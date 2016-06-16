@@ -4,45 +4,136 @@
     <meta charset="UTF-8">
     <title>Mathew Sachin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheet.css" media="screen">
+    <meta content="IE=10.000" http-equiv="X-UA-Compatible">
+    
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name"><small>Mathew Sachin</small></h1>
-      <h2 class="project-tagline">
-        I'm an Indian 12<sup>th</sup> standard student interested in coding in C#.Net with some experience in Java, C++ and PowerShell.
-      </h2>
-    </section>
+  <body id="Top" data-spy="scroll" data-target=".navbar" data-offset="50">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#Navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand"><a href="https://MathewSachin.github.io">Mathew Sachin</a></div>
+        </div>
+        <div class="collapse navbar-collapse" id="Navbar">
+          <ul class="nav navbar-nav">
+            <li><a href="#AboutMe">About Me</a></li>
+            <li><a href="#ContactMe">Contact Me</a></li>
+            <li><a href="#MadeByMe">Made by Me</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-    <section class="main-content">
-      <p>
-        Follow me on <a href="https://twitter.com/MathewSachin7">Twitter</a><br/>
-        Mail me <a href="mailto:Mathew.Sachin.Git@outlook.com"/>here</a>
-      </p>
+    <div id="AboutMe" class="container-fluid" style="padding-top:50px;height:300px;color:#fff;background-color:#00bcd4;">
+      <h2>About Me</h2>
+      <p>I'm a student coder interested in C# .Net and having some experience in Java, C++ and Powershell.</p>
+      <p>I'm particularly interested in acoustics and play guitar as a hobby.</p>
+    </div>
 
-      <h2>NuGet</h2>
-      Screna, ManagedBass and ManagedLame are available on <a href="http://nuget.org/profiles/MathewSachin">NuGet</a>.
+    <div id="ContactMe" class="container-fluid" style="padding-top:50px;">
+      <h2>Contact Me</h2>
+      <a href="https://github.com/MathewSachin" class="btn btn-warning" role="button">Follow on GitHub</a>
+      <a href="https://twitter.com/MathewSachin7" class="btn btn-info" role="button">Follow on Twitter</a>
+      <a href="mailto:Mathew.Sachin.Git@outlook.com" class="btn btn-success" role="button">Mail me</a>
+    </div>
 
-      <h2>GitHub</h2>
-      <ul>
-        <li><a href="https://github.com/MathewSachin/Captura">Captura</a></li>
+    <div id="MadeByMe" class="container-fluid" style="padding-top:50px;">
+      <h2>Made By Me <small>and hosted on GitHub</small></h2>
+      <div class="well">
+        <h3><a href="https://github.com/MathewSachin/Captura">Captura</a></h3>
         A Capture application to Capture Screen/Audio/Video/Cursor/Clicks/Keystrokes.
-        <li><a href="https://github.com/MathewSachin/Screna">Screna</a></li>
-        .Net Capture Library powering Captura.<br/>
-        Available on NuGet.<br/>
-        <li><a href="https://github.com/MathewSachin/NIco">NIco</a></li>
-        Create, Edit and View Icons.
-        <li><a href="https://github.com/MathewSachin/ManagedBass">ManagedBass</a></li>
-        Free Open-Source .Net Wrapper around un4seen Bass.
-        <li><a href="https://github.com/MathewSachin/Equamatics">Equamatics</a></li>
-        Solve Linear and Polynomial Equations.
-      </ul>
+        
+        <h3><a href="https://github.com/MathewSachin/Screna">Screna</a></h3>
+        .Net Capture Library powering Captura.
 
-      <footer class="site-footer">
-        <span class="site-footer-credits">
-          Based on <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by Jason Long.
-        </span>
-      </footer>
-    </section>
+        <h3><a href="https://github.com/MathewSachin/NIco">NIco</a></h3>
+        Create, Edit and View Icons.
+        
+        <h3><a href="https://github.com/MathewSachin/ManagedBass">ManagedBass</a></h3>
+        Free Open-Source .Net Wrapper around un4seen Bass.
+        
+        <h3><a href="https://github.com/MathewSachin/Equamatics">Equamatics</a></h3>
+        Solve Linear and Polynomial Equations.
+      </div>
+    </div>
+
+    <!-- Add Google Maps -->
+    <div id="googleMap" style="height:400px;width:100%;"></div>
+
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script>
+      var myCenter = new google.maps.LatLng(28.3518053, 77.3357153);
+
+      function initialize()
+      {
+        var mapProp = 
+        {
+          center:myCenter,
+          zoom:12,
+          scrollwheel:false,
+          draggable:false,
+          mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+        var marker = new google.maps.Marker({position:myCenter});
+
+        marker.setMap(map);
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+    <footer class="container-fluid text-center" style="background-color:#2f2f2f;color:#fff;padding-top:40px;padding-bottom:40px;">
+      <a href="#Top" title="To Top">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+      </a>
+      <p>Thanks for visiting.</p>
+    </footer>
+
+    <script>
+      $(document).ready(function(){
+        // Add smooth scrolling to all links in navbar + footer link
+        $(".navbar a, footer a[href='#Top']").on('click', function(event) {
+          // Make sure this.hash has a value before overriding default behavior
+          if (this.hash !== "") {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+
+            // Store hash
+            var hash = this.hash;
+
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+              scrollTop: $(hash).offset().top
+            }, 900, function(){
+        
+              // Add hash (#) to URL when done scrolling (default click behavior)
+              window.location.hash = hash;
+            });
+          } // End if
+        });
+        
+        $(window).scroll(function() {
+          $(".slideanim").each(function(){
+            var pos = $(this).offset().top;
+
+            var winTop = $(window).scrollTop();
+              if (pos < winTop + 600) {
+                $(this).addClass("slide");
+              }
+          });
+        });
+      })
+    </script>
   </body>
 </html>
