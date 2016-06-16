@@ -23,9 +23,9 @@
         </div>
         <div class="collapse navbar-collapse" id="Navbar">
           <ul class="nav navbar-nav">
-            <li><a href="#AboutMe">About Me</a></li>
-            <li><a href="#ContactMe">Contact Me</a></li>
+            <li><a href="#AboutMe">About Me</a></li>            
             <li><a href="#MadeByMe">Made by Me</a></li>
+            <li><a href="#ContactMe">Contact Me</a></li>
           </ul>
         </div>
       </div>
@@ -35,13 +35,12 @@
       <h2>About Me</h2>
       <p>I'm a student coder interested in C# .Net and having some experience in Java, C++ and Powershell.</p>
       <p>I'm particularly interested in acoustics and play guitar as a hobby.</p>
-    </div>
-
-    <div id="ContactMe" class="container-fluid" style="padding-top:50px;">
-      <h2>Contact Me</h2>
-      <a href="https://github.com/MathewSachin" class="btn btn-warning" role="button">Follow on GitHub</a>
-      <a href="https://twitter.com/MathewSachin7" class="btn btn-info" role="button">Follow on Twitter</a>
-      <a href="mailto:Mathew.Sachin.Git@outlook.com" class="btn btn-success" role="button">Mail me</a>
+      <p>
+        I started to program as a hobby in 8th standard beginning with Q-BASIC.
+        Soon, I realised that I needed something more powershell and tried Java while side by side exploring Powershell.
+        Then I tried C and C++ and finally my favorite C# which I continue till date.
+        C++ was a part of my studies in Senior Secondary classes.
+      </p>
     </div>
 
     <div id="MadeByMe" class="container-fluid" style="padding-top:50px;">
@@ -50,23 +49,35 @@
         <h3><a href="https://github.com/MathewSachin/Captura">Captura</a></h3>
         A Capture application to Capture Screen/Audio/Video/Cursor/Clicks/Keystrokes.
         
+        <h3><a href="https://github.com/MathewSachin/ManagedBass">ManagedBass</a></h3>
+        Free Open-Source .Net Wrapper around un4seen Bass.
+
         <h3><a href="https://github.com/MathewSachin/Screna">Screna</a></h3>
         .Net Capture Library powering Captura.
 
         <h3><a href="https://github.com/MathewSachin/NIco">NIco</a></h3>
         Create, Edit and View Icons.
-        
-        <h3><a href="https://github.com/MathewSachin/ManagedBass">ManagedBass</a></h3>
-        Free Open-Source .Net Wrapper around un4seen Bass.
-        
+
         <h3><a href="https://github.com/MathewSachin/Equamatics">Equamatics</a></h3>
         Solve Linear and Polynomial Equations.
+
+        <h3><a href="https://github.com/MathewSachin/Arpian">Arpian</a></h3>
+        Math Parser using Reverse Polish Notation.
       </div>
     </div>
 
-    <!-- Add Google Maps -->
-    <div id="googleMap" style="height:400px;width:100%;"></div>
+    <div id="ContactMe" class="container-fluid well" style="padding-top:50px;">
+      <div style="padding-bottom:20px;">
+        <h2>Contact Me</h2>
+        <p>Here are few ways to get in touch:</p>
+        <a href="https://github.com/MathewSachin" class="btn btn-warning" role="button">Follow on GitHub</a>
+        <a href="https://twitter.com/MathewSachin7" class="btn btn-info" role="button">Follow on Twitter</a>
+        <a href="mailto:Mathew.Sachin.Git@outlook.com" class="btn btn-success" role="button">Mail me</a>
+      </div>
+      <div id="googleMap" style="height:400px;width:100%;"></div>
+    </div>
 
+    <!-- Add Google Maps -->
     <script src="http://maps.googleapis.com/maps/api/js"></script>
     <script>
       var myCenter = new google.maps.LatLng(28.3518053, 77.3357153);
@@ -100,11 +111,14 @@
     </footer>
 
     <script>
-      $(document).ready(function(){
+      $(document).ready(function()
+      {
         // Add smooth scrolling to all links in navbar + footer link
-        $(".navbar a, footer a[href='#Top']").on('click', function(event) {
+        $(".navbar a, footer a[href='#Top']").on('click', function(event)
+        {
           // Make sure this.hash has a value before overriding default behavior
-          if (this.hash !== "") {
+          if (this.hash !== "")
+          {
             // Prevent default anchor click behavior
             event.preventDefault();
 
@@ -113,24 +127,29 @@
 
             // Using jQuery's animate() method to add smooth page scroll
             // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-            $('html, body').animate({
+            $('html, body').animate(
+            {
               scrollTop: $(hash).offset().top
-            }, 900, function(){
-        
+            }, 900, function()
+            {        
               // Add hash (#) to URL when done scrolling (default click behavior)
               window.location.hash = hash;
             });
           } // End if
         });
         
-        $(window).scroll(function() {
-          $(".slideanim").each(function(){
+        $(window).scroll(function()
+        {
+          $(".slideanim").each(function()
+          {
             var pos = $(this).offset().top;
 
             var winTop = $(window).scrollTop();
-              if (pos < winTop + 600) {
-                $(this).addClass("slide");
-              }
+
+            if (pos < winTop + 600) 
+            {
+              $(this).addClass("slide");
+            }
           });
         });
       })
