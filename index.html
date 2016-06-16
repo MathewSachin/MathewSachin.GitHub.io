@@ -3,25 +3,45 @@
   <head>
     <meta charset="UTF-8">
     <title>Mathew Sachin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta content="IE=10.000" http-equiv="X-UA-Compatible">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <meta content="IE=10.000"
+           http-equiv="X-UA-Compatible">
     
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">    
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- Google Maps -->
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="scripts/googleMaps.js"></script>
+
+    <!-- Smooth Scrolling -->
+    <script src="scripts/smoothScroll.js"></script>
   </head>
-  <body id="Top" data-spy="scroll" data-target=".navbar" data-offset="50">
+  <body id="Top"
+        data-spy="scroll"
+        data-target=".navbar"
+        data-offset="50">
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#Navbar">
+          <button type="button"
+                  class="navbar-toggle"
+                  data-toggle="collapse"
+                  data-target="#Navbar">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
           <div class="navbar-brand"><a href="https://MathewSachin.github.io">Mathew Sachin</a></div>
         </div>
-        <div class="collapse navbar-collapse" id="Navbar">
+        <div class="collapse navbar-collapse"
+             id="Navbar">
           <ul class="nav navbar-nav">
             <li><a href="#AboutMe">About Me</a></li>            
             <li><a href="#MadeByMe">Made by Me</a></li>
@@ -31,7 +51,9 @@
       </div>
     </nav>
 
-    <div id="AboutMe" class="container-fluid" style="padding-top:50px;padding-bottom:50px;color:#fff;background-color:#00bcd4;">
+    <div id="AboutMe"
+         class="container-fluid"
+         style="padding-top:50px;padding-bottom:50px;color:#fff;background-color:#00bcd4;">
       <h2>About Me</h2>
       <p>I'm a student coder interested in C# .Net and having some experience in Java, C++ and Powershell.</p>
       <p>I'm particularly interested in acoustics and play guitar as a hobby.</p>
@@ -43,7 +65,9 @@
       </p>
     </div>
 
-    <div id="MadeByMe" class="container-fluid" style="padding-top:50px;">
+    <div id="MadeByMe"
+         class="container-fluid"
+         style="padding-top:50px;">
       <h2>Made By Me <small>and hosted on GitHub</small></h2>
       <div class="well">
         <h3><a href="https://github.com/MathewSachin/Captura">Captura</a></h3>
@@ -66,93 +90,36 @@
       </div>
     </div>
 
-    <div id="ContactMe" class="container-fluid well" style="padding-top:50px;">
+    <div id="ContactMe"
+         class="container-fluid well"
+         style="padding-top:50px;">
       <div style="padding-bottom:20px;">
         <h2>Contact Me</h2>
         <p>Here are few ways to get in touch:</p>
-        <a href="https://github.com/MathewSachin" class="btn btn-warning" role="button" style="margin-bottom:5px;">Follow on GitHub</a>
-        <a href="https://twitter.com/MathewSachin7" class="btn btn-info" role="button" style="margin-bottom:5px;">Follow on Twitter</a>
-        <a href="mailto:Mathew.Sachin.Git@outlook.com" class="btn btn-success" role="button">Mail me</a>
+        <a href="https://github.com/MathewSachin"
+           class="btn btn-warning"
+           role="button"
+           style="margin-bottom:5px;">Follow on GitHub</a>
+        <a href="https://twitter.com/MathewSachin7"
+           class="btn btn-info"
+           role="button"
+           style="margin-bottom:5px;">Follow on Twitter</a>
+        <a href="mailto:Mathew.Sachin.Git@outlook.com"
+           class="btn btn-success"
+           role="button"
+           style="margin-bottom:5px;">Mail me</a>
       </div>
-      <div id="googleMap" style="height:400px;width:100%;"></div>
+      <div id="googleMap"
+           style="height:400px;width:100%;"></div>
     </div>
 
-    <!-- Add Google Maps -->
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script>
-      var myCenter = new google.maps.LatLng(28.3518053, 77.3357153);
-
-      function initialize()
-      {
-        var mapProp = 
-        {
-          center:myCenter,
-          zoom:12,
-          scrollwheel:false,
-          draggable:false,
-          mapTypeId:google.maps.MapTypeId.ROADMAP
-        };
-
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
-        var marker = new google.maps.Marker({position:myCenter});
-
-        marker.setMap(map);
-      }
-
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-
-    <footer class="container-fluid text-center" style="background-color:#2f2f2f;color:#fff;padding-top:40px;padding-bottom:40px;">
-      <a href="#Top" title="To Top">
+    <footer class="container-fluid text-center"
+            style="background-color:#2f2f2f;color:#fff;padding-top:40px;padding-bottom:40px;">
+      <a href="#Top"
+         title="To Top">
         <span class="glyphicon glyphicon-chevron-up"></span>
       </a>
       <p>Thanks for visiting.</p>
     </footer>
-
-    <script>
-      $(document).ready(function()
-      {
-        // Add smooth scrolling to all links in navbar + footer link
-        $(".navbar a, footer a[href='#Top']").on('click', function(event)
-        {
-          // Make sure this.hash has a value before overriding default behavior
-          if (this.hash !== "")
-          {
-            // Prevent default anchor click behavior
-            event.preventDefault();
-
-            // Store hash
-            var hash = this.hash;
-
-            // Using jQuery's animate() method to add smooth page scroll
-            // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-            $('html, body').animate(
-            {
-              scrollTop: $(hash).offset().top
-            }, 900, function()
-            {        
-              // Add hash (#) to URL when done scrolling (default click behavior)
-              window.location.hash = hash;
-            });
-          } // End if
-        });
-        
-        $(window).scroll(function()
-        {
-          $(".slideanim").each(function()
-          {
-            var pos = $(this).offset().top;
-
-            var winTop = $(window).scrollTop();
-
-            if (pos < winTop + 600) 
-            {
-              $(this).addClass("slide");
-            }
-          });
-        });
-      })
-    </script>
   </body>
 </html>
