@@ -1,6 +1,7 @@
 #AboutMe
 {
-    padding-top: 50px;
+    padding-top: 60px;
+    padding-bottom: 10px;
     color: #fff;
     background-color: #00bcd4;
 }
@@ -21,6 +22,5 @@ footer
 
 .avatar
 {
-    padding: 20px;
     width: 100%;
 }
