@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1"/>
     <meta content="IE=10.000"
-           http-equiv="X-UA-Compatible"/>
+          http-equiv="X-UA-Compatible"/>
     
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -25,6 +25,9 @@
 
     <!-- NuGet Download Counts -->
     <script src="scripts/nugetDownloadsBadge.js"></script>
+
+    <link rel="stylesheet"
+          href="styles.css">
   </head>
   <body id="Top"
         data-spy="scroll"
@@ -46,26 +49,30 @@
         <div class="collapse navbar-collapse"
              id="Navbar">
           <ul class="nav navbar-nav">
-            <li><a href="#AboutMe">About Me</a></li>            
-            <li><a href="#MadeByMe">Made by Me</a></li>
-            <li><a href="#ContactMe">Contact Me</a></li>
+            <li><a href="#AboutMe"><span class="glyphicon glyphicon-user"></span> About Me</a></li>            
+            <li><a href="#MadeByMe"><span class="glyphicon glyphicon-stats"></span> Made by Me</a></li>
+            <li><a href="#ContactMe"><span class="glyphicon glyphicon-earphone"></span> Contact Me</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
     <div id="AboutMe"
-         class="container-fluid"
-         style="padding-top:50px;padding-bottom:50px;color:#fff;background-color:#00bcd4;">
-      <h2>About Me</h2>
-      <p>I'm a student coder interested in C# .Net and having some experience in Java, C++ and Powershell.</p>
-      <p>I'm particularly interested in acoustics and play guitar as a hobby.</p>
-      <p>
-        I started to program as a hobby in 8th standard beginning with Q-BASIC.
-        Soon, I realised that I needed something more powershell and tried Java while side by side exploring Powershell.
-        Then I tried C and C++ and finally my favorite C# which I continue till date.
-        I met C++ again in my Senior Secondary classes.
-      </p>
+         class="container-fluid row">
+      <div class="col-md-4 text-center">
+        <img class="avatar img-circle" src="https://avatars1.githubusercontent.com/u/10654537?v=3&amp;s=400"/>
+      </div>
+      <div class="col-md-8">
+        <h2>About Me</h2>
+        <p>I'm a student coder interested in C# .Net and having some experience in Java, C++ and Powershell.</p>
+        <p>I'm particularly interested in acoustics and play guitar as a hobby.</p>
+        <p>
+          I started to program as a hobby in 8th standard beginning with Q-BASIC.
+          Soon, I realised that I needed something more powershell and tried Java while side by side exploring Powershell.
+          Then I tried C and C++ and finally my favorite C# which I continue till date.
+          I met C++ again in my Senior Secondary classes.
+        </p>
+      </div>
     </div>
 
     <div id="MadeByMe"
@@ -73,22 +80,46 @@
          style="padding-top:50px;">
       <h2>Made By Me <small>and hosted on GitHub</small></h2>
       <div class="well">
+        <div class="row text-center">
+          <div class="col-sm-4">            
+            <div class="thumbnail">
+              <a href="https://github.com/MathewSachin/ManagedBass">
+                <img src="https://raw.githubusercontent.com/ManagedBass/ManagedBass/master/ManagedBass.png" alt="ManagedBass" style="padding-bottom:20px;">
+              </a>
+              <hr/>
+              <p>ManagedBass</p>
+              <div id="MBassNuGet"></div>
+              <p>Free Open-Source .Net Wrapper around un4seen Bass.</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="thumbnail">
+              <a href="https://github.com/MathewSachin/Screna">
+                <img src="https://raw.githubusercontent.com/MathewSachin/Screna/master/Screna.png" alt="Screna" style="padding-bottom:20px;">
+              </a>
+              <hr/>
+              <p><strong>Screna</strong></p>
+              <div id="ScrenaNuGet"></div>
+              <p>.Net Capture Library powering Captura.</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="thumbnail" style="padding-bottom:25px">
+              <a href="https://github.com/MathewSachin/Equamatics">
+                <img src="https://raw.githubusercontent.com/MathewSachin/Equamatics/master/Logo.png" alt="Equamatics" style="padding-bottom:20px;">
+              </a>
+              <hr/>
+              <p><strong>Equamatics</strong></p>
+              <p>Solves System of Linear Equations and Polynomial Equations.</p>
+            </div>
+          </div>
+        </div>
+
         <h3><a href="https://github.com/MathewSachin/Captura">Captura</a></h3>
         A Capture application to Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.
-        
-        <h3><a href="https://github.com/MathewSachin/ManagedBass">ManagedBass</a></h3>
-        <div id="MBassNuGet"></div>
-        Free Open-Source .Net Wrapper around un4seen Bass.
-
-        <h3><a href="https://github.com/MathewSachin/Screna">Screna</a></h3>
-        <div id="ScrenaNuGet"></div>
-        .Net Capture Library powering Captura.
 
         <h3><a href="https://github.com/MathewSachin/NIco">NIco</a></h3>
         Create, Edit and View Icons.
-
-        <h3><a href="https://github.com/MathewSachin/Equamatics">Equamatics</a></h3>
-        Solve Linear and Polynomial Equations.
 
         <h3><a href="https://github.com/MathewSachin/Arpian">Arpian</a></h3>
         <div id="ArpianNuGet"></div>
@@ -113,14 +144,12 @@
         <a href="mailto:Mathew.Sachin.Git@outlook.com"
            class="btn btn-success"
            role="button"
-           style="margin-bottom:5px;">Mail me</a>
+           style="margin-bottom:5px;"><span class="glyphicon glyphicon-envelope"></span>  Mail me</a>
       </div>
-      <div id="googleMap"
-           style="height:400px;width:100%;"></div>
+      <div id="googleMap"></div>
     </div>
 
-    <footer class="container-fluid text-center"
-            style="background-color:#2f2f2f;color:#fff;padding-top:40px;padding-bottom:40px;">
+    <footer class="container-fluid text-center">
       <a href="#Top"
          title="To Top">
         <span class="glyphicon glyphicon-chevron-up"></span>

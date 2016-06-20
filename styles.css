@@ -1,0 +1,26 @@
+#AboutMe
+{
+    padding-top:50px;
+    color:#fff;
+    background-color:#00bcd4;
+}
+
+#googleMap
+{
+    height:400px;
+    width:100%;
+}
+
+footer
+{
+    background-color:#2f2f2f;
+    color:#fff;
+    padding-top:40px;
+    padding-bottom:40px;    
+}
+
+.avatar
+{
+    padding:20px;
+    width:80%;
+}
