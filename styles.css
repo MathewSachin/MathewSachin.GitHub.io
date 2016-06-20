@@ -21,7 +21,5 @@ footer
 
 .avatar
 {
-    width: 70%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
 }
