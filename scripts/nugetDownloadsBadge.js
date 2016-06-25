@@ -27,11 +27,7 @@ function NuGetDownloadBadge(PackageName, ElementId)
                 {
                     if (data[i].id == PackageName)
                     {
-                        var svgResult = "http://img.shields.io/badge/nuget-"
-                            + FormatDownloadCount(data[i].totalDownloads)
-                            + "-blue.svg?style=flat-square";
-
-                        $("#" + ElementId).html("<a href=\"http://nuget.org/packages/" + PackageName + "\"><img style=\"margin-bottom:3px;\" alt=nuget src=\"" + svgResult + "\"/></a>");
+                        $("#" + ElementId).text(FormatDownloadCount(data[i].totalDownloads));
 
                         break;
                     }
