@@ -13,7 +13,7 @@ function FormatDownloadCount(Download)
 
 function NuGetDownloadBadge(PackageName, ElementId)
 {
-    var searchQuery = "https://api-v3search-0.nuget.org/query?q=" + PackageName + "&skip=0&take=10";
+    var searchQuery = "https://api-v2v3search-0.nuget.org/query?q=" + PackageName + "&skip=0&take=10";
 
     $.ajax
         ({
