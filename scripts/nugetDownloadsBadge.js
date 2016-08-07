@@ -1,6 +1,6 @@
 function FormatDownloadCount(Download)
 {
-    var k = 1024;
+    var k = 1000;
     var m = k * k;
 
     if (Download >= m)
