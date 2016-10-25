@@ -13,27 +13,26 @@ function FormatDownloadCount(Download)
 
 function NuGetDownloadBadge(PackageName, ElementId)
 {
-    var searchQuery = "https://api-v2v3search-0.nuget.org/query?q=" + PackageName + "&skip=0&take=10";
+    var searchQuery = `https://api-v2v3search-0.nuget.org/query?q=${PackageName}&skip=0&take=10`;
 
-    $.ajax
-        ({
-            url: searchQuery,
-            dataType: 'jsonp',
-            success: function (jsonResult)
+    $.ajax({
+        url: searchQuery,
+        dataType: 'jsonp',
+        success: function (jsonResult)
+        {
+            var data = jsonResult.data;
+
+            for (var i = 0, n = data.length; i < n; ++i)
             {
-                var data = jsonResult.data;
-
-                for (var i = 0, n = data.length; i < n; ++i)
+                if (data[i].id == PackageName)
                 {
-                    if (data[i].id == PackageName)
-                    {
-                        $("#" + ElementId).text(FormatDownloadCount(data[i].totalDownloads));
+                    $("#" + ElementId).text(FormatDownloadCount(data[i].totalDownloads));
 
-                        break;
-                    }
+                    break;
                 }
             }
-        });
+        }
+    });
 }
 
 $(document).ready(function ()
