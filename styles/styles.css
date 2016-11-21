@@ -1,8 +1,21 @@
 #AboutMe
 {
     padding: 70px 20px 20px 20px;
-    color: #fff;
-    background-color: #00bcd4;
+    color: white;
+    background-color: #18BC9C;
+}
+
+#MadeByMe
+{
+    padding-top: 50px;
+    padding-bottom: 30px;
+}
+
+#ContactMe
+{
+    color: white;
+    padding-top: 30px;
+    background-color: #E57373;
 }
 
 #googleMap
@@ -22,6 +35,14 @@ footer
 .avatar
 {
     width: 100%;
+}
+
+@media only screen and (max-width: 768px)
+{
+    .avatar
+    {
+        max-width: 200px;
+    }
 }
 
 .fab {
@@ -50,4 +71,9 @@ a.back-to-top {
     position: fixed;
     right: 20px;
     bottom: 20px;
+}
+
+.navbar-inverse
+{
+    background-color: #333333
 }
