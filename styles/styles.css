@@ -14,12 +14,13 @@
 #ContactMe
 {
     color: white;
-    padding-top: 30px;
+    padding-top: 50px;
     background-color: #E57373;
 }
 
 #googleMap
 {
+    padding-top: 30px;
     height: 400px;
     width: 100%;
 }
