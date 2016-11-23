@@ -4,3 +4,7 @@ $(document).ready(function () {
         $('.navbar-toggle:visible').click();
     });
 });
+
+function navbarToggle(x) {
+    x.classList.toggle("change");
+}
