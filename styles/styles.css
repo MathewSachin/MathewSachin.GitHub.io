@@ -5,6 +5,12 @@
     background-color: #18BC9C;
 }
 
+#AboutMe a
+{
+    color: #3D3D3D;
+    font-style: italic;
+}
+
 #MadeByMe
 {
     padding-top: 50px;
@@ -68,7 +74,7 @@ a.back-to-top {
     background:#F44336;
     color: white;
     display: none;
-    z-index: 9999;
+    z-index: 10;
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -77,6 +83,12 @@ a.back-to-top {
 .navbar-inverse
 {
     background-color: #333333
+}
+
+.keywords {
+    color: #393939;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 600px) {

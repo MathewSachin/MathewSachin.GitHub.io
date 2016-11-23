@@ -38,6 +38,7 @@
 
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/carousel.css">
+    <link rel="stylesheet" href="styles/modal.css">
     <link rel="stylesheet" href="styles/navbarToggle.css">
     <script src="scripts/script.js"></script>
 
@@ -77,44 +78,40 @@
          class="container-fluid">
       <div class="row">
         <div class="col-sm-4 text-center">
-          <img class="avatar img-circle" src="https://github.com/MathewSachin.png"/>
+          <img class="avatar img-circle" src="https://github.com/MathewSachin.png"/>          
         </div>
         <div class="col-sm-8">
-<h2>About</h2>
-<p><strong>Mathew Sachin</strong> (born March 27, 1998) is an Indian engineering student. His interests are <em>music</em> and <em>programming</em>.</p>
+<h2>Mathew Sachin</h2>
+<p>An Indian engineering student interested in <em>music (guitar, piano)</em> and <em>programming (C#, C++, Web)</em>.</p>
 
-<h3 class="text-center">Developer - Musician - HUMAN?</h3>
+<h3 class="text-center keywords">Developer - Musician - HUMAN?</h3>
 
-<h3>Music</h3>
+<h3>Music <small>His Current Favourites</small></h3>
 <p>
-Mathew likes listening to English and Malayalam songs. Some of his favorites are Linkin Park, Enrique Iglesias, Owl City.
-He likes to sing though not proud of his voice. He learned to play the piano and the guitar a little.
+  <ol>
+    <li>Setting Fires - <small>The Chainsmokers ft. XYLO</small></li>
+    <li>Toothbrush - <small>DNCE</small></li>
+    <li>I Hate You, I Love You - <small>Gnash</small></li>
+    <li>Carry Me - <small>Kygo</small></li>
+    <li>Take My Breath Away - <small>Alesso</small></li>
+    <li>Here for You - <small>Kygo</small></li>
+    <li>Stay - <small>Kygo</small></li>
+    <li>Raging - <small>Kygo ft. Kodaline</small></li>    
+    <li>Closer - <small>The Chainsmokers ft. Halsey</small></li>
+    <li>Let Me Love You - <small>DJ Snake ft. Justin Bieber</small></li>    
+  </ol>
 </p>
-
-<h3>Programming</h3>
-<p>
-He is particularly interested in C# .Net and has some experience in Java, C, C++ and Powershell.
-He started to program as a hobby in 8th standard beginning with Q-BASIC and soon realised the need for something more powerfull and tried Java while side by side exploring Powershell.
-Then he tried C and C++ and finally found his favorite C#. Also, he has tried web development (HTML, CSS, JS, PHP, AngularJS, Bootstrap, ASP.NET).
-</p>
-
-<h3>Education</h3>
-<p>
-Mathew passed 10th standard (CBSE) from <em>Carmel Convent School, Faridabad</em> in 2014.
-He passed 12th standard (CBSE) in Non-Medical stream from <em>Modern Delhi Public School, Faridabad</em> in 2016.
-Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> program in <em>Atal Bihari Vajpayee - Indian Institute of Information Technology (ABV-IIITM), Gwalior</em>.
-</p>
-
-<p><strong>Languages Spoken</strong>: English, हिन्दी, മലയാളം</p>
 
 <blockquote>It's awkward talking about oneself in the third person. <small>Mathew Sachin</small></blockquote>
+
+<p><a href="#AboutModal" class="portfolio-link" data-toggle="modal">Continue Reading...</a></p>
         </div>
       </div>
     </div>
 
     <div id="MadeByMe"
          class="container-fluid bg-warning">
-      <h2>Made By Him <small>and hosted on GitHub</small></h2>
+      <h2>Made By Him <small>and open-sourced on GitHub</small></h2>
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
@@ -130,7 +127,7 @@ Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> 
         <div class="carousel-inner text-center" role="listbox">
           <div class="item active">
             <h4><a href="https://github.com/ManagedBass/ManagedBass">ManagedBass</a> <a href="https://nuget.org/packages/ManagedBass" class="badge" id="MBassNuGet"></a></h4>
-            <p>Free Open-Source .Net Wrapper around un4seen Bass.</p>
+            <p>Free Open-Source .Net Wrapper around un4seen Bass audio library.</p>
           </div>
           <div class="item">
             <h4><a href="https://github.com/MathewSachin/Screna">Screna</a> <a href="https://nuget.org/packages/Screna" class="badge" id="ScrenaNuGet"></a></h4>
@@ -208,5 +205,50 @@ Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> 
 
     <!-- Back to Top floating button -->
     <a href="#Top" class="fab back-to-top"><i class="glyphicon glyphicon-menu-up"></i></a>
+
+    <!-- Modal -->
+    <div class="portfolio-modal modal fade" id="AboutModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+<h2 class="text-center" style="margin-bottom: 20px">About</h2>
+<p><strong>Mathew Sachin</strong> was born on March 27, 1998 in <a href="https://www.google.co.in/maps/place/Kochi,+Kerala">Kochi, Kerala</a> in a Latin Catholic family to <em>P. M. Sebastian</em> and <em>Siji Sebastian</em>.
+Currently, he is an Indian engineering student. His interests are <em>music</em> and <em>programming</em>.</p>
+
+<h3>Music</h3>
+<p>
+Mathew likes listening to English and Malayalam songs. Some of his favorites are Linkin Park, Enrique Iglesias, Owl City.
+He likes to sing though not proud of his voice. He learned to play the piano and the guitar a little.
+</p>
+
+<h3>Programming</h3>
+<p>
+He is particularly interested in C# .Net and has some experience in Java, C, C++ and Powershell.
+He started to program as a hobby in 8th standard beginning with Q-BASIC and soon realised the need for something more powerfull and tried Java while side by side exploring Powershell.
+Then he tried C and C++ and finally found his favorite C#. Also, he has tried web development (HTML, CSS, JS, PHP, AngularJS, Bootstrap, ASP.NET).
+</p>
+
+<h3>Education</h3>
+<p>
+Mathew passed 10th standard (CBSE) from <em>Carmel Convent School, Faridabad</em> in 2014.
+He passed 12th standard (CBSE) in Non-Medical stream from <em>Modern Delhi Public School, Faridabad</em> in 2016.
+Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> program in <em>Atal Bihari Vajpayee - Indian Institute of Information Technology (ABV-IIITM), Gwalior</em>.
+</p>
+
+<p><strong>Languages Spoken</strong>: English, हिन्दी, മലയാളം</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </body>
 </html>
