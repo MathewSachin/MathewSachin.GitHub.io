@@ -82,7 +82,8 @@ a.back-to-top {
 
 .navbar-inverse
 {
-    background-color: #333333
+    background-color: #333333;
+    border-radius: 0px;
 }
 
 .keywords {
