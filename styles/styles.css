@@ -108,6 +108,37 @@ footer div {
 
 .toggle-chat {
     margin-top: 30px;
+    max-width: 220px;
+}
+
+.contacts a {
+    color: white;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.contacts button {
+    padding-top: 0px;
+    margin-right: 5px;
+}
+
+.contacts a:hover {
+    text-decoration: unset;
+    color: #EEEEEE;
+}
+
+.contacts .fab:hover {
+    transform: none;
+}
+
+.btn-github {
+    background-color: #555555;
+}
+
+.btn-github i {    
+    transform: scale(1.1);
+    margin-top: -1px;
 }
 
 @media only screen and (max-width: 600px) {
