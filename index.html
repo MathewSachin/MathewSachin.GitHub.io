@@ -166,31 +166,42 @@
     </div>
 
     <div id="ContactMe">
-      <div class="container-fluid">
-        <h2>Contacts</h2>
-        <p>Here are few ways to get in touch:</p>
-        <a href="https://github.com/MathewSachin"
-           class="btn btn-warning fab"
-           role="button"
-           title="Follow on GitHub"
-           style="padding-top: 0px;"><i class="fa fa-github fa-3x"></i></a>
-        <a href="https://twitter.com/MathewSachin7"
-           class="btn btn-info fab"
-           role="button"
-           title="Follow on Twitter"><i class="fa fa-twitter fa-lg"></i></a>
-        <a href="https://facebook.com/Mathew.Sachin.Sebastian"
-           class="btn btn-primary fab"
-           role="button"
-           title="Follow on Facebook"><i class="fa fa-facebook fa-lg"></i></a>
-        <a href="https://www.pinterest.com/mathewsachin/"
-           class="btn btn-danger fab"
-           role="button"
-           title="Follow on PInterest"><i class="fa fa-pinterest fa-lg"></i></a>
-        <a href="mailto:Mathew.Sachin.Git@outlook.com"
-           class="btn btn-success fab"
-           title="Mail"
-           role="button"><i class="glyphicon glyphicon-envelope fa-lg"></i></a>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="container-fluid">
+            <h2>Contacts</h2>
+            <p>Here are few ways to get in touch:</p>
+            <a href="https://github.com/MathewSachin"
+              class="btn btn-warning fab"
+              role="button"
+              title="Follow on GitHub"
+              style="padding-top: 0px;"><i class="fa fa-github fa-3x"></i></a>
+            <a href="https://twitter.com/MathewSachin7"
+              class="btn btn-info fab"
+              role="button"
+              title="Follow on Twitter"><i class="fa fa-twitter fa-lg"></i></a>
+            <a href="https://facebook.com/Mathew.Sachin.Sebastian"
+              class="btn btn-primary fab"
+              role="button"
+              title="Follow on Facebook"><i class="fa fa-facebook fa-lg"></i></a>
+            <a href="https://www.pinterest.com/mathewsachin/"
+              class="btn btn-danger fab"
+              role="button"
+              title="Follow on PInterest"><i class="fa fa-pinterest fa-lg"></i></a>
+            <a href="mailto:Mathew.Sachin.Git@outlook.com"
+              class="btn btn-success fab"
+              title="Mail"
+              role="button"><i class="glyphicon glyphicon-envelope fa-lg"></i></a>
+
+            <div class="toggle-chat"><button class="js-gitter-toggle-chat-button btn btn-success btn-block">Toggle Gitter Chat</button></div>
+          </div>
+        </div>
+        <div class="col-sm-7 text-center twitter">
+          <a class="twitter-timeline" data-width="400" href="https://twitter.com/MathewSachin7"></a>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
       </div>
+
       <div id="googleMap"></div>
     </div>
 
@@ -252,5 +263,13 @@ Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> 
             </div>
         </div>
     </div>
+
+    <script>
+      ((window.gitter = {}).chat = {}).options = {
+        room: 'MathewSachin/MathewSachin',
+        activationElement: '.my-special-button'
+      };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
   </body>
 </html>

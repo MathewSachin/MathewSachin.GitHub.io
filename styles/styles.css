@@ -84,6 +84,7 @@ a.back-to-top {
 {
     background-color: #333333;
     border-radius: 0px;
+    z-index: 20;
 }
 
 .keywords {
@@ -99,6 +100,14 @@ a.back-to-top {
 
 footer div {
     padding-top: 60px;
+}
+
+.twitter {
+    margin-top: 20px;
+}
+
+.toggle-chat {
+    margin-top: 30px;
 }
 
 @media only screen and (max-width: 600px) {
