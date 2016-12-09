@@ -17,12 +17,15 @@
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/carousel.css">
     <link rel="stylesheet" href="styles/modal.css">
-    <link rel="stylesheet" href="styles/navbarToggle.css">    
+    <link rel="stylesheet" href="styles/navbarToggle.css">
+    <link rel="stylesheet" href="styles/parallax.css">
   </head>
   <body id="Top"
         data-spy="scroll"
         data-target=".navbar"
         data-offset="50">
+
+    <!-- Navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -40,13 +43,19 @@
         <div class="collapse navbar-collapse"
              id="Navbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#AboutMe"><span class="glyphicon glyphicon-user"></span> About</a></li>            
-            <li><a href="#MadeByMe"><span class="glyphicon glyphicon-stats"></span> Creations</a></li>
-            <li><a href="#ContactMe"><span class="glyphicon glyphicon-earphone"></span> Contacts</a></li>
+            <li><a href="#AboutMeTarget"><span class="glyphicon glyphicon-user"></span> About</a></li>            
+            <li><a href="#MadeByMeTarget"><span class="glyphicon glyphicon-stats"></span> Creations</a></li>
+            <li><a href="#ContactMeTarget"><span class="glyphicon glyphicon-earphone"></span> Contacts</a></li>
           </ul>
         </div>
       </div>
     </nav>
+
+    <div class="bgimg-1" id="AboutMeTarget">
+      <div class="caption">
+        <span class="border">MATHEW SACHIN</span>
+      </div>
+    </div>
 
     <div id="AboutMe"
          class="container-fluid">
@@ -60,26 +69,16 @@
 
 <h3 class="text-center keywords">Developer - Musician</h3>
 
-<h3>Music <small>His Current Favourites</small></h3>
-<p>
-  <ol>
-    <li><a href="https://www.youtube.com/watch?v=v6IAJOOmDMg">Setting Fires</a> - <small>The Chainsmokers ft. XYLO</small></li>
-    <li><a href="https://www.youtube.com/watch?v=pUUGJD-JjGA">I Got You</a> - <small>Bebe Rexha</small></li>
-    <li><a href="https://www.youtube.com/watch?v=UrUJyKsLQeU">Toothbrush</a> - <small>DNCE</small></li>
-    <li><a href="https://www.youtube.com/watch?v=BiQIc7fG9pA">I Hate You, I Love You</a> - <small>Gnash</small></li>
-    <li><a href="https://www.youtube.com/watch?v=vusqQJ56iIM">Carry Me</a> - <small>Kygo</small></li>
-    <li><a href="https://www.youtube.com/watch?v=o10EV4PG40U">Take My Breath Away</a> - <small>Alesso</small></li>
-    <li><a href="https://www.youtube.com/watch?v=b8PPap4dJog">Here for You</a> - <small>Kygo</small></li>
-    <li><a href="https://www.youtube.com/watch?v=z9porfO8C_Q">Stay</a> - <small>Kygo</small></li>
-    <li><a href="https://www.youtube.com/watch?v=ZWyktWYW3ZM">Raging</a> - <small>Kygo ft. Kodaline</small></li>    
-    <li><a href="https://www.youtube.com/watch?v=0nZFFEsFJzI">Thinking About You</a> - <small>Hardwell ft. Jay Sean</small></li>    
-  </ol>
-</p>
-
 <blockquote>It's awkward talking about oneself in the third person. <small>Mathew Sachin</small></blockquote>
 
 <p><a href="#AboutModal" class="portfolio-link" data-toggle="modal">Continue Reading...</a></p>
         </div>
+      </div>
+    </div>
+
+    <div class="bgimg-2" id="MadeByMeTarget">
+      <div class="caption">
+        <span class="border">CREATIONS</span>
       </div>
     </div>
 
@@ -141,6 +140,12 @@
       </div>
     </div>
 
+    <div class="bgimg-3" id="ContactMeTarget">
+      <div class="caption">
+        <span class="border">CONTACTS</span>
+      </div>
+    </div>
+
     <div id="ContactMe">
       <div class="container-fluid">
         <div class="row">
@@ -180,7 +185,8 @@
     <!-- Footer -->
     <footer class="container-fluid text-center">
       <p class="mobile-hide qrcode">
-        <img src='https://chart.googleapis.com/chart?cht=qr&chl=https%3A%2F%2Fmathewsachin.github.io&chs=160x160&chld=L|0' alt='QR Code'>
+        <!--<img src='https://chart.googleapis.com/chart?cht=qr&chl=https%3A%2F%2Fmathewsachin.github.io&chs=160x160&chld=L|0' alt='QR Code'>-->
+        <img src='images/qr.png' alt='QR Code'>
       </p>
       <div>
         <p>&copy; Copyright 2016 Mathew Sachin. All Rights Reserved.</p>
@@ -189,7 +195,9 @@
     </footer>
 
     <!-- Back to Top floating button -->
-    <a href="#Top" class="fab back-to-top"><i class="glyphicon glyphicon-menu-up"></i></a>
+    <a href="#Top">
+      <button class="fab back-to-top"><i class="glyphicon glyphicon-menu-up"></i></button>
+    </a>
 
     <!-- Modal -->
     <div class="portfolio-modal modal fade" id="AboutModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -262,10 +270,6 @@ Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> 
     <script src="scripts/script.js"></script>
     <script src="scripts/scroll.js"></script>
 
-    <!-- Google Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script src="scripts/googleMaps.js"></script>
-
     <!-- NuGet Download Counts -->
     <script src="scripts/nugetDownloadsBadge.js"></script>
 
@@ -277,5 +281,9 @@ Currently, he is enrolled in a <em>5-year B-Tech + M-Tech Dual Degree (IT)</em> 
         enable_page_level_ads: true
       });
     </script>
+
+    <!-- Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="scripts/googleMaps.js"></script>
   </body>
 </html>

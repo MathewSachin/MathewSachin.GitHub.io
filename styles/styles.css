@@ -69,11 +69,12 @@ footer
     transform: scale(1.1);
 }
 
-a.back-to-top {
+.back-to-top {
     background-color:#F44336;
     background:#F44336;
     color: white;
     display: none;
+    padding: unset;
     z-index: 10;
     position: fixed;
     right: 20px;
