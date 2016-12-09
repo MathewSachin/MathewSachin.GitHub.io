@@ -1,24 +1,25 @@
-$(document).ready(function ()
-{
-    var myCenter = new google.maps.LatLng(28.3518053, 77.3357153);
+function initMap() {
+    var mapCenter = new google.maps.LatLng(28.3518053, 77.3357153);
 
-    function initialize()
+    var mapProp =
     {
-        var mapProp =
-        {
-            center: myCenter,
-            zoom: 12,
-            scrollwheel: false,
-            draggable: false,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+        center: mapCenter,
+        zoom: 2,
+        scrollwheel: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false,
+        overviewMapControl: true,
+    };
 
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
-        var marker = new google.maps.Marker({ position: myCenter });
+    var marker = new google.maps.Marker({position: mapCenter});
 
-        marker.setMap(map);
-    }
+    marker.setMap(map);
 
-    google.maps.event.addDomListener(window, 'load', initialize);
-});
+    google.maps.event.addListener(marker, 'click', function() {
+        map.setZoom(12);
+        map.setCenter(marker.getPosition());
+    });
+}
