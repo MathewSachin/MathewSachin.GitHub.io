@@ -15,17 +15,17 @@ body, html {
 
 }
 .bgimg-1 {
-  background-image: url("http://medias.velersoftware.com/images/portfolio/18.jpg");
+  background-image: url("../images/Hello.jpg");
   min-height: 100%;
 }
 
 .bgimg-2 {
-  background-image: url("https://enterprise.github.com/assets/aws/jetpack-octocat-airlock-b4e1d022c0113c997328f6598d16e58ad049140e50da4859d6b4d174890bb1c8.jpg");
+  background-image: url("../images/Creations.jpg");
   min-height: 400px;
 }
 
 .bgimg-3 {
-  background-image: url("http://bsnscb.com/data/out/42/40026308-contact-wallpapers.jpeg");
+  background-image: url("../images/Contacts.jpg");
   min-height: 400px;
 }
 
