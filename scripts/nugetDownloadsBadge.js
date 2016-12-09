@@ -26,7 +26,9 @@ function NuGetDownloadBadge(PackageName, ElementId)
             {
                 if (data[i].id == PackageName)
                 {
-                    $("#" + ElementId).text(FormatDownloadCount(data[i].totalDownloads));
+                    var count = FormatDownloadCount(data[i].totalDownloads);
+
+                    $("#" + ElementId).html(`<img src="https://img.shields.io/badge/nuget-${count}-green.svg?style=flat-square">`);
 
                     break;
                 }
