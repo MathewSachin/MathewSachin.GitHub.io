@@ -87,33 +87,32 @@
 
     <div id="MadeByMe"
          class="container-fluid bg-warning">
-      <h2>Made By Him <small>and open-sourced on GitHub</small></h2>
+      <h2>Featured Projects <small>(open-source)</small></h2>
       
       <br>
 
-      <div class="card">
-        <div>
-          <img src="https://github.com/ManagedBass.png" alt="ManagedBass">
-          <div class="container-fluid">
-            <h4><b><a href="https://github.com/ManagedBass/ManagedBass">ManagedBass</a></b></h4>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
             <div>
-              <a href="https://nuget.org/packages/ManagedBass" id="MBassNuGet"></a>
-              <a href="https://github.com/ManagedBass/ManagedBass/stargazers"><img src="https://img.shields.io/github/stars/ManagedBass/ManagedBass.svg?style=flat-square"></a>
-              <a href="https://github.com/ManagedBass/ManagedBass/fork"><img src="https://img.shields.io/github/forks/ManagedBass/ManagedBass.svg?style=flat-square"></a>
-              <a href="https://github.com/ManagedBass/ManagedBass/issues"><img src="https://img.shields.io/github/issues/ManagedBass/ManagedBass.svg?style=flat-square"></a>            
-              <a href="https://gratipay.com/ManagedBass/"><img src="https://img.shields.io/gratipay/team/ManagedBass.svg?style=flat-square"></a>
-              <a href="https://ci.appveyor.com/project/MathewSachin/managedbass"><img src="https://img.shields.io/appveyor/ci/MathewSachin/ManagedBass.svg?style=flat-square"></a>            
+              <img src="https://github.com/ManagedBass.png" alt="ManagedBass">
+              <div class="container-fluid">
+                <h4><b><a href="https://github.com/ManagedBass/ManagedBass">ManagedBass</a></b></h4>
+                <div>
+                  <a href="https://nuget.org/packages/ManagedBass" id="MBassNuGet"></a>
+                  <a href="https://github.com/ManagedBass/ManagedBass/stargazers"><img src="https://img.shields.io/github/stars/ManagedBass/ManagedBass.svg?style=flat-square"></a>
+                  <a href="https://github.com/ManagedBass/ManagedBass/fork"><img src="https://img.shields.io/github/forks/ManagedBass/ManagedBass.svg?style=flat-square"></a>
+                  <a href="https://github.com/ManagedBass/ManagedBass/issues"><img src="https://img.shields.io/github/issues/ManagedBass/ManagedBass.svg?style=flat-square"></a>            
+                  <a href="https://gratipay.com/ManagedBass/"><img src="https://img.shields.io/gratipay/team/ManagedBass.svg?style=flat-square"></a>
+                  <a href="https://ci.appveyor.com/project/MathewSachin/managedbass"><img src="https://img.shields.io/appveyor/ci/MathewSachin/ManagedBass.svg?style=flat-square"></a>            
+                </div>
+              </div>
             </div>
+            <hr>
+            <p class="container-fluid">Free Open-Source .Net Wrapper around un4seen Bass audio library.</p>
           </div>
         </div>
-        <hr>
-        <p class="container-fluid">Free Open-Source .Net Wrapper around un4seen Bass audio library.</p>
-      </div>
-
-      <br>
-
-      <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="card">
             <div>
               <img src="https://github.com/MathewSachin/Captura/raw/master/src/Logo.png" alt="Captura">
@@ -132,7 +131,7 @@
           </div>          
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="card">
             <div>
               <img src="https://github.com/MathewSachin/Screna/raw/master/Screna.png" alt="Screna">
@@ -153,6 +152,97 @@
         </div>
       </div>
       
+      <br><br>
+
+      <div class="input-group">
+        <input type="text" id="projectsFilter" class="form-control input-lg" onkeyup="filterProjects()" placeholder="Search for projects..">
+        <span class="input-group-btn">
+          <button class="btn btn-info btn-lg" type="button">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </span>
+      </div>     
+
+      <ul id="projects">
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/Arpian">Arpian</a>
+            <br>
+            Mathematical Parser using Reverse Polish Notation.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/BodyMassIndex">BodyMassIndex</a>
+            <br>
+            Calculates Body Mass Index.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/DuplicateFileDetector">DuplicateFileDetector</a>
+            <br>
+            Detects Duplicate Files in a Folder.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/Equamatics">Equamatics</a>
+            <br>
+            Linear and Polynomial Equation Solver.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/Fader">Fader</a>
+            <br>
+            Control Opacity of Windows.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/KeyTracker">KeyTracker</a>
+            <br>
+            Track Keypresses.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/NIco">NIco</a>
+            <br>
+            Create, Edit and View icons.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/Randomizer">Randomizer</a>
+            <br>
+            Randomly Selects a value from a set of given Values.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/RegX">RegX</a>
+            <br>
+            Regular Expression (Regex) Parser.
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/Thumbs">Thumbs</a>
+            <br>
+            WPF DWM Thumbnail Viewer
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="https://github.com/MathewSachin/TicTacToe">TicTacToe</a>
+            <br>
+            Classical Tic Tac Toe Game.
+          </div>
+        </li>
+      </ul>
+
       <br>
 
       <div class="text-center">
