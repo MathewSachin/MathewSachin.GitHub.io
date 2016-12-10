@@ -36,7 +36,7 @@ footer
     background-color: #2f2f2f;
     color: #fff;
     padding-top: 40px;
-    padding-bottom: 40px;    
+    padding-bottom: 20px;    
 }
 
 .avatar
@@ -95,12 +95,9 @@ footer
 }
 
 .qrcode {
-    float: left;
-    margin-left: 40px;
-}
-
-footer div {
-    padding-top: 60px;
+    position: absolute;
+    right: 30px;
+    top: 13%;
 }
 
 .twitter {
@@ -143,13 +140,9 @@ footer div {
     margin-top: -1px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
     .mobile-hide {
         display: none;
-    }
-
-    footer div {
-        padding-top: 0px;
     }
 }
 
