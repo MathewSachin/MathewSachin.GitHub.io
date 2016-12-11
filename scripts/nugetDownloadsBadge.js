@@ -37,7 +37,7 @@ function NuGetDownloadBadge(PackageName, ElementId)
     });
 }
 
-$(document).ready(function ()
+$(function ()
 {
     NuGetDownloadBadge("ManagedBass", "MBassNuGet");
     NuGetDownloadBadge("Screna", "ScrenaNuGet");
