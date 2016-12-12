@@ -1,3 +1,6 @@
 
 - name: Hacking Chrome Dino
   href: Hacking-Chrome-Dino.md
+
+- name: Using Windows Phone on Authenticated Proxy Wifi
+  href: Proxy-Windows-Phone.md
