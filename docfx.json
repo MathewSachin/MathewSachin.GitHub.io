@@ -1,0 +1,14 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "articles/**.md",
+          "articles/**/toc.yml"
+        ]
+      }
+    ],
+    "dest": "blog",
+    "template": ["template"]
+  }
+}

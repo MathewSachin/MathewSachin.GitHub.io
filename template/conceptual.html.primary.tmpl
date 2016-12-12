@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  {{>partials/head}}
+  <body data-spy="scroll" data-target="#affix" id="Top">
+    <div id="wrapper">
+      {{>partials/navbar}}
+      <div role="main" class="container-fluid body-content">
+        <div class="sidenav">
+          <a class="text-center toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-9" id="articleContainer">
+            <article class="content wrap" id="_content" data-uid="{{uid}}">
+              {{{rawTitle}}}
+              {{{conceptual}}}
+            </article>
+          </div>
+          <div class="hidden-sm col-md-3" role="complementary">
+            <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+            </nav>
+          </div>
+        </div>
+      </div>
+      <a href="#Top">
+        <button class="fab back-to-top"><i class="glyphicon glyphicon-menu-up"></i></button>
+      </a>
+    </div>
+    {{>partials/scripts}}
+  </body>
+</html>

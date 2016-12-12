@@ -1,0 +1,25 @@
+<head>
+  <!-- AdSense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-4251360406988977",
+      enable_page_level_ads: true
+    });
+  </script>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{{title}}</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="title" content="{{title}}">
+  {{#_description}}<meta name="description" content="{{_description}}">{{/_description}}
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/solarized_light.min.css"/>
+  <link rel="stylesheet" href="../../styles/docfx.css">
+  <link rel="stylesheet" href="../../styles/navbarToggle.css">
+  <link rel="stylesheet" href="../../styles/common.css">
+
+  <meta property="docfx:tocrel" content="{{_tocRel}}">
+</head>
