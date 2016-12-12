@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse"
           id="Navbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Blog</a></li>
+        <li class="active"><a href="https://mathewsachin.github.io/blog/articles/index.html"><span class="fa fa-rss"></span> Blog</a></li>
       </ul>
     </div>
   </div>
