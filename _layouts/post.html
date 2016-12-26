@@ -4,13 +4,13 @@ layout: default
 <div class="row">
     <div class="col-md-7 col-md-offset-2">
         <h1>{{ page.title }}</h1>
-        <em>{{ page.date | date_to_string }}</em> |
+        <em>{{ page.date | date_to_string }}</em> &nbsp; - &nbsp;
         <em>{% include readingTime.html %}</em>
         <hr>
 
         <div class="post-tag">
             {% for tag in page.tags %}
-                <a role="button" class="btn btn-primary btn-xs btn-tag" href="#{{ tag }}">{{ tag }}</a>
+                <a role="button" class="btn btn-primary btn-xs btn-tag" href="/blog/tags#{{ tag }}">{{ tag }}</a>
             {% endfor %}
         </div>
 
