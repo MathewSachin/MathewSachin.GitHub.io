@@ -17,7 +17,7 @@ title: Blog Posts
           <a role="button" class="btn btn-info btn-xs btn-tag" href="/blog/tags#{{ tag }}">{{ tag }}</a>
         {% endfor %}
       </div>
-      <p>{{ post.excerpt }} <a href="{{ post.url }}">Continue Reading ({% include readingTime.html %})...</a></p>
+      <p>{{ post.excerpt }} <a href="{{ post.url }}">Continue Reading ( {% include readingTime.html %} )...</a></p>
     </div>
     {% endfor %}
     
