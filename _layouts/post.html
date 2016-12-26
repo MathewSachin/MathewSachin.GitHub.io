@@ -4,7 +4,8 @@ layout: default
 <div class="row">
     <div class="col-md-7 col-md-offset-2">
         <h1>{{ page.title }}</h1>
-        <em>{{ page.date | date_to_string }}</em>
+        <em>{{ page.date | date_to_string }}</em> |
+        <em>{% include readingTime.html %} read</em>
         <hr>
 
         <div class="post-tag">
