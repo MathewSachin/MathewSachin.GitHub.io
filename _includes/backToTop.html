@@ -1,0 +1,49 @@
+<style>
+.fab {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    padding: 11px 0 0 0;
+    border: none;
+    outline: none;
+    color: #FFF;
+    border-radius: 100%;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition:.3s;
+}
+
+.fab:hover {
+    transform: scale(1.1);
+}
+
+.back-to-top {
+    background-color:#F44336;
+    background:#F44336;
+    color: white;
+    display: none;
+    padding: unset;
+    z-index: 10;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+</style>
+
+<button class="fab back-to-top"><i class="glyphicon glyphicon-menu-up"></i></button>
+
+<script>
+$(function() {
+    // Fade
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100)
+            $('.back-to-top').fadeIn(500);
+        else $('.back-to-top').fadeOut(500);
+    });
+
+    // Smooth scroll to top
+    $(".back-to-top").click(function()
+    {
+        $('html, body').animate({ scrollTop: 0 }, 900);
+    });
+});
+</script>

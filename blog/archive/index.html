@@ -1,0 +1,16 @@
+---
+layout: page
+title: Archive
+---
+
+<div class="archive">
+  {% if site.posts.size == 0 %}
+    <h2>No post found</h2>
+  {% else %}
+  {% for post in site.posts %}
+    <div>
+      <em>{{ post.date | date_to_string }}</em> | <a href="{{ post.url }}">{{ post.title }}</a>
+    </div>
+  {% endfor %}
+  {% endif %}
+</div>

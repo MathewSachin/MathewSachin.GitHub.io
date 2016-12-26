@@ -1,0 +1,43 @@
+#related {
+    padding-right: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+    .mobile-hide {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    #related {
+        position: static;
+        margin-top: 25px;
+    }
+}
+
+body {
+    padding-top: 80px;
+    padding-bottom: 100px;
+}
+
+#content > h1 {
+    margin-bottom: 20px;
+}
+
+#content img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.list-post {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.tag-title {
+    padding-top: 55px;
+}
+
+#post {
+    word-wrap: break-word;
+}

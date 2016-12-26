@@ -1,0 +1,27 @@
+---
+layout: page
+title: Tags
+---
+
+<div>
+  {% for tag in site.tags %}
+    <a role="button" href="#{{ tag[0] }}" class="btn btn-primary btn-sm btn-tag">{{ tag[0] }} <span class="badge">{{ tag[1].size }}</span></a>
+  {% endfor %}
+</div>
+
+<br>
+
+{% for tag in site.tags %}
+	<article>
+        <strong class="tag-title" id="{{ tag[0] }}">{{ tag[0] }}</strong>
+        <ul>
+            {% for post in tag[1] %}
+                <li class="tag-post">
+                    <a href="{{ post.url }}">
+                        <span class="tag-post-title">{{ post.title }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+	</article>
+{% endfor %}

@@ -1,0 +1,26 @@
+url: "https://MathewSachin.github.io"
+
+github: "MathewSachin"
+
+google-analytics: "UA-70778035-3"
+
+disqus: "mathewsachin"
+
+adsense: "ca-pub-4251360406988977"
+
+# Default to `post` layout for posts
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+gems:
+  - jekyll-seo-tag  # Search Engine Optimization
+  - jekyll-paginate # Pagination
+
+# Pagination
+paginate: 5
+paginate_path: /page:num/

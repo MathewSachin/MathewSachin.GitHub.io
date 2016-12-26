@@ -1,0 +1,45 @@
+---
+layout: default
+---
+<div class="row">
+    <div class="col-md-7 col-md-offset-2">
+        <h1>{{ page.title }}</h1>
+        <em>{{ page.date | date_to_string }}</em>
+        <hr>
+
+        <div class="post-tag">
+            {% for tag in page.tags %}
+                <a role="button" class="btn btn-primary btn-xs btn-tag" href="#{{ tag }}">{{ tag }}</a>
+            {% endfor %}
+        </div>
+
+        <br>
+
+        <div id="post">
+            {{ content }}
+        </div>
+
+        {% include adsense.html %}
+
+        {% include share.html %}
+
+        {% include disqus.html %}        
+    </div>
+    <div class="col-md-3">
+        {% if site.related_posts.size != 0 %}
+        <div id="related" class="affix">
+            <em>Related Posts</em>
+            <hr>
+            {% for post in site.related_posts limit:3 %}
+                <a href="{{ post.url }}">{{ post.title }}</a><br><br>
+            {% endfor %}
+
+            <hr>
+
+            {% include adsense.html %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% include highlight.html %}
