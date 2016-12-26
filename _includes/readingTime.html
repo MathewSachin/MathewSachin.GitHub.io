@@ -12,5 +12,7 @@
 {% elsif words < 990 %}
     5 min
 {% else %}
-    {{ words | divided_by:180 | append:" min" }}
+    {{ words | divided_by:180 }} min
 {% endif %}
+
+read
