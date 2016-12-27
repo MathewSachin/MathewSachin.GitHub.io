@@ -1,3 +1,5 @@
+lsi: false
+
 url: "https://MathewSachin.github.io"
 
 github: "MathewSachin"
@@ -7,6 +9,8 @@ google-analytics: "UA-70778035-3"
 disqus: "mathewsachin"
 
 adsense: "ca-pub-4251360406988977"
+
+exclude: ["Gemfile", "Gemfile.lock", "README.md"]
 
 # Default to `post` layout for posts
 defaults:
@@ -19,6 +23,7 @@ defaults:
 gems:
   - jekyll-seo-tag  # Search Engine Optimization
   - jekyll-paginate # Pagination
+  - jekyll-gist # GitHub Gists
 
 # Pagination
 paginate: 5
