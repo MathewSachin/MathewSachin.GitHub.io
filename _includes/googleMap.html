@@ -1,3 +1,15 @@
+<style>
+#googleMap
+{
+    padding-top: 30px;
+    height: 400px;
+    width: 100%;
+}
+</style>
+
+<div id="googleMap"></div>
+
+<script>
 function initMap() {
     var mapCenter = new google.maps.LatLng(28.3518053, 77.3357153);
 
@@ -23,3 +35,5 @@ function initMap() {
         map.setCenter(marker.getPosition());
     });
 }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
