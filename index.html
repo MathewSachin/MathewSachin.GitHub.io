@@ -177,83 +177,15 @@ layout: null
       </div>     
 
       <ul id="projects">
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/Arpian">Arpian</a>
-            <br>
-            Mathematical Parser using Reverse Polish Notation.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/BodyMassIndex">BodyMassIndex</a>
-            <br>
-            Calculates Body Mass Index.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/DuplicateFileDetector">DuplicateFileDetector</a>
-            <br>
-            Detects Duplicate Files in a Folder.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/Equamatics">Equamatics</a>
-            <br>
-            Linear and Polynomial Equation Solver.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/Fader">Fader</a>
-            <br>
-            Control Opacity of Windows.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/KeyTracker">KeyTracker</a>
-            <br>
-            Track Keypresses.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/NIco">NIco</a>
-            <br>
-            Create, Edit and View icons.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/Randomizer">Randomizer</a>
-            <br>
-            Randomly Selects a value from a set of given Values.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/RegX">RegX</a>
-            <br>
-            Regular Expression (Regex) Parser.
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/Thumbs">Thumbs</a>
-            <br>
-            WPF DWM Thumbnail Viewer
-          </div>
-        </li>
-        <li>
-          <div>
-            <a href="https://github.com/MathewSachin/TicTacToe">TicTacToe</a>
-            <br>
-            Classical Tic Tac Toe Game.
-          </div>
-        </li>
+        {% for project in site.data.projects %}
+          <li>
+            <div>
+              <a href="{{ project.url }}">{{ project.name }}</a>
+              <br>
+              {{ project.description }}.
+            </div>
+          </li>
+        {% endfor %}
       </ul>
 
       <br>

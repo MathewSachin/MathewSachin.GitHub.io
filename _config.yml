@@ -10,8 +10,7 @@ adsense: "ca-pub-4251360406988977"
 
 # Default to `post` layout for posts
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
       type: "posts"
     values:
