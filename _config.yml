@@ -1,5 +1,8 @@
 lsi: false
 
+name: Mathew Sachin
+description: My Website where I blog using jekyll
+author: Mathew Sachin
 url: "https://MathewSachin.github.io"
 
 github: "MathewSachin"
@@ -25,6 +28,7 @@ gems:
   - jekyll-paginate # Pagination
   - jekyll-gist # GitHub Gists
   - jekyll-sitemap # Site Map
+  - jekyll-feed # Atom Feed
 
 # Pagination
 paginate: 5
