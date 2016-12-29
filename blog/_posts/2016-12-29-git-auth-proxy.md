@@ -15,6 +15,7 @@ The second method has the advantage that other apps may also use the Environment
 ## Using Git Configuration
 
 Setting up:
+
 ```
 git config --global http.proxy http://UserName:Password@ProxyServer:Port/
 git config --global https.proxy https://UserName:Password@ProxyServer:Port/
@@ -23,12 +24,14 @@ git config --global https.proxy https://UserName:Password@ProxyServer:Port/
 e.g. `git config --global http.proxy http://2016ipg_047:PASSWORD@192.168.1.107:3128/`
 
 Verifying:
+
 ```
 git config --global --get http.proxy
 git config --global --get https.proxy
 ```
 
 When you want to Remove:
+
 ```
 git config --global --unset http.proxy
 git config --global --unset https.proxy
