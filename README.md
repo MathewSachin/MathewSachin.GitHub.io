@@ -23,6 +23,10 @@ For Shields.io NuGet badge, see [this post](https://mathewsachin.github.io/blog/
 
 - [Google Analytics](https://analytics.google.com)
 
+- [Gitter Sidecar](https://sidecar.gitter.im)
+
+- [Google Font](https://fonts.google.com) - Lato.
+
 - [Google Maps](https://maps.google.com) for showing location.
 
 - [jekyll-paginate](https://github.com/jekyll/jekyll-paginate) gem for Pagination of Blog Posts page.
