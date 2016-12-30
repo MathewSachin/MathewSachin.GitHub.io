@@ -29,8 +29,7 @@ layout: null
     <link rel="stylesheet" href="styles/navbarToggle.css">
     <link rel="stylesheet" href="styles/parallax.css">
   </head>
-  <body id="Top"
-        data-spy="scroll"
+  <body data-spy="scroll"
         data-target=".navbar"
         data-offset="50">
 
@@ -253,10 +252,7 @@ layout: null
       </div>      
     </footer>
 
-    <!-- Back to Top floating button -->
-    <a href="#Top">
-      <button class="fab back-to-top"><i class="glyphicon glyphicon-menu-up"></i></button>
-    </a>
+    {% include backToTop.html %}
 
     <!-- Modal -->
     <div class="portfolio-modal modal fade" id="AboutModal" tabindex="-1" role="dialog" aria-hidden="true">
