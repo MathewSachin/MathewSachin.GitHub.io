@@ -17,8 +17,11 @@ layout: null
     <link rel="icon" href="/images/favicon.ico">
     {% feed_meta %}
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -252,8 +255,6 @@ layout: null
       </div>      
     </footer>
 
-    {% include backToTop.html %}
-
     <!-- Modal -->
     <div class="portfolio-modal modal fade" id="AboutModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
@@ -276,6 +277,8 @@ layout: null
         </div>
     </div>
 
+    {% include backToTop.html %}
+
     {% include analytics.html %}
 
     <!-- Gitter Sidecar -->
@@ -286,9 +289,6 @@ layout: null
       };
     </script>
     <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     
     <script src="scripts/common.js"></script>
     <script src="scripts/script.js"></script>
