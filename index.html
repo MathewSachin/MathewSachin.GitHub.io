@@ -206,7 +206,7 @@ layout: null
       <div class="caption">
         <span class="border">CONTACTS</span>
         <br>
-        <div class="toggle-chat text-center"><button class="js-gitter-toggle-chat-button btn btn-primary">Toggle Gitter Chat</button></div>
+        {% include gitter.html %}
       </div>
     </div>
 
@@ -280,15 +280,6 @@ layout: null
     {% include backToTop.html %}
 
     {% include analytics.html %}
-
-    <!-- Gitter Sidecar -->
-    <script>
-      ((window.gitter = {}).chat = {}).options = {
-        room: 'MathewSachin/MathewSachin',
-        activationElement: '.my-special-button'
-      };
-    </script>
-    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
     
     <script src="scripts/common.js"></script>
     <script src="scripts/script.js"></script>
