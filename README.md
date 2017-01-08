@@ -25,6 +25,8 @@ For Shields.io NuGet badge, see [this post](https://mathewsachin.github.io/blog/
 
 - [Gitter Sidecar](https://sidecar.gitter.im)
 
+- [Harlem Shake](https://codepen.io/taylor8294/pen/HzEkg)
+
 - [Google Font](https://fonts.google.com) - Lato.
 
 - [Google Maps](https://maps.google.com) for showing location.
