@@ -21,8 +21,6 @@ For Shields.io NuGet badge, see [this post](https://mathewsachin.github.io/blog/
 
 - [Google Analytics](https://analytics.google.com)
 
-- [Gitter Sidecar](https://sidecar.gitter.im)
-
 - [Google Font](https://fonts.google.com) - Lato.
 
 - [Google Maps](https://maps.google.com) for showing location.
