@@ -8,8 +8,6 @@ My Website including a blog made with:
 - [Jekyll](http://jekyllrb.com) - Static Site Generator for those who want to blog like a hacker.
 GitHub Pages automatically generates Jekyll sites.
 
-- [Fork Me Banner](https://github.com/tholman/github-corners) - (c) 2016 [Tim Holman](http://tholman.com) - [The MIT License](https://github.com/tholman/github-corners/blob/master/license.md)
-
 - [Medium Style Reading Time](http://jamiecollinson.com/blog/medium-style-time-to-read-in-jekyll).
 
 - QR Code generated from [Google APIs](https://developers.google.com/chart/): `https://chart.googleapis.com/chart?cht=qr&chl=https%3A%2F%2Fmathewsachin.github.io&chs=160x160&chld=L|0`
@@ -24,8 +22,6 @@ For Shields.io NuGet badge, see [this post](https://mathewsachin.github.io/blog/
 - [Google Analytics](https://analytics.google.com)
 
 - [Gitter Sidecar](https://sidecar.gitter.im)
-
-- [Harlem Shake](https://codepen.io/taylor8294/pen/HzEkg)
 
 - [Google Font](https://fonts.google.com) - Lato.
 
