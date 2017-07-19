@@ -28,9 +28,6 @@ layout: null
 
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/modal.css">
-    <link rel="stylesheet" href="styles/navbarToggle.css">
-    <link rel="stylesheet" href="styles/parallax.css">    
   </head>
   <body data-spy="scroll"
         data-target=".navbar"
@@ -56,49 +53,9 @@ layout: null
           <ul class="nav navbar-nav">
             <li><a href="/blog"><span class="fa fa-rss"></span> Blog</a></li>
           </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#AboutMeTarget"><span class="glyphicon glyphicon-user"></span> About</a></li>            
-            <li><a href="#MadeByMeTarget"><span class="glyphicon glyphicon-stats"></span> Creations</a></li>
-            <li><a href="#ContactMeTarget"><span class="glyphicon glyphicon-earphone"></span> Contacts</a></li>
-          </ul>
         </div>
       </div>
     </nav>
-
-    <div class="bgimg-1" id="AboutMeTarget">
-      <p class="mobile-hide qrcode">
-        <!--<img src='https://chart.googleapis.com/chart?cht=qr&chl=https%3A%2F%2Fmathewsachin.github.io&chs=160x160&chld=L|0' alt='QR Code'>-->
-        <img src='images/qr.png' alt='QR Code'>
-      </p>
-      <div class="caption">
-        <span class="border">Hello();</span>
-      </div>
-    </div>
-
-    <div id="AboutMe"
-         class="container-fluid">
-      <div class="row">
-        <div class="col-sm-4 text-center">
-          <img class="avatar img-circle" src="https://github.com/MathewSachin.png"/>          
-        </div>
-        <div class="col-sm-8">
-<h2>Mathew Sachin</h2>
-<p>An Indian engineering student interested in <em>music (guitar, piano)</em> and <em>programming (C#, C++, Web)</em>.</p>
-
-<h3 class="text-center keywords">Developer - Musician</h3>
-
-<blockquote>It's awkward talking about oneself in the third person. <small>Mathew Sachin</small></blockquote>
-
-<p><a href="#AboutModal" class="portfolio-link" data-toggle="modal">Continue Reading...</a></p>
-        </div>
-      </div>
-    </div>
-
-    <div class="bgimg-2" id="MadeByMeTarget">
-      <div class="caption">
-        <span class="border">CREATIONS</span>
-      </div>
-    </div>
 
     <div id="MadeByMe"
          class="container-fluid bg-warning">
@@ -225,9 +182,6 @@ layout: null
               <a href="https://facebook.com/Mathew.Sachin.Sebastian">
                 <button class="btn btn-primary fab"><i class="fa fa-facebook fa-lg"></i></button> Follow on Facebook
               </a>
-              <a href="https://www.pinterest.com/mathewsachin/">
-                <button class="btn btn-danger fab"><i class="fa fa-pinterest fa-lg"></i></button> Follow on PInterest
-              </a>
               <a href="mailto:Mathew.Sachin.Git@outlook.com">
                 <button class="btn btn-warning fab"><i class="glyphicon glyphicon-envelope fa-lg"></i></button> Mail
               </a>
@@ -252,34 +206,11 @@ layout: null
       </div>      
     </footer>
 
-    <!-- Modal -->
-    <div class="portfolio-modal modal fade" id="AboutModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                          <h2 class="text-center" style="margin-bottom: 20px">About</h2>
-                          {% include bio.html %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {% include backToTop.html %}
 
     {% include analytics.html %}
     
     <script src="scripts/common.js"></script>
     <script src="scripts/script.js"></script>
-    <script src="scripts/scroll.js"></script>
   </body>
 </html>
