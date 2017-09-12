@@ -7,7 +7,7 @@ Google Chrome includes an endles runner Dinosaur game which appears in the absen
 
 **Edited: 12-09-17**
 
-If you are unable to get the No Internet page, open a new tab and paste `chrome://network-error/-106` and press enter.
+If you are unable to get the **No Internet page**, open a new tab and paste `chrome://dino` and press enter.
 
 ## Playing
 - **Space Bar / Up:** Jump (also to start the game)
@@ -21,7 +21,6 @@ If you are unable to get the No Internet page, open a new tab and paste `chrome:
 - Make sure you are on the **No Internet Connection** page.
 - Right click anywhere on the page and select *Inspect*.
 - Go to *Console* tab. This is where we will enter the commands to tweak the game.
-
 
 ## Tweaking Speed
 Type: `Runner.instance_.setSpeed(1000)`, or any other speed other than 1000 and press enter.
