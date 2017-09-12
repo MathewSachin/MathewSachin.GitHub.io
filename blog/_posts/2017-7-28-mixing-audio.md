@@ -5,7 +5,7 @@ highlight: true
 reading_time: true
 ---
 
-Mixing audio from Microphone input and Speaker output (obtained using WASAPI Loopback) was a commonly asked feature.
+Mixing audio from Microphone input and Speaker output (obtained using WASAPI Loopback) was a commonly asked feature for Captura.
 
 Before this feature was implemented, Captura used NAudio.
 We moved to ManagedBass (a .Net wrapper for un4seen BASS audio library) for audio handling which made it much easier to implement this function.

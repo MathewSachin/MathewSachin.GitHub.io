@@ -3,6 +3,8 @@ title: Making a Shields.io NuGet badge
 tags: [nuget, shields]
 ---
 
+**EDIT: shields.io now has a NuGet badge**
+
 ## What is Shields.io?
 [Shields.io](http://shields.io) is a metadata badge service serving fast and scalable informational images as badges for GitHub, Travis CI, Jenkins, WordPress and many more services
 
