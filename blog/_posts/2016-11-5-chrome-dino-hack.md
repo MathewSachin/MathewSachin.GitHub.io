@@ -7,6 +7,8 @@ Google Chrome includes an endles runner Dinosaur game which appears in the absen
 
 **Edited: 12-09-17**
 
+If you are unable to get the No Internet page, open a new tab and paste `chrome://network-error/-106` and press enter.
+
 ## Playing
 - **Space Bar / Up:** Jump (also to start the game)
 - **Down:** Duck (pterodactyls appear after 450 points)
