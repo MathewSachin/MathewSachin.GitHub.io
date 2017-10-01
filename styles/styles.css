@@ -5,7 +5,6 @@
 }
 
 .card {
-    /* Add shadows to create the "card" effect */
     box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     padding: 5px;
@@ -18,13 +17,11 @@
     }
 }
 
-/* On mouse-over, add a deeper shadow */
 .card:hover {
     box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
 }
 
 #projects {
-    /* Remove default list styling */
     list-style-type: none;
     padding: 0;
     margin-top: 10px;
@@ -33,20 +30,16 @@
 }
 
 #projects li div {
-    border: 1px solid #ddd; /* Add a border to all links */
-    margin-top: -1px; /* Prevent double borders */    
-    padding: 12px; /* Add some padding */
-    display: block; /* Make it into a block element to fill the whole list */
+    border: 1px solid #ddd;
+    margin-top: -1px;
+    padding: 12px;
+    display: block;
 }
 
 #projects li div:odd {
-    background-color: #f6f6f6; /* Grey background color */
+    background-color: #f6f6f6;
 }
 
 #projects li div:even {
     background-color: #e2e2e2;
-}
-
-#myUL li a:hover:not(.header) {
-    background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
