@@ -20,3 +20,12 @@ li {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.bg-teal { 
+    background-color: #1abc9c;
+    color: #ffffff;
+}
+
+.bg-teal a {
+    color: #3D3D3D;
+}

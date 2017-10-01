@@ -8,21 +8,32 @@ body {
     }
 }
 
-#content {
+.page-content {
     background: white;
     margin-top: -80px;
     padding: 30px;
     margin-bottom: 50px;
 }
 
-#content > h1 {
+.page-content > h1 {
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-#content img {
+.page-content img {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.jumbotron {
+    padding-bottom: 100px;
+}
+
+.page-content h2 {
+    margin-top: 60px;
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
 }
 
 .list-post {

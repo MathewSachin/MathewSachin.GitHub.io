@@ -5,8 +5,12 @@ layout: default
 <link rel="stylesheet" href="/styles/blog.css">
 <script src="/scripts/blog.js"></script>
 
-<h1>{{ page.title }}</h1>
-<hr>
-<br>
+<div class="jumbotron jumbotron-fluid bg-teal">
+    <div class="container">
+        <h2>{{ page.title }}</h2>
+    </div>
+</div>
 
-{{ content }}
+<div class="page-content">
+    {{ content }}
+</div>
