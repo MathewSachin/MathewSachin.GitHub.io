@@ -1,14 +1,18 @@
 ---
 layout: default
 ---
-<div class="container page-content">
-<div class="row">
-    <div class="col-md-9">
-        <h1>{{ page.title }}</h1>
+
+<div class="jumbotron jumbotron-fluid bg-teal">
+    <div class="container">
+        <h2>{{ page.title }}</h2>
         <em>{{ page.date | date_to_string }}</em> &nbsp; - &nbsp;
         <em>{% include readingTime.html %}</em>
-        <hr>
+    </div>
+</div>
 
+<div class="container page-content">
+<div class="row">
+    <div class="col-md-10">
         <div class="post-tag">
             {% for tag in page.tags %}
                 <a role="button" class="btn btn-primary btn-xs btn-tag" href="/blog/tags#{{ tag }}">{{ tag }}</a>
@@ -29,7 +33,7 @@ layout: default
 
         {% include disqus.html %}
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div <div class="sticky-top" style="top: 10px">
             {% include adsense.html %}
         </div>
