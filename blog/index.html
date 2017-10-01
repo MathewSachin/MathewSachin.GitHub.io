@@ -22,28 +22,26 @@ title: Blog Posts
     {% endfor %}
     
     <!-- Pagination links -->
-    <div class="text-center">
-      <ul class="pagination">
+    <nav>
+      <ul class="pagination justify-content-center">
         {% if paginator.previous_page %}
-        <li>
+        <li class="page-item">
         {% else %}
-        <li class="disabled">
+        <li class="page-item disabled">
         {% endif %}
-          <a href="{{ paginator.previous_page_path }}">
-            <i class="fa fa-angle-left"></i> Previous
-          </a>
+          <a href="{{ paginator.previous_page_path }}" class="page-link">Previous</a>
         </li>
 
         {% for page in (1..paginator.total_pages) %}
           {% if page == paginator.page %}
-            <li class="active">
-              <a href="#">
+            <li class="page-item active">
+              <a href="#" class="page-link">
           {% elsif page == 1 %}
-            <li>
-              <a href="/blog">
+            <li class="page-item">
+              <a href="/blog" class="page-link">
           {% else %}
-            <li>
-              <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', page }}">
+            <li class="page-item">
+              <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', page }}" class="page-link">
           {% endif %}
                 {{ page }}
               </a>
@@ -51,15 +49,13 @@ title: Blog Posts
         {% endfor %}
 
         {% if paginator.next_page %}
-        <li>
+        <li class="page-item">
         {% else %}
-        <li class="disabled">
+        <li class="page-item disabled">
         {% endif %}
-          <a href="{{ paginator.next_page_path }}">
-            Next <i class="fa fa-angle-right"></i>
-          </a>
+          <a href="{{ paginator.next_page_path }}" class="page-link">Next</a>
         </li>
       </ul>
-    </div>
+    </nav>
   {% endif %}
 </div>
