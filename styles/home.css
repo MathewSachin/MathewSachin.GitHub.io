@@ -1,26 +1,3 @@
-.card > div > img {
-    float: left;
-    width: 100px;
-    margin-right: 5px;
-}
-
-.card {
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    padding: 5px;
-    margin-bottom: 15px;
-}
-
-@media only screen and (min-width: 992px) {
-    .card {
-        min-height: 280px;
-    }
-}
-
-.card:hover {
-    box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
-}
-
 #projects {
     list-style-type: none;
     padding: 0;
