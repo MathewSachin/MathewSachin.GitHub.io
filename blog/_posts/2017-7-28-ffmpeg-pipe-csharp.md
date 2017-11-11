@@ -1,6 +1,7 @@
 ---
 title: Piping to ffmpeg.exe with C#
 tags: [ffmpeg]
+highlight: true
 ---
 
 FFMpeg is a great tool for doing all kinds of stuff with media.

@@ -1,5 +1,6 @@
 ---
 title: Mixing Microphone Input and Speaker Output
+highlight: true
 ---
 
 Mixing audio from Microphone input and Speaker output (obtained using WASAPI Loopback) was a commonly asked feature for Captura.
