@@ -28,6 +28,18 @@ Type: `Runner.instance_.setSpeed(1000)`, or any other speed other than 1000 and 
 
 ## Immortality
 - After every command press enter.
-- We store the original game over function in a variable: `var original = Runner.prototype.gameover`.
-- Then, we make the game over function empty: `Runner.prototype.gameover = function(){}`.
-- Revert back to the original game over function when you want to stop the game: `Runner.prototype.gameover = original`.
+
+- We store the original game over function in a variable:
+```js
+var original = Runner.prototype.gameover
+```
+
+- Then, we make the game over function empty:
+```js
+Runner.prototype.gameover = function(){}
+```
+
+- Revert back to the original game over function when you want to stop the game:
+```js
+Runner.prototype.gameover = original
+```
