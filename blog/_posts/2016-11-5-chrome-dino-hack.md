@@ -4,7 +4,7 @@ tags: [chrome, hack, game]
 highlight: true
 ---
 
-Google Chrome includes an endles runner Dinosaur game which appears in the absense of internet connection.
+Google Chrome includes an endless runner Dinosaur game which appears in the absense of internet connection.
 
 **Edited: 12-09-17**
 
