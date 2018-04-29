@@ -29,19 +29,18 @@ Type: `Runner.instance_.setSpeed(1000)`, or any other speed other than 1000 and 
 ## Immortality
 - After every command press enter.
 
-> If the following commands don't work, try again by changing `gameover` to `gameOver`.
-
 - We store the original game over function in a variable:
 ```js
-var original = Runner.prototype.gameover
+var original = Runner.prototype.gameOver
 ```
 
 - Then, we make the game over function empty:
 ```js
-Runner.prototype.gameover = function(){}
+Runner.prototype.gameOver = function(){}
 ```
 
-- Revert back to the original game over function when you want to stop the game:
+### Stopping the game after using Immortality
+When you want to stop the game, Revert back to the original game over function:
 ```js
-Runner.prototype.gameover = original
+Runner.prototype.gameOver = original
 ```
