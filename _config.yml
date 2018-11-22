@@ -23,7 +23,7 @@ defaults:
     values:
       layout: "post"
 
-gems:
+plugins:
   - jekyll-seo-tag  # Search Engine Optimization
   - jekyll-paginate # Pagination
   - jekyll-gist # GitHub Gists
