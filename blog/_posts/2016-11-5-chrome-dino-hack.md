@@ -6,9 +6,9 @@ highlight: true
 
 Google Chrome includes an endless runner Dinosaur game which appears in the absense of internet connection.
 
-**Edited: 12-09-17**
-
-If you are unable to get the **No Internet page**, open a new tab and paste `chrome://dino` and press enter.
+<div class="alert alert-info">
+  If you are unable to get the <b>No Internet page</b>, open a new tab and type <b>chrome://dino</b> and press enter.
+</div>
 
 ## Playing
 - **Space Bar / Up:** Jump (also to start the game)
@@ -19,12 +19,17 @@ If you are unable to get the **No Internet page**, open a new tab and paste `chr
 ![Chrome Dino](/images/chromeDino.gif)
 
 ## Open Chrome Console
-- Make sure you are on the **No Internet Connection** page.
-- Right click anywhere on the page and select *Inspect*.
-- Go to *Console* tab. This is where we will enter the commands to tweak the game.
+- Make sure you are on the **No Internet Connection** page.<br>
+- Right click anywhere on the page and select **Inspect**.
+- Go to **Console** tab. This is where we will enter the commands to tweak the game.
 
 ## Tweaking Speed
-Type: `Runner.instance_.setSpeed(1000)`, or any other speed other than 1000 and press enter.
+Type the following command in Console and press enter.
+You can use any other speed in place of **1000**.
+
+```
+Runner.instance_.setSpeed(1000)
+```
 
 ## Immortality
 - After every command press enter.

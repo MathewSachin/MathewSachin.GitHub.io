@@ -4,74 +4,30 @@ title: Mathew Sachin
 ---
 
 <meta name="google-site-verification" content="Lh8ESlqQMkcolLHKEBqLIXJ7fa6CYZ2NkdNU3QRDvvo" />
-
-<link rel="stylesheet" href="/styles/home.css">
-
-<div class="container">
-<h2>Featured Projects <small>(open-source)</small></h2>
-
 <br>
 
-<div class="card-deck">
-  <div class="card">
-    <div class="card-block">
-      <h4 class="card-title"><a href="https://github.com/MathewSachin/Captura">Captura</a></h4>
-      <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
-    </div>
-    <div class="card-footer">
-      <a href="https://github.com/MathewSachin/Captura/releases/latest"><img src="https://img.shields.io/github/downloads/MathewSachin/Captura/total.svg"></a>
-      <a href="https://github.com/MathewSachin/Captura/stargazers"><img src="https://img.shields.io/github/stars/MathewSachin/Captura.svg?style=flat-square"></a>
-      <a href="https://github.com/MathewSachin/Captura/fork"><img src="https://img.shields.io/github/forks/MathewSachin/Captura.svg?style=flat-square"></a>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-block">
-      <h4 class="card-title"><a href="https://github.com/ManagedBass/ManagedBass">ManagedBass</a></h4>
-      <p class="card-text">Free Open-Source .Net Wrapper around un4seen Bass audio library.</p>
-    </div>
-    <div class="card-footer">
-      <a href="https://nuget.org/packages/ManagedBass"><img src="https://img.shields.io/nuget/dt/ManagedBass.svg"></a>
-      <a href="https://github.com/ManagedBass/ManagedBass/stargazers"><img src="https://img.shields.io/github/stars/ManagedBass/ManagedBass.svg?style=flat-square"></a>
-      <a href="https://github.com/ManagedBass/ManagedBass/fork"><img src="https://img.shields.io/github/forks/ManagedBass/ManagedBass.svg?style=flat-square"></a>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-block">
-      <h4 class="card-title"><a href="https://github.com/MathewSachin/Screna">Screna</a></h4>
-      <p class="card-text">.Net Screen Capture Library powering Captura.</p>
-    </div>
-    <div class="card-footer">
-      <a href="https://nuget.org/packages/Screna"><img src="https://img.shields.io/nuget/dt/Screna.svg"></a>
-      <a href="https://github.com/MathewSachin/Screna/stargazers"><img src="https://img.shields.io/github/stars/MathewSachin/Screna.svg?style=flat-square"></a>
-      <a href="https://github.com/MathewSachin/Screna/fork"><img src="https://img.shields.io/github/forks/MathewSachin/Screna.svg?style=flat-square"></a>
-    </div>
-  </div>
-</div>
-
-<br><br>
-
-<div class="input-group">
-  <input type="text" id="projectsFilter" class="form-control input-lg" onkeyup="filterProjects()" placeholder="Search for projects..">
-  <span class="input-group-btn">
-    <button class="btn btn-info btn-lg" type="button">
-      <i class="fa fa-search"></i>
-    </button>
-  </span>
-</div>     
-
-<ul id="projects">
-  {% for project in site.data.projects %}
-    <li>
-      <div>
-        <a href="{{ project.url }}">{{ project.name }}</a>
-        <br>
-        {{ project.description }}.
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="card-title"><a href="https://mathewsachin.github.io/Captura/">Captura</a></div>
+          <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
+        </div>
+        <div class="card-footer">
+          <a href="https://github.com/MathewSachin/Captura/releases/latest"><img src="https://img.shields.io/github/downloads/MathewSachin/Captura/total.svg?style=flat-square"></a>
+          <a href="https://github.com/MathewSachin/Captura/stargazers"><img src="https://img.shields.io/github/stars/MathewSachin/Captura.svg?style=flat-square"></a>
+          <a href="https://github.com/MathewSachin/Captura/fork"><img src="https://img.shields.io/github/forks/MathewSachin/Captura.svg?style=flat-square"></a>
+        </div>
       </div>
-    </li>
-  {% endfor %}
-</ul>
+    </div>
+    <div class="col-md">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="card-title"><a href="/blog">Blog</a></div>
+          <p class="card-text">My Blog.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<script src="scripts/script.js"></script>
