@@ -9,8 +9,10 @@ Before this feature was implemented, Captura used NAudio.
 We moved to ManagedBass (a .Net wrapper for un4seen BASS audio library) for audio handling which made it much easier to implement this function.
 We implemented this feature using the BassMix addon along with built-in support for recording and WASAPI Loopback.
 
-Here's a [link](https://github.com/MathewSachin/Captura/blob/master/src/Captura.Core/Models/MixedAudioProvider.cs) to the implementation used in Captura.
+Here's a [link](https://github.com/MathewSachin/Captura/blob/master/src/Captura.Bass/MixedAudioProvider.cs) to the implementation used in Captura.
 If you experience broken link (may happen if repository structure changes in future), let me know in the comments.
+
+Here's an [NAudio implementation](https://github.com/MathewSachin/Captura/blob/master/src/Captura.NAudio/MixedAudioProvider.cs). Please note that it is not well tested.
 
 First, install the ManagedBass and ManagedBass.Mix NuGet packages:
 
