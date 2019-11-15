@@ -57,3 +57,10 @@ The current score is reset on game over.
 ```js
 Runner.instance_.distanceRan = 12345 / Runner.instance_.distanceMeter.config.COEFFICIENT
 ```
+
+## Dino jumping too high?
+You can control how high the dino jumps by using the below function. Adjust the value as necessary.
+
+```js
+Runner.instance_.tRex.setJumpVelocity(10)
+```
