@@ -1,31 +1,5 @@
-body {
-    font-family: 'Lato', sans-serif;
-}
-
-h2 {
-    margin-top: 40px;
-    margin-bottom: 15px;
-}
-
-h3 {
-    margin-top: 30px;
-    margin-bottom: 15px;
-}
-
-h4 {
-    margin-top: 30px;
-}
-
-li {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.bg-teal { 
-    background-color: #1abc9c;
-    color: #ffffff;
-}
-
-.bg-teal a {
-    color: #3D3D3D;
+.avatar {
+  border-radius: 50%;
+  max-width: 300px;
+  text-align: center;
 }

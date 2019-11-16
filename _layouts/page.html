@@ -5,12 +5,20 @@ layout: default
 <link rel="stylesheet" href="/styles/blog.css">
 <script src="/scripts/blog.js"></script>
 
-<div class="jumbotron jumbotron-fluid bg-teal">
-    <div class="container">
-        <h2>{{ page.title }}</h2>
+<div class="grey">
+    <div class="jumbotron jumbotron-fluid blue-gradient text-white">
+        <div class="container">
+            <h2>{{ page.title }}</h2>
+        </div>
     </div>
-</div>
 
-<div class="page-content container">
-    {{ content }}
+    <div class="page-content container">
+        <div class="card">
+            <div class="card-body">
+                {{ content }}
+            </div>
+        </div>
+    </div>
+
+    <br>
 </div>

@@ -3,9 +3,11 @@ lsi: false
 name: Mathew Sachin
 description: My Website where I blog using jekyll
 author: Mathew Sachin
-url: "https://MathewSachin.github.io"
+url: "https://mathewsachin.in"
 
 github: "MathewSachin"
+twitter: "MathewSachin7"
+linkedin: "mathewsachin7"
 
 google-analytics: "UA-70778035-3"
 
