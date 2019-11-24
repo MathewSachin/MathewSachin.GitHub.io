@@ -1,4 +1,6 @@
 <head>
+    {% include analytics.html %}
+
     <meta charset="UTF-8"/>
     <title>{% if page.title %}{{ page.title }}{% else %}Blog | Mathew Sachin{% endif %}</title>
     <meta name="viewport"
@@ -23,12 +25,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
-    
-    <!-- Google Font - Lato -->
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 
     <link rel="stylesheet" href="/styles/styles.css">
 
     {% feed_meta %}
     {% seo %}
+
+    {% include adsense.html %}
 </head>

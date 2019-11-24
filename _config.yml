@@ -9,7 +9,7 @@ github: "MathewSachin"
 twitter: "MathewSachin7"
 linkedin: "mathewsachin7"
 
-google-analytics: "UA-70778035-3"
+google-analytics: "UA-70778035-4"
 
 disqus: "mathewsachin"
 
@@ -17,13 +17,18 @@ adsense: "ca-pub-4251360406988977"
 
 exclude: ["Gemfile", "Gemfile.lock", "README.md"]
 
-# Default to `post` layout for posts
 defaults:
+  # Default to `post` layout for posts
   - scope:
       path: ""
       type: "posts"
     values:
       layout: "post"
+  # Ads shown on all pages by default
+  - scope:
+      path: ""
+    values:
+      ads: true
 
 plugins:
   - jekyll-seo-tag  # Search Engine Optimization
