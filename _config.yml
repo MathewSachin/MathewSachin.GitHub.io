@@ -18,16 +18,14 @@ adsense: "ca-pub-4251360406988977"
 exclude: ["Gemfile", "Gemfile.lock", "README.md"]
 
 defaults:
-  # Default to `post` layout for posts
   - scope:
       path: ""
       type: "posts"
     values:
+      # Default to `post` layout for posts
       layout: "post"
-  # Ads shown on all pages by default
-  - scope:
-      path: ""
-    values:
+
+      # Ads shown on all posts by default
       ads: true
 
 plugins:
