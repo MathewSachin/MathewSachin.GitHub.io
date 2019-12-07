@@ -1,0 +1,13 @@
+.page-content h2 {
+  margin-top: 40px;
+}
+
+.page-content h3 {
+  margin-top: 30px;
+}
+
+.page-content img {
+  max-width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
