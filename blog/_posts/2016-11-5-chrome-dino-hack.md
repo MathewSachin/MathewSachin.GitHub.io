@@ -2,6 +2,8 @@
 title: Hacking the Chrome Dino Game
 tags: [chrome, hack, game]
 highlight: true
+related:
+  - /blog/2019/12/07/unhide-password-box
 ---
 
 Google Chrome includes an endless runner Dinosaur game which appears in the absense of internet connection.

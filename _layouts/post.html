@@ -30,6 +30,19 @@ layout: default
         
                     {% include share.html %}
 
+                    {% if page.related %}
+                        <br>
+
+                        <i class="text-muted">You might also like:</i><br>
+                        <ul>
+                        {% for post in site.posts %}
+                            {% if page.related contains post.id %}
+                                <li><a href="{{post.url}}">{{post.title}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+
                     <br><hr><br>
         
                     {% include disqus.html %}
