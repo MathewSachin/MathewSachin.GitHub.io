@@ -31,9 +31,9 @@ layout: default
                     {% include share.html %}
 
                     {% if page.related %}
-                        <br>
+                        <br><hr><br>
 
-                        <i class="text-muted">You might also like:</i><br>
+                        <h3 class="text-muted"><i>You might also like</i></h3>
                         <ul>
                         {% for post in site.posts %}
                             {% if page.related contains post.id %}
