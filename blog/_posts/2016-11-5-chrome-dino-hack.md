@@ -2,6 +2,7 @@
 title: Hacking the Chrome Dino Game
 tags: [chrome, hack, game]
 highlight: true
+disqus: true
 related:
   - /blog/2019/12/07/unhide-password-box
 ---
