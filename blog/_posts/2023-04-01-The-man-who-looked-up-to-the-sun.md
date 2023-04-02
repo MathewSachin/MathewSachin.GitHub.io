@@ -5,6 +5,8 @@ tags: [wth]
 
 > The characters and situations in this book are completely fictional, anyone who feels a resemblance to this should seriously consider their life choices.
 
+<img src="/images/sunflower-man.jpg" width="600"/>
+
 Once upon a time, there lived a man who loved the sun.
 He aimed to be close to the sun, become one with it.
 Such a pure form of admiration for all that is bright and white.
