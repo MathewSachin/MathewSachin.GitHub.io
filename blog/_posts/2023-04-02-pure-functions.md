@@ -8,7 +8,7 @@ highlight: true
 Pure function is a function that produces the same result for identical inputs, and has no side-effects.  
 To always produce the same output for the same input, the function shouldn't depend on global or static variables or any form of IO.
 
-```kt
+```kotlin
 // A pure function that calculates square of a number
 fun square(i: Long): Long {
     return i * i
@@ -21,7 +21,7 @@ Side-effects are state changes outside the function like changing global variabl
 
 **_Referential transparency_**, an unnecessarily complex term :D, is a property of pure functions, where we can replace the function call with just it's result without changing the program's meaning. This works precisely due to the abscense of side-effects.
 
-```kt
+```kotlin
 println(square(2)) // prints 4
 println(4) // replacing the function call with just the output doesn't change the program's meaning
 ```
