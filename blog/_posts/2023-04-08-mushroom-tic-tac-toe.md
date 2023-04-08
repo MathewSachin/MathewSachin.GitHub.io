@@ -7,7 +7,7 @@ related:
   - /blog/2016/11/05/chrome-dino-hack
 ---
 
-Artificial Intelligence (AI) is a fascinating field that has come a long way in recent years. From machine learning to natural language processing, AI has the potential to revolutionize the way we live and work. One example of AI's capabilities is demonstrated by ChatGPT, a language model trained by OpenAI. Just for having fun I asked it to write a pointeless story, and it came up with the story of Gary the giraffe who likes to eat choose and along his travels a variation of tic-tac-toe that some mushrooms were playing in the story caught my interest.
+Artificial Intelligence (AI) is a fascinating field that has come a long way in recent years. From machine learning to natural language processing, AI has the potential to revolutionize the way we live and work. One example of AI's capabilities is demonstrated by [ChatGPT](https://chat.openai.com/chat), a language model trained by OpenAI. Just for having fun I asked it to write a pointeless story, and it came up with the story of Gary the giraffe who likes to eat choose and along his travels a variation of tic-tac-toe that some mushrooms were playing in the story caught my interest.
 So, I asked ChatGPT to list down the rules for this mushroom tic-tac-toe and so it did.
 
 In short, you get a set of mushroom caps, which I would prefer to be around 3, which then you take turns to place on a 3x3 grid.  
