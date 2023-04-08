@@ -5,6 +5,7 @@ highlight: true
 disqus: true
 related:
   - /blog/2019/12/07/unhide-password-box
+  - /blog/2023/04/08/mushroom-tic-tac-toe
 ---
 
 Google Chrome includes an endless runner Dinosaur game which appears in the absense of internet connection.
