@@ -1,10 +1,10 @@
 <style>
-.post-share .fab {
+.post-share .fab, .post-share .fa {
     margin-right: 10px;
     margin-top: 10px;
 }
 
-.post-share .fab:hover {
+.post-share .fab:hover, .post-share .fa:hover {
     text-decoration: unset;    
 }
 
@@ -43,7 +43,7 @@
     <em>Share this:</em> <br/>
     <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" class="fab fa-facebook fa-lg win"></a>
     <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}" class="fab fa-twitter fa-lg win"></a>
-    <a href="mailto:?subject={{ page.title }}&amp;body=Check out this site {{ site.url }}{{ page.url }}" class="fab fa-envelope fa-lg"></a>
+    <a href="mailto:?subject={{ page.title }}&amp;body=Check out this site {{ site.url }}{{ page.url }}" class="fa fa-envelope fa-lg"></a>
     <hr>
 </div>
 
