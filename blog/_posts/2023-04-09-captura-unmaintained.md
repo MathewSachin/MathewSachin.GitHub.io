@@ -6,6 +6,7 @@ related:
   - /blog/2016/11/05/chrome-dino-hack
 redirect_from:
   - /Captura/
+  - /captura/
 ---
 
 ### What's Captura?
