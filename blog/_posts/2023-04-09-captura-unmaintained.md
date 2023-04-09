@@ -53,6 +53,9 @@ If I do decide to contribute to open-source projects, it would likely be in the 
 If I were to create another major application, it would likely not be open-source, and I would explore monetization options.
 After having written code for charity in the past, I am looking to explore opportunities that offer remuneration for my work.
 
+### References
+[#405: Illegal Rebrand](https://github.com/MathewSachin/Captura/issues/405)
+
 ### Donations
 I have decided to take down Captura's website, and henceforth, I will be moving the donations that were previously accepted on the site.
 I have not accepted any donations since discontinuing work on the project.
