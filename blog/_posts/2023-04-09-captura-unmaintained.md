@@ -7,6 +7,7 @@ related:
 redirect_from:
   - /Captura/
   - /captura/
+  - captura
 ---
 
 ### What's Captura?
