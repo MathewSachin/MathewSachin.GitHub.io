@@ -34,6 +34,7 @@ plugins:
   - jekyll-gist # GitHub Gists
   - jekyll-sitemap # Site Map
   - jekyll-feed # Atom Feed
+  - jekyll-redirect-from
 
 # Pagination
 paginate: 10
