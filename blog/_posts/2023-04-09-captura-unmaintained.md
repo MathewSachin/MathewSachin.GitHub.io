@@ -4,6 +4,8 @@ tags: [captura]
 disqus: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
+redirect_from:
+  - /Captura/
 ---
 
 ### What's Captura?
