@@ -15,6 +15,8 @@ Captura **was** a screen capture (screenshot, recording) app for Windows which c
 It is no longer maintained, but the [source-code is still archived on GitHub](https://github.com/MathewSachin/Captura) with 8k+ stars and 1.5k+ forks.
 I acknowledge the existence of several outstanding bugs in the application, and despite knowing what needs to be addressed, I have decided against providing any further updates.
 
+You can still download it [here](https://github.com/MathewSachin/Captura/releases). Check `Assets` under the version you want and download either the Portable or Setup package.
+
 ![Captura](/images/captura.png)
 
 ### Some history
