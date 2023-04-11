@@ -24,7 +24,7 @@ layout: default
             <ul>
             {% for post in site.posts %}
                 {% if page.related contains post.id %}
-                    <li><a href="{{post.url}}">{{post.title}}</a></li>
+                    <li><a href="{{post.url}}" class="text-light">{{post.title}}</a></li>
                 {% endif %}
             {% endfor %}
             </ul>
