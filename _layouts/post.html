@@ -16,6 +16,19 @@ layout: default
                 <a class="badge badge-pill badge-primary" href="/blog/tags#{{ tag }}">{{ tag }}</a>
             {% endfor %}
         </div>
+        
+        {% if page.related %}
+            <br><hr><br>
+
+            <h4 class="text-muted"><i>You might also like</i></h4>
+            <ul>
+            {% for post in site.posts %}
+                {% if page.related contains post.id %}
+                    <li><a href="{{post.url}}">{{post.title}}</a></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </div>
 
@@ -29,19 +42,6 @@ layout: default
                     </div>
         
                     {% include share.html %}
-
-                    {% if page.related %}
-                        <br><hr><br>
-
-                        <h3 class="text-muted"><i>You might also like</i></h3>
-                        <ul>
-                        {% for post in site.posts %}
-                            {% if page.related contains post.id %}
-                                <li><a href="{{post.url}}">{{post.title}}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
 
                     <br><hr><br>
         
