@@ -11,7 +11,7 @@ related:
 **Discalimer:** What I'm going to show here is not something people usually do. If you do decide to use it, use in moderation, don't overdo.
 
 ```kotlin
-interface LocationExtensions {
+interface ScriptApi {
     fun Region.click()
     operator fun Region.contains(image: Image)
     fun Region.findMatch(image: Image): Match
@@ -20,7 +20,7 @@ interface LocationExtensions {
 ```
 
 ```kotlin
-class LocationExtensionsImpl @Inject constructor(
+class ScriptApiImplementation @Inject constructor(
     private val clicker: Clicker,
     private val imageMatcher: ImageMatcher
 ) : LocationExtensions {
@@ -28,5 +28,21 @@ class LocationExtensionsImpl @Inject constructor(
     override operator fun Region.contains(image: Image) = imageMatcher.matches(image, region)
     override fun Region.findMatch(image: Image): Match = imageMatcher.find(image, region)
     override fun Region.findAllMatches(image: Image): List<Match> = imageMatcher.findAll(image, region)
+}
+```
+
+```kotlin
+class BattleScript @Inject constructor(
+    api: ScriptApi
+) : ScriptApi by api {
+    val ENEMY_IMAGE: Image = //...
+    val ENEMY_REGION: Region = //...
+    val ATTCK_BUTTON: Location = /...
+
+    fun battle() {
+        if (ENEMY_IMAGE in ENEMY_REGION) { // or ENEMY_REGION.contains(ENEMY_IMAGE)
+            ATTACK_BUTTON.click()
+        }
+    }
 }
 ```
