@@ -8,7 +8,21 @@ related:
   - /blog/2023/04/09/captura-unmaintained
 ---
 
-**Discalimer:** What I'm going to show here is not something people usually do. If you do decide to use it, use in moderation, don't overdo.
+**Discalimer:** What I'm going to show here is not something people usually do. Carefully evaluate if it makes sense for your use-case and even if you use, better not overdo.
+
+**Extension functions** in Kotlin allow you to add new functions to existing classes without having to inherit from them.
+```
+fun Double.cube() = this * this * this
+```
+
+**Dependency injection** is a design pattern in which the dependencies of an object are provided externally rather than being created within the object itself.
+Knowing about dependency injection is a pre-requisite to this post.
+
+### What is this post about?
+
+
+
+### Show me the code
 
 ```kotlin
 interface ScriptApi {
