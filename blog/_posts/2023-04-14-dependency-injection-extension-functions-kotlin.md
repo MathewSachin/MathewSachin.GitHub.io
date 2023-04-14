@@ -34,11 +34,11 @@ class Car @Inject constructor(val engine: Engine) {
 
 ### What is this post about?
 Extension functions make the code more idiomatic, but are very similar to static functions.
-Hence, techniques like dependency injection and mocking don't play well with it.
+Hence, techniques like dependency injection and mocking don't play well with these.
 So, usually the recommendation is to [keep these functions pure]({% post_url /blog/2023-04-02-pure-functions %}), basically only rely on inputs to produce output, don't cause side-effects.
 This is so that we can reason about and test these function easily in isolation without needing dependency injection or mocking.
 
-But, there are some niche situations where using extensions functions would keep the code more readable.
+But, there are some niche situations where using extensions functions would make the code more readable.
 What I'm going to show you is a way to achieve just that while still being able to inject dependencies.
 
 The use-case I had for this was a game-automation scripting framework in which the main mode of operation was to match images on the screen and then click on the screen.  
@@ -81,8 +81,9 @@ class ScriptApiImplementation @Inject constructor(
 
 In the class where you want to use these extension functions, inject the interface that we defined above.
 Sprinkle in some magic with Kotlin delegation, i.e. use the injected interface to make the target class implement the same interface.
+
 That probably sounded confusing :D. Look at the `: ScriptApi by api` in the example below.
-What it basically tells Kotlin is that, this class implements this interface but via this another class for the implementation.
+What it basically tells Kotlin is that, call this other object for the functions/properties in this interface.
 
 ```kotlin
 class BattleScript @Inject constructor(
@@ -102,10 +103,11 @@ class BattleScript @Inject constructor(
 
 ### Testing
 There you have it! Now you can provide a mock interface while testing to test your extension functions in isolation!
-I usually like to have minmal details in the extension impelementation class and move the impure logic to other interfaces that I could mock out. In the above example, that's `Clicker` and `ImageMatcher`.
+I usually like to have minimal detail in the extension impelementation class and move the impure logic to other interfaces that I could mock out. In the above example, that's `Clicker` and `ImageMatcher`.
 Following example uses Mockito kotlin and JUnit 5:
 
 ```
+@Test
 fun `should attack when an enemy is spotted`() {
   val mockClicker = mock<Clicker> {
       // No-op on click
@@ -127,6 +129,6 @@ fun `should attack when an enemy is spotted`() {
 
 ### Conclusion
 
-While this post showed you a possiblity of using dependency-injection with extension functions, carefully evaluate before using this practically if this fits your use-case and if the extension functions improve readability of your code by a significant amount.
+While this post showed you a possiblity of using dependency-injection with extension functions, carefully evaluate if this fits your use-case, before using this practically, and also if the extension functions really improve readability of your code by a significant amount.
 
 Thanks for reading! Have fun!
