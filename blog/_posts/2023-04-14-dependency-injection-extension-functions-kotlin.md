@@ -8,6 +8,8 @@ related:
   - /blog/2023/04/09/captura-unmaintained
 ---
 
+### Pre-requisites
+
 **Extension functions** in Kotlin allow you to add new functions to existing classes without having to inherit from them.
 ```
 fun Double.cube() = this * this * this
