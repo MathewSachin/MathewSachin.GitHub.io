@@ -18,6 +18,7 @@ In this post, we're going to try out One-Time schedules in Kotlin via AWS Java S
 2. Create an SNS topic. We're creating with the name `SchedulerTargetTopic` for this example.
 3. Next, you need an IAM role that EventBridge scheduler can assume to invoke the target service like SNS or SQS. For this example, we'll use an SNS.
    Here's how you can configure the trust policy for the role to allow EventBridge scheduler to assume the role: 
+
 ```json
 {
     "Version": "2012-10-17",
@@ -32,7 +33,9 @@ In this post, we're going to try out One-Time schedules in Kotlin via AWS Java S
     ]
 }
 ```
+
    Since, we want to use an SNS topic as target, attach an inline policy to the role that allows publishing to the SNS topic. Replace the `Resource` value with your SNS topic ARN.
+
 ```json
 {
     "Version": "2012-10-17",
@@ -48,13 +51,16 @@ In this post, we're going to try out One-Time schedules in Kotlin via AWS Java S
 
 ### Start coding!
 1. Create EventBridge Scheduler client
+
 ```kotlin
 val eventBridgeScheduler = SchedulerClient.builder()
     .credentialsProvider(DefaultCredentialsProvider.create())
     .region(Region.US_WEST_2)
     .build()
 ```
+
 2. Create an SNS target
+
 ```kotlin
 val snsTarget = Target.builder()
     .roleArn("<ROLE ARN>")
@@ -62,7 +68,9 @@ val snsTarget = Target.builder()
     .input(message)
     .build()
 ```
+
 3. Call createSchedule
+
 ```kotlin
 val createScheduleRequest = CreateScheduleRequest.builder()
     .name("<TIMER ID>")
