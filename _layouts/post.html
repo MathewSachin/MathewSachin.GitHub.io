@@ -4,8 +4,8 @@ layout: default
 
 <link rel="stylesheet" href="/styles/blog.css">
 
-<div class="grey">
-<div class="jumbotron jumbotron-fluid blue-gradient text-white">
+<div class="bg-dark">
+<div class="jumbotron jumbotron-fluid bg-info text-white">
     <div class="container">
         <h2>{{ page.title }}</h2>
         <em>{{ page.date | date_to_string }}</em> &nbsp; - &nbsp;
@@ -13,8 +13,13 @@ layout: default
 
         <div class="post-tag my-1">
             {% for tag in page.tags %}
-                <a class="badge badge-pill badge-primary" href="/blog/tags#{{ tag }}">{{ tag }}</a>
+                <a class="badge badge-pill badge-secondary" href="/blog/tags#{{ tag }}">{{ tag }}</a>
             {% endfor %}
+        </div>
+
+        <div>
+            <a class="text-light" href="https://twitter.com/intent/tweet?text={{ page.title }}&amp;url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fab fa-twitter pr-1" aria-hidden="true"></i></a>
+            <a class="text-light" href="mailto:?subject={{ page.title }}&amp;body=Check out this site {{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fa fa-envelope pr-1" aria-hidden="true"></i></a>
         </div>
         
         {% if page.related %}
@@ -40,14 +45,10 @@ layout: default
                     <div class="page-content">
                     {{ content }}
                     </div>
-        
-                    {% include share.html %}
 
                     <br><hr><br>
-        
-                    {% if page.disqus %}
-                    {% include disqus.html %}
-                    {% endif %}
+
+                    <div id="disqus_thread"></div>
                 </div>
             </div>
         </div>
@@ -60,15 +61,4 @@ layout: default
 </div>
 
 <br>
-
-{% if page.highlight %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css">
-<script>hljs.initHighlightingOnLoad();</script>
-{% endif %}
-
-<script src="/scripts/blog.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
-<script src="/scripts/copy-code.js"></script>
 </div>

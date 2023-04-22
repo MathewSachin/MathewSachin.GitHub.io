@@ -9,7 +9,7 @@ We don't directly store your data, but some services we use do:
 - Disqus
 
 ### Google Analytics
-For more details on what data is collected and how to opt-out, refer to: https://policies.google.com/technologies/partner-sites
+For more details on what data is collected and how to opt-out, refer to: [https://policies.google.com/technologies/partner-sites]( https://policies.google.com/technologies/partner-sites).
 
 ### Google AdSense
 - Third party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.
@@ -17,4 +17,4 @@ For more details on what data is collected and how to opt-out, refer to: https:/
 - You may opt out of personalized advertising by visiting [Ads Settings](https://www.google.com/settings/ads).
 
 ### Disqus
-https://help.disqus.com/en/articles/1717103-disqus-privacy-policy
+[https://help.disqus.com/en/articles/1717103-disqus-privacy-policy](https://help.disqus.com/en/articles/1717103-disqus-privacy-policy)

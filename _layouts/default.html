@@ -5,7 +5,23 @@
     {% include navbar.html %}
 
     {{ content }}
-    
-    {% include backToTop.html %}    
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="/scripts/formatting.js"></script>
+
+    {% if page.highlight %}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css">
+      <script>hljs.initHighlightingOnLoad();</script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+      <script src="/scripts/copy-code.js"></script>
+    {% endif %}
+
+    {% if page.disqus %}
+      {% include disqus.html %}
+    {% endif %}
   </body>
 </html>
