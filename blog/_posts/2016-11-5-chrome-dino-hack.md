@@ -92,4 +92,39 @@ Runner.instance_.tRex.setJumpVelocity(10)
 
 <br>
 
+## Auto-play
+
+This code periodically checks for the closest obstacle (cactus or pterodactyl) and then jumps or ducks based on the obstacle height.
+
+```js
+function dispatchKey(type, key) {
+    document.dispatchEvent(new KeyboardEvent(type, {keyCode: key}));
+}
+setInterval(function () {
+    const KEY_CODE_SPACE_BAR = 32
+    const KEY_CODE_ARROW_DOWN = 40
+    const canvasHeight = Runner.instance_.dimensions.HEIGHT
+    const obstacles = Runner.instance_.horizon.obstacles
+    const speed = Runner.instance_.currentSpeed
+
+    if (obstacles.length > 0) {
+        const w = obstacles[0].width
+        const x = obstacles[0].xPos
+        const y = obstacles[0].yPos
+
+        if (x < 25 * speed - w / 2 && y > canvasHeight / 2) {
+            // Jump
+            dispatchKey("keyup",  KEY_CODE_ARROW_DOWN)
+            dispatchKey("keydown", KEY_CODE_SPACE_BAR)
+        }
+        else if (x < 30 * speed - w / 2 && y <= canvasHeight / 2) {
+            // Duck
+            dispatchKey("keydown", KEY_CODE_ARROW_DOWN)
+        }
+    }
+}, 5);
+```
+
+<br>
+
 That's all for now! Share this page around if you had fun!
