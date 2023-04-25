@@ -109,7 +109,9 @@ setInterval(function () {
 
     if (obstacles.length > 0) {
         const w = obstacles[0].width
+        // measured from left of canvas
         const x = obstacles[0].xPos
+        // measured from top of canvas
         const y = obstacles[0].yPos
 
         if (x < 25 * speed - w / 2 && y > canvasHeight / 2) {
