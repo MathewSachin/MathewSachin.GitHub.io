@@ -94,7 +94,7 @@ Runner.instance_.tRex.setJumpVelocity(10)
 
 ## Auto-play
 
-This code periodically checks for the closest obstacle (cactus or pterodactyl) and then jumps or ducks based on the obstacle height.
+This code periodically checks for the closest obstacle (cactus or pterodactyl) and then jumps or ducks based on the obstacle's position.
 
 ```js
 function dispatchKey(type, key) {
