@@ -103,22 +103,23 @@ function dispatchKey(type, key) {
 setInterval(function () {
     const KEY_CODE_SPACE_BAR = 32
     const KEY_CODE_ARROW_DOWN = 40
-    const canvasHeight = Runner.instance_.dimensions.HEIGHT
-    const obstacles = Runner.instance_.horizon.obstacles
-    const speed = Runner.instance_.currentSpeed
-    const dinoHeight = Runner.instance_.tRex.config.HEIGHT
+    const CANVAS_HEIGHT = Runner.instance_.dimensions.HEIGHT
+    const DINO_HEIGHT = Runner.instance_.tRex.config.HEIGHT
 
-    if (obstacles.length > 0) {
-        const w = obstacles[0].width
-        const x = obstacles[0].xPos // measured from left of canvas
-        const y = obstacles[0].yPos // measured from top of canvas
-        const yFromBottom = canvasHeight - y - obstacles[0].typeConfig.height
+    const obstacle = Runner.instance_.horizon.obstacles[0]
+    const speed = Runner.instance_.currentSpeed
+
+    if (obstacle) {
+        const w = obstacle.width
+        const x = obstacle.xPos // measured from left of canvas
+        const y = obstacle.yPos // measured from top of canvas
+        const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
         const isObstacleNearby = x < 25 * speed - w / 2
 
         if (isObstacleNearby) {
-            if (yFromBottom > dinoHeight) {
+            if (yFromBottom > DINO_HEIGHT) {
                 // Pterodactyl going from above, do nothing
-            } else if (y > canvasHeight / 2) {
+            } else if (y > CANVAS_HEIGHT / 2) {
                 // Jump
                 dispatchKey("keyup", KEY_CODE_ARROW_DOWN)
                 dispatchKey("keydown", KEY_CODE_SPACE_BAR)
