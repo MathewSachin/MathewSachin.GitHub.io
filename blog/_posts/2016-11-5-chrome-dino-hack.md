@@ -106,22 +106,26 @@ setInterval(function () {
     const canvasHeight = Runner.instance_.dimensions.HEIGHT
     const obstacles = Runner.instance_.horizon.obstacles
     const speed = Runner.instance_.currentSpeed
+    const dinoHeight = Runner.instance_.tRex.config.HEIGHT
 
     if (obstacles.length > 0) {
         const w = obstacles[0].width
-        // measured from left of canvas
-        const x = obstacles[0].xPos
-        // measured from top of canvas
-        const y = obstacles[0].yPos
+        const x = obstacles[0].xPos // measured from left of canvas
+        const y = obstacles[0].yPos // measured from top of canvas
+        const yFromBottom = canvasHeight - y - obstacles[0].typeConfig.height
+        const isObstacleNearby = x < 25 * speed - w / 2
 
-        if (x < 25 * speed - w / 2 && y > canvasHeight / 2) {
-            // Jump
-            dispatchKey("keyup",  KEY_CODE_ARROW_DOWN)
-            dispatchKey("keydown", KEY_CODE_SPACE_BAR)
-        }
-        else if (x < 30 * speed - w / 2 && y <= canvasHeight / 2) {
-            // Duck
-            dispatchKey("keydown", KEY_CODE_ARROW_DOWN)
+        if (isObstacleNearby) {
+            if (yFromBottom > dinoHeight) {
+                // Pterodactyl going from above, do nothing
+            } else if (y > canvasHeight / 2) {
+                // Jump
+                dispatchKey("keyup", KEY_CODE_ARROW_DOWN)
+                dispatchKey("keydown", KEY_CODE_SPACE_BAR)
+            } else {
+                // Duck
+                dispatchKey("keydown", KEY_CODE_ARROW_DOWN)
+            }
         }
     }
 }, 5);
