@@ -129,7 +129,7 @@ setInterval(function () {
             }
         }
     }
-}, 5);
+}, Runner.instance_.msPerFrame);
 ```
 
 <br>
