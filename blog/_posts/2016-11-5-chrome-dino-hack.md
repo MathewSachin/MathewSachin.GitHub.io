@@ -83,11 +83,27 @@ Runner.instance_.distanceRan = 12345 / Runner.instance_.distanceMeter.config.COE
 
 <br>
 
-## Dino jumping too high?
+## Jumping height
 You can control how high the dino jumps by using the below function. Adjust the value as necessary.
 
 ```js
 Runner.instance_.tRex.setJumpVelocity(10)
+```
+
+<br>
+
+## Walk in air
+
+<img alt="Chrome Dino walking in air" src="/images/sky_dino.jpg" width="400">
+
+```js
+Runner.instance_.tRex.groundYPos = 0
+```
+
+Back to ground:
+
+```js
+Runner.instance_.tRex.groundYPos = 93
 ```
 
 <br>
