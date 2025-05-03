@@ -75,17 +75,6 @@ si (someCondition()) {
 }
 ```
 
-But, unfortunately, the best I could come up with is:
-```kotlin
-val x = si (3 < 2) {
-    println("true branch")
-}.`sinon si` (4 > 3) {
-    println("another branch")
-} sinon {
-    println("false branch")
-}
-```
-
 using the following code:
 ```kotlin
 sealed class IfStatement<out T> {
@@ -93,15 +82,18 @@ sealed class IfStatement<out T> {
     object False : IfStatement<Nothing>()
 }
 
+fun <T> si(truth: Boolean, onTrue: () -> T): IfStatement<T> =
+    if (truth) IfStatement.True(onTrue()) else IfStatement.False
+
 infix fun <T> IfStatement<T>.sinon(onFalse: () -> T): T =
     when (this) {
         is IfStatement.True -> trueValue
         IfStatement.False -> onFalse()
     }
-    
-fun <T> IfStatement<T>.`sinon si`(truth: Boolean, onTrue: () -> T) =
-    if (truth) IfStatement.True(onTrue()) else IfStatement.False
 
-fun <T> si(truth: Boolean, onTrue: () -> T) =
-    if (truth) IfStatement.True(onTrue()) else IfStatement.False
+infix fun <T> IfStatement<T>.sinon(ifStatement: IfStatement<T>): IfStatement<T> =
+    when (this) {
+        is IfStatement.True -> this
+        IfStatement.False -> ifStatement
+    }
 ```
