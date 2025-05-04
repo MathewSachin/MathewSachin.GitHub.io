@@ -208,6 +208,32 @@ This script continuously checks for obstacles like cacti or pterodactyls. When a
 
 ---
 
+## 👻 Invisibility
+
+Want to make your dino invisible? It’s easy to do by simply disabling its drawing function! This will prevent the dino from being rendered on the screen, making it fully invisible.
+
+#### 🧑‍💻 Make the Dino Invisible
+
+```js
+const originalDraw = Runner.instance_.tRex.draw;
+Runner.instance_.tRex.draw = function() {};
+```
+
+This code replaces the dino's draw function with an empty one, meaning the dino won’t be drawn on the canvas.
+
+**Note:** The dino can still die if it collides with obstacles
+
+#### 🔙 Restore the Dino
+To bring the dino back, simply restore the original draw function:
+
+```js
+Runner.instance_.tRex.draw = originalDraw;
+```
+
+Now the dino is visible again, and the game continues as usual!
+
+---
+
 Keep having fun and may your dino run forever!
 
 Share this page around and comment down if you have tricks of your own!
