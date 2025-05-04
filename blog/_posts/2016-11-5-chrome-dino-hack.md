@@ -8,7 +8,7 @@ related:
   - /blog/2023/04/09/captura-unmaintained
 ---
 
-> Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!
+*Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
 
 ## 🕹️ What is the Chrome Dino Game?
 When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!
@@ -25,10 +25,10 @@ Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built
   Just open a new tab and go to <b>chrome://dino</b> — the game works even when you're online!
 </div>
 
-If this is your first time discovering the Dino game, welcome! It's super easy to play:
-⬆️ **Jump:** Press Spacebar or Up Arrow (this also starts the game)
-⬇️ **Duck:** Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)
-⏸️ **Pause:** Press Alt
+If this is your first time discovering the Dino game, welcome! It's super easy to play:  
+⬆️ **Jump:** Press Spacebar or Up Arrow (this also starts the game)  
+⬇️ **Duck:** Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)  
+⏸️ **Pause:** Press Alt  
 🌙 **Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
 
 ![Chrome Dino](/images/chromeDino.gif)
@@ -37,7 +37,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 - Press `F12` (or `Ctrl + Shift + I`) to open DevTools.
 - Navigate to the `Console` tab.
 
-> 🛠️ Note: After entering each command in the Console, press Enter to run it.  
+🛠️ Note: After entering each command in the Console, press Enter to run it.  
 
 ✅ The commands are case-sensitive, so make sure you type them exactly as shown.  
 
