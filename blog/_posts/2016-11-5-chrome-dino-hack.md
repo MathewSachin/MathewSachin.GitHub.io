@@ -45,39 +45,73 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 
 <br>
 
-## Immortality (God mode)
-Follow the commands to make the dino un-killable.
+## 🛡️ Immortality (God Mode)
 
-We store the original game over function in a variable. This step is **IMPORTANT** if you want to stop the game later and needs to be done before you reset the gameOver function.
+Want to make your dino un-killable? Let’s activate **God Mode** using a little JavaScript magic.
+
+### 🧩 Step 1: Save the Original Function  
+This is **very important** if you want to bring the game back to normal later.
+
 ```js
-var original = Runner.prototype.gameOver
+var original = Runner.prototype.gameOver;
 ```
 
-Then, we make the game over function empty:
+### 🧨 Step 2: Disable Game Over  
+Now, we override the `gameOver` function so that it does… nothing.
+
 ```js
-Runner.prototype.gameOver = function(){}
+Runner.prototype.gameOver = function() {};
 ```
 
-#### How to stop?
-When you want to stop the game, Revert back to the original game over function. This would only work if you had entered both commands in order for **Immortality**.
+Boom — your dino is now immortal. It’ll just run through cacti like a champ.
+
+---
+
+### 🛑 How to Stop It
+
+If you want to restore the game to normal (or get bored of being a god), use this:
+
 ```js
-Runner.prototype.gameOver = original
+Runner.prototype.gameOver = original;
 ```
+
+This only works if you **saved the original function** first (step 1). Otherwise, go ahead and refresh the page.
+
+---
+
+### How does it work?
+
+In JavaScript, functions are just objects — and they can be replaced on the fly.
+
+The `gameOver` function is normally triggered when the dino crashes. By saving it first (`var original = ...`) and then replacing it with an empty function (`function() {}`), we stop the game from ending.
+
+When you're done, you just restore the original function by assigning it back. Think of it like temporarily muting the crash handler!
+
+This works only because JavaScript allows us to override methods of objects while the game is still running in the browser.
 
 <br>
 
-## Tweaking Speed
-Type the following command in Console and press enter.
-You can use any other speed in place of **1000**.
+## ⚡ Tweaking Speed
 
-```
+Want to put the pedal to the metal? Or maybe slow things down for a challenge? You can easily adjust the game speed using a simple command in the Console.
+
+### 🚀 Speed Up the Game
+Enter this to crank up the speed:
+
+```js
 Runner.instance_.setSpeed(1000)
 ```
 
-To go back to normal speed:
-```
+Feel free to replace `1000` with any value for an extra boost!
+
+### 🐢 Slow It Down
+If you want to return to the regular pace, use:
+
+```js
 Runner.instance_.setSpeed(10)
 ```
+
+Now you can play at lightning-fast speeds or take your time — the choice is yours!
 
 <br>
 
