@@ -115,44 +115,58 @@ Now you can play at lightning-fast speeds or take your time — the choice is yo
 
 ---
 
-## Setting the current score
-Let's set the score to 12345. You can set any other score less than 99999.
-The current score is reset on game over.
+## 🎯 Setting the Current Score
+
+Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Here’s how to set it to **12345**:
 
 ```js
 Runner.instance_.distanceRan = 12345 / Runner.instance_.distanceMeter.config.COEFFICIENT
 ```
 
-<br>
+⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
 
-## Jumping height
-You can control how high the dino jumps by using the below function. Adjust the value as necessary.
+Experiment with different values to make your dino feel like a pro right from the start!
+
+---
+
+## 🦘 Jumping Height
+
+Want your dino to jump higher (or lower)? You can easily adjust the jump height with this command. Just change the value to suit your style.
 
 ```js
 Runner.instance_.tRex.setJumpVelocity(10)
 ```
 
-<br>
+Increase the number for higher jumps, or lower it for a more controlled hop. The power is in your hands!
 
-## Walk in air
+---
+
+## 🌤️ Walk in Air
+
+Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
 
 <img alt="Chrome Dino walking in air" src="/images/sky_dino.jpg" width="400">
+
+#### 🕺 Dino Walking in the Air
 
 ```js
 Runner.instance_.tRex.groundYPos = 0
 ```
 
-Back to ground:
+#### 🌍 Back to the Ground
+If you want to bring it back to Earth:
 
 ```js
 Runner.instance_.tRex.groundYPos = 93
 ```
 
-<br>
+Now your dino is floating through the sky or back to solid ground, all at your command!
 
-## Auto-play
+---
 
-This code periodically checks for the closest obstacle (cactus or pterodactyl) and then jumps or ducks based on the obstacle's position.
+## 🤖 Auto-play
+
+This code automatically controls the dino by checking for obstacles and making it jump or duck based on the obstacle's position. It runs periodically to keep the game going without you!
 
 ```js
 function dispatchKey(type, key) {
@@ -190,6 +204,10 @@ setInterval(function () {
 }, Runner.instance_.msPerFrame);
 ```
 
-<br>
+This script continuously checks for obstacles like cacti or pterodactyls. When an obstacle is near, the script determines if the dino should jump or duck depending on the obstacle's position. If it’s a pterodactyl flying above, it does nothing. If it’s an obstacle at a lower height, it jumps. Otherwise, the dino ducks to avoid the hazard. It's like a bot taking control of your dino — no more manual intervention needed!
 
-That's all for now! Share this page around if you had fun!
+---
+
+Keep having fun and may your dino run forever!
+
+Share this page around and comment down if you have tricks of your own!
