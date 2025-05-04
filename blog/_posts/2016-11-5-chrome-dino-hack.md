@@ -8,32 +8,40 @@ related:
   - /blog/2023/04/09/captura-unmaintained
 ---
 
-Google Chrome includes an endless runner Dinosaur (T-Rex) game which appears in the absense of internet connection. Let's put on our hacker hats and try to mess with this game.
+> Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!
 
+## 🕹️ What is the Chrome Dino Game?
+When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!
+
+But… what if we could cheat?
+
+Even if you’re not a programmer, here’s something cool: the Chrome Dino game is built using JavaScript, and its internal game code is exposed globally. That means we can actually poke around and change how the game works — right from the browser!
+
+Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. All you need is the Chrome Developer Console, and a few clever lines of code.
+
+## 🎮 How to Play the Chrome Dino Game?
 <div class="alert alert-info">
-  If you are unable to get the <b>No Internet page</b>, open a new tab and type <b>chrome://dino</b> and press enter.
+  💡 <b>Pro Tip:</b> Can’t get the <i>“No Internet”</i> screen to show up? <br>
+  Just open a new tab and go to <b>chrome://dino</b> — the game works even when you're online!
 </div>
 
-Not too important if you're not a programmer, this game is written in JavaScript and fortunately for us the class and object are globally exposed. Due to JavaScript's dynamic nature, we can override functions on the class to change the functionality. We can do all this from the Chrome console.
-
-## Playing
-Just in case, this is your first time seeing this game, it is fairly straightforward to play.
-
-- **Space Bar / Up:** Jump (also to start the game)
-- **Down:** Duck (pterodactyls appear after 450 points)
-- **Alt:** Pause
-- The game enters a black background mode after every multiple of 700 points for the next 100 points.
+If this is your first time discovering the Dino game, welcome! It's super easy to play:
+⬆️ **Jump:** Press Spacebar or Up Arrow (this also starts the game)
+⬇️ **Duck:** Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)
+⏸️ **Pause:** Press Alt
+🌙 **Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
 
 ![Chrome Dino](/images/chromeDino.gif)
 
-## Open Chrome Console
-- Make sure you are on the **No Internet Connection** page.<br>
-- Right click anywhere on the page and select **Inspect**.
-- Go to **Console** tab. This is where we will enter the commands to tweak the game.
+## 🔧 Opening Developer Tools / Chrome console
+- Press `F12` (or `Ctrl + Shift + I`) to open DevTools.
+- Navigate to the `Console` tab.
 
-> After every command press enter. All the commands are case-sensitive.
+> 🛠️ Note: After entering each command in the Console, press Enter to run it.  
 
-If you see `undefined` after entering a command correctly, don't worry that is expected (for those who want to know more, it is the return type of the function we called).
+✅ The commands are case-sensitive, so make sure you type them exactly as shown.  
+
+❓ Seeing undefined after running a command? Don’t worry — that’s totally normal! It just means the function didn’t return a value, which is expected in this case.
 
 <br>
 

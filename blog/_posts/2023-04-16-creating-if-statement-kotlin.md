@@ -68,7 +68,7 @@ Let's go a bit further and add support for else-if statements that look like:
 ```kotlin
 si (someCondition()) {
     println("true branch")
-} sinon si {
+} sinon si (anotherCondition()) {
     println("another branch")
 } sinon {
     println("false branch")
