@@ -9,7 +9,7 @@ related:
   - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
-*All hacks updated as of 8th March 2026 based on game changes. Setting current score hack removed for now.*
+*All hacks updated as of 8th March 2026 based on game changes.*
 
 ---
 
@@ -120,13 +120,12 @@ Now you can play at lightning-fast speeds or take your time — the choice is yo
 
 ---
 
-<!---
 ## 🎯 Setting the Current Score
 
 Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Here’s how to set it to **12345**:
 
 ```js
-Runner.getInstance().distanceRan = Runner.getInstance().distanceMeter.getActualDistance(12345)
+Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT
 ```
 
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
@@ -134,7 +133,6 @@ Runner.getInstance().distanceRan = Runner.getInstance().distanceMeter.getActualD
 Experiment with different values to make your dino feel like a pro right from the start!
 
 ---
--->
 
 ## 🦘 Jumping Height
 
