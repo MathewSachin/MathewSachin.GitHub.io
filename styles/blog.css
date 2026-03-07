@@ -12,3 +12,85 @@
   margin-bottom: 20px;
   border: 1px solid grey
 }
+
+/* Related posts */
+.related-posts-section .related-post-link {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.related-posts-section .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+}
+
+.related-posts-section .card:hover {
+  transform: translateY(-4px);
+}
+
+/* Top variant: inside the jumbotron (blue/info background) */
+.related-posts-section.top-variant .related-posts-heading {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.related-posts-section.top-variant .card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: white;
+}
+
+.related-posts-section.top-variant .card:hover {
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.related-posts-section.top-variant .card-footer {
+  background: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.related-posts-section.top-variant .related-post-date {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Bottom variant: inside the post card body (white background) */
+.related-posts-section.bottom-variant .related-posts-heading {
+  color: #17a2b8;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.related-posts-section.bottom-variant .card {
+  background: #17a2b8;
+  border: none;
+  color: white;
+}
+
+.related-posts-section.bottom-variant .card:hover {
+  background: #138496;
+  box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+}
+
+.related-posts-section.bottom-variant .card-footer {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.related-posts-section.bottom-variant .related-post-date {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.related-posts-section .card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}

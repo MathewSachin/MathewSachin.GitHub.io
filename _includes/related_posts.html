@@ -1,0 +1,31 @@
+{% assign related_posts_list = "" | split: "" %}
+{% for post in site.posts %}
+    {% if include.related contains post.id %}
+        {% assign related_posts_list = related_posts_list | push: post %}
+    {% endif %}
+{% endfor %}
+
+{% if related_posts_list.size > 0 %}
+<div class="related-posts-section {{ include.variant }}">
+    <h5 class="related-posts-heading">
+        <i class="fas fa-bookmark mr-2"></i>You might also like
+    </h5>
+    <div class="row">
+        {% for post in related_posts_list %}
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="{{ post.url }}" class="related-post-link" aria-label="Read {{ post.title }}">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1">{{ post.title }}</p>
+                        <small class="related-post-date">{{ post.date | date: "%b %-d, %Y" }}</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right mr-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
