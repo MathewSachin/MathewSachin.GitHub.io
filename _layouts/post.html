@@ -5,7 +5,7 @@ layout: default
 <link rel="stylesheet" href="/styles/blog.css">
 
 <div class="bg-dark">
-<div class="jumbotron jumbotron-fluid bg-info text-white">
+<div class="py-4 bg-info text-white">
     <div class="container">
         <h2>{{ page.title }}</h2>
         <em>{{ page.date | date_to_string }}</em> &nbsp; - &nbsp;
@@ -13,13 +13,13 @@ layout: default
 
         <div class="post-tag my-1">
             {% for tag in page.tags %}
-                <a class="badge badge-pill badge-secondary" href="/blog/tags#{{ tag }}">{{ tag }}</a>
+                <a class="badge rounded-pill bg-secondary" href="/blog/tags#{{ tag }}">{{ tag }}</a>
             {% endfor %}
         </div>
 
         <div>
-            <a class="text-light" href="https://twitter.com/intent/tweet?text={{ page.title }}&amp;url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fab fa-twitter pr-1" aria-hidden="true"></i></a>
-            <a class="text-light" href="mailto:?subject={{ page.title }}&amp;body=Check out this site {{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fa fa-envelope pr-1" aria-hidden="true"></i></a>
+            <a class="text-light" href="https://twitter.com/intent/tweet?text={{ page.title }}&amp;url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fab fa-twitter pe-1" aria-hidden="true"></i></a>
+            <a class="text-light" href="mailto:?subject={{ page.title }}&amp;body=Check out this site {{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fa fa-envelope pe-1" aria-hidden="true"></i></a>
         </div>
         
         {% if page.related %}

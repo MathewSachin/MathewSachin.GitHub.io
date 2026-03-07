@@ -52,7 +52,7 @@
   transform: translateY(-4px);
 }
 
-/* Top variant: inside the jumbotron (blue/info background) */
+/* Top variant: inside the hero section (blue/info background) */
 .related-posts-section.top-variant .related-posts-heading {
   color: rgba(255, 255, 255, 0.85);
   font-size: 1rem;
