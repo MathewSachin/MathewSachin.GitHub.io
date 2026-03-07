@@ -23,16 +23,8 @@ layout: default
         </div>
         
         {% if page.related %}
-            <br><hr><br>
-
-            <h4 class="text-muted"><i>You might also like</i></h4>
-            <ul>
-            {% for post in site.posts %}
-                {% if page.related contains post.id %}
-                    <li><a href="{{post.url}}" class="text-light">{{post.title}}</a></li>
-                {% endif %}
-            {% endfor %}
-            </ul>
+            <hr class="border-light mt-3 mb-3">
+            {% include related_posts.html related=page.related variant="top-variant" %}
         {% endif %}
     </div>
 </div>
@@ -47,6 +39,11 @@ layout: default
                     </div>
 
                     <br><hr><br>
+
+                    {% if page.related %}
+                        {% include related_posts.html related=page.related variant="bottom-variant" %}
+                        <br>
+                    {% endif %}
 
                     <div id="disqus_thread"></div>
                 </div>
