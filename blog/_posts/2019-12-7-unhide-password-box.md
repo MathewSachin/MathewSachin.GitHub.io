@@ -3,6 +3,8 @@ title: Hacking a password box
 tags: [chrome, hack]
 related:
   - /blog/2016/11/05/chrome-dino-hack
+  - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
 It might happen that sometimes you forgot a password for a website but your browser had saved it for you. The next time you visit the login page of that website, you can follow the steps below to view the password even without going to browser settings and entering the operating system user-account's password.

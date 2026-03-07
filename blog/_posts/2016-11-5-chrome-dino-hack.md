@@ -5,8 +5,8 @@ highlight: true
 disqus: true
 related:
   - /blog/2019/12/07/unhide-password-box
-  - /blog/2023/04/09/captura-unmaintained
   - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
 *Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
