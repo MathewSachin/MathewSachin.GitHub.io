@@ -9,6 +9,8 @@ related:
   - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
+> All hacks updated as of 8th March 2026 based on game changes. Setting current score hack removed for now.
+
 *Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
 
 ## 🕹️ What is the Chrome Dino Game?
@@ -100,7 +102,7 @@ Want to put the pedal to the metal? Or maybe slow things down for a challenge? Y
 Enter this to crank up the speed:
 
 ```js
-Runner.instance_.setSpeed(1000)
+Runner.getInstance().setSpeed(1000)
 ```
 
 Feel free to replace `1000` with any value for an extra boost!
@@ -109,19 +111,20 @@ Feel free to replace `1000` with any value for an extra boost!
 If you want to return to the regular pace, use:
 
 ```js
-Runner.instance_.setSpeed(10)
+Runner.getInstance().setSpeed(10)
 ```
 
 Now you can play at lightning-fast speeds or take your time — the choice is yours!
 
 ---
 
+<!---
 ## 🎯 Setting the Current Score
 
 Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Here’s how to set it to **12345**:
 
 ```js
-Runner.instance_.distanceRan = 12345 / Runner.instance_.distanceMeter.config.COEFFICIENT
+Runner.getInstance().distanceRan = Runner.getInstance().distanceMeter.getActualDistance(12345)
 ```
 
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
@@ -129,13 +132,14 @@ Runner.instance_.distanceRan = 12345 / Runner.instance_.distanceMeter.config.COE
 Experiment with different values to make your dino feel like a pro right from the start!
 
 ---
+-->
 
 ## 🦘 Jumping Height
 
 Want your dino to jump higher (or lower)? You can easily adjust the jump height with this command. Just change the value to suit your style.
 
 ```js
-Runner.instance_.tRex.setJumpVelocity(10)
+Runner.getInstance().tRex.setJumpVelocity(20)
 ```
 
 Increase the number for higher jumps, or lower it for a more controlled hop. The power is in your hands!
@@ -151,14 +155,14 @@ Ever wondered what it’s like for the dino to defy gravity? You can make it wal
 #### 🕺 Dino Walking in the Air
 
 ```js
-Runner.instance_.tRex.groundYPos = 0
+Runner.getInstance().tRex.groundYPos = 0
 ```
 
 #### 🌍 Back to the Ground
 If you want to bring it back to Earth:
 
 ```js
-Runner.instance_.tRex.groundYPos = 93
+Runner.getInstance().tRex.groundYPos = 93
 ```
 
 Now your dino is floating through the sky or back to solid ground, all at your command!
@@ -176,11 +180,11 @@ function dispatchKey(type, key) {
 setInterval(function () {
     const KEY_CODE_SPACE_BAR = 32
     const KEY_CODE_ARROW_DOWN = 40
-    const CANVAS_HEIGHT = Runner.instance_.dimensions.HEIGHT
-    const DINO_HEIGHT = Runner.instance_.tRex.config.HEIGHT
+    const CANVAS_HEIGHT = Runner.getInstance().dimensions.height
+    const DINO_HEIGHT = Runner.getInstance().tRex.config.height
 
-    const obstacle = Runner.instance_.horizon.obstacles[0]
-    const speed = Runner.instance_.currentSpeed
+    const obstacle = Runner.getInstance().horizon.obstacles[0]
+    const speed = Runner.getInstance().currentSpeed
 
     if (obstacle) {
         const w = obstacle.width
@@ -202,7 +206,7 @@ setInterval(function () {
             }
         }
     }
-}, Runner.instance_.msPerFrame);
+}, Runner.getInstance().msPerFrame);
 ```
 
 This script continuously checks for obstacles like cacti or pterodactyls. When an obstacle is near, the script determines if the dino should jump or duck depending on the obstacle's position. If it’s a pterodactyl flying above, it does nothing. If it’s an obstacle at a lower height, it jumps. Otherwise, the dino ducks to avoid the hazard. It's like a bot taking control of your dino — no more manual intervention needed!
@@ -216,8 +220,8 @@ Want to make your dino invisible? It’s easy to do by simply disabling its draw
 #### 🧑‍💻 Make the Dino Invisible
 
 ```js
-const originalDraw = Runner.instance_.tRex.draw;
-Runner.instance_.tRex.draw = function() {};
+const originalDraw = Runner.getInstance().tRex.draw;
+Runner.getInstance().tRex.draw = function() {};
 ```
 
 This code replaces the dino's draw function with an empty one, meaning the dino won’t be drawn on the canvas.
@@ -228,7 +232,7 @@ This code replaces the dino's draw function with an empty one, meaning the dino 
 To bring the dino back, simply restore the original draw function:
 
 ```js
-Runner.instance_.tRex.draw = originalDraw;
+Runner.getInstance().tRex.draw = originalDraw;
 ```
 
 Now the dino is visible again, and the game continues as usual!
