@@ -59,20 +59,6 @@ Every major browser ships with built-in Developer Tools (DevTools). Here's how t
 | Mac | `Cmd + Option + I` |
 | Any OS | Right-click anywhere on the page → **Inspect Element** |
 
-### 🍎 Safari (Mac only)
-
-Safari hides DevTools by default. Enable it once:
-
-1. Go to **Safari → Settings** (or **Preferences** on older macOS)
-2. Click the **Advanced** tab
-3. Check **"Show features for web developers"** (older macOS: *"Show Develop menu in menu bar"*)
-
-Now you can right-click anywhere → **Inspect Element**, or use `Cmd + Option + I`.
-
-### 📱 Android (Chrome)
-
-DevTools on mobile require a desktop Chrome browser connected via USB debugging. For a quick password reveal on Android, use the Console method described at the end of this post instead.
-
 ---
 
 ## 🔍 Step 2 — Select the Password Field
