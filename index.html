@@ -4,6 +4,8 @@ title: Mathew Sachin
 ads: true
 ---
 
+<link rel="stylesheet" href="/styles/blog.css">
+
 <div class="jumbotron rounded-0 bg-info">
   <div class="container">
     <div class="row mx-0 headfont mb-5 pb-3">
@@ -29,41 +31,51 @@ ads: true
 <br><hr><br>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md">
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="card-title"><a href="/Captura/">Captura</a></div>
-          <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
-        </div>
-        <div class="card-footer">
-          <a href="https://github.com/MathewSachin/Captura/releases/latest"><img src="https://img.shields.io/github/downloads/MathewSachin/Captura/total.svg?style=flat-square"></a>
-          <a href="https://github.com/MathewSachin/Captura/stargazers"><img src="https://img.shields.io/github/stars/MathewSachin/Captura.svg?style=flat-square"></a>
-          <a href="https://github.com/MathewSachin/Captura/fork"><img src="https://img.shields.io/github/forks/MathewSachin/Captura.svg?style=flat-square"></a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md">
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="card-title">
-            <a href="/FGA">FGA</a>
-            <p class="card-text">Auto-Battle app for F/GO Android.</p>
+  <div class="home-cards-section">
+    <div class="row">
+      <div class="col-md mb-3">
+        <a href="/Captura/" class="home-card-link" aria-label="Captura">
+          <div class="card h-100">
+            <div class="card-body">
+              <p class="card-title mb-1">Captura</p>
+              <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
+            </div>
+            <div class="card-footer">
+              <small><i class="fas fa-arrow-right mr-1"></i>Learn more</small>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
-    </div>
-    <div class="col-md">
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="card-title"><a href="/blog">Blog</a></div>
-          <p class="card-text">My Blog.</p>
-        </div>
+      <div class="col-md mb-3">
+        <a href="/FGA" class="home-card-link" aria-label="FGA">
+          <div class="card h-100">
+            <div class="card-body">
+              <p class="card-title mb-1">FGA</p>
+              <p class="card-text">Auto-Battle app for F/GO Android.</p>
+            </div>
+            <div class="card-footer">
+              <small><i class="fas fa-arrow-right mr-1"></i>Learn more</small>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md mb-3">
+        <a href="/blog" class="home-card-link" aria-label="Blog">
+          <div class="card h-100">
+            <div class="card-body">
+              <p class="card-title mb-1">Blog</p>
+              <p class="card-text">Thoughts, tutorials, and writeups.</p>
+            </div>
+            <div class="card-footer">
+              <small><i class="fas fa-arrow-right mr-1"></i>Read more</small>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
-  
-  <br><br>
+
+  <br>
 
   {% include recent_posts.html %}
 </div>

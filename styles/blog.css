@@ -13,6 +13,29 @@
   border: 1px solid grey
 }
 
+/* Home page project cards */
+.home-cards-section .home-card-link {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.home-cards-section .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+}
+
+.home-cards-section .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.home-cards-section .card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
 /* Related posts */
 .related-posts-section .related-post-link {
   text-decoration: none;
