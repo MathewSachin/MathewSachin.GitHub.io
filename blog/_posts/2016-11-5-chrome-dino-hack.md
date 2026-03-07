@@ -9,7 +9,9 @@ related:
   - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
-> All hacks updated as of 8th March 2026 based on game changes. Setting current score hack removed for now.
+*All hacks updated as of 8th March 2026 based on game changes. Setting current score hack removed for now.*
+
+---
 
 *Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
 
@@ -56,14 +58,14 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 
 Want to make your dino un-killable? Let’s activate **God Mode** using a little JavaScript magic.
 
-#### 🧩 Step 1: Save the Original Function  
+##### 🧩 Step 1: Save the Original Function  
 This is **very important** if you want to bring the game back to normal later.
 
 ```js
 var original = Runner.prototype.gameOver;
 ```
 
-#### 🧨 Step 2: Disable Game Over  
+##### 🧨 Step 2: Disable Game Over  
 Now, we override the `gameOver` function so that it does… nothing.
 
 ```js
@@ -72,7 +74,7 @@ Runner.prototype.gameOver = function() {};
 
 Boom — your dino is now immortal. It’ll just run through cacti like a champ.
 
-#### 🛑 How to Stop It
+##### 🛑 How to Stop It
 
 If you want to restore the game to normal (or get bored of being a god), use this:
 
@@ -82,7 +84,7 @@ Runner.prototype.gameOver = original;
 
 This only works if you **saved the original function** first (step 1). Otherwise, go ahead and refresh the page.
 
-#### How does it work?
+##### How does it work?
 
 In JavaScript, functions are just objects — and they can be replaced on the fly.
 
@@ -98,7 +100,7 @@ This works only because JavaScript allows us to override methods of objects whil
 
 Want to put the pedal to the metal? Or maybe slow things down for a challenge? You can easily adjust the game speed using a simple command in the Console.
 
-#### 🚀 Speed Up the Game
+##### 🚀 Speed Up the Game
 Enter this to crank up the speed:
 
 ```js
@@ -107,7 +109,7 @@ Runner.getInstance().setSpeed(1000)
 
 Feel free to replace `1000` with any value for an extra boost!
 
-#### 🐢 Slow It Down
+##### 🐢 Slow It Down
 If you want to return to the regular pace, use:
 
 ```js
@@ -152,13 +154,13 @@ Ever wondered what it’s like for the dino to defy gravity? You can make it wal
 
 <img alt="Chrome Dino walking in air" src="/images/sky_dino.jpg" width="400">
 
-#### 🕺 Dino Walking in the Air
+##### 🕺 Dino Walking in the Air
 
 ```js
 Runner.getInstance().tRex.groundYPos = 0
 ```
 
-#### 🌍 Back to the Ground
+##### 🌍 Back to the Ground
 If you want to bring it back to Earth:
 
 ```js
@@ -217,7 +219,7 @@ This script continuously checks for obstacles like cacti or pterodactyls. When a
 
 Want to make your dino invisible? It’s easy to do by simply disabling its drawing function! This will prevent the dino from being rendered on the screen, making it fully invisible.
 
-#### 🧑‍💻 Make the Dino Invisible
+##### 🧑‍💻 Make the Dino Invisible
 
 ```js
 const originalDraw = Runner.getInstance().tRex.draw;
@@ -228,7 +230,7 @@ This code replaces the dino's draw function with an empty one, meaning the dino 
 
 **Note:** The dino can still die if it collides with obstacles
 
-#### 🔙 Restore the Dino
+##### 🔙 Restore the Dino
 To bring the dino back, simply restore the original draw function:
 
 ```js
