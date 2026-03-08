@@ -1,6 +1,6 @@
 /* Pull the post content card up to overlap the teal header section */
 .post-content-container {
-  margin-top: -2.5rem;
+  margin-top: -7.5rem;
 }
 
 /* Copy code button: positioned inside the code block, top-right, visible on hover */
