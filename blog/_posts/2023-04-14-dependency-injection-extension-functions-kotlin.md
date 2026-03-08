@@ -11,13 +11,13 @@ related:
 ### Pre-requisites
 
 **Extension functions** in Kotlin allow you to add new functions to existing classes without having to inherit from them.
-```
+```kotlin
 fun Double.cube() = this * this * this
 ```
 
 **Dependency injection** is a design pattern in which the dependencies of an object are provided externally rather than being created within the object itself.
 Knowing about dependency injection is a pre-requisite to this post.
-```
+```kotlin
 class Car {
     // Engine created within Car. Always locked to Petrol engine
     private val engine = PetrolEngine()
@@ -44,7 +44,7 @@ What I'm going to show you is a way to achieve just that while still being able 
 The use-case I had for this was a game-automation scripting framework in which the main mode of operation was to match images on the screen and then click on the screen.  
 For these scripts, having simple extension functions felt very intuitive compare to calling regular functions.
 
-```
+```kotlin
 fun Region.click()
 operator fun Region.contains(image: Image)
 fun Region.findMatch(image: Image): Match
@@ -106,7 +106,7 @@ There you have it! Now you can provide a mock interface while testing to test yo
 I usually like to have minimal detail in the extension impelementation class and move the impure logic to other interfaces that I could mock out. In the above example, that's `Clicker` and `ImageMatcher`.
 Following example uses Mockito kotlin and JUnit 5:
 
-```
+```kotlin
 @Test
 fun `should attack when an enemy is spotted`() {
   val mockClicker = mock<Clicker> {
