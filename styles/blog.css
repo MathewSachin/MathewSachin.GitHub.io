@@ -1,20 +1,51 @@
-/* Copy code button: positioned inside the code block, top-right, visible on hover */
+/* Code block card styling */
 div.highlight {
   position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.code-block-header {
+  background: #1c1c2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 2.25rem;
+}
+
+.code-lang {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  text-transform: uppercase;
 }
 
 .btn-clip {
-  position: absolute;
-  top: 0.4rem;
-  right: 0.4rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 1;
+  color: rgba(255, 255, 255, 0.45);
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0.4rem;
+  transition: color 0.2s ease;
+  line-height: 1;
 }
 
-div.highlight:hover .btn-clip,
-div.highlight:focus-within .btn-clip {
-  opacity: 0.6;
+.btn-clip:hover,
+.btn-clip:focus {
+  color: #17a2b8;
+  background: transparent;
+  box-shadow: none;
+}
+
+div.highlight pre {
+  margin: 0;
+  border-radius: 0;
+  border: none;
 }
 
 .page-content h2 {
