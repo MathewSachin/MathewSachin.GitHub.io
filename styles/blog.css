@@ -1,4 +1,9 @@
-/* Code block card styling */
+/* Pull the post content card up to overlap the teal header section */
+.post-content-container {
+  margin-top: -2.5rem;
+}
+
+/* Copy code button: positioned inside the code block, top-right, visible on hover */
 div.highlight {
   position: relative;
   border-radius: 0.5rem;
