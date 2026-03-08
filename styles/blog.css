@@ -281,6 +281,36 @@ div.highlight pre {
   text-decoration: underline;
 }
 
+/* Pagination */
+.pagination .page-link {
+  color: #17a2b8;
+  border-color: rgba(23, 162, 184, 0.3);
+  border-radius: 50rem !important;
+  margin: 0 0.15rem;
+  min-width: 2.25rem;
+  text-align: center;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.pagination .page-link:hover {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  transform: translateY(-1px);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: rgba(23, 162, 184, 0.4);
+  border-color: rgba(23, 162, 184, 0.15);
+  background-color: transparent;
+}
+
 /* Tags page */
 .tag-cloud {
   border: 1px solid rgba(0, 0, 0, 0.1);
