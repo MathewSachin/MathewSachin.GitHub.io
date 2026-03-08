@@ -4,7 +4,7 @@ blocks.each(function(i) {
     var id = "block" + (i + 1);
     $(this).attr('id', id);
 
-    var btn = '<button class="btn btn-info btn-sm my-0 px-2 btn-clip float-end" data-clipboard-target="#' + id + '" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy to clipboard"><i class="fa fa-copy fa-lg"></i></button>';
+    var btn = '<button class="btn btn-info btn-sm px-2 btn-clip" data-clipboard-target="#' + id + '" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy to clipboard"><i class="fa fa-copy fa-lg"></i></button>';
     
     var code = $(this);
 

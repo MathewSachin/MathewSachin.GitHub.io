@@ -1,3 +1,22 @@
+/* Copy code button: positioned inside the code block, top-right, visible on hover */
+div.highlight {
+  position: relative;
+}
+
+.btn-clip {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+}
+
+div.highlight:hover .btn-clip,
+div.highlight:focus-within .btn-clip {
+  opacity: 0.6;
+}
+
 .page-content h2 {
   margin-top: 40px;
 }
