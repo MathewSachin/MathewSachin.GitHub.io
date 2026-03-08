@@ -15,22 +15,7 @@ title: Blog Posts
     <p class="text-muted">No posts found.</p>
   {% else %}
     {% for post in paginator.posts %}
-    <a href="{{ post.url }}" class="blog-post-link text-decoration-none text-reset">
-      <div class="blog-post-item py-3">
-        <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
-          <span class="blog-post-title fw-semibold">{{ post.title }}</span>
-          <span class="small text-muted text-nowrap">{{ post.date | date_to_string }}</span>
-        </div>
-        <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
-          <span class="small text-muted">{% include readingTime.html %}</span>
-          <div class="post-tag">
-            {% for tag in post.tags %}
-              <span class="badge rounded-pill bg-secondary">{{ tag }}</span>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </a>
+      {% include post_item.html post=post %}
     {% endfor %}
 
     <!-- Pagination links -->
