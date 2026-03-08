@@ -28,54 +28,56 @@ ads: true
   </div>
 </div>
 
-<br><hr><br>
+<div class="container py-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="home-cards-section">
+        <div class="row">
+          <div class="col-md mb-3">
+            <a href="/Captura/" class="home-card-link" aria-label="Captura">
+              <div class="card h-100">
+                <div class="card-body">
+                  <p class="card-title mb-1">Captura</p>
+                  <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
+                </div>
+                <div class="card-footer">
+                  <small><i class="fas fa-arrow-right me-1"></i>Learn more</small>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md mb-3">
+            <a href="/FGA" class="home-card-link" aria-label="FGA">
+              <div class="card h-100">
+                <div class="card-body">
+                  <p class="card-title mb-1">FGA</p>
+                  <p class="card-text">Auto-Battle app for F/GO Android.</p>
+                </div>
+                <div class="card-footer">
+                  <small><i class="fas fa-arrow-right me-1"></i>Learn more</small>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md mb-3">
+            <a href="/blog" class="home-card-link" aria-label="Blog">
+              <div class="card h-100">
+                <div class="card-body">
+                  <p class="card-title mb-1">Blog</p>
+                  <p class="card-text">Thoughts, tutorials, and writeups.</p>
+                </div>
+                <div class="card-footer">
+                  <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
 
-<div class="container">
-  <div class="home-cards-section">
-    <div class="row">
-      <div class="col-md mb-3">
-        <a href="/Captura/" class="home-card-link" aria-label="Captura">
-          <div class="card h-100">
-            <div class="card-body">
-              <p class="card-title mb-1">Captura</p>
-              <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
-            </div>
-            <div class="card-footer">
-              <small><i class="fas fa-arrow-right me-1"></i>Learn more</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-md mb-3">
-        <a href="/FGA" class="home-card-link" aria-label="FGA">
-          <div class="card h-100">
-            <div class="card-body">
-              <p class="card-title mb-1">FGA</p>
-              <p class="card-text">Auto-Battle app for F/GO Android.</p>
-            </div>
-            <div class="card-footer">
-              <small><i class="fas fa-arrow-right me-1"></i>Learn more</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-md mb-3">
-        <a href="/blog" class="home-card-link" aria-label="Blog">
-          <div class="card h-100">
-            <div class="card-body">
-              <p class="card-title mb-1">Blog</p>
-              <p class="card-text">Thoughts, tutorials, and writeups.</p>
-            </div>
-            <div class="card-footer">
-              <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
-            </div>
-          </div>
-        </a>
-      </div>
+      <hr>
+
+      {% include recent_posts.html %}
     </div>
   </div>
-
-  <br>
-
-  {% include recent_posts.html %}
 </div>
