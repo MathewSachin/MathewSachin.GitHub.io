@@ -10,7 +10,59 @@
   max-width: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: 1px solid grey
+  border: 1px solid grey;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.page-content img:hover {
+  transform: scale(1.02);
+  opacity: 0.88;
+  border-color: #17a2b8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Lightbox modal */
+#img-lightbox .modal-dialog {
+  max-width: 90vw;
+}
+
+#img-lightbox .modal-content {
+  background: rgba(0, 0, 0, 0.9);
+  border: none;
+}
+
+#img-lightbox .modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+#img-lightbox .modal-body img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border: none;
+  border-radius: 4px;
+  margin: 0;
+  cursor: default;
+}
+
+#img-lightbox .modal-body img:hover {
+  transform: none;
+  opacity: 1;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+#img-lightbox .btn-close {
+  filter: invert(1);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  z-index: 10;
 }
 
 /* Home page project cards */
