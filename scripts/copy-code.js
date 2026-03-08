@@ -17,7 +17,8 @@ blocks.each(function(i) {
     var $langSpan = $('<span>').addClass(lang ? 'code-lang' : '').text(lang);
     var $copyBtn = $('<button class="btn btn-sm btn-clip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy to clipboard">')
         .attr('data-clipboard-target', '#' + id)
-        .html('<i class="fa fa-copy"></i>');
+        .attr('aria-label', 'Copy code to clipboard')
+        .html('<i class="fa fa-copy" aria-hidden="true"></i>');
 
     var $header = $('<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">')
         .append($langSpan)

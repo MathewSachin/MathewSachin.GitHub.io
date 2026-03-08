@@ -47,6 +47,11 @@ div.highlight {
   box-shadow: none;
 }
 
+.btn-clip:focus-visible {
+  outline: 2px solid #17a2b8;
+  outline-offset: 2px;
+}
+
 div.highlight pre {
   margin: 0;
   border-radius: 0;
