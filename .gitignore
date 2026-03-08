@@ -3,4 +3,4 @@ _site/
 .DS_Store
 *.swp
 Gemfile.lock
-debug.log
+debug.log.bundle/

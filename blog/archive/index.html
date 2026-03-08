@@ -4,14 +4,21 @@ title: Archive
 ads: true
 ---
 
-<div class="archive">
-  {% if site.posts.size == 0 %}
-    <h2>No post found</h2>
-  {% else %}
-  {% for post in site.posts %}
-    <div>
-      <em>{{ post.date | date_to_string }}</em> | <a href="{{ post.url }}">{{ post.title }}</a>
-    </div>
+<link rel="stylesheet" href="/styles/blog.css">
+
+{% if site.posts.size == 0 %}
+  <p class="text-muted">No posts found.</p>
+{% else %}
+  {% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+  {% for year_group in posts_by_year %}
+  <h5 class="archive-year mt-3 mb-2">{{ year_group.name }}</h5>
+  {% for post in year_group.items %}
+    <a href="{{ post.url }}" class="archive-post-link text-decoration-none text-reset">
+      <div class="archive-post-item d-flex justify-content-between align-items-center py-2">
+        <span class="archive-post-title">{{ post.title }}</span>
+        <span class="small text-muted text-nowrap ms-3">{{ post.date | date: "%b %-d" }}</span>
+      </div>
+    </a>
   {% endfor %}
-  {% endif %}
-</div>
+  {% endfor %}
+{% endif %}
