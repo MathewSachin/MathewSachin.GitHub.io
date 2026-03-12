@@ -2,7 +2,6 @@
 title: "Fate/Grand Automata: A Developer's Deep Dive"
 tags: [android, kotlin, opencv, automation, fga]
 highlight: true
-disqus: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
   - /blog/2017/07/28/ffmpeg-pipe-csharp

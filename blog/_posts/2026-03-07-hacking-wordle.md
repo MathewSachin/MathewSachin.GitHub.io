@@ -2,7 +2,6 @@
 title: "Hacking Wordle: Solve It in One Try Using Browser DevTools"
 tags: [wordle, hack, browser, devtools]
 highlight: true
-disqus: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2019/12/07/unhide-password-box
