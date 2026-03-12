@@ -1,7 +1,6 @@
 ---
 title: What happened to Captura?
 tags: [captura]
-disqus: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2019/12/07/unhide-password-box

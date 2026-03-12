@@ -2,7 +2,6 @@
 title: "How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages"
 tags: [ai, github, copilot, jekyll, github-pages, automation, tutorial]
 highlight: true
-disqus: true
 related:
   - /blog/2026/03/09/luddites-vs-developers
 ---

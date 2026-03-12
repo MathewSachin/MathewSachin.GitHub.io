@@ -2,7 +2,6 @@
 title: One-time schedules using AWS EventBridge Scheduler
 tags: [aws, scheduler, eventbridge, kotlin]
 highlight: true
-disqus: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
   - /blog/2016/11/05/chrome-dino-hack
