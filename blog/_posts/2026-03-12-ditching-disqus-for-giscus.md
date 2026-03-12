@@ -19,13 +19,13 @@ Here's what was actually going on behind the scenes on every page load:
 
 | Issue | What it means for you |
 |---|---|
-| **Ads** | Disqus injects ads into the comment section unless you pay to remove them |
+| **Ads** | Disqus injects its own ads into the comment section *on top of* any ads you already run |
 | **Tracking** | Third-party cookies, pixel trackers, cross-site fingerprinting |
 | **Weight** | ~1 MB of JavaScript on every page, even if nobody comments |
 | **Slow load** | The whole comment widget deferred to a sluggish external server |
 | **Privacy** | Every visitor's data handed to Disqus, then used for ad targeting |
 
-I wasn't selling anything. I wasn't monetising this blog. I just wanted a comments box. And in exchange I was quietly taxing every reader with trackers and ads they never signed up for.
+The blog already runs Google AdSense — that's deliberate and I'm comfortable with it. But Disqus was bolting its own ad network *on top of that*, injecting third-party ads directly inside the comment section. So every post ended up with two separate ad systems running simultaneously, both loading tracking scripts, both fighting for space and bandwidth.
 
 Not great.
 
@@ -138,7 +138,7 @@ The old Disqus comments? Disqus lets you [export your comment data](https://help
 
 Every post on this blog now loads faster, respects your privacy, and has a comment section I'm actually happy to stand behind.
 
-No ads. No trackers. No regrets.
+No Disqus ads. No extra trackers. No regrets.
 
 ---
 
