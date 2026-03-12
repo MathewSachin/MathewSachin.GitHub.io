@@ -1,0 +1,245 @@
+---
+title: "How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages"
+tags: [ai, github, copilot, jekyll, github-pages, automation, tutorial]
+highlight: true
+disqus: true
+related:
+  - /blog/2026/03/09/luddites-vs-developers
+---
+
+*This post was itself generated using the exact workflow described below — a prompt typed on a mobile phone, handed off to GitHub Copilot, reviewed in a PR, merged, and live within minutes. No laptop required.*
+
+---
+
+## 🤖 The Idea
+
+What if publishing a blog post felt as lightweight as sending a message? No IDE, no local build environment, no copy-pasting markdown into a CMS. Just describe what you want, review the result, and merge.
+
+That's the workflow I now use for this blog. Here's how it works — and how you can set up the exact same thing.
+
+---
+
+## 🗺️ The Full Flow
+
+```
+Mobile phone
+    │
+    ▼
+GitHub Copilot (AI coding agent)
+    │  Writes the blog post as a markdown file
+    ▼
+Pull Request opened automatically
+    │
+    ▼
+You review & approve on mobile/desktop
+    │
+    ▼
+Merge PR
+    │
+    ▼
+GitHub Actions triggers
+    │
+    ▼
+GitHub Pages builds & deploys Jekyll site
+    │
+    ▼
+Post is live 🎉
+```
+
+No local clone. No terminal. No build step on your machine. The entire pipeline runs in the cloud.
+
+---
+
+## 🏗️ What You Need to Set Up
+
+### 1. A Jekyll Blog Hosted on GitHub Pages
+
+If you don't have one yet, create a new repository named `<yourusername>.github.io` on GitHub.
+
+Initialize it with Jekyll:
+
+```bash
+gem install jekyll bundler
+jekyll new my-blog
+cd my-blog
+bundle exec jekyll serve
+```
+
+Or clone the [Jekyll Now](https://github.com/barryclark/jekyll-now) starter — it's the fastest path to a working blog.
+
+Make sure your repository has **GitHub Pages** enabled:
+
+1. Go to your repo → **Settings** → **Pages**
+2. Set the source to the `main` branch (or `gh-pages` if you prefer)
+3. GitHub will give you a URL like `https://yourusername.github.io`
+
+Every time you push to `main`, GitHub Pages automatically rebuilds and redeploys your site. No CI configuration needed for basic Jekyll — it's baked in.
+
+---
+
+### 2. Blog Posts in `_posts/`
+
+Jekyll looks for posts in a `_posts/` directory (or `blog/_posts/` if you've configured a subdirectory). Each post is a Markdown file named:
+
+```
+YYYY-MM-DD-your-post-slug.md
+```
+
+Each file starts with YAML front matter:
+
+```yaml
+---
+title: "Your Post Title"
+tags: [tag1, tag2]
+---
+
+Your post content starts here.
+```
+
+That's it. Push the file, and Jekyll renders it into a full HTML page.
+
+---
+
+### 3. GitHub Copilot with Agent Mode Enabled
+
+This is the key piece. GitHub Copilot has an **agent mode** (also called coding agent) that can be given a task in natural language and will autonomously create files, write code, and open a pull request.
+
+To enable it:
+
+1. Go to your GitHub repository
+2. Navigate to **Settings** → **Copilot** (or access it via [github.com/settings/copilot](https://github.com/settings/copilot))
+3. Make sure **GitHub Copilot** is enabled for your account — it requires a Copilot subscription
+
+The agent has access to your repository, understands your existing file structure and conventions, and can write posts that match your existing style.
+
+---
+
+### 4. Giving the Agent the Right Instructions (Optional but Recommended)
+
+You can create a `.github/copilot-instructions.md` file in your repository to give the agent standing instructions. For a blog, this might include:
+
+```markdown
+# Copilot Instructions
+
+This is a Jekyll blog. Blog posts live in `blog/_posts/`.
+- Use YAML front matter with `title` and `tags`.
+- Match the tone and style of existing posts.
+- Use `##` and `###` for section headings.
+- Use emoji in headings to match the blog's style.
+- End posts with an italicised closing line.
+```
+
+The agent reads this file before starting, so you don't have to repeat yourself every time.
+
+---
+
+## 📱 The Day-to-Day Workflow
+
+Once the setup is done, publishing a new post takes about 60 seconds of your time:
+
+### Step 1 — Open GitHub on Your Phone
+
+Navigate to your repository. Tap the **Copilot** button (the sparkle icon ✨), or go to the **Issues** tab and open a new issue, or directly open an agent session via the Copilot panel.
+
+### Step 2 — Type Your Prompt
+
+Describe what you want. You don't need to be precise — treat it like you're briefing a colleague:
+
+> Write a blog post about my AI based blog post generation flow where I give a prompt to Copilot from my mobile, have a post generated, review the PR, merge it, and the website is live on GitHub Pages rendered via Jekyll. Make it a tutorial on how to set this up end to end.
+
+That's a real prompt. The one used for this very post, in fact.
+
+### Step 3 — Wait for the PR
+
+The agent will:
+- Look at your existing posts to understand your conventions
+- Write a new Markdown file in the correct directory with the correct filename format
+- Open a pull request with the new file
+
+This typically takes 1–3 minutes.
+
+### Step 4 — Review the PR
+
+GitHub's mobile app makes this easy. Open the PR, tap **Files changed**, and read through the generated post. You can:
+
+- Leave review comments asking for edits ("Make the intro shorter", "Add a section on X")
+- Approve and merge if it looks good
+- Request changes and the agent will update the post
+
+### Step 5 — Merge
+
+Tap **Merge pull request**. GitHub Pages picks it up automatically and your post is live within 1–2 minutes.
+
+---
+
+## 🔍 How the Agent Knows Your Conventions
+
+This is worth understanding. The agent doesn't just generate generic content — it reads your actual repository before writing. It will:
+
+- Look at existing post filenames to match your date/slug format
+- Check existing front matter to match your YAML keys
+- Read a few existing posts to pick up tone, heading style, and structure
+- Respect any instructions you've put in `.github/copilot-instructions.md`
+
+The more consistent your existing posts are, the better the generated posts will match.
+
+---
+
+## ⚙️ The GitHub Pages Build Pipeline
+
+When you merge the PR, here's what happens under the hood:
+
+1. **GitHub detects the push** to `main`
+2. **GitHub Actions** triggers the built-in `pages-build-deployment` workflow
+3. Jekyll runs, converting your Markdown files into static HTML
+4. The site is deployed to `https://yourusername.github.io`
+
+You can watch this happen in real time in your repository's **Actions** tab. The whole process usually takes under 2 minutes.
+
+<div class="alert alert-info">
+  💡 <b>No custom Actions workflow needed.</b> GitHub Pages has native Jekyll support. As long as your repository has a valid Jekyll structure and Pages is enabled, the builds happen automatically on every push. You only need a custom workflow if you want to do something non-standard (custom plugins, pre-processing steps, etc.).
+</div>
+
+---
+
+## 🛠️ Troubleshooting
+
+**The PR has the wrong filename format**  
+Check if your `_posts/` path or naming convention is unusual. Add a note to `.github/copilot-instructions.md` like: *"Post filenames must follow the pattern `YYYY-MM-DD-slug.md`."*
+
+**The post doesn't appear on the site after merging**  
+Make sure the date in the filename isn't in the future — Jekyll won't render future-dated posts by default. Also confirm the front matter has a valid `title`.
+
+**The build fails**  
+Go to the **Actions** tab in your repository. Click on the failing workflow run to see the error. Common causes: invalid YAML front matter (missing closing `---`), or a Liquid template syntax error in the post body.
+
+**The agent ignores your style**  
+Add more explicit examples to `.github/copilot-instructions.md`. You can even paste in a short example post showing the exact structure you want.
+
+---
+
+## 💭 Thoughts on This Workflow
+
+This setup has genuinely changed how I think about writing. The friction of "I need to open my laptop, pull the latest, create a file, write markdown, push, open a PR" used to mean I'd skip a lot of posts. Now a passing thought on a commute can become a published article.
+
+The agent isn't replacing the thinking — the ideas, the framing, the editorial judgment about whether something is worth publishing. But it handles the mechanical parts: formatting, file naming, front matter, linking to related posts.
+
+It's a good division of labour.
+
+---
+
+## ✅ Summary: Everything You Need
+
+| Step | What to do |
+|---|---|
+| 1 | Create a `<yourusername>.github.io` repository |
+| 2 | Set up Jekyll with a `_posts/` directory |
+| 3 | Enable GitHub Pages in repository settings |
+| 4 | Enable GitHub Copilot on your account |
+| 5 | (Optional) Add `.github/copilot-instructions.md` |
+| 6 | Open Copilot, type a prompt, get a PR |
+| 7 | Review, merge, and your post is live |
+
+---
+
+*And yes — this post was generated using exactly this flow. A prompt typed on a phone. A PR reviewed and merged. A Jekyll build. Words on the internet, with minimal friction.*
