@@ -4,3 +4,5 @@ _site/
 *.swp
 Gemfile.lock
 debug.log.bundle/
+__pycache__/
+*.pyc
