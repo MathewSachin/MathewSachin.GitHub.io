@@ -20,12 +20,14 @@ Usage:
     python3 tools/migrate-disqus-to-giscus.py path/to/disqus-export.xml
 
 Add --dry-run to preview what would be created without touching GitHub.
+Add --output FILE to write the dry-run output to FILE (as well as stdout).
 
 Requirements:
     pip install requests
 """
 
 import argparse
+import io
 import os
 import sys
 import time
@@ -88,8 +90,9 @@ def parse_export(xml_path: str):
     """Parse a Disqus XML export file.
 
     Returns:
-        pathname_titles: dict[pathname, title]
-        posts_by_pathname: dict[pathname, list[post_dict]]
+        pathname_titles: dict[pathname, title]  — all blog-post threads found
+        posts_by_pathname: dict[pathname, list[post_dict]]  — threads with ≥1 comment
+        skipped_links: list[str]  — thread links that were not blog posts
 
     Each post_dict has keys:
         id, message, author_name, author_username, created_at, parent_id
@@ -100,6 +103,7 @@ def parse_export(xml_path: str):
     # Map dsq:id -> canonical pathname (and title for first-seen thread)
     thread_map: dict[str, str] = {}     # dsq:id  -> pathname
     pathname_titles: dict[str, str] = {}  # pathname -> title
+    skipped_links: list[str] = []         # non-blog thread URLs
 
     for thread in root.findall(_d("thread")):
         tid = thread.get(_dsq("id"))
@@ -110,8 +114,10 @@ def parse_export(xml_path: str):
         if link_el is None or not (link_el.text or "").strip():
             continue
 
-        pathname = canonical_pathname(link_el.text)
+        url = link_el.text.strip()
+        pathname = canonical_pathname(url)
         if pathname is None:
+            skipped_links.append(url)
             continue
 
         thread_map[tid] = pathname
@@ -164,7 +170,7 @@ def parse_export(xml_path: str):
             }
         )
 
-    return pathname_titles, posts_by_pathname
+    return pathname_titles, posts_by_pathname, skipped_links
 
 
 # ── GitHub GraphQL helpers ─────────────────────────────────────────────────────
@@ -321,6 +327,39 @@ def _migrate_comments(
 
 # ── CLI ────────────────────────────────────────────────────────────────────────
 
+class _Tee(io.TextIOBase):
+    """Write to both a real stream and a file simultaneously."""
+
+    def __init__(self, stream, filepath: str):
+        self._stream = stream
+        self._file = open(filepath, "w", encoding="utf-8")
+
+    @property
+    def original_stream(self):
+        return self._stream
+
+    def write(self, s: str) -> int:
+        self._stream.write(s)
+        self._file.write(s)
+        return len(s)
+
+    def flush(self):
+        self._stream.flush()
+        self._file.flush()
+
+    def close(self):
+        try:
+            self._file.close()
+        finally:
+            super().close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc_info):
+        self.close()
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Migrate Disqus blog comments to GitHub Discussions for giscus."
@@ -331,8 +370,28 @@ def main():
         action="store_true",
         help="Preview what would be created without calling the GitHub API.",
     )
+    parser.add_argument(
+        "--output",
+        metavar="FILE",
+        help="Write output to FILE (in addition to stdout). Most useful with --dry-run.",
+    )
     args = parser.parse_args()
 
+    tee = None
+    if args.output:
+        tee = _Tee(sys.stdout, args.output)
+        sys.stdout = tee
+
+    try:
+        _run(args)
+    finally:
+        if tee is not None:
+            sys.stdout = tee.original_stream
+            tee.close()
+            print(f"Output written to {args.output}")
+
+
+def _run(args):
     token = os.environ.get("GITHUB_TOKEN", "")
     if not token and not args.dry_run:
         print(
@@ -341,21 +400,42 @@ def main():
         )
         sys.exit(1)
 
-    print(f"Parsing {args.xml} …")
-    pathname_titles, posts_by_pathname = parse_export(args.xml)
+    print(f"Parsing {args.xml} \u2026")
+    pathname_titles, posts_by_pathname, skipped_links = parse_export(args.xml)
+
+    if args.dry_run:
+        print("\n\u2500\u2500 DRY RUN \u2014 nothing will be written to GitHub \u2500\u2500\n")
+
+        print(f"Blog posts found: {len(pathname_titles)}")
+        for pathname in sorted(pathname_titles):
+            n = len(posts_by_pathname.get(pathname, []))
+            title = pathname_titles[pathname]
+            comment_note = f"{n} comment{'s' if n != 1 else ''}" if n else "no comments"
+            print(f"  \u2713 {pathname}  \u2014 {comment_note}")
+            print(f"    Title    : {title}")
+            print(f"    Discussion title would be: {pathname}")
+
+        unique_skipped = sorted(set(skipped_links))
+        if unique_skipped:
+            print(f"\nNon-blog pages filtered out: {len(unique_skipped)}")
+            for url in unique_skipped:
+                print(f"  \u2717 {url}")
 
     blog_pathnames = sorted(posts_by_pathname)
     if not blog_pathnames:
-        print("No blog-post comments found in the export.")
+        print("\nNo comments to migrate.")
+        if args.dry_run:
+            print("\n\u2705 Dry run complete.")
         return
 
-    print(f"\nFound {len(blog_pathnames)} blog post(s) with comments:\n")
-    for p in blog_pathnames:
-        n = len(posts_by_pathname[p])
-        print(f"  {p}  ({n} comment{'s' if n != 1 else ''})")
+    if not args.dry_run:
+        print(f"\nFound {len(blog_pathnames)} blog post(s) with comments:\n")
+        for p in blog_pathnames:
+            n = len(posts_by_pathname[p])
+            print(f"  {p}  ({n} comment{'s' if n != 1 else ''})")
 
     if args.dry_run:
-        print("\n── DRY RUN — nothing will be written to GitHub ──\n")
+        print("\nComments to migrate:")
 
     for pathname in blog_pathnames:
         title = pathname_titles.get(pathname, pathname)
@@ -367,14 +447,14 @@ def main():
         else:
             existing = _find_existing_discussion(token, pathname)
             if existing:
-                print(f"  ℹ Discussion already exists, appending comments.")
+                print(f"  \u2139 Discussion already exists, appending comments.")
                 discussion_id = existing
             else:
                 discussion_id = _create_discussion(token, pathname, title)
 
         _migrate_comments(token, discussion_id, posts_by_pathname[pathname], args.dry_run)
 
-    print("\n✅ Migration complete." if not args.dry_run else "\n✅ Dry run complete.")
+    print("\n\u2705 Migration complete." if not args.dry_run else "\n\u2705 Dry run complete.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,79 @@
+Parsing /tmp/disqus-export.xml …
+
+── DRY RUN — nothing will be written to GitHub ──
+
+Blog posts found: 14
+  ✓ /blog/2016/11/05/chrome-dino-hack  — no comments
+    Title    : Hacking the Chrome Dino Game
+    Discussion title would be: /blog/2016/11/05/chrome-dino-hack
+  ✓ /blog/2016/12/19/wp-wifi-proxy-auth  — no comments
+    Title    : Using Windows Phone on Authenticated Proxy Wifi
+    Discussion title would be: /blog/2016/12/19/wp-wifi-proxy-auth
+  ✓ /blog/2016/12/20/gitkeep  — no comments
+    Title    : .gitkeep (Track Empty Directory)
+    Discussion title would be: /blog/2016/12/20/gitkeep
+  ✓ /blog/2016/12/21/chrome-notepad  — no comments
+    Title    : Using Chrome as a Notepad
+    Discussion title would be: /blog/2016/12/21/chrome-notepad
+  ✓ /blog/2016/12/21/reset-wp  — no comments
+    Title    : Resetting an Unresponsive WindowsPhone
+    Discussion title would be: /blog/2016/12/21/reset-wp
+  ✓ /blog/2016/12/22/windows-registry-hacks  — no comments
+    Title    : Windows 10 Registry Hacks
+    Discussion title would be: /blog/2016/12/22/windows-registry-hacks
+  ✓ /blog/2016/12/26/shields-nuget-badge  — no comments
+    Title    : Making a Shields.io NuGet badge
+    Discussion title would be: /blog/2016/12/26/shields-nuget-badge
+  ✓ /blog/2016/12/29/git-auth-proxy  — no comments
+    Title    : Using Git over Authenticated Proxy Connection
+    Discussion title would be: /blog/2016/12/29/git-auth-proxy
+  ✓ /blog/2017/01/03/make-qr-code  — no comments
+    Title    : Generating QR Codes (using Google Charts API)
+    Discussion title would be: /blog/2017/01/03/make-qr-code
+  ✓ /blog/2017/07/28/ffmpeg-pipe-csharp  — no comments
+    Title    : Piping to ffmpeg.exe with C#
+    Discussion title would be: /blog/2017/07/28/ffmpeg-pipe-csharp
+  ✓ /blog/2017/07/28/mixing-audio  — no comments
+    Title    : Mixing Microphone Input and Speaker Output
+    Discussion title would be: /blog/2017/07/28/mixing-audio
+  ✓ /blog/2017/11/28/hacktoberfest-translations  — no comments
+    Title    : How my app was translated to almost 20 languages in just 15 days
+    Discussion title would be: /blog/2017/11/28/hacktoberfest-translations
+  ✓ /blog/2018/02/08/anime-openings-not-to-slip  — no comments
+    Title    : Some Anime Openings you won't want to skip
+    Discussion title would be: /blog/2018/02/08/anime-openings-not-to-slip
+  ✓ /blog/2018/04/24/great-anime-soundtracks  — no comments
+    Title    : Great Anime Soundtracks
+    Discussion title would be: /blog/2018/04/24/great-anime-soundtracks
+
+Non-blog pages filtered out: 26
+  ✗ https://mathewsachin.in/Captura/Acknowledgements/
+  ✗ https://mathewsachin.in/Captura/CI/
+  ✗ https://mathewsachin.in/Captura/Changelog/
+  ✗ https://mathewsachin.in/Captura/CmdLine/
+  ✗ https://mathewsachin.in/Captura/Contributing/
+  ✗ https://mathewsachin.in/Captura/Dependencies/
+  ✗ https://mathewsachin.in/Captura/Donate/
+  ✗ https://mathewsachin.in/Captura/Downloads/
+  ✗ https://mathewsachin.in/Captura/FAQ/
+  ✗ https://mathewsachin.in/Captura/Getting-Started/
+  ✗ https://mathewsachin.in/Captura/Hotkeys/
+  ✗ https://mathewsachin.in/Captura/License/
+  ✗ https://mathewsachin.in/Captura/Manual/
+  ✗ https://mathewsachin.in/Captura/Manual/cmdline.html
+  ✗ https://mathewsachin.in/Captura/Manual/hotkeys.html
+  ✗ https://mathewsachin.in/Captura/Manual/main.html
+  ✗ https://mathewsachin.in/Captura/Manual/region.html
+  ✗ https://mathewsachin.in/Captura/Manual/tray.html
+  ✗ https://mathewsachin.in/Captura/Manual/webcam.html
+  ✗ https://mathewsachin.in/Captura/RoadMap/
+  ✗ https://mathewsachin.in/Captura/ScreenShots/
+  ✗ https://mathewsachin.in/Captura/Translation/
+  ✗ https://mathewsachin.in/Captura/User-Manual/
+  ✗ https://mathewsachin.in/Captura/howto/mixing-audio.html
+  ✗ https://mathewsachin.in/Captura/howto/screenshot-methods.html
+  ✗ https://mathewsachin.in/Captura/y
+
+No comments to migrate.
+
+✅ Dry run complete.
