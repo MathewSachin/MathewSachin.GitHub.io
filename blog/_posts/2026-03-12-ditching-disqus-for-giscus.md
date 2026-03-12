@@ -130,14 +130,13 @@ The only real trade-off with giscus is that readers need a GitHub account to com
 
 Once giscus was live, I removed the `disqus` settings from `_config.yml` and trimmed the Disqus script from the layout. Less code, fewer dependencies, cleaner page loads.
 
-The old Disqus comments? Disqus lets you [export your comment data](https://help.disqus.com/en/articles/1717164-comments-export) as an XML file, and giscus has a migration path. Mine was sparse enough that I didn't bother, but if you have comments worth keeping there's a script in this repo that handles the whole thing:
+The old Disqus comments? Disqus lets you [export your comment data](https://help.disqus.com/en/articles/1717164-comments-export) as an XML file, and there's a script in this repo that converts it into per-post Markdown files with threaded indentation:
 
 ```bash
-export GITHUB_TOKEN=ghp_your_token_here
-python3 tools/migrate-disqus-to-giscus.py disqus-export.xml
+python3 tools/disqus-to-markdown.py disqus-export.xml
 ```
 
-The script filters the export to blog-post threads only, deduplicates URLs across domains and query strings, creates a GitHub Discussion for each post (with the URL pathname as the title, which is exactly what giscus looks for), and posts each comment as a reply preserving any threading. Run it with `--dry-run` first to see what it would do without touching GitHub.
+This writes one `.md` file per blog post into `tools/disqus-comments/`. Each file lists every comment (nothing skipped — deleted and spam posts are included and labelled) formatted as nested Markdown blockquotes that mirror the original reply threading.
 
 ---
 
