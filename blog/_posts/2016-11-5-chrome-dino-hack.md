@@ -3,6 +3,7 @@ title: Hacking the Chrome Dino Game
 tags: [chrome, hack, game]
 highlight: true
 related:
+  - /blog/2026/03/14/chrome-dino-autoplay
   - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/hacking-wordle
   - /blog/2026/03/07/edit-webpage-inspect-element
@@ -170,45 +171,9 @@ Now your dino is floating through the sky or back to solid ground, all at your c
 
 ## 🤖 Auto-play
 
-This code automatically controls the dino by checking for obstacles and making it jump or duck based on the obstacle's position. It runs periodically to keep the game going without you!
+Want the dino to play itself? There's a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.
 
-```js
-function dispatchKey(type, key) {
-    document.dispatchEvent(new KeyboardEvent(type, {keyCode: key}));
-}
-setInterval(function () {
-    const KEY_CODE_SPACE_BAR = 32
-    const KEY_CODE_ARROW_DOWN = 40
-    const CANVAS_HEIGHT = Runner.getInstance().dimensions.height
-    const DINO_HEIGHT = Runner.getInstance().tRex.config.height
-
-    const obstacle = Runner.getInstance().horizon.obstacles[0]
-    const speed = Runner.getInstance().currentSpeed
-
-    if (obstacle) {
-        const w = obstacle.width
-        const x = obstacle.xPos // measured from left of canvas
-        const y = obstacle.yPos // measured from top of canvas
-        const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
-        const isObstacleNearby = x < 25 * speed - w / 2
-
-        if (isObstacleNearby) {
-            if (yFromBottom > DINO_HEIGHT) {
-                // Pterodactyl going from above, do nothing
-            } else if (y > CANVAS_HEIGHT / 2) {
-                // Jump
-                dispatchKey("keyup", KEY_CODE_ARROW_DOWN)
-                dispatchKey("keydown", KEY_CODE_SPACE_BAR)
-            } else {
-                // Duck
-                dispatchKey("keydown", KEY_CODE_ARROW_DOWN)
-            }
-        }
-    }
-}, Runner.getInstance().msPerFrame);
-```
-
-This script continuously checks for obstacles like cacti or pterodactyls. When an obstacle is near, the script determines if the dino should jump or duck depending on the obstacle's position. If it’s a pterodactyl flying above, it does nothing. If it’s an obstacle at a lower height, it jumps. Otherwise, the dino ducks to avoid the hazard. It's like a bot taking control of your dino — no more manual intervention needed!
+👉 **[Full script + step-by-step explanation → Auto-play the Chrome Dino Game]({% post_url /blog/2026-03-14-chrome-dino-autoplay %})**
 
 ---
 
