@@ -1,0 +1,215 @@
+---
+layout: page
+title: CRON Expression Generator
+ads: false
+---
+
+<div class="row g-4">
+
+  <!-- Controls -->
+  <div class="col-12 col-md-5">
+    <h5 class="mb-3">Configure</h5>
+
+    <div class="mb-3">
+      <label class="form-label" for="freq-select">Frequency</label>
+      <select class="form-select" id="freq-select">
+        <option value="minute">Every Minute</option>
+        <option value="hour">Hourly</option>
+        <option value="day" selected>Daily</option>
+        <option value="week">Weekly</option>
+        <option value="month">Monthly</option>
+      </select>
+    </div>
+
+    <!-- Minute-of-hour (hidden for "Every Minute") -->
+    <div class="mb-3" id="row-minute">
+      <label class="form-label" for="sel-minute">At minute</label>
+      <select class="form-select" id="sel-minute"></select>
+    </div>
+
+    <!-- Hour-of-day (shown for daily / weekly / monthly) -->
+    <div class="mb-3 d-none" id="row-hour">
+      <label class="form-label" for="sel-hour">At hour (0–23, UTC)</label>
+      <select class="form-select" id="sel-hour"></select>
+    </div>
+
+    <!-- Day-of-week (shown for weekly) -->
+    <div class="mb-3 d-none" id="row-dow">
+      <label class="form-label" for="sel-dow">On day of week</label>
+      <select class="form-select" id="sel-dow">
+        <option value="0">Sunday</option>
+        <option value="1">Monday</option>
+        <option value="2">Tuesday</option>
+        <option value="3">Wednesday</option>
+        <option value="4">Thursday</option>
+        <option value="5">Friday</option>
+        <option value="6">Saturday</option>
+      </select>
+    </div>
+
+    <!-- Day-of-month (shown for monthly) -->
+    <div class="mb-3 d-none" id="row-dom">
+      <label class="form-label" for="sel-dom">On day of month</label>
+      <select class="form-select" id="sel-dom"></select>
+    </div>
+
+    <button class="btn btn-info text-white" id="generate-btn">Generate</button>
+  </div>
+
+  <!-- Result -->
+  <div class="col-12 col-md-7">
+    <h5 class="mb-3">Expression</h5>
+
+    <div id="result-area" class="d-none">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">CRON Expression</label>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <code id="cron-expr" class="fs-5"></code>
+          <button class="btn btn-sm btn-outline-secondary" id="copy-cron-btn" title="Copy expression">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Human Readable</label>
+        <p id="cron-desc" class="mb-0 text-muted"></p>
+      </div>
+
+      <hr>
+      <h6 class="mb-2">Field Reference</h6>
+      <table class="table table-sm table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody id="cron-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // ── Populate selects ─────────────────────────────────────────────────────
+
+  var selMinute = document.getElementById('sel-minute');
+  var selHour   = document.getElementById('sel-hour');
+  var selDom    = document.getElementById('sel-dom');
+
+  for (var m = 0; m < 60; m++) {
+    var opt = document.createElement('option');
+    opt.value = m; opt.textContent = m < 10 ? '0' + m : m;
+    selMinute.appendChild(opt);
+  }
+
+  for (var h = 0; h < 24; h++) {
+    var opt = document.createElement('option');
+    opt.value = h; opt.textContent = h < 10 ? '0' + h : h;
+    selHour.appendChild(opt);
+  }
+
+  for (var d = 1; d <= 31; d++) {
+    var opt = document.createElement('option');
+    opt.value = d; opt.textContent = d;
+    selDom.appendChild(opt);
+  }
+
+  // ── Show / hide rows based on frequency ──────────────────────────────────
+
+  var freqSelect = document.getElementById('freq-select');
+  var rowMinute  = document.getElementById('row-minute');
+  var rowHour    = document.getElementById('row-hour');
+  var rowDow     = document.getElementById('row-dow');
+  var rowDom     = document.getElementById('row-dom');
+
+  function updateVisibility() {
+    var freq = freqSelect.value;
+    rowMinute.classList.toggle('d-none', freq === 'minute');
+    rowHour.classList.toggle('d-none',   freq === 'minute' || freq === 'hour');
+    rowDow.classList.toggle('d-none',    freq !== 'week');
+    rowDom.classList.toggle('d-none',    freq !== 'month');
+  }
+
+  freqSelect.addEventListener('change', updateVisibility);
+  updateVisibility();
+
+  // ── Generate ──────────────────────────────────────────────────────────────
+
+  var DOW_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  var ordinal = function (n) {
+    var s = ['th','st','nd','rd'];
+    var v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  };
+
+  document.getElementById('generate-btn').addEventListener('click', function () {
+    var freq = freqSelect.value;
+    var min  = selMinute.value;
+    var hr   = selHour.value;
+    var dow  = document.getElementById('sel-dow').value;
+    var dom  = selDom.value;
+
+    var expr, desc, fields;
+
+    if (freq === 'minute') {
+      expr  = '* * * * *';
+      desc  = 'Every minute';
+      fields = [['Minute','*','Every minute'],['Hour','*','Every hour'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
+    } else if (freq === 'hour') {
+      expr  = min + ' * * * *';
+      desc  = 'Every hour at minute ' + min;
+      fields = [['Minute', min, 'At minute ' + min],['Hour','*','Every hour'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
+    } else if (freq === 'day') {
+      expr  = min + ' ' + hr + ' * * *';
+      desc  = 'Every day at ' + pad(hr) + ':' + pad(min) + ' UTC';
+      fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
+    } else if (freq === 'week') {
+      expr  = min + ' ' + hr + ' * * ' + dow;
+      desc  = 'Every ' + DOW_NAMES[dow] + ' at ' + pad(hr) + ':' + pad(min) + ' UTC';
+      fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)', dow, 'On ' + DOW_NAMES[dow]]];
+    } else { // month
+      expr  = min + ' ' + hr + ' ' + dom + ' * *';
+      desc  = 'On the ' + ordinal(+dom) + ' of every month at ' + pad(hr) + ':' + pad(min) + ' UTC';
+      fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)', dom, 'On the ' + ordinal(+dom)],['Month','*','Every month'],['Day (week)','*','Every day']];
+    }
+
+    document.getElementById('cron-expr').textContent = expr;
+    document.getElementById('cron-desc').textContent  = desc;
+
+    var tbody = document.getElementById('cron-table');
+    tbody.innerHTML = '';
+    fields.forEach(function (f) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + f[0] + '</td><td><code>' + f[1] + '</code></td><td>' + f[2] + '</td>';
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('result-area').classList.remove('d-none');
+  });
+
+  document.getElementById('copy-cron-btn').addEventListener('click', function () {
+    var btn = this;
+    var text = document.getElementById('cron-expr').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var icon = btn.querySelector('i');
+      icon.className = 'fas fa-check text-success';
+      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+    }).catch(function () {
+      var icon = btn.querySelector('i');
+      icon.className = 'fas fa-times text-danger';
+      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+    });
+  });
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  // Auto-generate on load with default selection
+  document.getElementById('generate-btn').click();
+}());
+</script>

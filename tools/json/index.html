@@ -1,0 +1,81 @@
+---
+layout: page
+title: JSON Formatter &amp; Validator
+ads: false
+---
+
+<div class="row g-4">
+  <div class="col-12 col-md-6">
+    <label class="form-label fw-semibold" for="json-input">Input</label>
+    <textarea id="json-input" class="form-control font-monospace" rows="14"
+      placeholder='{"key":"value"}'></textarea>
+    <div class="mt-2 d-flex gap-2 flex-wrap">
+      <button class="btn btn-info text-white" id="json-format-btn">Format</button>
+      <button class="btn btn-outline-secondary" id="json-minify-btn">Minify</button>
+      <button class="btn btn-outline-secondary" id="json-clear-btn">Clear</button>
+    </div>
+    <div id="json-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div>
+    <div id="json-ok" class="alert alert-success mt-2 py-2 d-none" role="alert">
+      <i class="fas fa-check-circle me-1"></i>Valid JSON
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <label class="form-label fw-semibold" for="json-output">Output</label>
+    <textarea id="json-output" class="form-control font-monospace" rows="14"
+      readonly placeholder="Formatted output…"></textarea>
+    <div class="mt-2">
+      <button class="btn btn-outline-secondary" id="json-copy-btn">
+        <i class="fas fa-copy me-1"></i>Copy
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var jsonInput  = document.getElementById('json-input');
+  var jsonOutput = document.getElementById('json-output');
+  var jsonError  = document.getElementById('json-error');
+  var jsonOk     = document.getElementById('json-ok');
+
+  function clearFeedback() {
+    jsonError.textContent = '';
+    jsonError.classList.add('d-none');
+    jsonOk.classList.add('d-none');
+  }
+
+  function jsonFormat(indent) {
+    clearFeedback();
+    var raw = jsonInput.value.trim();
+    if (!raw) return;
+    try {
+      var parsed = JSON.parse(raw);
+      jsonOutput.value = JSON.stringify(parsed, null, indent);
+      jsonOk.classList.remove('d-none');
+    } catch (e) {
+      jsonOutput.value = '';
+      jsonError.textContent = e.message;
+      jsonError.classList.remove('d-none');
+    }
+  }
+
+  document.getElementById('json-format-btn').addEventListener('click', function () { jsonFormat(2); });
+  document.getElementById('json-minify-btn').addEventListener('click', function () { jsonFormat(0); });
+  document.getElementById('json-clear-btn').addEventListener('click', function () {
+    jsonInput.value = ''; jsonOutput.value = '';
+    clearFeedback();
+  });
+  document.getElementById('json-copy-btn').addEventListener('click', function () {
+    var btn = this;
+    navigator.clipboard.writeText(jsonOutput.value).then(function () {
+      var icon = btn.querySelector('i');
+      icon.className = 'fas fa-check text-success me-1';
+      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+    }).catch(function () {
+      var icon = btn.querySelector('i');
+      icon.className = 'fas fa-times text-danger me-1';
+      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+    });
+  });
+}());
+</script>
