@@ -1,0 +1,477 @@
+---
+layout: tool
+title: Time Zone Overlap
+ads: true
+---
+
+<div class="card google-anno-skip">
+<div class="card-body">
+
+<p class="text-muted mb-4">
+  Select up to 4 cities to visualise their business hours side-by-side and find the best windows for scheduling a meeting.
+</p>
+
+<!-- ── City Selectors ──────────────────────────────────────────────── -->
+<div class="row g-3 mb-4" id="tz-selectors"></div>
+
+<!-- ── Timeline ───────────────────────────────────────────────────── -->
+<div class="d-flex align-items-center gap-2 mb-2">
+  <h6 class="mb-0">24-hour Timeline</h6>
+  <span class="badge bg-secondary" id="tz-now-badge"></span>
+</div>
+
+<div id="tz-timeline"></div>
+
+<!-- ── Legend ─────────────────────────────────────────────────────── -->
+<div class="d-flex flex-wrap gap-3 mt-3 small">
+  <span><span class="tz-dot" style="background:#198754"></span> All cities in business hours</span>
+  <span><span class="tz-dot" style="background:#fd7e14"></span> Most cities in business hours</span>
+  <span><span class="tz-dot" style="background:#ffc107"></span> Some cities in business hours</span>
+  <span><span class="tz-dot" style="background:rgba(13,202,240,0.55)"></span> City in business hours</span>
+  <span><span class="tz-dot" style="background:#2d3748"></span> Outside business hours</span>
+</div>
+
+<!-- ── Best Meeting Windows ───────────────────────────────────────── -->
+<div class="mt-4">
+  <h6 class="mb-2">
+    Best Meeting Windows
+    <small class="text-muted fw-normal">(all cities 9 AM – 5 PM)</small>
+  </h6>
+  <div id="tz-best-times">
+    <span class="text-muted small">Select cities above to see recommendations.</span>
+  </div>
+</div>
+
+<!-- ── Styles ─────────────────────────────────────────────────────── -->
+<style>
+.tz-wrap        { overflow-x: auto; padding-bottom: 4px; }
+.tz-grid        { min-width: 640px; }
+.tz-row         { display: flex; align-items: center; margin-bottom: 3px; }
+.tz-label       { width: 110px; min-width: 110px; font-size: 0.78rem; color: #adb5bd;
+                  padding-right: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.tz-label.main  { color: #dee2e6; font-weight: 500; }
+.tz-cells       { display: flex; flex: 1; gap: 2px; }
+.tz-cell        { flex: 1; height: 30px; border-radius: 3px; cursor: default;
+                  transition: opacity 0.15s ease; }
+.tz-cell:hover  { opacity: 0.72; }
+.tz-cell.now    { outline: 2px solid rgba(255,255,255,0.75); outline-offset: -2px; }
+.tz-hdr-cell    { flex: 1; height: 18px; font-size: 0.6rem; text-align: center;
+                  line-height: 18px; color: #6c757d; }
+.tz-hdr-cell.now { color: #0dcaf0; font-weight: 700; }
+.tz-overlap     { height: 20px; }
+.tz-dot         { display: inline-block; width: 12px; height: 12px; border-radius: 2px;
+                  margin-right: 3px; vertical-align: middle; }
+</style>
+
+<!-- ── Script ─────────────────────────────────────────────────────── -->
+<script>
+(function () {
+  /* ── City / timezone data ──────────────────────────────────────── */
+  var CITIES = [
+    { name: 'New York',        tz: 'America/New_York' },
+    { name: 'Los Angeles',     tz: 'America/Los_Angeles' },
+    { name: 'Chicago',         tz: 'America/Chicago' },
+    { name: 'Toronto',         tz: 'America/Toronto' },
+    { name: 'Vancouver',       tz: 'America/Vancouver' },
+    { name: 'Denver',          tz: 'America/Denver' },
+    { name: 'São Paulo',       tz: 'America/Sao_Paulo' },
+    { name: 'Buenos Aires',    tz: 'America/Argentina/Buenos_Aires' },
+    { name: 'Mexico City',     tz: 'America/Mexico_City' },
+    { name: 'London',          tz: 'Europe/London' },
+    { name: 'Dublin',          tz: 'Europe/Dublin' },
+    { name: 'Lisbon',          tz: 'Europe/Lisbon' },
+    { name: 'Paris',           tz: 'Europe/Paris' },
+    { name: 'Berlin',          tz: 'Europe/Berlin' },
+    { name: 'Amsterdam',       tz: 'Europe/Amsterdam' },
+    { name: 'Madrid',          tz: 'Europe/Madrid' },
+    { name: 'Rome',            tz: 'Europe/Rome' },
+    { name: 'Warsaw',          tz: 'Europe/Warsaw' },
+    { name: 'Stockholm',       tz: 'Europe/Stockholm' },
+    { name: 'Istanbul',        tz: 'Europe/Istanbul' },
+    { name: 'Moscow',          tz: 'Europe/Moscow' },
+    { name: 'Cairo',           tz: 'Africa/Cairo' },
+    { name: 'Lagos',           tz: 'Africa/Lagos' },
+    { name: 'Nairobi',         tz: 'Africa/Nairobi' },
+    { name: 'Johannesburg',    tz: 'Africa/Johannesburg' },
+    { name: 'Dubai',           tz: 'Asia/Dubai' },
+    { name: 'Karachi',         tz: 'Asia/Karachi' },
+    { name: 'Mumbai',          tz: 'Asia/Kolkata' },
+    { name: 'Kolkata',         tz: 'Asia/Kolkata' },
+    { name: 'Dhaka',           tz: 'Asia/Dhaka' },
+    { name: 'Bangkok',         tz: 'Asia/Bangkok' },
+    { name: 'Singapore',       tz: 'Asia/Singapore' },
+    { name: 'Kuala Lumpur',    tz: 'Asia/Kuala_Lumpur' },
+    { name: 'Jakarta',         tz: 'Asia/Jakarta' },
+    { name: 'Beijing',         tz: 'Asia/Shanghai' },
+    { name: 'Shanghai',        tz: 'Asia/Shanghai' },
+    { name: 'Hong Kong',       tz: 'Asia/Hong_Kong' },
+    { name: 'Seoul',           tz: 'Asia/Seoul' },
+    { name: 'Tokyo',           tz: 'Asia/Tokyo' },
+    { name: 'Sydney',          tz: 'Australia/Sydney' },
+    { name: 'Melbourne',       tz: 'Australia/Melbourne' },
+    { name: 'Auckland',        tz: 'Pacific/Auckland' },
+  ];
+
+  var NONE      = '__none__';
+  var BIZ_START = 9;
+  var BIZ_END   = 17; // exclusive — covers 9:00–16:59
+
+  var EM_DASH  = '\u2014'; // —
+  var EN_DASH  = '\u2013'; // –
+  var NBSP     = '\u00a0'; // non-breaking space
+  var NNBSP    = '\u202f'; // narrow no-break space
+  var CHECK    = '\u2713'; // ✓
+
+  /* Default: two common cross-Atlantic pairs */
+  var selections = ['America/New_York', 'Europe/London', NONE, NONE];
+
+  var selectorsEl = document.getElementById('tz-selectors');
+  var timelineEl  = document.getElementById('tz-timeline');
+  var bestTimesEl = document.getElementById('tz-best-times');
+  var nowBadgeEl  = document.getElementById('tz-now-badge');
+
+  /* ── Date / timezone helpers ───────────────────────────────────── */
+
+  /** Return a Date whose UTC time is today at the given UTC hour. */
+  function refDate(utcHour) {
+    var d = new Date();
+    d.setUTCHours(utcHour, 0, 0, 0);
+    return d;
+  }
+
+  /** Return the local clock hour (0–23) for the given UTC hour in `tz`. */
+  function localHour(utcHour, tz) {
+    try {
+      var parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, hour: 'numeric', hour12: false
+      }).formatToParts(refDate(utcHour));
+      var h = parseInt(parts.find(function (p) { return p.type === 'hour'; }).value, 10);
+      return h === 24 ? 0 : h;
+    } catch (e) { return 0; }
+  }
+
+  /** Format a UTC hour as a local 12-hour string (e.g. "9 AM"). */
+  function formatHour(utcHour, tz) {
+    try {
+      return new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, hour: 'numeric', hour12: true
+      }).format(refDate(utcHour % 24));
+    } catch (e) { return ''; }
+  }
+
+  /** Return a short timezone abbreviation (e.g. "EST", "GMT+5:30"). */
+  function tzAbbr(tz) {
+    try {
+      var parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, timeZoneName: 'short'
+      }).formatToParts(new Date());
+      return parts.find(function (p) { return p.type === 'timeZoneName'; }).value;
+    } catch (e) { return ''; }
+  }
+
+  /* ── Dropdown builder ──────────────────────────────────────────── */
+  function buildDropdown(idx) {
+    var col = document.createElement('div');
+    col.className = 'col-12 col-sm-6 col-md-3';
+
+    var lbl = document.createElement('label');
+    lbl.className = 'form-label small mb-1';
+    lbl.textContent = 'City ' + (idx + 1);
+    lbl.setAttribute('for', 'tz-city-' + idx);
+    col.appendChild(lbl);
+
+    var sel = document.createElement('select');
+    sel.className = 'form-select form-select-sm';
+    sel.id = 'tz-city-' + idx;
+
+    var noneOpt = document.createElement('option');
+    noneOpt.value = NONE;
+    noneOpt.textContent = '— None —';
+    sel.appendChild(noneOpt);
+
+    CITIES.forEach(function (c) {
+      var opt = document.createElement('option');
+      opt.value = c.tz;
+      opt.textContent = c.name;
+      sel.appendChild(opt);
+    });
+
+    sel.value = selections[idx];
+    sel.addEventListener('change', function () {
+      selections[idx] = this.value;
+      render();
+    });
+
+    col.appendChild(sel);
+    return col;
+  }
+
+  /* ── Render ────────────────────────────────────────────────────── */
+  function render() {
+    timelineEl.innerHTML = '';
+    bestTimesEl.innerHTML = '';
+
+    var nowH = new Date().getUTCHours();
+    nowBadgeEl.textContent = 'Now: ' + pad(nowH) + ':00 UTC';
+
+    var active = selections.map(function (tz) {
+      if (tz === NONE) return null;
+      var c = CITIES.find(function (x) { return x.tz === tz; }) || { name: tz, tz: tz };
+      return { name: c.name, tz: tz };
+    }).filter(Boolean);
+
+    if (active.length === 0) {
+      timelineEl.innerHTML =
+        '<p class="text-muted py-2 small">Select at least one city to see the timeline.</p>';
+      return;
+    }
+
+    /* Pre-compute local hours: cityHours[cityIdx][utcHour] */
+    var cityHours = active.map(function (city) {
+      var arr = [];
+      for (var h = 0; h < 24; h++) { arr.push(localHour(h, city.tz)); }
+      return arr;
+    });
+
+    var grid = document.createElement('div');
+    grid.className = 'tz-grid';
+
+    /* ── UTC header row ── */
+    var hdrRow = document.createElement('div');
+    hdrRow.className = 'tz-row';
+    var hdrLbl = document.createElement('div');
+    hdrLbl.className = 'tz-label';
+    hdrLbl.textContent = 'UTC';
+    hdrRow.appendChild(hdrLbl);
+    var hdrCells = document.createElement('div');
+    hdrCells.className = 'tz-cells';
+    for (var h = 0; h < 24; h++) {
+      var hc = document.createElement('div');
+      hc.className = 'tz-hdr-cell' + (h === nowH ? ' now' : '');
+      hc.textContent = h % 3 === 0 ? h : '';
+      hdrCells.appendChild(hc);
+    }
+    hdrRow.appendChild(hdrCells);
+    grid.appendChild(hdrRow);
+
+    /* ── City rows ── */
+    active.forEach(function (city, ci) {
+      var abbr = tzAbbr(city.tz);
+      var row = document.createElement('div');
+      row.className = 'tz-row';
+
+      var lbl = document.createElement('div');
+      lbl.className = 'tz-label main';
+      lbl.title = city.tz;
+      lbl.innerHTML = city.name +
+        (abbr ? '<br><span style="font-size:0.68rem;color:#6c757d;font-weight:400">' + abbr + '</span>' : '');
+      row.appendChild(lbl);
+
+      var cells = document.createElement('div');
+      cells.className = 'tz-cells';
+      for (var h = 0; h < 24; h++) {
+        var lh = cityHours[ci][h];
+        var inBiz = lh >= BIZ_START && lh < BIZ_END;
+        var cell = document.createElement('div');
+        cell.className = 'tz-cell' + (h === nowH ? ' now' : '');
+        cell.style.background = inBiz ? 'rgba(13,202,240,0.55)' : '#2d3748';
+        cell.title = city.name + ' ' + EM_DASH + ' UTC ' + pad(h) + ':00 = ' +
+          formatHour(h, city.tz) + (inBiz ? ' ' + CHECK + ' business hours' : '');
+        cells.appendChild(cell);
+      }
+      row.appendChild(cells);
+      grid.appendChild(row);
+    });
+
+    /* ── Overlap row ── */
+    var overlapCounts = [];
+    for (var h = 0; h < 24; h++) {
+      var cnt = 0;
+      active.forEach(function (_, ci) {
+        var lh = cityHours[ci][h];
+        if (lh >= BIZ_START && lh < BIZ_END) cnt++;
+      });
+      overlapCounts.push(cnt);
+    }
+
+    var sep = document.createElement('div');
+    sep.style.height = '6px';
+    grid.appendChild(sep);
+
+    var ovRow = document.createElement('div');
+    ovRow.className = 'tz-row';
+    var ovLbl = document.createElement('div');
+    ovLbl.className = 'tz-label';
+    ovLbl.textContent = 'Overlap';
+    ovRow.appendChild(ovLbl);
+
+    var ovCells = document.createElement('div');
+    ovCells.className = 'tz-cells';
+    var bestHours = [];
+    for (var h = 0; h < 24; h++) {
+      var cnt = overlapCounts[h];
+      var cell = document.createElement('div');
+      cell.className = 'tz-cell tz-overlap' + (h === nowH ? ' now' : '');
+      var bg;
+      if (cnt === active.length && cnt > 0) {
+        bg = '#198754';
+        bestHours.push(h);
+      } else if (cnt >= Math.ceil(active.length * 0.5)) {
+        bg = '#fd7e14';
+      } else if (cnt > 0) {
+        bg = '#ffc107';
+      } else {
+        bg = '#343a40';
+      }
+      cell.style.background = bg;
+      cell.title = cnt + '/' + active.length + ' cities in business hours at UTC ' + pad(h) + ':00';
+      ovCells.appendChild(cell);
+    }
+    ovRow.appendChild(ovCells);
+    grid.appendChild(ovRow);
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'tz-wrap';
+    wrapper.appendChild(grid);
+    timelineEl.appendChild(wrapper);
+
+    /* ── Best times summary ── */
+    if (bestHours.length > 0) {
+      var groups = groupConsecutive(bestHours);
+      var html = '<ul class="mb-0 ps-3 small">';
+      groups.forEach(function (g) {
+        html += '<li><strong>' + fmtWindow(g, active) + '</strong></li>';
+      });
+      html += '</ul>';
+      bestTimesEl.innerHTML = html;
+    } else {
+      /* Fall back: show best partial overlap */
+      var maxCnt = Math.max.apply(null, overlapCounts);
+      if (maxCnt === 0) {
+        bestTimesEl.innerHTML =
+          '<span class="text-warning small">No business-hours overlap found for the selected cities.</span>';
+      } else {
+        var partialHours = [];
+        overlapCounts.forEach(function (cnt, h) {
+          if (cnt === maxCnt) partialHours.push(h);
+        });
+        var groups = groupConsecutive(partialHours);
+        var html = '<p class="text-warning small mb-1">No full overlap found. ' +
+          'Best partial overlap (' + maxCnt + NNBSP + '/' + NNBSP + active.length + ' cities):</p>' +
+          '<ul class="mb-0 ps-3 small">';
+        groups.forEach(function (g) {
+          html += '<li>' + fmtWindow(g, active) + '</li>';
+        });
+        html += '</ul>';
+        bestTimesEl.innerHTML = html;
+      }
+    }
+  }
+
+  /* ── Helpers ───────────────────────────────────────────────────── */
+
+  function groupConsecutive(hours) {
+    if (!hours.length) return [];
+    var groups = [];
+    var group = [hours[0]];
+    for (var i = 1; i < hours.length; i++) {
+      if (hours[i] === hours[i - 1] + 1) {
+        group.push(hours[i]);
+      } else {
+        groups.push(group);
+        group = [hours[i]];
+      }
+    }
+    groups.push(group);
+    return groups;
+  }
+
+  function fmtWindow(group, active) {
+    var startUtc = group[0];
+    var endUtc   = group[group.length - 1] + 1;
+    var utcRange = 'UTC' + NBSP + pad(startUtc) + ':00' + NBSP + EN_DASH + NBSP + pad(endUtc % 24) + ':00';
+    var parts = active.map(function (city) {
+      return city.name + ':' + NBSP + formatHour(startUtc, city.tz) +
+        NBSP + EN_DASH + NBSP + formatHour(endUtc % 24, city.tz);
+    });
+    return utcRange + ' &nbsp;<span class="text-muted">(' + parts.join(', ') + ')</span>';
+  }
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  /* ── Initialise ────────────────────────────────────────────────── */
+  for (var i = 0; i < 4; i++) {
+    selectorsEl.appendChild(buildDropdown(i));
+  }
+  render();
+
+  /* Refresh the "Now" badge and current-hour highlight every minute */
+  setInterval(render, 60000);
+}());
+</script>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+<p>
+  This tool overlays the business hours of up to four cities on a single 24-hour timeline — entirely inside your browser.
+  <strong>No data is sent to a server.</strong>
+</p>
+
+<h5 class="mt-4">Reading the Timeline</h5>
+<p>
+  Each row represents one city. The 24 columns represent the UTC hours of the day (0&nbsp;&ndash;&nbsp;23).
+  A cell is highlighted in <strong style="color:#0dcaf0">teal</strong> when that UTC hour falls within
+  9&nbsp;AM&nbsp;&ndash;&nbsp;5&nbsp;PM local time for that city. Hovering over any cell shows the exact local
+  clock time and whether it is within business hours.
+</p>
+<p>
+  The <strong>Overlap</strong> strip below the city rows shows the degree of simultaneous coverage:
+</p>
+<ul>
+  <li><span style="display:inline-block;width:14px;height:14px;background:#198754;border-radius:2px;vertical-align:middle"></span>&nbsp;<strong>Green</strong> &mdash; every selected city is in business hours &mdash; the ideal meeting slot.</li>
+  <li><span style="display:inline-block;width:14px;height:14px;background:#fd7e14;border-radius:2px;vertical-align:middle"></span>&nbsp;<strong>Orange</strong> &mdash; at least half of the cities are in business hours.</li>
+  <li><span style="display:inline-block;width:14px;height:14px;background:#ffc107;border-radius:2px;vertical-align:middle"></span>&nbsp;<strong>Yellow</strong> &mdash; fewer than half of the cities are in business hours.</li>
+  <li><span style="display:inline-block;width:14px;height:14px;background:#343a40;border-radius:2px;vertical-align:middle"></span>&nbsp;<strong>Dark</strong> &mdash; no city is in business hours.</li>
+</ul>
+<p>
+  The column matching the current UTC hour is highlighted with a white outline and its label is shown in teal.
+</p>
+
+<h5 class="mt-4">Best Meeting Windows</h5>
+<p>
+  The <em>Best Meeting Windows</em> section lists every contiguous block of UTC hours where
+  <em>all</em> selected cities are simultaneously within business hours (9&nbsp;AM&nbsp;&ndash;&nbsp;5&nbsp;PM),
+  together with the equivalent local-time range for each city.
+  If no full overlap exists, the section falls back to the largest partial overlap.
+</p>
+
+<h5 class="mt-4">Implementation Details</h5>
+<p>
+  All time-zone conversions use the browser&rsquo;s built-in
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat"
+     target="_blank" rel="noopener"><code>Intl.DateTimeFormat</code></a> API.
+  For each UTC hour (0&nbsp;&ndash;&nbsp;23) the tool queries the local clock hour in every selected
+  time zone using <em>today&rsquo;s</em> date, so daylight saving time offsets are
+  automatically taken into account.
+  No third-party date library is required.
+</p>
+<p>
+  The timeline refreshes every minute so the current-hour indicator stays accurate without a page reload.
+</p>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  All calculations run locally in your browser tab. No city selections or times are transmitted anywhere.
+</p>
+
+<br><hr><br>
+
+{% include giscus.html %}
+
+</div>
+</div>
