@@ -1,8 +1,11 @@
 ---
-layout: page
+layout: tool
 title: JSON Formatter &amp; Validator
-ads: false
+ads: true
 ---
+
+<div class="card google-anno-skip">
+<div class="card-body">
 
 <div class="row g-4">
   <div class="col-12 col-md-6">
@@ -79,3 +82,68 @@ ads: false
   });
 }());
 </script>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+<p>
+  This tool parses, validates, and reformats
+  <a href="https://www.json.org/" target="_blank" rel="noopener">JSON</a>
+  text — entirely inside your browser.
+  <strong>No data is ever sent to a server.</strong>
+</p>
+
+<h5 class="mt-4">What is JSON?</h5>
+<p>
+  JSON (JavaScript Object Notation) is a lightweight, human-readable data interchange format.
+  It supports six value types: <code>string</code>, <code>number</code>, <code>boolean</code>,
+  <code>null</code>, <code>array</code>, and <code>object</code>. Because it maps directly to
+  JavaScript data structures, it is the most widely used format for REST APIs and
+  configuration files.
+</p>
+
+<h5 class="mt-4">Implementation Details</h5>
+<p>
+  The tool uses two standard JavaScript built-ins — no third-party libraries are involved:
+</p>
+<ul>
+  <li>
+    <strong>Parsing &amp; validation:</strong>
+    <code>JSON.parse(input)</code> — if the input is not valid JSON, the built-in parser throws
+    a <code>SyntaxError</code> whose message is displayed as the error feedback. If parsing
+    succeeds the JSON is considered valid.
+  </li>
+  <li>
+    <strong>Formatting:</strong>
+    <code>JSON.stringify(parsed, null, 2)</code> — re-serialises the parsed value with 2-space
+    indentation, producing consistently pretty-printed output regardless of the original
+    whitespace or key ordering.
+  </li>
+  <li>
+    <strong>Minification:</strong>
+    <code>JSON.stringify(parsed, null, 0)</code> — re-serialises with no extra whitespace,
+    producing the most compact valid JSON string.
+  </li>
+</ul>
+<p>
+  Because the round-trip goes through <code>JSON.parse</code> → <code>JSON.stringify</code>,
+  the formatter also <em>normalises</em> the data: duplicate keys are deduplicated and
+  certain non-standard values (e.g. <code>undefined</code>, functions) are stripped.
+</p>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  All processing happens locally in your browser tab. JSON payloads — which may contain
+  sensitive business data — never leave your device.
+</p>
+
+<br><hr><br>
+
+{% include giscus.html %}
+
+</div>
+</div>
