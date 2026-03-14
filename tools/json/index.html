@@ -1,118 +1,73 @@
 ---
 layout: page
-title: JSON / ION Formatter &amp; Validator
+title: JSON Formatter &amp; Validator
 ads: false
 ---
 
-<!-- Tab nav -->
-<ul class="nav nav-tabs mb-4" id="fmt-tabs" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="json-tab" data-bs-toggle="tab"
-      data-bs-target="#json-panel" type="button" role="tab"
-      aria-controls="json-panel" aria-selected="true">JSON</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="ion-tab" data-bs-toggle="tab"
-      data-bs-target="#ion-panel" type="button" role="tab"
-      aria-controls="ion-panel" aria-selected="false">Amazon Ion</button>
-  </li>
-</ul>
-
-<div class="tab-content">
-
-  <!-- JSON Panel -->
-  <div class="tab-pane fade show active" id="json-panel" role="tabpanel"
-    aria-labelledby="json-tab">
-    <div class="row g-4">
-      <div class="col-12 col-md-6">
-        <label class="form-label fw-semibold" for="json-input">Input</label>
-        <textarea id="json-input" class="form-control font-monospace" rows="14"
-          placeholder='{"key":"value"}'></textarea>
-        <div class="mt-2 d-flex gap-2 flex-wrap">
-          <button class="btn btn-info text-white" id="json-format-btn">Format</button>
-          <button class="btn btn-outline-secondary" id="json-minify-btn">Minify</button>
-          <button class="btn btn-outline-secondary" id="json-clear-btn">Clear</button>
-        </div>
-        <div id="json-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div>
-        <div id="json-ok" class="alert alert-success mt-2 py-2 d-none" role="alert">
-          <i class="fas fa-check-circle me-1"></i>Valid JSON
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <label class="form-label fw-semibold" for="json-output">Output</label>
-        <textarea id="json-output" class="form-control font-monospace" rows="14"
-          readonly placeholder="Formatted output…"></textarea>
-        <div class="mt-2">
-          <button class="btn btn-outline-secondary" id="json-copy-btn">
-            <i class="fas fa-copy me-1"></i>Copy
-          </button>
-        </div>
-      </div>
+<div class="row g-4">
+  <div class="col-12 col-md-6">
+    <label class="form-label fw-semibold" for="json-input">Input</label>
+    <textarea id="json-input" class="form-control font-monospace" rows="14"
+      placeholder='{"key":"value"}'></textarea>
+    <div class="mt-2 d-flex gap-2 flex-wrap">
+      <button class="btn btn-info text-white" id="json-format-btn">Format</button>
+      <button class="btn btn-outline-secondary" id="json-minify-btn">Minify</button>
+      <button class="btn btn-outline-secondary" id="json-clear-btn">Clear</button>
+    </div>
+    <div id="json-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div>
+    <div id="json-ok" class="alert alert-success mt-2 py-2 d-none" role="alert">
+      <i class="fas fa-check-circle me-1"></i>Valid JSON
     </div>
   </div>
-
-  <!-- ION Panel -->
-  <div class="tab-pane fade" id="ion-panel" role="tabpanel"
-    aria-labelledby="ion-tab">
-    <div class="alert alert-info py-2 mb-3">
-      <i class="fas fa-info-circle me-1"></i>
-      Amazon Ion text format is a superset of JSON. This tool strips Ion comments and
-      normalises typed nulls (<code>null.int</code>, <code>null.string</code>, …) before
-      parsing. Ion-specific literals such as <code>blob</code>, <code>clob</code>,
-      <code>sexp</code>, and symbol annotations are not fully supported.
-    </div>
-    <div class="row g-4">
-      <div class="col-12 col-md-6">
-        <label class="form-label fw-semibold" for="ion-input">Input</label>
-        <textarea id="ion-input" class="form-control font-monospace" rows="14"
-          placeholder="// Ion or JSON&#10;{key: &quot;value&quot;, created: 2023-01-01T, n: null.int}"></textarea>
-        <div class="mt-2 d-flex gap-2 flex-wrap">
-          <button class="btn btn-info text-white" id="ion-format-btn">Format</button>
-          <button class="btn btn-outline-secondary" id="ion-clear-btn">Clear</button>
-        </div>
-        <div id="ion-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div>
-        <div id="ion-ok" class="alert alert-success mt-2 py-2 d-none" role="alert">
-          <i class="fas fa-check-circle me-1"></i>Valid Ion (JSON-compatible subset)
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <label class="form-label fw-semibold" for="ion-output">Output</label>
-        <textarea id="ion-output" class="form-control font-monospace" rows="14"
-          readonly placeholder="Formatted output…"></textarea>
-        <div class="mt-2">
-          <button class="btn btn-outline-secondary" id="ion-copy-btn">
-            <i class="fas fa-copy me-1"></i>Copy
-          </button>
-        </div>
-      </div>
+  <div class="col-12 col-md-6">
+    <label class="form-label fw-semibold" for="json-output">Output</label>
+    <textarea id="json-output" class="form-control font-monospace" rows="14"
+      readonly placeholder="Formatted output…"></textarea>
+    <div class="mt-2">
+      <button class="btn btn-outline-secondary" id="json-copy-btn">
+        <i class="fas fa-copy me-1"></i>Copy
+      </button>
     </div>
   </div>
-
 </div>
 
 <script>
 (function () {
-  // ── Helpers ──────────────────────────────────────────────────────────────
+  var jsonInput  = document.getElementById('json-input');
+  var jsonOutput = document.getElementById('json-output');
+  var jsonError  = document.getElementById('json-error');
+  var jsonOk     = document.getElementById('json-ok');
 
-  function clearFeedback(errEl, okEl) {
-    errEl.textContent = '';
-    errEl.classList.add('d-none');
-    okEl.classList.add('d-none');
+  function clearFeedback() {
+    jsonError.textContent = '';
+    jsonError.classList.add('d-none');
+    jsonOk.classList.add('d-none');
   }
 
-  function showError(errEl, okEl, msg) {
-    errEl.textContent = msg;
-    errEl.classList.remove('d-none');
-    okEl.classList.add('d-none');
+  function jsonFormat(indent) {
+    clearFeedback();
+    var raw = jsonInput.value.trim();
+    if (!raw) return;
+    try {
+      var parsed = JSON.parse(raw);
+      jsonOutput.value = JSON.stringify(parsed, null, indent);
+      jsonOk.classList.remove('d-none');
+    } catch (e) {
+      jsonOutput.value = '';
+      jsonError.textContent = e.message;
+      jsonError.classList.remove('d-none');
+    }
   }
 
-  function showOk(errEl, okEl) {
-    errEl.classList.add('d-none');
-    okEl.classList.remove('d-none');
-  }
-
-  function copyOutput(outputEl, btn) {
-    navigator.clipboard.writeText(outputEl.value).then(function () {
+  document.getElementById('json-format-btn').addEventListener('click', function () { jsonFormat(2); });
+  document.getElementById('json-minify-btn').addEventListener('click', function () { jsonFormat(0); });
+  document.getElementById('json-clear-btn').addEventListener('click', function () {
+    jsonInput.value = ''; jsonOutput.value = '';
+    clearFeedback();
+  });
+  document.getElementById('json-copy-btn').addEventListener('click', function () {
+    var btn = this;
+    navigator.clipboard.writeText(jsonOutput.value).then(function () {
       var icon = btn.querySelector('i');
       icon.className = 'fas fa-check text-success me-1';
       setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
@@ -121,118 +76,6 @@ ads: false
       icon.className = 'fas fa-times text-danger me-1';
       setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
     });
-  }
-
-  // ── JSON ─────────────────────────────────────────────────────────────────
-
-  var jsonInput  = document.getElementById('json-input');
-  var jsonOutput = document.getElementById('json-output');
-  var jsonError  = document.getElementById('json-error');
-  var jsonOk     = document.getElementById('json-ok');
-
-  function jsonFormat(indent) {
-    clearFeedback(jsonError, jsonOk);
-    var raw = jsonInput.value.trim();
-    if (!raw) return;
-    try {
-      var parsed = JSON.parse(raw);
-      jsonOutput.value = JSON.stringify(parsed, null, indent);
-      showOk(jsonError, jsonOk);
-    } catch (e) {
-      jsonOutput.value = '';
-      showError(jsonError, jsonOk, e.message);
-    }
-  }
-
-  document.getElementById('json-format-btn').addEventListener('click', function () { jsonFormat(2); });
-  document.getElementById('json-minify-btn').addEventListener('click', function () { jsonFormat(0); });
-  document.getElementById('json-clear-btn').addEventListener('click', function () {
-    jsonInput.value = ''; jsonOutput.value = '';
-    clearFeedback(jsonError, jsonOk);
   });
-  document.getElementById('json-copy-btn').addEventListener('click', function () {
-    copyOutput(jsonOutput, this);
-  });
-
-  // ── ION ──────────────────────────────────────────────────────────────────
-
-  var ionInput  = document.getElementById('ion-input');
-  var ionOutput = document.getElementById('ion-output');
-  var ionError  = document.getElementById('ion-error');
-  var ionOk     = document.getElementById('ion-ok');
-
-  /**
-   * Minimal Ion-text → JSON normaliser.
-   * Handles: single-line comments, block comments, typed nulls,
-   * Ion timestamps (bare date literals), unquoted symbol keys.
-   */
-  function normaliseIon(src) {
-    var result = '';
-    var i = 0, len = src.length;
-
-    while (i < len) {
-      // Single-line comment
-      if (src[i] === '/' && src[i + 1] === '/') {
-        while (i < len && src[i] !== '\n') i++;
-        continue;
-      }
-      // Block comment
-      if (src[i] === '/' && src[i + 1] === '*') {
-        i += 2;
-        while (i < len && !(src[i - 1] === '*' && src[i] === '/')) i++;
-        i++;
-        continue;
-      }
-      // String literal — pass through unchanged
-      if (src[i] === '"') {
-        result += src[i++];
-        while (i < len) {
-          if (src[i] === '\\') { result += src[i++] + src[i++]; continue; }
-          result += src[i];
-          if (src[i++] === '"') break;
-        }
-        continue;
-      }
-      result += src[i++];
-    }
-
-    // Replace Ion typed nulls (null.int, null.string, …) with JSON null
-    result = result.replace(/null\.[a-z_]+/g, 'null');
-
-    // Replace Ion timestamp literals with quoted strings.
-    // Handles: full timestamps (2023-01-01T12:30:00Z), date-only (2023-01-01T),
-    // month (2023-01T), and year (2023T) precision.
-    result = result.replace(/\b(\d{4}-\d{2}-\d{2}T[\d:.Z+\-]*|\d{4}-\d{2}T|\d{4}T)\b/g, '"$1"');
-
-    // Replace unquoted Ion symbol keys (identifier followed by colon) with quoted keys
-    result = result.replace(/([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)(\s*:)/g, '$1"$2"$3');
-
-    return result;
-  }
-
-  document.getElementById('ion-format-btn').addEventListener('click', function () {
-    clearFeedback(ionError, ionOk);
-    var raw = ionInput.value.trim();
-    if (!raw) return;
-    try {
-      var normalised = normaliseIon(raw);
-      var parsed = JSON.parse(normalised);
-      ionOutput.value = JSON.stringify(parsed, null, 2);
-      showOk(ionError, ionOk);
-    } catch (e) {
-      ionOutput.value = '';
-      showError(ionError, ionOk, e.message);
-    }
-  });
-
-  document.getElementById('ion-clear-btn').addEventListener('click', function () {
-    ionInput.value = ''; ionOutput.value = '';
-    clearFeedback(ionError, ionOk);
-  });
-
-  document.getElementById('ion-copy-btn').addEventListener('click', function () {
-    copyOutput(ionOutput, this);
-  });
-
 }());
 </script>
