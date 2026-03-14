@@ -61,7 +61,8 @@ Open `chrome://dino`, start the game, then paste this into the DevTools Console 
 
 ```js
 // Step 1: Get the game's current sprite sheet
-var origSprite = Runner.imageSprite;
+var inst = Runner.getInstance();
+var origSprite = inst.getOrigImageSprite();
 
 // Step 2: Copy it onto a canvas so we can modify it
 var patchCanvas = document.createElement('canvas');
@@ -70,17 +71,23 @@ patchCanvas.height = origSprite.naturalHeight;
 var ctx = patchCanvas.getContext('2d');
 ctx.drawImage(origSprite, 0, 0);
 
-// Step 3: Draw a red hat on the running T-Rex frames
-// T-Rex running frames start at x=936, y=2 (1x sheet)
+// Step 3: Draw a red hat on the running T-Rex frames.
+// Read the T-Rex position from the game's own sprite definition so it works
+// on both standard (LDPI) and HiDPI (2x) sprite sheets automatically.
+var scale  = Runner.isHDPI ? 2 : 1;
+var trexX  = inst.spriteDef.TREX.x;  // e.g. 848 on LDPI, 1678 on HDPI
+var frameW = 44 * scale;
+var hatH   =  8 * scale;
+
 ctx.fillStyle = '#CC0000';
-ctx.fillRect(936,  2, 44, 8);  // hat on run frame 1
-ctx.fillRect(980,  2, 44, 8);  // hat on run frame 2
+ctx.fillRect(trexX + 88  * scale, 2, frameW, hatH);  // hat on run frame 1
+ctx.fillRect(trexX + 132 * scale, 2, frameW, hatH);  // hat on run frame 2
 
 // Step 4: Inject the modified image back into the game
 var patched = new Image();
 patched.onload = function() {
-    Runner.imageSprite = patched;
-    Runner.getInstance().tRex.imageSprite = patched;
+    Runner.prototype.getOrigImageSprite    = function() { return patched; };
+    Runner.prototype.getRunnerImageSprite  = function() { return patched; };
     console.log('Sprite patched! 🎩');
 };
 patched.src = patchCanvas.toDataURL('image/png');
@@ -89,7 +96,7 @@ patched.src = patchCanvas.toDataURL('image/png');
 Once you run this, your dino sprouts a little red hat on every step. This is a great starting point — tweak the rectangles, change colors, and iterate in real time.
 
 <div class="alert alert-info">
-  💡 <b>Why does this work?</b> The game's drawing code calls <code>ctx.drawImage(Runner.imageSprite, sx, sy, sw, sh, dx, dy, dw, dh)</code> every frame. By replacing <code>Runner.imageSprite</code> with our modified version, every subsequent frame picks up our artwork automatically.
+  💡 <b>Why does this work?</b> Every frame the game calls <code>inst.getOrigImageSprite()</code> / <code>getRunnerImageSprite()</code> to obtain the image it draws from. By overriding those methods on <code>Runner.prototype</code>, every subsequent frame picks up our patched artwork automatically — no need to hunt down every cached reference.
 </div>
 
 ---
@@ -104,10 +111,11 @@ While the dino game is running in DevTools, you can extract the current sprite s
 
 ```js
 // Extract the original sprite sheet as a data URL you can save
+var origSprite = Runner.getInstance().getOrigImageSprite();
 var extractCanvas = document.createElement('canvas');
-extractCanvas.width  = Runner.imageSprite.naturalWidth;
-extractCanvas.height = Runner.imageSprite.naturalHeight;
-extractCanvas.getContext('2d').drawImage(Runner.imageSprite, 0, 0);
+extractCanvas.width  = origSprite.naturalWidth;
+extractCanvas.height = origSprite.naturalHeight;
+extractCanvas.getContext('2d').drawImage(origSprite, 0, 0);
 
 // This opens the image in a new tab — right-click → Save As
 window.open(extractCanvas.toDataURL('image/png'));
@@ -140,14 +148,8 @@ var marioSheet = new Image();
 marioSheet.crossOrigin = 'anonymous';
 
 marioSheet.onload = function () {
-    // Update the global sprite reference
-    Runner.imageSprite = marioSheet;
-
-    // Also update any sprites cached on already-active game objects
-    var inst = Runner.getInstance();
-    inst.tRex.imageSprite = marioSheet;
-    inst.horizon.obstacles.forEach(function (o) { o.imageSprite = marioSheet; });
-    inst.horizon.clouds.forEach(function (c)    { c.imageSprite = marioSheet; });
+    Runner.prototype.getOrigImageSprite    = function() { return marioSheet; };
+    Runner.prototype.getRunnerImageSprite  = function() { return marioSheet; };
 
     console.log('🍄 Mario sprite sheet loaded! Let\'s-a go!');
 };
@@ -169,18 +171,21 @@ marioSheet.src = 'https://your-server.com/mario-dino-sprite-sheet.png';
 Want even more control? You can intercept every `drawImage` call to swap sprites frame-by-frame — no pre-made PNG required. This is more complex, but lets you replace sprites procedurally:
 
 ```js
-var _orig = CanvasRenderingContext2D.prototype.drawImage;
-var spriteSheet = Runner.imageSprite;
+var inst        = Runner.getInstance();
+var _origDraw   = CanvasRenderingContext2D.prototype.drawImage;
+var _origSprite = inst.getOrigImageSprite();  // capture now so the check stays stable
+var scale       = Runner.isHDPI ? 2 : 1;
+var trexX       = inst.spriteDef.TREX.x;     // e.g. 848 LDPI, 1678 HDPI
 
 CanvasRenderingContext2D.prototype.drawImage = function (img) {
     var args = Array.prototype.slice.call(arguments);
 
     // Only intercept draws from the dino sprite sheet
-    if (img === spriteSheet && args.length === 9) {
+    if (img === _origSprite && args.length === 9) {
         var sx = args[1]; // source x in sprite sheet
 
-        // T-Rex is at x≥848 in the sprite sheet
-        if (sx >= 848 && sx < 1300) {
+        // T-Rex frames start at trexX; allow ~400 scaled pixels for all frames
+        if (sx >= trexX && sx < trexX + 400 * scale) {
             var dx = args[5], dy = args[6], dw = args[7], dh = args[8];
 
             // Draw a simple Mario silhouette instead
@@ -194,7 +199,7 @@ CanvasRenderingContext2D.prototype.drawImage = function (img) {
         }
     }
     // Pass everything else through unchanged
-    _orig.apply(this, args);
+    _origDraw.apply(this, args);
 };
 
 console.log('🎨 Real-time sprite intercept active!');
@@ -205,14 +210,14 @@ Run this snippet and you'll immediately see the dino replaced by a simple three-
 To restore the original draw function:
 
 ```js
-CanvasRenderingContext2D.prototype.drawImage = _orig;
+CanvasRenderingContext2D.prototype.drawImage = _origDraw;
 ```
 
 ---
 
 ## 📐 Sprite Coordinate Reference
 
-Use this table when editing your sprite sheet — all values are for the **1x (LDPI)** sprite sheet (the one used when your monitor isn't HiDPI):
+Use this table when editing your sprite sheet — all values are for the **1x (LDPI)** sprite sheet. On HiDPI (Retina) displays Chrome loads a 2x sheet where every coordinate is roughly doubled; use `Runner.isHDPI` and `inst.spriteDef` to read the live values rather than hardcoding these numbers in scripts.
 
 | Sprite | x | y | Width | Height | Notes |
 |---|---|---|---|---|---|
