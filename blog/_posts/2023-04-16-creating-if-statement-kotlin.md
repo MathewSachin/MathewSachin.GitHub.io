@@ -4,7 +4,7 @@ tags: [kotlin, if]
 highlight: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
-  - /blog/2016/11/05/chrome-dino-hack
+  - /blog/2023/04/02/pure-functions
 ---
 
 Kotlin's lambda syntax is expressive enough that you can craft your own control-flow constructs that look and feel like built-in language keywords.
@@ -124,5 +124,6 @@ The two `sinon` overloads work together: the one accepting a lambda terminates t
 
 Kotlin's combination of infix functions, trailing lambdas, and sealed classes gives you the building blocks to create expressive, readable DSL-style control flow.
 While you'd rarely replace a plain `if`-`else` in production code, this exercise highlights how flexible Kotlin's syntax really is.
+The lambda blocks here work best when kept [pure]({% post_url /blog/2023-04-02-pure-functions %}) — side-effect-free functions that only compute their result — making the construct easy to reason about and test.
 
 Thanks for reading! Have fun!

@@ -5,6 +5,7 @@ highlight: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2019/12/07/unhide-password-box
+  - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
 *What if you could solve Wordle on your very first guess — every single day? No tricks, no guessing. Just the answer, handed to you by your own browser. Let's do this.*
@@ -112,4 +113,4 @@ No coding required. No special software. Just you, your browser, and a little cu
 
 ---
 
-*Want more browser tricks like this? Check out [Hacking the Chrome Dino Game](/blog/2016/11/05/chrome-dino-hack) for more fun ways to bend the web to your will!*
+*Want more browser tricks like this? Check out [Hacking the Chrome Dino Game](/blog/2016/11/05/chrome-dino-hack) for more fun ways to bend the web to your will, or try [Edit Any Webpage in Seconds]({% post_url /blog/2026-03-07-edit-webpage-inspect-element %}) to see another clever DevTools trick!*

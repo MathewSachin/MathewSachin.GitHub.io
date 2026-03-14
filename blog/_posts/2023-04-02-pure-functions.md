@@ -2,6 +2,9 @@
 title: WTH is a Pure function
 tags: [fp]
 highlight: true
+related:
+  - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
+  - /blog/2023/04/16/creating-if-statement-kotlin
 ---
 
 ### WTH is a pure function?
@@ -56,3 +59,4 @@ fun calculateTax(amount: Long, taxPercent: Int): Long {
 ### If side-effects are still needed, why should I write Pure functions?
 Pure functions are easy to reason about.
 They're also easy to test, and can be tested in isolation since they don't have any side-effects.
+For a practical example of how keeping functions pure pays off, see how it enables clean mocking in [Dependency Injection of extension functions in Kotlin]({% post_url /blog/2023-04-14-dependency-injection-extension-functions-kotlin %}).

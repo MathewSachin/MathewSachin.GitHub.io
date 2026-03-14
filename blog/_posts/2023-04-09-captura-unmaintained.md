@@ -2,8 +2,9 @@
 title: What happened to Captura?
 tags: [captura]
 related:
-  - /blog/2016/11/05/chrome-dino-hack
-  - /blog/2019/12/07/unhide-password-box
+  - /blog/2017/07/28/ffmpeg-pipe-csharp
+  - /blog/2017/07/28/mixing-audio
+  - /blog/2026/03/12/fate-grand-automata-developer-guide
 redirect_from:
   - /Captura/
   - /captura/
@@ -47,7 +48,7 @@ In hindsight, I feel that this was a somewhat childish decision, although I have
 
 Currently, I am working with Kotlin at my job, and I find it to be a language that I love working with more than C#, so I do not miss working with C#.
 
-Subsequently, I embarked on another open-source project that garnered significant success within a niche audience.
+Subsequently, I embarked on [another open-source project]({% post_url /blog/2026-3-12-fate-grand-automata-developer-guide %}) that garnered significant success within a niche audience.
 This project was essentially an enhancement of an existing one, with my contribution primarily consisting of major improvements.
 Given that the codebase was partially written by someone else, I had fewer concerns about the possibility of others stealing my code.
 

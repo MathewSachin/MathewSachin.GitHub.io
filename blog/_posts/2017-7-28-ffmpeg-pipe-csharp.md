@@ -2,10 +2,14 @@
 title: Piping to ffmpeg.exe with C#
 tags: [ffmpeg]
 highlight: true
+related:
+  - /blog/2017/07/28/mixing-audio
+  - /blog/2023/04/09/captura-unmaintained
 ---
 
 FFMpeg is a great tool for doing all kinds of stuff with media.
 In this post, I will demonstrate how images and audio can be piped to **ffmpeg.exe** from C#.
+If you need to mix audio from multiple sources before piping, check out [Mixing Microphone input and Speaker output]({% post_url /blog/2017-7-28-mixing-audio %}).
 
 We would run **ffmpeg.exe** using the `System.Diagnostics.Process` class.
 We would use parameters `UseShellExecute = false` and `CreateNoWindow = true` so that the command line window does not show up.

@@ -4,7 +4,7 @@ tags: [android, kotlin, opencv, automation, fga]
 highlight: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
-  - /blog/2017/07/28/ffmpeg-pipe-csharp
+  - /blog/2023/04/16/creating-if-statement-kotlin
 ---
 
 [Fate/Grand Automata (FGA)](https://github.com/Fate-Grand-Automata/FGA) is an open-source Android

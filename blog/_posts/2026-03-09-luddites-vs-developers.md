@@ -5,6 +5,7 @@ highlight: true
 related:
   - /blog/2023/04/16/creating-if-statement-kotlin
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
+  - /blog/2023/04/02/pure-functions
 ---
 
 *Every programmer, at some point, gets asked the question. Maybe by a new teammate, maybe in a job interview, maybe by a stranger on the internet at 2 AM. "What editor do you use?" What follows is never just an answer — it's a declaration of identity.*
