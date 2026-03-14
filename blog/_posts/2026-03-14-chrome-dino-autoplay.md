@@ -20,7 +20,7 @@ Paste this into the Chrome DevTools Console (press `F12` → **Console** tab) wh
 function dispatchKey(type, key) {
     document.dispatchEvent(new KeyboardEvent(type, {keyCode: key}));
 }
-setInterval(function () {
+const autoPlay = setInterval(function () {
     const KEY_CODE_SPACE_BAR = 32
     const KEY_CODE_ARROW_DOWN = 40
     const CANVAS_HEIGHT = Runner.getInstance().dimensions.height
@@ -78,7 +78,7 @@ By dispatching these events programmatically, the bot can trigger jumps and duck
 ## ⏱️ The Game Loop
 
 ```js
-setInterval(function () {
+const autoPlay = setInterval(function () {
     // ... check and react to obstacles
 }, Runner.getInstance().msPerFrame);
 ```
@@ -86,6 +86,8 @@ setInterval(function () {
 `setInterval` runs our callback repeatedly at the interval we specify. Instead of a hard-coded value like 16 ms, we use `Runner.getInstance().msPerFrame` — the exact frame duration the game itself uses.
 
 This means the bot checks for obstacles **once per frame**, keeping it perfectly in sync with the game's own rendering loop and avoiding both over-checking and under-checking.
+
+We store the return value in `autoPlay` so we can stop the bot later — see [Stopping Auto-play](#-stopping-auto-play) below.
 
 ---
 
@@ -146,6 +148,18 @@ Obstacle positions use the top-left corner as origin, so we compute `yFromBottom
 2. **Ground-level obstacle** (`y > CANVAS_HEIGHT / 2`): the obstacle is in the lower half of the canvas — a cactus or low-flying pterodactyl. Send a `keyup` Arrow Down first (to cancel any active duck), then `keydown` Space Bar to jump.
 
 3. **Mid-height obstacle** (everything else): the obstacle is hovering at mid-height — a pterodactyl the dino can't jump over but can duck under. Send `keydown` Arrow Down to duck.
+
+---
+
+## 🛑 Stopping Auto-play
+
+Because we stored the interval ID in `autoPlay`, stopping the bot is a single line:
+
+```js
+clearInterval(autoPlay)
+```
+
+Run this in the Console whenever you want to take back control of the dino.
 
 ---
 
