@@ -4,8 +4,8 @@ tags: [chrome, hack, game, javascript]
 highlight: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
+  - /blog/2026/03/14/chrome-dino-sprite-swap
   - /blog/2026/03/07/edit-webpage-inspect-element
-  - /blog/2019/12/07/unhide-password-box
 ---
 
 *Want the dino to play itself? Here's a bot you can drop into the Chrome DevTools Console — no installs, no extensions, just JavaScript.*

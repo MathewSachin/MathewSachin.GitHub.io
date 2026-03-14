@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="200" style="background:#F5F5DC;font-family:monospace">
+<rect width="800" height="200" fill="#F5F5DC" rx="4"/>
+<text x="10" y="18" font-size="12" fill="#333" font-weight="bold">Chrome Dino Sprite Sheet – Key Sprite Positions (1x scale)</text>
+<rect x="10" y="30" width="780" height="100" fill="#EEE" stroke="#AAA" stroke-width="1" rx="2"/>
+<rect x="10.6" y="30.6" width="11.7" height="10.4" fill="#FFB347" fill-opacity="0.5" stroke="#FFB347" stroke-width="1.5" rx="1"/>
+<text x="16.5" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">RESTART</text>
+<rect x="37.9" y="30.6" width="14.9" height="4.5" fill="#88CCFF" fill-opacity="0.5" stroke="#88CCFF" stroke-width="1.5" rx="1"/>
+<text x="45.4" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">CLOUD</text>
+<rect x="53.5" y="30.6" width="29.9" height="13.0" fill="#AA00CC" fill-opacity="0.5" stroke="#AA00CC" stroke-width="1.5" rx="1"/>
+<text x="68.4" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">PTERODACTYL</text>
+<rect x="84.0" y="30.6" width="33.8" height="16.9" fill="#00AA44" fill-opacity="0.5" stroke="#00AA44" stroke-width="1.5" rx="1"/>
+<text x="100.9" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">CACTUS SMALL</text>
+<rect x="117.8" y="30.6" width="49.3" height="16.9" fill="#007722" fill-opacity="0.5" stroke="#007722" stroke-width="1.5" rx="1"/>
+<text x="142.4" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">CACTUS LARGE</text>
+<rect x="167.1" y="30.6" width="13.0" height="26.6" fill="#CCCCAA" fill-opacity="0.5" stroke="#CCCCAA" stroke-width="1.5" rx="1"/>
+<text x="173.6" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">MOON</text>
+<rect x="222.6" y="30.6" width="62.6" height="16.9" fill="#AAAAAA" fill-opacity="0.5" stroke="#AAAAAA" stroke-width="1.5" rx="1"/>
+<text x="253.9" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">GAME TEXT</text>
+<rect x="285.3" y="30.6" width="100.6" height="16.9" fill="#DD0000" fill-opacity="0.5" stroke="#DD0000" stroke-width="1.5" rx="1"/>
+<text x="335.6" y="26.6" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">T-REX</text>
+<rect x="10.6" y="47.5" width="779.0" height="3.9" fill="#886644" fill-opacity="0.5" stroke="#886644" stroke-width="1.5" rx="1"/>
+<text x="400.2" y="29.5" font-size="7.5" fill="#222" text-anchor="middle" font-weight="bold">HORIZON</text>
+<text x="10" y="150" font-size="11" fill="#555">💡 To swap sprites, replace images at the <tspan font-weight="bold">same pixel positions</tspan> in a custom sprite sheet PNG.</text>
+<text x="10" y="166" font-size="11" fill="#555">   T-REX (Mario) at x=848, PTERODACTYL (Paratroopa) at x=134, CACTI (Goombas/Piranha) at x=228–484</text>
+</svg>

@@ -4,9 +4,9 @@ tags: [chrome, hack, game]
 highlight: true
 related:
   - /blog/2026/03/14/chrome-dino-autoplay
+  - /blog/2026/03/14/chrome-dino-sprite-swap
   - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/hacking-wordle
-  - /blog/2026/03/07/edit-webpage-inspect-element
 ---
 
 *All hacks updated as of 8th March 2026 based on game changes.*
