@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div class="bg-dark">
-    <div class="py-4 bg-info text-white">
+    <div class="py-4 bg-info text-white google-anno-skip">
         <div class="container">
             <h2>{{ page.title }}</h2>
         </div>
@@ -14,15 +14,7 @@ layout: default
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                <div class="card">
-                    <div class="card-body">
-                        {{ content }}
-
-                        <br><hr><br>
-
-                        {% include giscus.html %}
-                    </div>
-                </div>
+                {{ content }}
             </div>
             <div class="col-md-2">
                 <div class="sticky-top" style="top: 10px">
