@@ -5,6 +5,7 @@ highlight: true
 related:
   - /blog/2023/04/09/captura-unmaintained
   - /blog/2026/03/09/luddites-vs-developers
+  - /blog/2026/03/12/ai-blog-generation-flow
 ---
 
 *Comment sections are supposed to be the friendly bit at the bottom of a post. A place to ask questions, share thoughts, push back. So why did mine feel like a billboard?*
@@ -145,3 +146,5 @@ No Disqus ads. No extra trackers. No regrets.
 *If you've been putting off switching away from Disqus — don't. It genuinely took less time than writing this post.*
 
 *And speaking of comments — the shiny new giscus widget is live right below this paragraph. Sign in with GitHub and say hello. 👇 It would mean a lot to see it in action, and I'd love to hear if you've made (or are considering) the same switch!*
+
+*If you want to streamline the rest of your Jekyll workflow too, check out [How I Auto-Generate Blog Posts with GitHub Copilot]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}) — it's the other half of keeping this blog low-friction.*

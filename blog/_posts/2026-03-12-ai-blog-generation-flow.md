@@ -4,6 +4,8 @@ tags: [ai, github, copilot, jekyll, github-pages, automation, tutorial]
 highlight: true
 related:
   - /blog/2026/03/09/luddites-vs-developers
+  - /blog/2026/03/12/ditching-disqus-for-giscus
+  - /blog/2026/03/13/nature-vibe-coded-us
 ---
 
 *This post was itself generated using the exact workflow described below — a prompt typed on a mobile phone, handed off to GitHub Copilot, reviewed in a PR, merged, and live within minutes. No laptop required.*
@@ -224,6 +226,8 @@ This setup has genuinely changed how I think about writing. The friction of "I n
 The agent isn't replacing the thinking — the ideas, the framing, the editorial judgment about whether something is worth publishing. But it handles the mechanical parts: formatting, file naming, front matter, linking to related posts.
 
 It's a good division of labour.
+
+If you're setting up a Jekyll blog from scratch, you might also want to look at [Ditching Disqus for giscus]({% post_url /blog/2026-03-12-ditching-disqus-for-giscus %}) — swapping out the comment system was another quick win that made the blog faster and more privacy-friendly.
 
 ---
 
