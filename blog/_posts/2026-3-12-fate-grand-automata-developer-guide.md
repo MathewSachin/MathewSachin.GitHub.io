@@ -12,7 +12,7 @@ automation app for the mobile game Fate/Grand Order (FGO). It automates repetiti
 by watching the screen and tapping things just like a human player would — no root access required.
 If you're an Android developer curious about how to build something like this, read on.
 
-### What does it do?
+## What does it do?
 
 FGA watches the game screen using Android's **MediaProjection API** for screenshots and the
 **Accessibility Service API** for performing taps and swipes. It uses **OpenCV** for image
@@ -21,7 +21,7 @@ recognition to figure out what's on the screen at any given moment and decide wh
 The app does not modify the game or inject code into it. It operates entirely by observing pixels
 and issuing gestures, making it fundamentally different from traditional cheat tools.
 
-### Project Structure
+## Project Structure
 
 The repository is split into four Gradle modules:
 
@@ -36,7 +36,7 @@ The repository is split into four Gradle modules:
 This separation is intentional: `libautomata` has no knowledge of FGO. In theory you could reuse
 it for any Android automation task. The FGO-specific knowledge lives entirely in `scripts/`.
 
-### Core Primitives: Location and Region
+## Core Primitives: Location and Region
 
 Everything in FGA operates on 1440p virtual coordinates, regardless of the device's actual
 resolution. The two fundamental types are `Location` (a 2D point) and `Region` (a rectangle).
@@ -63,7 +63,7 @@ For screen elements that sit at a fixed offset from the center of the screen (li
 helper methods such as `xFromCenter()` and `xFromRight()` are used so that the layout adapts across
 different screen aspect ratios (16:9, 18:9, etc.).
 
-### The AutomataApi Interface
+## The AutomataApi Interface
 
 The scripting layer communicates with the Android platform through a single interface,
 `AutomataApi`. This is the key to why `libautomata` stays platform-agnostic.
@@ -98,7 +98,7 @@ if (images[Images.BattleScreen] in locations.battle.screenCheckRegion) {
 The concrete implementation, `StandardAutomataApi`, wires up the `ScreenshotManager`, `Clicker`,
 `ImageMatcher`, and other platform services via Dagger Hilt constructor injection.
 
-### How Screenshots Work
+## How Screenshots Work
 
 FGA uses Android's `MediaProjection` API to take screenshots. The process is:
 
@@ -118,7 +118,7 @@ The `useSameSnapIn { }` block is important for performance: it tells the framewo
 same screenshot for all image checks inside the block rather than taking a fresh screenshot for each
 call.
 
-### Screen Gestures via Accessibility Service
+## Screen Gestures via Accessibility Service
 
 Tapping and swiping are performed through Android's `AccessibilityService`. FGA registers a
 service that the user grants permission to, and it dispatches `GestureDescription` objects to
@@ -134,7 +134,7 @@ interface GestureService {
 }
 ```
 
-### EntryPoint: The Base Class for Scripts
+## EntryPoint: The Base Class for Scripts
 
 Every runnable script extends `EntryPoint`:
 
@@ -157,7 +157,7 @@ until either an `ExitManager.exit()` call throws a `ScriptAbortException`, or th
 decides to stop by throwing a `BattleExitException`. The exit listener is how the UI learns that a
 script has finished and what the reason was.
 
-### The AutoBattle Script
+## The AutoBattle Script
 
 `AutoBattle` is the most complex entrypoint. It coordinates support selection, party selection,
 combat, AP refilling, drop tracking, and story skipping.
@@ -211,7 +211,7 @@ sealed class ExitReason(val cause: Exception? = null) {
 When the UI shows the "battle finished" dialog, it deconstructs this sealed class to show the
 appropriate message to the user.
 
-### Battle Modules
+## Battle Modules
 
 The `Battle` class orchestrates each turn of combat by composing several smaller, injected
 modules:
@@ -233,7 +233,7 @@ modules:
 Each module is a separate class with a single focused responsibility, making them easy to test and
 modify independently.
 
-### Support Selection
+## Support Selection
 
 The support selection flow is handled by `SupportSelectionLoop`, which tries a configured strategy
 (preferred Servant/CE image match) and falls back gracefully:
@@ -254,7 +254,7 @@ Image matching for Servant and CE portraits uses the user-supplied images in the
 "support images" folder. The `SupportImageMaker` script automates the creation of these
 reference images by cropping them from a live screenshot.
 
-### Dependency Injection with Hilt
+## Dependency Injection with Hilt
 
 FGA uses **Dagger Hilt** throughout. A custom `@ScriptScope` annotation limits the lifetime of
 script-related objects to a single script run (they are destroyed when the script exits and
@@ -277,7 +277,7 @@ The `IFgoAutomataApi by api` Kotlin delegation pattern is the same technique des
 all extension functions from `AutomataApi` and `IFgoAutomataApi` become available in `AutoBattle`
 without any boilerplate forwarding.
 
-### Adding New Screen Coordinates
+## Adding New Screen Coordinates
 
 Because FGA maps everything to a 1440p virtual canvas, adding support for a new screen element
 involves these steps:
@@ -297,7 +297,7 @@ val myButtonClick = locations.scriptArea.center + Location(400, 0)
 val myButtonRegion = Region(Location(0, 600).xFromCenter(), 580, 400, 60)
 ```
 
-### Contributing
+## Contributing
 
 The project welcomes contributions. The workflow is:
 
@@ -311,7 +311,7 @@ The project welcomes contributions. The workflow is:
 Translations live on [POEditor](https://poeditor.com/join/project/67PXOyBGI0) and don't require
 code changes.
 
-### Wrapping Up
+## Wrapping Up
 
 FGA is a fascinating example of combining several Android platform features — MediaProjection,
 Accessibility Services, and OpenCV — into a coherent automation framework. The clean separation

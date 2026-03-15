@@ -10,9 +10,8 @@ related:
 
 *Want the dino to play itself? Here's a bot you can drop into the Chrome DevTools Console — no installs, no extensions, just JavaScript.*
 
----
 
-## 🤖 The Full Auto-play Script
+## The Full Auto-play Script
 
 Paste this into the Chrome DevTools Console (press `F12` → **Console** tab) while the Dino game is running, then press **Enter**. The dino will start dodging obstacles automatically.
 
@@ -56,9 +55,7 @@ That's it — copy, paste, run, and watch your dino become a pro! 🦕
 
 If you want to understand how each piece works, read on.
 
----
-
-## 🗝️ Simulating Keyboard Input
+## Simulating Keyboard Input
 
 ```js
 function dispatchKey(type, key) {
@@ -73,9 +70,7 @@ The Dino game listens for real keyboard events (`keydown` / `keyup`) on the `doc
 
 By dispatching these events programmatically, the bot can trigger jumps and ducks at precisely the right moment.
 
----
-
-## ⏱️ The Game Loop
+## The Game Loop
 
 ```js
 const autoPlay = setInterval(function () {
@@ -89,9 +84,7 @@ This means the bot checks for obstacles **once per frame**, keeping it perfectly
 
 We store the return value in `autoPlay` so we can stop the bot later — see [Stopping Auto-play](#-stopping-auto-play) below.
 
----
-
-## 🚧 Finding the Nearest Obstacle
+## Finding the Nearest Obstacle
 
 ```js
 const obstacle = Runner.getInstance().horizon.obstacles[0]
@@ -101,9 +94,7 @@ The game stores all active obstacles in `Runner.getInstance().horizon.obstacles`
 
 If the array is empty (no obstacles on screen yet), `obstacle` will be `undefined` and the whole `if (obstacle)` block is skipped safely.
 
----
-
-## 📏 Deciding When to React
+## Deciding When to React
 
 ```js
 const w = obstacle.width
@@ -119,9 +110,7 @@ We don't want to jump the moment an obstacle appears — that would be far too e
 
 The bot only acts when `x` (the obstacle's left edge, measured from the left of the canvas) drops below this threshold.
 
----
-
-## 🦅 Jump, Duck, or Do Nothing?
+## Jump, Duck, or Do Nothing?
 
 ```js
 const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
@@ -149,9 +138,7 @@ Obstacle positions use the top-left corner as origin, so we compute `yFromBottom
 
 3. **Mid-height obstacle** (everything else): the obstacle is hovering at mid-height — a pterodactyl the dino can't jump over but can duck under. Send `keydown` Arrow Down to duck.
 
----
-
-## 🛑 Stopping Auto-play
+## Stopping Auto-play
 
 Because we stored the interval ID in `autoPlay`, stopping the bot is a single line:
 
@@ -161,9 +148,7 @@ clearInterval(autoPlay)
 
 Run this in the Console whenever you want to take back control of the dino.
 
----
-
-## 🏁 Putting It All Together
+## Putting It All Together
 
 Every frame the bot:
 1. Looks at the first obstacle in the queue.
@@ -172,7 +157,5 @@ Every frame the bot:
 4. Fires the appropriate synthetic keyboard event.
 
 The result is a dino that plays indefinitely, reacting to every cactus and pterodactyl the game throws at it.
-
----
 
 *This auto-play script is just one of many tricks you can pull off in the Chrome Dino game. Check out [Hacking the Chrome Dino Game]({% post_url /blog/2016-11-5-chrome-dino-hack %}) for god mode, speed tweaks, score manipulation, and more!*

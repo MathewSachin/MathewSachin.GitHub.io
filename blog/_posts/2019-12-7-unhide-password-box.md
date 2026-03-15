@@ -10,9 +10,7 @@ related:
 
 *You know that maddening situation — your browser auto-fills a password box with a row of dots, but you can't remember what the actual password is? Here's a neat trick to reveal it in about 10 seconds, no special software needed.*
 
----
-
-## 🔐 Why Are Passwords Hidden in the First Place?
+## Why Are Passwords Hidden in the First Place?
 
 When a website creates a login form, the developer marks the password field with a special HTML attribute:
 
@@ -24,9 +22,7 @@ The `type="password"` tells your browser: *"render this as dots so nobody peeks 
 
 Which means… we can un-hide it just as easily. 😏
 
----
-
-## 📋 When Is This Useful?
+## When Is This Useful?
 
 - Your browser auto-filled a password you've since forgotten
 - You want to copy the password to use in another app or device
@@ -36,13 +32,11 @@ Which means… we can un-hide it just as easily. 😏
   ⚠️ <b>Important:</b> This only reveals passwords that your browser has <i>already saved and auto-filled</i> on <b>your own computer</b>. It can't crack passwords you don't know, and nobody else on the internet can use this trick on you remotely.
 </div>
 
----
-
-## 🛠️ Step 1 — Open Developer Tools
+## Step 1 — Open Developer Tools
 
 Every major browser ships with built-in Developer Tools (DevTools). Here's how to open them:
 
-### 🌐 Google Chrome / Microsoft Edge
+### Google Chrome / Microsoft Edge
 
 | OS | Shortcut |
 |---|---|
@@ -50,7 +44,7 @@ Every major browser ships with built-in Developer Tools (DevTools). Here's how t
 | Mac | `Cmd + Option + I` |
 | Any OS | Right-click anywhere on the page → **Inspect** |
 
-### 🦊 Mozilla Firefox
+### Mozilla Firefox
 
 | OS | Shortcut |
 |---|---|
@@ -58,9 +52,7 @@ Every major browser ships with built-in Developer Tools (DevTools). Here's how t
 | Mac | `Cmd + Option + I` |
 | Any OS | Right-click anywhere on the page → **Inspect Element** |
 
----
-
-## 🔍 Step 2 — Select the Password Field
+## Step 2 — Select the Password Field
 
 Once DevTools is open, you'll see the **Elements** tab (called **Inspector** in Firefox) which shows the HTML of the page.
 
@@ -78,9 +70,7 @@ DevTools will jump straight to the `<input>` element for that field.
   💡 <b>Tip:</b> Can't find the element picker? You can also right-click <i>directly on the password box</i> and choose <b>Inspect</b> — this opens DevTools with that element already highlighted.
 </div>
 
----
-
-## ✏️ Step 3 — Change `type="password"` to `type="text"`
+## Step 3 — Change `type="password"` to `type="text"`
 
 With the `<input>` element highlighted in DevTools, you'll see something like:
 
@@ -97,9 +87,7 @@ Now:
 
 The password box on the page instantly shows the real password as plain text. 🎉
 
----
-
-## ⚡ Alternative: The Console Method (One Command)
+## Alternative: The Console Method (One Command)
 
 If you prefer a one-liner, switch to the **Console** tab in DevTools and paste this:
 
@@ -113,23 +101,17 @@ Press **Enter** — all password fields on the page are revealed at once. This w
   💡 <b>Not seeing the Console tab?</b> Press <code>Esc</code> while DevTools is open to toggle a Console drawer at the bottom, or click the <b>Console</b> tab at the top of the DevTools panel.
 </div>
 
----
-
-## 🔧 How Does It Actually Work?
+## How Does It Actually Work?
 
 `type="password"` is just a CSS-level rendering hint. The browser stores the actual text in memory and submits it to the server on login — it simply chooses not to display it. By changing the type to `text`, you tell the browser: *"actually, display this normally"* — and it does, no questions asked.
 
 This is also why browser-saved passwords are accessible through Settings: the browser already has the plaintext; it's just a matter of where it shows it.
 
----
-
-## 🔒 A Note on Privacy
+## A Note on Privacy
 
 This only works on your own browser with passwords it has already filled in. If someone else's computer is auto-filling a password box, you'd need physical access to that machine and the time to open DevTools — which is not a remote exploit at all.
 
 That said: **always use a password manager** to keep your credentials safe, and consider enabling two-factor authentication on important accounts so that a revealed password alone isn't enough for a break-in.
-
----
 
 Give it a try the next time your browser remembers a password you don't!
 

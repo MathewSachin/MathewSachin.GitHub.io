@@ -10,7 +10,7 @@ related:
 Kotlin's lambda syntax is expressive enough that you can craft your own control-flow constructs that look and feel like built-in language keywords.
 In this post, we'll build a custom `if`-`else` construct step by step — in French, so it becomes a `si`-`sinon` statement!
 
-### si-sinon Statement
+## si-sinon Statement
 
 Let's aim for syntax that closely mirrors the standard Kotlin `if`-`else`:
 
@@ -44,7 +44,7 @@ fun si(truth: Boolean, onTrue: () -> Unit): IfStatement {
 The `sinon` infix function on that object then executes `onFalse` only when the condition was `false`.
 The `infix` modifier on `sinon` lets us drop the dot and parentheses, making it read naturally as `} sinon {`.
 
-### si-sinon Expression
+## si-sinon Expression
 
 In Kotlin, `if`-`else` can also be used as an expression — you can assign its result to a variable.
 This is Kotlin's answer to the ternary operator found in languages like Java or C:
@@ -77,7 +77,7 @@ infix fun <T> IfStatement<T>.sinon(onFalse: () -> T): T =
 `si` returns `IfStatement.True` wrapping the computed value when the condition holds, or `IfStatement.False` when it doesn't.
 `sinon` then unwraps the true value or evaluates the false branch, producing the final result of the whole expression.
 
-### else if (sinon si)
+## else if (sinon si)
 
 Real-world control flow often needs more than two branches.
 Let's extend the construct to support chained `else if` — or in our case, `sinon si`:
@@ -120,7 +120,7 @@ infix fun <T> IfStatement<T>.sinon(ifStatement: IfStatement<T>): IfStatement<T> 
 
 The two `sinon` overloads work together: the one accepting a lambda terminates the chain with a final value, while the one accepting an `IfStatement` continues it — mirroring how `else` terminates a chain of `else if` clauses in standard Kotlin.
 
-### Conclusion
+## Conclusion
 
 Kotlin's combination of infix functions, trailing lambdas, and sealed classes gives you the building blocks to create expressive, readable DSL-style control flow.
 While you'd rarely replace a plain `if`-`else` in production code, this exercise highlights how flexible Kotlin's syntax really is.

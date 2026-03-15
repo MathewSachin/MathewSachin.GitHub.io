@@ -7,7 +7,7 @@ related:
   - /blog/2023/04/16/creating-if-statement-kotlin
 ---
 
-### WTH is a pure function?
+## WTH is a pure function?
 Pure function is a function that produces the same result for identical inputs, and has no side-effects.  
 To always produce the same output for the same input, the function shouldn't depend on global or static variables or any form of IO.
 
@@ -25,7 +25,7 @@ fun square() {
 }
 ```
 
-### What exactly are side-effects?
+## What exactly are side-effects?
 
 Side-effects are state changes outside the function like changing global variables, mutating input parameters, writing to files, making network calls.
 
@@ -36,7 +36,7 @@ println(square(2)) // prints 4
 println(4) // replacing the function call with just the output doesn't change the program's meaning
 ```
 
-### But, without side-effects, how'll my program be useful?
+## But, without side-effects, how'll my program be useful?
 The idea is not to completely get rid of side-effects, but to extract out as many pure functions as possible from your code. Side-effects like sending a mail, updating a DB, etc. are essentially what we get paid for!
 
 Here's an impure function:
@@ -56,7 +56,7 @@ fun calculateTax(amount: Long, taxPercent: Int): Long {
 }
 ```
 
-### If side-effects are still needed, why should I write Pure functions?
+## If side-effects are still needed, why should I write Pure functions?
 Pure functions are easy to reason about.
 They're also easy to test, and can be tested in isolation since they don't have any side-effects.
 For a practical example of how keeping functions pure pays off, see how it enables clean mocking in [Dependency Injection of extension functions in Kotlin]({% post_url /blog/2023-04-14-dependency-injection-extension-functions-kotlin %}).

@@ -340,3 +340,8 @@ div.highlight pre {
 .tag-post-link:hover .tag-post-title {
   text-decoration: underline;
 }
+
+.page-content h2 {
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid gray;
+}

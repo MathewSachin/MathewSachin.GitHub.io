@@ -11,7 +11,7 @@ redirect_from:
   - captura
 ---
 
-### What's Captura?
+## What's Captura?
 Captura **was** a screen capture (screenshot, recording) app for Windows which could capture screeen, webcam, audio and keystrokes.
 It is no longer maintained, but the [source-code is still archived on GitHub](https://github.com/MathewSachin/Captura) with 8k+ stars and 1.5k+ forks.
 I acknowledge the existence of several outstanding bugs in the application, and despite knowing what needs to be addressed, I have decided against providing any further updates.
@@ -20,7 +20,7 @@ You can still download it [here](https://github.com/MathewSachin/Captura/release
 
 ![Captura](/images/captura.png)
 
-### Some history
+## Some history
 In 2015, while I was a high school student, I embarked on a "toy project" to develop a practical application utilizing the C# programming language that I was keenly interested in at that time.
 This project was the inception of Captura, a screen capture tool that over time grew to be a significant undertaking, and I aspired to create something of value for others.
 
@@ -30,7 +30,7 @@ The idea of having a community around an open-source project like Captura excite
 
 Although I did not receive many contributions on the coding aspect of the project, I would like to express my gratitude to everyone who aided in localizing Captura into over 20 languages.
 
-### Why it died?
+## Why it died?
 As the sole contributor to Captura, I was struggling with burnout from keeping up with feature development and bug fixes.
 Adding to the challenges, I began receiving threatening emails requesting that I remove the source code for the application.
 
@@ -41,7 +41,7 @@ Efforts to reach out to Microsoft Store proved to be largely unfruitful for near
 Eventually, I made the difficult decision to shut down the project completely.
 Following this, the Microsoft Store removed the application listing, but by that point, I had already moved on.
 
-### Lessons learnt
+## Lessons learnt
 After working on Captura for a while, I gradually lost interest in C# and decided to explore other programming languages.
 I made a conscious decision to avoid working with C# in the absence of an absolute requirement in any future job opportunities.
 In hindsight, I feel that this was a somewhat childish decision, although I have not encountered a scenario in which I needed to use C# in my current employment.
@@ -58,10 +58,10 @@ If I do decide to contribute to open-source projects, it would likely be in the 
 If I were to create another major application, it would likely not be open-source, and I would explore monetization options.
 After having written code for charity in the past, I am looking to explore opportunities that offer remuneration for my work.
 
-### References
+## References
 [#405: Illegal Rebrand](https://github.com/MathewSachin/Captura/issues/405)
 
-### Donations
+## Donations
 I have decided to take down Captura's website, and henceforth, I will be moving the donations that were previously accepted on the site.
 I have not accepted any donations since discontinuing work on the project.
 Nonetheless, I would like to extend my gratitude to all the individuals who supported me throughout the journey.

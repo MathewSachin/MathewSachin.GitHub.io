@@ -7,7 +7,7 @@ related:
   - /blog/2023/04/09/captura-unmaintained
 ---
 
-### Pre-requisites
+## Pre-requisites
 
 **Extension functions** in Kotlin allow you to add new functions to existing classes without having to inherit from them.
 ```kotlin
@@ -31,7 +31,7 @@ class Car @Inject constructor(val engine: Engine) {
 ```
 
 
-### What is this post about?
+## What is this post about?
 Extension functions make the code more idiomatic, but are very similar to static functions.
 Hence, techniques like dependency injection and mocking don't play well with these.
 So, usually the recommendation is to [keep these functions pure]({% post_url /blog/2023-04-02-pure-functions %}), basically only rely on inputs to produce output, don't cause side-effects.
@@ -50,7 +50,7 @@ fun Region.findMatch(image: Image): Match
 fun Region.findAllMatches(image: Image): List<Match>
 ```
 
-### Let's start
+## Let's start
 To enable dependency injection, I made use of the fact that Kotlin allows to define extension functions even on interfaces.
 So, let's move all these functions to an interface. You could also use multiple interfaces to group related functions.
 
@@ -100,7 +100,7 @@ class BattleScript @Inject constructor(
 }
 ```
 
-### Testing
+## Testing
 There you have it! Now you can provide a mock interface while testing to test your extension functions in isolation!
 I usually like to have minimal detail in the extension impelementation class and move the impure logic to other interfaces that I could mock out. In the above example, that's `Clicker` and `ImageMatcher`.
 Following example uses Mockito kotlin and JUnit 5:
@@ -126,7 +126,7 @@ fun `should attack when an enemy is spotted`() {
 }
 ```
 
-### Conclusion
+## Conclusion
 
 While this post showed you a possiblity of using dependency-injection with extension functions, carefully evaluate if this fits your use-case, before using this practically, and also if the extension functions really improve readability of your code by a significant amount.
 

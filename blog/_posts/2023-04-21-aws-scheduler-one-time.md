@@ -12,7 +12,7 @@ With EventBridge Scheduler, you can set up rules that define when to trigger eve
 EventBridge Scheduler is useful for a wide range of use cases, including triggering regular data processing tasks, running batch jobs at specific intervals, and sending periodic notifications. It can be integrated with various AWS services, such as AWS Lambda, AWS Batch, Amazon SNS, and Amazon SQS, to perform these tasks.  
 In this post, we're going to try out One-Time schedules in Kotlin via AWS Java SDK 2.0, which invokes a target only once at given date and time.
 
-### Setting up the target and role
+## Setting up the target and role
 - First off, you need to use a user or role (recommended) that has permissions to Create and Delete schedules. The easiest way is to attach the `AmazonEventBridgeSchedulerFullAccess` managed policy to your role.
 - Create an SNS topic. We're creating with the name `SchedulerTargetTopic` for this example.
 - Next, you need an IAM role that EventBridge scheduler can assume to invoke the target service like SNS or SQS. For this example, we'll use an SNS.
@@ -48,7 +48,7 @@ In this post, we're going to try out One-Time schedules in Kotlin via AWS Java S
 }
 ```
 
-### Start coding!
+## Start coding!
 Create EventBridge Scheduler client:
 
 ```kotlin
@@ -85,7 +85,7 @@ val createScheduleRequest = CreateScheduleRequest.builder()
 eventBridgeScheduler.createSchedule(createScheduleRequest)
 ```
 
-### Deleting schedules [IMPORTANT]
+## Deleting schedules [IMPORTANT]
 
 A one-time schedule still counts against your account quota after it has completed running and invoking it's target.
 You should delete a one-time schedule after it has completed running.

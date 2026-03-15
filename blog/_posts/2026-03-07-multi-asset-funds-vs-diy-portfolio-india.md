@@ -6,9 +6,7 @@ highlight: false
 
 Building wealth in India has never had more options — or more confusion. You can pick a ready-made multi-asset fund and let professionals manage the mix, or you can build your own portfolio across equity, debt, and gold. This post breaks down both approaches with real numbers across different salary levels and investment horizons.
 
----
-
-### What Is a Multi-Asset Fund?
+## What Is a Multi-Asset Fund?
 
 A **multi-asset fund** (also called a multi-asset allocation fund) is a single mutual fund that invests across at least three asset classes — typically equity, debt, and gold (or REITs). SEBI mandates that each asset class must receive at least 10% allocation. The fund manager rebalances internally, so you get diversification in a single product.
 
@@ -19,9 +17,7 @@ Popular multi-asset funds in India (as of early 2026):
 - **HDFC Multi Asset Fund**
 - **Tata Multi Asset Opportunities Fund**
 
----
-
-### What Is a DIY Portfolio?
+## What Is a DIY Portfolio?
 
 A **DIY (Do-It-Yourself) portfolio** means you manually allocate across separate funds or instruments — for example:
 - 60% in a Nifty 50 index fund
@@ -30,9 +26,7 @@ A **DIY (Do-It-Yourself) portfolio** means you manually allocate across separate
 
 You control each piece but are also responsible for rebalancing periodically.
 
----
-
-### Performance Snapshot: 3–5 Year Returns (2021–2026)
+## Performance Snapshot: 3–5 Year Returns (2021–2026)
 
 The numbers below are approximate CAGR figures drawn from publicly available NAV data and AMC factsheets as of early 2026. Past performance does not guarantee future results.
 
@@ -59,9 +53,7 @@ The numbers below are approximate CAGR figures drawn from publicly available NAV
 
 The DIY portfolio's blended cost in direct plans is dramatically lower. That difference compounds significantly over time.
 
----
-
-### SIP Comparison by Salary Bracket
+## SIP Comparison by Salary Bracket
 
 Let's look at a realistic SIP scenario across three income levels in India. We'll assume a 10-year horizon (2016–2026) and use the approximate blended CAGR figures above.
 
@@ -101,9 +93,7 @@ Here the gap widens in absolute terms. However, a financially engaged investor w
 
 At high incomes, **tax efficiency** becomes the dominant factor. Multi-asset funds taxed at 20% LTCG (equity-oriented if >65% in equity) vs a DIY portfolio where debt funds are taxed at your income slab (30%+ for this bracket). This can swing the net-of-tax outcome significantly in favour of DIY using SGBs (tax-free on maturity) and equity index funds.
 
----
-
-### Lumpsum Comparison
+## Lumpsum Comparison
 
 Lumpsums are often done at year-end bonuses or when liquid savings accumulate. Let's compare a one-time ₹5 lakh investment across 3, 5, and 10-year horizons.
 
@@ -115,9 +105,7 @@ Lumpsums are often done at year-end bonuses or when liquid savings accumulate. L
 
 For lumpsum too, multi-asset funds appear to win on raw returns — *if* the outperformance vs the blended DIY is sustained. The key risk: multi-asset fund managers may not always beat a passive DIY allocation, and fees eat into returns during flat or bearish markets.
 
----
-
-### Salary Bracket × Time Horizon Matrix
+## Salary Bracket × Time Horizon Matrix
 
 The table below summarises where each approach tends to win, qualitatively.
 
@@ -127,9 +115,7 @@ The table below summarises where each approach tends to win, qualitatively.
 | ₹6–15 LPA | Multi-Asset | DIY (control, lower ER) | DIY (tax + ER savings compound) |
 | > ₹15 LPA | DIY (tax optimisation matters) | DIY | DIY (SGB + index funds dominate after tax) |
 
----
-
-### The Hidden Costs: Tax Treatment Deep-Dive
+## The Hidden Costs: Tax Treatment Deep-Dive
 
 This is where DIY often wins at higher incomes.
 
@@ -147,9 +133,7 @@ Most popular multi-asset funds maintain 65–80% equity to retain equity taxatio
 
 For a taxpayer in the 30% bracket, replacing the debt component with SGBs and the gold component with SGBs makes the DIY portfolio significantly more tax-efficient.
 
----
-
-### Rebalancing: The Invisible Advantage of Multi-Asset Funds
+## Rebalancing: The Invisible Advantage of Multi-Asset Funds
 
 Multi-asset funds rebalance internally without triggering a taxable event for you. In a DIY portfolio, every rebalancing transaction — selling overweighted equity to buy more debt — is a taxable sale.
 
@@ -157,9 +141,7 @@ Multi-asset funds rebalance internally without triggering a taxable event for yo
 
 For active rebalancers, this internal rebalancing is a genuine advantage worth several percentage points over a decade.
 
----
-
-### Practical Recommendations
+## Practical Recommendations
 
 #### If You Are New to Investing
 Start with a multi-asset fund in the **direct plan** (via MF Central, Groww, Zerodha Coin, Kuvera, etc.). You get automatic diversification, professional rebalancing, and one NAV to track. Avoid regular plans — the 1–1.5% extra fee is a permanent drag.
@@ -179,15 +161,11 @@ Consider a **core-satellite approach**:
 
 This gives you the tax efficiency of DIY for the bulk of your wealth while letting fund managers take shots with a smaller allocation.
 
----
-
-### What About NPS and EPF?
+## What About NPS and EPF?
 
 For salaried Indians, don't forget that **EPF** (mandatory, ~8.25% interest, partially tax-free) and **NPS** (additional deduction under 80CCD(1B)) are part of your effective portfolio. These debt-like instruments mean your actual equity allocation is lower than just your mutual fund portfolio. Factor this in when deciding how equity-heavy to go in your mutual fund allocations.
 
----
-
-### Summary
+## Summary
 
 | Factor | Multi-Asset Fund | DIY Portfolio |
 |---|---|---|

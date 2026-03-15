@@ -10,9 +10,7 @@ related:
 
 *What if you could make any website say whatever you want — in about 10 seconds, with zero coding skills? You totally can. Here's how.*
 
----
-
-## 🤔 Wait, isn't that… illegal?
+## Wait, isn't that… illegal?
 
 Nope! When you "edit" a webpage this way, you're only changing what **you see on your own screen**. The actual website on the internet stays completely untouched. No servers are hacked. No databases are changed. Nobody else sees it.
 
@@ -26,13 +24,11 @@ This means:
 
 The classic use case? **Take a screenshot before refreshing** and share it as a "totally real" screenshot. That's the prank.
 
----
-
-## 🛠️ Step 1 — Open Developer Tools
+## Step 1 — Open Developer Tools
 
 Every major browser ships with built-in Developer Tools (DevTools). This is a panel used by web developers to inspect and debug websites — but it's available to everyone, no installation needed.
 
-### 🌐 Google Chrome / Microsoft Edge
+### Google Chrome / Microsoft Edge
 
 Both use identical shortcuts:
 
@@ -42,7 +38,7 @@ Both use identical shortcuts:
 | Also works | `Ctrl + Shift + I` (Windows/Linux) or `Cmd + Option + I` (Mac) |
 | Open via menu | Right-click anywhere on the page → **Inspect** |
 
-### 🦊 Mozilla Firefox
+### Mozilla Firefox
 
 | Action | Shortcut |
 |---|---|
@@ -50,7 +46,7 @@ Both use identical shortcuts:
 | Also works | `Ctrl + Shift + I` (Windows/Linux) or `Cmd + Option + I` (Mac) |
 | Open via menu | Right-click anywhere on the page → **Inspect Element** |
 
-### 🍎 Safari (Mac)
+### Safari (Mac)
 
 Safari hides DevTools by default. Enable it once:
 
@@ -64,9 +60,7 @@ Now you can right-click → **Inspect Element** or use `Cmd + Option + I`.
   💡 <b>Tip:</b> The fastest way to jump straight to any element is to <b>right-click directly on the text or image you want to change</b>, then select <b>Inspect</b> (or <b>Inspect Element</b>). The DevTools panel will open with that element already highlighted — no hunting required.
 </div>
 
----
-
-## 🧐 What am I looking at?
+## What am I looking at?
 
 When DevTools opens, it can look intimidating. Don't worry — you only need one tab: the **Elements** tab (called **Inspector** in Firefox).
 
@@ -82,9 +76,7 @@ Here's what a typical line looks like:
 - The text between the tags is what actually appears on screen
 - We're going to change that text 😈
 
----
-
-## ✏️ Step 2 — Edit Text on the Page
+## Step 2 — Edit Text on the Page
 
 ### The Double-Click Method (Easiest)
 
@@ -107,9 +99,7 @@ The page updates instantly. 🎉
 
 This is handy when you want to change multiple words at once, or the double-click didn't work.
 
----
-
-## 🖼️ Step 3 — Change Images
+## Step 3 — Change Images
 
 Want to swap an image for something else?
 
@@ -126,9 +116,7 @@ Want to swap an image for something else?
   💡 <b>Finding an image URL:</b> Open any image in a new tab (right-click it → "Open image in new tab"), then copy the URL from the address bar. That's the direct image URL you can paste in.
 </div>
 
----
-
-## 🎭 Prank Ideas to Try
+## Prank Ideas to Try
 
 Here are some classics that work on almost any site:
 
@@ -143,9 +131,7 @@ Here are some classics that work on almost any site:
 
 **Golden rule of pranking:** Always take a screenshot before refreshing the page. The edit vanishes the moment you reload!
 
----
-
-## 🔍 How Does This Actually Work?
+## How Does This Actually Work?
 
 When you type a web address and hit Enter, here's what happens behind the scenes:
 
@@ -157,16 +143,12 @@ The key insight: **your browser holds a local copy of all that code in memory**.
 
 This is exactly why web developers love DevTools — they can try out changes live without touching the actual website files.
 
----
-
-## ⚠️ Things to Know
+## Things to Know
 
 - **A page refresh undoes everything.** No undo button needed — just reload.
 - **Some pages are harder to edit.** If text is loaded dynamically (like live sports scores that update every few seconds), your changes might get overwritten automatically.
 - **Screenshots can be cropped/edited too** — so treat any "screenshots" you receive with healthy scepticism!
 - **Don't use this to deceive maliciously.** Harmless pranks on friends = fun. Using a doctored screenshot to spread misinformation or defame someone = not cool (and potentially illegal).
-
----
 
 Go ahead, change a headline, take a screenshot, and send it to a friend. When they panic, you can tell them it took you 10 seconds and a right-click.
 

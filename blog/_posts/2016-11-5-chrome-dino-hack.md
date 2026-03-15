@@ -15,7 +15,7 @@ related:
 
 *Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
 
-## 🕹️ What is the Chrome Dino Game?
+## What is the Chrome Dino Game?
 When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!
 
 But… what if we could cheat?
@@ -24,48 +24,42 @@ Even if you’re not a programmer, here’s something cool: the Chrome Dino game
 
 Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. All you need is the Chrome Developer Console, and a few clever lines of code.
 
----
-
-## 🎮 How to Play the Chrome Dino Game?
+## How to Play the Chrome Dino Game?
 <div class="alert alert-info">
   💡 <b>Pro Tip:</b> Can’t get the <i>“No Internet”</i> screen to show up? <br>
   Just open a new tab and go to <b>chrome://dino</b> — the game works even when you're online!
 </div>
 
 If this is your first time discovering the Dino game, welcome! It's super easy to play:  
-⬆️ **Jump:** Press Spacebar or Up Arrow (this also starts the game)  
-⬇️ **Duck:** Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)  
-⏸️ **Pause:** Press Alt  
-🌙 **Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
+**Jump:** Press Spacebar or Up Arrow (this also starts the game)  
+**Duck:** Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)  
+**Pause:** Press Alt  
+**Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
 
 ![Chrome Dino](/images/chromeDino.gif)
 
----
-
-## 🔧 Opening Developer Tools / Chrome console
+## Opening Developer Tools / Chrome console
 - Press `F12` (or `Ctrl + Shift + I`) to open DevTools.
 - Navigate to the `Console` tab.
 
-🛠️ Note: After entering each command in the Console, press Enter to run it.  
+Note: After entering each command in the Console, press Enter to run it.  
 
-✅ The commands are case-sensitive, so make sure you type them exactly as shown.  
+The commands are case-sensitive, so make sure you type them exactly as shown.  
 
-❓ Seeing undefined after running a command? Don’t worry — that’s totally normal! It just means the function didn’t return a value, which is expected in this case.
+Seeing undefined after running a command? Don’t worry — that’s totally normal! It just means the function didn’t return a value, which is expected in this case.
 
----
-
-## 🛡️ Immortality (God Mode)
+## Immortality (God Mode)
 
 Want to make your dino un-killable? Let’s activate **God Mode** using a little JavaScript magic.
 
-##### 🧩 Step 1: Save the Original Function  
+##### Step 1: Save the Original Function  
 This is **very important** if you want to bring the game back to normal later.
 
 ```js
 var original = Runner.prototype.gameOver;
 ```
 
-##### 🧨 Step 2: Disable Game Over  
+##### Step 2: Disable Game Over  
 Now, we override the `gameOver` function so that it does… nothing.
 
 ```js
@@ -74,7 +68,7 @@ Runner.prototype.gameOver = function() {};
 
 Boom — your dino is now immortal. It’ll just run through cacti like a champ.
 
-##### 🛑 How to Stop It
+##### How to Stop It
 
 If you want to restore the game to normal (or get bored of being a god), use this:
 
@@ -94,13 +88,11 @@ When you're done, you just restore the original function by assigning it back. T
 
 This works only because JavaScript allows us to override methods of objects while the game is still running in the browser.
 
----
-
-## ⚡ Tweaking Speed
+## Tweaking Speed
 
 Want to put the pedal to the metal? Or maybe slow things down for a challenge? You can easily adjust the game speed using a simple command in the Console.
 
-##### 🚀 Speed Up the Game
+##### Speed Up the Game
 Enter this to crank up the speed:
 
 ```js
@@ -109,7 +101,7 @@ Runner.getInstance().setSpeed(1000)
 
 Feel free to replace `1000` with any value for an extra boost!
 
-##### 🐢 Slow It Down
+##### *Slow It Down*
 If you want to return to the regular pace, use:
 
 ```js
@@ -118,9 +110,7 @@ Runner.getInstance().setSpeed(10)
 
 Now you can play at lightning-fast speeds or take your time — the choice is yours!
 
----
-
-## 🎯 Setting the Current Score
+## Setting the Current Score
 
 Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Here’s how to set it to **12345**:
 
@@ -132,9 +122,7 @@ Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT
 
 Experiment with different values to make your dino feel like a pro right from the start!
 
----
-
-## 🦘 Jumping Height
+## Jumping Height
 
 Want your dino to jump higher (or lower)? You can easily adjust the jump height with this command. Just change the value to suit your style.
 
@@ -144,21 +132,19 @@ Runner.getInstance().tRex.setJumpVelocity(20)
 
 Increase the number for higher jumps, or lower it for a more controlled hop. The power is in your hands!
 
----
-
-## 🌤️ Walk in Air
+## Walk in Air
 
 Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
 
 <img alt="Chrome Dino walking in air" src="/images/sky_dino.jpg" width="400">
 
-##### 🕺 Dino Walking in the Air
+##### Lift it up
 
 ```js
 Runner.getInstance().tRex.groundYPos = 0
 ```
 
-##### 🌍 Back to the Ground
+##### Back to the Ground
 If you want to bring it back to Earth:
 
 ```js
@@ -167,21 +153,17 @@ Runner.getInstance().tRex.groundYPos = 93
 
 Now your dino is floating through the sky or back to solid ground, all at your command!
 
----
-
-## 🤖 Auto-play
+## Auto-play
 
 Want the dino to play itself? There's a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.
 
 👉 **[Full script + step-by-step explanation → Auto-play the Chrome Dino Game]({% post_url /blog/2026-03-14-chrome-dino-autoplay %})**
 
----
-
-## 👻 Invisibility
+## Invisibility
 
 Want to make your dino invisible? It’s easy to do by simply disabling its drawing function! This will prevent the dino from being rendered on the screen, making it fully invisible.
 
-##### 🧑‍💻 Make the Dino Invisible
+##### Make the Dino Invisible
 
 ```js
 const originalDraw = Runner.getInstance().tRex.draw;
@@ -192,7 +174,7 @@ This code replaces the dino's draw function with an empty one, meaning the dino 
 
 **Note:** The dino can still die if it collides with obstacles
 
-##### 🔙 Restore the Dino
+##### Restore the Dino
 To bring the dino back, simply restore the original draw function:
 
 ```js

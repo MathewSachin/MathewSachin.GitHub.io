@@ -10,9 +10,7 @@ related:
 
 *Comment sections are supposed to be the friendly bit at the bottom of a post. A place to ask questions, share thoughts, push back. So why did mine feel like a billboard?*
 
----
-
-## 😤 The Problem with Disqus
+## The Problem with Disqus
 
 I had Disqus on this blog for years. It worked — technically. But every time I thought about it too hard, something felt off.
 
@@ -34,9 +32,7 @@ Not great.
   🔍 <b>Try it yourself:</b> Open DevTools on any Disqus-powered site and check the Network tab. Filter by <b>Fetch/XHR</b>. Count the requests. It's a lot.
 </div>
 
----
-
-## 💡 Enter giscus
+## Enter giscus
 
 [giscus](https://giscus.app) is an open-source comment system that stores comments as **GitHub Discussions** on your repository. That's it. No third-party servers, no ads, no tracking, no cost.
 
@@ -50,9 +46,7 @@ The idea is beautifully simple:
 
 It's built on the [GitHub Discussions API](https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions), which means reactions (👍 ❤️ 🎉) work too.
 
----
-
-## 🛠️ The Setup (It Really Is This Simple)
+## The Setup (It Really Is This Simple)
 
 ### Step 1: Enable GitHub Discussions on your repo
 
@@ -108,9 +102,7 @@ Done. Every post now has a fully functional, privacy-respecting comment section.
   ✅ <b>Bonus:</b> Because comments live in GitHub Discussions, you get email notifications for new comments for free — no extra configuration needed.
 </div>
 
----
-
-## 📊 Disqus vs giscus at a Glance
+## Disqus vs giscus at a Glance
 
 | | Disqus | giscus |
 |---|---|---|
@@ -125,23 +117,17 @@ Done. Every post now has a fully functional, privacy-respecting comment section.
 
 The only real trade-off with giscus is that readers need a GitHub account to comment. For a developer-focused blog, that's basically everyone already. If your audience is primarily non-developers, this is worth thinking about — but for me it's a non-issue.
 
----
-
-## 🧹 Removing Disqus
+## Removing Disqus
 
 Once giscus was live, I removed the `disqus` settings from `_config.yml` and trimmed the Disqus script from the layout. Less code, fewer dependencies, cleaner page loads.
 
 The old Disqus comments? Disqus lets you [export your comment data](https://help.disqus.com/en/articles/1717164-comments-export) as an XML file, and giscus has a migration path. Mine was sparse enough that I didn't bother, but the option is there if you need it.
 
----
-
-## 🎉 The Result
+## The Result
 
 Every post on this blog now loads faster, respects your privacy, and has a comment section I'm actually happy to stand behind.
 
 No Disqus ads. No extra trackers. No regrets.
-
----
 
 *If you've been putting off switching away from Disqus — don't. It genuinely took less time than writing this post.*
 
