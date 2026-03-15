@@ -101,6 +101,42 @@ Press **Enter** — all password fields on the page are revealed at once. This w
   💡 <b>Not seeing the Console tab?</b> Press <code>Esc</code> while DevTools is open to toggle a Console drawer at the bottom, or click the <b>Console</b> tab at the top of the DevTools panel.
 </div>
 
+## Try It Right Here!
+
+No need to hunt for a login page — practice the trick on this form. The password field below is already filled in. Use DevTools (or the Console snippet above) to reveal what's hiding behind the dots. 👀
+
+<div class="card shadow-sm my-4" style="max-width:400px;">
+  <div class="card-header fw-semibold">🔐 Demo Login Form</div>
+  <div class="card-body">
+    <form onsubmit="return false;">
+      <div class="mb-3">
+        <label for="demo-username" class="form-label">Username</label>
+        <input id="demo-username" type="text" class="form-control" value="neo" autocomplete="off">
+      </div>
+      <div class="mb-3">
+        <label for="demo-password" class="form-label">Password</label>
+        <input id="demo-password" type="password" class="form-control" value="TheMatrixHasYou!" autocomplete="off">
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm">Log In</button>
+        <button type="button" id="demo-reveal-btn" class="btn btn-outline-secondary btn-sm"
+          onclick="toggleDemoPassword(this)">
+          Reveal
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleDemoPassword(btn) {
+  var field = document.getElementById('demo-password');
+  var isHidden = field.type === 'password';
+  field.type = isHidden ? 'text' : 'password';
+  btn.textContent = isHidden ? 'Hide' : 'Reveal';
+}
+</script>
+
 ## How Does It Actually Work?
 
 `type="password"` is just a CSS-level rendering hint. The browser stores the actual text in memory and submits it to the server on login — it simply chooses not to display it. By changing the type to `text`, you tell the browser: *"actually, display this normally"* — and it does, no questions asked.
