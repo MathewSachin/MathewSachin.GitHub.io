@@ -36,7 +36,7 @@ Which means… we can un-hide it just as easily. 😏
 
 Every major browser ships with built-in Developer Tools (DevTools). Here's how to open them:
 
-### Google Chrome / Microsoft Edge
+#### Google Chrome / Microsoft Edge
 
 | OS | Shortcut |
 |---|---|
@@ -44,7 +44,7 @@ Every major browser ships with built-in Developer Tools (DevTools). Here's how t
 | Mac | `Cmd + Option + I` |
 | Any OS | Right-click anywhere on the page → **Inspect** |
 
-### Mozilla Firefox
+#### Mozilla Firefox
 
 | OS | Shortcut |
 |---|---|
