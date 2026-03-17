@@ -1,0 +1,29 @@
+name: AI Blog Post Generator
+
+on:
+  schedule:
+    - cron: '30 2 * * *'   # 8:00 AM IST (UTC+5:30)
+    - cron: '30 14 * * *'  # 8:00 PM IST (UTC+5:30)
+  workflow_dispatch:
+
+jobs:
+  create-blog-post-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create issue to trigger Copilot agent
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const dateStr = new Date().toISOString().split('T')[0];
+
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `AI Blog Post - ${dateStr}`,
+              body: `Look around internet and the latest news, pick the most interesting, engaging content you find and write a blog post about the same, maintaining the tone of the blog. Preferably keep it related to tech or finance. Link to and from other posts whenever appropriate.`,
+              assignees: ['copilot'],
+            });
+
+            console.log(`Created issue #${issue.data.number}: ${issue.data.html_url}`);
