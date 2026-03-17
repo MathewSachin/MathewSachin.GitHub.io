@@ -17,13 +17,20 @@ jobs:
         with:
           script: |
             const dateStr = new Date().toISOString().split('T')[0];
+            const instructions = `Look around the internet and the latest news, pick the most interesting, engaging content you find and write a blog post about the same, maintaining the tone of the blog. Preferably keep it related to tech or finance. Link to and from other posts whenever appropriate.`;
 
             const issue = await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `AI Blog Post - ${dateStr}`,
-              body: `Look around internet and the latest news, pick the most interesting, engaging content you find and write a blog post about the same, maintaining the tone of the blog. Preferably keep it related to tech or finance. Link to and from other posts whenever appropriate.`,
-              assignees: ['copilot'],
+              body: instructions,
             });
 
             console.log(`Created issue #${issue.data.number}: ${issue.data.html_url}`);
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.data.number,
+              body: `@github-copilot ${instructions}`,
+            });
