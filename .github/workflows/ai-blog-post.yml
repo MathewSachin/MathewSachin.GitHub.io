@@ -23,6 +23,6 @@ jobs:
             --repo "${{ github.repository }}" \
             --title "AI Blog Post - ${DATE}" \
             --body-file /tmp/issue-body.txt \
-            --assignee copilot)
+            --assignee "@copilot")
 
           echo "Created Copilot task: ${ISSUE_URL}"
