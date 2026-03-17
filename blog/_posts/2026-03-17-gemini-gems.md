@@ -118,7 +118,6 @@ Gems are powerful, but they have real constraints:
 - **Context window cap.** Uploaded files and long instruction blocks consume context space. Very large reference documents may be partially ignored.
 - **No long-term memory between sessions.** The Gem's instructions persist, but facts you told it in a previous conversation don't. It won't remember that you "last week mentioned the Q3 deadline was moved."
 - **Instructions are not strictly enforced.** If you ask the Gem something outside its instructions, it will usually comply rather than refusing. Think of the instructions as a strong default, not an unbreakable rule.
-- **Gemini Advanced is required for custom Gems.** The pre-built Gems are available on the free tier, but creating your own requires a Google One AI Premium subscription.
 
 ## Alternatives to Gemini Gems
 
