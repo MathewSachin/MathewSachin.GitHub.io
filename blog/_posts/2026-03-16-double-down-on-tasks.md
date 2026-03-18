@@ -9,6 +9,8 @@ related:
 
 *You already know what the most important thing on your list is. You've known since you woke up. And yet — here you are, three hours later, having handled everything except that one thing. This post is about fixing that.*
 
+<img alt="Blackjack table showing a highlighted priority task card with a 2× chip and task list, representing the concept of doubling down on your most important work" src="/images/double-down-tasks-hero.svg" width="480" style="display:block;margin:1rem auto;">
+
 ## What "Doubling Down" Actually Means
 
 Doubling down on a task isn't about working harder or longer. It's about making a deliberate, conscious commitment to a single piece of work — and then protecting that commitment against the steady drip of distractions, interruptions, and easier alternatives that will try to erode it.

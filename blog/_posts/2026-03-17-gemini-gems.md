@@ -10,6 +10,8 @@ related:
 
 *Every time you start a new chat with an AI assistant, you spend the first five minutes re-explaining who you are, what you're working on, and what tone you want. There's a better way.*
 
+<img alt="Gemini app mockup showing a sidebar of custom Gems like Code Reviewer, Blog Writer, and Data Analyst, with a chat area demonstrating context-aware responses without any preamble" src="/images/gemini-gems-hero.svg" width="560" style="display:block;margin:1rem auto;">
+
 ## What Is a Gemini Gem?
 
 A **Gem** is a custom AI persona you create inside [Google Gemini](https://gemini.google.com). Think of it as a version of Gemini that has already been briefed — on your domain, your style, your goals, and your preferred way of getting answers.

@@ -10,6 +10,8 @@ related:
 
 *Most AI companies are racing to build the biggest possible model. Mistral just announced a product that bets the future belongs somewhere else entirely.*
 
+<img alt="Pipeline visualization showing raw document data flowing into a Mistral Forge furnace, then emerging as a glowing custom AI model, with enterprise partner names ASML, Ericsson, ESA listed below" src="/images/mistral-forge-hero.svg" width="560" style="display:block;margin:1rem auto;">
+
 On March 18, 2026, Mistral AI unveiled **[Forge](https://mistral.ai/news/forge)** — a platform that lets enterprises build frontier-grade AI models trained on their own proprietary data, using Mistral's training infrastructure, methodology, and tooling. Not a chatbot wrapper. Not a RAG pipeline bolted onto a generic model. Actual model training, from pre-training through reinforcement learning, customized for an organization's internal knowledge.
 
 The launch partnerships are serious: **ASML** (the Dutch company whose lithography machines sit inside every modern semiconductor fab), **Ericsson**, the **European Space Agency**, **DSO National Laboratories Singapore**, and **Reply**. These aren't pilot customers testing a prototype. They've already built and deployed models using Forge.

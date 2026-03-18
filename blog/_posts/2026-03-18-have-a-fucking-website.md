@@ -9,6 +9,8 @@ related:
 
 *A short, profane blog post made Hacker News' front page this week and stayed there. It didn't say anything complicated. It just said: have a website. The comments said everything else.*
 
+<img alt="Visual contrast: social media platform icons labeled rented land with locks on the left, versus a personal website browser mockup labeled yours forever on the right" src="/images/have-a-website-hero.svg" width="560" style="display:block;margin:1rem auto;">
+
 On March 14th, a writer going by **otherstrangeness** published a post titled ["Have a Fucking Website"](https://www.otherstrangeness.com/2026/03/14/have-a-fucking-website/). It's barely five paragraphs long. There's no clever technical insight, no dataset, no benchmark. It's a rant. It hit [709 points on Hacker News](https://news.ycombinator.com/item?id=47421442) and sparked 403 comments.
 
 Here's the core of it:

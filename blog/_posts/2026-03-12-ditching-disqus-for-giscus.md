@@ -10,6 +10,8 @@ related:
 
 *Comment sections are supposed to be the friendly bit at the bottom of a post. A place to ask questions, share thoughts, push back. So why did mine feel like a billboard?*
 
+<img alt="Before and after comparison: Disqus with ad banners, tracking scripts and slow loading on the left; clean giscus GitHub Discussions widget on the right" src="/images/giscus-hero.svg" width="480" style="display:block;margin:1rem auto;">
+
 ## The Problem with Disqus
 
 I had Disqus on this blog for years. It worked — technically. But every time I thought about it too hard, something felt off.
