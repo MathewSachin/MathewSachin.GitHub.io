@@ -38,15 +38,25 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 
 ![Chrome Dino](/images/chromeDino.gif)
 
-## Opening Developer Tools / Chrome console
-- Press `F12` (or `Ctrl + Shift + I`) to open DevTools.
-- Navigate to the `Console` tab.
+## Opening Developer Tools / Chrome Console
 
-Note: After entering each command in the Console, press Enter to run it.  
+The **Developer Tools** (DevTools) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
 
-The commands are case-sensitive, so make sure you type them exactly as shown.  
+To open it and get to the Console:
 
-Seeing undefined after running a command? Don’t worry — that’s totally normal! It just means the function didn’t return a value, which is expected in this case.
+**On Windows / Linux:**
+- Press `F12` or `Ctrl + Shift + I` to open DevTools, then click the **Console** tab.
+- Shortcut: `Ctrl + Shift + J` jumps straight to the Console.
+
+**On Mac:**
+- Press `Cmd + Option + I` to open DevTools, then click the **Console** tab.
+- Shortcut: `Cmd + Option + J` jumps straight to the Console.
+
+You’ll see a blinking cursor where you can type JavaScript commands directly. After typing each command, press **Enter** to run it.
+
+A few things to keep in mind:
+- The commands are **case-sensitive** — type them exactly as shown.
+- Seeing `undefined` after a command? That’s completely normal. It just means the expression didn’t return a value, which is expected for most of these hacks.
 
 ## Immortality (God Mode)
 
@@ -90,25 +100,27 @@ This works only because JavaScript allows us to override methods of objects whil
 
 ## Tweaking Speed
 
-Want to put the pedal to the metal? Or maybe slow things down for a challenge? You can easily adjust the game speed using a simple command in the Console.
+Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs. With this hack, you can take full control of the pace.
 
 ##### Speed Up the Game
-Enter this to crank up the speed:
+Enter this to crank up the speed to an insane level:
 
 ```js
 Runner.getInstance().setSpeed(1000)
 ```
 
-Feel free to replace `1000` with any value for an extra boost!
+At speed 1000, the game moves so fast that it’s practically unplayable — but it’s hilarious to watch! Feel free to experiment with any value. Try `50` for a challenging but still-playable speed, or `200` for pure chaos.
 
-##### *Slow It Down*
-If you want to return to the regular pace, use:
+##### Slow It Down
+If you want to dial things back for a relaxed stroll through the desert:
 
 ```js
-Runner.getInstance().setSpeed(10)
+Runner.getInstance().setSpeed(6)
 ```
 
-Now you can play at lightning-fast speeds or take your time — the choice is yours!
+This resets the speed to the default starting value. You can also set it even lower (like `1`) to practically pause the game in slow motion — great for getting familiar with the mechanics.
+
+Now you can play at lightning-fast speeds or take your sweet time — the choice is yours!
 
 ## Setting the Current Score
 
@@ -118,19 +130,25 @@ Want to jump right into the action with a specific score? You can set the score 
 Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT
 ```
 
+##### How does it work?
+
+Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by a constant called `Config$2.COEFFICIENT` (roughly `0.025`). By dividing your desired score by that constant, you get the right internal value to set.
+
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
 
-Experiment with different values to make your dino feel like a pro right from the start!
+Experiment with different values to make your dino feel like a seasoned pro right from the start!
 
 ## Jumping Height
 
-Want your dino to jump higher (or lower)? You can easily adjust the jump height with this command. Just change the value to suit your style.
+Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.
+
+The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops.
 
 ```js
 Runner.getInstance().tRex.setJumpVelocity(20)
 ```
 
-Increase the number for higher jumps, or lower it for a more controlled hop. The power is in your hands!
+Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
 
 ## Walk in Air
 
@@ -138,18 +156,24 @@ Ever wondered what it’s like for the dino to defy gravity? You can make it wal
 
 <img alt="Chrome Dino walking in air" src="/images/sky_dino.jpg" width="400">
 
+The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
+
 ##### Lift it up
 
 ```js
 Runner.getInstance().tRex.groundYPos = 0
 ```
 
+The dino will immediately float up and keep running near the top of the screen. Obstacles will still scroll past below it, so you won’t get hit at all — making this a sneaky alternative to God Mode!
+
 ##### Back to the Ground
-If you want to bring it back to Earth:
+When you want to bring your dino back down to Earth:
 
 ```js
 Runner.getInstance().tRex.groundYPos = 93
 ```
+
+You can also try intermediate values (like `40` or `60`) to position the dino at any height you like. Note that cacti and pterodactyls are generated at fixed heights, so positioning yourself just above the ground can let you glide over ground-level cacti effortlessly.
 
 Now your dino is floating through the sky or back to solid ground, all at your command!
 
