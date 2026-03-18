@@ -9,6 +9,7 @@ related:
 ---
 
 *For twelve years, Microsoft's Xbox One sat at the top of the console security pyramid. Researchers tried. The community tried. Nobody got in. Then, at a security conference in March 2026, someone finally walked through the door — with electricity.*
+
 <img alt="Dramatic illustration of an Xbox One console with its green X logo, a broken lock, and lightning bolts representing the voltage glitch hack — labeled '12 Years crossed out, Bliss 2026'" src="/images/xbox-bliss-hero.svg" width="480" style="display:block;margin:1rem auto;">
 
 ## The Console That Wouldn't Break

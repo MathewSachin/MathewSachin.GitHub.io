@@ -69,7 +69,7 @@
   <polygon points="189,101 194,108 189,115 184,108" fill="#fff" opacity="0.8" transform="scale(0.5) translate(189,108)"/>
   <text x="204" y="109" font-family="Arial, sans-serif" font-size="9" fill="#444">Hey! Ready to write. Just tell me the topic —</text>
   <text x="204" y="122" font-family="Arial, sans-serif" font-size="9" fill="#444">I already know your tone, audience, and structure.</text>
-  <text x="204" y="135" font-family="Arial, sans-serif" font-size="9" fill="#888">No need to re-explain anything. 🎯</text>
+  <text x="204" y="135" font-family="Arial, sans-serif" font-size="9" fill="#888">No need to re-explain anything.</text>
 
   <!-- User message -->
   <rect x="310" y="158" width="270" height="38" rx="8" fill="#4285f4"/>

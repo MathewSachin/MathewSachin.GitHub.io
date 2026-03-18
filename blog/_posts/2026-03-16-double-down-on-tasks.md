@@ -8,6 +8,7 @@ related:
 ---
 
 *You already know what the most important thing on your list is. You've known since you woke up. And yet — here you are, three hours later, having handled everything except that one thing. This post is about fixing that.*
+
 <img alt="Blackjack table showing a highlighted priority task card with a 2× chip and task list, representing the concept of doubling down on your most important work" src="/images/double-down-tasks-hero.svg" width="480" style="display:block;margin:1rem auto;">
 
 ## What "Doubling Down" Actually Means

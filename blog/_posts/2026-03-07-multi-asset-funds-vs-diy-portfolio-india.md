@@ -5,6 +5,7 @@ highlight: false
 ---
 
 Building wealth in India has never had more options — or more confusion. You can pick a ready-made multi-asset fund and let professionals manage the mix, or you can build your own portfolio across equity, debt, and gold. This post breaks down both approaches with real numbers across different salary levels and investment horizons.
+
 <img alt="Balance scale comparing a Multi-Asset Fund with a pie chart showing 60% equity, 20% debt, 20% gold on one side, versus a DIY Portfolio with separate equity, debt, and gold fund icons on the other — for Indian investors" src="/images/multi-asset-vs-diy-hero.svg" width="560" style="display:block;margin:1rem auto;">
 
 ## What Is a Multi-Asset Fund?
