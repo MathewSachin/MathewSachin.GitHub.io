@@ -9,6 +9,8 @@ related:
 
 *Vibe coding is everywhere right now — describe what you want in plain language, and an AI figures out the rest. No spec document. No design review. Just vibes, iteration, and a vague hope that it works. But what if that's not a new idea? What if nature cracked this workflow roughly 3.8 billion years ago — and we're the output?*
 
+<img alt="Conceptual illustration showing nature's vibe coding: a speech bubble prompt on the left, a DNA double helix in the center, and a human silhouette as the output on the right" src="/images/nature-vibe-code-hero.svg" width="480" style="display:block;margin:1rem auto;">
+
 ## First, What Even Is Vibe Coding?
 
 If you haven't heard the term yet: vibe coding is the practice of telling an AI what you *want* your software to do — in natural language, with rough intent — and letting the AI write the actual code. You don't fully understand every line it produces. You just run it, see if it works, tweak the prompt, and repeat.

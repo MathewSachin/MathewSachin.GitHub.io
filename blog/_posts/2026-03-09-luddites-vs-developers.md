@@ -10,6 +10,8 @@ related:
 
 *Every programmer, at some point, gets asked the question. Maybe by a new teammate, maybe in a job interview, maybe by a stranger on the internet at 2 AM. "What editor do you use?" What follows is never just an answer — it's a declaration of identity.*
 
+<img alt="Three editor panels side by side: Vim with green-on-black terminal, Sublime Text with colorful syntax highlighting, and VS Code with file explorer and AI autocomplete" src="/images/editor-wars-hero.svg" width="480" style="display:block;margin:1rem auto;">
+
 ## The Luddite Label
 
 The original Luddites were 19th-century textile workers who smashed machines they feared would replace them. Today, the word gets thrown at developers who prefer older, simpler tools — and nobody gets called a Luddite more gleefully than the Vim user.

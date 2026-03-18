@@ -10,6 +10,8 @@ related:
 
 *This post was itself generated using the exact workflow described below — a prompt typed on a mobile phone, handed off to GitHub Copilot, reviewed in a PR, merged, and live within minutes. No laptop required.*
 
+<img alt="Flowchart showing the AI blog generation pipeline: Phone prompt → GitHub Copilot AI → Pull Request → Merge → Live Blog on GitHub Pages" src="/images/ai-blog-flow-hero.svg" width="480" style="display:block;margin:1rem auto;">
+
 ## The Idea
 
 What if publishing a blog post felt as lightweight as sending a message? No IDE, no local build environment, no copy-pasting markdown into a CMS. Just describe what you want, review the result, and merge.
