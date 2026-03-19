@@ -3,6 +3,7 @@ title: "Hacking Wordle: Solve It in One Try Using Browser DevTools"
 tags: [wordle, hack, browser, devtools]
 highlight: true
 related:
+  - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/edit-webpage-inspect-element
@@ -25,6 +26,11 @@ When you open Wordle, the game quietly asks the server, *"Hey, what's today's wo
 ## Opening Developer Tools
 
 This is the magic panel that web developers use to peek under the hood of any website. Don't be intimidated — you're about to use it like a pro.
+
+<div class="alert alert-info">
+  📱 <b>On a phone or tablet?</b> Mobile browsers don't have DevTools — but you can still hack Wordle using a bookmarklet. No computer needed!<br>
+  👉 <a href="{% post_url /blog/2026-03-19-hacking-wordle-mobile-bookmarklet %}">Hack Wordle on Mobile (Bookmarklet Method)</a>
+</div>
 
 <img alt="Browser window with DevTools panel open showing the Elements tab" src="/images/wordle-devtools-open.svg" width="480" style="display:block;margin:1rem auto;">
 
