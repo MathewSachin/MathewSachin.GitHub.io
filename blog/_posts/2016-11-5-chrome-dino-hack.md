@@ -3,6 +3,7 @@ title: Hacking the Chrome Dino Game
 tags: [chrome, hack, game]
 highlight: true
 related:
+  - /blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet
   - /blog/2026/03/14/chrome-dino-autoplay
   - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/hacking-wordle
@@ -57,6 +58,11 @@ You’ll see a blinking cursor where you can type JavaScript commands directly. 
 A few things to keep in mind:
 - The commands are **case-sensitive** — type them exactly as shown.
 - Seeing `undefined` after a command? That’s completely normal. It just means the expression didn’t return a value, which is expected for most of these hacks.
+
+<div class="alert alert-info">
+  📱 <b>On a phone or tablet?</b> Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!<br>
+  👉 <a href="{% post_url /blog/2026-03-19-chrome-dino-hack-mobile-bookmarklet %}">Hack the Chrome Dino on Mobile (Bookmarklet Method)</a>
+</div>
 
 ## Immortality (God Mode)
 
