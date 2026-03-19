@@ -116,6 +116,71 @@ Want to swap an image for something else?
   💡 <b>Finding an image URL:</b> Open any image in a new tab (right-click it → "Open image in new tab"), then copy the URL from the address bar. That's the direct image URL you can paste in.
 </div>
 
+## Bonus: The One-Command Method
+
+The DevTools steps above are great for precise, surgical edits. But there's a secret shortcut that turns the **entire page** into a giant text editor — no hunting through the HTML panel required.
+
+Open the **Console** tab in DevTools (it sits right next to the Elements tab) and type:
+
+```js
+document.designMode = "on"
+```
+
+Hit Enter. Now **click anywhere on the page and start typing**. Every piece of text — headings, paragraphs, captions — becomes editable instantly. It's like turning a webpage into a Word document.
+
+To turn it back off:
+
+```js
+document.designMode = "off"
+```
+
+### Try it on this page right now
+
+<div class="text-center my-3">
+  <button id="btn-design-mode" class="btn btn-info" onclick="toggleDesignMode(this)">✏️ Enable Edit Mode</button>
+</div>
+<p class="text-center text-muted" style="font-size:0.9em;">Click the button above, then click any text on this page and start typing!</p>
+
+<script>
+function toggleDesignMode(btn) {
+  var enabling = document.designMode !== 'on';
+  document.designMode = enabling ? 'on' : 'off';
+  btn.textContent = enabling ? '✋ Disable Edit Mode' : '✏️ Enable Edit Mode';
+  btn.className = enabling ? 'btn btn-warning' : 'btn btn-info';
+}
+</script>
+
+### On desktop: via the Chrome (or Edge) Console
+
+1. Press **`F12`** to open DevTools
+2. Click the **Console** tab
+3. Type `document.designMode = "on"` and press **Enter**
+4. Click any text on the page and edit away
+
+### On mobile: use a Bookmarklet
+
+Mobile browsers don't have a DevTools console, but you can run JavaScript via a **bookmarklet** — a bookmark whose URL is JavaScript code instead of a web address.
+
+**Setting it up (one-time):**
+
+1. Bookmark any page on your phone (tap ⋮ → **Bookmark**, or the share icon → **Add to Bookmarks**)
+2. Open your bookmarks, find the one you just made, and **edit** it
+3. Replace the URL with:
+
+```
+javascript:document.designMode=(document.designMode==='on')?'off':'on';void(0);
+```
+
+4. Rename it something memorable, like **"Edit Mode"**, and save
+
+**Using it:**
+
+Whenever you want to edit a page on your phone, open your bookmarks and tap **"Edit Mode"**. The whole page becomes editable. Tap the bookmarklet again to turn editing off.
+
+<div class="alert alert-info">
+  💡 <b>Pro tip:</b> This bookmarklet works on desktop too — sometimes it's faster than opening the console every time. Just add it to your bookmarks bar for one-click access.
+</div>
+
 ## Prank Ideas to Try
 
 Here are some classics that work on almost any site:
