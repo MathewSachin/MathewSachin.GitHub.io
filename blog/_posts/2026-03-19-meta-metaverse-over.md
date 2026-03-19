@@ -70,7 +70,7 @@ The pivot isn't just to mobile. It's to two things: AI and smart glasses.
 
 At Meta's Q4 2025 earnings call, Zuckerberg barely mentioned the metaverse. Instead, he laid out a new grand theory: AI is the next media format. Just as text gave way to photos, photos gave way to video, AI-generated interactive experiences will be the next leap. Feeds will become immersive. Any video you see, you'll be able to "tap into and experience in a more meaningful way."
 
-The hardware play is the Ray-Ban Meta smart glasses — specifically the [Meta Ray-Ban Display](/tech/779566/meta-ray-ban-display-hands-on-smart-glasses-price-battery-specs), which brought a small display and AI assistant to the frames. These have been selling faster than Meta expected. As of January 2026, the company is reportedly in talks to double its production capacity.
+The hardware play is the Ray-Ban Meta smart glasses — specifically the [Meta Ray-Ban Display](https://www.theverge.com/tech/779566/meta-ray-ban-display-hands-on-smart-glasses-price-battery-specs), which brought a small display and AI assistant to the frames. These have been selling faster than Meta expected. As of January 2026, the company is reportedly in talks to double its production capacity.
 
 This is, in retrospect, the only part of Zuckerberg's vision that actually worked. Not the $1,500 VR headset that requires you to strap a computer to your face. Not the legless virtual avatar workspace. A pair of sunglasses that occasionally tells you the weather and can take a photo.
 
