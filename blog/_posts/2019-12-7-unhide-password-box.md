@@ -101,6 +101,31 @@ Press **Enter** — all password fields on the page are revealed at once. This w
   💡 <b>Not seeing the Console tab?</b> Press <code>Esc</code> while DevTools is open to toggle a Console drawer at the bottom, or click the <b>Console</b> tab at the top of the DevTools panel.
 </div>
 
+## Mobile: Use a Bookmarklet
+
+Desktop browsers have DevTools, but **mobile browsers don't**. The workaround is a *bookmarklet* — a bookmark whose URL is a snippet of JavaScript that runs when you tap it.
+
+**The bookmarklet:**
+
+```
+javascript:(function(){let inputs=document.querySelectorAll('input[type="password"]');inputs.forEach(input=>input.type='text');})();
+```
+
+### How to install it on mobile
+
+1. **Bookmark any page** — open your mobile browser and bookmark any page (e.g. this one).
+2. **Edit the bookmark** — open your bookmarks list, long-press the new bookmark, and choose **Edit**.
+3. **Replace the URL** — clear the URL field and paste the JavaScript snippet above as the address. Give it a memorable name like *Reveal Passwords*.
+4. **Save** — confirm the edit.
+
+### How to use it
+
+Navigate to the page with the password box, then open your bookmarks and tap **Reveal Passwords**. All password fields on that page will switch to plain text instantly.
+
+<div class="alert alert-info">
+  💡 <b>On desktop browsers</b> you can also drag the link below straight to your bookmarks bar: <a href="javascript:(function(){let inputs=document.querySelectorAll('input[type=&quot;password&quot;]');inputs.forEach(input=&gt;input.type='text');})();" title="Reveal Passwords">Reveal Passwords</a>
+</div>
+
 ## Try It Right Here!
 
 No need to hunt for a login page — practice the trick on this form. The password field below is already filled in. Use DevTools (or the Console snippet above) to reveal what's hiding behind the dots. 👀
