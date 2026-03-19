@@ -1,9 +1,6 @@
 name: AI Blog Post Generator
 
 on:
-  schedule:
-    - cron: '23 2 * * *'   # 7:53 AM IST (UTC+5:30)
-    - cron: '23 14 * * *'  # 7:53 PM IST (UTC+5:30)
   workflow_dispatch:
 
 jobs:
