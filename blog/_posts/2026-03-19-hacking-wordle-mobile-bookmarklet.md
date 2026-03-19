@@ -1,0 +1,73 @@
+---
+title: "Hack Wordle on Mobile — No Computer Needed (Bookmarklet Method)"
+tags: [wordle, hack, browser, mobile]
+highlight: true
+related:
+  - /blog/2026/03/07/hacking-wordle
+  - /blog/2016/11/05/chrome-dino-hack
+  - /blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet
+  - /blog/2026/03/07/edit-webpage-inspect-element
+---
+
+*You've found the Wordle hack — but your phone doesn't have DevTools. No problem. There's a trick that works entirely from your mobile browser.*
+
+---
+
+The [classic Wordle hack]({% post_url /blog/2026-03-07-hacking-wordle %}) uses the browser's Network tab to peek at today's answer. On a desktop that's just a keyboard shortcut away, but on a phone or tablet DevTools simply isn't available. That's where **bookmarklets** come in.
+
+## What Is a Bookmarklet?
+
+A bookmarklet is a regular web bookmark — but instead of a website URL, it contains JavaScript code. When you tap the bookmark, the browser executes that code on whatever page you're currently viewing.
+
+It's a technique that has been around for decades and works in virtually every mobile browser, because tapping a bookmark is just a normal browser action, not a developer feature.
+
+## Setting It Up
+
+### Step 1 — Create a New Bookmark
+
+Open your mobile browser, navigate to [Wordle](https://www.nytimes.com/games/wordle/index.html), and bookmark the page. The URL doesn't matter; you'll replace it in the next step.
+
+### Step 2 — Edit the Bookmark
+
+Open your bookmarks, find the one you just saved, and tap **Edit**.
+
+- Change the **name** to: `Wordle Answer`
+- Delete the **URL** completely and paste this exact code in its place:
+
+```
+javascript:(function(){ fetch('https://www.nytimes.com/svc/wordle/v2/' + new Date().toISOString().split('T')[0] + '.json').then(res => res.json()).then(data => alert('The word is: ' + data.solution.toUpperCase())).catch(err => alert('Could not fetch the word!')); })();
+```
+
+Save the bookmark.
+
+### Step 3 — Open Wordle
+
+Navigate to [Wordle](https://www.nytimes.com/games/wordle/index.html) in your mobile browser and wait for the game to fully load.
+
+### Step 4 — Run the Bookmarklet
+
+<div class="alert alert-info">
+  ⚠️ <b>Crucial step:</b> Simply tapping the bookmark in your bookmarks menu won't work on mobile — the browser treats it as a navigation rather than executing the code. You need to trigger it through the address bar.
+</div>
+
+Tap your **address bar**, type **Wordle Answer**, and when the bookmark appears in the dropdown suggestions, tap it.
+
+A pop-up will appear showing today's word in capital letters — that's your answer!
+
+## How It Works
+
+The bookmarklet fetches today's answer directly from the same NYT API that the Wordle game itself uses. It builds the URL using today's date, requests the JSON file, reads the `solution` field, and pops up an alert with the word.
+
+The `javascript:` URL scheme tells the browser to evaluate the code as a script rather than navigate to a page. Because it runs in the context of the current tab, it can make the same fetch requests as the page itself.
+
+The code breaks down into these steps:
+
+1. Build the API URL using today's date: `https://www.nytimes.com/svc/wordle/v2/YYYY-MM-DD.json`
+2. Fetch the JSON response from the server.
+3. Read `data.solution` and convert it to uppercase.
+4. Show an `alert` pop-up with the answer.
+5. If anything goes wrong, show a friendly error message instead.
+
+---
+
+Want the full step-by-step desktop method? Check out [Hacking Wordle: Solve It in One Try Using Browser DevTools]({% post_url /blog/2026-03-07-hacking-wordle %}) for a detailed walkthrough using the Network tab!
