@@ -72,6 +72,15 @@ To put the page back to normal without refreshing, paste this into the console:
 
 Or just refresh the page — the injected style only lives in memory and disappears on reload.
 
+### Try It Right Here
+
+See it in action on this page before you copy the code anywhere:
+
+<div class="my-3">
+  <button class="btn btn-dark me-2" onclick="bruteDarkOn()">🌙 Dark Mode ON</button>
+  <button class="btn btn-secondary" onclick="bruteDarkOff()">☀️ Dark Mode OFF</button>
+</div>
+
 ## On Mobile — Using a Bookmarklet
 
 On a phone or tablet there's no DevTools. But there is another trick: **bookmarklets**. A bookmarklet is a bookmark whose "URL" is a snippet of JavaScript. Tapping it runs the code on the current page.
@@ -133,3 +142,18 @@ Because the style is tagged with a unique `id`, the revert script can find and r
 ---
 
 Want more browser hacks you can pull off without installing anything? Check out [Edit Any Webpage in Seconds]({% post_url /blog/2026-03-07-edit-webpage-inspect-element %}) and [Hacking Wordle with DevTools]({% post_url /blog/2026-03-07-hacking-wordle %}).
+
+<script>
+function bruteDarkOn() {
+  if (!document.getElementById('__brute-dark')) {
+    var s = document.createElement('style');
+    s.id = '__brute-dark';
+    s.innerHTML = 'html { filter: invert(100%) hue-rotate(180deg) !important; } img, video, picture, canvas { filter: invert(100%) hue-rotate(180deg) !important; }';
+    document.head.appendChild(s);
+  }
+}
+function bruteDarkOff() {
+  var el = document.getElementById('__brute-dark');
+  if (el) el.remove();
+}
+</script>
