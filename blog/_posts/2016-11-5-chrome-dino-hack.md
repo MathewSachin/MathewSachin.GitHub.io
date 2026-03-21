@@ -5,9 +5,17 @@ highlight: true
 related:
   - /blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet
   - /blog/2026/03/14/chrome-dino-autoplay
-  - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/20/cookie-clicker-hacks
+  - /blog/2026/03/20/hacking-minesweeper-online
+  - /blog/2026/03/20/hacking-typeracer
+  - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
+  - /blog/2026/03/21/instagram-reel-sniper
+  - /blog/2026/03/21/youtube-shorts-sniper
+  - /blog/2026/03/21/twitter-x-video-sniper
+  - /blog/2026/03/21/save-instagram-photos
   - /blog/2026/03/07/edit-webpage-inspect-element
+  - /blog/2019/12/07/unhide-password-box
 ---
 
 *All hacks updated as of 8th March 2026 based on game changes.*
