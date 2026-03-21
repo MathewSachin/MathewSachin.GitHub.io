@@ -3,10 +3,10 @@ title: "Instagram Reel Sniper: Download Any Reel Directly from Your Browser"
 tags: [instagram, hack, javascript, browser, devtools, bookmarklet]
 highlight: true
 related:
+  - /blog/2026/03/21/youtube-shorts-sniper
+  - /blog/2026/03/21/twitter-x-video-sniper
   - /blog/2026/03/20/cookie-clicker-hacks
-  - /blog/2026/03/20/hacking-typeracer
   - /blog/2026/03/07/edit-webpage-inspect-element
-  - /blog/2016/11/05/chrome-dino-hack
 ---
 
 *Instagram doesn't have a "Download" button for Reels. This script adds one — right from your browser, no extensions or third-party apps required.*
