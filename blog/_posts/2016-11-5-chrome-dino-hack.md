@@ -218,3 +218,7 @@ Now the dino is visible again, and the game continues as usual!
 Keep having fun and may your dino run forever!
 
 Share this page around and comment down if you have tricks of your own!
+
+---
+
+Time to try some other great hacks — [Wordle]({% post_url /blog/2026-03-07-hacking-wordle %}), [Minesweeper]({% post_url /blog/2026-03-20-hacking-minesweeper-online %}), [TypeRacer]({% post_url /blog/2026-03-20-hacking-typeracer %}).
