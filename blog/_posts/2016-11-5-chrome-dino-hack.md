@@ -4,7 +4,6 @@ tags: [chrome, hack, game]
 highlight: true
 related:
   - /blog/2026/03/07/hacking-wordle
-  - /blog/2026/03/20/cookie-clicker-hacks
   - /blog/2026/03/20/hacking-minesweeper-online
   - /blog/2026/03/20/hacking-typeracer
   - /blog/2026/03/21/instagram-reel-sniper
