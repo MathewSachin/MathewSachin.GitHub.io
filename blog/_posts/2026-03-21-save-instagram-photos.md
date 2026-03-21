@@ -9,10 +9,10 @@ related:
   - /blog/2016/11/05/chrome-dino-hack
 ---
 
-*Instagram prevents right-clicking on photos and dragging them to your desktop. This script strips those CSS restrictions in one go — no extensions, no third-party sites required.*
+*Instagram prevents right-clicking on photos and dragging them to your desktop. This script strips those CSS restrictions — and keeps stripping them as you scroll and new posts load — no extensions or third-party sites required.*
 
 <div class="alert alert-info">
-  ⚠️ <b>Educational purposes only.</b> This post explains how browser CSS properties work and how websites use them to restrict interaction. Downloading content from Instagram may be against <a href="https://help.instagram.com/581066165581870">Instagram's Terms of Service</a>. Only save photos you own, have explicit permission to download, or that are explicitly made available for download. Respect copyright and the work of creators.
+  ⚠️ <b>Educational purposes only.</b> This post explains how browser CSS properties and the MutationObserver API work and how websites use them to restrict interaction. Downloading content from Instagram may be against <a href="https://help.instagram.com/581066165581870">Instagram's Terms of Service</a>. Only save photos you own, have explicit permission to download, or that are explicitly made available for download. Respect copyright and the work of creators.
 </div>
 
 ---
@@ -29,7 +29,23 @@ z-index: 1;
 
 Instagram doesn't hide the image or encrypt it. The full-resolution photo is already sitting in your browser's memory — the browser already downloaded it to display it. Instagram just places invisible overlay elements on top of images and then sets `pointer-events: none` on the `<img>` elements themselves so that your mouse clicks land on the overlay (which does nothing) instead of on the image.
 
-This script reverses those CSS overrides directly in the page.
+This script reverses those CSS overrides directly in the page — and crucially, keeps reversing them as you scroll and new posts are injected into the DOM.
+
+---
+
+## Why Persistence Matters
+
+A naive one-shot approach — run the script once, unlock everything on the page — has an obvious weak point: Instagram's feed is **infinite-scroll**. As you scroll down, Instagram's JavaScript continuously:
+
+1. Fetches new batches of posts from the server
+2. Creates brand-new `<img>` DOM nodes and inserts them into the page
+3. Those new nodes have Instagram's default CSS shields applied from the start
+
+A one-time `querySelectorAll` only sees elements that exist **at the moment it runs**. Every image that loads after that call is invisible to it — still locked.
+
+The updated script solves this with a `MutationObserver`. Instead of a snapshot, it registers a persistent listener that the browser calls every time new DOM nodes are added to the page — whether by scrolling, clicking "Load more", or anything else Instagram's JavaScript does. Each time the observer fires, it re-runs the unlock pass over every image on the page.
+
+The result: you run the script once and then scroll freely. Every photo that loads — now or five minutes from now — is unlocked automatically.
 
 ---
 
@@ -56,30 +72,41 @@ Direct shortcut: `Cmd + Option + J` (Chrome) jumps straight to the Console.
 Paste the following code into the console and press **Enter**:
 
 ```js
-(function() {
-    // Force all images to be "clickable" and at the front
-    document.querySelectorAll('img').forEach(img => {
-        img.style.setProperty('z-index', '999', 'important');
-        img.style.setProperty('pointer-events', 'auto', 'important');
-        img.style.setProperty('position', 'relative', 'important');
-        
-        // Remove the 'no-select' restriction often found on profile pages
-        img.style.setProperty('-webkit-user-select', 'auto', 'important');
-        img.style.setProperty('user-select', 'auto', 'important');
+javascript:(function() {
+    console.log("%c 🛡️ Shield-Killer Observer Active...", "color: #ff00ff; font-weight: bold;");
+
+    const killShields = () => {
+        document.querySelectorAll('img').forEach(img => {
+            img.style.setProperty('z-index', '999', 'important');
+            img.style.setProperty('pointer-events', 'auto', 'important');
+            img.style.setProperty('position', 'relative', 'important');
+            img.style.setProperty('user-select', 'auto', 'important');
+        });
+    };
+
+    // Run once immediately
+    killShields();
+
+    // Set up the MutationObserver to watch for new posts
+    const observer = new MutationObserver((mutations) => {
+        killShields();
     });
 
-    console.log("Instagram Image Shields Removed.");
+    // Start watching the entire body for added elements
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    alert("Persistent Sniper Active! Shields will be auto-killed as you scroll.");
 })();
 ```
 
-You'll see **"Instagram Image Shields Removed."** logged in the console. Every image on the page is now right-clickable and draggable.
+You'll see a bright pink **"🛡️ Shield-Killer Observer Active..."** message in the console, followed by a confirmation alert. Every image on the page is now right-clickable — and any new images that load as you scroll will be unlocked automatically.
 
 ### Step 4 — Save the Photo
 
 Right-click any photo and choose **Save image as…** — or drag it straight to your desktop or a folder.
 
 <div class="alert alert-info">
-  💡 <b>Tip:</b> The script only affects images that are already loaded in the page. If you scroll down to load more photos, run the script again to unlock the newly loaded ones.
+  ⚠️ <b>The Stories Trap:</b> This script works well for Feed posts and Profile grids, but <b>Stories use a completely different layering system</b>. The Next / Previous navigation will still work, but right-clicking on a Story image won't give you a save option — the Story rendering pipeline doesn't expose a plain <code>&lt;img&gt;</code> you can interact with in the same way. Stick to Feed and Profile pages for reliable saving.
 </div>
 
 ---
@@ -100,16 +127,16 @@ Open your bookmarks, find the one you just saved, and tap **Edit**:
 - Delete the entire **URL** and paste this one-liner in its place (copy the whole thing — it must be one continuous line):
 
 ```
-javascript:(function(){document.querySelectorAll('img').forEach(img=>{img.style.setProperty('z-index','999','important');img.style.setProperty('pointer-events','auto','important');img.style.setProperty('position','relative','important');img.style.setProperty('-webkit-user-select','auto','important');img.style.setProperty('user-select','auto','important');});console.log("Instagram Image Shields Removed.");})();
+javascript:(function(){console.log("%c \uD83D\uDEE1\uFE0F Shield-Killer Observer Active...","color: #ff00ff; font-weight: bold;");const killShields=()=>{document.querySelectorAll('img').forEach(img=>{img.style.setProperty('z-index','999','important');img.style.setProperty('pointer-events','auto','important');img.style.setProperty('position','relative','important');img.style.setProperty('user-select','auto','important');});};killShields();const observer=new MutationObserver(()=>{killShields();});observer.observe(document.body,{childList:true,subtree:true});alert("Persistent Sniper Active! Shields will be auto-killed as you scroll.");})();
 ```
 
 Save the bookmark.
 
 ### Step 3 — Run It on Instagram
 
-1. Open Instagram in your mobile browser and navigate to the photo you want.
+1. Open Instagram in your mobile browser and navigate to the feed or profile you want.
 2. Tap the **address bar**, type the name you gave the bookmark (e.g. `IG Image Unblock`), and when it appears in the dropdown, tap it.
-3. Long-press the photo — the system image-save option should now appear.
+3. Dismiss the confirmation alert, then scroll freely — long-press any photo to save it.
 
 <div class="alert alert-info">
   💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won't execute the JavaScript on mobile. Always trigger it via the address bar dropdown.
@@ -129,45 +156,72 @@ Here's a plain-English breakdown for the curious.
 })();
 ```
 
-This is an **Immediately Invoked Function Expression (IIFE)**. Wrapping the code in a function and calling it immediately keeps all variables scoped locally, so the script doesn't pollute the page's global namespace or accidentally clash with Instagram's own JavaScript variables.
+This is an **Immediately Invoked Function Expression (IIFE)**. Wrapping the code in a function and calling it immediately keeps all variables — including `killShields` and `observer` — scoped locally, so the script doesn't pollute the page's global namespace or accidentally clash with Instagram's own JavaScript variables.
 
-### Selecting Every Image
-
-```js
-document.querySelectorAll('img').forEach(img => { ... });
-```
-
-`querySelectorAll('img')` returns a list of every `<img>` element currently in the DOM. The `forEach` loop then applies style changes to each one individually. This is intentionally broad — it catches photos in the feed, profile grids, Stories previews, and anywhere else an `<img>` appears.
-
-### Restoring Pointer Events
+### Styled Console Logging
 
 ```js
-img.style.setProperty('pointer-events', 'auto', 'important');
+console.log("%c 🛡️ Shield-Killer Observer Active...", "color: #ff00ff; font-weight: bold;");
 ```
 
-`pointer-events: none` is the main tool Instagram uses to make images "un-clickable". When this property is set to `none` on an element, the browser ignores all mouse input on it — clicks, right-clicks, hover, drag — and passes those events straight through to whatever is underneath (typically an invisible overlay div). Setting it back to `auto` re-enables normal mouse interaction.
+`console.log` accepts CSS formatting when the message starts with `%c`. The second argument is a CSS string applied to everything after `%c`. This is a small UX touch — the bright magenta text makes it immediately obvious in a crowded console that the observer is running and ready.
 
-The `'important'` flag is the third argument to `setProperty`. It's the programmatic equivalent of writing `!important` in a CSS rule, which overrides any stylesheet rule — including Instagram's — regardless of specificity.
-
-### Bringing Images to the Front
+### The `killShields` Helper Function
 
 ```js
-img.style.setProperty('z-index', '999', 'important');
-img.style.setProperty('position', 'relative', 'important');
+const killShields = () => {
+    document.querySelectorAll('img').forEach(img => {
+        img.style.setProperty('z-index', '999', 'important');
+        img.style.setProperty('pointer-events', 'auto', 'important');
+        img.style.setProperty('position', 'relative', 'important');
+        img.style.setProperty('user-select', 'auto', 'important');
+    });
+};
 ```
 
-`z-index` controls which elements are drawn on top of others in the same stacking context. A higher number means "closer to the viewer". By setting `z-index: 999` on each image, the script pushes photos in front of the overlay elements Instagram stacks on top of them. The value 999 is used as a pragmatically high number that exceeds the z-index values Instagram typically assigns to its overlay divs (usually in the single or double digits). If you find a page where 999 isn't enough, you can substitute `2147483647` — the maximum value browsers accept for `z-index`.
+This extracts the unlock logic into a named function so it can be called from two places: once immediately on startup, and once each time the observer fires. Without this, the same code would need to be duplicated.
 
-**Important detail:** `z-index` only works on *positioned* elements — elements with `position` set to anything other than `static` (the default). The `position: relative` line ensures each `<img>` participates in the stacking context so the `z-index` change actually takes effect.
+`querySelectorAll('img')` returns every `<img>` element currently in the DOM. The loop applies four inline style overrides to each one using `setProperty` with `'important'` — the programmatic equivalent of `!important` in a stylesheet — so Instagram's own CSS rules can't win the specificity battle:
 
-### Re-enabling Selection
+- **`pointer-events: auto`** — re-enables mouse clicks and right-clicks (Instagram sets `pointer-events: none` to pass clicks through to an invisible overlay div instead)
+- **`z-index: 999`** — lifts the image above overlay divs in the stacking order (999 is pragmatically high; `2147483647` is the maximum if you ever need more)
+- **`position: relative`** — required for `z-index` to take effect; `z-index` is ignored on statically positioned elements
+- **`user-select: auto`** — re-enables drag-and-select, which Instagram disables on profile grids
+
+### Running Immediately
 
 ```js
-img.style.setProperty('-webkit-user-select', 'auto', 'important');
-img.style.setProperty('user-select', 'auto', 'important');
+killShields();
 ```
 
-`user-select: none` is a CSS property that prevents users from selecting (highlighting) content — including dragging an image to the desktop. Instagram applies this on profile pages in particular. Setting both the standard `user-select` and the `-webkit-` prefixed version (used by Chrome and Safari) covers all major browsers and re-enables drag-and-select.
+This first call handles every image that was already in the DOM when the script ran. Without it, all currently visible photos would remain locked until the observer first fires.
+
+### The MutationObserver — Watching for New Posts
+
+```js
+const observer = new MutationObserver((mutations) => {
+    killShields();
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
+```
+
+[`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) is a browser API that lets you watch for changes to the DOM and run a callback whenever they occur. It's far more efficient than a polling loop (`setInterval`) because the browser only calls the callback when something actually changes, rather than on a fixed timer.
+
+The two options passed to `observer.observe` are:
+
+- **`childList: true`** — watch for direct children being added or removed from the target
+- **`subtree: true`** — extend that watch to all descendants of the target, not just immediate children
+
+Together they tell the observer: *"whenever any element anywhere inside `document.body` is added or removed, call `killShields()`."* Instagram's infinite-scroll loader inserts entire post subtrees deep inside the DOM — `subtree: true` is what catches those insertions regardless of how deeply nested they are.
+
+### The Confirmation Alert
+
+```js
+alert("Persistent Sniper Active! Shields will be auto-killed as you scroll.");
+```
+
+A simple `alert()` to confirm the observer is running before you close the console and start scrolling. Dismiss it and the observer keeps running silently in the background.
 
 ---
 
@@ -183,4 +237,4 @@ None of these measures prevent the browser from downloading the image — they o
 
 ---
 
-> **Disclaimer:** This script is provided for **educational purposes only**. It demonstrates standard browser CSS properties (`pointer-events`, `z-index`, `user-select`) that are freely documented and publicly available. Downloading content from Instagram may be against [Instagram's Terms of Service](https://help.instagram.com/581066165581870). Only save photos you own, have explicit permission to download, or that are explicitly made available for download. Respect copyright and the work of content creators.
+> **Disclaimer:** This script is provided for **educational purposes only**. It demonstrates standard browser APIs (`MutationObserver`, `pointer-events`, `z-index`, `user-select`) that are freely documented and publicly available. Downloading content from Instagram may be against [Instagram's Terms of Service](https://help.instagram.com/581066165581870). Only save photos you own, have explicit permission to download, or that are explicitly made available for download. Respect copyright and the work of content creators.
