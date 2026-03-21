@@ -8,9 +8,6 @@ related:
   - /blog/2026/03/20/hacking-minesweeper-online
   - /blog/2026/03/20/hacking-typeracer
   - /blog/2026/03/21/instagram-reel-sniper
-  - /blog/2026/03/21/youtube-shorts-sniper
-  - /blog/2026/03/21/twitter-x-video-sniper
-  - /blog/2026/03/21/save-instagram-photos
   - /blog/2026/03/07/edit-webpage-inspect-element
   - /blog/2019/12/07/unhide-password-box
 ---
