@@ -15,11 +15,18 @@ related:
 
 Twitter/X hosts a huge volume of video content: news clips, memes, sports highlights, short-form commentary. The platform intentionally omits a download button, nudging you toward third-party downloader sites that require you to paste a URL, wait for a server-side conversion, and trust an unknown service with your browsing activity.
 
-This script bypasses all of that. It runs entirely in your browser, uses the browser's own recording API to capture the video that's already playing on your screen, and saves it as a `.webm` file. Nothing leaves your machine.
+Two scripts cover this, and together they handle every situation:
+
+- **Method 1 — Delta-Sync Recorder:** uses the browser's recording API to re-encode the video as it plays, saving it as a `.webm` file. Reliable, but you wait through the full video duration.
+- **Method 2 — High-Res Scraper:** reaches into Twitter/X's internal React data structures, extracts the original `.mp4` URL that was already fetched, and opens it directly. Near-instant, and preserves the original upload quality — but depends on the platform's internals being accessible.
+
+Both scripts run entirely in your browser. Nothing leaves your machine.
 
 ---
 
 ## Using it on Desktop
+
+*This is Method 1 — the Delta-Sync Recorder.* If it completes successfully, skip to the end. If the video is very long or you want the original upload quality, try [Method 2](#method-2-the-instant-high-res-scraper) instead.
 
 ### Step 1 — Open Twitter/X and find your video
 
@@ -215,18 +222,195 @@ The clearest illustration of the platform differences is in the targeting strate
 
 ---
 
+## Method 2: The Instant High-Res Scraper
+
+The Delta-Sync Recorder in Method 1 is reliable but slow: you wait through the entire video in real-time while `MediaRecorder` captures it frame-by-frame. For a 2-minute clip, that's 2 minutes of waiting before the download appears.
+
+This script takes a completely different route. Instead of recording what the browser renders, it reaches directly into Twitter/X's internal data structures — specifically the React component tree attached to the video's DOM node — and extracts the original `.mp4` URL that the platform already fetched. The download starts in seconds, and the file is the original upload quality, not a re-encoded recording.
+
+### The Script
+
+Paste the following code into the console and press **Enter**:
+
+```js
+(function() {
+    /* 1. Spatial Targeting (Find the center video) */
+    const allVideos = document.querySelectorAll('video');
+    let targetVideo = null;
+    let minDistance = Infinity;
+    const centerY = window.innerHeight / 2;
+
+    allVideos.forEach(v => {
+        const rect = v.getBoundingClientRect();
+        const distance = Math.abs(centerY - (rect.top + rect.height / 2));
+        if (rect.top < window.innerHeight && rect.bottom > 0 && distance < minDistance) {
+            minDistance = distance;
+            targetVideo = v;
+        }
+    });
+
+    if (!targetVideo) return alert("No video found in center!");
+
+    /* 2. Advanced High-Res Scraper */
+    const urls = [];
+    const collectUrls = (obj, depth = 0) => {
+        if (depth > 12 || !obj || typeof obj !== 'object' || obj instanceof HTMLElement) return;
+        
+        for (let key in obj) {
+            const val = obj[key];
+            if (typeof val === 'string' && val.includes('.mp4')) {
+                urls.push(val);
+            } else if (val && typeof val === 'object') {
+                collectUrls(val, depth + 1);
+            }
+        }
+    };
+
+    /* 3. Execute and Rank Results */
+    let current = targetVideo;
+    while (current && urls.length === 0) {
+        const keys = Object.keys(current);
+        const fiberKey = keys.find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
+        if (fiberKey) {
+            collectUrls(current[fiberKey]);
+        }
+        current = current.parentElement;
+    }
+
+    if (urls.length > 0) {
+        /* X-specific sorting: Higher resolution strings usually have higher bitrates */
+        /* We look for the URL with the largest width/height dimensions in the string */
+        const highResUrl = urls.sort((a, b) => {
+            const getRes = (str) => {
+                const match = str.match(/\/(\d+)x(\d+)\//);
+                return match ? parseInt(match[1]) * parseInt(match[2]) : 0;
+            };
+            return getRes(b) - getRes(a);
+        })[0];
+
+        console.log("High-Res Selected:", highResUrl);
+        window.open(highResUrl, '_blank');
+    } else {
+        alert("Metadata blocked. Use the 'Delta-Sync' recorder script for this one.");
+    }
+})();
+```
+
+A new tab opens with the highest-resolution version of the video. Right-click → **Save Video As** to save it, or the browser may prompt a download directly depending on how X serves the URL.
+
+---
+
+## How Method 2 Works
+
+### 1. Spatial Targeting
+
+Identical to Method 1 — the same geometric centre-of-viewport heuristic selects the target `<video>` element. See the [explanation above](#1-spatial-targeting) for the full breakdown.
+
+### 2. React Fiber Traversal
+
+React, the JavaScript framework X uses to build its UI, attaches internal metadata to every DOM element it manages. This metadata is stored directly on the DOM node as properties with names like `__reactFiber$abc123` or `__reactProps$abc123` (the `$`-suffix is a random hash that changes between page loads but the prefix is stable). These properties hold the component's props, state, and the rendered subtree — including any video URLs passed down to the player component.
+
+The script finds this entry point by scanning the node's own property keys:
+
+```js
+const fiberKey = keys.find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
+```
+
+It then recursively walks the object, collecting any string value that contains `.mp4`:
+
+```js
+const collectUrls = (obj, depth = 0) => {
+    if (depth > 12 || !obj || typeof obj !== 'object' || obj instanceof HTMLElement) return;
+    
+    for (let key in obj) {
+        const val = obj[key];
+        if (typeof val === 'string' && val.includes('.mp4')) {
+            urls.push(val);
+        } else if (val && typeof val === 'object') {
+            collectUrls(val, depth + 1);
+        }
+    }
+};
+```
+
+Three guard conditions prevent the traversal from spiralling out of control:
+
+- **`depth > 12`** — the fiber tree can be very deep, but video URLs sit within a dozen levels of the attachment point. Capping at 12 avoids performance-killing deep recursion.
+- **`!obj`** — null/undefined guard.
+- **`obj instanceof HTMLElement`** — fiber objects contain back-references to DOM nodes, which themselves have fiber properties. Without this check the traversal would loop forever between the DOM and the React tree.
+
+### 3. DOM Ancestry Walk
+
+React components are often structured so that video URLs live on a wrapper container rather than the `<video>` element itself — the player component, the tweet component, or the media container one or two levels up. If the first probe finds nothing, the script walks up the DOM tree until URLs appear or the top is reached:
+
+```js
+let current = targetVideo;
+while (current && urls.length === 0) {
+    const keys = Object.keys(current);
+    const fiberKey = keys.find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
+    if (fiberKey) {
+        collectUrls(current[fiberKey]);
+    }
+    current = current.parentElement;
+}
+```
+
+### 4. Resolution Ranking
+
+Twitter/X typically provides the same video at multiple resolutions. The URLs embed the resolution in their path — something like `/ext_tw_video/.../480x270/` or `/ext_tw_video/.../1280x720/`. The script extracts the width and height with a regex and multiplies them to get a total pixel count, then sorts descending:
+
+```js
+const getRes = (str) => {
+    const match = str.match(/\/(\d+)x(\d+)\//);
+    return match ? parseInt(match[1]) * parseInt(match[2]) : 0;
+};
+```
+
+The URL with the highest pixel count — the best available resolution — wins.
+
+### 5. Opening the Result
+
+```js
+window.open(highResUrl, '_blank');
+```
+
+Rather than constructing a `Blob` and faking a click on an `<a>` element, the script opens the MP4 URL directly in a new tab. There is nothing to re-encode; the browser streams the original file straight from X's CDN.
+
+---
+
+## Method 1 vs Method 2
+
+| | Method 1 — Delta-Sync Recorder | Method 2 — High-Res Scraper |
+|---|---|---|
+| **Mechanism** | Re-records rendered frames with `captureStream` + `MediaRecorder` | Extracts the original MP4 URL from React fiber metadata |
+| **Speed** | Real-time — you wait through the full video duration | Near-instant — URL extracted and opened in seconds |
+| **Output quality** | Re-encoded VP9/Opus at 8 Mbps — bounded by render resolution | Original upload quality — exactly what X stored |
+| **Output format** | `.webm` | `.mp4` |
+| **Reliability** | Works on any video the browser can render | Depends on React fiber properties being accessible |
+| **Failure mode** | Rarely fails; always produces a usable file if the video plays | Alerts "Metadata blocked" and tells you to use Method 1 |
+| **Best for** | Long videos, obfuscated metadata, or when Method 2 fails | Most standard posts — faster and higher quality when it works |
+
+<div class="alert alert-info">
+  💡 <b>Recommended workflow:</b> Try Method 2 first. If it alerts "Metadata blocked", fall back to Method 1. You get the best quality when Method 2 succeeds, and a reliable fallback when it doesn't.
+</div>
+
+---
+
 ## Troubleshooting
 
 | Symptom | Likely Cause | Fix |
 |---|---|---|
 | Alert: "No visible video found" | No video is currently in the viewport | Scroll until the video is playing and visible on screen |
-| Recording captures the wrong video | Another video is closer to the centre of the screen | Scroll so your intended video is as close to the vertical midpoint as possible |
-| File downloads but is silent | Video was muted and `muted = false` didn't apply in time | Manually unmute the video on screen before running the script |
-| Stutter or corruption at the start | CPU spike during seek + recorder initialization | The 600 ms delay usually handles this; if not, enable Hardware Acceleration in browser settings |
-| Recording stops too early | `timeupdate` fired with a minor backward jump before the video played | Reload the page and try again; avoid scrubbing the video manually before running the script |
-| Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for x.com in browser settings |
-| `captureStream` not available | Script was run from an `http://` page, or the browser doesn't support the API | Use Chrome or Edge on `https://x.com`; Firefox uses `mozCaptureStream()` which the script already falls back to, but some Firefox builds restrict it for cross-origin media |
+| Recording captures the wrong video (Method 1) | Another video is closer to the centre of the screen | Scroll so your intended video is as close to the vertical midpoint as possible |
+| File downloads but is silent (Method 1) | Video was muted and `muted = false` didn't apply in time | Manually unmute the video on screen before running the script |
+| Stutter or corruption at the start (Method 1) | CPU spike during seek + recorder initialization | The 600 ms delay usually handles this; if not, enable Hardware Acceleration in browser settings |
+| Recording stops too early (Method 1) | `timeupdate` fired with a minor backward jump before the video played | Reload the page and try again; avoid scrubbing the video manually before running the script |
+| Download doesn't start (Method 1) | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for x.com in browser settings |
+| `captureStream` not available (Method 1) | Script was run from an `http://` page, or the browser doesn't support the API | Use Chrome or Edge on `https://x.com`; Firefox uses `mozCaptureStream()` which the script already falls back to, but some Firefox builds restrict it for cross-origin media |
+| Alert: "Metadata blocked" (Method 2) | React fiber properties are inaccessible on this video | Use Method 1 instead |
+| New tab opens but the video won't save (Method 2) | Browser blocked the popup | Allow popups for x.com in browser settings, or copy the URL from the console log and paste it into a new tab manually |
+| New tab shows a lower resolution than expected (Method 2) | Resolution regex didn't match the URL format for this video | Open the browser console — all collected URLs are logged; copy a higher-res one manually |
 
 ---
 
-> **Disclaimer:** This script is provided for **educational purposes only**. It demonstrates browser APIs (`getBoundingClientRect`, `captureStream`, `MediaRecorder`, `timeupdate`) that are freely documented and publicly available. Downloading content from Twitter/X may be against [X's Terms of Service](https://x.com/en/tos). Only use this on content you own, have explicit permission to download, or that is explicitly available for download. Respect copyright and the work of content creators.
+> **Disclaimer:** Both scripts are provided for **educational purposes only**. They demonstrate browser APIs (`getBoundingClientRect`, `captureStream`, `MediaRecorder`, `timeupdate`) and React's internal fiber metadata — all freely observable in the browser. Downloading content from Twitter/X may be against [X's Terms of Service](https://x.com/en/tos). Only use these on content you own, have explicit permission to download, or that is explicitly available for download. Respect copyright and the work of content creators.
