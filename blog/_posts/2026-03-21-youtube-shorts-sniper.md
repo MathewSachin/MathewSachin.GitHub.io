@@ -4,9 +4,9 @@ tags: [youtube, hack, javascript, browser, devtools]
 highlight: true
 related:
   - /blog/2026/03/21/instagram-reel-sniper
+  - /blog/2026/03/21/twitter-x-video-sniper
   - /blog/2026/03/20/cookie-clicker-hacks
   - /blog/2026/03/07/edit-webpage-inspect-element
-  - /blog/2016/11/05/chrome-dino-hack
 ---
 
 *YouTube's short-form player has a structural blind spot — and a single browser script is all it takes to walk straight through it.*
