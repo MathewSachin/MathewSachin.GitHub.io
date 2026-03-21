@@ -8,7 +8,6 @@ related:
   - /blog/2026/03/20/hacking-minesweeper-online
   - /blog/2026/03/20/hacking-typeracer
   - /blog/2026/03/21/instagram-reel-sniper
-  - /blog/2026/03/07/edit-webpage-inspect-element
   - /blog/2019/12/07/unhide-password-box
 ---
 
@@ -43,7 +42,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 
 ## Opening Developer Tools / Chrome Console
 
-The **Developer Tools** (DevTools) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
+The [**Developer Tools** (DevTools)]({% post_url /blog/2026-03-07-edit-webpage-inspect-element %}) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
 
 To open it and get to the Console:
 
