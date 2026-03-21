@@ -5,6 +5,7 @@ highlight: true
 related:
   - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
   - /blog/2016/11/05/chrome-dino-hack
+  - /blog/2026/03/20/cookie-clicker-hacks
   - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/edit-webpage-inspect-element
 ---

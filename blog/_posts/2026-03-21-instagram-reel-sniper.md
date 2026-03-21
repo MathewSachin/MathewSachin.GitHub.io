@@ -3,6 +3,7 @@ title: "Instagram Reel Sniper: Download Any Reel Directly from Your Browser"
 tags: [instagram, hack, javascript, browser, devtools, bookmarklet]
 highlight: true
 related:
+  - /blog/2026/03/21/save-instagram-photos
   - /blog/2026/03/21/youtube-shorts-sniper
   - /blog/2026/03/21/twitter-x-video-sniper
   - /blog/2026/03/20/cookie-clicker-hacks
@@ -212,6 +213,8 @@ The last line in `recorder.onstop` pauses the video after the download has been 
 | Recording is low resolution | Reel is small on screen at capture time | Use fullscreen or Large view before running the script |
 | Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for instagram.com in browser settings |
 | Script does nothing on mobile | Bookmarklet triggered from menu, not address bar | Tap the address bar, type the bookmark name, tap from dropdown |
+
+*Using the same browser-only approach, you can also [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
 
 ---
 

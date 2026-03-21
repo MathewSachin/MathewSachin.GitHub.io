@@ -5,6 +5,7 @@ highlight: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/20/cookie-clicker-hacks
   - /blog/2019/12/07/unhide-password-box
 ---
 

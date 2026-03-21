@@ -4,6 +4,8 @@ tags: [instagram, hack, javascript, browser, devtools, bookmarklet, social-media
 highlight: true
 related:
   - /blog/2026/03/21/instagram-reel-sniper
+  - /blog/2026/03/21/youtube-shorts-sniper
+  - /blog/2026/03/21/twitter-x-video-sniper
   - /blog/2026/03/07/edit-webpage-inspect-element
   - /blog/2019/12/07/unhide-password-box
   - /blog/2016/11/05/chrome-dino-hack
@@ -234,6 +236,8 @@ Platforms restrict right-clicking and image saving for a few reasons:
 - **DRM theatre** — In practice these restrictions are CSS-only and trivially bypassed (as this post demonstrates), so they function more as a mild friction than a real technical barrier.
 
 None of these measures prevent the browser from downloading the image — they only restrict what you can do with it once it's rendered on screen. The image data is already on your machine the moment it appears in your browser.
+
+*Using the same browser-only approach, you can also [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}).*
 
 ---
 
