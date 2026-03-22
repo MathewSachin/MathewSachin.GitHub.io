@@ -3,6 +3,7 @@ title: "Short-Form Sovereignty: YouTube Shorts are easier to hack than the Main 
 tags: [youtube, hack, javascript, browser, devtools]
 highlight: true
 related:
+  - /blog/2026/03/22/reddit-video-sniper
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2026/03/21/twitter-x-video-sniper
   - /blog/2026/03/21/save-instagram-photos
@@ -201,7 +202,7 @@ The core philosophy is the same: use `captureStream` to intercept what the brows
 | `timeupdate` never fires | Tab was backgrounded during recording | Keep the YouTube tab active and in the foreground while recording |
 | Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for youtube.com in browser settings |
 
-*Using the same browser-only approach, you can also [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
+*Using the same browser-only approach, you can also [download Reddit videos]({% post_url /blog/2026-03-22-reddit-video-sniper %}), [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
 
 ---
 
