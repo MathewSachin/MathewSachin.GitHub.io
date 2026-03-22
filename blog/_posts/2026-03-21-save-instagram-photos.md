@@ -3,6 +3,7 @@ title: "Save Instagram Photos: Remove the Right-Click Block"
 tags: [instagram, hack, javascript, browser, devtools, bookmarklet, social-media]
 highlight: true
 related:
+  - /blog/2026/03/22/instagram-story-sniper
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2026/03/21/youtube-shorts-sniper
   - /blog/2026/03/21/twitter-x-video-sniper
@@ -237,7 +238,7 @@ Platforms restrict right-clicking and image saving for a few reasons:
 
 None of these measures prevent the browser from downloading the image — they only restrict what you can do with it once it's rendered on screen. The image data is already on your machine the moment it appears in your browser.
 
-*Using the same browser-only approach, you can also [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}).*
+*Using the same browser-only approach, you can also [download Instagram Stories]({% post_url /blog/2026-03-22-instagram-story-sniper %}), [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}).*
 
 ---
 
