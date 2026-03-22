@@ -3,6 +3,7 @@ title: "Twitter/X Video Sniper: Download Any Video Directly from Your Browser"
 tags: [twitter, hack, javascript, browser, devtools]
 highlight: true
 related:
+  - /blog/2026/03/22/reddit-video-sniper
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2026/03/21/youtube-shorts-sniper
   - /blog/2026/03/21/save-instagram-photos
@@ -412,7 +413,7 @@ Rather than constructing a `Blob` and faking a click on an `<a>` element, the sc
 | New tab opens but the video won't save (Method 2) | Browser blocked the popup | Allow popups for x.com in browser settings, or copy the URL from the console log and paste it into a new tab manually |
 | New tab shows a lower resolution than expected (Method 2) | Resolution regex didn't match the URL format for this video | Open the browser console — all collected URLs are logged; copy a higher-res one manually |
 
-*Using the same browser-only approach, you can also [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
+*Using the same browser-only approach, you can also [download Reddit videos]({% post_url /blog/2026-03-22-reddit-video-sniper %}), [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
 
 ---
 

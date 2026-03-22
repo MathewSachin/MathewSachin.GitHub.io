@@ -3,6 +3,7 @@ title: "Instagram Story Sniper: Download Any Story Directly from Your Browser"
 tags: [instagram, hack, javascript, browser, devtools]
 highlight: true
 related:
+  - /blog/2026/03/22/reddit-video-sniper
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2026/03/21/save-instagram-photos
   - /blog/2026/03/21/youtube-shorts-sniper
@@ -273,7 +274,7 @@ The fundamental trade-off is **generality vs. precision**. The Reel downloader's
 | Alert: "Metadata hidden. Use the 'Delta-Sync' recorder" | React fiber data not found in the DOM tree | Instagram may have updated their component structure; try the Reel downloader's `captureStream` method instead |
 | Browser blocks the pop-up | Pop-up blocker intercepted the `link.click()` | Allow pop-ups for instagram.com in browser settings |
 
-*Using the same browser-only approach, you can also [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}).*
+*Using the same browser-only approach, you can also [download Reddit videos]({% post_url /blog/2026-03-22-reddit-video-sniper %}), [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}).*
 
 ---
 
