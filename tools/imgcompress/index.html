@@ -217,7 +217,12 @@ ads: true
     initializing = true;
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Loading ImageMagick — this may take a moment on first use…');
     var M = window['magick-wasm'];
-    M.initializeImageMagick('https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/magick.wasm')
+    // Pre-fetch the WASM binary ourselves so the browser's fetch() follows CDN
+    // redirects correctly; passing a raw Uint8Array avoids Emscripten's internal
+    // fetch path that can return an empty buffer on some CDN configurations.
+    fetch('https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/magick.wasm')
+      .then(function (r) { return r.arrayBuffer(); })
+      .then(function (buf) { return M.initializeImageMagick(new Uint8Array(buf)); })
       .then(function () {
         initialized = true;
         initializing = false;
