@@ -4,3 +4,4 @@ _site/
 *.swp
 Gemfile.lock
 debug.log.bundle/
+node_modules/
