@@ -150,18 +150,58 @@ There are a handful of client-side search libraries: Lunr.js, FlexSearch, MiniSe
 
 The bundled, minified Orama build comes to about 76 KB. That's the only JavaScript file the search page adds beyond what the site already loads.
 
-## Regenerating the Index
+## Keeping the Index Up to Date — Automatically
 
-Every time a new post is published, the index needs to be rebuilt:
+You could rebuild the index by hand every time you publish a post, but that's the kind of friction that turns into a bug (forgotten rebuild → stale search results). So the whole thing is automated with GitHub Actions.
 
-```bash
-npm run build-search-index
+A workflow file (`.github/workflows/build-search-index.yml`) watches for pushes to `main` that touch any of the relevant paths:
+
+```yaml
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'blog/_posts/**'
+      - 'scripts/build-search-index.mjs'
+      - 'package.json'
+      - 'package-lock.json'
 ```
 
-This overwrites `search-index.json` and gets committed alongside the new post. The Jekyll build doesn't touch the index — it's a static asset that travels through the build unchanged.
+The path filter means the workflow only runs when something that would actually change the index has been modified — adding a post, editing the build script, or updating dependencies. Updating a CSS file or changing a layout doesn't trigger it.
+
+When it does run, the steps are straightforward:
+
+1. **Checkout** the repository
+2. **Set up Node.js 20** with npm caching
+3. **`npm ci`** — install exact versions from `package-lock.json`
+4. **`npm run build`** — this rebuilds both the Orama browser bundle (`scripts/orama.js`) and the search index (`search-index.json`)
+5. **Commit back the changed files** — if either file changed, the bot commits them with the message `chore: update Orama bundle and search index [skip ci]`
+
+The `[skip ci]` tag in the commit message tells GitHub Actions not to re-trigger workflows on that commit — preventing an infinite loop where the bot's own commit kicks off another build.
+
+```
+New post merged to main
+    │
+    ▼
+GitHub Actions: build-search-index workflow triggers
+    │
+    ▼
+npm run build  →  search-index.json regenerated
+    │
+    ▼
+Bot commits updated index back to main
+    │
+    ▼
+GitHub Pages rebuilds the static site
+    │
+    ▼
+Search results include the new post ✅
+```
+
+The whole pipeline takes about 30 seconds. By the time GitHub Pages has rebuilt the site and the new post is live, the search index is already up to date — no manual step required.
 
 <div class="alert alert-info">
-  💡 <b>Want the same setup?</b> The full source is on <a href="https://github.com/MathewSachin/MathewSachin.GitHub.io" target="_blank" rel="noopener">GitHub</a>. The key files are <code>scripts/build-search-index.mjs</code>, <code>search/index.html</code>, and <code>package.json</code>. Clone the repo, swap out the posts, rebuild the index, and you have a fully offline search on your own Jekyll site.
+  💡 <b>Want the same setup?</b> The full source is on <a href="https://github.com/MathewSachin/MathewSachin.GitHub.io" target="_blank" rel="noopener">GitHub</a>. The key files are <code>scripts/build-search-index.mjs</code>, <code>.github/workflows/build-search-index.yml</code>, <code>search/index.html</code>, and <code>package.json</code>. Clone the repo, swap out the posts, and the automation handles the rest.
 </div>
 
-*Static doesn't have to mean dumb. A pre-built index, a small JavaScript library, and a bit of careful wiring is all it takes to add fast, private, fully offline search to any file-based site.*
+*Static doesn't have to mean dumb. A pre-built index, a small JavaScript library, a GitHub Actions workflow, and a bit of careful wiring is all it takes to add fast, private, fully offline search to any file-based site — with zero ongoing maintenance.*
