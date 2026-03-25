@@ -82,9 +82,12 @@ async function main() {
       : frontmatter.tags
         ? [String(frontmatter.tags)]
         : []
+    const dateMatch = file.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-/)
     const date = frontmatter.date
       ? String(frontmatter.date).slice(0, 10)
-      : file.slice(0, 10)
+      : dateMatch
+        ? `${dateMatch[1]}-${dateMatch[2].padStart(2, '0')}-${dateMatch[3].padStart(2, '0')}`
+        : file.slice(0, 10)
     const plainContent = stripMarkdown(content).slice(0, MAX_CONTENT_LENGTH)
 
     await insert(db, { title, url, content: plainContent, tags, date })
