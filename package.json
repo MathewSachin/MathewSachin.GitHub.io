@@ -1,0 +1,17 @@
+{
+  "name": "mathewsachin-blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build-search-index": "node scripts/build-search-index.mjs",
+    "bundle-orama": "esbuild --bundle --format=esm --minify --outfile=scripts/orama.js node_modules/@orama/orama/dist/browser/index.js",
+    "build": "npm run bundle-orama && npm run build-search-index"
+  },
+  "dependencies": {
+    "@orama/orama": "^3.1.18",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.4"
+  }
+}
