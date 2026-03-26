@@ -4,6 +4,9 @@ layout: default
 
 <link rel="stylesheet" href="/styles/blog.css">
 
+<!-- Reading progress bar -->
+<div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
 <div class="bg-dark">
 <div class="pt-4 pb-5 bg-info text-white">
     <div class="container">
@@ -33,6 +36,26 @@ layout: default
 <div class="container post-content-container">
     <div class="row">
         <div class="col-md-10">
+            <!-- Mobile TOC: collapsible, hidden on md+ screens -->
+            <div id="toc-mobile" class="d-none d-md-none mb-3">
+                <div class="card toc-card">
+                    <button type="button"
+                            class="card-header toc-header toc-mobile-toggle w-100 text-start"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#toc-nav-mobile-collapse"
+                            aria-expanded="false"
+                            aria-controls="toc-nav-mobile-collapse">
+                        <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                        <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+                    </button>
+                    <div class="collapse" id="toc-nav-mobile-collapse">
+                        <div class="card-body p-0">
+                            <nav id="toc-nav-mobile" aria-label="Table of contents"></nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="post" class="card">
                 <div class="card-body">
                     <div class="page-content">
@@ -50,8 +73,18 @@ layout: default
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 d-none d-md-block">
             <div class="sticky-top" style="top: 10px">
+                <div id="toc-sidebar" class="mb-3" style="display:none">
+                    <div class="card toc-card">
+                        <div class="card-header toc-header">
+                            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                        </div>
+                        <div class="card-body p-0">
+                            <nav id="toc-nav" aria-label="Table of contents"></nav>
+                        </div>
+                    </div>
+                </div>
                 {% include ad-unit.html %}
             </div>
         </div>
@@ -60,6 +93,11 @@ layout: default
 
 <br>
 </div>
+
+<!-- Back to top button -->
+<button id="back-to-top" class="btn btn-info" title="Back to top" aria-label="Back to top">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</button>
 
 <!-- Lightbox modal for blog post images -->
 <div class="modal fade" id="img-lightbox" tabindex="-1" aria-label="Image lightbox" aria-hidden="true">
