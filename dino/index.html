@@ -19,6 +19,7 @@ layout: none
       height: 100%;
       background: #f7f7f7;
       overflow: hidden;
+      overscroll-behavior: none;
     }
     .icon { -webkit-user-select: none; user-select: none; display: inline-block; }
     .icon-offline {
@@ -108,8 +109,15 @@ layout: none
   <script>
     // Compatibility shims so the blog post API works on the embedded game
     Runner.getInstance = function() { return Runner.instance_; };
-    // Expose Config$2 matching the Chrome Dino API used in blog post hacks
-    var Config$2 = { COEFFICIENT: DistanceMeter.config.COEFFICIENT };
+    // Expose Config$2 matching the Chrome Dino API used in blog post hacks.
+    // DistanceMeter lives inside offline.js's IIFE and is not exposed on window,
+    // so we read COEFFICIENT from the runner instance when available (0.025 fallback).
+    var Config$2 = {
+      get COEFFICIENT() {
+        var inst = Runner.instance_;
+        return (inst && inst.distanceMeter) ? inst.distanceMeter.config.COEFFICIENT : 0.025;
+      }
+    };
 
     // Prevent arrow keys and Space from scrolling the parent page while playing
     document.addEventListener('keydown', function(e) {
