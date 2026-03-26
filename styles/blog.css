@@ -438,6 +438,53 @@ div.highlight pre {
   color: #6c757d;
 }
 
+/* Interactive dino hack widgets */
+.dino-hack-widget {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dino-hack-controls {
+  background: #1c1c2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 2.5rem;
+}
+
+.dino-hack-controls .form-range {
+  accent-color: #17a2b8;
+}
+
+.dino-hack-controls .dino-hack-num {
+  width: 80px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+  border-color: rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+}
+
+.dino-hack-controls .dino-hack-num:focus {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-color: #17a2b8;
+  box-shadow: 0 0 0 0.15rem rgba(23, 162, 184, 0.3);
+}
+
+.dino-hack-controls .dino-hack-num:focus-visible {
+  outline: 2px solid #17a2b8;
+  outline-offset: 0;
+}
+
+.dino-hack-pre {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  background: #282b2e;
+  padding: 1em;
+}
+
 /* Mobile TOC collapsible toggle */
 .toc-mobile-toggle {
   display: flex;
