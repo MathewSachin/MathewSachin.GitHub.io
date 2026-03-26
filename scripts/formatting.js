@@ -34,7 +34,7 @@ $(function () {
             }
         });
         $backToTop.on("click", function () {
-            $("html, body").animate({ scrollTop: 0 }, 400);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         });
     }
 
