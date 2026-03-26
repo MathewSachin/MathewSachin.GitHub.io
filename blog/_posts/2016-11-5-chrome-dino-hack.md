@@ -108,33 +108,67 @@ This works only because JavaScript allows us to override methods of objects whil
 
 Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs. With this hack, you can take full control of the pace.
 
-##### Speed Up the Game
-Enter this to crank up the speed to an insane level:
+Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion. The default starting speed is `6`.
 
-```js
-Runner.getInstance().setSpeed(1000)
-```
-
-At speed 1000, the game moves so fast that it’s practically unplayable — but it’s hilarious to watch! Feel free to experiment with any value. Try `50` for a challenging but still-playable speed, or `200` for pure chaos.
-
-##### Slow It Down
-If you want to dial things back for a relaxed stroll through the desert:
-
-```js
-Runner.getInstance().setSpeed(6)
-```
-
-This resets the speed to the default starting value. You can also set it even lower (like `1`) to practically pause the game in slow motion — great for getting familiar with the mechanics.
-
-Now you can play at lightning-fast speeds or take your sweet time — the choice is yours!
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label>
+<input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider">
+<input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value">
+<button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre id="speed-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().setSpeed(6)</code></pre>
+</div>
+<script>
+(function() {
+  var DEFAULT = 6;
+  var slider = document.getElementById('speed-slider');
+  var input = document.getElementById('speed-input');
+  var code = document.querySelector('#speed-pre code');
+  function update(v) {
+    var val = Math.max(1, Math.min(1000, parseInt(v, 10) || DEFAULT));
+    slider.value = val;
+    input.value = val;
+    code.textContent = 'Runner.getInstance().setSpeed(' + val + ')';
+    if (window.hljs) hljs.highlightElement(code);
+  }
+  slider.addEventListener('input', function() { update(this.value); });
+  input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('speed-reset').addEventListener('click', function() { update(DEFAULT); });
+})();
+</script>
 
 ## Setting the Current Score
 
-Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Here’s how to set it to **12345**:
+Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below:
 
-```js
-Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT
-```
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="score-input">Score:</label>
+<input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px">
+<button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT</code></pre>
+</div>
+<script>
+(function() {
+  var DEFAULT = 12345;
+  var input = document.getElementById('score-input');
+  var code = document.querySelector('#score-pre code');
+  function update(v) {
+    var val = parseInt(v, 10);
+    if (isNaN(val) || val < 0) val = 0;
+    if (val > 99999) val = 99999;
+    input.value = val;
+    code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / Config$2.COEFFICIENT';
+    if (window.hljs) hljs.highlightElement(code);
+  }
+  input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('score-reset').addEventListener('click', function() { update(DEFAULT); });
+})();
+</script>
 
 ##### How does it work?
 
@@ -148,11 +182,36 @@ Experiment with different values to make your dino feel like a seasoned pro righ
 
 Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.
 
-The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops.
+The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. Use the slider to find your sweet spot.
 
-```js
-Runner.getInstance().tRex.setJumpVelocity(20)
-```
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="jump-slider">Jump Velocity:</label>
+<input type="range" class="form-range flex-grow-1" id="jump-slider" min="1" max="50" value="10" style="min-width:120px" aria-label="Jump velocity slider">
+<input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="1" max="50" value="10" aria-label="Jump velocity value">
+<button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre id="jump-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().tRex.setJumpVelocity(10)</code></pre>
+</div>
+<script>
+(function() {
+  var DEFAULT = 10;
+  var slider = document.getElementById('jump-slider');
+  var input = document.getElementById('jump-input');
+  var code = document.querySelector('#jump-pre code');
+  function update(v) {
+    var val = Math.max(1, Math.min(50, parseInt(v, 10) || DEFAULT));
+    slider.value = val;
+    input.value = val;
+    code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')';
+    if (window.hljs) hljs.highlightElement(code);
+  }
+  slider.addEventListener('input', function() { update(this.value); });
+  input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('jump-reset').addEventListener('click', function() { update(DEFAULT); });
+})();
+</script>
 
 Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
 
@@ -164,24 +223,38 @@ Ever wondered what it’s like for the dino to defy gravity? You can make it wal
 
 The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
 
-##### Lift it up
+Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`). Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode!
 
-```js
-Runner.getInstance().tRex.groundYPos = 0
-```
-
-The dino will immediately float up and keep running near the top of the screen. Obstacles will still scroll past below it, so you won’t get hit at all — making this a sneaky alternative to God Mode!
-
-##### Back to the Ground
-When you want to bring your dino back down to Earth:
-
-```js
-Runner.getInstance().tRex.groundYPos = 93
-```
-
-You can also try intermediate values (like `40` or `60`) to position the dino at any height you like. Note that cacti and pterodactyls are generated at fixed heights, so positioning yourself just above the ground can let you glide over ground-level cacti effortlessly.
-
-Now your dino is floating through the sky or back to solid ground, all at your command!
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Position:</label>
+<input type="range" class="form-range flex-grow-1" id="ground-slider" min="0" max="130" value="93" style="min-width:120px" aria-label="Ground Y position slider">
+<input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="0" max="130" value="93" aria-label="Ground Y position value">
+<button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre id="ground-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().tRex.groundYPos = 93</code></pre>
+</div>
+<script>
+(function() {
+  var DEFAULT = 93;
+  var slider = document.getElementById('ground-slider');
+  var input = document.getElementById('ground-input');
+  var code = document.querySelector('#ground-pre code');
+  function update(v) {
+    var val = parseInt(v, 10);
+    if (isNaN(val) || val < 0) val = 0;
+    if (val > 130) val = 130;
+    slider.value = val;
+    input.value = val;
+    code.textContent = 'Runner.getInstance().tRex.groundYPos = ' + val;
+    if (window.hljs) hljs.highlightElement(code);
+  }
+  slider.addEventListener('input', function() { update(this.value); });
+  input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('ground-reset').addEventListener('click', function() { update(DEFAULT); });
+})();
+</script>
 
 ## Auto-play
 
