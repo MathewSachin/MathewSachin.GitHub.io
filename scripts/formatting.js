@@ -40,7 +40,9 @@ $(function () {
 
     // Table of contents: auto-generated from h2/h3 headings
     var $tocNav = $("#toc-nav");
+    var $tocNavMobile = $("#toc-nav-mobile");
     var $tocSidebar = $("#toc-sidebar");
+    var $tocMobile = $("#toc-mobile");
     if ($tocNav.length) {
         var $postContent = $("#post .page-content");
         var $headings = $postContent.find("h2, h3");
@@ -59,11 +61,13 @@ $(function () {
                     .addClass(isH3 ? "toc-h3" : "")
                     .text($h.text());
                 $tocNav.append($link);
+                $tocNavMobile.append($link.clone());
             });
 
             $tocSidebar.show();
+            $tocMobile.removeClass("d-none");
 
-            // Scroll-spy: highlight active section
+            // Scroll-spy: highlight active section in both navs
             $(window).on("scroll.toc resize.toc", function () {
                 var scrollPos = $(window).scrollTop() + SCROLL_OFFSET;
                 var activeId = null;
@@ -73,8 +77,10 @@ $(function () {
                     }
                 });
                 $tocNav.find("a").removeClass("toc-active");
+                $tocNavMobile.find("a").removeClass("toc-active");
                 if (activeId) {
                     $tocNav.find('a[href="#' + activeId + '"]').addClass("toc-active");
+                    $tocNavMobile.find('a[href="#' + activeId + '"]').addClass("toc-active");
                 }
             });
         }

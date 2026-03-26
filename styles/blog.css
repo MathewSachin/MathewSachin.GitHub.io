@@ -404,7 +404,8 @@ div.highlight pre {
   padding: 0.4rem 0.6rem;
 }
 
-#toc-nav a {
+#toc-nav a,
+#toc-nav-mobile a {
   display: block;
   padding: 0.3rem 0.6rem;
   color: #495057;
@@ -415,20 +416,46 @@ div.highlight pre {
 }
 
 #toc-nav a:hover,
-#toc-nav a:focus-visible {
+#toc-nav a:focus-visible,
+#toc-nav-mobile a:hover,
+#toc-nav-mobile a:focus-visible {
   color: #17a2b8;
   border-left-color: #17a2b8;
   background: rgba(23, 162, 184, 0.06);
 }
 
-#toc-nav a.toc-active {
+#toc-nav a.toc-active,
+#toc-nav-mobile a.toc-active {
   color: #17a2b8;
   border-left-color: #17a2b8;
   font-weight: 600;
 }
 
-#toc-nav a.toc-h3 {
+#toc-nav a.toc-h3,
+#toc-nav-mobile a.toc-h3 {
   padding-left: 1.2rem;
   font-size: 0.75rem;
   color: #6c757d;
+}
+
+/* Mobile TOC collapsible toggle */
+.toc-mobile-toggle {
+  display: flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+}
+
+.toc-mobile-toggle:focus-visible {
+  outline: 2px solid #17a2b8;
+  outline-offset: 2px;
+}
+
+.toc-chevron {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.toc-mobile-toggle[aria-expanded="true"] .toc-chevron {
+  transform: rotate(180deg);
 }
