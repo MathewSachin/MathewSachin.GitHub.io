@@ -176,7 +176,7 @@ Want to jump right into the action with a specific score? You can set the score 
 <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT</code></pre>
+<pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / 0.025</code></pre>
 </div>
 <script>
 (function() {
@@ -188,9 +188,9 @@ Want to jump right into the action with a specific score? You can set the score 
     if (isNaN(val) || val < 0) val = 0;
     if (val > 99999) val = 99999;
     input.value = val;
-    code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / Config$2.COEFFICIENT';
+    code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / 0.025';
     if (window.hljs) hljs.highlightElement(code);
-    dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / w.Config$2.COEFFICIENT; });
+    dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / 0.025; });
   }
   input.addEventListener('input', function() { update(this.value); });
   document.getElementById('score-reset').addEventListener('click', function() { update(DEFAULT); });
@@ -199,7 +199,7 @@ Want to jump right into the action with a specific score? You can set the score 
 
 ##### How does it work?
 
-Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by a constant called `Config$2.COEFFICIENT` (roughly `0.025`). By dividing your desired score by that constant, you get the right internal value to set.
+Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by `0.025`. By dividing your desired score by that constant, you get the right internal value to set.
 
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
 
