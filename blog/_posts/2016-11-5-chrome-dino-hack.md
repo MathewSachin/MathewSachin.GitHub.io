@@ -42,7 +42,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 ## Play It Right Here
 
 <div class="dino-embed-wrapper">
-<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
+<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
 <small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
 </div>
 
@@ -52,7 +52,7 @@ function dinoApply(fn) {
   if (!frame) return;
   var w = frame.contentWindow;
   if (!w || !w.Runner || !w.Runner.instance_) {
-    alert('Press Space (or tap) in the game above to start it first, then try again.');
+    alert('Please start the game first by pressing Space (or tapping), then click this button again.');
     return;
   }
   try { fn(w); } catch(e) { console.error('Dino hack error:', e); }
@@ -100,11 +100,12 @@ Want to make your dino un-killable? Let’s activate **God Mode** using a little
   var active = false;
   btn.addEventListener('click', function() {
     dinoApply(function(w) {
+      w._dinoHacks = w._dinoHacks || {};
       if (!active) {
-        w._dinoOrigGameOver = w.Runner.prototype.gameOver;
+        w._dinoHacks.origGameOver = w.Runner.prototype.gameOver;
         w.Runner.prototype.gameOver = function() {};
       } else {
-        if (w._dinoOrigGameOver) w.Runner.prototype.gameOver = w._dinoOrigGameOver;
+        if (w._dinoHacks.origGameOver) w.Runner.prototype.gameOver = w._dinoHacks.origGameOver;
       }
     });
     active = !active;
@@ -224,7 +225,7 @@ Want to jump right into the action with a specific score? You can set the score 
     var val = parseInt(input.value, 10);
     if (isNaN(val) || val < 0) val = 0;
     if (val > 99999) val = 99999;
-    dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / 0.025; });
+    dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / w.Config$2.COEFFICIENT; });
   });
 })();
 </script>
@@ -349,12 +350,13 @@ Want to make your dino invisible? It’s easy to do by simply disabling its draw
   var active = false;
   btn.addEventListener('click', function() {
     dinoApply(function(w) {
+      w._dinoHacks = w._dinoHacks || {};
       var tRex = w.Runner.getInstance().tRex;
       if (!active) {
-        w._dinoOrigDraw = tRex.draw;
+        w._dinoHacks.origDraw = tRex.draw;
         tRex.draw = function() {};
       } else {
-        if (w._dinoOrigDraw) tRex.draw = w._dinoOrigDraw;
+        if (w._dinoHacks.origDraw) tRex.draw = w._dinoHacks.origDraw;
       }
     });
     active = !active;

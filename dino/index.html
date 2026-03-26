@@ -5,7 +5,7 @@ layout: none
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chrome Dino Game</title>
   <style>
     /* Copyright 2013 The Chromium Authors. All rights reserved.
@@ -109,7 +109,7 @@ layout: none
     // Compatibility shims so the blog post API works on the embedded game
     Runner.getInstance = function() { return Runner.instance_; };
     // Expose Config$2 matching the Chrome Dino API used in blog post hacks
-    var Config$2 = { COEFFICIENT: 0.025 };
+    var Config$2 = { COEFFICIENT: DistanceMeter.config.COEFFICIENT };
   </script>
 </body>
 </html>
