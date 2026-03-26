@@ -7,7 +7,76 @@ $(function () {
     if ($lightbox.length) {
         $(".page-content img").on("click", function () {
             $lightbox.find(".modal-body img").attr("src", $(this).attr("src")).attr("alt", $(this).attr("alt") || "");
-            new bootstrap.Modal($lightbox[0]).show();
+            bootstrap.Modal.getOrCreateInstance($lightbox[0]).show();
         });
+    }
+
+    // Reading progress bar
+    var $progressBar = $("#reading-progress-bar");
+    if ($progressBar.length) {
+        function updateProgress() {
+            var docHeight = $(document).height() - $(window).height();
+            var progress = docHeight > 0 ? Math.min(($(window).scrollTop() / docHeight) * 100, 100) : 0;
+            $progressBar.css("width", progress + "%").attr("aria-valuenow", Math.round(progress));
+        }
+        $(window).on("scroll.progress resize.progress", updateProgress);
+        updateProgress();
+    }
+
+    // Back to top button
+    var $backToTop = $("#back-to-top");
+    if ($backToTop.length) {
+        $(window).on("scroll.backtop", function () {
+            if ($(this).scrollTop() > 300) {
+                $backToTop.addClass("visible");
+            } else {
+                $backToTop.removeClass("visible");
+            }
+        });
+        $backToTop.on("click", function () {
+            $("html, body").animate({ scrollTop: 0 }, 400);
+        });
+    }
+
+    // Table of contents: auto-generated from h2/h3 headings
+    var $tocNav = $("#toc-nav");
+    var $tocSidebar = $("#toc-sidebar");
+    if ($tocNav.length) {
+        var $postContent = $("#post .page-content");
+        var $headings = $postContent.find("h2, h3");
+        // Offset in px to account for the fixed navbar when scroll-spying
+        var SCROLL_OFFSET = 90;
+
+        if ($headings.length >= 3) {
+            $headings.each(function () {
+                var $h = $(this);
+                var id = $h.attr("id");
+                // Kramdown auto-generates IDs for all headings; skip any that lack one
+                if (!id) return;
+                var isH3 = this.tagName.toUpperCase() === "H3";
+                var $link = $("<a>")
+                    .attr("href", "#" + id)
+                    .addClass(isH3 ? "toc-h3" : "")
+                    .text($h.text());
+                $tocNav.append($link);
+            });
+
+            $tocSidebar.show();
+
+            // Scroll-spy: highlight active section
+            $(window).on("scroll.toc resize.toc", function () {
+                var scrollPos = $(window).scrollTop() + SCROLL_OFFSET;
+                var activeId = null;
+                $headings.each(function () {
+                    if ($(this).offset().top <= scrollPos) {
+                        activeId = $(this).attr("id");
+                    }
+                });
+                $tocNav.find("a").removeClass("toc-active");
+                if (activeId) {
+                    $tocNav.find('a[href="#' + activeId + '"]').addClass("toc-active");
+                }
+            });
+        }
     }
 });
