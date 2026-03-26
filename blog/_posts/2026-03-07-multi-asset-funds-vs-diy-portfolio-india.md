@@ -2,6 +2,10 @@
 title: "Multi-Asset Funds vs DIY Portfolio: Which Is Better for Indian Investors?"
 tags: [investing, mutual-funds, personal-finance, india, sip]
 highlight: false
+related:
+  - /blog/2026/03/16/double-down-on-tasks
+  - /blog/2026/03/09/luddites-vs-developers
+  - /blog/2026/03/13/nature-vibe-coded-us
 ---
 
 Building wealth in India has never had more options — or more confusion. You can pick a ready-made multi-asset fund and let professionals manage the mix, or you can build your own portfolio across equity, debt, and gold. This post breaks down both approaches with real numbers across different salary levels and investment horizons.

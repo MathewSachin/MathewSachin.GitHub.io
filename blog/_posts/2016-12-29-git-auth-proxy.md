@@ -1,6 +1,10 @@
 ---
 title: Using Git over Authenticated Proxy Connection
 tags: [proxy, git]
+related:
+  - /blog/2026/03/25/how-site-search-works
+  - /blog/2023/04/02/pure-functions
+  - /blog/2026/03/12/ai-blog-generation-flow
 ---
 
 >Git  is a version control system (VCS) for tracking changes in computer files and coordinating work on those files among multiple people.

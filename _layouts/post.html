@@ -22,6 +22,7 @@ layout: default
 
         <div>
             <a class="text-light" href="https://twitter.com/intent/tweet?text={{ page.title }}&amp;url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fab fa-twitter pe-1" aria-hidden="true"></i></a>
+            <a class="text-light" href="https://www.linkedin.com/sharing/share-offsite/?url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fab fa-linkedin pe-1" aria-hidden="true"></i></a>
             <a class="text-light" href="mailto:?subject={{ page.title }}&amp;body=Check out this site {{ site.url }}{{ page.url }}" target="_blank" rel="noopener"><i class="fa fa-envelope pe-1" aria-hidden="true"></i></a>
         </div>
         
@@ -68,6 +69,8 @@ layout: default
                         {% include related_posts.html related=page.related variant="bottom-variant" %}
                         <br>
                     {% endif %}
+
+                    {% include follow-cta.html %}
 
                     {% include giscus.html %}
                 </div>
