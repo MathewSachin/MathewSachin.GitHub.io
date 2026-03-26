@@ -107,6 +107,126 @@ Lumpsums are often done at year-end bonuses or when liquid savings accumulate. L
 
 For lumpsum too, multi-asset funds appear to win on raw returns — *if* the outperformance vs the blended DIY is sustained. The key risk: multi-asset fund managers may not always beat a passive DIY allocation, and fees eat into returns during flat or bearish markets.
 
+## Interactive Comparison Calculator
+
+<div class="card my-4 border-info" id="sip-calc-card">
+  <div class="card-header bg-info text-white fw-semibold">
+    <i class="fas fa-calculator me-2" aria-hidden="true"></i>Multi-Asset vs DIY Portfolio Calculator
+  </div>
+  <div class="card-body">
+    <p class="text-muted small mb-3">Uses approximate historical CAGRs: Multi-Asset Fund ~19% (direct plan), DIY Portfolio ~15.9% (direct plan). Past performance is not indicative of future results.</p>
+
+    <div class="row g-3 mb-3">
+      <div class="col-sm-6">
+        <label class="form-label fw-semibold small">Investment Mode</label>
+        <div class="d-flex gap-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sip-calc-mode" id="sip-calc-mode-sip" value="sip" checked>
+            <label class="form-check-label" for="sip-calc-mode-sip">Monthly SIP</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sip-calc-mode" id="sip-calc-mode-lump" value="lump">
+            <label class="form-check-label" for="sip-calc-mode-lump">Lumpsum</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-semibold small" for="sip-calc-amount" id="sip-calc-amount-label">Monthly SIP Amount (₹)</label>
+        <input type="number" class="form-control" id="sip-calc-amount" value="10000" min="500" step="500">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold small" for="sip-calc-years">Investment Horizon: <span id="sip-calc-years-display" class="text-info fw-bold">10 years</span></label>
+      <input type="range" class="form-range" id="sip-calc-years" min="1" max="30" value="10" style="accent-color:#17a2b8">
+    </div>
+
+    <div class="row g-3" id="sip-calc-results">
+      <div class="col-md-6">
+        <div class="p-3 rounded" style="background:rgba(23,162,184,0.08);border:1px solid rgba(23,162,184,0.3)">
+          <div class="small text-muted mb-1">Multi-Asset Fund (~19% CAGR)</div>
+          <div class="fs-4 fw-bold text-info" id="sip-calc-multi">—</div>
+          <div class="mt-2">
+            <div class="progress" style="height:8px" role="progressbar" aria-label="Multi-Asset Fund share">
+              <div class="progress-bar bg-info" id="sip-calc-bar-multi" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="p-3 rounded" style="background:rgba(108,117,125,0.08);border:1px solid rgba(108,117,125,0.25)">
+          <div class="small text-muted mb-1">DIY Portfolio (~15.9% CAGR)</div>
+          <div class="fs-4 fw-bold text-secondary" id="sip-calc-diy">—</div>
+          <div class="mt-2">
+            <div class="progress" style="height:8px" role="progressbar" aria-label="DIY Portfolio share">
+              <div class="progress-bar bg-secondary" id="sip-calc-bar-diy" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info mt-3 mb-0 py-2 small" id="sip-calc-diff-box" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var MULTI_CAGR = 0.19;
+  var DIY_CAGR   = 0.159;
+
+  function fmtINR(val) {
+    if (val >= 1e7) return '\u20B9' + (val / 1e7).toFixed(2) + ' Cr';
+    if (val >= 1e5) return '\u20B9' + (val / 1e5).toFixed(2) + ' L';
+    return '\u20B9' + Math.round(val).toLocaleString('en-IN');
+  }
+
+  function sipFV(monthly, annualRate, years) {
+    var r = annualRate / 12;
+    var n = years * 12;
+    return monthly * (Math.pow(1 + r, n) - 1) / r * (1 + r);
+  }
+
+  function lumpFV(principal, annualRate, years) {
+    return principal * Math.pow(1 + annualRate, years);
+  }
+
+  function calc() {
+    var mode = document.querySelector('input[name="sip-calc-mode"]:checked').value;
+    var amount = parseFloat(document.getElementById('sip-calc-amount').value) || 0;
+    var years = parseInt(document.getElementById('sip-calc-years').value, 10);
+
+    document.getElementById('sip-calc-years-display').textContent = years + (years === 1 ? ' year' : ' years');
+    document.getElementById('sip-calc-amount-label').textContent = (mode === 'sip' ? 'Monthly SIP Amount (\u20B9)' : 'Lumpsum Amount (\u20B9)');
+
+    var multiVal = mode === 'sip' ? sipFV(amount, MULTI_CAGR, years) : lumpFV(amount, MULTI_CAGR, years);
+    var diyVal   = mode === 'sip' ? sipFV(amount, DIY_CAGR,   years) : lumpFV(amount, DIY_CAGR,   years);
+
+    document.getElementById('sip-calc-multi').textContent = fmtINR(multiVal);
+    document.getElementById('sip-calc-diy').textContent   = fmtINR(diyVal);
+
+    var maxVal = Math.max(multiVal, diyVal, 1);
+    document.getElementById('sip-calc-bar-multi').style.width = (multiVal / maxVal * 100).toFixed(1) + '%';
+    document.getElementById('sip-calc-bar-diy').style.width   = (diyVal   / maxVal * 100).toFixed(1) + '%';
+
+    var diffBox = document.getElementById('sip-calc-diff-box');
+    var diff = multiVal - diyVal;
+    var absDiff = Math.abs(diff);
+    var pct = diyVal > 0 ? (absDiff / diyVal * 100).toFixed(1) : '0';
+    var leader = diff >= 0 ? 'Multi-Asset Fund' : 'DIY Portfolio';
+    var trailer = diff >= 0 ? 'the DIY portfolio' : 'the Multi-Asset Fund';
+    var msg = leader + ' projects ' + fmtINR(absDiff) + ' more (' + pct + '%) than ' + trailer + ' over ' + years + (years === 1 ? ' year' : ' years') + '. This assumes sustained outperformance \u2014 review the tax & rebalancing factors above.';
+    diffBox.textContent = msg;
+  }
+
+  document.getElementById('sip-calc-amount').addEventListener('input', calc);
+  document.getElementById('sip-calc-years').addEventListener('input', calc);
+  document.querySelectorAll('input[name="sip-calc-mode"]').forEach(function(el) { el.addEventListener('change', calc); });
+
+  calc();
+})();
+</script>
+
 ## Salary Bracket × Time Horizon Matrix
 
 The table below summarises where each approach tends to win, qualitatively.
