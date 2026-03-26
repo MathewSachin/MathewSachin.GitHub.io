@@ -28,7 +28,8 @@ Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built
 ## How to Play the Chrome Dino Game?
 <div class="alert alert-info">
   💡 <b>Pro Tip:</b> Can’t get the <i>“No Internet”</i> screen to show up? <br>
-  Just open a new tab and go to <b>chrome://dino</b> — the game works even when you're online!
+  Just open a new tab and go to <b>chrome://dino</b> — the game works even when you're online! <br>
+  All hacks on this page also work on web-hosted mirrors such as <a href="https://chromedino.com" target="_blank" rel="noopener">chromedino.com</a>.
 </div>
 
 If this is your first time discovering the Dino game, welcome! It's super easy to play:  
@@ -136,9 +137,17 @@ Want to jump right into the action with a specific score? You can set the score 
 Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT
 ```
 
+<div class="alert alert-info">
+  💡 <b>On web-hosted mirrors</b> (e.g. chromedino.com), <code>Config$2</code> may not be defined. Use the coefficient value directly instead:
+
+```js
+Runner.getInstance().distanceRan = 12345 / 0.025
+```
+</div>
+
 ##### How does it work?
 
-Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by a constant called `Config$2.COEFFICIENT` (roughly `0.025`). By dividing your desired score by that constant, you get the right internal value to set.
+Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by a constant (roughly `0.025`). On `chrome://dino` this constant is exposed as `Config$2.COEFFICIENT`; on hosted mirrors it’s safest to just use `0.025` directly. By dividing your desired score by that value, you get the right internal value to set.
 
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
 
