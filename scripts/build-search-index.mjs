@@ -49,7 +49,7 @@ function postUrlFromFilename(filename) {
   const match = name.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/)
   if (!match) return null
   const [, year, month, day, slug] = match
-  return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${slug}/`
+  return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${slug}.html`
 }
 
 async function main() {
