@@ -39,6 +39,31 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 
 ![Chrome Dino](/images/chromeDino.gif)
 
+## Play It Right Here
+
+<div class="dino-embed-wrapper">
+<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+<small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
+</div>
+
+<script>
+function dinoApply(fn) {
+  var frame = document.getElementById('dino-game-frame');
+  if (!frame) return;
+  var w = frame.contentWindow;
+  if (!w || !w.Runner || !w.Runner.instance_) return;
+  try { fn(w); } catch(e) { console.error('Dino hack error:', e); }
+}
+// Prevent Up/Down arrow keys from scrolling the page while the game is in focus
+document.addEventListener('keydown', function(e) {
+  var frame = document.getElementById('dino-game-frame');
+  if (frame && document.activeElement === frame &&
+      (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === ' ')) {
+    e.preventDefault();
+  }
+}, { passive: false });
+</script>
+
 ## Opening Developer Tools / Chrome Console
 
 The [**Developer Tools** (DevTools)]({% post_url /blog/2026-03-07-edit-webpage-inspect-element %}) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
@@ -108,7 +133,7 @@ This works only because JavaScript allows us to override methods of objects whil
 
 Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs. With this hack, you can take full control of the pace.
 
-Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion. The default starting speed is `6`.
+Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion. The default starting speed is `6`. **Move the slider and the game above updates instantly!**
 
 <div class="dino-hack-widget">
 <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
@@ -132,6 +157,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
     input.value = val;
     code.textContent = 'Runner.getInstance().setSpeed(' + val + ')';
     if (window.hljs) hljs.highlightElement(code);
+    dinoApply(function(w) { w.Runner.getInstance().setSpeed(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
   input.addEventListener('input', function() { update(this.value); });
@@ -141,7 +167,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 
 ## Setting the Current Score
 
-Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below:
+Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below — **it applies instantly to the game at the top of this page!**
 
 <div class="dino-hack-widget">
 <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
@@ -150,7 +176,7 @@ Want to jump right into the action with a specific score? You can set the score 
 <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT</code></pre>
+<pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / 0.025</code></pre>
 </div>
 <script>
 (function() {
@@ -162,8 +188,9 @@ Want to jump right into the action with a specific score? You can set the score 
     if (isNaN(val) || val < 0) val = 0;
     if (val > 99999) val = 99999;
     input.value = val;
-    code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / Config$2.COEFFICIENT';
+    code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / 0.025';
     if (window.hljs) hljs.highlightElement(code);
+    dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / 0.025; });
   }
   input.addEventListener('input', function() { update(this.value); });
   document.getElementById('score-reset').addEventListener('click', function() { update(DEFAULT); });
@@ -172,7 +199,7 @@ Want to jump right into the action with a specific score? You can set the score 
 
 ##### How does it work?
 
-Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by a constant called `Config$2.COEFFICIENT` (roughly `0.025`). By dividing your desired score by that constant, you get the right internal value to set.
+Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by `0.025`. By dividing your desired score by that constant, you get the right internal value to set.
 
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
 
@@ -182,7 +209,7 @@ Experiment with different values to make your dino feel like a seasoned pro righ
 
 Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.
 
-The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. Use the slider to find your sweet spot.
+The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. **Drag the slider and watch the change take effect live in the game above!**
 
 <div class="dino-hack-widget">
 <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
@@ -206,6 +233,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')';
     if (window.hljs) hljs.highlightElement(code);
+    dinoApply(function(w) { w.Runner.getInstance().tRex.setJumpVelocity(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
   input.addEventListener('input', function() { update(this.value); });
@@ -223,7 +251,7 @@ Ever wondered what it’s like for the dino to defy gravity? You can make it wal
 
 The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
 
-Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`). Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode!
+Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`). Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode! **Try it live — the game above updates as you drag.**
 
 <div class="dino-hack-widget">
 <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
@@ -249,6 +277,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.groundYPos = ' + val;
     if (window.hljs) hljs.highlightElement(code);
+    dinoApply(function(w) { w.Runner.getInstance().tRex.groundYPos = val; });
   }
   slider.addEventListener('input', function() { update(this.value); });
   input.addEventListener('input', function() { update(this.value); });
