@@ -485,6 +485,27 @@ div.highlight pre {
   padding: 1em;
 }
 
+.btn-dino-reset {
+  color: rgba(255, 255, 255, 0.45);
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0.4rem;
+  transition: color 0.2s ease;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.72rem;
+}
+
+.btn-dino-reset:hover {
+  color: #17a2b8;
+  background: transparent;
+}
+
+.btn-dino-reset:focus-visible {
+  outline: 2px solid #17a2b8;
+  outline-offset: 2px;
+}
+
 /* Mobile TOC collapsible toggle */
 .toc-mobile-toggle {
   display: flex;

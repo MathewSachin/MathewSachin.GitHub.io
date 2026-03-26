@@ -115,17 +115,19 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 <label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label>
 <input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider">
 <input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value">
+<button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
 <pre id="speed-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().setSpeed(6)</code></pre>
 </div>
 <script>
 (function() {
+  var DEFAULT = 6;
   var slider = document.getElementById('speed-slider');
   var input = document.getElementById('speed-input');
   var code = document.querySelector('#speed-pre code');
   function update(v) {
-    var val = Math.max(1, Math.min(1000, parseInt(v, 10) || 6));
+    var val = Math.max(1, Math.min(1000, parseInt(v, 10) || DEFAULT));
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().setSpeed(' + val + ')';
@@ -133,6 +135,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
   }
   slider.addEventListener('input', function() { update(this.value); });
   input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('speed-reset').addEventListener('click', function() { update(DEFAULT); });
 })();
 </script>
 
@@ -144,12 +147,14 @@ Want to jump right into the action with a specific score? You can set the score 
 <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
 <label class="text-white-50 small mb-0 me-1" for="score-input">Score:</label>
 <input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px">
+<button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
 <pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / Config$2.COEFFICIENT</code></pre>
 </div>
 <script>
 (function() {
+  var DEFAULT = 12345;
   var input = document.getElementById('score-input');
   var code = document.querySelector('#score-pre code');
   function update(v) {
@@ -161,6 +166,7 @@ Want to jump right into the action with a specific score? You can set the score 
     if (window.hljs) hljs.highlightElement(code);
   }
   input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('score-reset').addEventListener('click', function() { update(DEFAULT); });
 })();
 </script>
 
@@ -183,17 +189,19 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
 <label class="text-white-50 small mb-0 me-1" for="jump-slider">Jump Velocity:</label>
 <input type="range" class="form-range flex-grow-1" id="jump-slider" min="1" max="50" value="10" style="min-width:120px" aria-label="Jump velocity slider">
 <input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="1" max="50" value="10" aria-label="Jump velocity value">
+<button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
 <pre id="jump-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().tRex.setJumpVelocity(10)</code></pre>
 </div>
 <script>
 (function() {
+  var DEFAULT = 10;
   var slider = document.getElementById('jump-slider');
   var input = document.getElementById('jump-input');
   var code = document.querySelector('#jump-pre code');
   function update(v) {
-    var val = Math.max(1, Math.min(50, parseInt(v, 10) || 10));
+    var val = Math.max(1, Math.min(50, parseInt(v, 10) || DEFAULT));
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')';
@@ -201,6 +209,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
   }
   slider.addEventListener('input', function() { update(this.value); });
   input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('jump-reset').addEventListener('click', function() { update(DEFAULT); });
 })();
 </script>
 
@@ -221,12 +230,14 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 <label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Position:</label>
 <input type="range" class="form-range flex-grow-1" id="ground-slider" min="0" max="130" value="93" style="min-width:120px" aria-label="Ground Y position slider">
 <input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="0" max="130" value="93" aria-label="Ground Y position value">
+<button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
 <pre id="ground-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().tRex.groundYPos = 93</code></pre>
 </div>
 <script>
 (function() {
+  var DEFAULT = 93;
   var slider = document.getElementById('ground-slider');
   var input = document.getElementById('ground-input');
   var code = document.querySelector('#ground-pre code');
@@ -241,6 +252,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
   }
   slider.addEventListener('input', function() { update(this.value); });
   input.addEventListener('input', function() { update(this.value); });
+  document.getElementById('ground-reset').addEventListener('click', function() { update(DEFAULT); });
 })();
 </script>
 
