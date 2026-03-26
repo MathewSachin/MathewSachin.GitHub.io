@@ -110,6 +110,13 @@ layout: none
     Runner.getInstance = function() { return Runner.instance_; };
     // Expose Config$2 matching the Chrome Dino API used in blog post hacks
     var Config$2 = { COEFFICIENT: DistanceMeter.config.COEFFICIENT };
+
+    // Prevent arrow keys and Space from scrolling the parent page while playing
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+      }
+    }, { passive: false });
   </script>
 </body>
 </html>

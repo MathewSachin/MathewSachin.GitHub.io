@@ -538,29 +538,6 @@ div.highlight pre {
   color: #17a2b8;
 }
 
-.btn-dino-apply {
-  color: #9eeaf9;
-  background: rgba(23, 162, 184, 0.15);
-  border: 1px solid rgba(23, 162, 184, 0.35);
-  padding: 0.15rem 0.5rem;
-  transition: all 0.2s ease;
-  line-height: 1;
-  white-space: nowrap;
-  font-size: 0.72rem;
-  border-radius: 0.25rem;
-}
-
-.btn-dino-apply:hover {
-  color: white;
-  background: rgba(23, 162, 184, 0.35);
-  border-color: #17a2b8;
-}
-
-.btn-dino-apply:focus-visible {
-  outline: 2px solid #17a2b8;
-  outline-offset: 2px;
-}
-
 /* Mobile TOC collapsible toggle */
 .toc-mobile-toggle {
   display: flex;
