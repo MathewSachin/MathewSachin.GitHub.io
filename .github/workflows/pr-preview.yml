@@ -38,4 +38,4 @@ jobs:
         with:
           source-dir: ./_site
           preview-branch: gh-pages
-          custom-url: https://MathewSachin.github.io/pr-preview/pr-${{ github.event.pull_request.number }}
+          pages-base-url: MathewSachin.github.io
