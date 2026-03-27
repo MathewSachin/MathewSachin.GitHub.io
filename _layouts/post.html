@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<link rel="stylesheet" href="/styles/blog.css">
+<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 
 <!-- Reading progress bar -->
 <div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -16,7 +16,7 @@ layout: default
 
         <div class="post-tag my-1">
             {% for tag in page.tags %}
-                <a class="badge rounded-pill bg-secondary" href="/blog/tags#{{ tag }}">{{ tag }}</a>
+                <a class="badge rounded-pill bg-secondary" href="{{ '/blog/tags' | relative_url }}#{{ tag }}">{{ tag }}</a>
             {% endfor %}
         </div>
 

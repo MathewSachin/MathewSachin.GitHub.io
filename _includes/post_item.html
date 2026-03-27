@@ -1,4 +1,4 @@
-<a href="{{ include.post.url }}" class="blog-post-link text-decoration-none text-reset">
+<a href="{{ include.post.url | relative_url }}" class="blog-post-link text-decoration-none text-reset">
   <div class="blog-post-item py-3">
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
       <span class="blog-post-title fw-semibold">{{ include.post.title }}</span>

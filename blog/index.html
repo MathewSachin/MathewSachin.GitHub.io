@@ -3,11 +3,11 @@ layout: page
 title: Blog Posts
 ---
 
-<link rel="stylesheet" href="/styles/blog.css">
+<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 
 <div class="d-flex gap-2 mb-3">
-  <a href="/blog/tags" class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>Tags</a>
-  <a href="/blog/archive" class="btn btn-outline-secondary btn-sm"><i class="fas fa-archive me-1"></i>Archive</a>
+  <a href="{{ '/blog/tags' | relative_url }}" class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>Tags</a>
+  <a href="{{ '/blog/archive' | relative_url }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-archive me-1"></i>Archive</a>
 </div>
 
 <div class="posts">
@@ -26,7 +26,7 @@ title: Blog Posts
         {% else %}
         <li class="page-item disabled">
         {% endif %}
-          <a href="{{ paginator.previous_page_path }}" class="page-link">Previous</a>
+          <a href="{{ paginator.previous_page_path | relative_url }}" class="page-link">Previous</a>
         </li>
 
         {% for page in (1..paginator.total_pages) %}
@@ -35,10 +35,10 @@ title: Blog Posts
               <a href="#" class="page-link">
           {% elsif page == 1 %}
             <li class="page-item">
-              <a href="/blog" class="page-link">
+              <a href="{{ '/blog' | relative_url }}" class="page-link">
           {% else %}
             <li class="page-item">
-              <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', page }}" class="page-link">
+              <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', page | relative_url }}" class="page-link">
           {% endif %}
                 {{ page }}
               </a>
@@ -50,7 +50,7 @@ title: Blog Posts
         {% else %}
         <li class="page-item disabled">
         {% endif %}
-          <a href="{{ paginator.next_page_path }}" class="page-link">Next</a>
+          <a href="{{ paginator.next_page_path | relative_url }}" class="page-link">Next</a>
         </li>
       </ul>
     </nav>
