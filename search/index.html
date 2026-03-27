@@ -165,6 +165,8 @@
     date: 'string',
   };
 
+  const BASE_PATH = '';
+
   const statusEl = document.getElementById('search-status');
   const inputEl  = document.getElementById('search-input');
   const resultsEl = document.getElementById('search-results');
@@ -200,7 +202,7 @@
     }
     resultsEl.innerHTML = hits.map(({ document: doc }) => {
       // Only allow safe relative paths (prevent javascript: URL injection)
-      const safeUrl = /^\/[^"<>]*$/.test(doc.url) ? doc.url : '#';
+      const safeUrl = /^\/[^"<>]*$/.test(doc.url) ? BASE_PATH + doc.url : '#';
       return `
       <a href="${safeUrl}" class="tag-post-link text-decoration-none text-reset">
         <div class="blog-post-item py-3 mb-1">
