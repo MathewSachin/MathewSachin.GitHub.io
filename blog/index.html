@@ -27,7 +27,7 @@ title: Blog Posts
         {% else %}
         <li class="page-item disabled">
         {% endif %}
-          <a href="{{ paginator.previous_page_path | relative_url }}" class="page-link">Previous</a>
+          <a href="{{ paginator.previous_page_path | relative_url }}" class="page-link" aria-label="Previous page"><i class="fas fa-chevron-left"></i></a>
         </li>
 
         {% assign current = paginator.page %}
@@ -83,7 +83,7 @@ title: Blog Posts
         {% else %}
         <li class="page-item disabled">
         {% endif %}
-          <a href="{{ paginator.next_page_path | relative_url }}" class="page-link">Next</a>
+          <a href="{{ paginator.next_page_path | relative_url }}" class="page-link" aria-label="Next page"><i class="fas fa-chevron-right"></i></a>
         </li>
       </ul>
     </nav>
