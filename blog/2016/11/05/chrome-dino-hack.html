@@ -418,7 +418,7 @@ document.addEventListener('keydown', function(e) {
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().setSpeed(' + val + ')';
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().setSpeed(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -451,7 +451,7 @@ document.addEventListener('keydown', function(e) {
     if (val > 99999) val = 99999;
     input.value = val;
     code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / 0.025';
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / 0.025; });
   }
   input.addEventListener('input', function() { update(this.value); });
@@ -494,7 +494,7 @@ document.addEventListener('keydown', function(e) {
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')';
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().tRex.setJumpVelocity(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -538,7 +538,7 @@ document.addEventListener('keydown', function(e) {
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.groundYPos = ' + val;
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().tRex.groundYPos = val; });
   }
   slider.addEventListener('input', function() { update(this.value); });
