@@ -19,8 +19,9 @@ title: Blog Posts
     {% endfor %}
 
     <!-- Pagination links -->
+    {% if paginator.total_pages > 1 %}
     <nav class="mt-3">
-      <ul class="pagination justify-content-center">
+      <ul class="pagination justify-content-center flex-wrap">
         {% if paginator.previous_page %}
         <li class="page-item">
         {% else %}
@@ -29,21 +30,53 @@ title: Blog Posts
           <a href="{{ paginator.previous_page_path | relative_url }}" class="page-link">Previous</a>
         </li>
 
-        {% for page in (1..paginator.total_pages) %}
-          {% if page == paginator.page %}
+        {% assign current = paginator.page %}
+        {% assign total = paginator.total_pages %}
+        {% assign delta = 2 %}
+        {% assign range_start = current | minus: delta %}
+        {% assign range_end = current | plus: delta %}
+        {% if range_start < 1 %}
+          {% assign range_start = 1 %}
+        {% endif %}
+        {% if range_end > total %}
+          {% assign range_end = total %}
+        {% endif %}
+
+        {% if range_start > 1 %}
+          <li class="page-item">
+            <a href="{{ '/blog' | relative_url }}" class="page-link">1</a>
+          </li>
+          {% if range_start > 2 %}
+            <li class="page-item disabled"><span class="page-link">…</span></li>
+          {% endif %}
+        {% endif %}
+
+        {% for page in (range_start..range_end) %}
+          {% if page == current %}
             <li class="page-item active">
-              <a href="#" class="page-link">
+              <a href="#" class="page-link">{{ page }}</a>
+            </li>
           {% elsif page == 1 %}
+            <!-- page 1 links to /blog, not /blog/page1/ -->
             <li class="page-item">
-              <a href="{{ '/blog' | relative_url }}" class="page-link">
+              <a href="{{ '/blog' | relative_url }}" class="page-link">{{ page }}</a>
+            </li>
           {% else %}
             <li class="page-item">
-              <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', page | relative_url }}" class="page-link">
-          {% endif %}
-                {{ page }}
-              </a>
+              <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', page | relative_url }}" class="page-link">{{ page }}</a>
             </li>
+          {% endif %}
         {% endfor %}
+
+        {% assign total_minus_1 = total | minus: 1 %}
+        {% if range_end < total %}
+          {% if range_end < total_minus_1 %}
+            <li class="page-item disabled"><span class="page-link">…</span></li>
+          {% endif %}
+          <li class="page-item">
+            <a href="{{ site.paginate_path | replace: '//', '/' | replace: ':num', total | relative_url }}" class="page-link">{{ total }}</a>
+          </li>
+        {% endif %}
 
         {% if paginator.next_page %}
         <li class="page-item">
@@ -54,5 +87,6 @@ title: Blog Posts
         </li>
       </ul>
     </nav>
+    {% endif %}
   {% endif %}
 </div>
