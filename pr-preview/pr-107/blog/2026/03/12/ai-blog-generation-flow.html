@@ -261,15 +261,16 @@ read</em>
 
 <h2 id="the-full-flow">The Full Flow</h2>
 
-<pre><code class="language-mermaid">flowchart TD
-    A[📱 Mobile phone] --&gt; B[GitHub Copilot&lt;br/&gt;AI coding agent]
+<pre class="mermaid">
+flowchart TD
+    A[📱 Mobile phone] --&gt; B[GitHub Copilot<br />AI coding agent]
     B --&gt;|Writes the blog post as a markdown file| C[Pull Request opened automatically]
-    C --&gt; D[You review &amp; approve&lt;br/&gt;on mobile/desktop]
+    C --&gt; D[You review &amp; approve<br />on mobile/desktop]
     D --&gt; E[Merge PR]
     E --&gt; F[GitHub Actions triggers]
     F --&gt; G[GitHub Pages builds &amp; deploys Jekyll site]
     G --&gt; H[Post is live 🎉]
-</code></pre>
+</pre>
 
 <p>No local clone. No terminal. No build step on your machine. The entire pipeline runs in the cloud.</p>
 
