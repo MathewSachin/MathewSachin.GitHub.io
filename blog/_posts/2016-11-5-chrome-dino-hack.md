@@ -156,7 +156,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().setSpeed(' + val + ')';
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().setSpeed(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -189,7 +189,7 @@ Want to jump right into the action with a specific score? You can set the score 
     if (val > 99999) val = 99999;
     input.value = val;
     code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / 0.025';
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / 0.025; });
   }
   input.addEventListener('input', function() { update(this.value); });
@@ -232,7 +232,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')';
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().tRex.setJumpVelocity(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -276,7 +276,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
     slider.value = val;
     input.value = val;
     code.textContent = 'Runner.getInstance().tRex.groundYPos = ' + val;
-    if (window.hljs) hljs.highlightElement(code);
+    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
     dinoApply(function(w) { w.Runner.getInstance().tRex.groundYPos = val; });
   }
   slider.addEventListener('input', function() { update(this.value); });
