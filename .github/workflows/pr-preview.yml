@@ -23,7 +23,8 @@ jobs:
 
       - name: Set baseurl for PR preview
         if: github.event.action != 'closed'
-        run: echo "baseurl: /pr-preview/pr-${{ github.event.pull_request.number }}" >> _config.yml
+        run: |
+          echo "baseurl: /pr-preview/pr-${{ github.event.pull_request.number }}" >> _config.yml
 
       - name: Build Jekyll site
         if: github.event.action != 'closed'
