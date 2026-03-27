@@ -21,7 +21,7 @@ That's the workflow I now use for this blog. Here's how it works — and how you
 
 ## The Full Flow
 
-```mermaid
+<pre class="mermaid">
 flowchart TD
     A[📱 Mobile phone] --> B[GitHub Copilot<br/>AI coding agent]
     B -->|Writes the blog post as a markdown file| C[Pull Request opened automatically]
@@ -30,7 +30,7 @@ flowchart TD
     E --> F[GitHub Actions triggers]
     F --> G[GitHub Pages builds & deploys Jekyll site]
     G --> H[Post is live 🎉]
-```
+</pre>
 
 No local clone. No terminal. No build step on your machine. The entire pipeline runs in the cloud.
 
