@@ -38,7 +38,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="/">Mathew Sachin</a>
+        <a class="navbar-brand" href="{{ '/' | relative_url }}">Mathew Sachin</a>
         <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
             <span class="icon-bar bar-t"></span>
             <span class="icon-bar bar-m"></span>
@@ -48,16 +48,16 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/blog">Blog</a>
+                    <a class="nav-link" href="{{ '/blog' | relative_url }}">Blog</a>
 		</li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/tools">Tools</a>
+                    <a class="nav-link" href="{{ '/tools' | relative_url }}">Tools</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/privacy_policy">Privacy Policy</a>
+                    <a class="nav-link" href="{{ '/privacy_policy' | relative_url }}">Privacy Policy</a>
                 </li>
             </ul>
-            <a class="btn btn-outline-info btn-sm ms-2" href="/search"><i class="fas fa-search me-1"></i>Search</a>
+            <a class="btn btn-outline-info btn-sm ms-2" href="{{ '/search' | relative_url }}"><i class="fas fa-search me-1"></i>Search</a>
         </div>
     </div>
 </nav>

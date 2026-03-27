@@ -4,7 +4,7 @@ title: Archive
 ads: true
 ---
 
-<link rel="stylesheet" href="/styles/blog.css">
+<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 
 {% if site.posts.size == 0 %}
   <p class="text-muted">No posts found.</p>
@@ -13,7 +13,7 @@ ads: true
   {% for year_group in posts_by_year %}
   <h5 class="archive-year mt-3 mb-2">{{ year_group.name }}</h5>
   {% for post in year_group.items %}
-    <a href="{{ post.url }}" class="archive-post-link text-decoration-none text-reset">
+    <a href="{{ post.url | relative_url }}" class="archive-post-link text-decoration-none text-reset">
       <div class="archive-post-item d-flex justify-content-between align-items-center py-2">
         <span class="archive-post-title">{{ post.title }}</span>
         <span class="small text-muted text-nowrap ms-3">{{ post.date | date: "%b %-d" }}</span>

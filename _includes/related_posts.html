@@ -13,7 +13,7 @@
     <div class="row">
         {% for post in related_posts_list %}
         <div class="col-sm-6 col-md-4 mb-3">
-            <a href="{{ post.url }}" class="related-post-link" aria-label="Read {{ post.title }}">
+            <a href="{{ post.url | relative_url }}" class="related-post-link" aria-label="Read {{ post.title }}">
                 <div class="card h-100">
                     <div class="card-body">
                         <p class="card-title mb-1">{{ post.title }}</p>
