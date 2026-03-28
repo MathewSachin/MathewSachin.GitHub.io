@@ -12,59 +12,71 @@ redirect_from:
 ---
 
 ## What's Captura?
-Captura **was** a screen capture (screenshot, recording) app for Windows which could capture screeen, webcam, audio and keystrokes.
+Captura **was** a screen capture (screenshot, recording) app for Windows which could capture screen, webcam, audio and keystrokes.
 It is no longer maintained, but the [source-code is still archived on GitHub](https://github.com/MathewSachin/Captura) with 8k+ stars and 1.5k+ forks.
-I acknowledge the existence of several outstanding bugs in the application, and despite knowing what needs to be addressed, I have decided against providing any further updates.
 
-You can still download it [here](https://github.com/MathewSachin/Captura/releases). Check `Assets` under the version you want and download either the Portable or Setup package.
+## Status / TL;DR
+- **Maintained?** No. Development stopped around 2019.
+- **Download:** Releases are still available [on GitHub](https://github.com/MathewSachin/Captura/releases). In the `Assets` section of the release you want, download either the Portable or Setup package.
+- **Support:** No bug fixes, feature requests, or security patches will be issued.
+- **Safety:** Captura has not received updates in several years. Use it at your own risk, especially on sensitive systems or newer versions of Windows.
 
 ![Captura](/images/captura.png)
 
 ## Some history
-In 2015, while I was a high school student, I embarked on a "toy project" to develop a practical application utilizing the C# programming language that I was keenly interested in at that time.
-This project was the inception of Captura, a screen capture tool that over time grew to be a significant undertaking, and I aspired to create something of value for others.
+In 2015, while I was a high school student, I started Captura as a "toy project" — a practical way to learn C#.
+Over time it grew into something much larger: a full-featured screen capture tool that attracted a community and over 20 language translations.
+As it was not driven by any commercial motive, I kept it completely ad-free, though I later began accepting donations from generous users.
 
-As the project was not driven by any commercial motive, I opted to keep it completely ad-free.
-However, as multiple generous individuals reached out to support me, I began accepting donations.
-The idea of having a community around an open-source project like Captura excited me, and I was inspired by the numerous open-source initiatives in existence.
+## Timeline
+- **2015** — Project started as a personal learning exercise in C#.
+- **2016–2018** — Significant growth; community translations, user donations, and active feature development.
+- **2018–2019** — Burnout set in; unauthorized rebrands appeared on the Windows Store, violating the MIT license attribution requirement.
+- **~2019** — Project archived; development stopped.
+- **2023** — This post written to document the history.
 
-Although I did not receive many contributions on the coding aspect of the project, I would like to express my gratitude to everyone who aided in localizing Captura into over 20 languages.
+## Why I stopped maintaining it
+As the sole contributor, I was struggling with burnout from balancing feature development and bug fixes.
+I also started receiving threatening emails demanding that I remove the source code.
 
-## Why it died?
-As the sole contributor to Captura, I was struggling with burnout from keeping up with feature development and bug fixes.
-Adding to the challenges, I began receiving threatening emails requesting that I remove the source code for the application.
+Around the same time, I discovered that individuals had taken the application, stripped out all license information, and were selling it on platforms including the Windows Store under a different name — without crediting me.
+The MIT license permits selling the application, but it **requires that the original license notice and attribution be retained**.
+Removing that information is a violation of the license terms (see [#405: Illegal Rebrand](https://github.com/MathewSachin/Captura/issues/405)).
 
-Subsequently, I discovered that certain individuals had stolen the application and were selling it on various platforms, including the Windows Store, under a different name without crediting me as the original developer.
-Despite Captura being licensed under the MIT license, which allows for the application to be sold as long as proper attribution is given, these individuals had removed all license information from the application.
+Efforts to get the Microsoft Store to remove these listings took nearly a year and left me feeling overwhelmed.
+Eventually, I shut down the project. The infringing listings were later removed, but by that point I had already moved on.
 
-Efforts to reach out to Microsoft Store proved to be largely unfruitful for nearly a year, and these circumstances left me feeling overwhelmed.
-Eventually, I made the difficult decision to shut down the project completely.
-Following this, the Microsoft Store removed the application listing, but by that point, I had already moved on.
+## Safety & expectations
+Captura has not received any updates since approximately 2019. What this means in practice:
 
-## Lessons learnt
-After working on Captura for a while, I gradually lost interest in C# and decided to explore other programming languages.
-I made a conscious decision to avoid working with C# in the absence of an absolute requirement in any future job opportunities.
-In hindsight, I feel that this was a somewhat childish decision, although I have not encountered a scenario in which I needed to use C# in my current employment.
+- **No bug fixes** — known issues will not be resolved.
+- **No new features** — the application is feature-frozen.
+- **No security patches** — vulnerabilities discovered after 2019 will not be fixed.
+- **Compatibility** — Captura may not work correctly on newer versions of Windows.
 
-Currently, I am working with Kotlin at my job, and I find it to be a language that I love working with more than C#, so I do not miss working with C#.
+If it still meets your needs for light, non-sensitive use, feel free to continue using it.
+For anything involving sensitive content or a production environment, consider a maintained alternative.
 
-Subsequently, I embarked on [another open-source project]({% post_url /blog/2026-3-12-fate-grand-automata-developer-guide %}) that garnered significant success within a niche audience.
-This project was essentially an enhancement of an existing one, with my contribution primarily consisting of major improvements.
-Given that the codebase was partially written by someone else, I had fewer concerns about the possibility of others stealing my code.
+## Alternatives
+A few well-known tools for common use cases:
 
-As of now, due to my full-time job in a major tech company, I have limited time to devote to open-source projects.
-If I do decide to contribute to open-source projects, it would likely be in the form of contributions to existing projects rather than creating something new.
+- **Screen recording:** [OBS Studio](https://obsproject.com/) — free, open-source, Windows / macOS / Linux.
+- **Screenshots & recording:** [ShareX](https://getsharex.com/) — free, open-source, Windows.
+- **GIF capture:** [ScreenToGif](https://www.screentogif.com/) — free, open-source, Windows.
 
-If I were to create another major application, it would likely not be open-source, and I would explore monetization options.
-After having written code for charity in the past, I am looking to explore opportunities that offer remuneration for my work.
+## Lessons learned
+- **Burnout is real in solo open-source projects.** Without a co-maintainer or clear scope boundaries, the maintenance load compounds quickly.
+- **License enforcement is hard.** MIT is permissive, but attribution requirements are routinely ignored, and platforms like the Microsoft Store are slow to act on violations.
+- **Language enthusiasm alone doesn't sustain a project.** My interest in C# faded; had I built Captura in a language I still use today, I might have maintained it longer.
+- **Monetization is worth thinking about upfront.** Writing code for free is rewarding early on, but sustainable projects often need a funding model. After this experience, I would explore monetization options before starting something new.
+- I have since worked on [another open-source project]({% post_url /blog/2026-3-12-fate-grand-automata-developer-guide %}) with a narrower scope and a different community dynamic — and found it far less draining. My current full-time role at a major tech company leaves limited time for open source, so any future contributions would more likely be to existing projects than to new ones I create.
 
 ## References
 [#405: Illegal Rebrand](https://github.com/MathewSachin/Captura/issues/405)
 
 ## Donations
-I have decided to take down Captura's website, and henceforth, I will be moving the donations that were previously accepted on the site.
-I have not accepted any donations since discontinuing work on the project.
-Nonetheless, I would like to extend my gratitude to all the individuals who supported me throughout the journey.
+The table below lists donations received while Captura was active.
+I have not accepted any donations since discontinuing the project, and I am grateful to everyone who supported Captura during its run.
 
 <table class="table table-striped table-bordered shadow">
   {% for donation in site.data.captura_donations %}
