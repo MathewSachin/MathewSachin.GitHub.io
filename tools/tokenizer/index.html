@@ -4,8 +4,8 @@ title: AI Tokenizer &amp; Cost Calculator
 ads: true
 ---
 
-<script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.9.0/dist/cl100k_base.js"
-  integrity="sha384-Bm0YAmlUT5avIZgjZuWy31M++31h6BxWUCHzM9ew2xFyy0zqE6VEMXAYNLmvdMvt"
+<script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.9.0/dist/o200k_base.js"
+  integrity="sha384-c++bciYftVqCv4OqISnwDg8w6AAp4byu4pbHKziESSt788G8QD2kccLmT+ixYwNy"
   crossorigin="anonymous"></script>
 
 <style>
@@ -20,6 +20,7 @@ ads: true
     white-space: pre-wrap;
     word-break: break-all;
     background: #1a1a2e;
+    color: #e0e0e0;
     border-radius: 8px;
     padding: 1rem;
     max-height: 320px;
@@ -53,7 +54,7 @@ ads: true
   <div class="d-flex flex-wrap gap-2 mb-3" id="stats-bar" aria-live="polite" aria-atomic="true">
     <div class="stat-box">
       <div class="fs-5 fw-bold text-info" id="stat-tokens">0</div>
-      <small class="text-muted">tokens</small>
+      <small class="text-muted">GPT-4o tokens</small>
     </div>
     <div class="stat-box">
       <div class="fs-5 fw-bold" id="stat-chars">0</div>
@@ -72,8 +73,8 @@ ads: true
   <!-- Visualization -->
   <div class="mb-1 d-flex align-items-center justify-content-between flex-wrap gap-1">
     <label class="form-label mb-0 text-muted small">
-      Token visualization
-      <small class="ms-1">(each colour change = one token boundary)</small>
+      GPT-4o token visualization
+      <small class="ms-1">(each colour change = one token boundary, o200k_base)</small>
     </label>
     <small id="viz-cap-note" class="text-muted d-none">showing first 5,000 tokens</small>
   </div>
@@ -86,9 +87,13 @@ ads: true
   <!-- Cost estimation -->
   <h5 class="mb-2">API Cost Estimation</h5>
   <p class="text-muted small mb-3">
-    Prices as of Q1 2025. Token count uses GPT-4 (cl100k_base) tokenization — Claude and Gemini
-    have similar token counts for typical text. <em>Est. output cost</em> assumes a reply that is
-    roughly half the length of your input.
+    Prices as of Q1 2025. GPT-4o uses its own <em>o200k_base</em> tokenizer (actual count).
+    Claude and Gemini use proprietary tokenizers — their counts are estimated from benchmarks:
+    Claude tokenizes code and JSON roughly <strong>10% less efficiently</strong> than GPT-4o;
+    Gemini roughly <strong>15% less efficiently</strong>.
+    For plain English prose the difference is minimal; for heavy JSON or non-English text it can
+    be substantial.
+    <em>Est. output cost</em> assumes a reply roughly half the length of your input.
   </p>
 
   <div class="table-responsive">
@@ -96,6 +101,7 @@ ads: true
       <thead class="table-dark">
         <tr>
           <th>Model</th>
+          <th class="text-end">Tokens</th>
           <th class="text-end">Input cost</th>
           <th class="text-end">Est. output cost</th>
           <th style="min-width:130px">Context used</th>
@@ -113,10 +119,12 @@ ads: true
   'use strict';
 
   // ── Models & pricing ──────────────────────────────────────────────────────────
+  // multiplier: how many tokens this model uses relative to GPT-4o (o200k_base)
+  // tokenNote:  shown in table to explain estimate source
   var MODELS = [
-    { name: 'GPT-4o',           inputPer1M:  2.50, outputPer1M:  10.00, context: 128000  },
-    { name: 'Claude 3.5 Sonnet',inputPer1M:  3.00, outputPer1M:  15.00, context: 200000  },
-    { name: 'Gemini 2.0 Flash', inputPer1M:  0.10, outputPer1M:   0.40, context: 1000000 }
+    { name: 'GPT-4o',            inputPer1M:  2.50, outputPer1M:  10.00, context:  128000, multiplier: 1.00, tokenNote: 'o200k_base'        },
+    { name: 'Claude 3.5 Sonnet', inputPer1M:  3.00, outputPer1M:  15.00, context:  200000, multiplier: 1.10, tokenNote: 'est. ×1.10'         },
+    { name: 'Gemini 2.0 Flash',  inputPer1M:  0.10, outputPer1M:   0.40, context: 1000000, multiplier: 1.15, tokenNote: 'est. ×1.15'         }
   ];
 
   var VIZ_CAP = 5000;
@@ -173,7 +181,7 @@ ads: true
   }
 
   // ── Tokenizer ─────────────────────────────────────────────────────────────────
-  var enc       = window.GPTTokenizer_cl100k_base;
+  var enc       = window.GPTTokenizer_o200k_base;
   var encodeText = enc ? enc.encode : null;
   var decodeIds  = enc ? enc.decode : null;
 
@@ -236,16 +244,21 @@ ads: true
     updateCostTable(count);
   }
 
-  function updateCostTable(tokenCount) {
+  function updateCostTable(baseCount) {
     var html = '';
     MODELS.forEach(function (m) {
+      var tokenCount = Math.round(baseCount * m.multiplier);
       var inputCost  = (tokenCount / 1e6) * m.inputPer1M;
       var outputCost = (tokenCount * 0.5 / 1e6) * m.outputPer1M;
+      var isEst      = m.multiplier !== 1.00;
       html +=
         '<tr>' +
           '<td><strong>' + m.name + '</strong><br>' +
           '<small class="text-muted">$' + m.inputPer1M.toFixed(2) +
           '\u202f/\u202f$' + m.outputPer1M.toFixed(2) + ' per 1\u202fM tokens in/out</small></td>' +
+          '<td class="text-end fw-semibold">' +
+            tokenCount.toLocaleString() +
+            '<br><small class="text-muted fw-normal">' + m.tokenNote + '</small></td>' +
           '<td class="text-end fw-semibold">' + formatCost(inputCost) + '</td>' +
           '<td class="text-end">' + formatCost(outputCost) + '</td>' +
           '<td>' + pctBar(tokenCount, m.context) + '</td>' +
@@ -278,9 +291,9 @@ ads: true
 
 <h4>How It Works</h4>
 <p>
-  This tool tokenizes your text using the
-  <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">cl100k_base</a>
-  encoding — the same tokenizer used by GPT-4, GPT-4o, and ChatGPT — entirely inside your browser.
+  This tool tokenizes your text using GPT-4o's
+  <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">o200k_base</a>
+  encoding — entirely inside your browser.
   <strong>Your text is never sent to a server.</strong>
 </p>
 
@@ -294,6 +307,42 @@ ads: true
   The coloured spans in the visualizer above mark individual tokens. Each colour change is a token
   boundary. You'll see that short common words are usually one token, while longer or less common
   words are split into two or more.
+</p>
+
+<h5 class="mt-4">Why token counts differ across models</h5>
+<p>
+  Every provider ships its own tokenizer with a different vocabulary size and merge rules. The same
+  1,000-word document can cost 20–30% more on one API than another, purely because of how each
+  tokenizer encodes it — especially for code, JSON, and non-English text.
+</p>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr><th>Provider</th><th>Tokenizer</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>OpenAI (GPT-4o)</strong></td>
+        <td>tiktoken o200k_base (200K vocab)</td>
+        <td>Industry benchmark. Highly efficient for code, JSON, and non-English text due to its large vocabulary.</td>
+      </tr>
+      <tr>
+        <td><strong>Anthropic (Claude)</strong></td>
+        <td>Proprietary BPE</td>
+        <td>Optimised for natural English. Benchmarks show roughly <strong>10% more tokens</strong> than GPT-4o for mixed code/JSON payloads.</td>
+      </tr>
+      <tr>
+        <td><strong>Google (Gemini)</strong></td>
+        <td>SentencePiece variant</td>
+        <td>Efficient for standard English. Noticeably "greedy" on code, indented JSON, and bracket-heavy markup — roughly <strong>15% more tokens</strong> than GPT-4o for such payloads.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p class="text-muted small">
+  The Claude and Gemini token counts in the estimator above are approximations derived from these
+  benchmarks. Actual counts vary by payload — differences are smallest for plain English prose and
+  largest for heavily indented code or JSON.
 </p>
 
 <h5 class="mt-4">Why token counts matter</h5>
@@ -330,21 +379,16 @@ ads: true
     </tbody>
   </table>
 </div>
-<p class="text-muted small">
-  Note: Claude and Gemini use their own internal tokenizers. Token counts shown here are computed
-  with GPT-4's cl100k_base and serve as a close approximation — actual counts on those APIs may
-  differ by a few percent for typical text.
-</p>
 
 <h5 class="mt-4">Implementation</h5>
 <p>
   Tokenization is powered by
   <a href="https://github.com/niieani/gpt-tokenizer" target="_blank" rel="noopener">gpt-tokenizer</a>,
   a pure JavaScript implementation of OpenAI's Byte-Pair Encoding (BPE) algorithm. The library
-  bundles the full cl100k_base vocabulary and merge rules and produces bit-identical results to the
+  bundles the full o200k_base vocabulary and merge rules and produces bit-identical results to the
   original Python
   <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">tiktoken</a> library.
-  Everything runs synchronously in your browser tab — no WebAssembly download, no server round-trip.
+  Everything runs synchronously in your browser tab — no server round-trip.
 </p>
 
 <h5 class="mt-4">Privacy</h5>
