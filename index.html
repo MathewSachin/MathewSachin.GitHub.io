@@ -34,13 +34,13 @@ ads: true
 <div class="container py-4">
   <div class="card">
     <div class="card-body">
-      <div class="home-cards-section pb-5">
+      <div class="home-cards-section pb-4">
         <div class="row">
           <div class="col-md mb-3">
             <a href="{{ '/Captura/' | relative_url }}" class="home-card-link" aria-label="Captura">
               <div class="card h-100">
                 <div class="card-body">
-                  <p class="card-title mb-1">Captura</p>
+                  <p class="card-title mb-1"><i class="fas fa-video text-info me-2" aria-hidden="true"></i>Captura</p>
                   <p class="card-text">Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.</p>
                 </div>
                 <div class="card-footer">
@@ -53,7 +53,7 @@ ads: true
             <a href="{{ '/FGA' | relative_url }}" class="home-card-link" aria-label="FGA">
               <div class="card h-100">
                 <div class="card-body">
-                  <p class="card-title mb-1">FGA</p>
+                  <p class="card-title mb-1"><i class="fas fa-gamepad text-info me-2" aria-hidden="true"></i>FGA</p>
                   <p class="card-text">Auto-Battle app for F/GO Android.</p>
                 </div>
                 <div class="card-footer">
@@ -66,7 +66,7 @@ ads: true
             <a href="{{ '/blog' | relative_url }}" class="home-card-link" aria-label="Blog">
               <div class="card h-100">
                 <div class="card-body">
-                  <p class="card-title mb-1">Blog</p>
+                  <p class="card-title mb-1"><i class="fas fa-pen-to-square text-info me-2" aria-hidden="true"></i>Blog</p>
                   <p class="card-text">Thoughts, tutorials, and writeups.</p>
                 </div>
                 <div class="card-footer">
@@ -79,7 +79,7 @@ ads: true
             <a href="{{ '/tools' | relative_url }}" class="home-card-link" aria-label="Tools">
               <div class="card h-100">
                 <div class="card-body">
-                  <p class="card-title mb-1">Tools</p>
+                  <p class="card-title mb-1"><i class="fas fa-screwdriver-wrench text-info me-2" aria-hidden="true"></i>Tools</p>
                   <p class="card-text">Handy utilities and converters.</p>
                 </div>
                 <div class="card-footer">
@@ -88,6 +88,37 @@ ads: true
               </div>
             </a>
           </div>
+        </div>
+      </div>
+
+      <div class="home-section-divider mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 fw-semibold">Quick Tools</h5>
+          <a href="{{ '/tools' | relative_url }}" class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-right me-1"></i>All tools</a>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{{ '/tools/timestamp' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-clock me-1"></i>Timestamp</a>
+          <a href="{{ '/tools/base64' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-code me-1"></i>Base64</a>
+          <a href="{{ '/tools/json' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-file-code me-1"></i>JSON</a>
+          <a href="{{ '/tools/cron' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-calendar-days me-1"></i>CRON</a>
+          <a href="{{ '/tools/hash' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-hashtag me-1"></i>Hash</a>
+          <a href="{{ '/tools/scratchpad' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-pencil me-1"></i>Scratchpad</a>
+          <a href="{{ '/tools/imgcompress' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-image me-1"></i>Image Compressor</a>
+          <a href="{{ '/tools/llm' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-robot me-1"></i>LLM Chat</a>
+        </div>
+      </div>
+
+      <div class="home-section-divider mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 fw-semibold">Browse by Topic</h5>
+          <a href="{{ '/blog/tags' | relative_url }}" class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>All tags</a>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          {% for tag in site.tags %}
+            {% if tag[1].size > 1 %}
+              <a href="{{ '/blog/tags' | relative_url }}#{{ tag[0] }}" class="btn btn-sm btn-outline-secondary rounded-pill">{{ tag[0] }}<span class="badge bg-secondary ms-1">{{ tag[1].size }}</span></a>
+            {% endif %}
+          {% endfor %}
         </div>
       </div>
 

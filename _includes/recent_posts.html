@@ -3,7 +3,7 @@
   <a href="{{ '/blog' | relative_url }}" class="btn btn-outline-info btn-sm"><i class="fas fa-book-open me-1"></i>All posts</a>
 </div>
 <div class="posts">
-  {% for post in site.posts limit: 5 %}
+  {% for post in site.posts limit: 8 %}
     {% include post_item.html post=post %}
   {% endfor %}
 </div>
