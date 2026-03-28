@@ -466,8 +466,8 @@ var VOCAB_SRI = 'sha384-0/W+OO5/jtFlfeZbfhRHiHgEgTWkh9Er967ebA7jUcG4Tmw6DTyCIlNv
       fetch(WASM_URL, { integrity: WASM_SRI }).then(function (r) { return r.arrayBuffer(); })
     ]);
 
-    // Compile + instantiate WASM (instantiate accepts arrayBuffer for SRI-verified bytes)
-    var wasmResult = await WebAssembly.instantiate(wasmBuffer, tiktoken);
+    // Compile + instantiate WASM; the import module name must match wasm-bindgen's convention
+    var wasmResult = await WebAssembly.instantiate(wasmBuffer, { './tiktoken_bg.js': tiktoken });
 
     // Wire WASM exports into the JS glue module
     tiktoken.__wbg_set_wasm(wasmResult.instance.exports);
