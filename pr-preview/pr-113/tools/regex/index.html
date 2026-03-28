@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70778035-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70778035-4');
+</script>
+
+
+    <meta charset="UTF-8"/>
+    <title>Regex Visualizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="/pr-preview/pr-113/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-113/styles/styles.css">
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-113/feed.xml" title="Mathew Sachin" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Regex Visualizer | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Regex Visualizer" />
+<meta name="author" content="Mathew Sachin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My Website where I blog using jekyll" />
+<meta property="og:description" content="My Website where I blog using jekyll" />
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-113/tools/regex/" />
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-113/tools/regex/" />
+<meta property="og:site_name" content="Mathew Sachin" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Regex Visualizer" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@Mathew Sachin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"My Website where I blog using jekyll","headline":"Regex Visualizer","url":"https://mathewsachin.github.io/pr-preview/pr-113/tools/regex/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-113/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-113/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-113/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-113/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-113/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="bg-dark">
+    <div class="py-4 bg-info text-white google-anno-skip">
+        <div class="container">
+            <h2>Regex Visualizer</h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card google-anno-skip">
+<div class="card-body">
+
+<div class="row g-4">
+
+  <!-- Input -->
+  <div class="col-12 col-md-6">
+    <label class="form-label fw-semibold" for="rx-pattern">Regular Expression</label>
+    <div class="input-group">
+      <span class="input-group-text font-monospace">/</span>
+      <input type="text" id="rx-pattern" class="form-control font-monospace"
+        placeholder="e.g. ^[a-zA-Z0-9]+$" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <span class="input-group-text font-monospace">/</span>
+      <span class="input-group-text p-1 gap-1 d-flex">
+        <span class="form-check form-check-inline m-0 px-2">
+          <input class="form-check-input" type="checkbox" id="rx-flag-g" checked>
+          <label class="form-check-label font-monospace" for="rx-flag-g" title="Global — find all matches">g</label>
+        </span>
+        <span class="form-check form-check-inline m-0 px-2">
+          <input class="form-check-input" type="checkbox" id="rx-flag-i">
+          <label class="form-check-label font-monospace" for="rx-flag-i" title="Case-insensitive">i</label>
+        </span>
+        <span class="form-check form-check-inline m-0 px-2">
+          <input class="form-check-input" type="checkbox" id="rx-flag-m" checked>
+          <label class="form-check-label font-monospace" for="rx-flag-m" title="Multiline — ^ and $ match line boundaries">m</label>
+        </span>
+        <span class="form-check form-check-inline m-0 px-2">
+          <input class="form-check-input" type="checkbox" id="rx-flag-s">
+          <label class="form-check-label font-monospace" for="rx-flag-s" title="Dot-all — . matches newlines too">s</label>
+        </span>
+      </span>
+    </div>
+    <div id="rx-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div>
+
+    <label class="form-label fw-semibold mt-3" for="rx-test">Test String</label>
+    <textarea id="rx-test" class="form-control font-monospace" rows="5"
+      placeholder="Enter text to test against the regex…"></textarea>
+  </div>
+
+  <!-- Matches -->
+  <div class="col-12 col-md-6">
+    <label class="form-label fw-semibold">Matches</label>
+    <div id="rx-matches" class="font-monospace rx-match-box p-3 rounded border"
+      style="min-height:140px; white-space:pre-wrap; word-break:break-all;"></div>
+    <div id="rx-match-count" class="text-muted small mt-1"></div>
+  </div>
+
+</div>
+
+<!-- Diagram -->
+<div class="mt-4">
+  <label class="form-label fw-semibold">Railroad Diagram</label>
+  <div id="rx-diagram" class="rx-diagram-box p-2 rounded border overflow-auto"
+    style="min-height:80px;"></div>
+</div>
+
+</div>
+</div>
+
+<style>
+.rx-match-box { background: var(--bs-body-bg, #fff); }
+.rx-diagram-box { background: var(--bs-body-bg, #fff); }
+mark.rx-match {
+  background: #ffe06688;
+  border-radius: 2px;
+  padding: 1px 0;
+  color: inherit;
+}
+/* SVG styles injected by JS */
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  var patternInput = document.getElementById('rx-pattern');
+  var flagG = document.getElementById('rx-flag-g');
+  var flagI = document.getElementById('rx-flag-i');
+  var flagM = document.getElementById('rx-flag-m');
+  var flagS = document.getElementById('rx-flag-s');
+  var testInput  = document.getElementById('rx-test');
+  var matchBox   = document.getElementById('rx-matches');
+  var matchCount = document.getElementById('rx-match-count');
+  var diagramBox = document.getElementById('rx-diagram');
+  var errorBox   = document.getElementById('rx-error');
+
+  // ── Regex Parser ─────────────────────────────────────────────────────────
+  // Produces a simple AST.
+
+  function parseRegex(src) {
+    var pos = 0;
+    var capIdx = 0;
+
+    function peek() { return src[pos]; }
+    function next()  { return src[pos++]; }
+    function has()   { return pos < src.length; }
+
+    function parseTop() { return parseAlt(); }
+
+    function parseAlt() {
+      var branches = [parseSeq()];
+      while (has() && peek() === '|') { next(); branches.push(parseSeq()); }
+      return branches.length === 1 ? branches[0] : { t: 'alt', items: branches };
+    }
+
+    function parseSeq() {
+      var items = [];
+      while (has() && peek() !== '|' && peek() !== ')') {
+        items.push(parseQuant());
+      }
+      if (items.length === 0) return { t: 'empty' };
+      if (items.length === 1) return items[0];
+      return { t: 'seq', items: items };
+    }
+
+    function parseQuant() {
+      var item = parseAtom();
+      if (!has()) return item;
+      var c = peek();
+      var mn, mx, lazy;
+      if (c === '*')      { next(); mn = 0; mx = Infinity; }
+      else if (c === '+') { next(); mn = 1; mx = Infinity; }
+      else if (c === '?') { next(); mn = 0; mx = 1; }
+      else if (c === '{') {
+        next();
+        var n1 = ''; while (has() && peek() !== ',' && peek() !== '}') n1 += next();
+        if (peek() === ',') {
+          next();
+          var n2 = ''; while (has() && peek() !== '}') n2 += next();
+          if (has()) next(); // }
+          mn = parseInt(n1) || 0; mx = n2 === '' ? Infinity : (parseInt(n2) || 0);
+        } else {
+          if (has()) next(); // }
+          mn = mx = parseInt(n1) || 0;
+        }
+      } else { return item; }
+      lazy = has() && peek() === '?' ? (next(), true) : false;
+      return { t: 'quant', item: item, mn: mn, mx: mx, lazy: lazy };
+    }
+
+    function parseAtom() {
+      var c = peek();
+
+      if (c === '(') {
+        next();
+        var kind = 'cap', name = null;
+        var idx = null;
+        if (peek() === '?') {
+          next();
+          var n = peek();
+          if (n === ':')  { next(); kind = 'nc'; }
+          else if (n === '=') { next(); kind = 'la'; }
+          else if (n === '!') { next(); kind = 'nla'; }
+          else if (n === '<') {
+            next();
+            if (peek() === '=') { next(); kind = 'lb'; }
+            else if (peek() === '!') { next(); kind = 'nlb'; }
+            else {
+              var nm = ''; while (has() && peek() !== '>') nm += next();
+              if (has()) next(); kind = 'named'; name = nm;
+            }
+          } else if (n === 'P' && src[pos+1] === '<') {
+            next(); next();
+            var nm2 = ''; while (has() && peek() !== '>') nm2 += next();
+            if (has()) next(); kind = 'named'; name = nm2;
+          }
+        }
+        if (kind === 'cap') idx = ++capIdx;
+        var inner = parseAlt();
+        if (has() && peek() === ')') next();
+        return { t: 'grp', item: inner, kind: kind, idx: idx, name: name };
+      }
+
+      if (c === '[') {
+        next();
+        var raw = '[';
+        if (has() && peek() === '^') raw += next();
+        if (has() && peek() === ']') raw += next();
+        while (has() && peek() !== ']') {
+          if (peek() === '\\') { raw += next(); if (has()) raw += next(); }
+          else raw += next();
+        }
+        if (has()) raw += next(); // ]
+        return { t: 'cc', v: raw };
+      }
+
+      if (c === '^') { next(); return { t: 'anc', v: '^' }; }
+      if (c === '$') { next(); return { t: 'anc', v: '$' }; }
+      if (c === '.') { next(); return { t: 'dot' }; }
+
+      if (c === '\\') {
+        next();
+        var esc = next();
+        if ('dDwWsSbBntrfv0'.indexOf(esc) !== -1) return { t: 'esc', v: '\\' + esc };
+        if (esc >= '1' && esc <= '9') {
+          var digits = esc;
+          while (has() && peek() >= '0' && peek() <= '9') digits += next();
+          return { t: 'bref', v: '\\' + digits };
+        }
+        return { t: 'lit', v: esc };
+      }
+
+      next();
+      return { t: 'lit', v: c };
+    }
+
+    return parseTop();
+  }
+
+  // ── SVG Railroad Diagram ──────────────────────────────────────────────────
+  // Each node is laid out to produce { w, h, mid } (mid = Y of rail from top).
+  // Then rendered at an absolute (x, y) position.
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var RH   = 28;  // box height for terminals
+  var PX   = 14;  // horizontal padding inside terminal
+  var CW   = 7.5; // approx char width (px) for layout of monospace terminal labels
+  var G    = 14;  // gap between sequence items
+  var SKP  = 18;  // height of skip arc above optional node
+  var LP   = 18;  // height of loop arc below repeat node
+  var SIDE = 28;  // lateral clearance for choice fork lines
+  var VGAP = 12;  // vertical gap between choice branches
+
+  function tw(s) { return Math.ceil(s.length * CW) + PX * 2; }
+
+  // ── Layout ────────────────────────────────────────────────────────────────
+
+  function layout(node) {
+    switch (node.t) {
+      case 'lit':   return lTerminal(escLabel(node.v), 'term');
+      case 'cc':    return lTerminal(node.v, 'cc');
+      case 'dot':   return lTerminal('any char', 'term');
+      case 'anc':   return lAnchor(node.v);
+      case 'esc':   return lTerminal(node.v, 'esc');
+      case 'bref':  return lTerminal(node.v, 'esc');
+      case 'empty': return { w: G * 2, h: RH, mid: RH / 2 };
+      case 'seq':   return lSeq(node.items);
+      case 'alt':   return lAlt(node.items);
+      case 'grp':   return lGrp(node);
+      case 'quant': return lQuant(node);
+      default:      return lTerminal('?', 'term');
+    }
+  }
+
+  function lTerminal(text, cls) {
+    return { w: tw(text), h: RH, mid: RH / 2, text: text, cls: cls };
+  }
+
+  function lAnchor(v) {
+    var label = v === '^' ? 'start' : v === '$' ? 'end' : v === '\\b' ? 'word boundary' : 'non-word boundary';
+    return { w: tw(label) + 4, h: RH, mid: RH / 2, anc: true, label: label };
+  }
+
+  function lSeq(items) {
+    var ls = items.map(layout);
+    var maxMid = Math.max.apply(null, ls.map(function (l) { return l.mid; }));
+    var maxBot = Math.max.apply(null, ls.map(function (l) { return l.h - l.mid; }));
+    var w = ls.reduce(function (a, l) { return a + l.w; }, 0) + G * (ls.length - 1);
+    return { w: w, h: maxMid + maxBot, mid: maxMid, seq: ls };
+  }
+
+  function lAlt(items) {
+    var ls = items.map(layout);
+    var maxW = Math.max.apply(null, ls.map(function (l) { return l.w; }));
+    var curY = 0;
+    ls.forEach(function (l, i) {
+      l._altY = curY;
+      curY += l.h + (i < ls.length - 1 ? VGAP : 0);
+    });
+    return { w: maxW + SIDE * 2, h: curY, mid: ls[0].mid, alt: ls, maxW: maxW };
+  }
+
+  function lGrp(node) {
+    var inner = layout(node.item);
+    var label = grpLabel(node);
+    var labW  = Math.ceil(label.length * (CW - 1)) + 10;
+    var w = Math.max(inner.w, labW) + PX * 2;
+    var TOP = 18; // label tab height
+    var h = inner.h + PX * 2 + TOP;
+    return { w: w, h: h, mid: TOP + PX + inner.mid, grp: inner, label: label };
+  }
+
+  function lQuant(node) {
+    var inner = layout(node.item);
+    var mn = node.mn, mx = node.mx, lazy = node.lazy;
+    var suffix = lazy ? ' (lazy)' : '';
+    var label = '';
+    if (mn === 0 && mx === 1)        label = 'optional' + suffix;
+    else if (mn === 0 && mx === Infinity) label = '0 or more' + suffix;
+    else if (mn === 1 && mx === Infinity) label = '1 or more' + suffix;
+    else if (mn === mx)               label = 'exactly ' + mn + suffix;
+    else if (mx === Infinity)         label = mn + ' or more' + suffix;
+    else                              label = mn + '\u2013' + mx + suffix;
+
+    var iw = inner.w + G * 2; // wider than inner to accommodate rails
+
+    if (mn === 0 && mx === 1) {
+      // Optional: skip arc above
+      return { w: iw, h: inner.h + SKP, mid: inner.mid + SKP, opt: inner, label: label };
+    }
+    if (mn === 0 && mx === Infinity) {
+      // ZeroOrMore: skip above + loop below
+      return { w: iw, h: inner.h + SKP + LP, mid: inner.mid + SKP, zom: inner, label: label };
+    }
+    if (mn === 1 && mx === Infinity) {
+      // OneOrMore: loop below only
+      return { w: iw, h: inner.h + LP, mid: inner.mid, oom: inner, label: label };
+    }
+    // Fixed / ranged repeat: box with label above
+    return { w: iw, h: inner.h + 16, mid: inner.mid + 16, rep: inner, label: label };
+  }
+
+  function grpLabel(node) {
+    if (node.kind === 'cap')   return 'Group ' + node.idx;
+    if (node.kind === 'nc')    return 'non-capturing';
+    if (node.kind === 'la')    return 'lookahead';
+    if (node.kind === 'nla')   return 'negative lookahead';
+    if (node.kind === 'lb')    return 'lookbehind';
+    if (node.kind === 'nlb')   return 'negative lookbehind';
+    if (node.kind === 'named') return '\u201c' + node.name + '\u201d';
+    return 'group';
+  }
+
+  function escLabel(c) {
+    // Make control / special characters readable
+    if (c === '\n') return '\\n';
+    if (c === '\t') return '\\t';
+    if (c === '\r') return '\\r';
+    return c;
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+
+  function el(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    return e;
+  }
+
+  function line(x1, y1, x2, y2) {
+    return el('line', { x1: x1, y1: y1, x2: x2, y2: y2, 'class': 'rxl' });
+  }
+
+  function txt(s, x, y, cls) {
+    var t = el('text', { x: x, y: y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'class': cls || 'rxlabel' });
+    t.textContent = s;
+    return t;
+  }
+
+  function render(lay, x, y, svg) {
+    if      (lay.seq)   renderSeq(lay, x, y, svg);
+    else if (lay.alt)   renderAlt(lay, x, y, svg);
+    else if (lay.grp)   renderGrp(lay, x, y, svg);
+    else if (lay.opt)   renderOpt(lay, x, y, svg);
+    else if (lay.zom)   renderZOM(lay, x, y, svg);
+    else if (lay.oom)   renderOOM(lay, x, y, svg);
+    else if (lay.rep)   renderRep(lay, x, y, svg);
+    else if (lay.anc)   renderAnc(lay, x, y, svg);
+    else if (lay.text !== undefined) renderTerm(lay, x, y, svg);
+    // empty: nothing
+  }
+
+  function renderTerm(lay, x, y, svg) {
+    var ry = y + lay.mid;
+    var bh = RH; var by = ry - bh / 2;
+    var r = lay.cls === 'cc' ? 4 : (lay.cls === 'esc' ? 4 : 12);
+    var cls = 'rx-box rx-' + lay.cls;
+    svg.appendChild(el('rect', { x: x, y: by, width: lay.w, height: bh, rx: r, ry: r, 'class': cls }));
+    svg.appendChild(txt(lay.text, x + lay.w / 2, ry));
+  }
+
+  function renderAnc(lay, x, y, svg) {
+    var ry = y + lay.mid;
+    var bh = RH - 4; var by = ry - bh / 2;
+    svg.appendChild(el('rect', { x: x + 2, y: by, width: lay.w - 4, height: bh, rx: 2, ry: 2, 'class': 'rx-box rx-anc' }));
+    svg.appendChild(txt(lay.label, x + lay.w / 2, ry, 'rxlabel-sm'));
+  }
+
+  function renderSeq(lay, x, y, svg) {
+    var railY = y + lay.mid;
+    var cx = x;
+    lay.seq.forEach(function (item, i) {
+      var iy = y + lay.mid - item.mid;
+      render(item, cx, iy, svg);
+      if (i < lay.seq.length - 1) {
+        svg.appendChild(line(cx + item.w, railY, cx + item.w + G, railY));
+      }
+      cx += item.w + G;
+    });
+  }
+
+  function renderAlt(lay, x, y, svg) {
+    var railY = y + lay.mid;
+    var lx = x + SIDE;
+    var rx = x + lay.w - SIDE;
+
+    lay.alt.forEach(function (item, i) {
+      var iy = y + item._altY;
+      var iry = iy + item.mid; // item rail Y (absolute)
+      var ix = lx + (lay.maxW - item.w) / 2;
+
+      render(item, ix, iy, svg);
+      svg.appendChild(line(lx, iry, ix, iry));
+      svg.appendChild(line(ix + item.w, iry, rx, iry));
+
+      if (i === 0) {
+        // Main rail straight through
+        svg.appendChild(line(x, railY, lx, railY));
+        svg.appendChild(line(rx, railY, x + lay.w, railY));
+      }
+
+      if (i > 0) {
+        // Curved entry: from (x, railY) curve down to (lx, iry)
+        svg.appendChild(arc(x, railY, lx, iry, 'in'));
+        svg.appendChild(arc(rx, iry, x + lay.w, railY, 'out'));
+      }
+    });
+
+    // Vertical connecting lines between branch curves (left side)
+    if (lay.alt.length > 1) {
+      var firstBotY = y + lay.alt[0]._altY + lay.alt[0].h;
+      var lastBranchY = y + lay.alt[lay.alt.length - 1]._altY + lay.alt[lay.alt.length - 1].mid;
+      if (lastBranchY > railY + 1) {
+        svg.appendChild(line(x, railY, x, lastBranchY));
+        svg.appendChild(line(x + lay.w, railY, x + lay.w, lastBranchY));
+      }
+    }
+  }
+
+  function arc(x1, y1, x2, y2, dir) {
+    // Smooth L-shaped arc from (x1,y1) to (x2,y2)
+    var d;
+    if (dir === 'in') {
+      // Go right and down: elbow at (x1, y2) with control point
+      d = 'M' + x1 + ' ' + y1 + ' Q' + x1 + ' ' + y2 + ' ' + x2 + ' ' + y2;
+    } else {
+      // Go right and up
+      d = 'M' + x1 + ' ' + y1 + ' Q' + x2 + ' ' + y1 + ' ' + x2 + ' ' + y2;
+    }
+    return el('path', { d: d, 'class': 'rxl' });
+  }
+
+  function renderGrp(lay, x, y, svg) {
+    var TOP = 18;
+    var railY = y + lay.mid;
+    var innerX = x + PX;
+    var innerY = y + TOP + PX;
+
+    // Border
+    svg.appendChild(el('rect', { x: x, y: y + TOP, width: lay.w, height: lay.h - TOP,
+      rx: 5, ry: 5, 'class': 'rx-grp' }));
+
+    // Label tab
+    if (lay.label) {
+      var labW = Math.ceil(lay.label.length * (CW - 1)) + 10;
+      svg.appendChild(el('rect', { x: x + 8, y: y, width: labW, height: 18,
+        rx: 3, ry: 3, 'class': 'rx-grp-tab' }));
+      svg.appendChild(txt(lay.label, x + 8 + labW / 2, y + 9, 'rxlabel-sm'));
+    }
+
+    svg.appendChild(line(x, railY, innerX, railY));
+    svg.appendChild(line(innerX + lay.grp.w, railY, x + lay.w, railY));
+    render(lay.grp, innerX, innerY, svg);
+  }
+
+  function renderOpt(lay, x, y, svg) {
+    var railY = y + lay.mid;
+    var innerX = x + G;
+    var innerY = y + SKP;
+
+    render(lay.opt, innerX, innerY, svg);
+    svg.appendChild(line(x, railY, innerX, railY));
+    svg.appendChild(line(innerX + lay.opt.w, railY, x + lay.w, railY));
+
+    // Skip arc above
+    var sy = y + 4;
+    var path = 'M' + x + ' ' + railY +
+      ' Q' + x + ' ' + sy + ' ' + (x + G) + ' ' + sy +
+      ' L' + (x + lay.w - G) + ' ' + sy +
+      ' Q' + (x + lay.w) + ' ' + sy + ' ' + (x + lay.w) + ' ' + railY;
+    svg.appendChild(el('path', { d: path, 'class': 'rxl-alt' }));
+    if (lay.label) svg.appendChild(txt(lay.label, x + lay.w / 2, sy, 'rxlabel-alt'));
+  }
+
+  function renderZOM(lay, x, y, svg) {
+    var railY = y + lay.mid;
+    var innerX = x + G;
+    var innerY = y + SKP;
+    var innerRailY = innerY + lay.zom.mid;
+
+    render(lay.zom, innerX, innerY, svg);
+    svg.appendChild(line(x, railY, innerX, railY));
+    svg.appendChild(line(innerX + lay.zom.w, railY, x + lay.w, railY));
+
+    // Skip arc above
+    var sy = y + 4;
+    var skipPath = 'M' + x + ' ' + railY +
+      ' Q' + x + ' ' + sy + ' ' + (x + G) + ' ' + sy +
+      ' L' + (x + lay.w - G) + ' ' + sy +
+      ' Q' + (x + lay.w) + ' ' + sy + ' ' + (x + lay.w) + ' ' + railY;
+    svg.appendChild(el('path', { d: skipPath, 'class': 'rxl-alt' }));
+
+    // Loop arc below
+    var ly2 = innerY + lay.zom.h + LP - 4;
+    var loopPath = 'M' + (innerX + lay.zom.w) + ' ' + innerRailY +
+      ' Q' + (innerX + lay.zom.w) + ' ' + ly2 + ' ' + (innerX + lay.zom.w - G) + ' ' + ly2 +
+      ' L' + (innerX + G) + ' ' + ly2 +
+      ' Q' + innerX + ' ' + ly2 + ' ' + innerX + ' ' + innerRailY;
+    svg.appendChild(el('path', { d: loopPath, 'class': 'rxl-loop' }));
+    if (lay.label) svg.appendChild(txt(lay.label, x + lay.w / 2, ly2, 'rxlabel-alt'));
+  }
+
+  function renderOOM(lay, x, y, svg) {
+    var railY = y + lay.mid;
+    var innerX = x + G;
+    var innerRailY = railY;
+
+    render(lay.oom, innerX, y, svg);
+    svg.appendChild(line(x, railY, innerX, railY));
+    svg.appendChild(line(innerX + lay.oom.w, railY, x + lay.w, railY));
+
+    // Loop arc below
+    var ly2 = y + lay.oom.h + LP - 4;
+    var loopPath = 'M' + (innerX + lay.oom.w) + ' ' + innerRailY +
+      ' Q' + (innerX + lay.oom.w) + ' ' + ly2 + ' ' + (innerX + lay.oom.w - G) + ' ' + ly2 +
+      ' L' + (innerX + G) + ' ' + ly2 +
+      ' Q' + innerX + ' ' + ly2 + ' ' + innerX + ' ' + innerRailY;
+    svg.appendChild(el('path', { d: loopPath, 'class': 'rxl-loop' }));
+    if (lay.label) svg.appendChild(txt(lay.label, x + lay.w / 2, ly2, 'rxlabel-alt'));
+  }
+
+  function renderRep(lay, x, y, svg) {
+    var railY = y + lay.mid;
+    var innerX = x + G;
+    var innerY = y + 16;
+
+    render(lay.rep, innerX, innerY, svg);
+    svg.appendChild(line(x, railY, innerX, railY));
+    svg.appendChild(line(innerX + lay.rep.w, railY, x + lay.w, railY));
+    if (lay.label) svg.appendChild(txt(lay.label, x + lay.w / 2, y + 7, 'rxlabel-alt'));
+  }
+
+  // ── Build full diagram SVG ─────────────────────────────────────────────────
+
+  function buildDiagram(pattern) {
+    var ast = parseRegex(pattern);
+    var lay = layout(ast);
+
+    var M = 24;    // margin
+    var TW = 16;   // terminus width
+    var TH = 12;   // terminus radius area
+
+    var totalW = lay.w + M * 2 + TW * 2 + G * 2;
+    var totalH = lay.h + M * 2;
+
+    var svg = el('svg', {
+      width: totalW, height: totalH,
+      viewBox: '0 0 ' + totalW + ' ' + totalH,
+      'class': 'rx-svg', 'aria-label': 'Railroad diagram for: ' + pattern
+    });
+
+    // Inject SVG styles
+    var style = document.createElementNS(NS, 'style');
+    style.textContent = [
+      '.rxl { stroke: var(--rxs, #555); stroke-width: 1.5; fill: none; }',
+      '.rxl-alt { stroke: var(--rxs, #555); stroke-width: 1.2; fill: none; stroke-dasharray: 4 2; }',
+      '.rxl-loop { stroke: #0d6efd; stroke-width: 1.2; fill: none; stroke-dasharray: 4 2; }',
+      '.rxlabel { font: 12px monospace; fill: var(--rxlf, #212529); }',
+      '.rxlabel-sm { font: 10px sans-serif; fill: var(--rxlf, #212529); }',
+      '.rxlabel-alt { font: 10px sans-serif; fill: #888; }',
+      '.rx-box { stroke: var(--rxs, #555); stroke-width: 1; }',
+      '.rx-term { fill: #e8f4fd; stroke: #4a90d9; }',
+      '.rx-cc   { fill: #fef3e2; stroke: #e8a020; }',
+      '.rx-esc  { fill: #eaf7ea; stroke: #3a8a3a; }',
+      '.rx-anc  { fill: #f3e8fd; stroke: #8b4ac0; }',
+      '.rx-grp  { fill: none; stroke: #aaa; stroke-width: 1.5; stroke-dasharray: 6 3; }',
+      '.rx-grp-tab { fill: #f8f9fa; stroke: #aaa; stroke-width: 1; }',
+      '.rx-term-dot { fill: var(--rxs, #555); }',
+      '.rx-term-dbl { fill: none; stroke: var(--rxs, #555); stroke-width: 1.5; }'
+    ].join('\n');
+    svg.appendChild(style);
+
+    var railY = M + lay.mid;
+    var cx = M + TW + G;
+
+    // Start terminus (filled circle)
+    svg.appendChild(el('circle', { cx: M + TW / 2, cy: railY, r: 6, 'class': 'rx-term-dot' }));
+    svg.appendChild(line(M + TW, railY, cx, railY));
+
+    render(lay, cx, M, svg);
+
+    // End terminus (double circle)
+    var ex = cx + lay.w + G;
+    svg.appendChild(line(cx + lay.w, railY, ex, railY));
+    svg.appendChild(el('circle', { cx: ex + TW / 2, cy: railY, r: 6, 'class': 'rx-term-dot' }));
+    svg.appendChild(el('circle', { cx: ex + TW / 2, cy: railY, r: 10, 'class': 'rx-term-dbl' }));
+
+    return svg;
+  }
+
+  // ── Match Highlighting ─────────────────────────────────────────────────────
+
+  function getFlags() {
+    var f = '';
+    if (flagG.checked) f += 'g';
+    if (flagI.checked) f += 'i';
+    if (flagM.checked) f += 'm';
+    if (flagS.checked) f += 's';
+    return f;
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function runMatching() {
+    var pat  = patternInput.value;
+    var test = testInput.value;
+    errorBox.classList.add('d-none');
+
+    if (!pat) {
+      matchBox.innerHTML = escHtml(test) || '<span class="text-muted">Enter a pattern above…</span>';
+      matchCount.textContent = '';
+      return;
+    }
+
+    var flags = getFlags();
+    var gFlags = flags.indexOf('g') === -1 ? flags + 'g' : flags;
+
+    try {
+      var re = new RegExp(pat, gFlags);
+      var matches = Array.from(test.matchAll(re));
+
+      if (matches.length === 0) {
+        matchBox.innerHTML = escHtml(test) || '<span class="text-muted">(empty string)</span>';
+        matchCount.textContent = 'No matches found.';
+        return;
+      }
+
+      var html = '';
+      var last = 0;
+      matches.forEach(function (m) {
+        html += escHtml(test.slice(last, m.index));
+        html += '<mark class="rx-match">' + escHtml(m[0]) + '</mark>';
+        // matchAll already advances lastIndex by 1 for zero-length matches, so
+        // using m[0].length (which is 0) here is safe — the remaining text is
+        // still emitted correctly in subsequent iterations and the final slice.
+        last = m.index + m[0].length;
+      });
+      html += escHtml(test.slice(last));
+      matchBox.innerHTML = html;
+      matchCount.textContent = matches.length + ' match' + (matches.length !== 1 ? 'es' : '') + ' found.';
+    } catch (e) {
+      matchBox.innerHTML = '';
+      matchCount.textContent = '';
+      errorBox.textContent = e.message;
+      errorBox.classList.remove('d-none');
+    }
+  }
+
+  function runDiagram() {
+    var pat = patternInput.value;
+    diagramBox.innerHTML = '';
+
+    if (!pat) {
+      diagramBox.innerHTML = '<span class="text-muted small">Enter a pattern to see its railroad diagram.</span>';
+      return;
+    }
+
+    try {
+      new RegExp(pat); // validate
+      var svg = buildDiagram(pat);
+      diagramBox.appendChild(svg);
+    } catch (e) {
+      diagramBox.innerHTML = '<span class="text-muted small">Cannot visualize: ' + escHtml(e.message) + '</span>';
+    }
+  }
+
+  function runAll() { runMatching(); runDiagram(); }
+
+  patternInput.addEventListener('input', runAll);
+  testInput.addEventListener('input', runMatching);
+  [flagG, flagI, flagM, flagS].forEach(function (cb) { cb.addEventListener('change', runAll); });
+
+  // Default example
+  patternInput.value = '^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$';
+  testInput.value = 'hello@example.com\nnot-an-email\nuser@sub.domain.org\n@missing-user.com\nno-at-sign';
+  runAll();
+}());
+</script>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+<p>
+  This tool tests a regular expression against sample text and draws its logic as a
+  <strong>railroad diagram</strong> — entirely inside your browser.
+  <strong>No data is sent to a server.</strong>
+</p>
+
+<h5 class="mt-4">What is a Railroad Diagram?</h5>
+<p>
+  A railroad diagram (also called a <em>syntax diagram</em>) is a visual representation of a
+  formal grammar. Each token in the expression is drawn as a box, and the arrows between
+  boxes show how text flows through the pattern — like trains on tracks.
+  It makes alternations (choices), quantifiers (loops), and groups immediately obvious
+  at a glance, which is why they are the standard way to document grammars in
+  programming language specifications.
+</p>
+
+<h5 class="mt-4">Reading the Diagram</h5>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr><th>Visual</th><th>What it means</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span style="display:inline-block;background:#e8f4fd;border:1px solid #4a90d9;border-radius:10px;padding:1px 10px;font-family:monospace;font-size:13px;">abc</span></td>
+        <td>Literal character or text that must match exactly</td>
+      </tr>
+      <tr>
+        <td><span style="display:inline-block;background:#fef3e2;border:1px solid #e8a020;border-radius:4px;padding:1px 10px;font-family:monospace;font-size:13px;">[a-z]</span></td>
+        <td>Character class — matches any one character in the set</td>
+      </tr>
+      <tr>
+        <td><span style="display:inline-block;background:#eaf7ea;border:1px solid #3a8a3a;border-radius:4px;padding:1px 10px;font-family:monospace;font-size:13px;">\d</span></td>
+        <td>Predefined escape sequence (digit, word char, whitespace, etc.)</td>
+      </tr>
+      <tr>
+        <td><span style="display:inline-block;background:#f3e8fd;border:1px solid #8b4ac0;border-radius:2px;padding:1px 10px;font-size:13px;">start / end</span></td>
+        <td>Anchor — asserts position (start/end of string or line, word boundary)</td>
+      </tr>
+      <tr>
+        <td>Dashed box</td>
+        <td>Capturing or non-capturing group — bundles part of the pattern</td>
+      </tr>
+      <tr>
+        <td>Arc above a box</td>
+        <td>Optional path — the element can be skipped (quantifier <code>?</code>)</td>
+      </tr>
+      <tr>
+        <td>Blue arc below a box</td>
+        <td>Repeat loop — the element can repeat (<code>+</code>, <code>*</code>, <code>{n,m}</code>)</td>
+      </tr>
+      <tr>
+        <td>Branching paths</td>
+        <td>Alternation — matches any one of the listed branches (<code>|</code>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="mt-4">Flags</h5>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr><th>Flag</th><th>Name</th><th>Effect</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>g</code></td><td>Global</td><td>Find all matches rather than stopping after the first.</td></tr>
+      <tr><td><code>i</code></td><td>Case-insensitive</td><td>Treat uppercase and lowercase as equivalent.</td></tr>
+      <tr><td><code>m</code></td><td>Multiline</td><td><code>^</code> and <code>$</code> match the start/end of each <em>line</em>, not just the whole string.</td></tr>
+      <tr><td><code>s</code></td><td>Dot-all</td><td>The <code>.</code> metacharacter matches newline characters too.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="mt-4">Implementation Details</h5>
+<p>
+  The diagram is generated by a hand-written recursive-descent parser that converts the
+  regex string into an abstract syntax tree (AST), which is then walked to produce an SVG
+  railroad diagram. No third-party libraries are used — everything runs in the browser.
+</p>
+<p>
+  Match highlighting uses
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll" target="_blank" rel="noopener"><code>String.prototype.matchAll()</code></a>
+  with the <code>g</code> flag to find every match, then builds an HTML string that wraps
+  each matched span in a <code>&lt;mark&gt;</code> element.
+</p>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  All processing happens locally in your browser tab. Your patterns and test strings never
+  leave your device.
+</p>
+
+<br><hr><br>
+
+<script src="https://giscus.app/client.js"
+        data-repo="MathewSachin/MathewSachin.GitHub.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw=="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOAulkj84C4PRo"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</div>
+</div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="sticky-top" style="top: 10px">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js" integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="/pr-preview/pr-113/scripts/formatting.js"></script>
+
+    
+
+    
+  </body>
+</html>
