@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="480" height="280">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#0e2a0e"/>
+      <stop offset="100%" stop-color="#080808"/>
+    </radialGradient>
+    <radialGradient id="xboxGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3a8c3a"/>
+      <stop offset="100%" stop-color="#1a5c1a"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark dramatic background -->
+  <rect width="480" height="280" fill="url(#bgGlow)"/>
+
+  <!-- Subtle circuit lines in background -->
+  <line x1="0" y1="60" x2="120" y2="60" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="120" y1="60" x2="120" y2="90" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="360" y1="60" x2="480" y2="60" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="360" y1="60" x2="360" y2="90" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="0" y1="220" x2="80" y2="220" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="80" y1="220" x2="80" y2="200" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="400" y1="220" x2="480" y2="220" stroke="#1a3a1a" stroke-width="1"/>
+  <line x1="400" y1="220" x2="400" y2="200" stroke="#1a3a1a" stroke-width="1"/>
+
+  <!-- Xbox One console body - cuboid effect -->
+  <!-- Top face (slight 3D) -->
+  <polygon points="120,80 360,80 370,95 130,95" fill="#1a1a1a"/>
+  <!-- Main face -->
+  <rect x="120" y="95" width="240" height="130" rx="4" fill="#111111" stroke="#2a2a2a" stroke-width="1.5"/>
+  <!-- Side shadow -->
+  <polygon points="360,95 370,95 370,225 360,225" fill="#0a0a0a"/>
+
+  <!-- Xbox disc drive slot -->
+  <rect x="145" y="145" width="3" height="60" rx="1.5" fill="#222"/>
+  <rect x="148" y="160" width="60" height="3" rx="1.5" fill="#222"/>
+
+  <!-- Power button area - right side -->
+  <rect x="310" y="140" width="35" height="50" rx="4" fill="#0d0d0d"/>
+
+  <!-- Xbox circular logo (center of console) -->
+  <circle cx="240" cy="145" r="32" fill="url(#xboxGlow)" filter="url(#glow)"/>
+  <circle cx="240" cy="145" r="28" fill="#1e6b1e"/>
+  <circle cx="240" cy="145" r="24" fill="#165c16"/>
+  <!-- X shape -->
+  <line x1="226" y1="131" x2="254" y2="159" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <line x1="254" y1="131" x2="226" y2="159" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Lock icon on console - left side -->
+  <rect x="168" y="113" width="22" height="18" rx="3" fill="#333"/>
+  <path d="M172,113 L172,107 Q179,100 186,107 L186,113" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="179" cy="120" r="3" fill="#888"/>
+  <line x1="179" y1="120" x2="179" y2="124" stroke="#888" stroke-width="2"/>
+
+  <!-- Lightning bolt breaking lock -->
+  <polygon points="193,98 185,112 191,112 183,128 197,110 190,110" fill="#ffcc00" filter="url(#glow)"/>
+  <!-- Second lightning bolt for effect -->
+  <polygon points="210,94 203,106 208,106 201,120 213,103 207,103" fill="#ff9900" opacity="0.7"/>
+
+  <!-- Electric probe/wire -->
+  <line x1="155" y1="75" x2="172" y2="108" stroke="#ffcc00" stroke-width="2" stroke-dasharray="4,2"/>
+  <circle cx="155" cy="75" r="5" fill="#ffcc00"/>
+  <line x1="145" y1="65" x2="155" y2="75" stroke="#ffcc00" stroke-width="3" stroke-linecap="round"/>
+  <!-- Zigzag electricity -->
+  <polyline points="130,55 137,62 130,68 137,75 145,65" fill="none" stroke="#ffcc00" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Bottom text area -->
+  <rect x="100" y="238" width="280" height="30" rx="6" fill="#111" stroke="#1a3a1a" stroke-width="1"/>
+
+  <!-- "12 years" crossed out -->
+  <text x="185" y="257" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#666">12 Years</text>
+  <line x1="148" y1="255" x2="222" y2="255" stroke="#ff4444" stroke-width="2"/>
+
+  <text x="215" y="257" font-family="Arial, sans-serif" font-size="11" fill="#555">→</text>
+
+  <!-- "Bliss 2026" text -->
+  <text x="315" y="257" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#52c852" filter="url(#glow)">Bliss 2026</text>
+
+  <!-- Top caption -->
+  <text x="240" y="35" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#52c852" filter="url(#glow)">The "Unhackable" Console</text>
+  <text x="240" y="52" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">Hardware voltage glitch · March 2026</text>
+</svg>
