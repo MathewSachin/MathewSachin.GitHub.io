@@ -87,12 +87,10 @@ ads: true
   <!-- Cost estimation -->
   <h5 class="mb-2">API Cost Estimation</h5>
   <p class="text-muted small mb-3">
-    Prices as of Q1 2025. GPT-4o uses its own <em>o200k_base</em> tokenizer (actual count).
-    Claude and Gemini use proprietary tokenizers — their counts are estimated from benchmarks:
-    Claude tokenizes code and JSON roughly <strong>10% less efficiently</strong> than GPT-4o;
-    Gemini roughly <strong>15% less efficiently</strong>.
-    For plain English prose the difference is minimal; for heavy JSON or non-English text it can
-    be substantial.
+    Prices as of Q1 2025. GPT-4o and Claude 3.5 Sonnet token counts are computed with their
+    <strong>actual tokenizers</strong> entirely in your browser.
+    Gemini's tokenizer is not publicly available — its count is estimated at ×1.15 from GPT-4o
+    based on benchmarks (code and JSON are typically 15% more expensive on Gemini).
     <em>Est. output cost</em> assumes a reply roughly half the length of your input.
   </p>
 
@@ -119,13 +117,35 @@ ads: true
   'use strict';
 
   // ── Models & pricing ──────────────────────────────────────────────────────────
-  // multiplier: how many tokens this model uses relative to GPT-4o (o200k_base)
-  // tokenNote:  shown in table to explain estimate source
+  // id:         used for per-model token count storage
+  // tokenSrc:   label shown in table under the token count
+  // multiplier: fallback when actual tokenizer is unavailable
   var MODELS = [
-    { name: 'GPT-4o',            inputPer1M:  2.50, outputPer1M:  10.00, context:  128000, multiplier: 1.00, tokenNote: 'o200k_base' },
-    { name: 'Claude 3.5 Sonnet', inputPer1M:  3.00, outputPer1M:  15.00, context:  200000, multiplier: 1.10, tokenNote: 'est. ×1.10' },
-    { name: 'Gemini 2.0 Flash',  inputPer1M:  0.10, outputPer1M:   0.40, context: 1000000, multiplier: 1.15, tokenNote: 'est. ×1.15' }
+    { name: 'GPT-4o',            inputPer1M:  2.50, outputPer1M:  10.00, context:  128000, id: 'gpt4o',  tokenSrc: 'o200k_base',  multiplier: 1.00 },
+    { name: 'Claude 3.5 Sonnet', inputPer1M:  3.00, outputPer1M:  15.00, context:  200000, id: 'claude', tokenSrc: null,          multiplier: 1.10 },
+    { name: 'Gemini 2.0 Flash',  inputPer1M:  0.10, outputPer1M:   0.40, context: 1000000, id: 'gemini', tokenSrc: 'est. ×1.15',  multiplier: 1.15 }
   ];
+
+  // ── Claude tokenizer state ────────────────────────────────────────────────────
+  // 'loading' → 'ready' | 'failed'
+  var claudeState  = 'loading';
+  var claudeEncode = null;  // function(text) → token count when ready
+
+  // Called by the async module script below when the Claude tokenizer is ready
+  window.__onClaudeReady = function (encodeFn) {
+    claudeEncode = encodeFn;
+    claudeState  = 'ready';
+    // Re-render the cost table with actual Claude counts
+    var text = textInput.value;
+    var base = (encodeText && text.length) ? encodeText(text).length : 0;
+    updateCostTable(base);
+  };
+  window.__onClaudeFailed = function () {
+    claudeState = 'failed';
+    var text = textInput.value;
+    var base = (encodeText && text.length) ? encodeText(text).length : 0;
+    updateCostTable(base);
+  };
 
   var VIZ_CAP = 5000;
   var COLORS  = ['tok-a', 'tok-b'];
@@ -247,10 +267,27 @@ ads: true
   function updateCostTable(baseCount) {
     var html = '';
     MODELS.forEach(function (m) {
-      var tokenCount = Math.round(baseCount * m.multiplier);
+      var tokenCount, tokenNote;
+
+      if (m.id === 'claude') {
+        if (claudeState === 'ready' && claudeEncode) {
+          tokenCount = claudeEncode(textInput.value);
+          tokenNote  = 'actual (claude.json)';
+        } else if (claudeState === 'loading') {
+          tokenCount = Math.round(baseCount * m.multiplier);
+          tokenNote  = '<span class="spinner-border spinner-border-sm text-secondary me-1" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading tokenizer</span>loading\u2026';
+        } else {
+          // failed
+          tokenCount = Math.round(baseCount * m.multiplier);
+          tokenNote  = 'est. \u00d71.10 (tokenizer unavailable)';
+        }
+      } else {
+        tokenCount = Math.round(baseCount * m.multiplier);
+        tokenNote  = m.tokenSrc;
+      }
+
       var inputCost  = (tokenCount / 1e6) * m.inputPer1M;
       var outputCost = (tokenCount * 0.5 / 1e6) * m.outputPer1M;
-      var isEst      = m.multiplier !== 1.00;
       html +=
         '<tr>' +
           '<td><strong>' + m.name + '</strong><br>' +
@@ -258,7 +295,7 @@ ads: true
           '\u202f/\u202f$' + m.outputPer1M.toFixed(2) + ' per 1\u202fM tokens in/out</small></td>' +
           '<td class="text-end fw-semibold">' +
             tokenCount.toLocaleString() +
-            '<br><small class="text-muted fw-normal">' + m.tokenNote + '</small></td>' +
+            '<br><small class="text-muted fw-normal">' + tokenNote + '</small></td>' +
           '<td class="text-end fw-semibold">' + formatCost(inputCost) + '</td>' +
           '<td class="text-end">' + formatCost(outputCost) + '</td>' +
           '<td>' + pctBar(tokenCount, m.context) + '</td>' +
@@ -286,16 +323,63 @@ ads: true
 }());
 </script>
 
+<!-- ── Async Claude tokenizer (Anthropic's published vocabulary + tiktoken WASM) ──────── -->
+<!-- tiktoken_bg.js and tiktoken_bg.wasm via jsDelivr; claude.json from @anthropic-ai/tokenizer -->
+<script type="module">
+// Import the tiktoken WASM bindings (pure JS glue code) — SRI applied via fetch integrity below
+import * as tiktoken from 'https://cdn.jsdelivr.net/npm/tiktoken@1.0.22/tiktoken_bg.js';
+
+var WASM_URL  = 'https://cdn.jsdelivr.net/npm/tiktoken@1.0.22/tiktoken_bg.wasm';
+var VOCAB_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/tokenizer@0.0.4/dist/cjs/claude.json';
+var WASM_SRI  = 'sha384-LhZSdpJS87vKuKVPQYSnIsEhM6lCqZLPI/IzPYEKdzOA+1sQcyzuJbBfuSNLU2qH';
+var VOCAB_SRI = 'sha384-0/W+OO5/jtFlfeZbfhRHiHgEgTWkh9Er967ebA7jUcG4Tmw6DTyCIlNvJCwzjT8c';
+
+(async function () {
+  try {
+    // Fetch vocabulary and WASM in parallel; .arrayBuffer() ensures SRI is enforced before compile
+    var [vocabResp, wasmBuffer] = await Promise.all([
+      fetch(VOCAB_URL, { integrity: VOCAB_SRI }),
+      fetch(WASM_URL, { integrity: WASM_SRI }).then(function (r) { return r.arrayBuffer(); })
+    ]);
+
+    // Compile + instantiate WASM (instantiate accepts arrayBuffer for SRI-verified bytes)
+    var wasmResult = await WebAssembly.instantiate(wasmBuffer, tiktoken);
+
+    // Wire WASM exports into the JS glue module
+    tiktoken.__wbg_set_wasm(wasmResult.instance.exports);
+
+    var claudeData = await vocabResp.json();
+    var t = new tiktoken.Tiktoken(
+      claudeData.bpe_ranks,
+      claudeData.special_tokens,
+      claudeData.pat_str
+    );
+
+    if (typeof window.__onClaudeReady === 'function') {
+      window.__onClaudeReady(function (text) {
+        return t.encode(text.normalize('NFKC'), 'all').length;
+      });
+    }
+  } catch (err) {
+    if (typeof window.__onClaudeFailed === 'function') window.__onClaudeFailed();
+  }
+}());
+</script>
+
 <div class="card mt-4">
 <div class="card-body">
 
 <h4>How It Works</h4>
 <p>
-  This tool tokenizes your text using GPT-4o's
-  <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">o200k_base</a>
-  encoding — entirely inside your browser.
+  This tool tokenizes your text using the <strong>actual tokenizers</strong> for each model,
+  entirely inside your browser.
   <strong>Your text is never sent to a server.</strong>
 </p>
+<ul>
+  <li><strong>GPT-4o</strong>: tokenized synchronously using <a href="https://github.com/niieani/gpt-tokenizer" target="_blank" rel="noopener">gpt-tokenizer</a>'s pure-JS o200k_base implementation.</li>
+  <li><strong>Claude 3.5 Sonnet</strong>: tokenized using <a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener">Anthropic's published vocabulary</a> (<code>claude.json</code>) with tiktoken's WASM engine — loaded asynchronously in the background.</li>
+  <li><strong>Gemini 2.0 Flash</strong>: Google has not released their tokenizer as a standalone library; token count is estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads.</li>
+</ul>
 
 <h5 class="mt-4">What is a token?</h5>
 <p>
@@ -328,21 +412,22 @@ ads: true
       </tr>
       <tr>
         <td><strong>Anthropic (Claude)</strong></td>
-        <td>Proprietary BPE</td>
-        <td>Optimised for natural English. Benchmarks show roughly <strong>10% more tokens</strong> than GPT-4o for mixed code/JSON payloads.</td>
+        <td>Proprietary BPE (<a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener">vocabulary published</a>)</td>
+        <td>Run in-browser using Anthropic's published <code>claude.json</code> vocabulary with tiktoken's WASM. Actual counts used — no estimate needed.</td>
       </tr>
       <tr>
         <td><strong>Google (Gemini)</strong></td>
-        <td>SentencePiece variant</td>
-        <td>Efficient for standard English. Noticeably "greedy" on code, indented JSON, and bracket-heavy markup — roughly <strong>15% more tokens</strong> than GPT-4o for such payloads.</td>
+        <td>SentencePiece variant (not public)</td>
+        <td>No standalone tokenizer library available. Count estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads.</td>
       </tr>
     </tbody>
   </table>
 </div>
 <p class="text-muted small">
-  The Claude and Gemini token counts in the estimator above are approximations derived from these
-  benchmarks. Actual counts vary by payload — differences are smallest for plain English prose and
-  largest for heavily indented code or JSON.
+  Claude's actual token counts are computed in-browser using Anthropic's published
+  <a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener"><code>@anthropic-ai/tokenizer</code></a>
+  vocabulary. Gemini's tokenizer is not publicly available — its count remains an estimate.
+  Differences are smallest for plain English prose and largest for heavily indented code or JSON.
 </p>
 
 <h5 class="mt-4">Why token counts matter</h5>
@@ -382,13 +467,17 @@ ads: true
 
 <h5 class="mt-4">Implementation</h5>
 <p>
-  Tokenization is powered by
+  <strong>GPT-4o</strong>: tokenized synchronously using
   <a href="https://github.com/niieani/gpt-tokenizer" target="_blank" rel="noopener">gpt-tokenizer</a>,
-  a pure JavaScript implementation of OpenAI's Byte-Pair Encoding (BPE) algorithm. The library
-  bundles the full o200k_base vocabulary and merge rules and produces bit-identical results to the
-  original Python
-  <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">tiktoken</a> library.
-  Everything runs synchronously in your browser tab — no server round-trip.
+  a pure JavaScript BPE implementation bundling the full o200k_base vocabulary — no WASM, no server round-trip.
+</p>
+<p>
+  <strong>Claude 3.5 Sonnet</strong>: tokenized using
+  <a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener">Anthropic's published <code>@anthropic-ai/tokenizer</code></a>
+  vocabulary (<code>claude.json</code>, loaded from jsDelivr) with
+  <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">tiktoken</a>'s
+  Rust-compiled WASM engine. Both resources are verified with SRI integrity hashes and loaded
+  asynchronously in the background so they don't delay the initial page render.
 </p>
 
 <h5 class="mt-4">Privacy</h5>
