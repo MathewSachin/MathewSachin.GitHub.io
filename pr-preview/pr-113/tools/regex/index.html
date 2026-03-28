@@ -141,24 +141,24 @@
       <input type="text" id="rx-pattern" class="form-control font-monospace"
         placeholder="e.g. ^[a-zA-Z0-9]+$" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <span class="input-group-text font-monospace">/</span>
-      <span class="input-group-text p-1 gap-1 d-flex">
-        <span class="form-check form-check-inline m-0 px-2">
-          <input class="form-check-input" type="checkbox" id="rx-flag-g" checked>
-          <label class="form-check-label font-monospace" for="rx-flag-g" title="Global — find all matches">g</label>
-        </span>
-        <span class="form-check form-check-inline m-0 px-2">
-          <input class="form-check-input" type="checkbox" id="rx-flag-i">
-          <label class="form-check-label font-monospace" for="rx-flag-i" title="Case-insensitive">i</label>
-        </span>
-        <span class="form-check form-check-inline m-0 px-2">
-          <input class="form-check-input" type="checkbox" id="rx-flag-m" checked>
-          <label class="form-check-label font-monospace" for="rx-flag-m" title="Multiline — ^ and $ match line boundaries">m</label>
-        </span>
-        <span class="form-check form-check-inline m-0 px-2">
-          <input class="form-check-input" type="checkbox" id="rx-flag-s">
-          <label class="form-check-label font-monospace" for="rx-flag-s" title="Dot-all — . matches newlines too">s</label>
-        </span>
-      </span>
+    </div>
+    <div class="mt-2 d-flex gap-3 flex-wrap">
+      <div class="form-check form-check-inline m-0">
+        <input class="form-check-input" type="checkbox" id="rx-flag-g" checked>
+        <label class="form-check-label font-monospace" for="rx-flag-g" title="Global — find all matches">g <span class="text-muted small fw-normal" style="font-family:inherit">global</span></label>
+      </div>
+      <div class="form-check form-check-inline m-0">
+        <input class="form-check-input" type="checkbox" id="rx-flag-i">
+        <label class="form-check-label font-monospace" for="rx-flag-i" title="Case-insensitive">i <span class="text-muted small fw-normal" style="font-family:inherit">case-insensitive</span></label>
+      </div>
+      <div class="form-check form-check-inline m-0">
+        <input class="form-check-input" type="checkbox" id="rx-flag-m" checked>
+        <label class="form-check-label font-monospace" for="rx-flag-m" title="Multiline — ^ and $ match line boundaries">m <span class="text-muted small fw-normal" style="font-family:inherit">multiline</span></label>
+      </div>
+      <div class="form-check form-check-inline m-0">
+        <input class="form-check-input" type="checkbox" id="rx-flag-s">
+        <label class="form-check-label font-monospace" for="rx-flag-s" title="Dot-all — . matches newlines too">s <span class="text-muted small fw-normal" style="font-family:inherit">dot-all</span></label>
+      </div>
     </div>
     <div id="rx-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div>
 
