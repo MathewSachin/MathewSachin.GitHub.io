@@ -175,4 +175,4 @@ The script attaches a listener to the `input` event rather than `keydown`. This 
 
 Happy racing! 🏁
 
-*Enjoyed this? Check out [Hacking the Chrome Dino Game](/blog/2016/11/05/chrome-dino-hack) or [Hacking Wordle]({% post_url /blog/2026-03-07-hacking-wordle %}) for more fun browser tricks.*
+*Enjoyed this? Check out {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="Hacking the Chrome Dino Game" %} or {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle" %} for more fun browser tricks.*

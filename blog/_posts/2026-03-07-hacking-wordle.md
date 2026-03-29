@@ -105,4 +105,4 @@ You just used **browser developer tools** to intercept live data from a website 
 
 No coding required. No special software. Just you, your browser, and a little curiosity.
 
-*Want more browser tricks like this? Check out [Hacking the Chrome Dino Game](/blog/2016/11/05/chrome-dino-hack) for more fun ways to bend the web to your will, or try [Edit Any Webpage in Seconds]({% post_url /blog/2026-03-07-edit-webpage-inspect-element %}) to see another clever DevTools trick!*
+*Want more browser tricks like this? Check out {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="Hacking the Chrome Dino Game" %} for more fun ways to bend the web to your will, or try {% include post_link.html url="/blog/2026/03/07/edit-webpage-inspect-element" text="Edit Any Webpage in Seconds" %} to see another clever DevTools trick!*

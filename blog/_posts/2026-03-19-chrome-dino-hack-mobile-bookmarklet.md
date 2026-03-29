@@ -14,7 +14,7 @@ related:
 
 ---
 
-The [classic Dino hacks]({% post_url /blog/2016-11-5-chrome-dino-hack %}) rely on the Chrome Developer Console to run JavaScript. On a desktop that's one keyboard shortcut away, but on a phone or tablet the console simply isn't available. That's where **bookmarklets** come in.
+The {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="classic Dino hacks" %} rely on the Chrome Developer Console to run JavaScript. On a desktop that's one keyboard shortcut away, but on a phone or tablet the console simply isn't available. That's where **bookmarklets** come in.
 
 ## What Is a Bookmarklet?
 
@@ -86,4 +86,4 @@ Or simply refresh the page to start fresh.
 
 ---
 
-Want to go further? Check out the full [Chrome Dino Hack guide]({% post_url /blog/2016-11-5-chrome-dino-hack %}) for speed control, score manipulation, auto-play, and more tricks you can use on desktop!
+Want to go further? Check out the full {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="Chrome Dino Hack guide" %} for speed control, score manipulation, auto-play, and more tricks you can use on desktop!

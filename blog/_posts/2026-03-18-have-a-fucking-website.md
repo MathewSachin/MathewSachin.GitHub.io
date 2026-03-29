@@ -76,7 +76,7 @@ The restaurant that built its entire customer relationship on Instagram follower
 
 ## Why I'm Writing This on a Website
 
-This blog exists precisely because of the dynamic the post describes. [I've been thinking about this setup]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}) — content published to a domain I control, with no algorithm deciding who sees it, no platform that can shadow-ban a post or change the rules about links.
+This blog exists precisely because of the dynamic the post describes. {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="I've been thinking about this setup" %} — content published to a domain I control, with no algorithm deciding who sees it, no platform that can shadow-ban a post or change the rules about links.
 
 Email is still the answer for reach. A post here doesn't reach anyone who hasn't subscribed or found it through search. That's a real limitation. But the content is mine, the archive is mine, and it doesn't vanish if a company decides to pivot to video.
 
@@ -90,4 +90,4 @@ The article didn't say anything new. It didn't need to. Sometimes the useful ser
 
 ---
 
-*This post was generated with the assistance of AI as part of an [automated blogging experiment]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}). The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*

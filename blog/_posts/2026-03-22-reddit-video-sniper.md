@@ -105,7 +105,7 @@ Your browser will open a new tab or trigger a download prompt for the `.mp4` fil
 
 ## How the Code Works
 
-This script takes a fundamentally different approach from the [Instagram Reel Sniper]({% post_url /blog/2026-03-21-instagram-reel-sniper %}) or [YouTube Shorts Sniper]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), which use `captureStream` and `MediaRecorder` to re-record the video as it plays. The Reddit approach is a **direct URL extraction** — no re-encoding, just retrieving the link that Reddit already knows about.
+This script takes a fundamentally different approach from the {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="Instagram Reel Sniper" %} or {% include post_link.html url="/blog/2026/03/21/youtube-shorts-sniper" text="YouTube Shorts Sniper" %}, which use `captureStream` and `MediaRecorder` to re-record the video as it plays. The Reddit approach is a **direct URL extraction** — no re-encoding, just retrieving the link that Reddit already knows about.
 
 ### Step 1: Sanitizing the URL
 
@@ -195,7 +195,7 @@ This script's approach is architecturally distinct from the recorder-based scrip
 | **Audio** | Video-only (DASH separation) | Audio included (stream is already merged) |
 | **Why different** | Reddit publicly exposes metadata via `.json` API | Other platforms do not expose direct CDN links |
 
-The [Twitter/X Video Sniper]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}) has a Method 2 (High-Res Scraper) that also extracts a direct URL via React internals — that's the closest conceptual equivalent. The Reddit approach is simpler because the metadata is available through an official public endpoint rather than internal component state.
+The {% include post_link.html url="/blog/2026/03/21/twitter-x-video-sniper" text="Twitter/X Video Sniper" %} has a Method 2 (High-Res Scraper) that also extracts a direct URL via React internals — that's the closest conceptual equivalent. The Reddit approach is simpler because the metadata is available through an official public endpoint rather than internal component state.
 
 ---
 
@@ -210,7 +210,7 @@ The [Twitter/X Video Sniper]({% post_url /blog/2026-03-21-twitter-x-video-sniper
 | File saves as `Reddit_Post_abc123.mp4` but won't play | Incomplete download or corrupt file | Re-run the script; if the issue persists, the CDN URL may have changed |
 | Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for reddit.com in browser settings |
 
-*Using the same browser-only approach, you can also [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download Instagram Stories]({% post_url /blog/2026-03-22-instagram-story-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
+*Using the same browser-only approach, you can also {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="download Instagram Reels" %}, {% include post_link.html url="/blog/2026/03/22/instagram-story-sniper" text="download Instagram Stories" %}, {% include post_link.html url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" %}, {% include post_link.html url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" %}, and {% include post_link.html url="/blog/2026/03/21/save-instagram-photos" text="save Instagram photos" %}.*
 
 ---
 

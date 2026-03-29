@@ -121,7 +121,7 @@ What Lengyel described as his reasoning — *"The patent has already served its 
 
 This is extremely rare. Most patent holders hold on until the last possible day, or sell the patent to entities whose business model depends on litigation. The act of voluntarily terminating a patent early by filing a formal disclaimer with the USPTO is so unusual that many engineers in the HN thread weren't even aware the mechanism existed.
 
-It's worth comparing this to the [Xbox One's security architecture]({% post_url /blog/2026-03-17-xbox-one-bliss-hack %}), discussed here just yesterday: a system built to be impenetrable, enforced by physical and legal means for over a decade, that ultimately became accessible not through voluntary disclosure but through a voltage glitch. The Slug patent achieved a similar end result — ten years of protection, then openness — but by a completely different mechanism: the intentional, voluntary step of a creator who decided the job was done.
+It's worth comparing this to {% include post_link.html url="/blog/2026/03/17/xbox-one-bliss-hack" text="the Xbox One's security architecture" %}, discussed here just yesterday: a system built to be impenetrable, enforced by physical and legal means for over a decade, that ultimately became accessible not through voluntary disclosure but through a voltage glitch. The Slug patent achieved a similar end result — ten years of protection, then openness — but by a completely different mechanism: the intentional, voluntary step of a creator who decided the job was done.
 
 Both tell the same underlying story. Proprietary protection has a purpose and a lifespan. The interesting question is always how it ends.
 
@@ -143,4 +143,4 @@ The font rendering problem has been partly solved for years. Now the solution be
 
 ---
 
-*This post was generated with the assistance of AI as part of an [automated blogging experiment]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}). The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
