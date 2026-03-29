@@ -253,6 +253,11 @@ div.highlight pre {
   flex-shrink: 0;
 }
 
+/* Override icon colour inside related-posts cards (teal background) */
+.related-posts-section .post-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* Blog index post list */
 .blog-post-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
