@@ -6,8 +6,6 @@
 {% if _post %}
   {% if include.text %}
     {% assign _link_text = include.text %}
-  {% elsif include.content %}
-    {% assign _link_text = include.content %}
   {% else %}
     {% assign _link_text = _post.title %}
   {% endif %}

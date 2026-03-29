@@ -203,4 +203,4 @@ Bass.CurrentRecordingDevice = LoopbackDeviceIndex;
 Bass.RecordFree();
 ```
 
-Once you have the raw mixed audio data, you can pipe it to FFmpeg for encoding — see {% include post_link.html url="/blog/2017/07/28/ffmpeg-pipe-csharp" %} for how to do that.
+Once you have the raw mixed audio data, you can pipe it to FFmpeg for encoding — see {% include post_link.html url="/blog/2017/07/28/ffmpeg-pipe-csharp" text="my C# FFmpeg piping post" %} for how to do that.
