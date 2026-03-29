@@ -195,7 +195,7 @@ The agent isn't replacing the thinking — the ideas, the framing, the editorial
 
 It's a good division of labour.
 
-If you're setting up a Jekyll blog from scratch, you might also want to look at [Ditching Disqus for giscus]({% post_url /blog/2026-03-12-ditching-disqus-for-giscus %}) — swapping out the comment system was another quick win that made the blog faster and more privacy-friendly.
+If you're setting up a Jekyll blog from scratch, you might also want to look at {% include post_link.html url="/blog/2026/03/12/ditching-disqus-for-giscus" %} — swapping out the comment system was another quick win that made the blog faster and more privacy-friendly.
 
 ## Summary: Everything You Need
 

@@ -87,7 +87,7 @@ A few things to keep in mind:
 
 <div class="alert alert-info">
   📱 <b>On a phone or tablet?</b> Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!<br>
-  👉 <a href="{% post_url /blog/2026-03-19-chrome-dino-hack-mobile-bookmarklet %}">Hack the Chrome Dino on Mobile (Bookmarklet Method)</a>
+  👉 {% include post_link.html url="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet" %}
 </div>
 
 ## Immortality (God Mode)
@@ -290,7 +290,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 
 Want the dino to play itself? There's a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.
 
-👉 **[Full script + step-by-step explanation → Auto-play the Chrome Dino Game]({% post_url /blog/2026-03-14-chrome-dino-autoplay %})**
+👉 {% include post_link.html url="/blog/2026/03/14/chrome-dino-autoplay" %}
 
 ## Invisibility
 
