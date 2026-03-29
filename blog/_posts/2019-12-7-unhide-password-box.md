@@ -127,7 +127,7 @@ Navigate to the page with the password box, then open your bookmarks and tap **R
   💡 <b>On desktop browsers</b> you can also drag the link below straight to your bookmarks bar: <a href="javascript:(function(){let inputs=document.querySelectorAll('input[type=&quot;password&quot;]');inputs.forEach(input=&gt;input.type='text');})();" title="Reveal Passwords">Reveal Passwords</a>
 </div>
 
-Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarklet/) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+Want to write your own bookmarklets? The [Bookmarklet Compiler]({{ '/tools/bookmarklet/' | relative_url }}) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
 
 ## Try It Right Here!
 

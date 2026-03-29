@@ -138,7 +138,7 @@ Save the bookmark.
 
 The script will inject and run instantly.
 
-Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarklet/) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+Want to write your own bookmarklets? The [Bookmarklet Compiler]({{ '/tools/bookmarklet/' | relative_url }}) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
 
 ---
 

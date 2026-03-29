@@ -144,7 +144,7 @@ javascript:(function(){let textNodes=document.querySelectorAll('span[unselectabl
 4. The input box turns **light green** 🟢 — the bot is armed!
 5. Type the first letter of the passage yourself to trigger the bot
 
-Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarklet/) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+Want to write your own bookmarklets? The [Bookmarklet Compiler]({{ '/tools/bookmarklet/' | relative_url }}) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
 
 ## Under the Hood
 
