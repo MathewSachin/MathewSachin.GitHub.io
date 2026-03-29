@@ -88,12 +88,18 @@ alert('Word count: ' + (words ? words.length : 0));"
       <textarea id="compiled-output" class="form-control" rows="14" readonly
         placeholder="Compiled output will appear here…"
         aria-label="Compiled bookmarklet output"></textarea>
-      <div class="mt-3 d-flex align-items-center gap-3 flex-wrap">
-        <a id="drag-btn" href="#" class="bm-disabled" draggable="true"
-          title="Drag this button onto your bookmarks bar">
-          <i class="fas fa-bookmark me-2"></i>Drag me to Bookmarks
-        </a>
-        <small class="text-muted">or right-click &rarr; Bookmark this link</small>
+      <div class="mt-3">
+        <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
+          <a id="drag-btn" href="#" class="bm-disabled" draggable="true"
+            title="Drag this button onto your bookmarks bar">
+            <i class="fas fa-bookmark me-2"></i>Drag me to Bookmarks
+          </a>
+          <small class="text-muted">or right-click &rarr; Bookmark this link</small>
+        </div>
+        <p class="d-md-none text-muted small mb-0">
+          <i class="fas fa-info-circle me-1"></i>Dragging to the bookmarks bar is a desktop-only feature.
+          On mobile, tap <strong>Copy</strong> above, then manually create a new bookmark in your browser and paste the compiled code as the URL.
+        </p>
       </div>
     </div>
 
@@ -106,12 +112,24 @@ alert('Word count: ' + (words ? words.length : 0));"
 <div class="card-body">
 
 <h4>How to Use</h4>
-<ol>
-  <li>Paste your raw JavaScript into the left pane.</li>
-  <li>The compiled bookmarklet appears on the right instantly.</li>
-  <li>Drag the <strong>Drag me to Bookmarks</strong> button onto your browser's bookmarks bar.</li>
-  <li>Navigate to any webpage and click the bookmark to run your script.</li>
-</ol>
+<div class="d-none d-md-block">
+  <ol>
+    <li>Paste your raw JavaScript into the left pane.</li>
+    <li>The compiled bookmarklet appears on the right instantly.</li>
+    <li>Drag the <strong>Drag me to Bookmarks</strong> button onto your browser's bookmarks bar, or right-click it and choose <em>Bookmark this link</em>.</li>
+    <li>Navigate to any webpage and click the bookmark to run your script.</li>
+  </ol>
+  <p class="mt-3 mb-1"><strong>On mobile</strong>, dragging to the bookmarks bar is not supported — see the note below the output pane for the manual installation steps.</p>
+</div>
+<div class="d-md-none">
+  <p class="mb-1"><strong>On mobile</strong>, dragging to the bookmarks bar is not supported. To install a bookmarklet:</p>
+  <ol>
+    <li>Paste your raw JavaScript into the input above.</li>
+    <li>Tap <strong>Copy</strong> to copy the compiled bookmarklet.</li>
+    <li>Create a new bookmark in your browser (bookmark any page first).</li>
+    <li>Edit that bookmark and replace its URL with the copied code.</li>
+  </ol>
+</div>
 
 <h5 class="mt-4">What Is a Bookmarklet?</h5>
 <p>
