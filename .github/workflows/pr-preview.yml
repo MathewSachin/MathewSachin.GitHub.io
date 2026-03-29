@@ -14,7 +14,8 @@ jobs:
   build:
     if: github.event.action != 'closed'
     uses: ./.github/workflows/build-site.yml
-    permissions: {}
+    permissions:
+      contents: read
     with:
       baseurl: /pr-preview/pr-${{ github.event.pull_request.number }}
 
@@ -27,9 +28,12 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download site artifact
         if: github.event.action != 'closed'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.3
         with:
           name: site
           path: ./_site

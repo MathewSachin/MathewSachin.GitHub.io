@@ -32,7 +32,10 @@ jobs:
 
       - name: Set baseurl
         if: inputs.baseurl != ''
-        run: echo "baseurl: ${{ inputs.baseurl }}" >> _config.yml
+        env:
+          BASEURL: ${{ inputs.baseurl }}
+        run: |
+          echo "baseurl: $BASEURL" >> _config.yml
 
       - name: Build Jekyll site
         uses: actions/jekyll-build-pages@v1
