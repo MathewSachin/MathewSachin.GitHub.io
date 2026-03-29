@@ -141,6 +141,8 @@ Save the bookmark.
 4. Tap the **smiley face ☺** to start a new game.
 5. Tap anywhere near the **bottom-right corner** of the board.
 
+Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarklet/) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+
 ## Under the Hood
 
 ### Why Replacing `Math.random()` Works

@@ -138,6 +138,8 @@ Save the bookmark.
 
 The script will inject and run instantly.
 
+Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarklet/) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+
 ---
 
 Enjoy your mountains of cookies — however you choose to earn them!
