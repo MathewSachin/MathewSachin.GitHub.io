@@ -405,7 +405,7 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
 
 <p>YouTube’s Shorts player keeps several <code class="language-plaintext highlighter-rouge">ytd-reel-video-renderer</code> elements in the DOM at once — one for the Short above, one for the current Short, one below. Each is ready to play the moment you swipe. The active one carries an <code class="language-plaintext highlighter-rouge">is-active</code> attribute. The selector targets that active renderer’s <code class="language-plaintext highlighter-rouge">&lt;video&gt;</code> child directly. The fallback <code class="language-plaintext highlighter-rouge">#shorts-player video</code> catches edge cases where the attribute-based selector doesn’t match (older YouTube UI versions).</p>
 
-<p>This is a fundamentally different approach from the <a href="/blog/2026/03/21/instagram-reel-sniper.html">Instagram Reel Sniper</a>, which has to loop through every <code class="language-plaintext highlighter-rouge">&lt;video&gt;</code> on the page and check each one’s bounding rectangle to find the visible one. YouTube gives us a cleaner semantic handle with <code class="language-plaintext highlighter-rouge">is-active</code>.</p>
+<p>This is a fundamentally different approach from the <a href="/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>Instagram Reel Sniper</a>, which has to loop through every <code class="language-plaintext highlighter-rouge">&lt;video&gt;</code> on the page and check each one’s bounding rectangle to find the visible one. YouTube gives us a cleaner semantic handle with <code class="language-plaintext highlighter-rouge">is-active</code>.</p>
 
 <h3 id="the-500-ms-delay">The 500 ms Delay</h3>
 
@@ -448,7 +448,7 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
 
 <h2 id="differences-from-instagram-reel-downloads">Differences from Instagram Reel Downloads</h2>
 
-<p>For a full breakdown of the <code class="language-plaintext highlighter-rouge">captureStream</code> + <code class="language-plaintext highlighter-rouge">MediaRecorder</code> pattern, see the <a href="/blog/2026/03/21/instagram-reel-sniper.html">Instagram Reel Sniper</a> post. The core pipeline is identical. Here’s where the two scripts diverge:</p>
+<p>For a full breakdown of the <code class="language-plaintext highlighter-rouge">captureStream</code> + <code class="language-plaintext highlighter-rouge">MediaRecorder</code> pattern, see the <a href="/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>Instagram Reel Sniper</a> post. The core pipeline is identical. Here’s where the two scripts diverge:</p>
 
 <table>
   <thead>
@@ -550,7 +550,7 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
   </tbody>
 </table>
 
-<p><em>Using the same browser-only approach, you can also <a href="/blog/2026/03/22/reddit-video-sniper.html">download Reddit videos</a>, <a href="/blog/2026/03/21/instagram-reel-sniper.html">download Instagram Reels</a>, <a href="/blog/2026/03/21/twitter-x-video-sniper.html">download Twitter/X videos</a>, and <a href="/blog/2026/03/21/save-instagram-photos.html">save Instagram photos</a>.</em></p>
+<p><em>Using the same browser-only approach, you can also <a href="/blog/2026/03/22/reddit-video-sniper.html" class="post-link" aria-label="Reddit Video Sniper: Download Any Reddit Video Directly from Your Browser"><i class="fab fa-reddit post-icon me-1" aria-hidden="true"></i>download Reddit videos</a>, <a href="/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>download Instagram Reels</a>, <a href="/blog/2026/03/21/twitter-x-video-sniper.html" class="post-link" aria-label="Twitter/X Video Sniper: Download Any Video Directly from Your Browser"><i class="fab fa-twitter post-icon me-1" aria-hidden="true"></i>download Twitter/X videos</a>, and <a href="/blog/2026/03/21/save-instagram-photos.html" class="post-link" aria-label="Save Instagram Photos: Remove the Right-Click Block"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>save Instagram photos</a>.</em></p>
 
 <hr />
 
