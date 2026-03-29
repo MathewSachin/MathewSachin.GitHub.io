@@ -1,0 +1,6 @@
+{% assign _post = include.post %}
+{% unless _post %}
+  {% assign _id = include.url | remove_last: "/" %}
+  {% assign _post = site.posts | where: "id", _id | first %}
+{% endunless %}
+{% if _post %}<a href="{{ _post.url | relative_url }}" class="post-link">{% if _post.icon %}<i class="{{ _post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _post.title }}</a>{% endif %}

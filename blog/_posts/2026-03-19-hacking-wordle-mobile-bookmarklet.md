@@ -71,4 +71,4 @@ The code breaks down into these steps:
 
 ---
 
-Want the full step-by-step desktop method? Check out [Hacking Wordle: Solve It in One Try Using Browser DevTools]({% post_url /blog/2026-03-07-hacking-wordle %}) for a detailed walkthrough using the Network tab!
+Want the full step-by-step desktop method? Check out {% include post_link.html url="/blog/2026/03/07/hacking-wordle" %} for a detailed walkthrough using the Network tab!

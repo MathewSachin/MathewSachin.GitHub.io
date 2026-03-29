@@ -14,7 +14,7 @@ related:
 
 FFmpeg is a great tool for working with media of all kinds.
 In this post, I will demonstrate how images and audio can be piped to **ffmpeg.exe** from C#.
-If you need to mix audio from multiple sources before piping, check out [Mixing Microphone input and Speaker output]({% post_url /blog/2017-7-28-mixing-audio %}).
+If you need to mix audio from multiple sources before piping, check out {% include post_link.html url="/blog/2017/07/28/mixing-audio" %}.
 
 We launch **ffmpeg.exe** as a child process using the `System.Diagnostics.Process` class, with `UseShellExecute = false` and `CreateNoWindow = true` so that no console window appears.
 

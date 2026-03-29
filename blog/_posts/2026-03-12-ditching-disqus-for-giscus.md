@@ -136,4 +136,4 @@ No Disqus ads. No extra trackers. No regrets.
 
 *And speaking of comments — the shiny new giscus widget is live right below this paragraph. Sign in with GitHub and say hello. 👇 It would mean a lot to see it in action, and I'd love to hear if you've made (or are considering) the same switch!*
 
-*If you want to streamline the rest of your Jekyll workflow too, check out [How I Auto-Generate Blog Posts with GitHub Copilot]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}) — it's the other half of keeping this blog low-friction.*
+*If you want to streamline the rest of your Jekyll workflow too, check out {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" %} — it's the other half of keeping this blog low-friction.*

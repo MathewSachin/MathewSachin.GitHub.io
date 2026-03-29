@@ -161,4 +161,4 @@ Every frame the bot:
 
 The result is a dino that plays indefinitely, reacting to every cactus and pterodactyl the game throws at it.
 
-*This auto-play script is just one of many tricks you can pull off in the Chrome Dino game. Check out [Hacking the Chrome Dino Game]({% post_url /blog/2016-11-5-chrome-dino-hack %}) for god mode, speed tweaks, score manipulation, and more!*
+*This auto-play script is just one of many tricks you can pull off in the Chrome Dino game. Check out {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" %} for god mode, speed tweaks, score manipulation, and more!*

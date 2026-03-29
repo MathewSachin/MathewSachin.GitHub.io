@@ -218,6 +218,6 @@ This is exactly why web developers love DevTools — they can try out changes li
 
 Go ahead, change a headline, take a screenshot, and send it to a friend. When they panic, you can tell them it took you 10 seconds and a right-click.
 
-Want to take your DevTools skills further? Check out [Hacking Wordle: Solve It in One Try Using Browser DevTools]({% post_url /blog/2026-03-07-hacking-wordle %}) for another fun trick you can pull off with the same panel.
+Want to take your DevTools skills further? Check out {% include post_link.html url="/blog/2026/03/07/hacking-wordle" %} for another fun trick you can pull off with the same panel.
 
 Drop a comment below with the funniest prank you pulled off! 👇
