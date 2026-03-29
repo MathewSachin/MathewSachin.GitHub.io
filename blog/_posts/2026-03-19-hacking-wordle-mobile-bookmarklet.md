@@ -22,6 +22,8 @@ A bookmarklet is a regular web bookmark — but instead of a website URL, it con
 
 It's a technique that has been around for decades and works in virtually every mobile browser, because tapping a bookmark is just a normal browser action, not a developer feature.
 
+Want to create your own bookmarklets from any JavaScript snippet? The [Bookmarklet Compiler]({{ '/tools/bookmarklet/' | relative_url }}) handles the IIFE wrapping, minification, and URI encoding for you — just paste your code and it's ready to use.
+
 ## Setting It Up
 
 ### Step 1 — Create a New Bookmark

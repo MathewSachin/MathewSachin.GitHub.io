@@ -146,6 +146,8 @@ Save the bookmark.
   💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won't execute the JavaScript on mobile. Always trigger it via the address bar dropdown.
 </div>
 
+Want to write your own bookmarklets? The [Bookmarklet Compiler]({{ '/tools/bookmarklet/' | relative_url }}) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+
 ---
 
 ## How the Code Works
