@@ -253,9 +253,10 @@ div.highlight pre {
   flex-shrink: 0;
 }
 
-/* Override icon colour inside related-posts cards (teal background) */
+/* Override icon colour inside related-posts cards (teal background) — inherit white from card */
 .related-posts-section .post-icon {
-  color: rgba(255, 255, 255, 0.9);
+  color: inherit;
+  opacity: 1;
 }
 
 /* Blog index post list */
