@@ -1,5 +1,6 @@
 ---
 title: "Fate/Grand Automata: A Developer's Deep Dive"
+icon: "fas fa-robot"
 tags: [android, kotlin, opencv, automation, fga]
 highlight: true
 related:

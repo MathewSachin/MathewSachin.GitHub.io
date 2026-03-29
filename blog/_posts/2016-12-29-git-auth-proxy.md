@@ -1,5 +1,6 @@
 ---
 title: Using Git over Authenticated Proxy Connection
+icon: "fab fa-git-alt"
 tags: [proxy, git]
 ---
 

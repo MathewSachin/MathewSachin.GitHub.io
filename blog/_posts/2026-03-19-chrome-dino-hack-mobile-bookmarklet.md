@@ -1,5 +1,6 @@
 ---
 title: "Hack the Chrome Dino on Mobile — No Computer Needed (Bookmarklet Method)"
+icon: "fas fa-mobile-alt"
 tags: [chrome, hack, game, mobile]
 highlight: true
 related:

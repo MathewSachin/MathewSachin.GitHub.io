@@ -1,5 +1,6 @@
 ---
 title: "The Metaverse Is Dead. Mark Zuckerberg Killed It."
+icon: "fas fa-vr-cardboard"
 tags: [meta, facebook, metaverse, vr, ai, tech-industry]
 highlight: true
 related:

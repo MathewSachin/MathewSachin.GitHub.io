@@ -21,7 +21,7 @@ ads: true
     {% for post in tag[1] %}
       <a href="{{ post.url | relative_url }}" class="tag-post-link text-decoration-none text-reset">
         <div class="tag-post-item d-flex justify-content-between align-items-center py-2">
-          <span class="tag-post-title">{{ post.title }}</span>
+          <span class="tag-post-title">{% if post.icon %}<i class="{{ post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ post.title }}</span>
           <span class="small text-muted text-nowrap ms-3">{{ post.date | date: "%b %-d, %Y" }}</span>
         </div>
       </a>

@@ -1,5 +1,6 @@
 ---
 title: "You Still Need a Website. Yes, You."
+icon: "fas fa-globe"
 tags: [web, social-media, personal, open-web]
 highlight: true
 related:

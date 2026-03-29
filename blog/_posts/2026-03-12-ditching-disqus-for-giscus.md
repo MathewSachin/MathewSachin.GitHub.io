@@ -1,5 +1,6 @@
 ---
 title: "Ditching Disqus for giscus — and I Should Have Done It Sooner"
+icon: "fas fa-comments"
 tags: [giscus, disqus, comments, jekyll, github-pages, github]
 highlight: true
 related:

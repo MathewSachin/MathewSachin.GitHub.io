@@ -1,5 +1,6 @@
 ---
 title: "Hack Wordle on Mobile — No Computer Needed (Bookmarklet Method)"
+icon: "fas fa-mobile-alt"
 tags: [wordle, hack, browser, mobile]
 highlight: true
 related:

@@ -1,5 +1,6 @@
 ---
 title: "Hacking TypeRacer: The Human-Mimic Bot"
+icon: "fas fa-keyboard"
 tags: [typeracer, hack, javascript, browser, devtools, bookmarklet]
 highlight: true
 related:

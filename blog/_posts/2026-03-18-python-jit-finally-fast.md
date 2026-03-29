@@ -1,5 +1,6 @@
 ---
 title: "Python's JIT Is Finally Fast — And It Almost Didn't Happen"
+icon: "fab fa-python"
 tags: [python, performance, jit, open-source, compilers]
 highlight: true
 related:

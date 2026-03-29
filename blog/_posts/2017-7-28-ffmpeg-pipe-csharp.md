@@ -1,5 +1,6 @@
 ---
 title: Piping to ffmpeg.exe with C#
+icon: "fas fa-film"
 tags: [ffmpeg]
 highlight: true
 related:

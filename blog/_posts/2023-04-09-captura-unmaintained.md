@@ -1,5 +1,6 @@
 ---
 title: What happened to Captura?
+icon: "fas fa-camera"
 tags: [captura]
 related:
   - /blog/2017/07/28/ffmpeg-pipe-csharp

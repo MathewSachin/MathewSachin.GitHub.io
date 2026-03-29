@@ -1,5 +1,6 @@
 ---
 title: Hacking the Chrome Dino Game
+icon: "fas fa-gamepad"
 tags: [chrome, hack, game]
 highlight: true
 related:

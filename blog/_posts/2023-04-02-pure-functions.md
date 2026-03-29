@@ -1,5 +1,6 @@
 ---
 title: WTH is a Pure function
+icon: "fas fa-infinity"
 tags: [fp]
 highlight: true
 related:

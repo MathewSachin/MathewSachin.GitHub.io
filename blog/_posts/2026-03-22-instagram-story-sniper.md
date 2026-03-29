@@ -1,5 +1,6 @@
 ---
 title: "Instagram Story Sniper: Download Any Story Directly from Your Browser"
+icon: "fab fa-instagram"
 tags: [instagram, hack, javascript, browser, devtools]
 highlight: true
 related:
