@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70778035-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70778035-4');
+</script>
+
+
+    <meta charset="UTF-8"/>
+    <title>Hash Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="/pr-preview/pr-124/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-124/styles/styles.css">
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-124/feed.xml" title="Mathew Sachin" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Hash Generator | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Hash Generator" />
+<meta name="author" content="Mathew Sachin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My Website where I blog using jekyll" />
+<meta property="og:description" content="My Website where I blog using jekyll" />
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-124/tools/hash/" />
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-124/tools/hash/" />
+<meta property="og:site_name" content="Mathew Sachin" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Hash Generator" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@Mathew Sachin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"My Website where I blog using jekyll","headline":"Hash Generator","url":"https://mathewsachin.github.io/pr-preview/pr-124/tools/hash/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-124/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-124/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-124/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-124/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-124/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="bg-dark">
+    <div class="py-4 bg-info text-white google-anno-skip">
+        <div class="container">
+            <h2>Hash Generator</h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card google-anno-skip">
+<div class="card-body">
+
+<div class="row g-4">
+
+  <!-- Input -->
+  <div class="col-12">
+    <label class="form-label fw-semibold" for="hash-input">Input Text</label>
+    <textarea id="hash-input" class="form-control font-monospace" rows="5"
+      placeholder="Enter text to hash…"></textarea>
+    <div class="mt-2">
+      <button class="btn btn-info text-white" id="hash-btn">Generate Hashes</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="col-12" id="hash-results">
+    <h5 class="mb-3">Results</h5>
+
+    <div class="mb-3">
+      <label class="form-label text-muted">MD5</label>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <code id="out-md5" class="text-break flex-grow-1"></code>
+        <button class="btn btn-sm btn-outline-secondary copy-hash-btn" data-target="out-md5"
+          title="Copy MD5">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-muted">SHA-1</label>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <code id="out-sha1" class="text-break flex-grow-1"></code>
+        <button class="btn btn-sm btn-outline-secondary copy-hash-btn" data-target="out-sha1"
+          title="Copy SHA-1">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-muted">SHA-256</label>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <code id="out-sha256" class="text-break flex-grow-1"></code>
+        <button class="btn btn-sm btn-outline-secondary copy-hash-btn" data-target="out-sha256"
+          title="Copy SHA-256">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // ── Compact MD5 (Paul Johnston, public domain) ────────────────────────────
+
+  function md5(str) {
+    function safeAdd(x, y) {
+      var lsw = (x & 0xffff) + (y & 0xffff);
+      return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xffff);
+    }
+    function bitRol(num, cnt) { return (num << cnt) | (num >>> (32 - cnt)); }
+    function cmn(q, a, b, x, s, t) { return safeAdd(bitRol(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
+    function ff(a,b,c,d,x,s,t){return cmn((b&c)|((~b)&d),a,b,x,s,t);}
+    function gg(a,b,c,d,x,s,t){return cmn((b&d)|(c&(~d)),a,b,x,s,t);}
+    function hh(a,b,c,d,x,s,t){return cmn(b^c^d,a,b,x,s,t);}
+    function ii(a,b,c,d,x,s,t){return cmn(c^(b|(~d)),a,b,x,s,t);}
+
+    function coreMd5(x, len) {
+      x[len >> 5] |= 0x80 << (len % 32);
+      x[(((len + 64) >>> 9) << 4) + 14] = len;
+      var a=1732584193, b=-271733879, c=-1732584194, d=271733878;
+      for (var i = 0; i < x.length; i += 16) {
+        var oa=a,ob=b,oc=c,od=d;
+        a=ff(a,b,c,d,x[i+ 0], 7,-680876936); d=ff(d,a,b,c,x[i+ 1],12,-389564586); c=ff(c,d,a,b,x[i+ 2],17, 606105819); b=ff(b,c,d,a,x[i+ 3],22,-1044525330);
+        a=ff(a,b,c,d,x[i+ 4], 7,-176418897); d=ff(d,a,b,c,x[i+ 5],12, 1200080426); c=ff(c,d,a,b,x[i+ 6],17,-1473231341); b=ff(b,c,d,a,x[i+ 7],22,-45705983);
+        a=ff(a,b,c,d,x[i+ 8], 7, 1770035416); d=ff(d,a,b,c,x[i+ 9],12,-1958414417); c=ff(c,d,a,b,x[i+10],17,-42063); b=ff(b,c,d,a,x[i+11],22,-1990404162);
+        a=ff(a,b,c,d,x[i+12], 7, 1804603682); d=ff(d,a,b,c,x[i+13],12,-40341101); c=ff(c,d,a,b,x[i+14],17,-1502002290); b=ff(b,c,d,a,x[i+15],22, 1236535329);
+        a=gg(a,b,c,d,x[i+ 1], 5,-165796510); d=gg(d,a,b,c,x[i+ 6], 9,-1069501632); c=gg(c,d,a,b,x[i+11],14, 643717713); b=gg(b,c,d,a,x[i+ 0],20,-373897302);
+        a=gg(a,b,c,d,x[i+ 5], 5,-701558691); d=gg(d,a,b,c,x[i+10], 9, 38016083); c=gg(c,d,a,b,x[i+15],14,-660478335); b=gg(b,c,d,a,x[i+ 4],20,-405537848);
+        a=gg(a,b,c,d,x[i+ 9], 5, 568446438); d=gg(d,a,b,c,x[i+14], 9,-1019803690); c=gg(c,d,a,b,x[i+ 3],14,-187363961); b=gg(b,c,d,a,x[i+ 8],20, 1163531501);
+        a=gg(a,b,c,d,x[i+13], 5,-1444681467); d=gg(d,a,b,c,x[i+ 2], 9,-51403784); c=gg(c,d,a,b,x[i+ 7],14, 1735328473); b=gg(b,c,d,a,x[i+12],20,-1926607734);
+        a=hh(a,b,c,d,x[i+ 5], 4,-378558); d=hh(d,a,b,c,x[i+ 8],11,-2022574463); c=hh(c,d,a,b,x[i+11],16, 1839030562); b=hh(b,c,d,a,x[i+14],23,-35309556);
+        a=hh(a,b,c,d,x[i+ 1], 4,-1530992060); d=hh(d,a,b,c,x[i+ 4],11, 1272893353); c=hh(c,d,a,b,x[i+ 7],16,-155497632); b=hh(b,c,d,a,x[i+10],23,-1094730640);
+        a=hh(a,b,c,d,x[i+13], 4, 681279174); d=hh(d,a,b,c,x[i+ 0],11,-358537222); c=hh(c,d,a,b,x[i+ 3],16,-722521979); b=hh(b,c,d,a,x[i+ 6],23, 76029189);
+        a=hh(a,b,c,d,x[i+ 9], 4,-640364487); d=hh(d,a,b,c,x[i+12],11,-421815835); c=hh(c,d,a,b,x[i+15],16, 530742520); b=hh(b,c,d,a,x[i+ 2],23,-995338651);
+        a=ii(a,b,c,d,x[i+ 0], 6,-198630844); d=ii(d,a,b,c,x[i+ 7],10, 1126891415); c=ii(c,d,a,b,x[i+14],15,-1416354905); b=ii(b,c,d,a,x[i+ 5],21,-57434055);
+        a=ii(a,b,c,d,x[i+12], 6, 1700485571); d=ii(d,a,b,c,x[i+ 3],10,-1894986606); c=ii(c,d,a,b,x[i+10],15,-1051523); b=ii(b,c,d,a,x[i+ 1],21,-2054922799);
+        a=ii(a,b,c,d,x[i+ 8], 6, 1873313359); d=ii(d,a,b,c,x[i+15],10,-30611744); c=ii(c,d,a,b,x[i+ 6],15,-1560198380); b=ii(b,c,d,a,x[i+13],21, 1309151649);
+        a=ii(a,b,c,d,x[i+ 4], 6,-145523070); d=ii(d,a,b,c,x[i+11],10,-1120210379); c=ii(c,d,a,b,x[i+ 2],15, 718787259); b=ii(b,c,d,a,x[i+ 9],21,-343485551);
+        a=safeAdd(a,oa); b=safeAdd(b,ob); c=safeAdd(c,oc); d=safeAdd(d,od);
+      }
+      return [a,b,c,d];
+    }
+
+    function str2binl(s) {
+      var bin = [];
+      for (var i = 0; i < s.length * 8; i += 8)
+        bin[i >> 5] |= (s.charCodeAt(i / 8) & 0xff) << (i % 32);
+      return bin;
+    }
+
+    function binl2hex(arr) {
+      var hex = '0123456789abcdef', out = '';
+      for (var i = 0; i < arr.length * 4; i++)
+        out += hex[(arr[i >> 2] >> ((i % 4) * 8 + 4)) & 0xf] +
+               hex[(arr[i >> 2] >> ((i % 4) * 8)) & 0xf];
+      return out;
+    }
+
+    // Encode to UTF-8 bytes first (handles non-ASCII characters)
+    var utf8 = unescape(encodeURIComponent(str));
+    return binl2hex(coreMd5(str2binl(utf8), utf8.length * 8));
+  }
+
+  // ── SHA via Web Crypto API ────────────────────────────────────────────────
+
+  function hexFromBuffer(buf) {
+    return Array.from(new Uint8Array(buf))
+      .map(function (b) { return b.toString(16).padStart(2, '0'); })
+      .join('');
+  }
+
+  function sha(algo, text) {
+    var enc = new TextEncoder().encode(text);
+    return crypto.subtle.digest(algo, enc).then(hexFromBuffer);
+  }
+
+  // ── UI ────────────────────────────────────────────────────────────────────
+
+  document.getElementById('hash-btn').addEventListener('click', function () {
+    var text = document.getElementById('hash-input').value;
+
+    // MD5 (synchronous)
+    document.getElementById('out-md5').textContent = md5(text);
+
+    // SHA-1 and SHA-256 (async)
+    sha('SHA-1', text).then(function (h) {
+      document.getElementById('out-sha1').textContent = h;
+    });
+    sha('SHA-256', text).then(function (h) {
+      document.getElementById('out-sha256').textContent = h;
+    });
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-hash-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = document.getElementById(this.dataset.target);
+      var self = this;
+      navigator.clipboard.writeText(target.textContent).then(function () {
+        var icon = self.querySelector('i');
+        icon.className = 'fas fa-check text-success';
+        setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+      }).catch(function () {
+        var icon = self.querySelector('i');
+        icon.className = 'fas fa-times text-danger';
+        setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+      });
+    });
+  });
+
+  // Auto-generate on load with empty string to show format
+  document.getElementById('hash-btn').click();
+}());
+</script>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+<p>
+  This tool computes cryptographic hash digests of any text input — entirely inside your browser.
+  <strong>Your input is never sent to a server.</strong>
+</p>
+
+<h5 class="mt-4">What is a Hash?</h5>
+<p>
+  A hash function maps an arbitrary-length input to a fixed-length output (the <em>digest</em>).
+  Good hash functions are deterministic (same input → same output), fast to compute, and
+  practically irreversible — you cannot reconstruct the original text from the digest alone.
+  They are widely used for data integrity verification, checksums, digital signatures, and
+  password storage.
+</p>
+
+<h5 class="mt-4">Supported Algorithms</h5>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr><th>Algorithm</th><th>Digest length</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>MD5</td>
+        <td>128 bits (32 hex chars)</td>
+        <td>Fast; considered cryptographically broken — use only for checksums, not security.</td>
+      </tr>
+      <tr>
+        <td>SHA-1</td>
+        <td>160 bits (40 hex chars)</td>
+        <td>Deprecated for security use since 2017; still common in legacy systems.</td>
+      </tr>
+      <tr>
+        <td>SHA-256</td>
+        <td>256 bits (64 hex chars)</td>
+        <td>Part of the SHA-2 family; the current standard for most security applications.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="mt-4">Implementation Details</h5>
+<p>
+  <strong>SHA-1 and SHA-256</strong> are computed using the browser's native
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest" target="_blank" rel="noopener">Web Crypto API</a>
+  (<code>crypto.subtle.digest()</code>). The input text is first encoded to UTF-8 bytes via
+  <code>TextEncoder</code> and the resulting <code>ArrayBuffer</code> is converted to a
+  lowercase hexadecimal string.
+</p>
+<p>
+  <strong>MD5</strong> is computed using a compact, self-contained JavaScript implementation
+  based on the public-domain algorithm by Paul Johnston. The input string is encoded to UTF-8
+  bytes before being processed by the MD5 algorithm to ensure consistent results for non-ASCII
+  characters.
+</p>
+<p>
+  All three digests are rendered instantly in the page without any page reload or network
+  request.
+</p>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  All hashing runs locally in your browser tab. Sensitive text you enter — passwords, API
+  keys, personal data — never leaves your device.
+</p>
+
+<br><hr><br>
+
+<script src="https://giscus.app/client.js"
+        data-repo="MathewSachin/MathewSachin.GitHub.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw=="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOAulkj84C4PRo"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</div>
+</div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="sticky-top" style="top: 10px">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js" integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="/pr-preview/pr-124/scripts/formatting.js"></script>
+
+    
+
+    
+  </body>
+</html>
