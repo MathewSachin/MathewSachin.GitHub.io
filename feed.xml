@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/" rel="alternate" type="text/html" /><updated>2026-03-29T17:33:37+00:00</updated><id>https://mathewsachin.github.io/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked.</title><link href="https://mathewsachin.github.io/blog/2026/03/26/openai-sora-shutdown.html" rel="alternate" type="text/html" title="Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked." /><published>2026-03-26T00:00:00+00:00</published><updated>2026-03-26T00:00:00+00:00</updated><id>https://mathewsachin.github.io/blog/2026/03/26/openai-sora-shutdown</id><content type="html" xml:base="https://mathewsachin.github.io/blog/2026/03/26/openai-sora-shutdown.html"><![CDATA[<p><em>OpenAI announced Sora with “we are giving early access to a small group of creative professionals” in February 2024. By March 2026, they’ve given it a burial instead.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/" rel="alternate" type="text/html" /><updated>2026-03-29T18:21:26+00:00</updated><id>https://mathewsachin.github.io/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked.</title><link href="https://mathewsachin.github.io/blog/2026/03/26/openai-sora-shutdown.html" rel="alternate" type="text/html" title="Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked." /><published>2026-03-26T00:00:00+00:00</published><updated>2026-03-26T00:00:00+00:00</updated><id>https://mathewsachin.github.io/blog/2026/03/26/openai-sora-shutdown</id><content type="html" xml:base="https://mathewsachin.github.io/blog/2026/03/26/openai-sora-shutdown.html"><![CDATA[<p><em>OpenAI announced Sora with “we are giving early access to a small group of creative professionals” in February 2024. By March 2026, they’ve given it a burial instead.</em></p>
 
 <p><img alt="A film strip fading from vivid color to dead static, with four frames spanning Feb 2024 to Mar 2026, and the word DISCONTINUED in red. The right panel lists the five reasons Sora failed: cost, competition, strategy, quality, and revenue." src="/images/openai-sora-shutdown-hero.svg" width="640" style="display:block;margin:1rem auto;" /></p>
 
@@ -1099,6 +1099,8 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
   💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won't execute the JavaScript on mobile. Always trigger it via the address bar dropdown.
 </div>
 
+<p>Want to write your own bookmarklets? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.</p>
+
 <hr />
 
 <h2 id="tips-for-best-quality">Tips for Best Quality</h2>
@@ -1346,6 +1348,8 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
 <div class="alert alert-info">
   💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won't execute the JavaScript on mobile. Always trigger it via the address bar dropdown.
 </div>
+
+<p>Want to write your own bookmarklets? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.</p>
 
 <hr />
 
@@ -2382,6 +2386,8 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
 
 <p>The script will inject and run instantly.</p>
 
+<p>Want to write your own bookmarklets? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.</p>
+
 <hr />
 
 <p>Enjoy your mountains of cookies — however you choose to earn them!</p>
@@ -2532,6 +2538,8 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
   <li>Tap the <strong>smiley face ☺</strong> to start a new game.</li>
   <li>Tap anywhere near the <strong>bottom-right corner</strong> of the board.</li>
 </ol>
+
+<p>Want to write your own bookmarklets? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.</p>
 
 <h2 id="under-the-hood">Under the Hood</h2>
 
