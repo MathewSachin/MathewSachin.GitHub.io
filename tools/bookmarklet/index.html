@@ -145,8 +145,12 @@ alert('Word count: ' + (words ? words.length : 0));"
     inside string literals are preserved intact.
   </li>
   <li>
-    <strong>Whitespace Compression</strong> — Newlines and tabs are replaced with a single
-    space, and runs of multiple spaces are collapsed to one — but only outside string literals.
+    <strong>Semicolon Insertion &amp; Whitespace Compression</strong> — Each newline is
+    replaced with <code>;</code> if the preceding token can end a statement (identifier,
+    number, closing parenthesis/bracket/string/regex) — mirroring JavaScript's own
+    Automatic Semicolon Insertion rules — and with a space otherwise. Tabs and runs of
+    multiple spaces are then collapsed to a single space. String literal and template
+    literal contents are left untouched.
   </li>
   <li>
     <strong>Template Literal &amp; Regex Awareness</strong> — Content inside backtick
@@ -245,7 +249,11 @@ alert('Word count: ' + (words ? words.length : 0));"
           }
 
         } else if (c === '\r' || c === '\n') {
-          out += ' '; i++;                   // newline → space
+          // Insert ';' where ASI would — i.e. when the preceding token can end
+          // a statement (identifier, number, closing paren/bracket/string/regex).
+          // Without this, collapsing newlines to spaces breaks semicolon-free JS.
+          out += /[a-zA-Z0-9_$)\]'"\/]/.test(prevCode) ? ';' : ' ';
+          i++;
 
         } else if (c === '\t') {
           out += ' '; prevCode = ' '; i++;   // tab → space
@@ -288,7 +296,8 @@ alert('Word count: ' + (words ? words.length : 0));"
       // ── S_LCOM ─────────────────────────────────────────────────────────
       } else if (state === S_LCOM) {
         if (c === '\n' || c === '\r') {
-          out += ' '; state = S_CODE; i++;
+          out += /[a-zA-Z0-9_$)\]'"\/]/.test(prevCode) ? ';' : ' ';
+          state = S_CODE; i++;
         } else {
           i++;
         }
