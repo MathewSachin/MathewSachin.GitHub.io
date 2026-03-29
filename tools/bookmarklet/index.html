@@ -11,14 +11,6 @@ ads: true
     font-size: 0.85rem;
     resize: vertical;
     min-height: 300px;
-    background: #1a1a2e;
-    color: #e0e0e0;
-    border-color: #444;
-    caret-color: #17a2b8;
-  }
-  #compiled-output {
-    background: #0d1117;
-    color: #7ee787;
   }
   #drag-btn {
     display: inline-block;
@@ -47,8 +39,8 @@ ads: true
     padding: 0.2rem 0.55rem;
     border-radius: 4px;
     font-size: 0.78rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 </style>
 
@@ -96,7 +88,7 @@ alert('Word count: ' + (words ? words.length : 0));"
           </a>
           <small class="text-muted">or right-click &rarr; Bookmark this link</small>
         </div>
-        <p class="d-md-none mb-0" style="font-size:0.85rem; color:#495057;">
+        <p class="d-md-none mb-0 text-muted" style="font-size:0.85rem;">
           <i class="fas fa-info-circle me-1"></i>Dragging to the bookmarks bar is a desktop-only feature.
           On mobile, tap <strong>Copy</strong> above, then manually create a new bookmark in your browser and paste the compiled code as the URL.
         </p>
