@@ -1,5 +1,6 @@
 ---
 title: "The GPU Font Patent That Fed a Game Studio for a Decade — and Just Became Free"
+icon: "fas fa-microchip"
 tags: [open-source, graphics, gaming, patents, gpu]
 highlight: true
 related:

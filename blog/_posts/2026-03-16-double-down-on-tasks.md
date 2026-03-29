@@ -1,5 +1,6 @@
 ---
 title: "How to Double Down on Tasks (And Actually Get Things Done)"
+icon: "fas fa-tasks"
 tags: [productivity, focus, tasks, habits, deep-work]
 highlight: true
 related:

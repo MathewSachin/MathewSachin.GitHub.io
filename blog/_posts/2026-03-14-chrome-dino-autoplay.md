@@ -1,5 +1,6 @@
 ---
 title: "Auto-play the Chrome Dino Game with JavaScript"
+icon: "fas fa-play-circle"
 tags: [chrome, hack, game, javascript]
 highlight: true
 related:

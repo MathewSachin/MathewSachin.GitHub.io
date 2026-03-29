@@ -1,5 +1,6 @@
 ---
 title: "Short-Form Sovereignty: YouTube Shorts are easier to hack than the Main Site"
+icon: "fab fa-youtube"
 tags: [youtube, hack, javascript, browser, devtools]
 highlight: true
 related:

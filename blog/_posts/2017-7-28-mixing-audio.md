@@ -1,5 +1,6 @@
 ---
 title: Mixing Microphone input and Speaker output (Windows)
+icon: "fas fa-music"
 tags: [windows, bass, audio]
 highlight: true
 related:

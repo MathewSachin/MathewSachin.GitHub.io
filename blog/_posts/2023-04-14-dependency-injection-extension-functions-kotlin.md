@@ -1,5 +1,6 @@
 ---
 title: Dependency Injection of extension functions in Kotlin
+icon: "fas fa-plug"
 tags: [di, extensions, functions, kotlin]
 highlight: true
 related:

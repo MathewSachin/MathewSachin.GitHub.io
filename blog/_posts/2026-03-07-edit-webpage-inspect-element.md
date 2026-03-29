@@ -1,5 +1,6 @@
 ---
 title: "Edit Any Webpage in Seconds (Great for Pranks!)"
+icon: "fas fa-pencil-alt"
 tags: [chrome, hack, browser, devtools]
 highlight: true
 related:

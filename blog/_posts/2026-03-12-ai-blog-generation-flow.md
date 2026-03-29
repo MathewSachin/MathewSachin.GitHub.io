@@ -1,5 +1,6 @@
 ---
 title: "How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages"
+icon: "fas fa-robot"
 tags: [ai, github, copilot, jekyll, github-pages, automation, tutorial]
 highlight: true
 mermaid: true

@@ -1,5 +1,6 @@
 ---
 title: "Brute-Force Dark Mode on Any Website — Desktop and Mobile"
+icon: "fas fa-moon"
 tags: [hack, browser, devtools, css, mobile]
 highlight: true
 related:

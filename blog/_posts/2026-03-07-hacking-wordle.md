@@ -1,5 +1,6 @@
 ---
 title: "Hacking Wordle: Solve It in One Try Using Browser DevTools"
+icon: "fas fa-puzzle-piece"
 tags: [wordle, hack, browser, devtools]
 highlight: true
 related:

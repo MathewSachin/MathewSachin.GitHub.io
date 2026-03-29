@@ -1,5 +1,6 @@
 ---
 title: "Multi-Asset Funds vs DIY Portfolio: Which Is Better for Indian Investors?"
+icon: "fas fa-chart-line"
 tags: [investing, mutual-funds, personal-finance, india, sip]
 highlight: false
 ---

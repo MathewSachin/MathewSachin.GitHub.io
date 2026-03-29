@@ -1,5 +1,6 @@
 ---
 title: "Vim, Sublime, or an IDE? The Never-Ending Developer Holy War"
+icon: "fas fa-terminal"
 tags: [vim, editor, ide, productivity, coding]
 highlight: true
 related:

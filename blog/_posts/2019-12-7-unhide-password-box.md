@@ -1,5 +1,6 @@
 ---
 title: "Reveal a Saved Password Hidden Behind Dots"
+icon: "fas fa-eye"
 tags: [chrome, hack, browser, devtools]
 highlight: true
 related:

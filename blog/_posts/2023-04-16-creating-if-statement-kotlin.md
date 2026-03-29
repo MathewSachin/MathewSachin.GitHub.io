@@ -1,5 +1,6 @@
 ---
 title: Creating your own if statement in Kotlin
+icon: "fas fa-code-branch"
 tags: [kotlin, if]
 highlight: true
 related:

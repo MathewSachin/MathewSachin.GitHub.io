@@ -16,7 +16,7 @@
             <a href="{{ post.url | relative_url }}" class="related-post-link" aria-label="Read {{ post.title }}">
                 <div class="card h-100">
                     <div class="card-body">
-                        <p class="card-title mb-1">{{ post.title }}</p>
+                        <p class="card-title mb-1">{% if post.icon %}<i class="{{ post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ post.title }}</p>
                         <small class="related-post-date">{{ post.date | date: "%b %-d, %Y" }}</small>
                     </div>
                     <div class="card-footer">

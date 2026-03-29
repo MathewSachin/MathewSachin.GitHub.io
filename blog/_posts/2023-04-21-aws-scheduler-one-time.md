@@ -1,5 +1,6 @@
 ---
 title: One-time schedules using AWS EventBridge Scheduler
+icon: "fab fa-aws"
 tags: [aws, scheduler, eventbridge, kotlin]
 highlight: true
 related:

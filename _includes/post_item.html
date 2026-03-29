@@ -1,7 +1,7 @@
 <a href="{{ include.post.url | relative_url }}" class="blog-post-link text-decoration-none text-reset">
   <div class="blog-post-item py-3">
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
-      <span class="blog-post-title fw-semibold">{{ include.post.title }}</span>
+      <span class="blog-post-title fw-semibold">{% if include.post.icon %}<i class="{{ include.post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ include.post.title }}</span>
       <span class="small text-muted text-nowrap">{{ include.post.date | date_to_string }}</span>
     </div>
     <div class="d-flex flex-wrap align-items-center gap-2 mt-1">

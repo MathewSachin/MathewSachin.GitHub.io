@@ -1,5 +1,6 @@
 ---
 title: "Gemini Gems: Build a Custom AI That Actually Knows Your Stuff"
+icon: "fas fa-gem"
 tags: [ai, gemini, google, productivity, customization]
 highlight: true
 related:

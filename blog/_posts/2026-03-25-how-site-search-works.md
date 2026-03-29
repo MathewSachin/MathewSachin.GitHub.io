@@ -1,5 +1,6 @@
 ---
 title: "This Blog Has Fully Offline Search — Here's How It Works"
+icon: "fas fa-search"
 tags: [search, javascript, orama, jekyll, tutorial, github-pages]
 highlight: true
 related:
