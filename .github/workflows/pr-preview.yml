@@ -11,27 +11,28 @@ on:
 concurrency: preview-${{ github.ref }}
 
 jobs:
+  build:
+    if: github.event.action != 'closed'
+    uses: ./.github/workflows/build-site.yml
+    permissions: {}
+    with:
+      baseurl: /pr-preview/pr-${{ github.event.pull_request.number }}
+
   deploy-preview:
+    needs: build
+    if: needs.build.result == 'success' || needs.build.result == 'skipped'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set baseurl for PR preview
+      - name: Download site artifact
         if: github.event.action != 'closed'
-        run: |
-          echo "baseurl: /pr-preview/pr-${{ github.event.pull_request.number }}" >> _config.yml
-
-      - name: Build Jekyll site
-        if: github.event.action != 'closed'
-        uses: actions/jekyll-build-pages@v1
+        uses: actions/download-artifact@v4
         with:
-          source: ./
-          destination: ./_site
+          name: site
+          path: ./_site
 
       - name: Deploy PR preview
         uses: rossjrw/pr-preview-action@v1
