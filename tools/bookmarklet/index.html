@@ -140,22 +140,12 @@ alert('Word count: ' + (words ? words.length : 0));"
     target page's global scope.
   </li>
   <li>
-    <strong>Comment Stripping</strong> — Single-line (<code>//</code>) and block
-    (<code>/* &hellip; */</code>) comments are removed. URLs such as <code>https://</code>
-    inside string literals are preserved intact.
-  </li>
-  <li>
-    <strong>Semicolon Insertion &amp; Whitespace Compression</strong> — Each newline is
-    replaced with <code>;</code> if the preceding token can end a statement (identifier,
-    number, closing parenthesis/bracket/string/regex) — mirroring JavaScript's own
-    Automatic Semicolon Insertion rules — and with a space otherwise. Tabs and runs of
-    multiple spaces are then collapsed to a single space. String literal and template
-    literal contents are left untouched.
-  </li>
-  <li>
-    <strong>Template Literal &amp; Regex Awareness</strong> — Content inside backtick
-    template literals (including embedded newlines) is preserved verbatim. A <code>/</code>
-    character is correctly identified as a regex delimiter or division operator based on context.
+    <strong>Minification via Terser</strong> — The industry-standard
+    <a href="https://terser.org" target="_blank" rel="noopener noreferrer">Terser</a>
+    library handles comment stripping, whitespace removal, dead-code
+    elimination, and constant folding. It uses a full JavaScript parser so edge
+    cases like regex literals, template literals, and semicolon-free style are
+    all handled correctly.
   </li>
   <li>
     <strong>URI Encoding</strong> — Characters that would break a URL bar
@@ -177,167 +167,28 @@ alert('Word count: ' + (words ? words.length : 0));"
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/terser@5.46.1/dist/bundle.min.js" integrity="sha384-nzjWtCA/KgLA3wxAwnhUkyVMkUYv5FHRfUInpQG+0QyLpbblos9RKFceXWHQ3AWM" crossorigin="anonymous"></script>
 <script>
 (function () {
   'use strict';
 
-  var rawInput        = document.getElementById('raw-input');
-  var compiledOutput  = document.getElementById('compiled-output');
-  var dragBtn         = document.getElementById('drag-btn');
-  var copyBtn         = document.getElementById('copy-btn');
-  var clearBtn        = document.getElementById('clear-btn');
-  var statRaw         = document.getElementById('stat-raw');
-  var statOut         = document.getElementById('stat-out');
-  var statPct         = document.getElementById('stat-pct');
-  var statSavings     = document.getElementById('stat-savings-badge');
+  var rawInput       = document.getElementById('raw-input');
+  var compiledOutput = document.getElementById('compiled-output');
+  var dragBtn        = document.getElementById('drag-btn');
+  var copyBtn        = document.getElementById('copy-btn');
+  var clearBtn       = document.getElementById('clear-btn');
+  var statRaw        = document.getElementById('stat-raw');
+  var statOut        = document.getElementById('stat-out');
+  var statPct        = document.getElementById('stat-pct');
+  var statSavings    = document.getElementById('stat-savings-badge');
 
-  // ── State-machine minifier ────────────────────────────────────────────────
-  //
-  // States:
-  //   S_CODE  – regular code
-  //   S_DQ    – double-quoted string  "…"
-  //   S_SQ    – single-quoted string  '…'
-  //   S_TPL   – template literal      `…`
-  //   S_BCOM  – block comment         /* … */
-  //   S_LCOM  – line comment          // …
-  //   S_RE    – regex literal         /…/
+  var debounceTimer = null;
+  var seq = 0; // incremented per Terser call; ignored results are discarded
 
-  var S_CODE = 0, S_DQ = 1, S_SQ = 2, S_TPL = 3,
-      S_BCOM = 4, S_LCOM = 5, S_RE = 6;
-
-  // Characters after which a bare / must be a regex (not division)
-  var RE_AFTER = /[(\[!&|?:,;={}<>+\-*%^~]/;
-
-  function minify(raw) {
-    if (!raw.trim()) return '';
-
-    var out      = '';
-    var i        = 0;
-    var n        = raw.length;
-    var state    = S_CODE;
-    var prevCode = ''; // last non-space code character
-
-    while (i < n) {
-      var c  = raw[i];
-      var c2 = (i + 1 < n) ? raw[i + 1] : '';
-
-      // ── S_CODE ─────────────────────────────────────────────────────────
-      if (state === S_CODE) {
-
-        if (c === '/' && c2 === '*') {
-          state = S_BCOM; i += 2;
-
-        } else if (c === '/' && c2 === '/') {
-          state = S_LCOM; i += 2;
-
-        } else if (c === '"') {
-          state = S_DQ;  out += c; prevCode = c; i++;
-
-        } else if (c === "'") {
-          state = S_SQ;  out += c; prevCode = c; i++;
-
-        } else if (c === '`') {
-          state = S_TPL; out += c; prevCode = c; i++;
-
-        } else if (c === '/') {
-          // Regex when preceded by operator/keyword-boundary, or at expression start
-          var isRe = !prevCode || RE_AFTER.test(prevCode);
-          if (isRe) {
-            state = S_RE; out += c; i++;
-          } else {
-            out += c; prevCode = c; i++;
-          }
-
-        } else if (c === '\r' || c === '\n') {
-          // Insert ';' where ASI would — i.e. when the preceding token can end
-          // a statement (identifier, number, closing paren/bracket/string/regex).
-          // Without this, collapsing newlines to spaces breaks semicolon-free JS.
-          out += /[a-zA-Z0-9_$)\]'"\/]/.test(prevCode) ? ';' : ' ';
-          i++;
-
-        } else if (c === '\t') {
-          out += ' '; prevCode = ' '; i++;   // tab → space
-
-        } else {
-          out += c;
-          if (c !== ' ') prevCode = c;
-          i++;
-        }
-
-      // ── S_DQ / S_SQ ────────────────────────────────────────────────────
-      } else if (state === S_DQ || state === S_SQ) {
-        var term = (state === S_DQ) ? '"' : "'";
-        if (c === '\\') {
-          out += c + c2; i += 2;
-        } else if (c === term) {
-          out += c; state = S_CODE; prevCode = c; i++;
-        } else {
-          out += c; i++;
-        }
-
-      // ── S_TPL ──────────────────────────────────────────────────────────
-      } else if (state === S_TPL) {
-        if (c === '\\') {
-          out += c + c2; i += 2;
-        } else if (c === '`') {
-          out += c; state = S_CODE; prevCode = c; i++;
-        } else {
-          out += c; i++; // preserve newlines inside template literals
-        }
-
-      // ── S_BCOM ─────────────────────────────────────────────────────────
-      } else if (state === S_BCOM) {
-        if (c === '*' && c2 === '/') {
-          out += ' '; state = S_CODE; i += 2;
-        } else {
-          i++;
-        }
-
-      // ── S_LCOM ─────────────────────────────────────────────────────────
-      } else if (state === S_LCOM) {
-        if (c === '\n' || c === '\r') {
-          out += /[a-zA-Z0-9_$)\]'"\/]/.test(prevCode) ? ';' : ' ';
-          state = S_CODE; i++;
-        } else {
-          i++;
-        }
-
-      // ── S_RE ───────────────────────────────────────────────────────────
-      } else if (state === S_RE) {
-        if (c === '\\') {
-          out += c + c2; i += 2;
-
-        } else if (c === '[') {
-          // Character class: a / inside [  ] is not a terminator
-          out += c; i++;
-          while (i < n && raw[i] !== ']') {
-            if (raw[i] === '\\' && i + 1 < n) { out += raw[i] + raw[i + 1]; i += 2; }
-            else                               { out += raw[i]; i++; }
-          }
-          if (i < n) { out += raw[i]; i++; } // closing ]
-
-        } else if (c === '/') {
-          out += c; i++;
-          while (i < n && /[dgimsuvy]/.test(raw[i])) { out += raw[i]; i++; }
-          state = S_CODE; prevCode = '/';
-
-        } else if (c === '\n' || c === '\r') {
-          // Unterminated regex — fall back to code
-          state = S_CODE; out += ' '; i++;
-
-        } else {
-          out += c; i++;
-        }
-      }
-    }
-
-    // Collapse multiple spaces (guaranteed safe: string/template contents are
-    // passed through verbatim and won't have runs of synthesised spaces)
-    out = out.replace(/  +/g, ' ').trim();
-
-    // URI-encode characters that break bookmark URL bars.
-    // % must be first to prevent double-encoding.
-    out = out
+  // URI-encode characters that break bookmark URL bars.
+  // % must be first to prevent double-encoding.
+  function uriEncode(code) {
+    return code
       .replace(/%/g,  '%25')
       .replace(/"/g,  '%22')
       .replace(/'/g,  '%27')
@@ -346,37 +197,65 @@ alert('Word count: ' + (words ? words.length : 0));"
       .replace(/</g,  '%3C')
       .replace(/>/g,  '%3E')
       .replace(/`/g,  '%60');
-
-    return 'javascript:(function(){' + out + '})();';
   }
 
-  // ── UI update ──────────────────────────────────────────────────────────────
-  function update() {
-    var raw    = rawInput.value;
-    var result = minify(raw);
-
-    compiledOutput.value = result;
-
-    var rawLen = raw.length;
-    var outLen = result.length;
-    statRaw.textContent = rawLen.toLocaleString();
+  function setResult(bookmarklet) {
+    compiledOutput.value = bookmarklet;
+    var rawLen = rawInput.value.length;
+    var outLen = bookmarklet.length;
     statOut.textContent = outLen.toLocaleString();
-
     if (rawLen > 0 && outLen > 0 && outLen < rawLen) {
-      var pct = Math.round((1 - outLen / rawLen) * 100);
-      statPct.textContent = pct;
+      statPct.textContent = Math.round((1 - outLen / rawLen) * 100);
       statSavings.classList.remove('d-none');
     } else {
       statSavings.classList.add('d-none');
     }
+    dragBtn.href = bookmarklet;
+    dragBtn.classList.remove('bm-disabled');
+  }
 
-    if (result) {
-      dragBtn.href = result;
-      dragBtn.classList.remove('bm-disabled');
-    } else {
-      dragBtn.href = '#';
-      dragBtn.classList.add('bm-disabled');
+  function clearResult() {
+    compiledOutput.value = '';
+    statOut.textContent = '0';
+    statSavings.classList.add('d-none');
+    dragBtn.href = '#';
+    dragBtn.classList.add('bm-disabled');
+  }
+
+  function update() {
+    var raw = rawInput.value;
+    statRaw.textContent = raw.length.toLocaleString();
+
+    if (!raw.trim()) {
+      clearResult();
+      return;
     }
+
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      var mySeq = ++seq;
+      Terser.minify(raw, {
+        compress: true,
+        mangle: false,
+        format: { comments: false }
+      }).then(function (result) {
+        if (mySeq !== seq) return; // superseded by a later call
+        var bookmarklet = 'javascript:(function(){' + uriEncode(result.code) + '})();';
+        setResult(bookmarklet);
+      }).catch(function (err) {
+        if (mySeq !== seq) return;
+        var msg = err.message || String(err);
+        // Terser parse errors include line:col in the message; append if separate props exist
+        if (err.line != null && !msg.includes(err.line)) {
+          msg += ' [line ' + err.line + (err.col != null ? ':' + err.col : '') + ']';
+        }
+        compiledOutput.value = '/* ' + msg + ' */';
+        dragBtn.href = '#';
+        dragBtn.classList.add('bm-disabled');
+        statSavings.classList.add('d-none');
+        statOut.textContent = '0';
+      });
+    }, 250);
   }
 
   rawInput.addEventListener('input', update);
