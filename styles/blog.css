@@ -259,6 +259,43 @@ div.highlight pre {
   opacity: 1;
 }
 
+/* Inline post links with icon (post_link.html include) */
+.post-link {
+  color: #17a2b8;
+  text-decoration: none;
+}
+
+.post-link:hover {
+  color: #138496;
+  text-decoration: underline;
+}
+
+.post-link:visited {
+  color: #6f42c1;
+}
+
+.post-link:visited:hover {
+  color: #5a32a3;
+}
+
+/* Visited state distinction for inline content links in post body */
+.page-content a:visited {
+  color: #6f42c1;
+}
+
+/* Visited state distinction for post list entries */
+.blog-post-link:visited .blog-post-title {
+  color: #6c757d;
+}
+
+.archive-post-link:visited .archive-post-title {
+  color: #6c757d;
+}
+
+.tag-post-link:visited .tag-post-title {
+  color: #6c757d;
+}
+
 /* Blog index post list */
 .blog-post-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);

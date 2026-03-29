@@ -231,7 +231,10 @@ read</em>
 
 <p>FFmpeg is a great tool for working with media of all kinds.
 In this post, I will demonstrate how images and audio can be piped to <strong>ffmpeg.exe</strong> from C#.
-If you need to mix audio from multiple sources before piping, check out <a href="/blog/2017/07/28/mixing-audio.html">Mixing Microphone input and Speaker output</a>.</p>
+If you need to mix audio from multiple sources before piping, check out</p>
+
+<p><a href="/blog/2017/07/28/mixing-audio.html" class="post-link"><i class="fas fa-music post-icon me-1" aria-hidden="true"></i>Mixing Microphone input and Speaker output (Windows)</a>
+.</p>
 
 <p>We launch <strong>ffmpeg.exe</strong> as a child process using the <code class="language-plaintext highlighter-rouge">System.Diagnostics.Process</code> class, with <code class="language-plaintext highlighter-rouge">UseShellExecute = false</code> and <code class="language-plaintext highlighter-rouge">CreateNoWindow = true</code> so that no console window appears.</p>
 
