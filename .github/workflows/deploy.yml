@@ -11,7 +11,8 @@ concurrency:
 jobs:
   build:
     uses: ./.github/workflows/build-site.yml
-    permissions: {}
+    permissions:
+      contents: read
 
   deploy:
     needs: build
