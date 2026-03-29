@@ -14,7 +14,7 @@ related:
 
 ---
 
-The [classic Wordle hack]({% post_url /blog/2026-03-07-hacking-wordle %}) uses the browser's Network tab to peek at today's answer. On a desktop that's just a keyboard shortcut away, but on a phone or tablet DevTools simply isn't available. That's where **bookmarklets** come in.
+The {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="classic Wordle hack" %} uses the browser's Network tab to peek at today's answer. On a desktop that's just a keyboard shortcut away, but on a phone or tablet DevTools simply isn't available. That's where **bookmarklets** come in.
 
 ## What Is a Bookmarklet?
 

@@ -102,7 +102,7 @@ From Malik's piece:
 
 That curve — $6B added in a single month — is what makes a prospectus compelling without a PR campaign. You don't need to craft a narrative when the numbers are doing it for you.
 
-And it's [developers, not sycophancy, that are driving it]({% post_url /blog/2026-03-18-mistral-forge-enterprise-ai %}). The same pattern that [Mistral is betting on with Forge]({% post_url /blog/2026-03-18-mistral-forge-enterprise-ai %}) — that the real enterprise value in AI comes from depth of adoption rather than breadth of users — is exactly what Claude Code is demonstrating. Anthropic has no friends in Washington, and the Pentagon has reportedly declared it a "supply-chain risk." What it has instead is a product that developers actually want to use, and a growth curve that answers the only question that matters at IPO time.
+And it's {% include post_link.html url="/blog/2026/03/18/mistral-forge-enterprise-ai" text="developers, not sycophancy, that are driving it" %}. The same pattern that {% include post_link.html url="/blog/2026/03/18/mistral-forge-enterprise-ai" text="Mistral is betting on with Forge" %} — that the real enterprise value in AI comes from depth of adoption rather than breadth of users — is exactly what Claude Code is demonstrating. Anthropic has no friends in Washington, and the Pentagon has reportedly declared it a "supply-chain risk." What it has instead is a product that developers actually want to use, and a growth curve that answers the only question that matters at IPO time.
 
 OpenAI, meanwhile, generates $25B in annualized revenue with 900 million weekly users and a CEO who is genuinely exceptional at bending narratives. That's not nothing. That's a huge number. But the story it needs to tell investors — focused, enterprise-ready, ahead in the race — is being actively undermined by the story its product is telling users: *click the hook, stay in the loop, don't leave.*
 
@@ -134,7 +134,7 @@ A few things will clarify how this plays out:
 
 **Whether OpenAI follows through on its enterprise pivot.** Malik notes that OpenAI is in talks with TPG, Advent International, Bain Capital, and Brookfield for a $10B joint venture targeting PE-backed portfolio companies. That's a coherent enterprise strategy — if it works. Getting large, bureaucratic organizations to actually adopt AI in their workflows is hard in a way that writing a great follow-up hook is not.
 
-**Whether the engagement mechanics backfire.** There's a real risk that the very users ChatGPT is trying to retain are the ones most likely to notice the manipulation and switch to something that treats them like adults. Developers in particular don't stay with tools that prioritize engagement over output quality. [They've made that clear before.]({% post_url /blog/2026-03-09-luddites-vs-developers %})
+**Whether the engagement mechanics backfire.** There's a real risk that the very users ChatGPT is trying to retain are the ones most likely to notice the manipulation and switch to something that treats them like adults. Developers in particular don't stay with tools that prioritize engagement over output quality. {% include post_link.html url="/blog/2026/03/09/luddites-vs-developers" text="They've made that clear before." %}
 
 **Whether the IPO window actually stays open.** If the macro picture turns sufficiently ugly, none of this matters. The race to the IPO is real, but public markets are not obligated to cooperate.
 
@@ -146,4 +146,4 @@ The best minds of a generation are thinking about how to make people click.
 
 ---
 
-*This post was generated with the assistance of AI as part of an [automated blogging experiment]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}). The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*

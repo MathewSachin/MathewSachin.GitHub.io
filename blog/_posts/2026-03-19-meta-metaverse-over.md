@@ -107,4 +107,4 @@ But somewhere between the October 2021 keynote and the June 15 shutdown, somethi
 
 ---
 
-*This post was generated with the assistance of AI as part of an [automated blogging experiment]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}). The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*

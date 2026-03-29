@@ -217,7 +217,7 @@ The last line in `recorder.onstop` pauses the video after the download has been 
 | Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for instagram.com in browser settings |
 | Script does nothing on mobile | Bookmarklet triggered from menu, not address bar | Tap the address bar, type the bookmark name, tap from dropdown |
 
-*Using the same browser-only approach, you can also [download Reddit videos]({% post_url /blog/2026-03-22-reddit-video-sniper %}), [download Instagram Stories]({% post_url /blog/2026-03-22-instagram-story-sniper %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
+*Using the same browser-only approach, you can also {% include post_link.html url="/blog/2026/03/22/reddit-video-sniper" text="download Reddit videos" %}, {% include post_link.html url="/blog/2026/03/22/instagram-story-sniper" text="download Instagram Stories" %}, {% include post_link.html url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" %}, {% include post_link.html url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" %}, and {% include post_link.html url="/blog/2026/03/21/save-instagram-photos" text="save Instagram photos" %}.*
 
 ---
 

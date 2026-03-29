@@ -16,7 +16,7 @@ related:
 
 ---
 
-Stories are ephemeral by design. Once they disappear, they are gone from everyone's feed — including your own. And unlike Reels, there is no "Save" option anywhere in the UI. This script takes a completely different approach to the [Reel downloader]({% post_url /blog/2026-03-21-instagram-reel-sniper %}): instead of recording the screen, it reaches into the browser's internal React data to pull the original CDN URL and opens it directly in a new tab where you can save it natively.
+Stories are ephemeral by design. Once they disappear, they are gone from everyone's feed — including your own. And unlike Reels, there is no "Save" option anywhere in the UI. This script takes a completely different approach to the {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="Reel downloader" %}: instead of recording the screen, it reaches into the browser's internal React data to pull the original CDN URL and opens it directly in a new tab where you can save it natively.
 
 ---
 
@@ -128,7 +128,7 @@ If it succeeds, the Story's original source file opens in a new browser tab. Rig
 
 ## How the Code Works
 
-Here is a plain-English breakdown of each stage, and where it differs from the [Reel downloader]({% post_url /blog/2026-03-21-instagram-reel-sniper %}).
+Here is a plain-English breakdown of each stage, and where it differs from the {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="Reel downloader" %}.
 
 ### Stage 1 — URL Guard
 
@@ -275,7 +275,7 @@ The fundamental trade-off is **generality vs. precision**. The Reel downloader's
 | Alert: "Metadata hidden. Use the 'Delta-Sync' recorder" | React fiber data not found in the DOM tree | Instagram may have updated their component structure; try the Reel downloader's `captureStream` method instead |
 | Browser blocks the pop-up | Pop-up blocker intercepted the `link.click()` | Allow pop-ups for instagram.com in browser settings |
 
-*Using the same browser-only approach, you can also [download Reddit videos]({% post_url /blog/2026-03-22-reddit-video-sniper %}), [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}), [download YouTube Shorts]({% post_url /blog/2026-03-21-youtube-shorts-sniper %}), and [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}).*
+*Using the same browser-only approach, you can also {% include post_link.html url="/blog/2026/03/22/reddit-video-sniper" text="download Reddit videos" %}, {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="download Instagram Reels" %}, {% include post_link.html url="/blog/2026/03/21/save-instagram-photos" text="save Instagram photos" %}, {% include post_link.html url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" %}, and {% include post_link.html url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" %}.*
 
 ---
 

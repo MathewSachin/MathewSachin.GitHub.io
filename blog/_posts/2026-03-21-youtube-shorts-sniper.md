@@ -130,7 +130,7 @@ const video = document.querySelector('ytd-reel-video-renderer[is-active] video, 
 
 YouTube's Shorts player keeps several `ytd-reel-video-renderer` elements in the DOM at once — one for the Short above, one for the current Short, one below. Each is ready to play the moment you swipe. The active one carries an `is-active` attribute. The selector targets that active renderer's `<video>` child directly. The fallback `#shorts-player video` catches edge cases where the attribute-based selector doesn't match (older YouTube UI versions).
 
-This is a fundamentally different approach from the [Instagram Reel Sniper]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), which has to loop through every `<video>` on the page and check each one's bounding rectangle to find the visible one. YouTube gives us a cleaner semantic handle with `is-active`.
+This is a fundamentally different approach from the {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="Instagram Reel Sniper" %}, which has to loop through every `<video>` on the page and check each one's bounding rectangle to find the visible one. YouTube gives us a cleaner semantic handle with `is-active`.
 
 ### The 500 ms Delay
 
@@ -175,7 +175,7 @@ The rest mirrors the Instagram approach: `captureStream` turns the `<video>` ele
 
 ## Differences from Instagram Reel Downloads
 
-For a full breakdown of the `captureStream` + `MediaRecorder` pattern, see the [Instagram Reel Sniper]({% post_url /blog/2026-03-21-instagram-reel-sniper %}) post. The core pipeline is identical. Here's where the two scripts diverge:
+For a full breakdown of the `captureStream` + `MediaRecorder` pattern, see the {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="Instagram Reel Sniper" %} post. The core pipeline is identical. Here's where the two scripts diverge:
 
 | | YouTube Shorts Sniper | Instagram Reel Sniper |
 |---|---|---|
@@ -203,7 +203,7 @@ The core philosophy is the same: use `captureStream` to intercept what the brows
 | `timeupdate` never fires | Tab was backgrounded during recording | Keep the YouTube tab active and in the foreground while recording |
 | Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for youtube.com in browser settings |
 
-*Using the same browser-only approach, you can also [download Reddit videos]({% post_url /blog/2026-03-22-reddit-video-sniper %}), [download Instagram Reels]({% post_url /blog/2026-03-21-instagram-reel-sniper %}), [download Twitter/X videos]({% post_url /blog/2026-03-21-twitter-x-video-sniper %}), and [save Instagram photos]({% post_url /blog/2026-03-21-save-instagram-photos %}).*
+*Using the same browser-only approach, you can also {% include post_link.html url="/blog/2026/03/22/reddit-video-sniper" text="download Reddit videos" %}, {% include post_link.html url="/blog/2026/03/21/instagram-reel-sniper" text="download Instagram Reels" %}, {% include post_link.html url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" %}, and {% include post_link.html url="/blog/2026/03/21/save-instagram-photos" text="save Instagram photos" %}.*
 
 ---
 

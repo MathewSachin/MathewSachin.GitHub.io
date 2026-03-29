@@ -142,7 +142,7 @@ Because the style is tagged with a unique `id`, the revert script can find and r
 
 ---
 
-Want more browser hacks you can pull off without installing anything? Check out [Edit Any Webpage in Seconds]({% post_url /blog/2026-03-07-edit-webpage-inspect-element %}) and [Hacking Wordle with DevTools]({% post_url /blog/2026-03-07-hacking-wordle %}).
+Want more browser hacks you can pull off without installing anything? Check out {% include post_link.html url="/blog/2026/03/07/edit-webpage-inspect-element" text="Edit Any Webpage in Seconds" %} and {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle with DevTools" %}.
 
 <script>
 function bruteDarkOn() {

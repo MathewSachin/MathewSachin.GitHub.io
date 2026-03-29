@@ -324,4 +324,4 @@ Share this page around and comment down if you have tricks of your own!
 
 ---
 
-Time to try some other great hacks — [Wordle]({% post_url /blog/2026-03-07-hacking-wordle %}), [Minesweeper]({% post_url /blog/2026-03-20-hacking-minesweeper-online %}), [TypeRacer]({% post_url /blog/2026-03-20-hacking-typeracer %}).
+Time to try some other great hacks — {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Wordle" %}, {% include post_link.html url="/blog/2026/03/20/hacking-minesweeper-online" text="Minesweeper" %}, {% include post_link.html url="/blog/2026/03/20/hacking-typeracer" text="TypeRacer" %}.

@@ -167,4 +167,4 @@ Without the `if (fakeRandom >= 1) fakeRandom = 0` line, the counter would eventu
 
 Now go enjoy your (totally legitimate) winning streak! 🏆
 
-*Enjoyed this? Check out [Hacking the Chrome Dino Game](/blog/2016/11/05/chrome-dino-hack), [Hacking TypeRacer]({% post_url /blog/2026-03-20-hacking-typeracer %}), or [Hacking Wordle]({% post_url /blog/2026-03-07-hacking-wordle %}) for more fun browser tricks.*
+*Enjoyed this? Check out {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="Hacking the Chrome Dino Game" %}, {% include post_link.html url="/blog/2026/03/20/hacking-typeracer" text="Hacking TypeRacer" %}, or {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle" %} for more fun browser tricks.*

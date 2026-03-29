@@ -69,7 +69,7 @@ It's worth stepping back and thinking about what Mistral is actually doing here,
 
 Those companies are all competing on the same axis: the frontier model. Bigger training runs, more parameters, better benchmark scores, faster reasoning. The implicit assumption is that the best model wins, and winning the model race means winning the enterprise.
 
-Mistral is making a different argument. [Ken Jin's Python JIT work]({% post_url /blog/2026-03-18-python-jit-finally-fast %}) reminded the open-source community this week that performance improvements don't always come from adding more — sometimes they come from understanding the specific workload. Mistral seems to be applying the same thinking to AI: instead of building the most capable general model, build the most capable model *for you*.
+Mistral is making a different argument. {% include post_link.html url="/blog/2026/03/18/python-jit-finally-fast" text="Ken Jin's Python JIT work" %} reminded the open-source community this week that performance improvements don't always come from adding more — sometimes they come from understanding the specific workload. Mistral seems to be applying the same thinking to AI: instead of building the most capable general model, build the most capable model *for you*.
 
 This plays to Mistral's real strengths:
 - A European company in an era where EU customers are concerned about data sovereignty and US provider dependence
@@ -100,7 +100,7 @@ Forge is trying to insert Mistral deeper into the first layer — but specifical
 
 If that works, the value of a generic foundation model subscription goes down for those customers. They're not renting intelligence; they're building their own.
 
-This is also, notably, where the [Gemini Gems]({% post_url /blog/2026-03-17-gemini-gems %}) vision ends. Gems let you customize a model's behavior and context. Forge lets you reshape what the model actually knows at a fundamental level. Different tools for different depths of need.
+This is also, notably, where the {% include post_link.html url="/blog/2026/03/17/gemini-gems" text="Gemini Gems" %} vision ends. Gems let you customize a model's behavior and context. Forge lets you reshape what the model actually knows at a fundamental level. Different tools for different depths of need.
 
 ## The Honest Questions
 
@@ -125,4 +125,4 @@ If Forge works for them, the argument for specialized model training will be har
 
 ---
 
-*This post was generated with the assistance of AI as part of an [automated blogging experiment]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}). The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*

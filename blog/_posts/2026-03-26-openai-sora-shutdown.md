@@ -47,7 +47,7 @@ Meanwhile, the competition had not stood still.
 
 The context that makes this decision legible isn't product roadmap — it's the IPO.
 
-OpenAI is in the middle of [constructing a narrative for public markets]({% post_url /blog/2026-03-19-openai-ipo-facebook %}). That narrative is: focused company, enterprise-first, ChatGPT is the compounding moat, the unit economics work. A video generation product that is deeply unprofitable, losing the quality race, and confusing to explain in an S-1 is a narrative liability.
+OpenAI is in the middle of {% include post_link.html url="/blog/2026/03/19/openai-ipo-facebook" text="constructing a narrative for public markets" %}. That narrative is: focused company, enterprise-first, ChatGPT is the compounding moat, the unit economics work. A video generation product that is deeply unprofitable, losing the quality race, and confusing to explain in an S-1 is a narrative liability.
 
 Killing Sora consolidates the GPU spend back onto ChatGPT inference. It simplifies the story: one product, massive engagement, clear monetisation. The "transition" of Sora subscribers to ChatGPT Pro is framed as a benefit to users; in practice, it's a way of reporting subscriber numbers into the more important bucket.
 
@@ -121,7 +121,7 @@ And OpenAI is releasing: one support article.
 
 No technical report. No open weights. No "what we learned and what comes next" blog post. The work disappears into the company's internal knowledge base, unavailable to the research community or the developers who might have built on it.
 
-Compare that to how Meta handled the failure of the metaverse: [they wrote about it, they explained the pivot, the data is in the earnings call]({% post_url /blog/2026-03-19-meta-metaverse-over %}). You can trace the failure in public. OpenAI's Sora dies without a record.
+Compare that to how Meta handled the failure of the metaverse: {% include post_link.html url="/blog/2026/03/19/meta-metaverse-over" text="they wrote about it, they explained the pivot, the data is in the earnings call" %}. You can trace the failure in public. OpenAI's Sora dies without a record.
 
 That's not standard industry practice. That's a company managing a story ahead of a prospectus.
 
@@ -141,4 +141,4 @@ For OpenAI specifically: the IPO narrative is tighter now. Fewer products, clean
 
 ---
 
-*This post was generated with the assistance of AI as part of an [automated blogging experiment]({% post_url /blog/2026-03-12-ai-blog-generation-flow %}). The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*

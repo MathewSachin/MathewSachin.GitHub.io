@@ -142,4 +142,4 @@ The script will inject and run instantly.
 
 Enjoy your mountains of cookies — however you choose to earn them!
 
-*Enjoyed this? Check out [Hacking the Chrome Dino Game]({% post_url /blog/2016-11-5-chrome-dino-hack %}), [Hacking Minesweeper Online]({% post_url /blog/2026-03-20-hacking-minesweeper-online %}), or [Hacking TypeRacer]({% post_url /blog/2026-03-20-hacking-typeracer %}) for more browser tricks.*
+*Enjoyed this? Check out {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="Hacking the Chrome Dino Game" %}, {% include post_link.html url="/blog/2026/03/20/hacking-minesweeper-online" text="Hacking Minesweeper Online" %}, or {% include post_link.html url="/blog/2026/03/20/hacking-typeracer" text="Hacking TypeRacer" %} for more browser tricks.*

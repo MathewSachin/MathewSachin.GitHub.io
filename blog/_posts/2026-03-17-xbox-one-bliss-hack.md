@@ -87,11 +87,11 @@ This doesn't mean console security is pointless. Twelve years of protection is t
 
 For security researchers, Bliss is a case study in patience and methodology: build the tooling you need, understand the target deeply, and find the gap where the model doesn't match reality.
 
-For the rest of us, it's a reminder that "unhackable" is always a statement about *current knowledge*, not permanent truth. [Wordle's answer was hiding in the network tab all along]({% post_url /blog/2026-03-07-hacking-wordle %}). The Chrome Dino's game state [was always one console command away]({% post_url /blog/2016-11-5-chrome-dino-hack %}). And the Xbox One's boot sequence had a 12-year-old voltage rail waiting to be touched at exactly the right moment.
+For the rest of us, it's a reminder that "unhackable" is always a statement about *current knowledge*, not permanent truth. {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Wordle's answer was hiding in the network tab all along" %}. The Chrome Dino's game state {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="was always one console command away" %}. And the Xbox One's boot sequence had a 12-year-old voltage rail waiting to be touched at exactly the right moment.
 
 The lock was real. So was the key — it just took a very long time to find.
 
-*Impressed by the patience and precision it takes to find exploits like this? Drop a comment below — and if you want to try your hand at a softer kind of hacking, the [Chrome Dino hack]({% post_url /blog/2016-11-5-chrome-dino-hack %}) is a good place to start. 👇*
+*Impressed by the patience and precision it takes to find exploits like this? Drop a comment below — and if you want to try your hand at a softer kind of hacking, {% include post_link.html url="/blog/2016/11/05/chrome-dino-hack" text="the Chrome Dino hack" %} is a good place to start. 👇*
 
 ---
 
