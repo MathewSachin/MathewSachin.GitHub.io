@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70778035-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70778035-4');
+</script>
+
+
+    <meta charset="UTF-8"/>
+    <title>Bookmarklet Compiler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="/pr-preview/pr-120/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-120/styles/styles.css">
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-120/feed.xml" title="Mathew Sachin" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Bookmarklet Compiler | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Bookmarklet Compiler" />
+<meta name="author" content="Mathew Sachin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My Website where I blog using jekyll" />
+<meta property="og:description" content="My Website where I blog using jekyll" />
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-120/tools/bookmarklet/" />
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-120/tools/bookmarklet/" />
+<meta property="og:site_name" content="Mathew Sachin" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Bookmarklet Compiler" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@Mathew Sachin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"My Website where I blog using jekyll","headline":"Bookmarklet Compiler","url":"https://mathewsachin.github.io/pr-preview/pr-120/tools/bookmarklet/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-120/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-120/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-120/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-120/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-120/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="bg-dark">
+    <div class="py-4 bg-info text-white google-anno-skip">
+        <div class="container">
+            <h2>Bookmarklet Compiler</h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <style>
+  #raw-input,
+  #compiled-output {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.85rem;
+    resize: vertical;
+    min-height: 300px;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-color: #444;
+    caret-color: #17a2b8;
+  }
+  #compiled-output {
+    background: #0d1117;
+    color: #7ee787;
+  }
+  #drag-btn {
+    display: inline-block;
+    padding: 0.55rem 1.15rem;
+    background: #17a2b8;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: grab;
+    border: 2px solid #17a2b8;
+    transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+    user-select: none;
+  }
+  #drag-btn:hover {
+    background: #138496;
+    border-color: #138496;
+    color: #fff;
+  }
+  #drag-btn.bm-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .stat-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>
+
+<div class="card google-anno-skip">
+<div class="card-body">
+
+  <div class="row g-4">
+
+    <!-- Left: Raw Input -->
+    <div class="col-12 col-md-6">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <h5 class="mb-0">Raw JavaScript</h5>
+        <button class="btn btn-sm btn-outline-secondary" id="clear-btn">Clear</button>
+      </div>
+      <textarea id="raw-input" class="form-control" rows="14"
+        placeholder="Paste your raw JavaScript here…
+
+// Example — show page word count
+var words = document.body.innerText.match(/\S+/g);
+alert('Word count: ' + (words ? words.length : 0));"
+        aria-label="Raw JavaScript source"></textarea>
+      <div class="mt-2 d-flex gap-2 flex-wrap" id="stats-bar" aria-live="polite" aria-atomic="true">
+        <span class="stat-badge"><span id="stat-raw">0</span> chars in</span>
+        <span class="stat-badge text-info"><span id="stat-out">0</span> chars out</span>
+        <span class="stat-badge text-success d-none" id="stat-savings-badge"><span id="stat-pct"></span>% smaller</span>
+      </div>
+    </div>
+
+    <!-- Right: Compiled Output -->
+    <div class="col-12 col-md-6">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <h5 class="mb-0">Compiled Bookmarklet</h5>
+        <button class="btn btn-sm btn-outline-secondary" id="copy-btn">
+          <i class="fas fa-copy me-1"></i>Copy
+        </button>
+      </div>
+      <textarea id="compiled-output" class="form-control" rows="14" readonly
+        placeholder="Compiled output will appear here…"
+        aria-label="Compiled bookmarklet output"></textarea>
+      <div class="mt-3 d-flex align-items-center gap-3 flex-wrap">
+        <a id="drag-btn" href="#" class="bm-disabled" draggable="true"
+          title="Drag this button onto your bookmarks bar">
+          <i class="fas fa-bookmark me-2"></i>Drag me to Bookmarks
+        </a>
+        <small class="text-muted">or right-click &rarr; Bookmark this link</small>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How to Use</h4>
+<ol>
+  <li>Paste your raw JavaScript into the left pane.</li>
+  <li>The compiled bookmarklet appears on the right instantly.</li>
+  <li>Drag the <strong>Drag me to Bookmarks</strong> button onto your browser's bookmarks bar.</li>
+  <li>Navigate to any webpage and click the bookmark to run your script.</li>
+</ol>
+
+<h5 class="mt-4">What Is a Bookmarklet?</h5>
+<p>
+  A bookmarklet is a browser bookmark whose URL begins with <code>javascript:</code> instead of
+  <code>http://</code>. When clicked, the browser executes the embedded JavaScript on the current
+  page — no browser extension or installation required. Common uses include toggling dark mode,
+  extracting data from tables, tweaking page styles, or automating repetitive tasks.
+</p>
+
+<h5 class="mt-4">The Compilation Pipeline</h5>
+<p>Your code passes through a strict, sequential pipeline:</p>
+<ol>
+  <li>
+    <strong>IIFE Wrapper</strong> — The code is wrapped in
+    <code>(function(){&nbsp;&hellip;&nbsp;})()</code> so local variables don't leak into the
+    target page's global scope.
+  </li>
+  <li>
+    <strong>Comment Stripping</strong> — Single-line (<code>//</code>) and block
+    (<code>/* &hellip; */</code>) comments are removed. URLs such as <code>https://</code>
+    inside string literals are preserved intact.
+  </li>
+  <li>
+    <strong>Whitespace Compression</strong> — Newlines and tabs are replaced with a single
+    space, and runs of multiple spaces are collapsed to one — but only outside string literals.
+  </li>
+  <li>
+    <strong>Template Literal &amp; Regex Awareness</strong> — Content inside backtick
+    template literals (including embedded newlines) is preserved verbatim. A <code>/</code>
+    character is correctly identified as a regex delimiter or division operator based on context.
+  </li>
+  <li>
+    <strong>URI Encoding</strong> — Characters that would break a URL bar
+    (<code>%</code>, <code>"</code>, <code>'</code>, <code>#</code>, <code>&amp;</code>,
+    <code>&lt;</code>, <code>&gt;</code>, <code>`</code>) are percent-encoded so the browser
+    doesn't mangle your script before it executes.
+  </li>
+</ol>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  All compilation runs entirely in your browser — your code never leaves your device.
+</p>
+
+<br><hr><br>
+
+<script src="https://giscus.app/client.js"
+        data-repo="MathewSachin/MathewSachin.GitHub.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw=="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOAulkj84C4PRo"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var rawInput        = document.getElementById('raw-input');
+  var compiledOutput  = document.getElementById('compiled-output');
+  var dragBtn         = document.getElementById('drag-btn');
+  var copyBtn         = document.getElementById('copy-btn');
+  var clearBtn        = document.getElementById('clear-btn');
+  var statRaw         = document.getElementById('stat-raw');
+  var statOut         = document.getElementById('stat-out');
+  var statPct         = document.getElementById('stat-pct');
+  var statSavings     = document.getElementById('stat-savings-badge');
+
+  // ── State-machine minifier ────────────────────────────────────────────────
+  //
+  // States:
+  //   S_CODE  – regular code
+  //   S_DQ    – double-quoted string  "…"
+  //   S_SQ    – single-quoted string  '…'
+  //   S_TPL   – template literal      `…`
+  //   S_BCOM  – block comment         /* … */
+  //   S_LCOM  – line comment          // …
+  //   S_RE    – regex literal         /…/
+
+  var S_CODE = 0, S_DQ = 1, S_SQ = 2, S_TPL = 3,
+      S_BCOM = 4, S_LCOM = 5, S_RE = 6;
+
+  // Characters after which a bare / must be a regex (not division)
+  var RE_AFTER = /[(\[!&|?:,;={}<>+\-*%^~]/;
+
+  function minify(raw) {
+    if (!raw.trim()) return '';
+
+    var out      = '';
+    var i        = 0;
+    var n        = raw.length;
+    var state    = S_CODE;
+    var prevCode = ''; // last non-space code character
+
+    while (i < n) {
+      var c  = raw[i];
+      var c2 = (i + 1 < n) ? raw[i + 1] : '';
+
+      // ── S_CODE ─────────────────────────────────────────────────────────
+      if (state === S_CODE) {
+
+        if (c === '/' && c2 === '*') {
+          state = S_BCOM; i += 2;
+
+        } else if (c === '/' && c2 === '/') {
+          state = S_LCOM; i += 2;
+
+        } else if (c === '"') {
+          state = S_DQ;  out += c; prevCode = c; i++;
+
+        } else if (c === "'") {
+          state = S_SQ;  out += c; prevCode = c; i++;
+
+        } else if (c === '`') {
+          state = S_TPL; out += c; prevCode = c; i++;
+
+        } else if (c === '/') {
+          // Regex when preceded by operator/keyword-boundary, or at expression start
+          var isRe = !prevCode || RE_AFTER.test(prevCode);
+          if (isRe) {
+            state = S_RE; out += c; i++;
+          } else {
+            out += c; prevCode = c; i++;
+          }
+
+        } else if (c === '\r' || c === '\n') {
+          out += ' '; i++;                   // newline → space
+
+        } else if (c === '\t') {
+          out += ' '; prevCode = ' '; i++;   // tab → space
+
+        } else {
+          out += c;
+          if (c !== ' ') prevCode = c;
+          i++;
+        }
+
+      // ── S_DQ / S_SQ ────────────────────────────────────────────────────
+      } else if (state === S_DQ || state === S_SQ) {
+        var term = (state === S_DQ) ? '"' : "'";
+        if (c === '\\') {
+          out += c + c2; i += 2;
+        } else if (c === term) {
+          out += c; state = S_CODE; prevCode = c; i++;
+        } else {
+          out += c; i++;
+        }
+
+      // ── S_TPL ──────────────────────────────────────────────────────────
+      } else if (state === S_TPL) {
+        if (c === '\\') {
+          out += c + c2; i += 2;
+        } else if (c === '`') {
+          out += c; state = S_CODE; prevCode = c; i++;
+        } else {
+          out += c; i++; // preserve newlines inside template literals
+        }
+
+      // ── S_BCOM ─────────────────────────────────────────────────────────
+      } else if (state === S_BCOM) {
+        if (c === '*' && c2 === '/') {
+          out += ' '; state = S_CODE; i += 2;
+        } else {
+          i++;
+        }
+
+      // ── S_LCOM ─────────────────────────────────────────────────────────
+      } else if (state === S_LCOM) {
+        if (c === '\n' || c === '\r') {
+          out += ' '; state = S_CODE; i++;
+        } else {
+          i++;
+        }
+
+      // ── S_RE ───────────────────────────────────────────────────────────
+      } else if (state === S_RE) {
+        if (c === '\\') {
+          out += c + c2; i += 2;
+
+        } else if (c === '[') {
+          // Character class: a / inside [  ] is not a terminator
+          out += c; i++;
+          while (i < n && raw[i] !== ']') {
+            if (raw[i] === '\\' && i + 1 < n) { out += raw[i] + raw[i + 1]; i += 2; }
+            else                               { out += raw[i]; i++; }
+          }
+          if (i < n) { out += raw[i]; i++; } // closing ]
+
+        } else if (c === '/') {
+          out += c; i++;
+          while (i < n && /[dgimsuvy]/.test(raw[i])) { out += raw[i]; i++; }
+          state = S_CODE; prevCode = '/';
+
+        } else if (c === '\n' || c === '\r') {
+          // Unterminated regex — fall back to code
+          state = S_CODE; out += ' '; i++;
+
+        } else {
+          out += c; i++;
+        }
+      }
+    }
+
+    // Collapse multiple spaces (guaranteed safe: string/template contents are
+    // passed through verbatim and won't have runs of synthesised spaces)
+    out = out.replace(/  +/g, ' ').trim();
+
+    // URI-encode characters that break bookmark URL bars.
+    // % must be first to prevent double-encoding.
+    out = out
+      .replace(/%/g,  '%25')
+      .replace(/"/g,  '%22')
+      .replace(/'/g,  '%27')
+      .replace(/#/g,  '%23')
+      .replace(/&/g,  '%26')
+      .replace(/</g,  '%3C')
+      .replace(/>/g,  '%3E')
+      .replace(/`/g,  '%60');
+
+    return 'javascript:(function(){' + out + '})();';
+  }
+
+  // ── UI update ──────────────────────────────────────────────────────────────
+  function update() {
+    var raw    = rawInput.value;
+    var result = minify(raw);
+
+    compiledOutput.value = result;
+
+    var rawLen = raw.length;
+    var outLen = result.length;
+    statRaw.textContent = rawLen.toLocaleString();
+    statOut.textContent = outLen.toLocaleString();
+
+    if (rawLen > 0 && outLen > 0 && outLen < rawLen) {
+      var pct = Math.round((1 - outLen / rawLen) * 100);
+      statPct.textContent = pct;
+      statSavings.classList.remove('d-none');
+    } else {
+      statSavings.classList.add('d-none');
+    }
+
+    if (result) {
+      dragBtn.href = result;
+      dragBtn.classList.remove('bm-disabled');
+    } else {
+      dragBtn.href = '#';
+      dragBtn.classList.add('bm-disabled');
+    }
+  }
+
+  rawInput.addEventListener('input', update);
+
+  copyBtn.addEventListener('click', function () {
+    if (!compiledOutput.value) return;
+    var icon = copyBtn.querySelector('i');
+    navigator.clipboard.writeText(compiledOutput.value).then(function () {
+      icon.className = 'fas fa-check text-success me-1';
+      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+    }).catch(function () {
+      icon.className = 'fas fa-times text-danger me-1';
+      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+    });
+  });
+
+  clearBtn.addEventListener('click', function () {
+    rawInput.value = '';
+    update();
+  });
+
+}());
+</script>
+
+            </div>
+            <div class="col-md-2">
+                <div class="sticky-top" style="top: 10px">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js" integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="/pr-preview/pr-120/scripts/formatting.js"></script>
+
+    
+
+    
+  </body>
+</html>
