@@ -100,7 +100,7 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 // ==UserScript==
 // @name         Instagram Download Buttons
 // @namespace    https://mathewsachin.github.io/
-// @version      1.1
+// @version      1.2
 // @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram
 // @author       Mathew Sachin
 // @match        https://www.instagram.com/*
@@ -158,9 +158,9 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     }
 
     /* ── Shared React Fiber scraper ─────────────────────────────────── */
-    /* Walks up the DOM from startEl looking for __reactFiber$ props,    */
-    /* then recursively crawls the fiber tree to find CDN URLs.          */
-    function scrapeReactFiber(startEl) {
+    /* Async: yields the main thread between DOM ancestor lookups so     */
+    /* scroll and paint events are not blocked by the recursive walk.    */
+    async function scrapeReactFiber(startEl) {
         const videoUrls = [], imageUrls = [];
 
         const collect = (obj, depth = 0) => {
@@ -183,6 +183,9 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
             const fk = Object.keys(el).find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
             if (fk) collect(el[fk]);
             el = el.parentElement;
+            // Yield after each ancestor so the browser can process pending
+            // scroll / paint / input events before the next iteration.
+            await new Promise(r => setTimeout(r, 0));
         }
 
         const best = arr => arr.length ? arr.sort((a, b) => b.area - a.area)[0].url : null;
@@ -233,16 +236,15 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     }
 
     /* ── CSS shield removal — restores right-click on all images ─────── */
-    /* Instagram sets pointer-events:none on <img> elements and places    */
-    /* invisible overlay divs on top. This reverses those overrides so    */
-    /* right-click "Save image as…" works again.                          */
-    function killShields() {
-        document.querySelectorAll('img').forEach(img => {
-            img.style.setProperty('pointer-events', 'auto', 'important');
-            img.style.setProperty('user-select', 'auto', 'important');
-            img.style.setProperty('z-index', '999', 'important');
-            img.style.setProperty('position', 'relative', 'important');
-        });
+    /* Injects a <style> rule once instead of patching every <img> inline  */
+    /* on every scan. Only pointer-events and user-select are touched —    */
+    /* no position or z-index changes that would break Instagram's layout. */
+    function installKillShieldsCSS() {
+        if (document.getElementById('ig-dl-shields')) return;
+        const style = document.createElement('style');
+        style.id = 'ig-dl-shields';
+        style.textContent = 'img { pointer-events: auto !important; user-select: auto !important; }';
+        (document.head || document.documentElement).appendChild(style);
     }
 
     /* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */
@@ -262,9 +264,10 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
             wrapper.style.setProperty('position', 'relative', 'important');
 
         const btn = makeBtn('⬇', 'Download photo', async () => {
+            btn.disabled = true;
             btn.textContent = '⏳';
             try {
-                let url = scrapeReactFiber(img);
+                let url = await scrapeReactFiber(img);
                 if (!url) {
                     const srcset = img.getAttribute('srcset') || '';
                     const candidates = srcset.split(',').map(s => s.trim().split(/\s+/)).filter(p => p.length);
@@ -276,7 +279,7 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
                 btn.textContent = '❌';
                 console.error('[IG-DL] Photo download failed:', err);
             }
-            setTimeout(() => { btn.textContent = '⬇'; }, 2000);
+            setTimeout(() => { btn.textContent = '⬇'; btn.disabled = false; }, 2000);
         });
         btn.style.top = '8px';
         btn.style.right = '8px';
@@ -295,9 +298,10 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
             wrapper.style.setProperty('position', 'relative', 'important');
 
         const btn = makeBtn('⬇', 'Download reel', async () => {
+            btn.disabled = true;
             btn.textContent = '⏳';
             try {
-                const url = scrapeReactFiber(videoEl);
+                const url = await scrapeReactFiber(videoEl);
                 if (url) {
                     // Fiber gave us the CDN URL — download it directly
                     await downloadBlob(url, `reel.${extFromUrl(url)}`);
@@ -317,7 +321,7 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
                 btn.textContent = '❌';
                 console.error('[IG-DL] Reel download failed:', err);
             }
-            setTimeout(() => { btn.textContent = '⬇'; }, 3000);
+            setTimeout(() => { btn.textContent = '⬇'; btn.disabled = false; }, 3000);
         });
         btn.style.top = '8px';
         btn.style.right = '8px';
@@ -336,21 +340,22 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
             wrapper.style.setProperty('position', 'relative', 'important');
 
         const btn = makeBtn('⬇', 'Download story', async () => {
+            btn.disabled = true;
             btn.textContent = '⏳';
-            const url = scrapeReactFiber(mediaEl);
-            if (url) {
-                try {
+            try {
+                const url = await scrapeReactFiber(mediaEl);
+                if (url) {
                     await downloadBlob(url, `story.${extFromUrl(url)}`);
                     btn.textContent = '✅';
-                } catch (err) {
+                } else {
                     btn.textContent = '❌';
-                    console.error('[IG-DL] Story download failed:', err);
+                    console.warn('[IG-DL] Story CDN URL not found in React Fiber');
                 }
-            } else {
+            } catch (err) {
                 btn.textContent = '❌';
-                console.warn('[IG-DL] Story CDN URL not found in React Fiber');
+                console.error('[IG-DL] Story download failed:', err);
             }
-            setTimeout(() => { btn.textContent = '⬇'; }, 2000);
+            setTimeout(() => { btn.textContent = '⬇'; btn.disabled = false; }, 2000);
         });
         // Place above the story progress bar (~40 px tall) at the bottom of the story
         btn.style.bottom = '48px';
@@ -360,7 +365,7 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 
     /* ══ PAGE SCANNER — Detect context and add the right buttons ════════ */
     function scan() {
-        killShields(); // always re-apply CSS overrides for right-click support
+        installKillShieldsCSS(); // inject once; no-op on subsequent calls
 
         if (location.href.includes('/stories/')) {
             // Stories are pre-loaded horizontally; pick the one nearest the viewport centre
@@ -477,28 +482,49 @@ The `<a download>` attribute is the standard way to trigger a browser download r
 ### CSS Shield Removal — Restoring Right-Click
 
 ```js
-function killShields() {
-    document.querySelectorAll('img').forEach(img => {
-        img.style.setProperty('pointer-events', 'auto', 'important');
-        img.style.setProperty('user-select', 'auto', 'important');
-        img.style.setProperty('z-index', '999', 'important');
-        img.style.setProperty('position', 'relative', 'important');
-    });
+function installKillShieldsCSS() {
+    if (document.getElementById('ig-dl-shields')) return;
+    const style = document.createElement('style');
+    style.id = 'ig-dl-shields';
+    style.textContent = 'img { pointer-events: auto !important; user-select: auto !important; }';
+    (document.head || document.documentElement).appendChild(style);
 }
 ```
 
-Instagram sets `pointer-events: none` on `<img>` elements and places invisible overlay `<div>`s on top to intercept right-clicks. `killShields` reverses those overrides with `!important` so the browser's native context menu ("Save image as…") is restored. The function runs at the start of every `scan()` call, which means it re-applies as new posts load during infinite-scroll — the same persistent approach as the {% include post_link.html url="/blog/2026/03/21/save-instagram-photos" text="Save Instagram Photos" %} post.
+Instagram sets `pointer-events: none` on `<img>` elements and places invisible overlay `<div>`s on top to intercept right-clicks. The previous approach of calling `el.style.setProperty(...)` on every image inside every `scan()` caused two problems: (1) it iterated over every `<img>` in the DOM on each scan, forcing a full style recalculation each time the MutationObserver fired during scroll; (2) setting `position: relative !important` broke images that Instagram had already positioned as `position: absolute`, leaving a blank gap below them.
+
+`installKillShieldsCSS` fixes both problems by injecting a single `<style>` tag **once**. The `id` guard makes every subsequent call a no-op. The CSS engine handles the override natively without touching `position` or `z-index` — only `pointer-events` and `user-select` need to be changed to restore the browser's right-click context menu.
 
 ### The React Fiber Scraper
 
 ```js
-const fk = Object.keys(el).find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
-if (fk) collect(el[fk]);
+async function scrapeReactFiber(startEl) {
+    // ...collect() walks the object tree synchronously per fiber node...
+    while (el && videoUrls.length === 0 && imageUrls.length === 0) {
+        const fk = Object.keys(el).find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
+        if (fk) collect(el[fk]);
+        el = el.parentElement;
+        await new Promise(r => setTimeout(r, 0)); // yield between ancestors
+    }
+}
 ```
 
 Every DOM element rendered by React has a hidden property whose name starts with `__reactFiber$` or `__reactProps$` (followed by a random suffix that changes with each React build). This property holds the component's internal state — including the CDN URLs Instagram retrieved from its servers. The scraper walks up the DOM from the target element, finds these hidden properties, and recursively crawls their object trees looking for `.mp4`, `.jpg`, or `.webp` URLs. This approach is shared by both the photo handler and the story handler; it comes directly from the {% include post_link.html url="/blog/2026/03/22/instagram-story-sniper" text="Story Sniper" %}.
 
 When multiple resolutions are present (Instagram often includes several), the scraper ranks them by `width × height` and returns the largest.
+
+**Why async?** Instagram's React fiber tree can contain thousands of nested objects — `collect` walks up to 15 levels deep and visits every key at each level. Running this synchronously blocks the JavaScript main thread for tens to hundreds of milliseconds, which is what made the page unresponsive when a download button was clicked. Making `scrapeReactFiber` `async` and inserting `await new Promise(r => setTimeout(r, 0))` after each DOM ancestor hands control back to the browser's event loop between iterations, letting it process pending scroll frames, paint work, and input events. Because the fiber key is typically found within the first ancestor or two, in practice only one or two yields occur before the URL is found and the loop exits.
+
+### Button Disabling
+
+```js
+btn.disabled = true;
+btn.textContent = '⏳';
+// ... async work ...
+setTimeout(() => { btn.textContent = '⬇'; btn.disabled = false; }, 2000);
+```
+
+Every click handler disables its button at the start of the operation and re-enables it in the post-completion `setTimeout`. This prevents double-clicks from launching overlapping downloads, and — combined with the async fiber scraper — ensures the button gives clear visual feedback (`⏳` → `✅` or `❌`) without the page becoming unresponsive.
 
 ### The MediaRecorder Fallback
 
@@ -559,7 +585,9 @@ Every handler checks for a `data-ig-dl` attribute on the element before doing an
 |---|---|---|
 | No ⬇ button appears anywhere | Script is not active | Open the Tampermonkey dashboard and confirm the script is enabled and the `@match` line is correct |
 | Button appears but clicking shows ❌ | React Fiber tree did not contain a URL (and `captureStream` failed for reels) | Instagram may have updated their internal structure; try the individual console scripts from the linked posts |
-| Right-click still blocked on images | `killShields` has not run yet | Scroll slightly — any new post load triggers `scan()` which re-runs `killShields()` |
+| Right-click still blocked on images | The `<style>` injection hasn't run yet (page just loaded) | Trigger any scroll or navigation; the first `scan()` call installs the CSS rule permanently for the session |
+| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.2 — the CSS rule now only touches `pointer-events` and `user-select` |
+| Button is greyed out after clicking | Download is in progress | Wait for `✅` or `❌` — the button re-enables automatically after ~2–3 seconds |
 | Button appears in the wrong spot | The wrapper element's position style changed | The `wrapper.style.position = 'relative'` override may conflict with Instagram's own layout — adjust the button's `top` / `right` values in the script |
 | Tampermonkey shows a domain-not-allowed error | `@connect` list doesn't cover the CDN hostname | Add `@connect *` to the header as a temporary catch-all while you identify the exact CDN domain from DevTools |
 | Reel button shows ⏳ for a long time | MediaRecorder path: the full reel must play through before the file is ready | Let the video finish playing — duration depends on reel length |
