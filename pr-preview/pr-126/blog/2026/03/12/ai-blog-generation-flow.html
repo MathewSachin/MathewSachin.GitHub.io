@@ -261,9 +261,11 @@ read</em>
 
 <pre class="mermaid">
 flowchart TD
-    A[📱 Mobile phone] --&gt; B[GitHub Copilot<br />AI coding agent]
+    A[📱 Mobile phone] --&gt; B["GitHub Copilot
+AI coding agent"]
     B --&gt;|Writes the blog post as a markdown file| C[Pull Request opened automatically]
-    C --&gt; D[You review &amp; approve<br />on mobile/desktop]
+    C --&gt; D["You review &amp; approve
+on mobile/desktop"]
     D --&gt; E[Merge PR]
     E --&gt; F[GitHub Actions triggers]
     F --&gt; G[GitHub Pages builds &amp; deploys Jekyll site]
