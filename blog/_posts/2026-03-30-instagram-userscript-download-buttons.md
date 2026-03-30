@@ -100,8 +100,8 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 // ==UserScript==
 // @name         Instagram Download Buttons
 // @namespace    https://mathewsachin.github.io/
-// @version      1.6
-// @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram
+// @version      1.7
+// @description  Adds ⬇ download buttons for reels and stories on Instagram; restores right-click on photos
 // @author       Mathew Sachin
 // @match        https://www.instagram.com/*
 // @grant        GM_xmlhttpRequest
@@ -264,54 +264,6 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
         document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
     }
 
-    /* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */
-    function addPhotoButton(article) {
-        if (article.dataset.igDl) return;
-
-        // Exclude images inside <header> — the post author's profile avatar is
-        // always in a <header> at the top of the article and must not be downloaded.
-        // Among the remaining candidates, prefer the largest by pixel area so that
-        // on carousel posts we get the main visible image, not a thumbnail.
-        const imgCandidates = Array.from(article.querySelectorAll('img[srcset]'))
-            .filter(i => !i.closest('header'));
-        imgCandidates.sort((a, b) => (b.naturalWidth * b.naturalHeight) - (a.naturalWidth * a.naturalHeight));
-
-        const img = imgCandidates[0]
-            || Array.from(article.querySelectorAll('img[src]'))
-                .filter(i => !i.closest('header') && i.naturalWidth > 100)[0];
-        if (!img) return; // image not loaded yet — do NOT mark article, allow retry
-
-        article.dataset.igDl = '1'; // mark only after we know we can add a button
-
-        // Attach to the article itself — img.parentElement usually has overflow:hidden
-        // which would clip the absolutely-positioned button out of view.
-        const pos = getComputedStyle(article).position;
-        if (!['relative', 'absolute', 'fixed', 'sticky'].includes(pos))
-            article.style.setProperty('position', 'relative', 'important');
-
-        const btn = makeBtn('⬇', 'Download photo', async () => {
-            btn.disabled = true;
-            btn.textContent = '⏳';
-            try {
-                let url = await scrapeReactFiber(img);
-                if (!url) {
-                    const srcset = img.getAttribute('srcset') || '';
-                    const candidates = srcset.split(',').map(s => s.trim().split(/\s+/)).filter(p => p.length);
-                    url = candidates.length ? candidates[candidates.length - 1][0] : img.src;
-                }
-                await downloadBlob(url, `photo.${extFromUrl(url)}`);
-                btn.textContent = '✅';
-            } catch (err) {
-                btn.textContent = '❌';
-                console.error('[IG-DL] Photo download failed:', err);
-            }
-            setTimeout(() => { btn.textContent = '⬇'; btn.disabled = false; }, 2000);
-        });
-        btn.style.top = '8px';
-        btn.style.right = '8px';
-        article.appendChild(btn);
-    }
-
     /* ══ REEL HANDLER — Reel player ══════════════════════════════════════ */
     function addReelButton(videoEl) {
         if (videoEl.dataset.igDl) return;
@@ -414,11 +366,6 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
         // Reel videos (tall, in-viewport)
         document.querySelectorAll('video').forEach(v => {
             if (v.getBoundingClientRect().height > 100) addReelButton(v);
-        });
-
-        // Photo posts inside <article> (no <video> child = photo post)
-        document.querySelectorAll('article').forEach(article => {
-            if (!article.querySelector('video')) addPhotoButton(article);
         });
     }
 
@@ -613,36 +560,22 @@ The watcher uses two complementary strategies:
 ### The `data-igDl` Guard
 
 ```js
-if (article.dataset.igDl) return;
-// ... find image ...
-if (!img) return; // do NOT mark — allow retry when image loads
-article.dataset.igDl = '1'; // mark only after button is attached
+if (videoEl.dataset.igDl) return;
+videoEl.dataset.igDl = '1';
 ```
 
 Every handler checks for a `data-ig-dl` attribute on the element before doing anything. Once a button has been attached, the attribute is set. The next time `scan()` runs — after a DOM mutation or navigation — the guard prevents a second button from being added to the same element.
 
-For the photo handler the guard is deliberately set **after** the `!img` check. Instagram's feed lazily loads images — an `<article>` can appear in the DOM with no `<img>` yet. If we marked it before finding the image and the check returned early, the next `scan()` would skip it (already marked) and the button would never be added. Setting the mark only after we successfully find the image ensures re-attempts happen naturally until the image is ready.
+### Why No Download Button for Photos?
 
-### Photo Button Attachment Point
+Instagram photos can be saved with a simple right-click → *Save image as…*. The script already restores that capability via `installKillShieldsCSS`:
 
 ```js
-// Exclude images inside <header> — the profile avatar is always in a <header>.
-// Sort remaining candidates by pixel area descending to prefer the post image.
-const imgCandidates = Array.from(article.querySelectorAll('img[srcset]'))
-    .filter(i => !i.closest('header'));
-imgCandidates.sort((a, b) => (b.naturalWidth * b.naturalHeight) - (a.naturalWidth * a.naturalHeight));
-const img = imgCandidates[0] || /* img[src] fallback */;
-
-// Attach to the article itself — img.parentElement usually has overflow:hidden
-// which would clip the absolutely-positioned button out of view.
-article.style.setProperty('position', 'relative', 'important');
-// ...
-article.appendChild(btn);
+GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
+document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
 ```
 
-Instagram wraps each `<img>` in a small `<div>` with `overflow: hidden` to maintain the image's aspect ratio. If the button is appended to that wrapper and positioned absolutely, it is clipped by `overflow: hidden` and never appears on screen. Appending to `article` — the outermost post card — avoids the overflow constraint. The script checks whether `article` is already positioned (relative / absolute / fixed / sticky) and only adds `position: relative` if it isn't, so it doesn't disturb Instagram's own layout.
-
-**Why exclude `<header>` descendants?** Every Instagram post card contains two images with a `srcset` attribute: the author's profile avatar (inside a `<header>` at the top of the card) and the actual post photo below it. The naïve `article.querySelector('img[srcset]')` returns the first DOM match, which is the profile avatar. Filtering with `!i.closest('header')` eliminates it. The remaining candidates are sorted by pixel area descending (naturalWidth × naturalHeight) so that on carousel posts the visible main image is preferred over any smaller thumbnail.
+A dedicated download button would need to reliably identify the correct post image among multiple `<img>` elements in each `<article>` — the profile avatar, the post image, and any carousel thumbnails. Getting this wrong is worse than having no button at all. Since right-click works reliably once the kill shields are in place, a button adds complexity without benefit.
 
 ---
 
@@ -652,12 +585,9 @@ Instagram wraps each `<img>` in a small `<div>` with `overflow: hidden` to maint
 |---|---|---|
 | No ⬇ button appears anywhere | Script is not active | Open the Tampermonkey dashboard and confirm the script is enabled and the `@match` line is correct |
 | Button appears but clicking shows ❌ | React Fiber tree did not contain a URL (and `captureStream` failed for reels) | Instagram may have updated their internal structure; try the individual console scripts from the linked posts |
-| Right-click still blocked on images | `GM_addStyle` grant missing — old script version | Update to v1.6 which adds both `@grant GM_addStyle` (CSS fix) and a capture-phase `contextmenu` listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants |
-| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.6 — the CSS rule only touches `pointer-events` and `user-select` |
-| Photo ⬇ button not visible | Old version appended the button to the image's direct wrapper which has `overflow: hidden` | Update to v1.6 — button is now appended to the `<article>` element |
-| Photo button downloads the profile picture | Old version used `querySelector('img[srcset]')` which returns the profile avatar first | Update to v1.6 — profile avatar is excluded by filtering out images inside `<header>` |
+| Right-click still blocked on images | `GM_addStyle` grant missing — old script version | Update to v1.7 which adds both `@grant GM_addStyle` (CSS fix) and a capture-phase `contextmenu` listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants |
+| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.7 — the CSS rule only touches `pointer-events` and `user-select` |
 | Button is greyed out after clicking | Download is in progress | Wait for `✅` or `❌` — the button re-enables automatically after ~2–3 seconds |
-| Button appears in the wrong spot | The wrapper element's position style changed | The `wrapper.style.position = 'relative'` override may conflict with Instagram's own layout — adjust the button's `top` / `right` values in the script |
 | Tampermonkey shows a domain-not-allowed error | `@connect` list doesn't cover the CDN hostname | Add `@connect *` to the header as a temporary catch-all while you identify the exact CDN domain from DevTools |
 | Reel button shows ⏳ for a long time | MediaRecorder path: the full reel must play through before the file is ready | Let the video finish playing — duration depends on reel length |
 | Script breaks after an Instagram update | Instagram periodically changes their React component structure | Check for an updated version of this script; the Fiber key prefix (`__reactFiber$`) is stable but the object layout inside can shift |
