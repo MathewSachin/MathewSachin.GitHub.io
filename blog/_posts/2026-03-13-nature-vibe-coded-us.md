@@ -77,8 +77,8 @@ Every generation is a release. The environment is the user. Survival and reprodu
 <pre class="mermaid">
 flowchart TD
     A["🔁 Reproduce with variation"] --> B["🚀 Deploy to environment"]
-    B --> C["📊 Environment provides feedback<br/>(survival, reproduction rate)"]
-    C --> D["✅ Fit variants proliferate<br/>❌ Unfit variants are deprecated"]
+    B --> C["📊 Environment provides feedback\n(survival, reproduction rate)"]
+    C --> D["✅ Fit variants proliferate\n❌ Unfit variants are deprecated"]
     D --> A
 </pre>
 
