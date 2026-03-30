@@ -336,20 +336,16 @@ read</em>
 
 <p>Every generation is a release. The environment is the user. Survival and reproduction are the metrics. There’s no version number, no changelog, no rollback button — but the system converges on increasingly well-adapted organisms because the feedback signal is brutally honest.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Evolutionary CI/CD Pipeline (simplified):
-
-  Reproduce with variation
-        ↓
-  Deploy to environment
-        ↓
-  Environment provides feedback
-   (survival, reproduction rate)
-        ↓
-  Fit variants proliferate
-  Unfit variants are deprecated
-        ↓
-  Repeat — for millions of years
-</code></pre></div></div>
+<pre class="pintora">
+activityDiagram
+  while (Evolution continues)
+    :Reproduce with variation;
+    :Deploy to environment;
+    :Receive feedback from environment;
+    :Fit variants proliferate;
+    :Unfit variants are removed;
+  endwhile
+</pre>
 
 <p>The pace is slow by human standards. But it’s been running <em>uninterrupted</em> for nearly four billion years. That’s a lot of sprints.</p>
 
@@ -587,6 +583,9 @@ read</em>
       <script src="/scripts/copy-code.js"></script>
     
 
+    
+      <script src="https://cdn.jsdelivr.net/npm/@pintora/standalone@0.8.1/lib/pintora-standalone.umd.js" integrity="sha384-ukZa5IV7d3VoeDYJXNQpvzCwORRKOUcKApRymElNTgfB7+bTsSzu3rJfsy3PPbGS" crossorigin="anonymous"></script>
+      <script>pintora.default.initBrowser();</script>
     
   </body>
 </html>
