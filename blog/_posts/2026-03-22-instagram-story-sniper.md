@@ -4,6 +4,7 @@ icon: "fab fa-instagram"
 tags: [instagram, hack, javascript, browser, devtools]
 highlight: true
 related:
+  - /blog/2026/03/30/instagram-userscript-download-buttons
   - /blog/2026/03/22/reddit-video-sniper
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2026/03/21/save-instagram-photos
