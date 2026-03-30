@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-130/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-130/" rel="alternate" type="text/html" /><updated>2026-03-30T17:11:06+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-130/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story</title><link href="https://mathewsachin.github.io/pr-preview/pr-130/blog/2026/03/30/instagram-userscript-download-buttons.html" rel="alternate" type="text/html" title="Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story" /><published>2026-03-30T00:00:00+00:00</published><updated>2026-03-30T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-130/blog/2026/03/30/instagram-userscript-download-buttons</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-130/blog/2026/03/30/instagram-userscript-download-buttons.html"><![CDATA[<p><em>The three earlier Instagram posts — <a href="/pr-preview/pr-130/blog/2026/03/21/save-instagram-photos.html" class="post-link" aria-label="Save Instagram Photos: Remove the Right-Click Block"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>photo saving</a>, <a href="/pr-preview/pr-130/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>reel downloading</a>, and <a href="/pr-preview/pr-130/blog/2026/03/22/instagram-story-sniper.html" class="post-link" aria-label="Instagram Story Sniper: Download Any Story Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>story downloading</a> — each require you to open the browser console, paste a snippet, and press Enter every single time you want to save something. This post bundles all three techniques into one persistent userscript that injects a <strong>⬇ button</strong> directly into the Instagram UI — no console, no paste, no repeat setup.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-130/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-130/" rel="alternate" type="text/html" /><updated>2026-03-30T17:18:25+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-130/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story</title><link href="https://mathewsachin.github.io/pr-preview/pr-130/blog/2026/03/30/instagram-userscript-download-buttons.html" rel="alternate" type="text/html" title="Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story" /><published>2026-03-30T00:00:00+00:00</published><updated>2026-03-30T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-130/blog/2026/03/30/instagram-userscript-download-buttons</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-130/blog/2026/03/30/instagram-userscript-download-buttons.html"><![CDATA[<p><em>The three earlier Instagram posts — <a href="/pr-preview/pr-130/blog/2026/03/21/save-instagram-photos.html" class="post-link" aria-label="Save Instagram Photos: Remove the Right-Click Block"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>photo saving</a>, <a href="/pr-preview/pr-130/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>reel downloading</a>, and <a href="/pr-preview/pr-130/blog/2026/03/22/instagram-story-sniper.html" class="post-link" aria-label="Instagram Story Sniper: Download Any Story Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>story downloading</a> — each require you to open the browser console, paste a snippet, and press Enter every single time you want to save something. This post bundles all three techniques into one persistent userscript that injects a <strong>⬇ button</strong> directly into the Instagram UI — no console, no paste, no repeat setup.</em></p>
 
 <hr />
 
@@ -168,7 +168,7 @@
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ==UserScript==</span>
 <span class="c1">// @name         Instagram Download Buttons</span>
 <span class="c1">// @namespace    https://mathewsachin.github.io/</span>
-<span class="c1">// @version      1.3</span>
+<span class="c1">// @version      1.4</span>
 <span class="c1">// @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram</span>
 <span class="c1">// @author       Mathew Sachin</span>
 <span class="c1">// @match        https://www.instagram.com/*</span>
@@ -314,16 +314,22 @@
     <span class="p">}</span>
 
     <span class="cm">/* ── CSS shield removal — restores right-click on all images ─────── */</span>
-    <span class="cm">/* Uses GM_addStyle so the rule is injected via the extension context, */</span>
-    <span class="cm">/* bypassing Instagram's Content Security Policy (CSP). A &lt;style&gt; tag  */</span>
-    <span class="cm">/* appended from page-context JS is silently blocked by Instagram's    */</span>
-    <span class="cm">/* CSP, but GM_addStyle runs in the privileged extension context and   */</span>
-    <span class="cm">/* is not subject to the page's restrictions.                          */</span>
+    <span class="cm">/* Two-part fix:                                                       */</span>
+    <span class="cm">/* 1. GM_addStyle: injects CSS via extension context (CSP-exempt) to  */</span>
+    <span class="cm">/*    set pointer-events:auto on &lt;img&gt; elements so mouse events reach  */</span>
+    <span class="cm">/*    the image itself.                                                 */</span>
+    <span class="cm">/* 2. Capture-phase contextmenu listener: Instagram registers          */</span>
+    <span class="cm">/*    contextmenu handlers that call preventDefault() to suppress the  */</span>
+    <span class="cm">/*    browser's right-click menu. By listening in the capture phase    */</span>
+    <span class="cm">/*    and calling stopImmediatePropagation(), our handler runs first    */</span>
+    <span class="cm">/*    and prevents all of Instagram's handlers from firing — without   */</span>
+    <span class="cm">/*    calling preventDefault() ourselves, so the browser menu appears. */</span>
     <span class="kd">let</span> <span class="nx">_shieldsInstalled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="kd">function</span> <span class="nx">installKillShieldsCSS</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_shieldsInstalled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="nx">_shieldsInstalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="nx">GM_addStyle</span><span class="p">(</span><span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; }</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="cm">/* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */</span>
@@ -563,17 +569,25 @@
     <span class="k">if</span> <span class="p">(</span><span class="nx">_shieldsInstalled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
     <span class="nx">_shieldsInstalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="nx">GM_addStyle</span><span class="p">(</span><span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; }</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Instagram sets <code class="language-plaintext highlighter-rouge">pointer-events: none</code> on <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> elements and places invisible overlay <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s on top to intercept right-clicks. Two previous approaches had issues:</p>
+<p>Restoring right-click requires two independent fixes, because Instagram uses two independent mechanisms to prevent it:</p>
+
+<p><strong>1. CSS: <code class="language-plaintext highlighter-rouge">pointer-events</code> via <code class="language-plaintext highlighter-rouge">GM_addStyle</code>.</strong><br />
+Instagram sets <code class="language-plaintext highlighter-rouge">pointer-events: none</code> on <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> elements so mouse events pass through to invisible overlay <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s that Instagram controls. <code class="language-plaintext highlighter-rouge">GM_addStyle</code> (requires <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code>) injects the counter-rule via the <strong>extension context</strong>, not the page context — this bypasses Instagram’s <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policy (CSP)</a>, which blocks <code class="language-plaintext highlighter-rouge">&lt;style&gt;</code> elements injected by page-context scripts. The CSS fix ensures <code class="language-plaintext highlighter-rouge">mouseenter</code>/<code class="language-plaintext highlighter-rouge">mousedown</code>/<code class="language-plaintext highlighter-rouge">contextmenu</code> events actually reach the <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> element.</p>
+
+<p><strong>2. JS: capture-phase <code class="language-plaintext highlighter-rouge">contextmenu</code> listener.</strong><br />
+Even with <code class="language-plaintext highlighter-rouge">pointer-events</code> restored, Instagram still blocks the native right-click menu via JavaScript: it registers <code class="language-plaintext highlighter-rouge">contextmenu</code> event listeners on container elements that call <code class="language-plaintext highlighter-rouge">e.preventDefault()</code>. CSS cannot stop a JS event handler. The fix is <code class="language-plaintext highlighter-rouge">document.addEventListener('contextmenu', e =&gt; e.stopImmediatePropagation(), true)</code>:</p>
 
 <ul>
-  <li><strong>Per-element <code class="language-plaintext highlighter-rouge">style.setProperty</code> on every <code class="language-plaintext highlighter-rouge">scan()</code></strong>: forced a full style-recalculation on every MutationObserver tick during scroll; also set <code class="language-plaintext highlighter-rouge">position: relative !important</code> which displaced <code class="language-plaintext highlighter-rouge">position: absolute</code> images and left blank gaps below them.</li>
-  <li><strong><code class="language-plaintext highlighter-rouge">document.createElement('style')</code> appended to <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code></strong>: silently blocked by Instagram’s <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policy (CSP)</a>. Instagram’s CSP prevents page-context scripts from injecting <code class="language-plaintext highlighter-rouge">&lt;style&gt;</code> elements, so the rule was created in the DOM but never applied by the browser.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">true</code> third argument registers in the <strong>capture phase</strong>, which runs <em>before</em> the target element and <em>before</em> any bubble-phase listeners anywhere in the tree.</li>
+  <li><code class="language-plaintext highlighter-rouge">stopImmediatePropagation()</code> prevents every other listener on every element from seeing the event — including Instagram’s handlers that call <code class="language-plaintext highlighter-rouge">preventDefault()</code>.</li>
+  <li>We do <strong>not</strong> call <code class="language-plaintext highlighter-rouge">preventDefault()</code> ourselves, so the browser’s native right-click menu still appears.</li>
 </ul>
 
-<p><code class="language-plaintext highlighter-rouge">GM_addStyle</code> is the correct fix. It is a Tampermonkey API (requires <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code>) that injects the style via the <strong>extension context</strong> rather than the page context. Extension-injected styles bypass the page’s CSP entirely. The boolean guard <code class="language-plaintext highlighter-rouge">_shieldsInstalled</code> ensures it is called only once per page load.</p>
+<p>The boolean guard <code class="language-plaintext highlighter-rouge">_shieldsInstalled</code> ensures both fixes are applied exactly once.</p>
 
 <h3 id="the-react-fiber-scraper">The React Fiber Scraper</h3>
 
@@ -685,12 +699,12 @@
     <tr>
       <td>Right-click still blocked on images</td>
       <td><code class="language-plaintext highlighter-rouge">GM_addStyle</code> grant missing — old script version</td>
-      <td>Update to v1.3 which adds <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code>; re-install the script from scratch if Tampermonkey cached the old grants</td>
+      <td>Update to v1.4 which adds both <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code> (CSS fix) and a capture-phase <code class="language-plaintext highlighter-rouge">contextmenu</code> listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants</td>
     </tr>
     <tr>
       <td>Images have blank space below them</td>
       <td>Old version of the script set <code class="language-plaintext highlighter-rouge">position: relative !important</code> on images</td>
-      <td>Update to v1.3 — the CSS rule only touches <code class="language-plaintext highlighter-rouge">pointer-events</code> and <code class="language-plaintext highlighter-rouge">user-select</code></td>
+      <td>Update to v1.4 — the CSS rule only touches <code class="language-plaintext highlighter-rouge">pointer-events</code> and <code class="language-plaintext highlighter-rouge">user-select</code></td>
     </tr>
     <tr>
       <td>Button is greyed out after clicking</td>
