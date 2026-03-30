@@ -100,16 +100,23 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 // ==UserScript==
 // @name         Instagram Download Buttons
 // @namespace    https://mathewsachin.github.io/
-// @version      1.0
+// @version      1.1
 // @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram
 // @author       Mathew Sachin
 // @match        https://www.instagram.com/*
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @connect      cdninstagram.com
+// @connect      instagram.com
 // @run-at       document-idle
 // ==/UserScript==
 
 (function () {
     'use strict';
+
+    /* Class added to every button we create — used to filter our own     */
+    /* DOM insertions out of the MutationObserver, preventing a feedback  */
+    /* loop that would hang scrolling.                                     */
+    const BTN_CLASS = 'ig-dl-btn';
 
     const BTN_STYLE = [
         'background:rgba(0,0,0,0.6)',
@@ -123,6 +130,32 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
         'position:absolute',
         'z-index:9999',
     ].join(';');
+
+    /* ── Direct download via GM_xmlhttpRequest ───────────────────────── */
+    /* Fetches the CDN URL from the extension context (bypasses CORS),    */
+    /* creates a same-origin blob URL, and triggers <a download> so the   */
+    /* file saves directly instead of opening in a new tab.               */
+    function downloadBlob(url, filename) {
+        return new Promise((resolve, reject) => {
+            GM_xmlhttpRequest({
+                method: 'GET',
+                url,
+                responseType: 'blob',
+                onload: r => {
+                    const blobUrl = URL.createObjectURL(r.response);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+                    resolve();
+                },
+                onerror: reject,
+            });
+        });
+    }
 
     /* ── Shared React Fiber scraper ─────────────────────────────────── */
     /* Walks up the DOM from startEl looking for __reactFiber$ props,    */
@@ -156,17 +189,6 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
         return videoUrls.length > 0 ? best(videoUrls) : best(imageUrls);
     }
 
-    /* ── Open URL in new tab (triggers browser save dialog) ─────────── */
-    function openUrl(url) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        a.rel = 'noreferrer';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
-
     /* ── MediaRecorder fallback for reels when CDN URL is not in Fiber ─ */
     function recordReel(videoEl) {
         return new Promise((resolve, reject) => {
@@ -198,9 +220,29 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
         const btn = document.createElement('button');
         btn.textContent = emoji;
         btn.title = title;
+        btn.className = BTN_CLASS; // marks button so MutationObserver ignores it
         btn.style.cssText = BTN_STYLE;
         btn.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); onClick(btn); });
         return btn;
+    }
+
+    /* ── Guess file extension from a CDN URL ────────────────────────── */
+    function extFromUrl(url) {
+        const m = url.match(/\.(mp4|jpg|jpeg|webp|png)(\?|$)/i);
+        return m ? m[1] : 'jpg';
+    }
+
+    /* ── CSS shield removal — restores right-click on all images ─────── */
+    /* Instagram sets pointer-events:none on <img> elements and places    */
+    /* invisible overlay divs on top. This reverses those overrides so    */
+    /* right-click "Save image as…" works again.                          */
+    function killShields() {
+        document.querySelectorAll('img').forEach(img => {
+            img.style.setProperty('pointer-events', 'auto', 'important');
+            img.style.setProperty('user-select', 'auto', 'important');
+            img.style.setProperty('z-index', '999', 'important');
+            img.style.setProperty('position', 'relative', 'important');
+        });
     }
 
     /* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */
@@ -208,28 +250,32 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
         if (article.dataset.igDl) return;
         article.dataset.igDl = '1';
 
-        const img = article.querySelector('img[srcset], img[src]');
+        // Prefer <img srcset> (full-res post image); fall back to <img src> with size check
+        const img = article.querySelector('img[srcset]')
+            || Array.from(article.querySelectorAll('img[src]')).find(i => i.naturalWidth > 100);
         if (!img) return;
 
-        const wrapper = img.closest('[style*="position"]') || img.parentElement;
+        const wrapper = img.parentElement;
         if (!wrapper) return;
-        wrapper.style.position = 'relative';
+        const pos = getComputedStyle(wrapper).position;
+        if (!['relative', 'absolute', 'fixed', 'sticky'].includes(pos))
+            wrapper.style.setProperty('position', 'relative', 'important');
 
         const btn = makeBtn('⬇', 'Download photo', async () => {
             btn.textContent = '⏳';
-
-            // React Fiber gives the original CDN URL at highest quality
-            let url = scrapeReactFiber(img);
-
-            if (!url) {
-                // Fall back to the largest entry in srcset
-                const srcset = img.getAttribute('srcset') || '';
-                const candidates = srcset.split(',').map(s => s.trim().split(/\s+/)).filter(p => p.length);
-                url = candidates.length ? candidates[candidates.length - 1][0] : img.src;
+            try {
+                let url = scrapeReactFiber(img);
+                if (!url) {
+                    const srcset = img.getAttribute('srcset') || '';
+                    const candidates = srcset.split(',').map(s => s.trim().split(/\s+/)).filter(p => p.length);
+                    url = candidates.length ? candidates[candidates.length - 1][0] : img.src;
+                }
+                await downloadBlob(url, `photo.${extFromUrl(url)}`);
+                btn.textContent = '✅';
+            } catch (err) {
+                btn.textContent = '❌';
+                console.error('[IG-DL] Photo download failed:', err);
             }
-
-            openUrl(url);
-            btn.textContent = '✅';
             setTimeout(() => { btn.textContent = '⬇'; }, 2000);
         });
         btn.style.top = '8px';
@@ -244,19 +290,26 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 
         const wrapper = videoEl.parentElement;
         if (!wrapper) return;
-        if (!['relative', 'absolute', 'fixed'].includes(getComputedStyle(wrapper).position))
-            wrapper.style.position = 'relative';
+        const pos = getComputedStyle(wrapper).position;
+        if (!['relative', 'absolute', 'fixed', 'sticky'].includes(pos))
+            wrapper.style.setProperty('position', 'relative', 'important');
 
         const btn = makeBtn('⬇', 'Download reel', async () => {
             btn.textContent = '⏳';
             try {
                 const url = scrapeReactFiber(videoEl);
                 if (url) {
-                    openUrl(url);
+                    // Fiber gave us the CDN URL — download it directly
+                    await downloadBlob(url, `reel.${extFromUrl(url)}`);
                 } else {
-                    // MediaRecorder path: wait for the full video to play through
+                    // MediaRecorder path: play through and record frames
                     const blobUrl = await recordReel(videoEl);
-                    openUrl(blobUrl);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = 'reel.webm';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
                     setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
                 }
                 btn.textContent = '✅';
@@ -278,15 +331,21 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 
         const wrapper = mediaEl.parentElement;
         if (!wrapper) return;
-        if (!['relative', 'absolute', 'fixed'].includes(getComputedStyle(wrapper).position))
-            wrapper.style.position = 'relative';
+        const pos = getComputedStyle(wrapper).position;
+        if (!['relative', 'absolute', 'fixed', 'sticky'].includes(pos))
+            wrapper.style.setProperty('position', 'relative', 'important');
 
-        const btn = makeBtn('⬇', 'Download story', () => {
+        const btn = makeBtn('⬇', 'Download story', async () => {
             btn.textContent = '⏳';
             const url = scrapeReactFiber(mediaEl);
             if (url) {
-                openUrl(url);
-                btn.textContent = '✅';
+                try {
+                    await downloadBlob(url, `story.${extFromUrl(url)}`);
+                    btn.textContent = '✅';
+                } catch (err) {
+                    btn.textContent = '❌';
+                    console.error('[IG-DL] Story download failed:', err);
+                }
             } else {
                 btn.textContent = '❌';
                 console.warn('[IG-DL] Story CDN URL not found in React Fiber');
@@ -301,6 +360,8 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 
     /* ══ PAGE SCANNER — Detect context and add the right buttons ════════ */
     function scan() {
+        killShields(); // always re-apply CSS overrides for right-click support
+
         if (location.href.includes('/stories/')) {
             // Stories are pre-loaded horizontally; pick the one nearest the viewport centre
             const allMedia = Array.from(document.querySelectorAll('video, img'));
@@ -336,9 +397,27 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     /* to re-run scan() after each navigation.                               */
 
     let scanTimer;
-    const scheduleScan = () => { clearTimeout(scanTimer); scanTimer = setTimeout(scan, 600); };
 
-    new MutationObserver(scheduleScan).observe(document.body, { childList: true, subtree: true });
+    /* Use requestIdleCallback when available so scan() runs during idle   */
+    /* time and doesn't compete with scroll animation frames.              */
+    const scheduleIdle = typeof requestIdleCallback === 'function'
+        ? cb => requestIdleCallback(cb, { timeout: 1000 })
+        : cb => setTimeout(cb, 600);
+
+    const scheduleScan = () => {
+        clearTimeout(scanTimer);
+        scanTimer = scheduleIdle(scan);
+    };
+
+    /* Only react to mutations caused by Instagram's own code — not by    */
+    /* our own button insertions (which carry BTN_CLASS). Without this     */
+    /* filter, each appendChild(btn) would re-trigger the observer and     */
+    /* reset the debounce timer, causing continuous work during scrolling. */
+    new MutationObserver(mutations => {
+        if (mutations.some(m =>
+            Array.from(m.addedNodes).some(n => n.nodeType === 1 && !n.classList.contains(BTN_CLASS))
+        )) scheduleScan();
+    }).observe(document.body, { childList: true, subtree: true });
 
     const _push = history.pushState.bind(history);
     history.pushState = (...a) => { _push(...a); scheduleScan(); };
@@ -360,11 +439,55 @@ The script is structured in five layers. Each layer builds on techniques introdu
 
 ```js
 // @match        https://www.instagram.com/*
+// @grant        GM_xmlhttpRequest
+// @connect      cdninstagram.com
+// @connect      instagram.com
 // @run-at       document-idle
-// @grant        none
 ```
 
-The header is a structured comment that the userscript manager reads — not JavaScript. `@match` is a URL glob: the manager only injects the script when the current URL matches `https://www.instagram.com/*`. `@run-at document-idle` waits until the page's DOM is ready before injecting (equivalent to `DOMContentLoaded`). `@grant none` opts out of the special userscript sandbox APIs (like `GM_xmlhttpRequest`) — the script uses only standard browser APIs.
+The header is a structured comment that the userscript manager reads — not JavaScript. `@match` is a URL glob: the manager only injects the script when the current URL matches `https://www.instagram.com/*`. `@run-at document-idle` waits until the page's DOM is ready before injecting (equivalent to `DOMContentLoaded`).
+
+`@grant GM_xmlhttpRequest` opts into the special `GM_xmlhttpRequest` API, which lets the script make HTTP requests from the extension's background context — bypassing the same-origin restrictions that the page itself faces. This is required for direct downloads (see below). `@connect` declares which domains `GM_xmlhttpRequest` is allowed to contact; Tampermonkey matches subdomains, so `cdninstagram.com` covers `scontent-lga3-1.cdninstagram.com` and all other Instagram CDN hostnames.
+
+### Direct Download via `GM_xmlhttpRequest`
+
+```js
+function downloadBlob(url, filename) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url,
+            responseType: 'blob',
+            onload: r => {
+                const blobUrl = URL.createObjectURL(r.response);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                // ...
+            },
+        });
+    });
+}
+```
+
+The `<a download>` attribute is the standard way to trigger a browser download rather than opening a URL. However, **browsers ignore `download` on cross-origin URLs** — if the link points to a different domain (such as Instagram's CDN), the attribute is silently dropped and the URL opens in a new tab instead.
+
+`GM_xmlhttpRequest` sidesteps this. Because the request runs from the extension context rather than the page context, it is not subject to the same-origin policy. The CDN response arrives as a `Blob`; `URL.createObjectURL` converts it to a same-origin `blob:` URL, and `<a download>` works correctly on same-origin URLs. The blob URL is revoked after 60 seconds to free memory.
+
+### CSS Shield Removal — Restoring Right-Click
+
+```js
+function killShields() {
+    document.querySelectorAll('img').forEach(img => {
+        img.style.setProperty('pointer-events', 'auto', 'important');
+        img.style.setProperty('user-select', 'auto', 'important');
+        img.style.setProperty('z-index', '999', 'important');
+        img.style.setProperty('position', 'relative', 'important');
+    });
+}
+```
+
+Instagram sets `pointer-events: none` on `<img>` elements and places invisible overlay `<div>`s on top to intercept right-clicks. `killShields` reverses those overrides with `!important` so the browser's native context menu ("Save image as…") is restored. The function runs at the start of every `scan()` call, which means it re-applies as new posts load during infinite-scroll — the same persistent approach as the {% include post_link.html url="/blog/2026/03/21/save-instagram-photos" text="Save Instagram Photos" %} post.
 
 ### The React Fiber Scraper
 
@@ -397,7 +520,11 @@ Stories pre-load the previous and next stories **horizontally** — they sit off
 ### The SPA Navigation Watcher
 
 ```js
-new MutationObserver(scheduleScan).observe(document.body, { childList: true, subtree: true });
+new MutationObserver(mutations => {
+    if (mutations.some(m =>
+        Array.from(m.addedNodes).some(n => n.nodeType === 1 && !n.classList.contains(BTN_CLASS))
+    )) scheduleScan();
+}).observe(document.body, { childList: true, subtree: true });
 
 history.pushState = (...a) => { _push(...a); scheduleScan(); };
 history.replaceState = (...a) => { _replace(...a); scheduleScan(); };
@@ -411,7 +538,9 @@ The watcher uses two complementary strategies:
 1. **`MutationObserver`** — fires whenever new DOM nodes are added anywhere under `<body>`. This catches Instagram's lazy-loading of feed posts as you scroll, and also catches the DOM swap that happens on navigation.
 2. **`pushState` / `replaceState` intercepts** — wrap the native history API methods so that `scheduleScan()` is called whenever Instagram programmatically navigates. This is more reliable than `MutationObserver` alone for catching navigation that starts with a URL change before new DOM has been inserted.
 
-Both paths call `scheduleScan()`, which debounces `scan()` by 600 ms. The debounce prevents `scan` from firing dozens of times per second during a large DOM flush (such as the initial feed load), collapsing all the calls into one.
+**The `BTN_CLASS` scroll-hang fix.** Every `wrapper.appendChild(btn)` call would previously re-trigger the observer (it is a child insertion, which is exactly what `childList: true` watches for). This reset the debounce timer continuously during the initial scan, and every new button added during infinite-scroll caused yet another scan to be scheduled. The result was near-constant work that competed with Instagram's scroll animation. The fix is to give every button we create a CSS class (`ig-dl-btn`) and then check, in the observer callback, that at least one of the added nodes does *not* carry that class — meaning it was added by Instagram, not by us — before scheduling a scan. Since the guard checks `nodeType === 1` first (ensuring an element node), `classList` is guaranteed to exist and can be accessed without a null check.
+
+**`requestIdleCallback`.** `scheduleScan` switches from `setTimeout(scan, 600)` to `requestIdleCallback(scan, { timeout: 1000 })` when the browser supports it. `requestIdleCallback` defers execution to periods when the main thread is not busy — specifically, not during scroll frames. This prevents `scan()` from running at a moment when it would force a layout (from the `getBoundingClientRect()` calls inside) mid-scroll. The 1-second timeout ensures the callback is never delayed indefinitely.
 
 ### The `data-igDl` Guard
 
@@ -430,8 +559,9 @@ Every handler checks for a `data-ig-dl` attribute on the element before doing an
 |---|---|---|
 | No ⬇ button appears anywhere | Script is not active | Open the Tampermonkey dashboard and confirm the script is enabled and the `@match` line is correct |
 | Button appears but clicking shows ❌ | React Fiber tree did not contain a URL (and `captureStream` failed for reels) | Instagram may have updated their internal structure; try the individual console scripts from the linked posts |
+| Right-click still blocked on images | `killShields` has not run yet | Scroll slightly — any new post load triggers `scan()` which re-runs `killShields()` |
 | Button appears in the wrong spot | The wrapper element's position style changed | The `wrapper.style.position = 'relative'` override may conflict with Instagram's own layout — adjust the button's `top` / `right` values in the script |
-| New tab opens but the file won't save | The CDN URL expired between navigation and click | CDN links are short-lived; navigate to the content fresh and click the button without delay |
+| Tampermonkey shows a domain-not-allowed error | `@connect` list doesn't cover the CDN hostname | Add `@connect *` to the header as a temporary catch-all while you identify the exact CDN domain from DevTools |
 | Reel button shows ⏳ for a long time | MediaRecorder path: the full reel must play through before the file is ready | Let the video finish playing — duration depends on reel length |
 | Script breaks after an Instagram update | Instagram periodically changes their React component structure | Check for an updated version of this script; the Fiber key prefix (`__reactFiber$`) is stable but the object layout inside can shift |
 
