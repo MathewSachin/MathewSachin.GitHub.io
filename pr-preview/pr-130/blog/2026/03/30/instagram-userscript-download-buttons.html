@@ -130,7 +130,7 @@
         <em>
 
 
-45 min
+39 min
 
 
 read</em>
@@ -457,8 +457,8 @@ read</em>
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ==UserScript==</span>
 <span class="c1">// @name         Instagram Download Buttons</span>
 <span class="c1">// @namespace    https://mathewsachin.github.io/</span>
-<span class="c1">// @version      1.6</span>
-<span class="c1">// @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram</span>
+<span class="c1">// @version      1.7</span>
+<span class="c1">// @description  Adds ⬇ download buttons for reels and stories on Instagram; restores right-click on photos</span>
 <span class="c1">// @author       Mathew Sachin</span>
 <span class="c1">// @match        https://www.instagram.com/*</span>
 <span class="c1">// @grant        GM_xmlhttpRequest</span>
@@ -621,54 +621,6 @@ read</em>
         <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="cm">/* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */</span>
-    <span class="kd">function</span> <span class="nx">addPhotoButton</span><span class="p">(</span><span class="nx">article</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">article</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
-        <span class="c1">// Exclude images inside &lt;header&gt; — the post author's profile avatar is</span>
-        <span class="c1">// always in a &lt;header&gt; at the top of the article and must not be downloaded.</span>
-        <span class="c1">// Among the remaining candidates, prefer the largest by pixel area so that</span>
-        <span class="c1">// on carousel posts we get the main visible image, not a thumbnail.</span>
-        <span class="kd">const</span> <span class="nx">imgCandidates</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">article</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">img[srcset]</span><span class="dl">'</span><span class="p">))</span>
-            <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">i</span> <span class="o">=&gt;</span> <span class="o">!</span><span class="nx">i</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="dl">'</span><span class="s1">header</span><span class="dl">'</span><span class="p">));</span>
-        <span class="nx">imgCandidates</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">naturalWidth</span> <span class="o">*</span> <span class="nx">b</span><span class="p">.</span><span class="nx">naturalHeight</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">naturalWidth</span> <span class="o">*</span> <span class="nx">a</span><span class="p">.</span><span class="nx">naturalHeight</span><span class="p">));</span>
-
-        <span class="kd">const</span> <span class="nx">img</span> <span class="o">=</span> <span class="nx">imgCandidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="o">||</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">article</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">img[src]</span><span class="dl">'</span><span class="p">))</span>
-                <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">i</span> <span class="o">=&gt;</span> <span class="o">!</span><span class="nx">i</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="dl">'</span><span class="s1">header</span><span class="dl">'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span><span class="p">.</span><span class="nx">naturalWidth</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">img</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span> <span class="c1">// image not loaded yet — do NOT mark article, allow retry</span>
-
-        <span class="nx">article</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// mark only after we know we can add a button</span>
-
-        <span class="c1">// Attach to the article itself — img.parentElement usually has overflow:hidden</span>
-        <span class="c1">// which would clip the absolutely-positioned button out of view.</span>
-        <span class="kd">const</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">getComputedStyle</span><span class="p">(</span><span class="nx">article</span><span class="p">).</span><span class="nx">position</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="dl">'</span><span class="s1">relative</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">absolute</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">fixed</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">sticky</span><span class="dl">'</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">pos</span><span class="p">))</span>
-            <span class="nx">article</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="dl">'</span><span class="s1">position</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">relative</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">important</span><span class="dl">'</span><span class="p">);</span>
-
-        <span class="kd">const</span> <span class="nx">btn</span> <span class="o">=</span> <span class="nx">makeBtn</span><span class="p">(</span><span class="dl">'</span><span class="s1">⬇</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Download photo</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-            <span class="nx">btn</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="nx">btn</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">⏳</span><span class="dl">'</span><span class="p">;</span>
-            <span class="k">try</span> <span class="p">{</span>
-                <span class="kd">let</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">scrapeReactFiber</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">const</span> <span class="nx">srcset</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">srcset</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span>
-                    <span class="kd">const</span> <span class="nx">candidates</span> <span class="o">=</span> <span class="nx">srcset</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/</span><span class="p">)).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
-                    <span class="nx">url</span> <span class="o">=</span> <span class="nx">candidates</span><span class="p">.</span><span class="nx">length</span> <span class="p">?</span> <span class="nx">candidates</span><span class="p">[</span><span class="nx">candidates</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="nx">img</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">await</span> <span class="nx">downloadBlob</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="s2">`photo.</span><span class="p">${</span><span class="nx">extFromUrl</span><span class="p">(</span><span class="nx">url</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
-                <span class="nx">btn</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">✅</span><span class="dl">'</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">btn</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">❌</span><span class="dl">'</span><span class="p">;</span>
-                <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">[IG-DL] Photo download failed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">btn</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">⬇</span><span class="dl">'</span><span class="p">;</span> <span class="nx">btn</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
-        <span class="p">});</span>
-        <span class="nx">btn</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">8px</span><span class="dl">'</span><span class="p">;</span>
-        <span class="nx">btn</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">8px</span><span class="dl">'</span><span class="p">;</span>
-        <span class="nx">article</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">btn</span><span class="p">);</span>
-    <span class="p">}</span>
-
     <span class="cm">/* ══ REEL HANDLER — Reel player ══════════════════════════════════════ */</span>
     <span class="kd">function</span> <span class="nx">addReelButton</span><span class="p">(</span><span class="nx">videoEl</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">videoEl</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
@@ -771,11 +723,6 @@ read</em>
         <span class="c1">// Reel videos (tall, in-viewport)</span>
         <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">video</span><span class="dl">'</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">v</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">().</span><span class="nx">height</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="nx">addReelButton</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
-        <span class="p">});</span>
-
-        <span class="c1">// Photo posts inside &lt;article&gt; (no &lt;video&gt; child = photo post)</span>
-        <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">article</span><span class="dl">'</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">article</span> <span class="o">=&gt;</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">article</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">video</span><span class="dl">'</span><span class="p">))</span> <span class="nx">addPhotoButton</span><span class="p">(</span><span class="nx">article</span><span class="p">);</span>
         <span class="p">});</span>
     <span class="p">}</span>
 
@@ -965,35 +912,21 @@ Even with <code class="language-plaintext highlighter-rouge">pointer-events</cod
 
 <h3 id="the-data-igdl-guard">The <code class="language-plaintext highlighter-rouge">data-igDl</code> Guard</h3>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nx">article</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-<span class="c1">// ... find image ...</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">img</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span> <span class="c1">// do NOT mark — allow retry when image loads</span>
-<span class="nx">article</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// mark only after button is attached</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nx">videoEl</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+<span class="nx">videoEl</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">igDl</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>Every handler checks for a <code class="language-plaintext highlighter-rouge">data-ig-dl</code> attribute on the element before doing anything. Once a button has been attached, the attribute is set. The next time <code class="language-plaintext highlighter-rouge">scan()</code> runs — after a DOM mutation or navigation — the guard prevents a second button from being added to the same element.</p>
 
-<p>For the photo handler the guard is deliberately set <strong>after</strong> the <code class="language-plaintext highlighter-rouge">!img</code> check. Instagram’s feed lazily loads images — an <code class="language-plaintext highlighter-rouge">&lt;article&gt;</code> can appear in the DOM with no <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> yet. If we marked it before finding the image and the check returned early, the next <code class="language-plaintext highlighter-rouge">scan()</code> would skip it (already marked) and the button would never be added. Setting the mark only after we successfully find the image ensures re-attempts happen naturally until the image is ready.</p>
+<h3 id="why-no-download-button-for-photos">Why No Download Button for Photos?</h3>
 
-<h3 id="photo-button-attachment-point">Photo Button Attachment Point</h3>
+<p>Instagram photos can be saved with a simple right-click → <em>Save image as…</em>. The script already restores that capability via <code class="language-plaintext highlighter-rouge">installKillShieldsCSS</code>:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Exclude images inside &lt;header&gt; — the profile avatar is always in a &lt;header&gt;.</span>
-<span class="c1">// Sort remaining candidates by pixel area descending to prefer the post image.</span>
-<span class="kd">const</span> <span class="nx">imgCandidates</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">article</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">img[srcset]</span><span class="dl">'</span><span class="p">))</span>
-    <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">i</span> <span class="o">=&gt;</span> <span class="o">!</span><span class="nx">i</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="dl">'</span><span class="s1">header</span><span class="dl">'</span><span class="p">));</span>
-<span class="nx">imgCandidates</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">naturalWidth</span> <span class="o">*</span> <span class="nx">b</span><span class="p">.</span><span class="nx">naturalHeight</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">naturalWidth</span> <span class="o">*</span> <span class="nx">a</span><span class="p">.</span><span class="nx">naturalHeight</span><span class="p">));</span>
-<span class="kd">const</span> <span class="nx">img</span> <span class="o">=</span> <span class="nx">imgCandidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="cm">/* img[src] fallback */</span><span class="p">;</span>
-
-<span class="c1">// Attach to the article itself — img.parentElement usually has overflow:hidden</span>
-<span class="c1">// which would clip the absolutely-positioned button out of view.</span>
-<span class="nx">article</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="dl">'</span><span class="s1">position</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">relative</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">important</span><span class="dl">'</span><span class="p">);</span>
-<span class="c1">// ...</span>
-<span class="nx">article</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">btn</span><span class="p">);</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">GM_addStyle</span><span class="p">(</span><span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; }</span><span class="dl">'</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>Instagram wraps each <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> in a small <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code> with <code class="language-plaintext highlighter-rouge">overflow: hidden</code> to maintain the image’s aspect ratio. If the button is appended to that wrapper and positioned absolutely, it is clipped by <code class="language-plaintext highlighter-rouge">overflow: hidden</code> and never appears on screen. Appending to <code class="language-plaintext highlighter-rouge">article</code> — the outermost post card — avoids the overflow constraint. The script checks whether <code class="language-plaintext highlighter-rouge">article</code> is already positioned (relative / absolute / fixed / sticky) and only adds <code class="language-plaintext highlighter-rouge">position: relative</code> if it isn’t, so it doesn’t disturb Instagram’s own layout.</p>
-
-<p><strong>Why exclude <code class="language-plaintext highlighter-rouge">&lt;header&gt;</code> descendants?</strong> Every Instagram post card contains two images with a <code class="language-plaintext highlighter-rouge">srcset</code> attribute: the author’s profile avatar (inside a <code class="language-plaintext highlighter-rouge">&lt;header&gt;</code> at the top of the card) and the actual post photo below it. The naïve <code class="language-plaintext highlighter-rouge">article.querySelector('img[srcset]')</code> returns the first DOM match, which is the profile avatar. Filtering with <code class="language-plaintext highlighter-rouge">!i.closest('header')</code> eliminates it. The remaining candidates are sorted by pixel area descending (naturalWidth × naturalHeight) so that on carousel posts the visible main image is preferred over any smaller thumbnail.</p>
+<p>A dedicated download button would need to reliably identify the correct post image among multiple <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> elements in each <code class="language-plaintext highlighter-rouge">&lt;article&gt;</code> — the profile avatar, the post image, and any carousel thumbnails. Getting this wrong is worse than having no button at all. Since right-click works reliably once the kill shields are in place, a button adds complexity without benefit.</p>
 
 <hr />
 
@@ -1021,32 +954,17 @@ Even with <code class="language-plaintext highlighter-rouge">pointer-events</cod
     <tr>
       <td>Right-click still blocked on images</td>
       <td><code class="language-plaintext highlighter-rouge">GM_addStyle</code> grant missing — old script version</td>
-      <td>Update to v1.6 which adds both <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code> (CSS fix) and a capture-phase <code class="language-plaintext highlighter-rouge">contextmenu</code> listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants</td>
+      <td>Update to v1.7 which adds both <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code> (CSS fix) and a capture-phase <code class="language-plaintext highlighter-rouge">contextmenu</code> listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants</td>
     </tr>
     <tr>
       <td>Images have blank space below them</td>
       <td>Old version of the script set <code class="language-plaintext highlighter-rouge">position: relative !important</code> on images</td>
-      <td>Update to v1.6 — the CSS rule only touches <code class="language-plaintext highlighter-rouge">pointer-events</code> and <code class="language-plaintext highlighter-rouge">user-select</code></td>
-    </tr>
-    <tr>
-      <td>Photo ⬇ button not visible</td>
-      <td>Old version appended the button to the image’s direct wrapper which has <code class="language-plaintext highlighter-rouge">overflow: hidden</code></td>
-      <td>Update to v1.6 — button is now appended to the <code class="language-plaintext highlighter-rouge">&lt;article&gt;</code> element</td>
-    </tr>
-    <tr>
-      <td>Photo button downloads the profile picture</td>
-      <td>Old version used <code class="language-plaintext highlighter-rouge">querySelector('img[srcset]')</code> which returns the profile avatar first</td>
-      <td>Update to v1.6 — profile avatar is excluded by filtering out images inside <code class="language-plaintext highlighter-rouge">&lt;header&gt;</code></td>
+      <td>Update to v1.7 — the CSS rule only touches <code class="language-plaintext highlighter-rouge">pointer-events</code> and <code class="language-plaintext highlighter-rouge">user-select</code></td>
     </tr>
     <tr>
       <td>Button is greyed out after clicking</td>
       <td>Download is in progress</td>
       <td>Wait for <code class="language-plaintext highlighter-rouge">✅</code> or <code class="language-plaintext highlighter-rouge">❌</code> — the button re-enables automatically after ~2–3 seconds</td>
-    </tr>
-    <tr>
-      <td>Button appears in the wrong spot</td>
-      <td>The wrapper element’s position style changed</td>
-      <td>The <code class="language-plaintext highlighter-rouge">wrapper.style.position = 'relative'</code> override may conflict with Instagram’s own layout — adjust the button’s <code class="language-plaintext highlighter-rouge">top</code> / <code class="language-plaintext highlighter-rouge">right</code> values in the script</td>
     </tr>
     <tr>
       <td>Tampermonkey shows a domain-not-allowed error</td>
