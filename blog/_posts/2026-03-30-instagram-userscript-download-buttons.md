@@ -100,7 +100,7 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 // ==UserScript==
 // @name         Instagram Download Buttons
 // @namespace    https://mathewsachin.github.io/
-// @version      1.7
+// @version      1.8
 // @description  Adds ⬇ download buttons for reels and stories on Instagram; restores right-click on photos
 // @author       Mathew Sachin
 // @match        https://www.instagram.com/*
@@ -246,21 +246,41 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     }
 
     /* ── CSS shield removal — restores right-click on all images ─────── */
-    /* Two-part fix:                                                       */
+    /* Three-part fix:                                                     */
     /* 1. GM_addStyle: injects CSS via extension context (CSP-exempt) to  */
-    /*    set pointer-events:auto on <img> elements so mouse events reach  */
-    /*    the image itself.                                                 */
-    /* 2. Capture-phase contextmenu listener: Instagram registers          */
-    /*    contextmenu handlers that call preventDefault() to suppress the  */
-    /*    browser's right-click menu. By listening in the capture phase    */
-    /*    and calling stopImmediatePropagation(), our handler runs first    */
-    /*    and prevents all of Instagram's handlers from firing — without   */
-    /*    calling preventDefault() ourselves, so the browser menu appears. */
+    /*    (a) set pointer-events:auto on <img> so clicks reach the image  */
+    /*    and (b) disable pointer-events on overlay <div>s that Instagram */
+    /*    stacks on top of post images to intercept mouse events.         */
+    /* 2. Event.prototype.preventDefault override: Instagram registers its */
+    /*    contextmenu handlers BEFORE our script runs (document-idle), so */
+    /*    a capture-phase stopImmediatePropagation cannot beat them.      */
+    /*    Overriding preventDefault on the Event prototype makes any call  */
+    /*    to e.preventDefault() on a contextmenu event a no-op — the      */
+    /*    browser right-click menu always appears.                         */
+    /* 3. Capture-phase contextmenu listener: belt-and-suspenders stop     */
+    /*    for any bubble-phase or same-phase-later Instagram handlers.     */
     let _shieldsInstalled = false;
     function installKillShieldsCSS() {
         if (_shieldsInstalled) return;
         _shieldsInstalled = true;
-        GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
+        GM_addStyle([
+            // Restore pointer events on images themselves
+            'img { pointer-events: auto !important; user-select: auto !important; }',
+            // Disable pointer events on overlay divs that Instagram stacks on top of
+            // post images. These are plain <div>s (no role, no aria-label) that are
+            // direct children of a container which also directly holds an img[srcset].
+            // Disabling them lets right-click land on the <img> so the browser shows
+            // "Save image as…" rather than the generic page context menu.
+            'div:has(> img[srcset]) > div:not([role]):not([aria-label]) { pointer-events: none !important; }',
+        ].join('\n'));
+        // Override preventDefault on the Event prototype so Instagram's contextmenu
+        // handlers — which were registered before this script ran — cannot suppress
+        // the browser's right-click menu regardless of capture/bubble order.
+        const _pd = Event.prototype.preventDefault;
+        Event.prototype.preventDefault = function () {
+            if (this.type !== 'contextmenu') _pd.call(this);
+        };
+        // Belt-and-suspenders: also stop propagation for same/later-registered handlers
         document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
     }
 
@@ -459,24 +479,33 @@ let _shieldsInstalled = false;
 function installKillShieldsCSS() {
     if (_shieldsInstalled) return;
     _shieldsInstalled = true;
-    GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
+    GM_addStyle([
+        'img { pointer-events: auto !important; user-select: auto !important; }',
+        'div:has(> img[srcset]) > div:not([role]):not([aria-label]) { pointer-events: none !important; }',
+    ].join('\n'));
+    const _pd = Event.prototype.preventDefault;
+    Event.prototype.preventDefault = function () {
+        if (this.type !== 'contextmenu') _pd.call(this);
+    };
     document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
 }
 ```
 
-Restoring right-click requires two independent fixes, because Instagram uses two independent mechanisms to prevent it:
+Restoring right-click requires three independent fixes, because Instagram uses three independent mechanisms to prevent it, plus a fourth belt-and-suspenders layer:
 
-**1. CSS: `pointer-events` via `GM_addStyle`.**  
-Instagram sets `pointer-events: none` on `<img>` elements so mouse events pass through to invisible overlay `<div>`s that Instagram controls. `GM_addStyle` (requires `@grant GM_addStyle`) injects the counter-rule via the **extension context**, not the page context — this bypasses Instagram's [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), which blocks `<style>` elements injected by page-context scripts. The CSS fix ensures `mouseenter`/`mousedown`/`contextmenu` events actually reach the `<img>` element.
+**1. CSS fix A: `pointer-events: auto` on `<img>`.**  
+Instagram sets `pointer-events: none` on `<img>` elements so mouse events pass through to transparent overlay `<div>`s that Instagram controls. `GM_addStyle` (requires `@grant GM_addStyle`) injects the counter-rule via the **extension context**, not the page context — this bypasses Instagram's [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), which blocks `<style>` elements injected by page-context scripts.
 
-**2. JS: capture-phase `contextmenu` listener.**  
-Even with `pointer-events` restored, Instagram still blocks the native right-click menu via JavaScript: it registers `contextmenu` event listeners on container elements that call `e.preventDefault()`. CSS cannot stop a JS event handler. The fix is `document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true)`:
+**2. CSS fix B: `pointer-events: none` on overlay `<div>`s.**  
+Restoring pointer events on the `<img>` alone is not enough. Instagram posts have a transparent `<div>` with `pointer-events: auto` (the default) stacked *on top* of the image. Since it is higher in the z-order, right-clicks still land on the overlay div rather than the `<img>` — meaning the browser shows the generic page context menu instead of "Save image as…". The second CSS rule targets these overlays specifically: `div:has(> img[srcset]) > div:not([role]):not([aria-label])` matches plain `<div>` children of a container that also directly holds an `<img srcset>`, excluding any div that carries a WAI-ARIA `role` or `aria-label` (those are interactive controls that should remain clickable). The `:has()` selector requires Chrome 105+ / Firefox 121+ / Safari 15.4+.
 
-- The `true` third argument registers in the **capture phase**, which runs *before* the target element and *before* any bubble-phase listeners anywhere in the tree.
-- `stopImmediatePropagation()` prevents every other listener on every element from seeing the event — including Instagram's handlers that call `preventDefault()`.
-- We do **not** call `preventDefault()` ourselves, so the browser's native right-click menu still appears.
+**3. JS: `Event.prototype.preventDefault` override.**  
+Even with both CSS fixes, Instagram's JavaScript can still call `e.preventDefault()` on the `contextmenu` event to suppress the browser menu. The `stopImmediatePropagation()` approach only beats Instagram if our listener was registered first — but because our script runs at `document-idle` (after Instagram's scripts have already run), Instagram's capture-phase handlers are registered **before** ours and will have already called `preventDefault()` before our listener fires. The prototype override makes any `preventDefault()` call on a `contextmenu` event a no-op across the board, regardless of listener registration order. This is the definitive fix.
 
-The boolean guard `_shieldsInstalled` ensures both fixes are applied exactly once.
+**4. JS: capture-phase `stopImmediatePropagation` (belt-and-suspenders).**  
+The `document.addEventListener(..., true)` listener is retained as a backup for any Instagram handlers that might be registered *after* our script (e.g. dynamically injected during navigation). `stopImmediatePropagation()` prevents them from seeing the event at all.
+
+The boolean guard `_shieldsInstalled` ensures all four fixes are applied exactly once.
 
 ### The React Fiber Scraper
 
@@ -571,7 +600,14 @@ Every handler checks for a `data-ig-dl` attribute on the element before doing an
 Instagram photos can be saved with a simple right-click → *Save image as…*. The script already restores that capability via `installKillShieldsCSS`:
 
 ```js
-GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
+GM_addStyle([
+    'img { pointer-events: auto !important; user-select: auto !important; }',
+    'div:has(> img[srcset]) > div:not([role]):not([aria-label]) { pointer-events: none !important; }',
+].join('\n'));
+const _pd = Event.prototype.preventDefault;
+Event.prototype.preventDefault = function () {
+    if (this.type !== 'contextmenu') _pd.call(this);
+};
 document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
 ```
 
@@ -585,8 +621,9 @@ A dedicated download button would need to reliably identify the correct post ima
 |---|---|---|
 | No ⬇ button appears anywhere | Script is not active | Open the Tampermonkey dashboard and confirm the script is enabled and the `@match` line is correct |
 | Button appears but clicking shows ❌ | React Fiber tree did not contain a URL (and `captureStream` failed for reels) | Instagram may have updated their internal structure; try the individual console scripts from the linked posts |
-| Right-click still blocked on images | `GM_addStyle` grant missing — old script version | Update to v1.7 which adds both `@grant GM_addStyle` (CSS fix) and a capture-phase `contextmenu` listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants |
-| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.7 — the CSS rule only touches `pointer-events` and `user-select` |
+| Right-click menu appears but no "Save image as…" | Old script: overlay CSS rule missing | Update to v1.8 which adds `div:has(> img[srcset]) > div:not([role]):not([aria-label]) { pointer-events: none !important; }` to disable Instagram's transparent overlay divs so right-clicks land on the `<img>` itself |
+| Right-click still blocked entirely | `GM_addStyle` grant missing or old script | Update to v1.8 which overrides `Event.prototype.preventDefault` for `contextmenu` events, defeating Instagram's handlers regardless of registration order; re-install the script from scratch if Tampermonkey cached the old grants |
+| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.8 — the CSS rules only touch `pointer-events` and `user-select` |
 | Button is greyed out after clicking | Download is in progress | Wait for `✅` or `❌` — the button re-enables automatically after ~2–3 seconds |
 | Tampermonkey shows a domain-not-allowed error | `@connect` list doesn't cover the CDN hostname | Add `@connect *` to the header as a temporary catch-all while you identify the exact CDN domain from DevTools |
 | Reel button shows ⏳ for a long time | MediaRecorder path: the full reel must play through before the file is ready | Let the video finish playing — duration depends on reel length |
