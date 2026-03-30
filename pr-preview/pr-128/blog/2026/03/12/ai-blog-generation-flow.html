@@ -259,15 +259,17 @@ read</em>
 
 <h2 id="the-full-flow">The Full Flow</h2>
 
-<pre class="mermaid">
-flowchart TD
-    A[📱 Mobile phone] --&gt; B[GitHub Copilot<br />AI coding agent]
-    B --&gt;|Writes the blog post as a markdown file| C[Pull Request opened automatically]
-    C --&gt; D[You review &amp; approve<br />on mobile/desktop]
-    D --&gt; E[Merge PR]
-    E --&gt; F[GitHub Actions triggers]
-    F --&gt; G[GitHub Pages builds &amp; deploys Jekyll site]
-    G --&gt; H[Post is live 🎉]
+<pre class="pintora">
+activityDiagram
+  :📱 Mobile phone;
+  :GitHub Copilot AI coding agent;
+  -&gt; Writes the blog post as a markdown file;
+  :Pull Request opened automatically;
+  :You review &amp; approve on mobile/desktop;
+  :Merge PR;
+  :GitHub Actions triggers;
+  :GitHub Pages builds &amp; deploys Jekyll site;
+  :Post is live 🎉;
 </pre>
 
 <p>No local clone. No terminal. No build step on your machine. The entire pipeline runs in the cloud.</p>
@@ -625,8 +627,8 @@ Add more explicit examples to <code class="language-plaintext highlighter-rouge"
     
 
     
-      <script src="https://cdn.jsdelivr.net/npm/mermaid@11.13.0/dist/mermaid.min.js" integrity="sha384-tI0sDqjGJcqrQ8e/XKiQGS+ee11v5knTNWx2goxMBxe4DO9U0uKlfxJtYB9ILZ4j" crossorigin="anonymous"></script>
-      <script>mermaid.initialize({ startOnLoad: true });</script>
+      <script src="https://cdn.jsdelivr.net/npm/@pintora/standalone@0.8.1/lib/pintora-standalone.umd.js" integrity="sha384-ukZa5IV7d3VoeDYJXNQpvzCwORRKOUcKApRymElNTgfB7+bTsSzu3rJfsy3PPbGS" crossorigin="anonymous"></script>
+      <script>pintora.default.initBrowser();</script>
     
   </body>
 </html>
