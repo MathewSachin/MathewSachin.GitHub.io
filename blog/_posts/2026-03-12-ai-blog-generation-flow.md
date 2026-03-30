@@ -24,9 +24,11 @@ That's the workflow I now use for this blog. Here's how it works — and how you
 
 <pre class="mermaid">
 flowchart TD
-    A[📱 Mobile phone] --> B[GitHub Copilot<br/>AI coding agent]
+    A[📱 Mobile phone] --> B["GitHub Copilot
+AI coding agent"]
     B -->|Writes the blog post as a markdown file| C[Pull Request opened automatically]
-    C --> D[You review & approve<br/>on mobile/desktop]
+    C --> D["You review & approve
+on mobile/desktop"]
     D --> E[Merge PR]
     E --> F[GitHub Actions triggers]
     F --> G[GitHub Pages builds & deploys Jekyll site]

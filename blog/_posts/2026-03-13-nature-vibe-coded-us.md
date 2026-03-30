@@ -75,11 +75,12 @@ Evolution has been running this pipeline since before multicellular life existed
 Every generation is a release. The environment is the user. Survival and reproduction are the metrics. There's no version number, no changelog, no rollback button — but the system converges on increasingly well-adapted organisms because the feedback signal is brutally honest.
 
 <pre class="mermaid">
-%%{init: {'flowchart': {'useMaxWidth': false}}}%%
 flowchart TD
     A["🔁 Reproduce with variation"] --> B["🚀 Deploy to environment"]
-    B --> C["📊 Environment provides feedback<br>survival / reproduction rate"]
-    C --> D["✅ Fit variants proliferate<br>❌ Unfit variants deprecated"]
+    B --> C["📊 Environment provides feedback
+survival / reproduction rate"]
+    C --> D["✅ Fit variants proliferate
+❌ Unfit variants deprecated"]
     D --> A
 </pre>
 
