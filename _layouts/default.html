@@ -20,9 +20,9 @@
       <script src="{{ '/scripts/copy-code.js' | relative_url }}"></script>
     {% endif %}
 
-    {% if page.mermaid %}
-      <script src="https://cdn.jsdelivr.net/npm/mermaid@11.13.0/dist/mermaid.min.js" integrity="sha384-tI0sDqjGJcqrQ8e/XKiQGS+ee11v5knTNWx2goxMBxe4DO9U0uKlfxJtYB9ILZ4j" crossorigin="anonymous"></script>
-      <script>mermaid.initialize({ startOnLoad: true });</script>
+    {% if page.pintora %}
+      <script src="https://cdn.jsdelivr.net/npm/@pintora/standalone@0.8.1/lib/pintora-standalone.umd.js" integrity="sha384-ukZa5IV7d3VoeDYJXNQpvzCwORRKOUcKApRymElNTgfB7+bTsSzu3rJfsy3PPbGS" crossorigin="anonymous"></script>
+      <script>pintora.default.initBrowser();</script>
     {% endif %}
   </body>
 </html>
