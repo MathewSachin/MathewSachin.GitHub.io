@@ -332,20 +332,13 @@ read</em>
 
 <p>Every generation is a release. The environment is the user. Survival and reproduction are the metrics. There’s no version number, no changelog, no rollback button — but the system converges on increasingly well-adapted organisms because the feedback signal is brutally honest.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Evolutionary CI/CD Pipeline (simplified):
-
-  Reproduce with variation
-        ↓
-  Deploy to environment
-        ↓
-  Environment provides feedback
-   (survival, reproduction rate)
-        ↓
-  Fit variants proliferate
-  Unfit variants are deprecated
-        ↓
-  Repeat — for millions of years
-</code></pre></div></div>
+<pre class="mermaid">
+flowchart TD
+    A["🔁 Reproduce with variation"] --&gt; B["🚀 Deploy to environment"]
+    B --&gt; C["📊 Environment provides feedback<br />(survival, reproduction rate)"]
+    C --&gt; D["✅ Fit variants proliferate<br />❌ Unfit variants are deprecated"]
+    D --&gt; A
+</pre>
 
 <p>The pace is slow by human standards. But it’s been running <em>uninterrupted</em> for nearly four billion years. That’s a lot of sprints.</p>
 
@@ -573,6 +566,9 @@ read</em>
       <script src="/pr-preview/pr-126/scripts/copy-code.js"></script>
     
 
+    
+      <script src="https://cdn.jsdelivr.net/npm/mermaid@11.13.0/dist/mermaid.min.js" integrity="sha384-tI0sDqjGJcqrQ8e/XKiQGS+ee11v5knTNWx2goxMBxe4DO9U0uKlfxJtYB9ILZ4j" crossorigin="anonymous"></script>
+      <script>mermaid.initialize({ startOnLoad: true });</script>
     
   </body>
 </html>
