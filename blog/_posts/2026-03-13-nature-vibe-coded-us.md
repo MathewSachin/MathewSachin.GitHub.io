@@ -76,13 +76,13 @@ Every generation is a release. The environment is the user. Survival and reprodu
 
 <pre class="pintora">
 activityDiagram
-  while (Evolution continues) {
+  while (Evolution continues)
     :Reproduce with variation;
     :Deploy to environment;
     :Receive feedback from environment;
     :Fit variants proliferate;
     :Unfit variants are removed;
-  }
+  endwhile
 </pre>
 
 The pace is slow by human standards. But it's been running *uninterrupted* for nearly four billion years. That's a lot of sprints.
