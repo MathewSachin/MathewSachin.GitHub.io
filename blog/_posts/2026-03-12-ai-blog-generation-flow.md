@@ -3,7 +3,7 @@ title: "How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Page
 icon: "fas fa-robot"
 tags: [ai, github, copilot, jekyll, github-pages, automation, tutorial]
 highlight: true
-mermaid: true
+pintora: true
 related:
   - /blog/2026/03/09/luddites-vs-developers
   - /blog/2026/03/12/ditching-disqus-for-giscus
@@ -22,15 +22,17 @@ That's the workflow I now use for this blog. Here's how it works — and how you
 
 ## The Full Flow
 
-<pre class="mermaid">
-flowchart TD
-    A[📱 Mobile phone] --> B[GitHub Copilot<br/>AI coding agent]
-    B -->|Writes the blog post as a markdown file| C[Pull Request opened automatically]
-    C --> D[You review & approve<br/>on mobile/desktop]
-    D --> E[Merge PR]
-    E --> F[GitHub Actions triggers]
-    F --> G[GitHub Pages builds & deploys Jekyll site]
-    G --> H[Post is live 🎉]
+<pre class="pintora">
+activityDiagram
+  :📱 Mobile phone;
+  :GitHub Copilot AI coding agent;
+  -> Writes the blog post as a markdown file;
+  :Pull Request opened automatically;
+  :You review & approve on mobile/desktop;
+  :Merge PR;
+  :GitHub Actions triggers;
+  :GitHub Pages builds & deploys Jekyll site;
+  :Post is live 🎉;
 </pre>
 
 No local clone. No terminal. No build step on your machine. The entire pipeline runs in the cloud.

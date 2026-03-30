@@ -3,7 +3,7 @@ title: "This Blog Has Fully Offline Search — Here's How It Works"
 icon: "fas fa-search"
 tags: [search, javascript, orama, jekyll, tutorial, github-pages]
 highlight: true
-mermaid: true
+pintora: true
 related:
   - /blog/2026/03/12/ai-blog-generation-flow
   - /blog/2026/03/12/ditching-disqus-for-giscus
@@ -33,19 +33,20 @@ The search on this site is powered by [Orama](https://orama.com), an open-source
 
 The key insight is that the index is **pre-built at deploy time**, not at search time. When you open the [search page](/search/), your browser downloads one JSON file (`search-index.json`) containing the entire pre-processed search index. After that, every query runs instantly — no network requests, no latency, no server.
 
-<pre class="mermaid">
-flowchart TD
-    subgraph build["🔨 Build time (Node.js)"]
-        A["Blog posts (.md)"] --> B[Parse frontmatter + strip Markdown]
-        B --> C[Insert into Orama database]
-        C --> D["Serialize → search-index.json (~700 KB)"]
-    end
-    subgraph runtime["🌐 Runtime (browser)"]
-        E[search-index.json] --> F["Load into Orama (in-memory)"]
-        F --> G[User types a query]
-        G --> H[Orama searches locally → results]
-    end
-    D --> E
+<pre class="pintora">
+activityDiagram
+  partition "🔨 Build time - Node.js" {
+    :Blog posts .md files;
+    :Parse frontmatter + strip Markdown;
+    :Insert into Orama database;
+    :Serialize → search-index.json ~700 KB;
+  }
+  partition "🌐 Runtime - browser" {
+    :search-index.json;
+    :Load into Orama, in-memory;
+    :User types a query;
+    :Orama searches locally → results;
+  }
 </pre>
 
 ## Building the Index
@@ -170,13 +171,14 @@ When it does run, the steps are straightforward:
 
 The `[skip ci]` tag in the commit message tells GitHub Actions not to re-trigger workflows on that commit — preventing an infinite loop where the bot's own commit kicks off another build.
 
-<pre class="mermaid">
-flowchart TD
-    A[New post merged to main] --> B[GitHub Actions: build-search-index workflow triggers]
-    B --> C["npm run build → search-index.json regenerated"]
-    C --> D[Bot commits updated index back to main]
-    D --> E[GitHub Pages rebuilds the static site]
-    E --> F["Search results include the new post ✅"]
+<pre class="pintora">
+activityDiagram
+  :New post merged to main;
+  :GitHub Actions build-search-index workflow triggers;
+  :npm run build → search-index.json regenerated;
+  :Bot commits updated index back to main;
+  :GitHub Pages rebuilds the static site;
+  :Search results include the new post ✅;
 </pre>
 
 The whole pipeline takes about 30 seconds. By the time GitHub Pages has rebuilt the site and the new post is live, the search index is already up to date — no manual step required.
