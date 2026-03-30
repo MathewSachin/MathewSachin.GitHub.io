@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-128/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-128/" rel="alternate" type="text/html" /><updated>2026-03-30T05:45:54+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-128/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked.</title><link href="https://mathewsachin.github.io/pr-preview/pr-128/blog/2026/03/26/openai-sora-shutdown.html" rel="alternate" type="text/html" title="Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked." /><published>2026-03-26T00:00:00+00:00</published><updated>2026-03-26T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-128/blog/2026/03/26/openai-sora-shutdown</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-128/blog/2026/03/26/openai-sora-shutdown.html"><![CDATA[<p><em>OpenAI announced Sora with “we are giving early access to a small group of creative professionals” in February 2024. By March 2026, they’ve given it a burial instead.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-128/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-128/" rel="alternate" type="text/html" /><updated>2026-03-30T06:56:02+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-128/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked.</title><link href="https://mathewsachin.github.io/pr-preview/pr-128/blog/2026/03/26/openai-sora-shutdown.html" rel="alternate" type="text/html" title="Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked." /><published>2026-03-26T00:00:00+00:00</published><updated>2026-03-26T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-128/blog/2026/03/26/openai-sora-shutdown</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-128/blog/2026/03/26/openai-sora-shutdown.html"><![CDATA[<p><em>OpenAI announced Sora with “we are giving early access to a small group of creative professionals” in February 2024. By March 2026, they’ve given it a burial instead.</em></p>
 
 <p><img alt="A film strip fading from vivid color to dead static, with four frames spanning Feb 2024 to Mar 2026, and the word DISCONTINUED in red. The right panel lists the five reasons Sora failed: cost, competition, strategy, quality, and revenue." src="/images/openai-sora-shutdown-hero.svg" width="640" style="display:block;margin:1rem auto;" /></p>
 
@@ -187,15 +187,15 @@
 
 <pre class="pintora">
 activityDiagram
-  partition "🔨 Build time (Node.js)" {
-    :Blog posts (.md);
+  partition "🔨 Build time - Node.js" {
+    :Blog posts .md files;
     :Parse frontmatter + strip Markdown;
     :Insert into Orama database;
-    :Serialize → search-index.json (~700 KB);
+    :Serialize → search-index.json ~700 KB;
   }
-  partition "🌐 Runtime (browser)" {
+  partition "🌐 Runtime - browser" {
     :search-index.json;
-    :Load into Orama (in-memory);
+    :Load into Orama, in-memory;
     :User types a query;
     :Orama searches locally → results;
   }
@@ -365,7 +365,7 @@ activityDiagram
 <pre class="pintora">
 activityDiagram
   :New post merged to main;
-  :GitHub Actions: build-search-index workflow triggers;
+  :GitHub Actions build-search-index workflow triggers;
   :npm run build → search-index.json regenerated;
   :Bot commits updated index back to main;
   :GitHub Pages rebuilds the static site;
