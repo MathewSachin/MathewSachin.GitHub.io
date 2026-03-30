@@ -100,11 +100,12 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 // ==UserScript==
 // @name         Instagram Download Buttons
 // @namespace    https://mathewsachin.github.io/
-// @version      1.2
+// @version      1.3
 // @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram
 // @author       Mathew Sachin
 // @match        https://www.instagram.com/*
 // @grant        GM_xmlhttpRequest
+// @grant        GM_addStyle
 // @connect      cdninstagram.com
 // @connect      instagram.com
 // @run-at       document-idle
@@ -158,34 +159,43 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     }
 
     /* ── Shared React Fiber scraper ─────────────────────────────────── */
-    /* Async: yields the main thread between DOM ancestor lookups so     */
-    /* scroll and paint events are not blocked by the recursive walk.    */
+    /* Iterative DFS: yields every 200 object visits so the browser can  */
+    /* process scroll / paint events between bursts of work. WeakSet     */
+    /* guards against React's circular fiber references.                 */
     async function scrapeReactFiber(startEl) {
         const videoUrls = [], imageUrls = [];
-
-        const collect = (obj, depth = 0) => {
-            if (depth > 15 || !obj || typeof obj !== 'object' || obj instanceof HTMLElement) return;
-            for (const key in obj) {
-                const val = obj[key];
-                if (typeof val === 'string' && val.startsWith('https://') && !val.includes('<?xml')) {
-                    if (val.includes('.mp4'))
-                        videoUrls.push({ url: val, area: (obj.width || 0) * (obj.height || 0) });
-                    else if (val.includes('.jpg') || val.includes('.webp'))
-                        imageUrls.push({ url: val, area: (obj.width || 0) * (obj.height || 0) });
-                } else if (val && typeof val === 'object') {
-                    collect(val, depth + 1);
-                }
-            }
-        };
+        const visited = new WeakSet();
 
         let el = startEl;
-        while (el && videoUrls.length === 0 && imageUrls.length === 0) {
+        while (el) {
             const fk = Object.keys(el).find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
-            if (fk) collect(el[fk]);
+            if (fk) {
+                const stack = [{ obj: el[fk], depth: 0 }];
+                let steps = 0;
+                while (stack.length > 0) {
+                    // Yield every 200 object visits to keep the thread responsive
+                    if (++steps % 200 === 0) await new Promise(r => setTimeout(r, 0));
+                    const { obj, depth } = stack.pop();
+                    if (depth > 15 || !obj || typeof obj !== 'object' || obj instanceof HTMLElement) continue;
+                    if (visited.has(obj)) continue;
+                    visited.add(obj);
+                    for (const key in obj) {
+                        const val = obj[key];
+                        if (typeof val === 'string' && val.startsWith('https://') && !val.includes('<?xml')) {
+                            if (val.includes('.mp4'))
+                                videoUrls.push({ url: val, area: (obj.width || 0) * (obj.height || 0) });
+                            else if (val.includes('.jpg') || val.includes('.webp'))
+                                imageUrls.push({ url: val, area: (obj.width || 0) * (obj.height || 0) });
+                        } else if (val && typeof val === 'object') {
+                            stack.push({ obj: val, depth: depth + 1 });
+                        }
+                    }
+                }
+                // Found URLs at this ancestor — no need to walk further up the tree
+                if (videoUrls.length > 0 || imageUrls.length > 0) break;
+            }
             el = el.parentElement;
-            // Yield after each ancestor so the browser can process pending
-            // scroll / paint / input events before the next iteration.
-            await new Promise(r => setTimeout(r, 0));
+            await new Promise(r => setTimeout(r, 0)); // yield between ancestors
         }
 
         const best = arr => arr.length ? arr.sort((a, b) => b.area - a.area)[0].url : null;
@@ -236,15 +246,16 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     }
 
     /* ── CSS shield removal — restores right-click on all images ─────── */
-    /* Injects a <style> rule once instead of patching every <img> inline  */
-    /* on every scan. Only pointer-events and user-select are touched —    */
-    /* no position or z-index changes that would break Instagram's layout. */
+    /* Uses GM_addStyle so the rule is injected via the extension context, */
+    /* bypassing Instagram's Content Security Policy (CSP). A <style> tag  */
+    /* appended from page-context JS is silently blocked by Instagram's    */
+    /* CSP, but GM_addStyle runs in the privileged extension context and   */
+    /* is not subject to the page's restrictions.                          */
+    let _shieldsInstalled = false;
     function installKillShieldsCSS() {
-        if (document.getElementById('ig-dl-shields')) return;
-        const style = document.createElement('style');
-        style.id = 'ig-dl-shields';
-        style.textContent = 'img { pointer-events: auto !important; user-select: auto !important; }';
-        (document.head || document.documentElement).appendChild(style);
+        if (_shieldsInstalled) return;
+        _shieldsInstalled = true;
+        GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
     }
 
     /* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */
@@ -482,38 +493,46 @@ The `<a download>` attribute is the standard way to trigger a browser download r
 ### CSS Shield Removal — Restoring Right-Click
 
 ```js
+let _shieldsInstalled = false;
 function installKillShieldsCSS() {
-    if (document.getElementById('ig-dl-shields')) return;
-    const style = document.createElement('style');
-    style.id = 'ig-dl-shields';
-    style.textContent = 'img { pointer-events: auto !important; user-select: auto !important; }';
-    (document.head || document.documentElement).appendChild(style);
+    if (_shieldsInstalled) return;
+    _shieldsInstalled = true;
+    GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
 }
 ```
 
-Instagram sets `pointer-events: none` on `<img>` elements and places invisible overlay `<div>`s on top to intercept right-clicks. The previous approach of calling `el.style.setProperty(...)` on every image inside every `scan()` caused two problems: (1) it iterated over every `<img>` in the DOM on each scan, forcing a full style recalculation each time the MutationObserver fired during scroll; (2) setting `position: relative !important` broke images that Instagram had already positioned as `position: absolute`, leaving a blank gap below them.
+Instagram sets `pointer-events: none` on `<img>` elements and places invisible overlay `<div>`s on top to intercept right-clicks. Two previous approaches had issues:
 
-`installKillShieldsCSS` fixes both problems by injecting a single `<style>` tag **once**. The `id` guard makes every subsequent call a no-op. The CSS engine handles the override natively without touching `position` or `z-index` — only `pointer-events` and `user-select` need to be changed to restore the browser's right-click context menu.
+- **Per-element `style.setProperty` on every `scan()`**: forced a full style-recalculation on every MutationObserver tick during scroll; also set `position: relative !important` which displaced `position: absolute` images and left blank gaps below them.
+- **`document.createElement('style')` appended to `<head>`**: silently blocked by Instagram's [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP). Instagram's CSP prevents page-context scripts from injecting `<style>` elements, so the rule was created in the DOM but never applied by the browser.
+
+`GM_addStyle` is the correct fix. It is a Tampermonkey API (requires `@grant GM_addStyle`) that injects the style via the **extension context** rather than the page context. Extension-injected styles bypass the page's CSP entirely. The boolean guard `_shieldsInstalled` ensures it is called only once per page load.
 
 ### The React Fiber Scraper
 
 ```js
 async function scrapeReactFiber(startEl) {
-    // ...collect() walks the object tree synchronously per fiber node...
-    while (el && videoUrls.length === 0 && imageUrls.length === 0) {
-        const fk = Object.keys(el).find(k => k.startsWith('__reactFiber$') || k.startsWith('__reactProps$'));
-        if (fk) collect(el[fk]);
-        el = el.parentElement;
-        await new Promise(r => setTimeout(r, 0)); // yield between ancestors
+    const visited = new WeakSet();
+    // ...
+    const stack = [{ obj: el[fk], depth: 0 }];
+    let steps = 0;
+    while (stack.length > 0) {
+        if (++steps % 200 === 0) await new Promise(r => setTimeout(r, 0));
+        const { obj, depth } = stack.pop();
+        if (visited.has(obj)) continue;
+        visited.add(obj);
+        // ...push children onto stack...
     }
 }
 ```
 
-Every DOM element rendered by React has a hidden property whose name starts with `__reactFiber$` or `__reactProps$` (followed by a random suffix that changes with each React build). This property holds the component's internal state — including the CDN URLs Instagram retrieved from its servers. The scraper walks up the DOM from the target element, finds these hidden properties, and recursively crawls their object trees looking for `.mp4`, `.jpg`, or `.webp` URLs. This approach is shared by both the photo handler and the story handler; it comes directly from the {% include post_link.html url="/blog/2026/03/22/instagram-story-sniper" text="Story Sniper" %}.
+Every DOM element rendered by React has a hidden property whose name starts with `__reactFiber$` or `__reactProps$` (followed by a random suffix that changes with each React build). This property holds the component's internal state — including the CDN URLs Instagram retrieved from its servers. The scraper walks up the DOM from the target element, finds these hidden properties, and crawls their object trees looking for `.mp4`, `.jpg`, or `.webp` URLs. This approach is shared by both the photo handler and the story handler; it comes directly from the {% include post_link.html url="/blog/2026/03/22/instagram-story-sniper" text="Story Sniper" %}.
 
 When multiple resolutions are present (Instagram often includes several), the scraper ranks them by `width × height` and returns the largest.
 
-**Why async?** Instagram's React fiber tree can contain thousands of nested objects — `collect` walks up to 15 levels deep and visits every key at each level. Running this synchronously blocks the JavaScript main thread for tens to hundreds of milliseconds, which is what made the page unresponsive when a download button was clicked. Making `scrapeReactFiber` `async` and inserting `await new Promise(r => setTimeout(r, 0))` after each DOM ancestor hands control back to the browser's event loop between iterations, letting it process pending scroll frames, paint work, and input events. Because the fiber key is typically found within the first ancestor or two, in practice only one or two yields occur before the URL is found and the loop exits.
+**Why iterative DFS with yields?** The previous version used a recursive `collect()` function that was fully synchronous per ancestor. A single React fiber node can have thousands of nested objects, and walking the whole tree in one call can block the main thread for hundreds of milliseconds — long enough to drop frames and make the page feel frozen. The rewrite converts the recursion to an explicit stack, and inserts `await new Promise(r => setTimeout(r, 0))` every 200 object visits. Each yield hands control back to the browser's event loop so it can process scroll frames, paints, and input events before the scraper continues. This keeps each burst of synchronous work under ~1 ms.
+
+**Why `WeakSet`?** React's fiber tree contains circular references — parent nodes point to children and children point back to parents. Without cycle detection, a naive DFS would loop infinitely. `WeakSet.has` / `WeakSet.add` are O(1) and don't prevent garbage collection, so they add negligible overhead.
 
 ### Button Disabling
 
@@ -585,8 +604,8 @@ Every handler checks for a `data-ig-dl` attribute on the element before doing an
 |---|---|---|
 | No ⬇ button appears anywhere | Script is not active | Open the Tampermonkey dashboard and confirm the script is enabled and the `@match` line is correct |
 | Button appears but clicking shows ❌ | React Fiber tree did not contain a URL (and `captureStream` failed for reels) | Instagram may have updated their internal structure; try the individual console scripts from the linked posts |
-| Right-click still blocked on images | The `<style>` injection hasn't run yet (page just loaded) | Trigger any scroll or navigation; the first `scan()` call installs the CSS rule permanently for the session |
-| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.2 — the CSS rule now only touches `pointer-events` and `user-select` |
+| Right-click still blocked on images | `GM_addStyle` grant missing — old script version | Update to v1.3 which adds `@grant GM_addStyle`; re-install the script from scratch if Tampermonkey cached the old grants |
+| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.3 — the CSS rule only touches `pointer-events` and `user-select` |
 | Button is greyed out after clicking | Download is in progress | Wait for `✅` or `❌` — the button re-enables automatically after ~2–3 seconds |
 | Button appears in the wrong spot | The wrapper element's position style changed | The `wrapper.style.position = 'relative'` override may conflict with Instagram's own layout — adjust the button's `top` / `right` values in the script |
 | Tampermonkey shows a domain-not-allowed error | `@connect` list doesn't cover the CDN hostname | Add `@connect *` to the header as a temporary catch-all while you identify the exact CDN domain from DevTools |
