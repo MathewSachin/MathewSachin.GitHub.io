@@ -100,7 +100,7 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
 // ==UserScript==
 // @name         Instagram Download Buttons
 // @namespace    https://mathewsachin.github.io/
-// @version      1.3
+// @version      1.4
 // @description  Adds ⬇ download buttons for photos, reels, and stories on Instagram
 // @author       Mathew Sachin
 // @match        https://www.instagram.com/*
@@ -246,16 +246,22 @@ Navigate to [instagram.com](https://instagram.com). Browse your feed, open a Ree
     }
 
     /* ── CSS shield removal — restores right-click on all images ─────── */
-    /* Uses GM_addStyle so the rule is injected via the extension context, */
-    /* bypassing Instagram's Content Security Policy (CSP). A <style> tag  */
-    /* appended from page-context JS is silently blocked by Instagram's    */
-    /* CSP, but GM_addStyle runs in the privileged extension context and   */
-    /* is not subject to the page's restrictions.                          */
+    /* Two-part fix:                                                       */
+    /* 1. GM_addStyle: injects CSS via extension context (CSP-exempt) to  */
+    /*    set pointer-events:auto on <img> elements so mouse events reach  */
+    /*    the image itself.                                                 */
+    /* 2. Capture-phase contextmenu listener: Instagram registers          */
+    /*    contextmenu handlers that call preventDefault() to suppress the  */
+    /*    browser's right-click menu. By listening in the capture phase    */
+    /*    and calling stopImmediatePropagation(), our handler runs first    */
+    /*    and prevents all of Instagram's handlers from firing — without   */
+    /*    calling preventDefault() ourselves, so the browser menu appears. */
     let _shieldsInstalled = false;
     function installKillShieldsCSS() {
         if (_shieldsInstalled) return;
         _shieldsInstalled = true;
         GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
+        document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
     }
 
     /* ══ PHOTO HANDLER — Feed posts and Profile grid ════════════════════ */
@@ -498,15 +504,23 @@ function installKillShieldsCSS() {
     if (_shieldsInstalled) return;
     _shieldsInstalled = true;
     GM_addStyle('img { pointer-events: auto !important; user-select: auto !important; }');
+    document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
 }
 ```
 
-Instagram sets `pointer-events: none` on `<img>` elements and places invisible overlay `<div>`s on top to intercept right-clicks. Two previous approaches had issues:
+Restoring right-click requires two independent fixes, because Instagram uses two independent mechanisms to prevent it:
 
-- **Per-element `style.setProperty` on every `scan()`**: forced a full style-recalculation on every MutationObserver tick during scroll; also set `position: relative !important` which displaced `position: absolute` images and left blank gaps below them.
-- **`document.createElement('style')` appended to `<head>`**: silently blocked by Instagram's [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP). Instagram's CSP prevents page-context scripts from injecting `<style>` elements, so the rule was created in the DOM but never applied by the browser.
+**1. CSS: `pointer-events` via `GM_addStyle`.**  
+Instagram sets `pointer-events: none` on `<img>` elements so mouse events pass through to invisible overlay `<div>`s that Instagram controls. `GM_addStyle` (requires `@grant GM_addStyle`) injects the counter-rule via the **extension context**, not the page context — this bypasses Instagram's [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), which blocks `<style>` elements injected by page-context scripts. The CSS fix ensures `mouseenter`/`mousedown`/`contextmenu` events actually reach the `<img>` element.
 
-`GM_addStyle` is the correct fix. It is a Tampermonkey API (requires `@grant GM_addStyle`) that injects the style via the **extension context** rather than the page context. Extension-injected styles bypass the page's CSP entirely. The boolean guard `_shieldsInstalled` ensures it is called only once per page load.
+**2. JS: capture-phase `contextmenu` listener.**  
+Even with `pointer-events` restored, Instagram still blocks the native right-click menu via JavaScript: it registers `contextmenu` event listeners on container elements that call `e.preventDefault()`. CSS cannot stop a JS event handler. The fix is `document.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true)`:
+
+- The `true` third argument registers in the **capture phase**, which runs *before* the target element and *before* any bubble-phase listeners anywhere in the tree.
+- `stopImmediatePropagation()` prevents every other listener on every element from seeing the event — including Instagram's handlers that call `preventDefault()`.
+- We do **not** call `preventDefault()` ourselves, so the browser's native right-click menu still appears.
+
+The boolean guard `_shieldsInstalled` ensures both fixes are applied exactly once.
 
 ### The React Fiber Scraper
 
@@ -604,8 +618,8 @@ Every handler checks for a `data-ig-dl` attribute on the element before doing an
 |---|---|---|
 | No ⬇ button appears anywhere | Script is not active | Open the Tampermonkey dashboard and confirm the script is enabled and the `@match` line is correct |
 | Button appears but clicking shows ❌ | React Fiber tree did not contain a URL (and `captureStream` failed for reels) | Instagram may have updated their internal structure; try the individual console scripts from the linked posts |
-| Right-click still blocked on images | `GM_addStyle` grant missing — old script version | Update to v1.3 which adds `@grant GM_addStyle`; re-install the script from scratch if Tampermonkey cached the old grants |
-| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.3 — the CSS rule only touches `pointer-events` and `user-select` |
+| Right-click still blocked on images | `GM_addStyle` grant missing — old script version | Update to v1.4 which adds both `@grant GM_addStyle` (CSS fix) and a capture-phase `contextmenu` listener (JS fix); re-install the script from scratch if Tampermonkey cached the old grants |
+| Images have blank space below them | Old version of the script set `position: relative !important` on images | Update to v1.4 — the CSS rule only touches `pointer-events` and `user-select` |
 | Button is greyed out after clicking | Download is in progress | Wait for `✅` or `❌` — the button re-enables automatically after ~2–3 seconds |
 | Button appears in the wrong spot | The wrapper element's position style changed | The `wrapper.style.position = 'relative'` override may conflict with Instagram's own layout — adjust the button's `top` / `right` values in the script |
 | Tampermonkey shows a domain-not-allowed error | `@connect` list doesn't cover the CDN hostname | Add `@connect *` to the header as a temporary catch-all while you identify the exact CDN domain from DevTools |
