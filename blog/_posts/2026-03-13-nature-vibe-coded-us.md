@@ -3,6 +3,7 @@ title: "Did Nature Vibe Code Us Humans?"
 icon: "fas fa-leaf"
 tags: [nature, evolution, vibe-coding, ai, biology, philosophy]
 highlight: true
+pintora: true
 related:
   - /blog/2026/03/09/luddites-vs-developers
   - /blog/2026/03/12/ai-blog-generation-flow
@@ -73,21 +74,16 @@ Evolution has been running this pipeline since before multicellular life existed
 
 Every generation is a release. The environment is the user. Survival and reproduction are the metrics. There's no version number, no changelog, no rollback button — but the system converges on increasingly well-adapted organisms because the feedback signal is brutally honest.
 
-```
-Evolutionary CI/CD Pipeline (simplified):
-
-  Reproduce with variation
-        ↓
-  Deploy to environment
-        ↓
-  Environment provides feedback
-   (survival, reproduction rate)
-        ↓
-  Fit variants proliferate
-  Unfit variants are deprecated
-        ↓
-  Repeat — for millions of years
-```
+<pre class="pintora">
+activityDiagram
+  while (Evolution continues) {
+    :Reproduce with variation;
+    :Deploy to environment;
+    :Receive feedback from environment;
+    :Fit variants proliferate;
+    :Unfit variants are removed;
+  }
+</pre>
 
 The pace is slow by human standards. But it's been running *uninterrupted* for nearly four billion years. That's a lot of sprints.
 
