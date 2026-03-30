@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70778035-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70778035-4');
+</script>
+
+
+    <meta charset="UTF-8"/>
+    <title>CRON Expression Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="/pr-preview/pr-129/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-129/styles/styles.css">
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-129/feed.xml" title="Mathew Sachin" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CRON Expression Generator | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="CRON Expression Generator" />
+<meta name="author" content="Mathew Sachin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My Website where I blog using jekyll" />
+<meta property="og:description" content="My Website where I blog using jekyll" />
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-129/tools/cron/" />
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-129/tools/cron/" />
+<meta property="og:site_name" content="Mathew Sachin" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CRON Expression Generator" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@Mathew Sachin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"My Website where I blog using jekyll","headline":"CRON Expression Generator","url":"https://mathewsachin.github.io/pr-preview/pr-129/tools/cron/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-129/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-129/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-129/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-129/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-129/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="bg-dark">
+    <div class="py-4 bg-info text-white google-anno-skip">
+        <div class="container">
+            <h2>CRON Expression Generator</h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card google-anno-skip">
+<div class="card-body">
+
+<div class="row g-4">
+
+  <!-- Controls -->
+  <div class="col-12 col-md-5">
+    <h5 class="mb-3">Configure</h5>
+
+    <div class="mb-3">
+      <label class="form-label" for="freq-select">Frequency</label>
+      <select class="form-select" id="freq-select">
+        <option value="minute">Every Minute</option>
+        <option value="hour">Hourly</option>
+        <option value="day" selected>Daily</option>
+        <option value="week">Weekly</option>
+        <option value="month">Monthly</option>
+      </select>
+    </div>
+
+    <!-- Minute-of-hour (hidden for "Every Minute") -->
+    <div class="mb-3" id="row-minute">
+      <label class="form-label" for="sel-minute">At minute</label>
+      <select class="form-select" id="sel-minute"></select>
+    </div>
+
+    <!-- Hour-of-day (shown for daily / weekly / monthly) -->
+    <div class="mb-3 d-none" id="row-hour">
+      <label class="form-label" for="sel-hour">At hour (0–23, UTC)</label>
+      <select class="form-select" id="sel-hour"></select>
+    </div>
+
+    <!-- Day-of-week (shown for weekly) -->
+    <div class="mb-3 d-none" id="row-dow">
+      <label class="form-label" for="sel-dow">On day of week</label>
+      <select class="form-select" id="sel-dow">
+        <option value="0">Sunday</option>
+        <option value="1">Monday</option>
+        <option value="2">Tuesday</option>
+        <option value="3">Wednesday</option>
+        <option value="4">Thursday</option>
+        <option value="5">Friday</option>
+        <option value="6">Saturday</option>
+      </select>
+    </div>
+
+    <!-- Day-of-month (shown for monthly) -->
+    <div class="mb-3 d-none" id="row-dom">
+      <label class="form-label" for="sel-dom">On day of month</label>
+      <select class="form-select" id="sel-dom"></select>
+    </div>
+
+    <button class="btn btn-info text-white" id="generate-btn">Generate</button>
+  </div>
+
+  <!-- Result -->
+  <div class="col-12 col-md-7">
+    <h5 class="mb-3">Expression</h5>
+
+    <div id="result-area" class="d-none">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">CRON Expression</label>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <code id="cron-expr" class="fs-5"></code>
+          <button class="btn btn-sm btn-outline-secondary" id="copy-cron-btn" title="Copy expression">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Human Readable</label>
+        <p id="cron-desc" class="mb-0 text-muted"></p>
+      </div>
+
+      <hr>
+      <h6 class="mb-2">Field Reference</h6>
+      <table class="table table-sm table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody id="cron-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // ── Populate selects ─────────────────────────────────────────────────────
+
+  var selMinute = document.getElementById('sel-minute');
+  var selHour   = document.getElementById('sel-hour');
+  var selDom    = document.getElementById('sel-dom');
+
+  for (var m = 0; m < 60; m++) {
+    var opt = document.createElement('option');
+    opt.value = m; opt.textContent = m < 10 ? '0' + m : m;
+    selMinute.appendChild(opt);
+  }
+
+  for (var h = 0; h < 24; h++) {
+    var opt = document.createElement('option');
+    opt.value = h; opt.textContent = h < 10 ? '0' + h : h;
+    selHour.appendChild(opt);
+  }
+
+  for (var d = 1; d <= 31; d++) {
+    var opt = document.createElement('option');
+    opt.value = d; opt.textContent = d;
+    selDom.appendChild(opt);
+  }
+
+  // ── Show / hide rows based on frequency ──────────────────────────────────
+
+  var freqSelect = document.getElementById('freq-select');
+  var rowMinute  = document.getElementById('row-minute');
+  var rowHour    = document.getElementById('row-hour');
+  var rowDow     = document.getElementById('row-dow');
+  var rowDom     = document.getElementById('row-dom');
+
+  function updateVisibility() {
+    var freq = freqSelect.value;
+    rowMinute.classList.toggle('d-none', freq === 'minute');
+    rowHour.classList.toggle('d-none',   freq === 'minute' || freq === 'hour');
+    rowDow.classList.toggle('d-none',    freq !== 'week');
+    rowDom.classList.toggle('d-none',    freq !== 'month');
+  }
+
+  freqSelect.addEventListener('change', updateVisibility);
+  updateVisibility();
+
+  // ── Generate ──────────────────────────────────────────────────────────────
+
+  var DOW_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  var ordinal = function (n) {
+    var s = ['th','st','nd','rd'];
+    var v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  };
+
+  document.getElementById('generate-btn').addEventListener('click', function () {
+    var freq = freqSelect.value;
+    var min  = selMinute.value;
+    var hr   = selHour.value;
+    var dow  = document.getElementById('sel-dow').value;
+    var dom  = selDom.value;
+
+    var expr, desc, fields;
+
+    if (freq === 'minute') {
+      expr  = '* * * * *';
+      desc  = 'Every minute';
+      fields = [['Minute','*','Every minute'],['Hour','*','Every hour'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
+    } else if (freq === 'hour') {
+      expr  = min + ' * * * *';
+      desc  = 'Every hour at minute ' + min;
+      fields = [['Minute', min, 'At minute ' + min],['Hour','*','Every hour'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
+    } else if (freq === 'day') {
+      expr  = min + ' ' + hr + ' * * *';
+      desc  = 'Every day at ' + pad(hr) + ':' + pad(min) + ' UTC';
+      fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
+    } else if (freq === 'week') {
+      expr  = min + ' ' + hr + ' * * ' + dow;
+      desc  = 'Every ' + DOW_NAMES[dow] + ' at ' + pad(hr) + ':' + pad(min) + ' UTC';
+      fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)', dow, 'On ' + DOW_NAMES[dow]]];
+    } else { // month
+      expr  = min + ' ' + hr + ' ' + dom + ' * *';
+      desc  = 'On the ' + ordinal(+dom) + ' of every month at ' + pad(hr) + ':' + pad(min) + ' UTC';
+      fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)', dom, 'On the ' + ordinal(+dom)],['Month','*','Every month'],['Day (week)','*','Every day']];
+    }
+
+    document.getElementById('cron-expr').textContent = expr;
+    document.getElementById('cron-desc').textContent  = desc;
+
+    var tbody = document.getElementById('cron-table');
+    tbody.innerHTML = '';
+    fields.forEach(function (f) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + f[0] + '</td><td><code>' + f[1] + '</code></td><td>' + f[2] + '</td>';
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('result-area').classList.remove('d-none');
+  });
+
+  document.getElementById('copy-cron-btn').addEventListener('click', function () {
+    var btn = this;
+    var text = document.getElementById('cron-expr').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var icon = btn.querySelector('i');
+      icon.className = 'fas fa-check text-success';
+      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+    }).catch(function () {
+      var icon = btn.querySelector('i');
+      icon.className = 'fas fa-times text-danger';
+      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+    });
+  });
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  // Auto-generate on load with default selection
+  document.getElementById('generate-btn').click();
+}());
+</script>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+<p>
+  This tool generates
+  <a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">CRON expressions</a>
+  from a simple point-and-click interface — entirely inside your browser.
+  <strong>No data is sent to a server.</strong>
+</p>
+
+<h5 class="mt-4">What is a CRON Expression?</h5>
+<p>
+  A CRON expression is a string of five fields separated by spaces that defines a recurring schedule
+  for a job scheduler (cron daemon on Unix, GitHub Actions, AWS EventBridge, etc.).
+  Each field controls one dimension of time:
+</p>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Position</th>
+        <th>Field</th>
+        <th>Allowed Values</th>
+        <th>Special Characters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Minute</td><td>0–59</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr>
+      <tr><td>2</td><td>Hour</td><td>0–23</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr>
+      <tr><td>3</td><td>Day of month</td><td>1–31</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr>
+      <tr><td>4</td><td>Month</td><td>1–12</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr>
+      <tr><td>5</td><td>Day of week</td><td>0–6 (Sun–Sat)</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr>
+    </tbody>
+  </table>
+</div>
+<p>
+  An asterisk (<code>*</code>) in a field means "every valid value for that field."
+  For example, <code>0 9 * * 1</code> means "at 09:00 every Monday."
+</p>
+
+<h5 class="mt-4">Implementation Details</h5>
+<p>
+  The generator is written in plain JavaScript. When you click <strong>Generate</strong>, the
+  selected frequency and time values are read from the form controls and assembled into a
+  five-field CRON string using simple string concatenation.
+  A human-readable description and a field-by-field reference table are then rendered
+  directly in the page without any page reload.
+</p>
+<p>
+  All scheduling logic runs in the browser — no network requests, no backend, no libraries.
+  Time values (hours) follow <strong>UTC</strong> unless your scheduler interprets them otherwise.
+</p>
+
+<h5 class="mt-4">Common Examples</h5>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr><th>Expression</th><th>Meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>* * * * *</code></td><td>Every minute</td></tr>
+      <tr><td><code>0 * * * *</code></td><td>Every hour (at :00)</td></tr>
+      <tr><td><code>0 9 * * *</code></td><td>Every day at 09:00 UTC</td></tr>
+      <tr><td><code>0 9 * * 1</code></td><td>Every Monday at 09:00 UTC</td></tr>
+      <tr><td><code>0 9 1 * *</code></td><td>First day of every month at 09:00 UTC</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  Everything runs locally in your browser. No schedule data is transmitted anywhere.
+</p>
+
+<br><hr><br>
+
+<script src="https://giscus.app/client.js"
+        data-repo="MathewSachin/MathewSachin.GitHub.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw=="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOAulkj84C4PRo"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</div>
+</div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="sticky-top" style="top: 10px">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js" integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="/pr-preview/pr-129/scripts/formatting.js"></script>
+
+    
+
+    
+  </body>
+</html>
