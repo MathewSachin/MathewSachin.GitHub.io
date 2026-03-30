@@ -130,7 +130,7 @@
         <em>
 
 
-42 min
+38 min
 
 
 read</em>
@@ -457,7 +457,7 @@ read</em>
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ==UserScript==</span>
 <span class="c1">// @name         Instagram Download Buttons</span>
 <span class="c1">// @namespace    https://mathewsachin.github.io/</span>
-<span class="c1">// @version      1.8</span>
+<span class="c1">// @version      1.0</span>
 <span class="c1">// @description  Adds ⬇ download buttons for reels and stories on Instagram; restores right-click on photos</span>
 <span class="c1">// @author       Mathew Sachin</span>
 <span class="c1">// @match        https://www.instagram.com/*</span>
@@ -603,42 +603,15 @@ read</em>
     <span class="p">}</span>
 
     <span class="cm">/* ── CSS shield removal — restores right-click on all images ─────── */</span>
-    <span class="cm">/* Three-part fix:                                                     */</span>
-    <span class="cm">/* 1. GM_addStyle: injects CSS via extension context (CSP-exempt) to  */</span>
-    <span class="cm">/*    (a) set pointer-events:auto on &lt;img&gt; so clicks reach the image  */</span>
-    <span class="cm">/*    and (b) disable pointer-events on overlay &lt;div&gt;s that Instagram */</span>
-    <span class="cm">/*    stacks on top of post images to intercept mouse events.         */</span>
-    <span class="cm">/* 2. Event.prototype.preventDefault override: Instagram registers its */</span>
-    <span class="cm">/*    contextmenu handlers BEFORE our script runs (document-idle), so */</span>
-    <span class="cm">/*    a capture-phase stopImmediatePropagation cannot beat them.      */</span>
-    <span class="cm">/*    Overriding preventDefault on the Event prototype makes any call  */</span>
-    <span class="cm">/*    to e.preventDefault() on a contextmenu event a no-op — the      */</span>
-    <span class="cm">/*    browser right-click menu always appears.                         */</span>
-    <span class="cm">/* 3. Capture-phase contextmenu listener: belt-and-suspenders stop     */</span>
-    <span class="cm">/*    for any bubble-phase or same-phase-later Instagram handlers.     */</span>
+    <span class="cm">/* GM_addStyle injects via extension context (CSP-exempt). Setting    */</span>
+    <span class="cm">/* position:relative + z-index:999 lifts &lt;img&gt; elements above the     */</span>
+    <span class="cm">/* invisible overlay &lt;div&gt;s Instagram stacks on top to intercept      */</span>
+    <span class="cm">/* mouse events, so right-click lands directly on the image.          */</span>
     <span class="kd">let</span> <span class="nx">_shieldsInstalled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="kd">function</span> <span class="nx">installKillShieldsCSS</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_shieldsInstalled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="nx">_shieldsInstalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="nx">GM_addStyle</span><span class="p">([</span>
-            <span class="c1">// Restore pointer events on images themselves</span>
-            <span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; }</span><span class="dl">'</span><span class="p">,</span>
-            <span class="c1">// Disable pointer events on overlay divs that Instagram stacks on top of</span>
-            <span class="c1">// post images. These are plain &lt;div&gt;s (no role, no aria-label) that are</span>
-            <span class="c1">// direct children of a container which also directly holds an img[srcset].</span>
-            <span class="c1">// Disabling them lets right-click land on the &lt;img&gt; so the browser shows</span>
-            <span class="c1">// "Save image as…" rather than the generic page context menu.</span>
-            <span class="dl">'</span><span class="s1">div:has(&gt; img[srcset]) &gt; div:not([role]):not([aria-label]) { pointer-events: none !important; }</span><span class="dl">'</span><span class="p">,</span>
-        <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">));</span>
-        <span class="c1">// Override preventDefault on the Event prototype so Instagram's contextmenu</span>
-        <span class="c1">// handlers — which were registered before this script ran — cannot suppress</span>
-        <span class="c1">// the browser's right-click menu regardless of capture/bubble order.</span>
-        <span class="kd">const</span> <span class="nx">_pd</span> <span class="o">=</span> <span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">;</span>
-        <span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">preventDefault</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">)</span> <span class="nx">_pd</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-        <span class="p">};</span>
-        <span class="c1">// Belt-and-suspenders: also stop propagation for same/later-registered handlers</span>
-        <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="nx">GM_addStyle</span><span class="p">(</span><span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; position: relative !important; z-index: 999 !important; }</span><span class="dl">'</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="cm">/* ══ REEL HANDLER — Reel player ══════════════════════════════════════ */</span>
@@ -833,33 +806,27 @@ read</em>
 <span class="kd">function</span> <span class="nx">installKillShieldsCSS</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">_shieldsInstalled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
     <span class="nx">_shieldsInstalled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="nx">GM_addStyle</span><span class="p">([</span>
-        <span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; }</span><span class="dl">'</span><span class="p">,</span>
-        <span class="dl">'</span><span class="s1">div:has(&gt; img[srcset]) &gt; div:not([role]):not([aria-label]) { pointer-events: none !important; }</span><span class="dl">'</span><span class="p">,</span>
-    <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">));</span>
-    <span class="kd">const</span> <span class="nx">_pd</span> <span class="o">=</span> <span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">;</span>
-    <span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">preventDefault</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">)</span> <span class="nx">_pd</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-    <span class="p">};</span>
-    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">GM_addStyle</span><span class="p">(</span><span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; position: relative !important; z-index: 999 !important; }</span><span class="dl">'</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Restoring right-click requires three independent fixes, because Instagram uses three independent mechanisms to prevent it, plus a fourth belt-and-suspenders layer:</p>
+<p>Instagram uses two CSS tricks to block right-click on photos:</p>
 
-<p><strong>1. CSS fix A: <code class="language-plaintext highlighter-rouge">pointer-events: auto</code> on <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code>.</strong><br />
-Instagram sets <code class="language-plaintext highlighter-rouge">pointer-events: none</code> on <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> elements so mouse events pass through to transparent overlay <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s that Instagram controls. <code class="language-plaintext highlighter-rouge">GM_addStyle</code> (requires <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code>) injects the counter-rule via the <strong>extension context</strong>, not the page context — this bypasses Instagram’s <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policy (CSP)</a>, which blocks <code class="language-plaintext highlighter-rouge">&lt;style&gt;</code> elements injected by page-context scripts.</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">pointer-events: none</code> is set on <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> elements so mouse clicks pass through to a transparent overlay <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code> above the image instead of hitting the image itself.</li>
+  <li>That overlay <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code> sits higher in the stacking order (higher z-index), so even if you restore pointer events on the image, clicks still land on the overlay.</li>
+</ol>
 
-<p><strong>2. CSS fix B: <code class="language-plaintext highlighter-rouge">pointer-events: none</code> on overlay <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s.</strong><br />
-Restoring pointer events on the <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> alone is not enough. Instagram posts have a transparent <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code> with <code class="language-plaintext highlighter-rouge">pointer-events: auto</code> (the default) stacked <em>on top</em> of the image. Since it is higher in the z-order, right-clicks still land on the overlay div rather than the <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> — meaning the browser shows the generic page context menu instead of “Save image as…”. The second CSS rule targets these overlays specifically: <code class="language-plaintext highlighter-rouge">div:has(&gt; img[srcset]) &gt; div:not([role]):not([aria-label])</code> matches plain <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code> children of a container that also directly holds an <code class="language-plaintext highlighter-rouge">&lt;img srcset&gt;</code>, excluding any div that carries a WAI-ARIA <code class="language-plaintext highlighter-rouge">role</code> or <code class="language-plaintext highlighter-rouge">aria-label</code> (those are interactive controls that should remain clickable). The <code class="language-plaintext highlighter-rouge">:has()</code> selector requires Chrome 105+ / Firefox 121+ / Safari 15.4+.</p>
+<p>The fix is a single CSS rule injected via <code class="language-plaintext highlighter-rouge">GM_addStyle</code> (requires <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code>). Because <code class="language-plaintext highlighter-rouge">GM_addStyle</code> injects via the <strong>extension context</strong> rather than the page context, it bypasses Instagram’s <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policy (CSP)</a> that would otherwise block page-injected <code class="language-plaintext highlighter-rouge">&lt;style&gt;</code> elements:</p>
 
-<p><strong>3. JS: <code class="language-plaintext highlighter-rouge">Event.prototype.preventDefault</code> override.</strong><br />
-Even with both CSS fixes, Instagram’s JavaScript can still call <code class="language-plaintext highlighter-rouge">e.preventDefault()</code> on the <code class="language-plaintext highlighter-rouge">contextmenu</code> event to suppress the browser menu. The <code class="language-plaintext highlighter-rouge">stopImmediatePropagation()</code> approach only beats Instagram if our listener was registered first — but because our script runs at <code class="language-plaintext highlighter-rouge">document-idle</code> (after Instagram’s scripts have already run), Instagram’s capture-phase handlers are registered <strong>before</strong> ours and will have already called <code class="language-plaintext highlighter-rouge">preventDefault()</code> before our listener fires. The prototype override makes any <code class="language-plaintext highlighter-rouge">preventDefault()</code> call on a <code class="language-plaintext highlighter-rouge">contextmenu</code> event a no-op across the board, regardless of listener registration order. This is the definitive fix.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pointer-events: auto</code> re-enables mouse events on the image itself.</li>
+  <li><code class="language-plaintext highlighter-rouge">position: relative</code> establishes a new stacking context for the image.</li>
+  <li><code class="language-plaintext highlighter-rouge">z-index: 999</code> lifts the image above the overlay in the stacking order, so right-click lands directly on the <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> and the browser shows <em>Save image as…</em></li>
+  <li><code class="language-plaintext highlighter-rouge">user-select: auto</code> re-enables text selection (Instagram also disables this).</li>
+</ul>
 
-<p><strong>4. JS: capture-phase <code class="language-plaintext highlighter-rouge">stopImmediatePropagation</code> (belt-and-suspenders).</strong><br />
-The <code class="language-plaintext highlighter-rouge">document.addEventListener(..., true)</code> listener is retained as a backup for any Instagram handlers that might be registered <em>after</em> our script (e.g. dynamically injected during navigation). <code class="language-plaintext highlighter-rouge">stopImmediatePropagation()</code> prevents them from seeing the event at all.</p>
-
-<p>The boolean guard <code class="language-plaintext highlighter-rouge">_shieldsInstalled</code> ensures all four fixes are applied exactly once.</p>
+<p>The boolean guard <code class="language-plaintext highlighter-rouge">_shieldsInstalled</code> ensures the style rule is injected exactly once.</p>
 
 <h3 id="the-react-fiber-scraper">The React Fiber Scraper</h3>
 
@@ -882,7 +849,7 @@ The <code class="language-plaintext highlighter-rouge">document.addEventListener
 
 <p>When multiple resolutions are present (Instagram often includes several), the scraper ranks them by <code class="language-plaintext highlighter-rouge">width × height</code> and returns the largest.</p>
 
-<p><strong>Why iterative DFS with yields?</strong> The previous version used a recursive <code class="language-plaintext highlighter-rouge">collect()</code> function that was fully synchronous per ancestor. A single React fiber node can have thousands of nested objects, and walking the whole tree in one call can block the main thread for hundreds of milliseconds — long enough to drop frames and make the page feel frozen. The rewrite converts the recursion to an explicit stack, and inserts <code class="language-plaintext highlighter-rouge">await new Promise(r =&gt; setTimeout(r, 0))</code> every 200 object visits. Each yield hands control back to the browser’s event loop so it can process scroll frames, paints, and input events before the scraper continues. This keeps each burst of synchronous work under ~1 ms.</p>
+<p><strong>Why iterative DFS with yields?</strong> A single React fiber node can have thousands of nested objects, and walking the whole tree synchronously can block the main thread for hundreds of milliseconds — long enough to drop frames and make the page feel frozen. The scraper uses an explicit stack instead of recursion, and inserts <code class="language-plaintext highlighter-rouge">await new Promise(r =&gt; setTimeout(r, 0))</code> every 200 object visits. Each yield hands control back to the browser’s event loop so it can process scroll frames, paints, and input events before the scraper continues. This keeps each burst of synchronous work under ~1 ms.</p>
 
 <p><strong>Why <code class="language-plaintext highlighter-rouge">WeakSet</code>?</strong> React’s fiber tree contains circular references — parent nodes point to children and children point back to parents. Without cycle detection, a naive DFS would loop infinitely. <code class="language-plaintext highlighter-rouge">WeakSet.has</code> / <code class="language-plaintext highlighter-rouge">WeakSet.add</code> are O(1) and don’t prevent garbage collection, so they add negligible overhead.</p>
 
@@ -949,15 +916,7 @@ The <code class="language-plaintext highlighter-rouge">document.addEventListener
 
 <p>Instagram photos can be saved with a simple right-click → <em>Save image as…</em>. The script already restores that capability via <code class="language-plaintext highlighter-rouge">installKillShieldsCSS</code>:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">GM_addStyle</span><span class="p">([</span>
-    <span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; }</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">div:has(&gt; img[srcset]) &gt; div:not([role]):not([aria-label]) { pointer-events: none !important; }</span><span class="dl">'</span><span class="p">,</span>
-<span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">));</span>
-<span class="kd">const</span> <span class="nx">_pd</span> <span class="o">=</span> <span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">;</span>
-<span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">preventDefault</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">)</span> <span class="nx">_pd</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-<span class="p">};</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">contextmenu</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">GM_addStyle</span><span class="p">(</span><span class="dl">'</span><span class="s1">img { pointer-events: auto !important; user-select: auto !important; position: relative !important; z-index: 999 !important; }</span><span class="dl">'</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>A dedicated download button would need to reliably identify the correct post image among multiple <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> elements in each <code class="language-plaintext highlighter-rouge">&lt;article&gt;</code> — the profile avatar, the post image, and any carousel thumbnails. Getting this wrong is worse than having no button at all. Since right-click works reliably once the kill shields are in place, a button adds complexity without benefit.</p>
@@ -986,19 +945,9 @@ The <code class="language-plaintext highlighter-rouge">document.addEventListener
       <td>Instagram may have updated their internal structure; try the individual console scripts from the linked posts</td>
     </tr>
     <tr>
-      <td>Right-click menu appears but no “Save image as…”</td>
-      <td>Old script: overlay CSS rule missing</td>
-      <td>Update to v1.8 which adds <code class="language-plaintext highlighter-rouge">div:has(&gt; img[srcset]) &gt; div:not([role]):not([aria-label]) { pointer-events: none !important; }</code> to disable Instagram’s transparent overlay divs so right-clicks land on the <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> itself</td>
-    </tr>
-    <tr>
-      <td>Right-click still blocked entirely</td>
-      <td><code class="language-plaintext highlighter-rouge">GM_addStyle</code> grant missing or old script</td>
-      <td>Update to v1.8 which overrides <code class="language-plaintext highlighter-rouge">Event.prototype.preventDefault</code> for <code class="language-plaintext highlighter-rouge">contextmenu</code> events, defeating Instagram’s handlers regardless of registration order; re-install the script from scratch if Tampermonkey cached the old grants</td>
-    </tr>
-    <tr>
-      <td>Images have blank space below them</td>
-      <td>Old version of the script set <code class="language-plaintext highlighter-rouge">position: relative !important</code> on images</td>
-      <td>Update to v1.8 — the CSS rules only touch <code class="language-plaintext highlighter-rouge">pointer-events</code> and <code class="language-plaintext highlighter-rouge">user-select</code></td>
+      <td>Right-click still blocked on images</td>
+      <td><code class="language-plaintext highlighter-rouge">GM_addStyle</code> grant missing</td>
+      <td>Re-install the script from scratch — Tampermonkey caches granted permissions and will not apply the new <code class="language-plaintext highlighter-rouge">@grant GM_addStyle</code> line unless you delete and reinstall</td>
     </tr>
     <tr>
       <td>Button is greyed out after clicking</td>
