@@ -35,15 +35,15 @@ The key insight is that the index is **pre-built at deploy time**, not at search
 
 <pre class="pintora">
 activityDiagram
-  partition "🔨 Build time (Node.js)" {
-    :Blog posts (.md);
+  partition "🔨 Build time - Node.js" {
+    :Blog posts .md files;
     :Parse frontmatter + strip Markdown;
     :Insert into Orama database;
-    :Serialize → search-index.json (~700 KB);
+    :Serialize → search-index.json ~700 KB;
   }
-  partition "🌐 Runtime (browser)" {
+  partition "🌐 Runtime - browser" {
     :search-index.json;
-    :Load into Orama (in-memory);
+    :Load into Orama, in-memory;
     :User types a query;
     :Orama searches locally → results;
   }
@@ -174,7 +174,7 @@ The `[skip ci]` tag in the commit message tells GitHub Actions not to re-trigger
 <pre class="pintora">
 activityDiagram
   :New post merged to main;
-  :GitHub Actions: build-search-index workflow triggers;
+  :GitHub Actions build-search-index workflow triggers;
   :npm run build → search-index.json regenerated;
   :Bot commits updated index back to main;
   :GitHub Pages rebuilds the static site;
