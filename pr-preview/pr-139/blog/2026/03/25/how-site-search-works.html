@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+
+    <meta charset="UTF-8"/>
+    <title>This Blog Has Fully Offline Search — Here's How It Works</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="/pr-preview/pr-139/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-139/styles/styles.css">
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-139/feed.xml" title="Mathew Sachin" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>This Blog Has Fully Offline Search — Here’s How It Works | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="This Blog Has Fully Offline Search — Here’s How It Works" />
+<meta name="author" content="Mathew Sachin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="No server. No API calls. No cloud search subscription. Just a JSON file, a JavaScript library, and full-text search that works completely offline. Here’s the whole story." />
+<meta property="og:description" content="No server. No API calls. No cloud search subscription. Just a JSON file, a JavaScript library, and full-text search that works completely offline. Here’s the whole story." />
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-139/blog/2026/03/25/how-site-search-works.html" />
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-139/blog/2026/03/25/how-site-search-works.html" />
+<meta property="og:site_name" content="Mathew Sachin" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-25T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="This Blog Has Fully Offline Search — Here’s How It Works" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@Mathew Sachin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mathew Sachin"},"dateModified":"2026-03-25T00:00:00+00:00","datePublished":"2026-03-25T00:00:00+00:00","description":"No server. No API calls. No cloud search subscription. Just a JSON file, a JavaScript library, and full-text search that works completely offline. Here’s the whole story.","headline":"This Blog Has Fully Offline Search — Here’s How It Works","mainEntityOfPage":{"@type":"WebPage","@id":"https://mathewsachin.github.io/pr-preview/pr-139/blog/2026/03/25/how-site-search-works.html"},"url":"https://mathewsachin.github.io/pr-preview/pr-139/blog/2026/03/25/how-site-search-works.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-139/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-139/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-139/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-139/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-139/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+
+
+    <link rel="stylesheet" href="/pr-preview/pr-139/styles/blog.css">
+
+<div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+
+<div class="bg-dark">
+<div class="pt-4 pb-5 bg-info text-white">
+    <div class="container">
+        <h2>This Blog Has Fully Offline Search — Here's How It Works</h2>
+        <em>25 Mar 2026</em> &nbsp; - &nbsp;
+        <em>
+
+
+8 min
+
+
+read</em>
+
+        <div class="post-tag my-1">
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-139/blog/tags#search">search</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-139/blog/tags#javascript">javascript</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-139/blog/tags#orama">orama</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-139/blog/tags#jekyll">jekyll</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-139/blog/tags#tutorial">tutorial</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-139/blog/tags#github-pages">github-pages</a>
+            
+        </div>
+
+        <div>
+            <a class="text-light" href="https://twitter.com/intent/tweet?text=This Blog Has Fully Offline Search — Here's How It Works&amp;url=https://mathewsachin.github.io/blog/2026/03/25/how-site-search-works.html" target="_blank" rel="noopener"><i class="fab fa-twitter pe-1" aria-hidden="true"></i></a>
+            <a class="text-light" href="mailto:?subject=This Blog Has Fully Offline Search — Here's How It Works&amp;body=Check out this site https://mathewsachin.github.io/blog/2026/03/25/how-site-search-works.html" target="_blank" rel="noopener"><i class="fa fa-envelope pe-1" aria-hidden="true"></i></a>
+        </div>
+        
+        
+            <hr class="border-light mt-3 mb-3">
+            
+
+
+
+<div class="related-posts-section top-variant">
+    <h5 class="related-posts-heading">
+        <i class="fas fa-bookmark me-2"></i>You might also like
+    </h5>
+    <div class="row">
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-139/blog/2026/03/18/have-a-fucking-website.html" class="related-post-link" aria-label="Read You Still Need a Website. Yes, You.">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-globe post-icon me-1" aria-hidden="true"></i>You Still Need a Website. Yes, You.</p>
+                        <small class="related-post-date">Mar 18, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-139/blog/2026/03/12/ditching-disqus-for-giscus.html" class="related-post-link" aria-label="Read Ditching Disqus for giscus — and I Should Have Done It Sooner">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-comments post-icon me-1" aria-hidden="true"></i>Ditching Disqus for giscus — and I Should Have Done It Sooner</p>
+                        <small class="related-post-date">Mar 12, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-139/blog/2026/03/12/ai-blog-generation-flow.html" class="related-post-link" aria-label="Read How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-robot post-icon me-1" aria-hidden="true"></i>How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages</p>
+                        <small class="related-post-date">Mar 12, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+        
+        <div class="p-5"></div>
+    </div>
+</div>
+
+<div class="container post-content-container">
+    <div class="row">
+        <div class="col-md-10">
+            <!-- Mobile TOC: collapsible, hidden on md+ screens -->
+<div id="toc-mobile" class="d-none d-md-none mb-3">
+    <div class="card toc-card">
+        <button type="button"
+                class="card-header toc-header toc-mobile-toggle w-100 text-start"
+                data-bs-toggle="collapse"
+                data-bs-target="#toc-nav-mobile-collapse"
+                aria-expanded="false"
+                aria-controls="toc-nav-mobile-collapse">
+            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+            <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="toc-nav-mobile-collapse">
+            <div class="card-body p-0">
+                <nav id="toc-nav-mobile" aria-label="Table of contents"></nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <div id="post" class="card">
+                <div class="card-body">
+                    <div class="page-content">
+                    <p><em>No server. No API calls. No cloud search subscription. Just a JSON file, a JavaScript library, and full-text search that works completely offline. Here’s the whole story.</em></p>
+
+<h2 id="the-problem-with-search-on-a-static-site">The Problem with Search on a Static Site</h2>
+
+<p>Static sites like this one — generated by Jekyll and hosted on GitHub Pages — are fast, cheap, and simple to maintain. But they don’t run server-side code. There’s no database to query, no backend to handle a search request.</p>
+
+<p>The typical solutions aren’t great:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Approach</th>
+      <th>The catch</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Algolia / Elasticsearch</strong></td>
+      <td>External service, API keys, pricing tiers, vendor lock-in</td>
+    </tr>
+    <tr>
+      <td><strong>Google Custom Search</strong></td>
+      <td>Embeds Google’s search widget (and ads) into your page</td>
+    </tr>
+    <tr>
+      <td><strong>Client-side scan</strong></td>
+      <td>Downloads every post at search time — slow and expensive</td>
+    </tr>
+    <tr>
+      <td><strong>No search at all</strong></td>
+      <td>Fine until you have more than a dozen posts</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>What I actually wanted: fast, private, offline-capable search with no external dependencies. So I built it.</p>
+
+<h2 id="the-stack-orama--a-pre-built-index">The Stack: Orama + a Pre-built Index</h2>
+
+<p>The search on this site is powered by <a href="https://orama.com">Orama</a>, an open-source full-text search engine written entirely in JavaScript. It runs in the browser, with no server required.</p>
+
+<p>The key insight is that the index is <strong>pre-built at deploy time</strong>, not at search time. When you open the <a href="/search/">search page</a>, your browser downloads one JSON file (<code class="language-plaintext highlighter-rouge">search-index.json</code>) containing the entire pre-processed search index. After that, every query runs instantly — no network requests, no latency, no server.</p>
+
+<pre class="pintora">
+activityDiagram
+  partition "🔨 Build time - Node.js" {
+    :Blog posts .md files;
+    :Parse frontmatter + strip Markdown;
+    :Insert into Orama database;
+    :Serialize → search-index.json ~700 KB;
+  }
+  partition "🌐 Runtime - browser" {
+    :search-index.json;
+    :Load into Orama, in-memory;
+    :User types a query;
+    :Orama searches locally → results;
+  }
+</pre>
+
+<h2 id="building-the-index">Building the Index</h2>
+
+<p>A Node.js script (<code class="language-plaintext highlighter-rouge">scripts/build-search-index.mjs</code>) runs before each deployment. It:</p>
+
+<ol>
+  <li><strong>Reads every <code class="language-plaintext highlighter-rouge">.md</code> file</strong> in <code class="language-plaintext highlighter-rouge">blog/_posts/</code></li>
+  <li><strong>Parses the frontmatter</strong> using <a href="https://github.com/jonschlinkert/gray-matter">gray-matter</a> to extract the title, tags, and date</li>
+  <li><strong>Strips Markdown syntax</strong> from the post body — removes code blocks, HTML tags, link syntax, heading markers, emphasis markers — leaving clean plain text for indexing</li>
+  <li><strong>Truncates content</strong> to 2,000 characters (enough for relevance, small enough to keep the index manageable)</li>
+  <li><strong>Derives the URL</strong> from the filename (<code class="language-plaintext highlighter-rouge">YYYY-MM-DD-slug.md</code> → <code class="language-plaintext highlighter-rouge">/blog/YYYY/MM/DD/slug/</code>)</li>
+  <li><strong>Inserts each post</strong> into an Orama database with this schema:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="nl">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nx">url</span><span class="p">:</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nx">content</span><span class="p">:</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nx">tags</span><span class="p">:</span> <span class="dl">'</span><span class="s1">string[]</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nx">date</span><span class="p">:</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li><strong>Serialises the database</strong> with Orama’s <code class="language-plaintext highlighter-rouge">save()</code> function and writes it to <code class="language-plaintext highlighter-rouge">search-index.json</code></li>
+</ol>
+
+<p>The whole build takes under a second for ~40 posts.</p>
+
+<h2 id="loading-and-querying-in-the-browser">Loading and Querying in the Browser</h2>
+
+<p>The search page uses Orama as an ES module (bundled and minified with <a href="https://esbuild.github.io">esbuild</a>):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">create</span><span class="p">,</span> <span class="nx">load</span><span class="p">,</span> <span class="nx">search</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">/scripts/orama.js</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>On page load:</p>
+<ol>
+  <li>Fetch <code class="language-plaintext highlighter-rouge">search-index.json</code></li>
+  <li>Create a new Orama database with the same schema</li>
+  <li>Call <code class="language-plaintext highlighter-rouge">load(db, rawIndex)</code> to restore the pre-built index in memory</li>
+  <li>Enable the search input</li>
+</ol>
+
+<p>From that point on, every keystroke triggers a local search:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">results</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">search</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">term</span><span class="p">,</span>
+  <span class="na">properties</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">title</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">tags</span><span class="dl">'</span><span class="p">],</span>
+  <span class="na">tolerance</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// fuzzy match: allows 1 typo</span>
+  <span class="na">limit</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Input is debounced by 150 ms so it doesn’t fire on every individual keystroke.</p>
+
+<div class="alert alert-info">
+  🔍 <b>Try it:</b> Type <b>serach</b> (a deliberate typo) into the <a href="/search/">search box</a>. The <code>tolerance: 1</code> setting means Orama treats one character difference as a match — so typos don't break your results.
+</div>
+
+<h2 id="security-no-xss-no-open-redirects">Security: No XSS, No Open Redirects</h2>
+
+<p>Two things to get right when rendering user-controlled content in a search result:</p>
+
+<p><strong>HTML escaping.</strong> Every piece of text from the index (title, tags) is passed through <code class="language-plaintext highlighter-rouge">escapeHtml()</code> before being inserted into the DOM as a string. This prevents any content in a post title from being interpreted as HTML.</p>
+
+<p><strong>URL validation.</strong> The URL from the index is validated against <code class="language-plaintext highlighter-rouge">/^\/[^"&lt;&gt;]*$/</code> before being used as an <code class="language-plaintext highlighter-rouge">href</code>. Only safe relative paths (starting with <code class="language-plaintext highlighter-rouge">/</code>, containing no quotes or angle brackets) are accepted. Anything else falls back to <code class="language-plaintext highlighter-rouge">#</code>.</p>
+
+<p>Both checks are there because the data comes from a JSON file that could theoretically be tampered with in a supply chain scenario.</p>
+
+<h2 id="the-trade-offs">The Trade-offs</h2>
+
+<p>This approach works beautifully for a blog of this size, but it has real constraints worth knowing:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>This approach</th>
+      <th>Server-side search</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Latency after index load</strong></td>
+      <td>~0 ms</td>
+      <td>50–300 ms (network round-trip)</td>
+    </tr>
+    <tr>
+      <td><strong>Initial load</strong></td>
+      <td>~700 KB JSON</td>
+      <td>Nothing</td>
+    </tr>
+    <tr>
+      <td><strong>Works offline</strong></td>
+      <td>✅ Yes</td>
+      <td>❌ No</td>
+    </tr>
+    <tr>
+      <td><strong>Privacy</strong></td>
+      <td>✅ Queries never leave your browser</td>
+      <td>❌ Every query hits a server</td>
+    </tr>
+    <tr>
+      <td><strong>Scales to 10,000+ posts</strong></td>
+      <td>❌ Index would be too large</td>
+      <td>✅ Yes</td>
+    </tr>
+    <tr>
+      <td><strong>Hosting cost</strong></td>
+      <td>Free</td>
+      <td>Depends on the service</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For a personal blog with dozens to a few hundred posts, the pre-built JSON approach is nearly perfect. The 700 KB index downloads once and is cached by the browser — subsequent visits to the search page are instant.</p>
+
+<h2 id="why-orama">Why Orama?</h2>
+
+<p>There are a handful of client-side search libraries: Lunr.js, FlexSearch, MiniSearch, Fuse.js. I went with Orama because:</p>
+
+<ul>
+  <li>It’s actively maintained with a clean modern API</li>
+  <li>It handles <code class="language-plaintext highlighter-rouge">string[]</code> fields natively (useful for tags)</li>
+  <li>Built-in fuzzy matching with configurable tolerance</li>
+  <li>The serialise/restore cycle (<code class="language-plaintext highlighter-rouge">save</code> + <code class="language-plaintext highlighter-rouge">load</code>) is first-class — not an afterthought</li>
+  <li>ES module output, which means esbuild can tree-shake and bundle it cleanly</li>
+</ul>
+
+<p>The bundled, minified Orama build comes to about 76 KB. That’s the only JavaScript file the search page adds beyond what the site already loads.</p>
+
+<h2 id="keeping-the-index-up-to-date--automatically">Keeping the Index Up to Date — Automatically</h2>
+
+<p>You could rebuild the index by hand every time you publish a post, but that’s the kind of friction that turns into a bug (forgotten rebuild → stale search results). So the whole thing is automated with GitHub Actions.</p>
+
+<p>A workflow file (<code class="language-plaintext highlighter-rouge">.github/workflows/build-search-index.yml</code>) watches for pushes to <code class="language-plaintext highlighter-rouge">main</code> that touch any of the relevant paths:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">,</span> <span class="nv">master</span><span class="pi">]</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">blog/_posts/**'</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">scripts/build-search-index.mjs'</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">package.json'</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">package-lock.json'</span>
+</code></pre></div></div>
+
+<p>The path filter means the workflow only runs when something that would actually change the index has been modified — adding a post, editing the build script, or updating dependencies. Updating a CSS file or changing a layout doesn’t trigger it.</p>
+
+<p>When it does run, the steps are straightforward:</p>
+
+<ol>
+  <li><strong>Checkout</strong> the repository</li>
+  <li><strong>Set up Node.js 20</strong> with npm caching</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">npm ci</code></strong> — install exact versions from <code class="language-plaintext highlighter-rouge">package-lock.json</code></li>
+  <li><strong><code class="language-plaintext highlighter-rouge">npm run build</code></strong> — this rebuilds both the Orama browser bundle (<code class="language-plaintext highlighter-rouge">scripts/orama.js</code>) and the search index (<code class="language-plaintext highlighter-rouge">search-index.json</code>)</li>
+  <li><strong>Commit back the changed files</strong> — if either file changed, the bot commits them with the message <code class="language-plaintext highlighter-rouge">chore: update Orama bundle and search index [skip ci]</code></li>
+</ol>
+
+<p>The <code class="language-plaintext highlighter-rouge">[skip ci]</code> tag in the commit message tells GitHub Actions not to re-trigger workflows on that commit — preventing an infinite loop where the bot’s own commit kicks off another build.</p>
+
+<pre class="pintora">
+activityDiagram
+  :New post merged to main;
+  :GitHub Actions build-search-index workflow triggers;
+  :npm run build → search-index.json regenerated;
+  :Bot commits updated index back to main;
+  :GitHub Pages rebuilds the static site;
+  :Search results include the new post ✅;
+</pre>
+
+<p>The whole pipeline takes about 30 seconds. By the time GitHub Pages has rebuilt the site and the new post is live, the search index is already up to date — no manual step required.</p>
+
+<div class="alert alert-info">
+  💡 <b>Want the same setup?</b> The full source is on <a href="https://github.com/MathewSachin/MathewSachin.GitHub.io" target="_blank" rel="noopener">GitHub</a>. The key files are <code>scripts/build-search-index.mjs</code>, <code>.github/workflows/build-search-index.yml</code>, <code>search/index.html</code>, and <code>package.json</code>. Clone the repo, swap out the posts, and the automation handles the rest.
+</div>
+
+<p><em>Static doesn’t have to mean dumb. A pre-built index, a small JavaScript library, a GitHub Actions workflow, and a bit of careful wiring is all it takes to add fast, private, fully offline search to any file-based site — with zero ongoing maintenance.</em></p>
+
+                    </div>
+
+                    <br><hr><br>
+
+                    
+
+                    
+                        
+
+
+
+<div class="related-posts-section bottom-variant">
+    <h5 class="related-posts-heading">
+        <i class="fas fa-bookmark me-2"></i>You might also like
+    </h5>
+    <div class="row">
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-139/blog/2026/03/18/have-a-fucking-website.html" class="related-post-link" aria-label="Read You Still Need a Website. Yes, You.">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-globe post-icon me-1" aria-hidden="true"></i>You Still Need a Website. Yes, You.</p>
+                        <small class="related-post-date">Mar 18, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-139/blog/2026/03/12/ditching-disqus-for-giscus.html" class="related-post-link" aria-label="Read Ditching Disqus for giscus — and I Should Have Done It Sooner">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-comments post-icon me-1" aria-hidden="true"></i>Ditching Disqus for giscus — and I Should Have Done It Sooner</p>
+                        <small class="related-post-date">Mar 12, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-139/blog/2026/03/12/ai-blog-generation-flow.html" class="related-post-link" aria-label="Read How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-robot post-icon me-1" aria-hidden="true"></i>How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages</p>
+                        <small class="related-post-date">Mar 12, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+                        <br>
+                    
+
+                    <script src="https://giscus.app/client.js"
+        data-repo="MathewSachin/MathewSachin.GitHub.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw=="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOAulkj84C4PRo"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 d-none d-md-block">
+            <div class="sticky-top" style="top: 10px">
+                <div id="toc-sidebar" class="mb-3" style="display:none">
+                    <div class="card toc-card">
+                        <div class="card-header toc-header">
+                            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                        </div>
+                        <div class="card-body p-0">
+                            <nav id="toc-nav" aria-label="Table of contents"></nav>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+</div>
+
+<button id="back-to-top" class="btn btn-info" title="Back to top" aria-label="Back to top">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</button>
+
+
+<!-- Lightbox modal for blog post images -->
+<div class="modal fade" id="img-lightbox" tabindex="-1" aria-label="Image lightbox" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <img src="" alt="Expanded image">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js" integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="/pr-preview/pr-139/scripts/formatting.js"></script>
+
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/agate.min.css" integrity="sha384-Yno0F1TwvVYWd95R9B4ViD8Z/XeywVsysQN8gRKbgRFu/jzdbWtrXEVNuBuUWR5I" crossorigin="anonymous">
+      <script>hljs.highlightAll();</script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha384-J08i8An/QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+      <script src="/pr-preview/pr-139/scripts/copy-code.js"></script>
+    
+
+    
+      <script src="https://cdn.jsdelivr.net/npm/@pintora/standalone@0.8.1/lib/pintora-standalone.umd.js" integrity="sha384-ukZa5IV7d3VoeDYJXNQpvzCwORRKOUcKApRymElNTgfB7+bTsSzu3rJfsy3PPbGS" crossorigin="anonymous"></script>
+      <script>pintora.default.initBrowser();</script>
+    
+  </body>
+</html>
