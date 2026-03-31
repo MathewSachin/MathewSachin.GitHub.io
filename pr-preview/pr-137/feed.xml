@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-137/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-137/" rel="alternate" type="text/html" /><updated>2026-03-31T14:36:25+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Watch YouTube Shorts in the Normal Player (No Extensions Required)</title><link href="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html" rel="alternate" type="text/html" title="Watch YouTube Shorts in the Normal Player (No Extensions Required)" /><published>2026-03-31T00:00:00+00:00</published><updated>2026-03-31T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html"><![CDATA[<p><em>The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here’s how to instantly escape it using nothing but your address bar.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-137/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-137/" rel="alternate" type="text/html" /><updated>2026-03-31T14:42:45+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Watch YouTube Shorts in the Normal Player (No Extensions Required)</title><link href="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html" rel="alternate" type="text/html" title="Watch YouTube Shorts in the Normal Player (No Extensions Required)" /><published>2026-03-31T00:00:00+00:00</published><updated>2026-03-31T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html"><![CDATA[<p><em>The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here’s how to instantly escape it using nothing but your address bar.</em></p>
 
 <h2 id="the-problem-with-the-shorts-player">The Problem With the Shorts Player</h2>
 
@@ -136,7 +136,7 @@ The page reloads instantly as a normal YouTube video with all controls restored.
   💡 <b>Mobile:</b> Bookmarklets work on mobile browsers too. Save it to your bookmarks, then tap it from the bookmarks list whenever you land on a Shorts page. See <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet/">this post</a> for a detailed walkthrough of the mobile installation steps.
 </div>
 
-<h2 id="how-does-it-work">How Does It Work?</h2>
+<h3 id="how-does-it-work">How Does It Work?</h3>
 
 <p>YouTube uses the same video-delivery infrastructure for Shorts and regular videos.
 The <code class="language-plaintext highlighter-rouge">/shorts/VIDEO_ID</code> path is purely a UI decision — it tells YouTube’s front-end to render the mobile swipe player.
@@ -145,36 +145,6 @@ The video file itself, its CDN URL, its resolution, and all its metadata stay id
 
 <p>This is different from a traditional “download” problem — you’re not bypassing any DRM or accessing anything you weren’t meant to.
 You’re simply telling YouTube which player skin to use to display a video you have full permission to watch.</p>
-
-<h2 id="comparison">Comparison</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Setup</th>
-      <th>Works on mobile?</th>
-      <th>Automatic?</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Manual URL edit</td>
-      <td>None</td>
-      <td>✅</td>
-      <td>❌</td>
-    </tr>
-    <tr>
-      <td>Bookmarklet</td>
-      <td>1 min</td>
-      <td>✅</td>
-      <td>❌ (one click)</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>If you just want a quick fix right now: edit the URL manually.
-If you watch Shorts regularly on desktop: grab the bookmarklet.</p>
 
 <p>Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡</p>
 
