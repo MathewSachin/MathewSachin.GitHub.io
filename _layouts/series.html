@@ -1,0 +1,47 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
+
+<div class="bg-dark">
+<div class="pt-4 pb-5 bg-info text-white">
+    <div class="container">
+        <h2>{{ page.title }}</h2>
+        <div class="p-5"></div>
+    </div>
+</div>
+
+<div class="container post-content-container">
+    <div class="row">
+        <div class="col-md-10">
+            {% include toc.html %}
+
+            <div id="post" class="card">
+                <div class="card-body">
+                    <div class="page-content">
+                    {{ content }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 d-none d-md-block">
+            <div class="sticky-top" style="top: 10px">
+                <div id="toc-sidebar" class="mb-3" style="display:none">
+                    <div class="card toc-card">
+                        <div class="card-header toc-header">
+                            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                        </div>
+                        <div class="card-body p-0">
+                            <nav id="toc-nav" aria-label="Table of contents"></nav>
+                        </div>
+                    </div>
+                </div>
+                {% include ad-unit.html %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+</div>

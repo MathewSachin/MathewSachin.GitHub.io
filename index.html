@@ -122,6 +122,14 @@ ads: true
         </div>
       </div>
 
+      <div class="home-section-divider mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 fw-semibold">Series</h5>
+          <a href="{{ '/blog' | relative_url }}" class="btn btn-outline-info btn-sm"><i class="fas fa-layer-group me-1"></i>All posts</a>
+        </div>
+        {% include series_showcase.html %}
+      </div>
+
       {% include recent_posts.html %}
     </div>
   </div>

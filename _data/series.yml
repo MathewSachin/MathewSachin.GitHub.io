@@ -3,8 +3,9 @@ browser-hacks:
   url: "/blog/series/browser-hacks/"
   description: >
     An 18-part series that takes you from your very first <kbd>F12</kbd> press all the way
-    to writing persistent browser scripts. Every technique builds on the last. No installs,
-    no extensions — just your browser and a curious mind.
+    to writing persistent browser scripts. Every technique builds on the last.
+    Most chapters need nothing but a browser and a curious mind — the final chapter
+    adds Tampermonkey to make your scripts persistent.
   levels:
     - title: "Level 1 — Zero Coding Required"
       icon: "fas fa-seedling"
