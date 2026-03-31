@@ -3,6 +3,13 @@ title: "Instagram Reel Sniper: Download Any Reel Directly from Your Browser"
 icon: "fab fa-instagram"
 tags: [instagram, hack, javascript, browser, devtools, bookmarklet]
 highlight: true
+series:
+  name: "Browser Hacks"
+  url: "/blog/series/browser-hacks/"
+  part: 13
+  total: 18
+  prev: "/blog/2026/03/21/save-instagram-photos"
+  next: "/blog/2026/03/21/youtube-shorts-sniper"
 related:
   - /blog/2026/03/30/instagram-userscript-download-buttons
   - /blog/2026/03/22/reddit-video-sniper

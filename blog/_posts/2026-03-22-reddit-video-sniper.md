@@ -3,6 +3,13 @@ title: "Reddit Video Sniper: Download Any Reddit Video Directly from Your Browse
 icon: "fab fa-reddit"
 tags: [reddit, hack, javascript, browser, devtools]
 highlight: true
+series:
+  name: "Browser Hacks"
+  url: "/blog/series/browser-hacks/"
+  part: 16
+  total: 18
+  prev: "/blog/2026/03/21/twitter-x-video-sniper"
+  next: "/blog/2026/03/22/instagram-story-sniper"
 related:
   - /blog/2026/03/21/twitter-x-video-sniper
   - /blog/2026/03/21/youtube-shorts-sniper

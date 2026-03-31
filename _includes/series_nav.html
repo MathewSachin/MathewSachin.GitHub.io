@@ -1,0 +1,59 @@
+{%- comment -%}
+  series_nav.html
+  Renders series navigation for a post.
+  Requires page.series frontmatter with keys: name, url, part, total, prev (optional), next (optional).
+  variant="header"  → compact banner shown inside the hero header.
+  variant="footer"  → full prev/next navigation bar shown at the bottom of the post.
+{%- endcomment -%}
+{%- if page.series -%}
+  {%- if include.variant == "header" -%}
+    {%- assign _s_prev_post = nil -%}
+    {%- if page.series.prev -%}
+      {%- assign _s_prev_post = site.posts | where: "id", page.series.prev | first -%}
+    {%- endif -%}
+    <div class="series-banner">
+      <i class="fas fa-layer-group me-1" aria-hidden="true"></i>
+      Part {{ page.series.part }} of {{ page.series.total }} &mdash;
+      <a href="{{ page.series.url | relative_url }}">{{ page.series.name }}</a> series
+      {%- if _s_prev_post %}
+      <br>
+      <a class="series-prev-link" href="{{ _s_prev_post.url | relative_url }}">
+        <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>Previous: {{ _s_prev_post.title }}
+      </a>
+      {%- endif %}
+    </div>
+  {%- elsif include.variant == "footer" -%}
+    {%- assign _s_prev_post = nil -%}
+    {%- assign _s_next_post = nil -%}
+    {%- if page.series.prev -%}
+      {%- assign _s_prev_post = site.posts | where: "id", page.series.prev | first -%}
+    {%- endif -%}
+    {%- if page.series.next -%}
+      {%- assign _s_next_post = site.posts | where: "id", page.series.next | first -%}
+    {%- endif -%}
+    {%- if _s_prev_post or _s_next_post -%}
+    <div class="series-post-nav" role="navigation" aria-label="Series navigation">
+      {%- if _s_prev_post -%}
+      <a href="{{ _s_prev_post.url | relative_url }}" class="series-nav-btn prev-post">
+        <i class="fas fa-arrow-left nav-icon" aria-hidden="true"></i>
+        <div>
+          <span class="nav-label">Previous in series</span>
+          <span class="nav-title">{% if _s_prev_post.icon %}<i class="{{ _s_prev_post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _s_prev_post.title }}</span>
+        </div>
+      </a>
+      {%- else -%}
+      <div></div>
+      {%- endif -%}
+      {%- if _s_next_post -%}
+      <a href="{{ _s_next_post.url | relative_url }}" class="series-nav-btn next-post">
+        <i class="fas fa-arrow-right nav-icon" aria-hidden="true"></i>
+        <div>
+          <span class="nav-label">Next in series</span>
+          <span class="nav-title">{% if _s_next_post.icon %}<i class="{{ _s_next_post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _s_next_post.title }}</span>
+        </div>
+      </a>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}

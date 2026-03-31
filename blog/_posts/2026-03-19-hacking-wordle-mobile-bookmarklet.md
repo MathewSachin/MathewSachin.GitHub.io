@@ -3,6 +3,13 @@ title: "Hack Wordle on Mobile — No Computer Needed (Bookmarklet Method)"
 icon: "fas fa-mobile-alt"
 tags: [wordle, hack, browser, mobile]
 highlight: true
+series:
+  name: "Browser Hacks"
+  url: "/blog/series/browser-hacks/"
+  part: 11
+  total: 18
+  prev: "/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet"
+  next: "/blog/2026/03/21/save-instagram-photos"
 related:
   - /blog/2026/03/07/hacking-wordle
   - /blog/2016/11/05/chrome-dino-hack

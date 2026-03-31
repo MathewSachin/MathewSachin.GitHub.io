@@ -3,6 +3,13 @@ title: "Hacking TypeRacer: The Human-Mimic Bot"
 icon: "fas fa-keyboard"
 tags: [typeracer, hack, javascript, browser, devtools, bookmarklet]
 highlight: true
+series:
+  name: "Browser Hacks"
+  url: "/blog/series/browser-hacks/"
+  part: 7
+  total: 18
+  prev: "/blog/2026/03/20/hacking-minesweeper-online"
+  next: "/blog/2026/03/20/cookie-clicker-hacks"
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2026/03/07/hacking-wordle

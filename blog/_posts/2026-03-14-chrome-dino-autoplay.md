@@ -3,6 +3,13 @@ title: "Auto-play the Chrome Dino Game with JavaScript"
 icon: "fas fa-play-circle"
 tags: [chrome, hack, game, javascript]
 highlight: true
+series:
+  name: "Browser Hacks"
+  url: "/blog/series/browser-hacks/"
+  part: 5
+  total: 18
+  prev: "/blog/2026/03/07/hacking-wordle"
+  next: "/blog/2026/03/20/hacking-minesweeper-online"
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2026/03/07/edit-webpage-inspect-element
