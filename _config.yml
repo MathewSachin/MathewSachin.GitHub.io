@@ -14,7 +14,7 @@ google-analytics: "UA-70778035-4"
 
 adsense: "ca-pub-4251360406988977"
 
-exclude: ["Gemfile", "Gemfile.lock", "README.md", "node_modules", "package.json", "package-lock.json"]
+exclude: ["Gemfile", "Gemfile.lock", "README.md", "node_modules", "package.json", "package-lock.json", "vendor"]
 
 defaults:
   - scope:
@@ -34,7 +34,15 @@ plugins:
   - jekyll-sitemap # Site Map
   - jekyll-feed # Atom Feed
   - jekyll-redirect-from
+  - jekyll-minifier # Minify HTML/CSS/JS output
 
 # Pagination
 paginate: 10
 paginate_path: "/blog/page:num/"
+
+jekyll-minifier:
+  uglifier_args:
+    harmony: true
+  exclude:
+    - "dino/offline.js"
+    - "scripts/orama.js"

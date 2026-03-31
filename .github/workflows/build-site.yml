@@ -48,11 +48,14 @@ jobs:
         run: |
           echo "google-analytics: false" >> _config.yml
 
-      - name: Build Jekyll site
-        uses: actions/jekyll-build-pages@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          source: ./
-          destination: ./_site
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Build Jekyll site
+        run: JEKYLL_ENV=production bundle exec jekyll build --destination ./_site
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
