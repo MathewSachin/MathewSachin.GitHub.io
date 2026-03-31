@@ -1,5 +1,3 @@
----
----
 var blocks = $("div.highlight");
 
 blocks.each(function(i) {
