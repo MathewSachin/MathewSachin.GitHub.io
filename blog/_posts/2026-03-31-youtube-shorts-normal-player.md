@@ -1,7 +1,7 @@
 ---
 title: "Watch YouTube Shorts in the Normal Player (No Extensions Required)"
 icon: "fab fa-youtube"
-tags: [youtube, hack, browser, userscript, bookmarklet]
+tags: [youtube, hack, browser, bookmarklet]
 highlight: true
 series: browser-hacks
 related:
@@ -132,66 +132,6 @@ The page reloads instantly as a normal YouTube video with all controls restored.
   💡 <b>Mobile:</b> Bookmarklets work on mobile browsers too. Save it to your bookmarks, then tap it from the bookmarks list whenever you land on a Shorts page. See <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet/">this post</a> for a detailed walkthrough of the mobile installation steps.
 </div>
 
-## Userscript: Fully Automatic (No Click Required)
-
-If you want zero manual steps — every Shorts URL redirects itself automatically the moment you land on it — use a **userscript**.
-
-A userscript is a small JavaScript file that your browser runs on specific pages automatically.
-You'll need [Tampermonkey](https://www.tampermonkey.net/) (Chrome, Edge) or [Greasemonkey](https://www.greasespot.net/) (Firefox) installed first.
-Both are free browser extensions with millions of users.
-
-### The script
-
-```js
-// ==UserScript==
-// @name         YouTube Shorts → Normal Player
-// @namespace    https://mathewsachin.github.io/
-// @version      1.1
-// @description  Automatically redirects YouTube Shorts URLs to the standard YouTube player
-// @author       MathewSachin
-// @match        https://www.youtube.com/*
-// @run-at       document-start
-// @grant        none
-// ==/UserScript==
-
-(function () {
-  'use strict';
-
-  function redirect() {
-    var match = location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);
-    if (match) {
-      location.replace('https://www.youtube.com/watch?v=' + match[1]);
-    }
-  }
-
-  // Handle direct loads (full page load or hard navigation to a Shorts URL)
-  redirect();
-
-  // Handle SPA navigation — YouTube fires this event after every in-page route change
-  document.addEventListener('yt-navigate-finish', redirect);
-})();
-```
-
-### How to install it
-
-1. Install [Tampermonkey](https://www.tampermonkey.net/) (Chrome/Edge) or [Greasemonkey](https://www.greasespot.net/) (Firefox) from your browser's extension store
-2. Click the Tampermonkey/Greasemonkey icon in the toolbar → **Create a new script**
-3. Delete the placeholder code and paste the full script above
-4. Press `Ctrl + S` (or `Cmd + S`) to save
-
-That's it. From now on, every time you open or land on a YouTube Shorts URL — whether by typing it directly, following a link, or clicking a Shorts video from the YouTube home page — it redirects to the normal player automatically.
-
-### Why two hooks?
-
-YouTube is a **Single Page Application (SPA)**. When you click a link on YouTube, the browser doesn't reload the full page — YouTube's own JavaScript intercepts the click, swaps the page content in place, and updates the address bar via `history.pushState`. A `@run-at document-start` script fires once on the initial page load, but it never sees those internal navigations.
-
-YouTube solves this for external scripts by dispatching a `yt-navigate-finish` event on `document` after every SPA route change completes. By listening for that event alongside the initial `redirect()` call, the script covers both entry paths:
-
-| Scenario | Handled by |
-|---|---|
-| Direct link or hard reload to a `/shorts/` URL | `redirect()` at script start |
-| Clicking a Shorts video thumbnail while already on YouTube | `yt-navigate-finish` listener |
-
 ## How Does It Work?
 
 YouTube uses the same video-delivery infrastructure for Shorts and regular videos.
@@ -208,11 +148,9 @@ You're simply telling YouTube which player skin to use to display a video you ha
 |---|---|---|---|
 | Manual URL edit | None | ✅ | ❌ |
 | Bookmarklet | 1 min | ✅ | ❌ (one click) |
-| Userscript | 5 min + extension | ❌ | ✅ |
 
 If you just want a quick fix right now: edit the URL manually.
 If you watch Shorts regularly on desktop: grab the bookmarklet.
-If you never want to think about it again: install the userscript.
 
 Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡
 
