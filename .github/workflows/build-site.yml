@@ -7,6 +7,10 @@ on:
         description: 'Optional baseurl to inject into _config.yml'
         type: string
         default: ''
+      preview:
+        description: 'Whether this is a PR preview build (disables Google Analytics)'
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -38,6 +42,11 @@ jobs:
           BASEURL: ${{ inputs.baseurl }}
         run: |
           echo "baseurl: $BASEURL" >> _config.yml
+
+      - name: Disable Google Analytics for preview
+        if: inputs.preview
+        run: |
+          echo "google-analytics: ''" >> _config.yml
 
       - name: Build Jekyll site
         uses: actions/jekyll-build-pages@v1
