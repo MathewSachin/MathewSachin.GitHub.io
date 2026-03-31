@@ -146,20 +146,29 @@ Both are free browser extensions with millions of users.
 // ==UserScript==
 // @name         YouTube Shorts → Normal Player
 // @namespace    https://mathewsachin.github.io/
-// @version      1.0
+// @version      1.1
 // @description  Automatically redirects YouTube Shorts URLs to the standard YouTube player
 // @author       MathewSachin
-// @match        https://www.youtube.com/shorts/*
+// @match        https://www.youtube.com/*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
 (function () {
   'use strict';
-  var match = location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);
-  if (match) {
-    location.replace('https://www.youtube.com/watch?v=' + match[1]);
+
+  function redirect() {
+    var match = location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);
+    if (match) {
+      location.replace('https://www.youtube.com/watch?v=' + match[1]);
+    }
   }
+
+  // Handle direct loads (full page load or hard navigation to a Shorts URL)
+  redirect();
+
+  // Handle SPA navigation — YouTube fires this event after every in-page route change
+  document.addEventListener('yt-navigate-finish', redirect);
 })();
 ```
 
@@ -170,13 +179,18 @@ Both are free browser extensions with millions of users.
 3. Delete the placeholder code and paste the full script above
 4. Press `Ctrl + S` (or `Cmd + S`) to save
 
-That's it. From now on, every time you open a YouTube Shorts link, it silently redirects to the normal player before the Shorts UI even has a chance to load.
+That's it. From now on, every time you open or land on a YouTube Shorts URL — whether by typing it directly, following a link, or clicking a Shorts video from the YouTube home page — it redirects to the normal player automatically.
 
-### Why `@run-at document-start`?
+### Why two hooks?
 
-The `@run-at document-start` directive tells the browser to inject your script before the page's own scripts run.
-Without it, the Shorts player would load first and then navigate away — causing a visible flash.
-With it, the redirect fires immediately at the network level and you never see the Shorts UI at all.
+YouTube is a **Single Page Application (SPA)**. When you click a link on YouTube, the browser doesn't reload the full page — YouTube's own JavaScript intercepts the click, swaps the page content in place, and updates the address bar via `history.pushState`. A `@run-at document-start` script fires once on the initial page load, but it never sees those internal navigations.
+
+YouTube solves this for external scripts by dispatching a `yt-navigate-finish` event on `document` after every SPA route change completes. By listening for that event alongside the initial `redirect()` call, the script covers both entry paths:
+
+| Scenario | Handled by |
+|---|---|
+| Direct link or hard reload to a `/shorts/` URL | `redirect()` at script start |
+| Clicking a Shorts video thumbnail while already on YouTube | `yt-navigate-finish` listener |
 
 ## How Does It Work?
 
