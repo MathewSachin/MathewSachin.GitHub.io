@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-137/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-137/" rel="alternate" type="text/html" /><updated>2026-03-31T13:14:54+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Watch YouTube Shorts in the Normal Player (No Extensions Required)</title><link href="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html" rel="alternate" type="text/html" title="Watch YouTube Shorts in the Normal Player (No Extensions Required)" /><published>2026-03-31T00:00:00+00:00</published><updated>2026-03-31T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html"><![CDATA[<p><em>The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here’s how to instantly escape it using nothing but your address bar.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/pr-preview/pr-137/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/pr-preview/pr-137/" rel="alternate" type="text/html" /><updated>2026-03-31T13:25:43+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Watch YouTube Shorts in the Normal Player (No Extensions Required)</title><link href="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html" rel="alternate" type="text/html" title="Watch YouTube Shorts in the Normal Player (No Extensions Required)" /><published>2026-03-31T00:00:00+00:00</published><updated>2026-03-31T00:00:00+00:00</updated><id>https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player</id><content type="html" xml:base="https://mathewsachin.github.io/pr-preview/pr-137/blog/2026/03/31/youtube-shorts-normal-player.html"><![CDATA[<p><em>The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here’s how to instantly escape it using nothing but your address bar.</em></p>
 
 <h2 id="the-problem-with-the-shorts-player">The Problem With the Shorts Player</h2>
 
@@ -149,20 +149,29 @@ Both are free browser extensions with millions of users.</p>
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ==UserScript==</span>
 <span class="c1">// @name         YouTube Shorts → Normal Player</span>
 <span class="c1">// @namespace    https://mathewsachin.github.io/</span>
-<span class="c1">// @version      1.0</span>
+<span class="c1">// @version      1.1</span>
 <span class="c1">// @description  Automatically redirects YouTube Shorts URLs to the standard YouTube player</span>
 <span class="c1">// @author       MathewSachin</span>
-<span class="c1">// @match        https://www.youtube.com/shorts/*</span>
+<span class="c1">// @match        https://www.youtube.com/*</span>
 <span class="c1">// @run-at       document-start</span>
 <span class="c1">// @grant        none</span>
 <span class="c1">// ==/UserScript==</span>
 
 <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="dl">'</span><span class="s1">use strict</span><span class="dl">'</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">location</span><span class="p">.</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/</span><span class="se">\/</span><span class="sr">shorts</span><span class="se">\/([</span><span class="sr">A-Za-z0-9_-</span><span class="se">]</span><span class="sr">+</span><span class="se">)</span><span class="sr">/</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">match</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">location</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://www.youtube.com/watch?v=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+  <span class="kd">function</span> <span class="nx">redirect</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">location</span><span class="p">.</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/</span><span class="se">\/</span><span class="sr">shorts</span><span class="se">\/([</span><span class="sr">A-Za-z0-9_-</span><span class="se">]</span><span class="sr">+</span><span class="se">)</span><span class="sr">/</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">match</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">location</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://www.youtube.com/watch?v=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
   <span class="p">}</span>
+
+  <span class="c1">// Handle direct loads (full page load or hard navigation to a Shorts URL)</span>
+  <span class="nx">redirect</span><span class="p">();</span>
+
+  <span class="c1">// Handle SPA navigation — YouTube fires this event after every in-page route change</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">yt-navigate-finish</span><span class="dl">'</span><span class="p">,</span> <span class="nx">redirect</span><span class="p">);</span>
 <span class="p">})();</span>
 </code></pre></div></div>
 
@@ -175,13 +184,32 @@ Both are free browser extensions with millions of users.</p>
   <li>Press <code class="language-plaintext highlighter-rouge">Ctrl + S</code> (or <code class="language-plaintext highlighter-rouge">Cmd + S</code>) to save</li>
 </ol>
 
-<p>That’s it. From now on, every time you open a YouTube Shorts link, it silently redirects to the normal player before the Shorts UI even has a chance to load.</p>
+<p>That’s it. From now on, every time you open or land on a YouTube Shorts URL — whether by typing it directly, following a link, or clicking a Shorts video from the YouTube home page — it redirects to the normal player automatically.</p>
 
-<h3 id="why-run-at-document-start">Why <code class="language-plaintext highlighter-rouge">@run-at document-start</code>?</h3>
+<h3 id="why-two-hooks">Why two hooks?</h3>
 
-<p>The <code class="language-plaintext highlighter-rouge">@run-at document-start</code> directive tells the browser to inject your script before the page’s own scripts run.
-Without it, the Shorts player would load first and then navigate away — causing a visible flash.
-With it, the redirect fires immediately at the network level and you never see the Shorts UI at all.</p>
+<p>YouTube is a <strong>Single Page Application (SPA)</strong>. When you click a link on YouTube, the browser doesn’t reload the full page — YouTube’s own JavaScript intercepts the click, swaps the page content in place, and updates the address bar via <code class="language-plaintext highlighter-rouge">history.pushState</code>. A <code class="language-plaintext highlighter-rouge">@run-at document-start</code> script fires once on the initial page load, but it never sees those internal navigations.</p>
+
+<p>YouTube solves this for external scripts by dispatching a <code class="language-plaintext highlighter-rouge">yt-navigate-finish</code> event on <code class="language-plaintext highlighter-rouge">document</code> after every SPA route change completes. By listening for that event alongside the initial <code class="language-plaintext highlighter-rouge">redirect()</code> call, the script covers both entry paths:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Handled by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Direct link or hard reload to a <code class="language-plaintext highlighter-rouge">/shorts/</code> URL</td>
+      <td><code class="language-plaintext highlighter-rouge">redirect()</code> at script start</td>
+    </tr>
+    <tr>
+      <td>Clicking a Shorts video thumbnail while already on YouTube</td>
+      <td><code class="language-plaintext highlighter-rouge">yt-navigate-finish</code> listener</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="how-does-it-work">How Does It Work?</h2>
 
