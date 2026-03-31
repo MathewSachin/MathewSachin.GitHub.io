@@ -740,17 +740,10 @@ div.highlight pre {
   gap: 0.75rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid #e9ecef;
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.15s ease;
 }
 
 .series-post-item:last-child {
   border-bottom: none;
-}
-
-.series-post-item:hover {
-  color: #17a2b8;
 }
 
 .series-post-item:hover .series-part-badge {
@@ -778,6 +771,16 @@ div.highlight pre {
   font-weight: 600;
   line-height: 1.3;
   font-size: 0.95rem;
+}
+
+.series-post-title a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+
+.series-post-title a:hover {
+  color: #17a2b8;
 }
 
 .series-level-heading {
