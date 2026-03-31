@@ -132,7 +132,7 @@ The page reloads instantly as a normal YouTube video with all controls restored.
   💡 <b>Mobile:</b> Bookmarklets work on mobile browsers too. Save it to your bookmarks, then tap it from the bookmarks list whenever you land on a Shorts page. See <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet/">this post</a> for a detailed walkthrough of the mobile installation steps.
 </div>
 
-## How Does It Work?
+### How Does It Work?
 
 YouTube uses the same video-delivery infrastructure for Shorts and regular videos.
 The `/shorts/VIDEO_ID` path is purely a UI decision — it tells YouTube's front-end to render the mobile swipe player.
@@ -142,15 +142,6 @@ The video file itself, its CDN URL, its resolution, and all its metadata stay id
 This is different from a traditional "download" problem — you're not bypassing any DRM or accessing anything you weren't meant to.
 You're simply telling YouTube which player skin to use to display a video you have full permission to watch.
 
-## Comparison
-
-| Method | Setup | Works on mobile? | Automatic? |
-|---|---|---|---|
-| Manual URL edit | None | ✅ | ❌ |
-| Bookmarklet | 1 min | ✅ | ❌ (one click) |
-
-If you just want a quick fix right now: edit the URL manually.
-If you watch Shorts regularly on desktop: grab the bookmarklet.
 
 Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡
 

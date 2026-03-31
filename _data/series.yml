@@ -19,7 +19,7 @@ browser-hacks:
         - id: "/blog/2019/12/07/unhide-password-box"
           blurb: "Your browser auto-filled a password and you can't remember it. One attribute change fixes that. Teaches: HTML <code>type</code> attributes, Inspect Element."
         - id: "/blog/2026/03/31/youtube-shorts-normal-player"
-          blurb: "The Shorts player hides speed controls and breaks volume mixing. One URL swap opens the exact same video in the full desktop player. Teaches: URL structure, bookmarklets, userscripts."
+          blurb: "The Shorts player hides speed controls and breaks volume mixing. One URL swap opens the exact same video in the full desktop player. Teaches: URL structure and bookmarklets."
 
     - title: "Level 2 — Your First Console Scripts"
       icon: "fas fa-terminal"
