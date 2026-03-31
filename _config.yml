@@ -34,6 +34,7 @@ plugins:
   - jekyll-sitemap # Site Map
   - jekyll-feed # Atom Feed
   - jekyll-redirect-from
+  - jekyll-minifier # Minify HTML/CSS/JS output
 
 # Pagination
 paginate: 10
