@@ -1,0 +1,205 @@
+---
+title: "Watch YouTube Shorts in the Normal Player (No Extensions Required)"
+icon: "fab fa-youtube"
+tags: [youtube, hack, browser, userscript, bookmarklet]
+highlight: true
+series: browser-hacks
+related:
+  - /blog/2026/03/07/edit-webpage-inspect-element
+  - /blog/2019/12/07/unhide-password-box
+  - /blog/2026/03/19/brute-force-dark-mode
+  - /blog/2026/03/21/youtube-shorts-sniper
+---
+
+*The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here's how to instantly escape it using nothing but your address bar.*
+
+## The Problem With the Shorts Player
+
+YouTube Shorts on desktop is a crippled experience wearing a mobile outfit.
+When a video URL contains `/shorts/`, YouTube forces it into a vertical swipe player that was designed for a phone screen.
+On a desktop browser you lose:
+
+- **Playback speed controls** — can't slow down a tutorial or speed up a rambling clip
+- **Volume mixing** — the player hijacks your system volume instead of using the standard site-level mixer
+- **Theatre and cinema mode** — the video is pinned to a narrow portrait strip in the middle of your screen
+- **Chapter markers and full description** — hidden behind an extra click or gone entirely
+- **Mini-player** — so you can't continue watching while you switch tabs
+
+The frustrating part? Every single one of those features still works perfectly — you just have to get YouTube to use the *normal* player.
+
+## The Fix: One URL Swap
+
+YouTube Shorts and regular YouTube videos use the same underlying video ID.
+The only difference is the URL format:
+
+| Format | URL |
+|---|---|
+| Shorts player | `https://www.youtube.com/shorts/dQw4w9WgXcQ` |
+| Normal player | `https://www.youtube.com/watch?v=dQw4w9WgXcQ` |
+
+**The manual fix:**
+
+1. Look at the address bar — note the video ID after `/shorts/`
+2. Delete `/shorts/` and replace it with `/watch?v=`
+3. Press **Enter**
+
+That's it. The exact same video now plays in the full YouTube player with every feature intact.
+
+<div class="alert alert-info">
+  💡 <b>Tip:</b> The video ID is the random string of letters and numbers after <code>/shorts/</code> — in the example above it's <code>dQw4w9WgXcQ</code>. That ID doesn't change when you swap the URL format.
+</div>
+
+## Try It Right Now
+
+Paste any Shorts URL into the box below and the converter will generate the normal-player URL for you:
+
+<div class="card shadow-sm my-4" style="max-width:560px;">
+  <div class="card-header fw-semibold">🔗 Shorts URL Converter</div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label for="shorts-input" class="form-label">Paste a YouTube Shorts URL</label>
+      <input id="shorts-input" type="url" class="form-control font-monospace"
+        placeholder="https://www.youtube.com/shorts/dQw4w9WgXcQ"
+        oninput="convertShortsUrl(this.value)">
+    </div>
+    <div id="shorts-output-wrap" style="display:none;">
+      <label class="form-label">Normal player URL</label>
+      <div class="input-group">
+        <input id="shorts-output" type="url" class="form-control font-monospace" readonly>
+        <button class="btn btn-outline-secondary" type="button" onclick="copyShortsUrl()">Copy</button>
+      </div>
+      <a id="shorts-open" href="#" target="_blank" rel="noopener" class="btn btn-primary mt-2">▶ Open in Normal Player</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function convertShortsUrl(val) {
+  var wrap = document.getElementById('shorts-output-wrap');
+  var match = val.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/);
+  if (match) {
+    var url = 'https://www.youtube.com/watch?v=' + match[1];
+    document.getElementById('shorts-output').value = url;
+    document.getElementById('shorts-open').href = url;
+    wrap.style.display = '';
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+function copyShortsUrl() {
+  var out = document.getElementById('shorts-output');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(out.value);
+  } else {
+    out.select();
+    document.execCommand('copy');
+  }
+}
+</script>
+
+## Bookmarklet: One-Click Fix (Works on Any Computer)
+
+Doing the manual swap every time is only a few keystrokes, but if you watch a lot of Shorts it gets old fast.
+A **bookmarklet** is a bookmark whose address is a snippet of JavaScript instead of a URL.
+Click it on any Shorts page and it redirects you to the normal player instantly — no typing required.
+
+**The bookmarklet code:**
+
+```
+javascript:(function(){var m=location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);if(m)location.href='https://www.youtube.com/watch?v='+m[1];})();
+```
+
+### How to install it
+
+**Desktop (Chrome, Edge, Firefox):**
+
+1. Show the bookmarks bar if it's hidden: `Ctrl + Shift + B` (Windows/Linux) or `Cmd + Shift + B` (Mac)
+2. Right-click the bookmarks bar → **Add page…** (Chrome/Edge) or **New Bookmark** (Firefox)
+3. Set the **Name** to something like *"▶ Normal Player"*
+4. Paste the code above as the **URL / Address**
+5. Save
+
+**Or drag this link straight to your bookmarks bar:**
+
+<a href="javascript:(function(){var m=location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);if(m)location.href='https://www.youtube.com/watch?v='+m[1];})();" title="Normal Player">▶ Normal Player</a>
+
+### How to use it
+
+Navigate to any YouTube Shorts page, then click the **▶ Normal Player** bookmarklet.
+The page reloads instantly as a normal YouTube video with all controls restored.
+
+<div class="alert alert-info">
+  💡 <b>Mobile:</b> Bookmarklets work on mobile browsers too. Save it to your bookmarks, then tap it from the bookmarks list whenever you land on a Shorts page. See <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet/">this post</a> for a detailed walkthrough of the mobile installation steps.
+</div>
+
+## Userscript: Fully Automatic (No Click Required)
+
+If you want zero manual steps — every Shorts URL redirects itself automatically the moment you land on it — use a **userscript**.
+
+A userscript is a small JavaScript file that your browser runs on specific pages automatically.
+You'll need [Tampermonkey](https://www.tampermonkey.net/) (Chrome, Edge) or [Greasemonkey](https://www.greasespot.net/) (Firefox) installed first.
+Both are free browser extensions with millions of users.
+
+### The script
+
+```js
+// ==UserScript==
+// @name         YouTube Shorts → Normal Player
+// @namespace    https://mathewsachin.github.io/
+// @version      1.0
+// @description  Automatically redirects YouTube Shorts URLs to the standard YouTube player
+// @author       MathewSachin
+// @match        https://www.youtube.com/shorts/*
+// @run-at       document-start
+// @grant        none
+// ==/UserScript==
+
+(function () {
+  'use strict';
+  var match = location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);
+  if (match) {
+    location.replace('https://www.youtube.com/watch?v=' + match[1]);
+  }
+})();
+```
+
+### How to install it
+
+1. Install [Tampermonkey](https://www.tampermonkey.net/) (Chrome/Edge) or [Greasemonkey](https://www.greasespot.net/) (Firefox) from your browser's extension store
+2. Click the Tampermonkey/Greasemonkey icon in the toolbar → **Create a new script**
+3. Delete the placeholder code and paste the full script above
+4. Press `Ctrl + S` (or `Cmd + S`) to save
+
+That's it. From now on, every time you open a YouTube Shorts link, it silently redirects to the normal player before the Shorts UI even has a chance to load.
+
+### Why `@run-at document-start`?
+
+The `@run-at document-start` directive tells the browser to inject your script before the page's own scripts run.
+Without it, the Shorts player would load first and then navigate away — causing a visible flash.
+With it, the redirect fires immediately at the network level and you never see the Shorts UI at all.
+
+## How Does It Work?
+
+YouTube uses the same video-delivery infrastructure for Shorts and regular videos.
+The `/shorts/VIDEO_ID` path is purely a UI decision — it tells YouTube's front-end to render the mobile swipe player.
+Change the path to `/watch?v=VIDEO_ID` and YouTube renders the standard desktop player instead.
+The video file itself, its CDN URL, its resolution, and all its metadata stay identical.
+
+This is different from a traditional "download" problem — you're not bypassing any DRM or accessing anything you weren't meant to.
+You're simply telling YouTube which player skin to use to display a video you have full permission to watch.
+
+## Comparison
+
+| Method | Setup | Works on mobile? | Automatic? |
+|---|---|---|---|
+| Manual URL edit | None | ✅ | ❌ |
+| Bookmarklet | 1 min | ✅ | ❌ (one click) |
+| Userscript | 5 min + extension | ❌ | ✅ |
+
+If you just want a quick fix right now: edit the URL manually.
+If you watch Shorts regularly on desktop: grab the bookmarklet.
+If you never want to think about it again: install the userscript.
+
+Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡
+
+Drop a comment below if you found this useful, or if you know other YouTube URL tricks! 👇
