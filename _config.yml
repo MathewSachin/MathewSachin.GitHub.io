@@ -39,3 +39,10 @@ plugins:
 # Pagination
 paginate: 10
 paginate_path: "/blog/page:num/"
+
+jekyll-minifier:
+  uglifier_args:
+    harmony: true
+  exclude:
+    - "dino/offline.js"
+    - "scripts/orama.js"
