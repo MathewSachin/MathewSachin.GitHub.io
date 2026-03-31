@@ -1,4 +1,154 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/" rel="alternate" type="text/html" /><updated>2026-03-31T10:10:43+00:00</updated><id>https://mathewsachin.github.io/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story</title><link href="https://mathewsachin.github.io/blog/2026/03/30/instagram-userscript-download-buttons.html" rel="alternate" type="text/html" title="Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story" /><published>2026-03-30T00:00:00+00:00</published><updated>2026-03-30T00:00:00+00:00</updated><id>https://mathewsachin.github.io/blog/2026/03/30/instagram-userscript-download-buttons</id><content type="html" xml:base="https://mathewsachin.github.io/blog/2026/03/30/instagram-userscript-download-buttons.html"><![CDATA[<p><em>The three earlier Instagram posts — <a href="/blog/2026/03/21/save-instagram-photos.html" class="post-link" aria-label="Save Instagram Photos: Remove the Right-Click Block"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>photo saving</a>, <a href="/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>reel downloading</a>, and <a href="/blog/2026/03/22/instagram-story-sniper.html" class="post-link" aria-label="Instagram Story Sniper: Download Any Story Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>story downloading</a> — each require you to open the browser console, paste a snippet, and press Enter every single time you want to save something. This post bundles all three techniques into one persistent userscript that injects a <strong>⬇ button</strong> directly into the Instagram UI — no console, no paste, no repeat setup.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://mathewsachin.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://mathewsachin.github.io/" rel="alternate" type="text/html" /><updated>2026-03-31T14:46:22+00:00</updated><id>https://mathewsachin.github.io/feed.xml</id><title type="html">Mathew Sachin</title><subtitle>My Website where I blog using jekyll</subtitle><author><name>Mathew Sachin</name></author><entry><title type="html">Watch YouTube Shorts in the Normal Player (No Extensions Required)</title><link href="https://mathewsachin.github.io/blog/2026/03/31/youtube-shorts-normal-player.html" rel="alternate" type="text/html" title="Watch YouTube Shorts in the Normal Player (No Extensions Required)" /><published>2026-03-31T00:00:00+00:00</published><updated>2026-03-31T00:00:00+00:00</updated><id>https://mathewsachin.github.io/blog/2026/03/31/youtube-shorts-normal-player</id><content type="html" xml:base="https://mathewsachin.github.io/blog/2026/03/31/youtube-shorts-normal-player.html"><![CDATA[<p><em>The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here’s how to instantly escape it using nothing but your address bar.</em></p>
+
+<h2 id="the-problem-with-the-shorts-player">The Problem With the Shorts Player</h2>
+
+<p>YouTube Shorts on desktop is a crippled experience wearing a mobile outfit.
+When a video URL contains <code class="language-plaintext highlighter-rouge">/shorts/</code>, YouTube forces it into a vertical swipe player that was designed for a phone screen.
+On a desktop browser you lose:</p>
+
+<ul>
+  <li><strong>Playback speed controls</strong> — can’t slow down a tutorial or speed up a rambling clip</li>
+  <li><strong>Volume mixing</strong> — the player hijacks your system volume instead of using the standard site-level mixer</li>
+  <li><strong>Theatre and cinema mode</strong> — the video is pinned to a narrow portrait strip in the middle of your screen</li>
+  <li><strong>Chapter markers and full description</strong> — hidden behind an extra click or gone entirely</li>
+  <li><strong>Mini-player</strong> — so you can’t continue watching while you switch tabs</li>
+</ul>
+
+<p>The frustrating part? Every single one of those features still works perfectly — you just have to get YouTube to use the <em>normal</em> player.</p>
+
+<h2 id="the-fix-one-url-swap">The Fix: One URL Swap</h2>
+
+<p>YouTube Shorts and regular YouTube videos use the same underlying video ID.
+The only difference is the URL format:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Format</th>
+      <th>URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Shorts player</td>
+      <td><code class="language-plaintext highlighter-rouge">https://www.youtube.com/shorts/dQw4w9WgXcQ</code></td>
+    </tr>
+    <tr>
+      <td>Normal player</td>
+      <td><code class="language-plaintext highlighter-rouge">https://www.youtube.com/watch?v=dQw4w9WgXcQ</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The manual fix:</strong></p>
+
+<ol>
+  <li>Look at the address bar — note the video ID after <code class="language-plaintext highlighter-rouge">/shorts/</code></li>
+  <li>Delete <code class="language-plaintext highlighter-rouge">/shorts/</code> and replace it with <code class="language-plaintext highlighter-rouge">/watch?v=</code></li>
+  <li>Press <strong>Enter</strong></li>
+</ol>
+
+<p>That’s it. The exact same video now plays in the full YouTube player with every feature intact.</p>
+
+<div class="alert alert-info">
+  💡 <b>Tip:</b> The video ID is the random string of letters and numbers after <code>/shorts/</code> — in the example above it's <code>dQw4w9WgXcQ</code>. That ID doesn't change when you swap the URL format.
+</div>
+
+<h2 id="try-it-right-now">Try It Right Now</h2>
+
+<p>Paste any Shorts URL into the box below and the converter will generate the normal-player URL for you:</p>
+
+<div class="card shadow-sm my-4" style="max-width:560px;">
+  <div class="card-header fw-semibold">🔗 Shorts URL Converter</div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label for="shorts-input" class="form-label">Paste a YouTube Shorts URL</label>
+      <input id="shorts-input" type="url" class="form-control font-monospace" placeholder="https://www.youtube.com/shorts/dQw4w9WgXcQ" oninput="convertShortsUrl(this.value)" />
+    </div>
+    <div id="shorts-output-wrap" style="display:none;">
+      <label class="form-label">Normal player URL</label>
+      <div class="input-group">
+        <input id="shorts-output" type="url" class="form-control font-monospace" readonly="" />
+        <button class="btn btn-outline-secondary" type="button" onclick="copyShortsUrl()">Copy</button>
+      </div>
+      <a id="shorts-open" href="#" target="_blank" rel="noopener" class="btn btn-primary mt-2">▶ Open in Normal Player</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function convertShortsUrl(val) {
+  var wrap = document.getElementById('shorts-output-wrap');
+  var match = val.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/);
+  if (match) {
+    var url = 'https://www.youtube.com/watch?v=' + match[1];
+    document.getElementById('shorts-output').value = url;
+    document.getElementById('shorts-open').href = url;
+    wrap.style.display = '';
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+function copyShortsUrl() {
+  var out = document.getElementById('shorts-output');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(out.value);
+  } else {
+    out.select();
+    document.execCommand('copy');
+  }
+}
+</script>
+
+<h2 id="bookmarklet-one-click-fix-works-on-any-computer">Bookmarklet: One-Click Fix (Works on Any Computer)</h2>
+
+<p>Doing the manual swap every time is only a few keystrokes, but if you watch a lot of Shorts it gets old fast.
+A <strong>bookmarklet</strong> is a bookmark whose address is a snippet of JavaScript instead of a URL.
+Click it on any Shorts page and it redirects you to the normal player instantly — no typing required.</p>
+
+<p><strong>The bookmarklet code:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>javascript:(function(){var m=location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);if(m)location.href='https://www.youtube.com/watch?v='+m[1];})();
+</code></pre></div></div>
+
+<h3 id="how-to-install-it">How to install it</h3>
+
+<p><strong>Desktop (Chrome, Edge, Firefox):</strong></p>
+
+<ol>
+  <li>Show the bookmarks bar if it’s hidden: <code class="language-plaintext highlighter-rouge">Ctrl + Shift + B</code> (Windows/Linux) or <code class="language-plaintext highlighter-rouge">Cmd + Shift + B</code> (Mac)</li>
+  <li>Right-click the bookmarks bar → <strong>Add page…</strong> (Chrome/Edge) or <strong>New Bookmark</strong> (Firefox)</li>
+  <li>Set the <strong>Name</strong> to something like <em>“▶ Normal Player”</em></li>
+  <li>Paste the code above as the <strong>URL / Address</strong></li>
+  <li>Save</li>
+</ol>
+
+<p><strong>Or drag this link straight to your bookmarks bar:</strong></p>
+
+<p><a href="javascript:(function(){var m=location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);if(m)location.href='https://www.youtube.com/watch?v='+m[1];})();" title="Normal Player">▶ Normal Player</a></p>
+
+<h3 id="how-to-use-it">How to use it</h3>
+
+<p>Navigate to any YouTube Shorts page, then click the <strong>▶ Normal Player</strong> bookmarklet.
+The page reloads instantly as a normal YouTube video with all controls restored.</p>
+
+<div class="alert alert-info">
+  💡 <b>Mobile:</b> Bookmarklets work on mobile browsers too. Save it to your bookmarks, then tap it from the bookmarks list whenever you land on a Shorts page. See <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet/">this post</a> for a detailed walkthrough of the mobile installation steps.
+</div>
+
+<h3 id="how-does-it-work">How Does It Work?</h3>
+
+<p>YouTube uses the same video-delivery infrastructure for Shorts and regular videos.
+The <code class="language-plaintext highlighter-rouge">/shorts/VIDEO_ID</code> path is purely a UI decision — it tells YouTube’s front-end to render the mobile swipe player.
+Change the path to <code class="language-plaintext highlighter-rouge">/watch?v=VIDEO_ID</code> and YouTube renders the standard desktop player instead.
+The video file itself, its CDN URL, its resolution, and all its metadata stay identical.</p>
+
+<p>This is different from a traditional “download” problem — you’re not bypassing any DRM or accessing anything you weren’t meant to.
+You’re simply telling YouTube which player skin to use to display a video you have full permission to watch.</p>
+
+<p>Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡</p>
+
+<p>Drop a comment below if you found this useful, or if you know other YouTube URL tricks! 👇</p>]]></content><author><name>Mathew Sachin</name></author><category term="blog" /><category term="youtube" /><category term="hack" /><category term="browser" /><category term="bookmarklet" /><summary type="html"><![CDATA[The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here’s how to instantly escape it using nothing but your address bar.]]></summary></entry><entry><title type="html">Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story</title><link href="https://mathewsachin.github.io/blog/2026/03/30/instagram-userscript-download-buttons.html" rel="alternate" type="text/html" title="Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Reel, and Story" /><published>2026-03-30T00:00:00+00:00</published><updated>2026-03-30T00:00:00+00:00</updated><id>https://mathewsachin.github.io/blog/2026/03/30/instagram-userscript-download-buttons</id><content type="html" xml:base="https://mathewsachin.github.io/blog/2026/03/30/instagram-userscript-download-buttons.html"><![CDATA[<p><em>The three earlier Instagram posts — <a href="/blog/2026/03/21/save-instagram-photos.html" class="post-link" aria-label="Save Instagram Photos: Remove the Right-Click Block"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>photo saving</a>, <a href="/blog/2026/03/21/instagram-reel-sniper.html" class="post-link" aria-label="Instagram Reel Sniper: Download Any Reel Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>reel downloading</a>, and <a href="/blog/2026/03/22/instagram-story-sniper.html" class="post-link" aria-label="Instagram Story Sniper: Download Any Story Directly from Your Browser"><i class="fab fa-instagram post-icon me-1" aria-hidden="true"></i>story downloading</a> — each require you to open the browser console, paste a snippet, and press Enter every single time you want to save something. This post bundles all three techniques into one persistent userscript that injects a <strong>⬇ button</strong> directly into the Instagram UI — no console, no paste, no repeat setup.</em></p>
 
 <hr />
 
@@ -2956,135 +3106,4 @@ Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option
 
 <blockquote>
   <p><strong>Disclaimer:</strong> This script is provided for <strong>educational purposes only</strong>. It demonstrates browser APIs (<code class="language-plaintext highlighter-rouge">captureStream</code>, <code class="language-plaintext highlighter-rouge">MediaRecorder</code>, <code class="language-plaintext highlighter-rouge">timeupdate</code>) that are freely documented and publicly available. Downloading content from YouTube may be against <a href="https://www.youtube.com/static?template=terms">YouTube’s Terms of Service</a>. Only use this on content you own, have explicit permission to download, or that is explicitly licensed for offline use. Respect copyright and the work of content creators.</p>
-</blockquote>]]></content><author><name>Mathew Sachin</name></author><category term="blog" /><category term="youtube" /><category term="hack" /><category term="javascript" /><category term="browser" /><category term="devtools" /><summary type="html"><![CDATA[YouTube’s short-form player has a structural blind spot — and a single browser script is all it takes to walk straight through it.]]></summary></entry><entry><title type="html">Cookie Clicker Hacks: Three Backdoors the Developer Left Wide Open</title><link href="https://mathewsachin.github.io/blog/2026/03/20/cookie-clicker-hacks.html" rel="alternate" type="text/html" title="Cookie Clicker Hacks: Three Backdoors the Developer Left Wide Open" /><published>2026-03-20T00:00:00+00:00</published><updated>2026-03-20T00:00:00+00:00</updated><id>https://mathewsachin.github.io/blog/2026/03/20/cookie-clicker-hacks</id><content type="html" xml:base="https://mathewsachin.github.io/blog/2026/03/20/cookie-clicker-hacks.html"><![CDATA[<p><em>Sometimes the most elegant software architecture is just finding the backdoor the developer forgot to close — or in this case, the one they intentionally left wide open.</em></p>
-
-<hr />
-
-<h2 id="what-is-cookie-clicker">What is Cookie Clicker?</h2>
-
-<p><a href="https://orteil.dashnet.org/cookieclicker/">Cookie Clicker</a> is a deceptively simple idle game by developer <strong>Orteil</strong>: click the big cookie, earn cookies, spend cookies on buildings and upgrades, earn more cookies, repeat — forever. It sounds absurd, and it is. It’s also utterly addictive.</p>
-
-<p>But here’s the twist: Cookie Clicker is a browser game written in JavaScript, and its internal state is exposed as global variables on the page. That means anyone with a browser console can reach right in and rewrite the rules.</p>
-
-<p>Below are three hacks — from the nuclear option to the subtle — each a single line of JavaScript.</p>
-
-<h2 id="opening-the-browser-console">Opening the Browser Console</h2>
-
-<p>The <strong>Developer Console</strong> lets you run JavaScript directly on any page. To open it on the Cookie Clicker page:</p>
-
-<p><strong>Windows / Linux:</strong> Press <code class="language-plaintext highlighter-rouge">F12</code> or <code class="language-plaintext highlighter-rouge">Ctrl + Shift + I</code>, then click the <strong>Console</strong> tab.<br />
-Direct shortcut: <code class="language-plaintext highlighter-rouge">Ctrl + Shift + J</code> jumps straight to the Console.</p>
-
-<p><strong>Mac:</strong> Press <code class="language-plaintext highlighter-rouge">Cmd + Option + I</code>, then click the <strong>Console</strong> tab.<br />
-Direct shortcut: <code class="language-plaintext highlighter-rouge">Cmd + Option + J</code> jumps straight to the Console.</p>
-
-<p>You’ll see a blinking cursor. Type (or paste) any command and press <strong>Enter</strong> to run it. Commands are case-sensitive — type them exactly as shown. Seeing <code class="language-plaintext highlighter-rouge">undefined</code> after a command is completely normal.</p>
-
-<div class="alert alert-info">
-  📱 <b>On a phone or tablet?</b> Mobile browsers don't have DevTools — but each hack below includes a bookmarklet you can use instead. No computer needed!
-</div>
-
-<hr />
-
-<h2 id="hack-1-ruin-the-fun--the-developers-own-god-mode">Hack 1: “Ruin The Fun” — The Developer’s Own God Mode</h2>
-
-<p>This is the nuclear option. Orteil actually built a <code class="language-plaintext highlighter-rouge">RuinTheFun()</code> function directly into the game’s source code — a single call that instantly grants you nearly infinite cookies, every building, every upgrade, and every achievement simultaneously.</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Game</span><span class="p">.</span><span class="nx">RuinTheFun</span><span class="p">();</span>
-</code></pre></div></div>
-
-<p>One line. The game is beaten.</p>
-
-<h4 id="how-does-it-work">How does it work?</h4>
-
-<p><code class="language-plaintext highlighter-rouge">Game.RuinTheFun()</code> is a built-in convenience function Orteil left in the production code — originally used during development to test the late-game state without grinding. Because <code class="language-plaintext highlighter-rouge">Game</code> is a global variable, anyone with console access can call it.</p>
-
-<h4 id="bookmarklet">Bookmarklet</h4>
-
-<p>Save this as a bookmark URL to run it in one tap:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>javascript:Game.RuinTheFun();void(0);
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="hack-2-the-invisible-auto-clicker">Hack 2: The Invisible Auto-Clicker</h2>
-
-<p>If “Ruin The Fun” is too destructive and you actually want to <em>watch</em> the numbers go up, this is the classic approach. It silently sets up a background loop that clicks the big cookie 100 times a second — no menus, no buttons, no interruptions.</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">Game</span><span class="p">.</span><span class="nx">ClickCookie</span><span class="p">();</span> <span class="p">},</span> <span class="mi">10</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>The <code class="language-plaintext highlighter-rouge">10</code> is the interval in milliseconds — so this fires 100 times per second. You can raise it to <code class="language-plaintext highlighter-rouge">100</code> (10 clicks/sec) for a more leisurely pace, or drop it even lower for absolute insanity.</p>
-
-<h4 id="how-does-it-work-1">How does it work?</h4>
-
-<p><code class="language-plaintext highlighter-rouge">Game.ClickCookie()</code> is the same function the game calls when you physically click the cookie. <code class="language-plaintext highlighter-rouge">setInterval</code> runs it on a timer in the background. The auto-clicker keeps running until you refresh the page, so you can switch tabs and come back to a mountain of cookies.</p>
-
-<h4 id="bookmarklet-1">Bookmarklet</h4>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>javascript:setInterval(function(){Game.ClickCookie();},10);void(0);
-</code></pre></div></div>
-
-<div class="alert alert-info">
-  💡 <b>Tip:</b> The auto-clicker stacks with upgrades and buildings — so activate it after buying a few cursor upgrades for maximum effect.
-</div>
-
-<hr />
-
-<h2 id="hack-3-the-open-sesame-hidden-dev-menu">Hack 3: The “Open Sesame” Hidden Dev Menu</h2>
-
-<p>Instead of building your own cheat menu, you can just force Cookie Clicker to reveal its <em>own</em> hidden developer tools panel. The game has a built-in easter egg: if your bakery name ends with <code class="language-plaintext highlighter-rouge">saysopensesame</code>, a small wrench icon appears in the top-left corner. Click it to access sliders and buttons for spawning Golden Cookies, manipulating time, and more.</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Game</span><span class="p">.</span><span class="nx">bakeryName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Hacker saysopensesame</span><span class="dl">"</span><span class="p">;</span>
-<span class="nx">Game</span><span class="p">.</span><span class="nx">bakeryNameRefresh</span><span class="p">();</span>
-</code></pre></div></div>
-
-<p>A wrench icon will appear in the top-left of the game. Click it to open the full dev panel.</p>
-
-<h4 id="how-does-it-work-2">How does it work?</h4>
-
-<p>Cookie Clicker checks the bakery name for the string <code class="language-plaintext highlighter-rouge">saysopensesame</code> and toggles visibility of the dev panel accordingly. <code class="language-plaintext highlighter-rouge">Game.bakeryNameRefresh()</code> re-evaluates the name immediately, so you don’t have to wait for the game to check on its own.</p>
-
-<h4 id="bookmarklet-2">Bookmarklet</h4>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>javascript:Game.bakeryName="Hacker saysopensesame";Game.bakeryNameRefresh();void(0);
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="using-bookmarklets-on-mobile">Using Bookmarklets on Mobile</h2>
-
-<p>Mobile browsers don’t have a developer console — but they do support bookmarklets. A bookmarklet is a bookmark whose URL is JavaScript code. When you tap it, the browser runs the code on the current page.</p>
-
-<h4 id="step-1-create-a-new-bookmark">Step 1: Create a New Bookmark</h4>
-
-<p>In your mobile browser, bookmark any page. The URL doesn’t matter — you’ll replace it next.</p>
-
-<h4 id="step-2-edit-the-bookmark">Step 2: Edit the Bookmark</h4>
-
-<p>Open your bookmark manager, find the bookmark you just saved, and tap <strong>Edit</strong>:</p>
-
-<ul>
-  <li>Change the <strong>name</strong> to something descriptive (e.g. <code class="language-plaintext highlighter-rouge">Cookie Clicker God Mode</code>)</li>
-  <li>Replace the entire <strong>URL</strong> with one of the bookmarklet codes from above (copy the whole thing — it must be one continuous line)</li>
-</ul>
-
-<p>Save the bookmark.</p>
-
-<h4 id="step-3-run-it-on-cookie-clicker">Step 3: Run It on Cookie Clicker</h4>
-
-<ol>
-  <li>Go to <a href="https://orteil.dashnet.org/cookieclicker/">orteil.dashnet.org/cookieclicker</a> and wait for the game to fully load.</li>
-  <li>Tap the <strong>address bar</strong>, type the bookmark name, and when it appears in the dropdown, tap it.</li>
-</ol>
-
-<p>The script will inject and run instantly.</p>
-
-<p>Want to write your own bookmarklets? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.</p>
-
-<hr />
-
-<p>Enjoy your mountains of cookies — however you choose to earn them!</p>
-
-<p><em>Enjoyed this? Check out <a href="/blog/2016/11/05/chrome-dino-hack.html" class="post-link"><i class="fas fa-gamepad post-icon me-1" aria-hidden="true"></i>Hacking the Chrome Dino Game</a>, <a href="/blog/2026/03/20/hacking-minesweeper-online.html" class="post-link" aria-label="Hacking Minesweeper Online: Rigging the RNG"><i class="fas fa-bomb post-icon me-1" aria-hidden="true"></i>Hacking Minesweeper Online</a>, or <a href="/blog/2026/03/20/hacking-typeracer.html" class="post-link" aria-label="Hacking TypeRacer: The Human-Mimic Bot"><i class="fas fa-keyboard post-icon me-1" aria-hidden="true"></i>Hacking TypeRacer</a> for more browser tricks.</em></p>]]></content><author><name>Mathew Sachin</name></author><category term="blog" /><category term="cookie-clicker" /><category term="hack" /><category term="javascript" /><category term="browser" /><category term="devtools" /><category term="bookmarklet" /><category term="game" /><summary type="html"><![CDATA[Sometimes the most elegant software architecture is just finding the backdoor the developer forgot to close — or in this case, the one they intentionally left wide open.]]></summary></entry></feed>
+</blockquote>]]></content><author><name>Mathew Sachin</name></author><category term="blog" /><category term="youtube" /><category term="hack" /><category term="javascript" /><category term="browser" /><category term="devtools" /><summary type="html"><![CDATA[YouTube’s short-form player has a structural blind spot — and a single browser script is all it takes to walk straight through it.]]></summary></entry></feed>
