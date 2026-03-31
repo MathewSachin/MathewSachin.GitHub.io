@@ -8,6 +8,7 @@ div.highlight {
   position: relative;
   border-radius: 0.5rem;
   overflow: hidden;
+  max-width: 100%;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
   margin-top: 1rem;
   margin-bottom: 1.5rem;
@@ -56,6 +57,7 @@ div.highlight pre {
   margin: 0;
   border-radius: 0;
   border: none;
+  overflow-x: auto;
 }
 
 .page-content h2 {
