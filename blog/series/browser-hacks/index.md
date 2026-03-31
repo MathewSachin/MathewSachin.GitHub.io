@@ -23,22 +23,16 @@ ads: true
 {%- for _entry in _level.posts -%}
   {%- assign _part_counter = _part_counter | plus: 1 -%}
   {%- assign _post = site.posts | where: "id", _entry.id | first -%}
-  {%- if _post -%}
-<a href="{{ _post.url | relative_url }}" class="series-post-item">
+  {%- if _post %}
+<div class="series-post-item">
   <span class="series-part-badge">{{ _part_counter }}</span>
   <div>
-    <div class="series-post-title">{% if _post.icon %}<i class="{{ _post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _post.title }}</div>
-    <small class="text-muted">{{ _entry.blurb }}</small>
+    <a href="{{ _post.url | relative_url }}" class="series-post-title">{% if _post.icon %}<i class="{{ _post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _post.title }}</a>
+    <br><small class="text-muted">{{ _entry.blurb }}</small>
   </div>
-</a>
+</div>
   {%- endif -%}
 {%- endfor -%}
 {%- endfor -%}
 
----
 
-<p class="text-muted small mt-3">
-  <i class="fas fa-info-circle me-1" aria-hidden="true"></i>
-  All hacks in this series run directly in your browser — no software to install, no accounts to create.
-  Techniques are for educational purposes; always respect a site's Terms of Service.
-</p>

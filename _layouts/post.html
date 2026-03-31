@@ -28,8 +28,7 @@ layout: default
         {% if page.series %}
             <hr class="border-light mt-3 mb-0">
             {% include series_nav.html variant="header" %}
-        {% endif %}
-        {% if page.related %}
+        {% elsif page.related %}
             <hr class="border-light mt-3 mb-3">
             {% include related_posts.html related=page.related variant="top-variant" %}
         {% endif %}
