@@ -3,12 +3,7 @@ title: "Edit Any Webpage in Seconds (Great for Pranks!)"
 icon: "fas fa-pencil-alt"
 tags: [chrome, hack, browser, devtools]
 highlight: true
-series:
-  name: "Browser Hacks"
-  url: "/blog/series/browser-hacks/"
-  part: 1
-  total: 18
-  next: "/blog/2019/12/07/unhide-password-box"
+series: browser-hacks
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2019/12/07/unhide-password-box

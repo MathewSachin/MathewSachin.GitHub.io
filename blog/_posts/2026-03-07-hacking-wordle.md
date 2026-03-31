@@ -3,13 +3,7 @@ title: "Hacking Wordle: Solve It in One Try Using Browser DevTools"
 icon: "fas fa-puzzle-piece"
 tags: [wordle, hack, browser, devtools]
 highlight: true
-series:
-  name: "Browser Hacks"
-  url: "/blog/series/browser-hacks/"
-  part: 4
-  total: 18
-  prev: "/blog/2016/11/05/chrome-dino-hack"
-  next: "/blog/2026/03/14/chrome-dino-autoplay"
+series: browser-hacks
 related:
   - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
   - /blog/2016/11/05/chrome-dino-hack

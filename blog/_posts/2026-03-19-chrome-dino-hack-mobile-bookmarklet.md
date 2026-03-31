@@ -3,13 +3,7 @@ title: "Hack the Chrome Dino on Mobile — No Computer Needed (Bookmarklet Metho
 icon: "fas fa-mobile-alt"
 tags: [chrome, hack, game, mobile]
 highlight: true
-series:
-  name: "Browser Hacks"
-  url: "/blog/series/browser-hacks/"
-  part: 10
-  total: 18
-  prev: "/blog/2026/03/19/brute-force-dark-mode"
-  next: "/blog/2026/03/19/hacking-wordle-mobile-bookmarklet"
+series: browser-hacks
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2026/03/14/chrome-dino-autoplay

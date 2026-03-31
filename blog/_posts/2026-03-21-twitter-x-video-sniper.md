@@ -3,13 +3,7 @@ title: "Twitter/X Video Sniper: Download Any Video Directly from Your Browser"
 icon: "fab fa-twitter"
 tags: [twitter, hack, javascript, browser, devtools]
 highlight: true
-series:
-  name: "Browser Hacks"
-  url: "/blog/series/browser-hacks/"
-  part: 15
-  total: 18
-  prev: "/blog/2026/03/21/youtube-shorts-sniper"
-  next: "/blog/2026/03/22/reddit-video-sniper"
+series: browser-hacks
 related:
   - /blog/2026/03/22/reddit-video-sniper
   - /blog/2026/03/21/instagram-reel-sniper
