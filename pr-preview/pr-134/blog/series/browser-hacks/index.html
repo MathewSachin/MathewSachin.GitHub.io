@@ -33,8 +33,8 @@
 <meta property="og:title" content="Browser Hacks: From Zero to Browser Wizard" />
 <meta name="author" content="Mathew Sachin" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="An 18-part series that takes you from your very first F12 press to writing persistent userscripts — no installs, no extensions, just your browser." />
-<meta property="og:description" content="An 18-part series that takes you from your very first F12 press to writing persistent userscripts — no installs, no extensions, just your browser." />
+<meta name="description" content="An 18-part series that takes you from your very first F12 press to writing persistent userscripts — mostly just your browser, with Tampermonkey for the final chapter." />
+<meta property="og:description" content="An 18-part series that takes you from your very first F12 press to writing persistent userscripts — mostly just your browser, with Tampermonkey for the final chapter." />
 <link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-134/blog/series/browser-hacks/" />
 <meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-134/blog/series/browser-hacks/" />
 <meta property="og:site_name" content="Mathew Sachin" />
@@ -44,7 +44,7 @@
 <meta name="twitter:site" content="@" />
 <meta name="twitter:creator" content="@Mathew Sachin" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"An 18-part series that takes you from your very first F12 press to writing persistent userscripts — no installs, no extensions, just your browser.","headline":"Browser Hacks: From Zero to Browser Wizard","url":"https://mathewsachin.github.io/pr-preview/pr-134/blog/series/browser-hacks/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"An 18-part series that takes you from your very first F12 press to writing persistent userscripts — mostly just your browser, with Tampermonkey for the final chapter.","headline":"Browser Hacks: From Zero to Browser Wizard","url":"https://mathewsachin.github.io/pr-preview/pr-134/blog/series/browser-hacks/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -116,24 +116,48 @@
 </nav>
 
 
-    <div class="bg-dark">
-    <div class="py-4 bg-info text-white">
-        <div class="container">
-            <h2>Browser Hacks: From Zero to Browser Wizard</h2>
+    <link rel="stylesheet" href="/pr-preview/pr-134/styles/blog.css">
+
+<div class="bg-dark">
+<div class="pt-4 pb-5 bg-info text-white">
+    <div class="container">
+        <h2>Browser Hacks: From Zero to Browser Wizard</h2>
+        <div class="p-5"></div>
+    </div>
+</div>
+
+<div class="container post-content-container">
+    <div class="row">
+        <div class="col-md-10">
+            <!-- Mobile TOC: collapsible, hidden on md+ screens -->
+<div id="toc-mobile" class="d-none d-md-none mb-3">
+    <div class="card toc-card">
+        <button type="button"
+                class="card-header toc-header toc-mobile-toggle w-100 text-start"
+                data-bs-toggle="collapse"
+                data-bs-target="#toc-nav-mobile-collapse"
+                aria-expanded="false"
+                aria-controls="toc-nav-mobile-collapse">
+            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+            <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="toc-nav-mobile-collapse">
+            <div class="card-body p-0">
+                <nav id="toc-nav-mobile" aria-label="Table of contents"></nav>
+            </div>
         </div>
     </div>
+</div>
 
-    <br>
 
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <link rel="stylesheet" href="/pr-preview/pr-134/styles/blog.css" />
-<p class="lead mt-2 mb-4">An 18-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. No installs, no extensions — just your browser and a curious mind.
+            <div id="post" class="card">
+                <div class="card-body">
+                    <div class="page-content">
+                    <p class="lead mt-2 mb-4">An 18-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. Most chapters need nothing but a browser and a curious mind — the final chapter adds Tampermonkey to make your scripts persistent.
 </p>
 <hr />
 
-<p class="series-level-heading"><i class="fas fa-seedling me-1" aria-hidden="true"></i>Level 1 — Zero Coding Required</p>
+<h2 class="series-level-heading" id="level-1"><i class="fas fa-seedling me-1" aria-hidden="true"></i>Level 1 — Zero Coding Required</h2>
 
 <p>You don't need to know a single line of code to start here. These two tricks use the browser's built-in inspector — the same tool professional web developers use every day. Your only job is to press <kbd>F12</kbd> and click.
 </p>
@@ -153,7 +177,7 @@
 </div>
 <hr />
 
-<p class="series-level-heading"><i class="fas fa-terminal me-1" aria-hidden="true"></i>Level 2 — Your First Console Scripts</p>
+<h2 class="series-level-heading" id="level-2"><i class="fas fa-terminal me-1" aria-hidden="true"></i>Level 2 — Your First Console Scripts</h2>
 
 <p>Time to open the JavaScript Console and type commands that actually change how a game works. These three posts introduce variables, objects, automation loops, and event simulation — core concepts you will use in every subsequent post.
 </p>
@@ -180,7 +204,7 @@
 </div>
 <hr />
 
-<p class="series-level-heading"><i class="fas fa-chess-knight me-1" aria-hidden="true"></i>Level 3 — Advanced Game Manipulation</p>
+<h2 class="series-level-heading" id="level-3"><i class="fas fa-chess-knight me-1" aria-hidden="true"></i>Level 3 — Advanced Game Manipulation</h2>
 
 <p>You have the basics. Now go deeper. These three posts show you how to override the browser's own built-in functions, build bots that mimic human behaviour convincingly, and exploit intentional backdoors that developers accidentally (or not so accidentally) left inside their own code.
 </p>
@@ -207,7 +231,7 @@
 </div>
 <hr />
 
-<p class="series-level-heading"><i class="fas fa-mobile-alt me-1" aria-hidden="true"></i>Level 4 — CSS Injection &amp; Bookmarklets</p>
+<h2 class="series-level-heading" id="level-4"><i class="fas fa-mobile-alt me-1" aria-hidden="true"></i>Level 4 — CSS Injection &amp; Bookmarklets</h2>
 
 <p>Typing into the Console every time gets old fast. Bookmarklets let you save a hack as a browser bookmark and run it with a single tap — even on mobile where DevTools doesn't exist at all. This section also covers CSS injection to change how websites look and feel.
 </p>
@@ -234,7 +258,7 @@
 </div>
 <hr />
 
-<p class="series-level-heading"><i class="fas fa-satellite-dish me-1" aria-hidden="true"></i>Level 5 — Network Sniffing &amp; Media Downloading</p>
+<h2 class="series-level-heading" id="level-5"><i class="fas fa-satellite-dish me-1" aria-hidden="true"></i>Level 5 — Network Sniffing &amp; Media Downloading</h2>
 
 <p>Now the serious power moves. These posts show you how to intercept network traffic, inspect the browser's internal data structures, use platform JSON APIs, and ultimately write a fully persistent userscript — a mini browser extension you author yourself. Each platform teaches a different angle of the same underlying skill.
 </p>
@@ -288,12 +312,31 @@
   </div>
 </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 d-none d-md-block">
+            <div class="sticky-top" style="top: 10px">
+                <div id="toc-sidebar" class="mb-3" style="display:none">
+                    <div class="card toc-card">
+                        <div class="card-header toc-header">
+                            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                        </div>
+                        <div class="card-body p-0">
+                            <nav id="toc-nav" aria-label="Table of contents"></nav>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
-
-    <br>
 </div>
+
+<br>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js" integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
