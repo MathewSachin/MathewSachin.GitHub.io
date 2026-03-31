@@ -1,5 +1,5 @@
 $(function () {
-    $(".page-content table").addClass("table table-bordered table-striped table-sm");
+    $(".page-content table").addClass("table table-bordered table-striped table-sm").wrap('<div class="table-responsive"></div>');
     $("blockquote").addClass("blockquote fw-light");
 
     // Lightbox: click on blog post images to expand
