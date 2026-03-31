@@ -2,7 +2,7 @@ browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
   description: >
-    An 18-part series that takes you from your very first <kbd>F12</kbd> press all the way
+    A 19-part series that takes you from your very first <kbd>F12</kbd> press all the way
     to writing persistent browser scripts. Every technique builds on the last.
     Most chapters need nothing but a browser and a curious mind — the final chapter
     adds Tampermonkey to make your scripts persistent.
@@ -10,7 +10,7 @@ browser-hacks:
     - title: "Level 1 — Zero Coding Required"
       icon: "fas fa-seedling"
       intro: >
-        You don't need to know a single line of code to start here. These two tricks use the
+        You don't need to know a single line of code to start here. These tricks use the
         browser's built-in inspector — the same tool professional web developers use every day.
         Your only job is to press <kbd>F12</kbd> and click.
       posts:
@@ -18,6 +18,8 @@ browser-hacks:
           blurb: 'Make any website say whatever you want in about ten seconds — great for pranks. Teaches: the DOM, <code>document.designMode</code>.'
         - id: "/blog/2019/12/07/unhide-password-box"
           blurb: "Your browser auto-filled a password and you can't remember it. One attribute change fixes that. Teaches: HTML <code>type</code> attributes, Inspect Element."
+        - id: "/blog/2026/03/31/youtube-shorts-normal-player"
+          blurb: "The Shorts player hides speed controls and breaks volume mixing. One URL swap opens the exact same video in the full desktop player. Teaches: URL structure and bookmarklets."
 
     - title: "Level 2 — Your First Console Scripts"
       icon: "fas fa-terminal"
