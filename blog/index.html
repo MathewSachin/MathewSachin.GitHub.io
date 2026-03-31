@@ -10,6 +10,8 @@ title: Blog Posts
   <a href="{{ '/blog/archive' | relative_url }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-archive me-1"></i>Archive</a>
 </div>
 
+{% include series_showcase.html %}
+
 <div class="posts">
   {% if site.posts.size == 0 %}
     <p class="text-muted">No posts found.</p>

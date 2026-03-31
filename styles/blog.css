@@ -792,4 +792,28 @@ div.highlight pre {
   margin-bottom: 0.25rem;
   margin-top: 1.5rem;
 }
+
+/* Override default page-content h2 rules when heading is a series level title */
+.page-content h2.series-level-heading {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-top: 0;
 }
+
+/* Series showcase card (used on home page and blog index) */
+.series-showcase-link {
+  display: block;
+}
+
+.series-showcase-card {
+  border: 1px solid rgba(23, 162, 184, 0.3);
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.series-showcase-link:hover .series-showcase-card {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(23, 162, 184, 0.2);
+  border-color: #17a2b8;
+}
+

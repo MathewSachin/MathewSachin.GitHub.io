@@ -1,11 +1,10 @@
 ---
-layout: page
+layout: series
 title: "Browser Hacks: From Zero to Browser Wizard"
-description: "An 18-part series that takes you from your very first F12 press to writing persistent userscripts — no installs, no extensions, just your browser."
+description: "An 18-part series that takes you from your very first F12 press to writing persistent userscripts — mostly just your browser, with Tampermonkey for the final chapter."
 ads: true
 ---
 
-<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 
 {%- assign _series = site.data.series["browser-hacks"] -%}
 
@@ -16,7 +15,7 @@ ads: true
 
 ---
 
-<p class="series-level-heading"><i class="{{ _level.icon }} me-1" aria-hidden="true"></i>{{ _level.title }}</p>
+<h2 class="series-level-heading" id="level-{{ forloop.index }}"><i class="{{ _level.icon }} me-1" aria-hidden="true"></i>{{ _level.title }}</h2>
 
 <p>{{ _level.intro }}</p>
 
