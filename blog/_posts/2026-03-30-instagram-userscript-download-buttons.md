@@ -3,6 +3,7 @@ title: "Instagram Download Buttons: A Userscript That Adds ⬇ to Every Post, Re
 icon: "fab fa-instagram"
 tags: [instagram, hack, javascript, browser, userscript, social-media]
 highlight: true
+series: browser-hacks
 related:
   - /blog/2026/03/22/instagram-story-sniper
   - /blog/2026/03/21/instagram-reel-sniper

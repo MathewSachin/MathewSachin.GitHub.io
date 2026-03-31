@@ -3,6 +3,7 @@ title: "Hacking Minesweeper Online: Rigging the RNG"
 icon: "fas fa-bomb"
 tags: [minesweeper, hack, javascript, browser, devtools, bookmarklet]
 highlight: true
+series: browser-hacks
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2026/03/20/hacking-typeracer

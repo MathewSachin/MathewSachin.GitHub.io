@@ -3,6 +3,7 @@ title: "Brute-Force Dark Mode on Any Website — Desktop and Mobile"
 icon: "fas fa-moon"
 tags: [hack, browser, devtools, css, mobile]
 highlight: true
+series: browser-hacks
 related:
   - /blog/2026/03/07/edit-webpage-inspect-element
   - /blog/2026/03/07/hacking-wordle

@@ -3,6 +3,7 @@ title: Hacking the Chrome Dino Game
 icon: "fas fa-gamepad"
 tags: [chrome, hack, game]
 highlight: true
+series: browser-hacks
 related:
   - /blog/2026/03/07/hacking-wordle
   - /blog/2026/03/20/hacking-minesweeper-online

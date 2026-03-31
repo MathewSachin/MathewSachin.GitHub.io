@@ -625,3 +625,171 @@ div.highlight pre {
 .toc-mobile-toggle[aria-expanded="true"] .toc-chevron {
   transform: rotate(180deg);
 }
+
+/* ==============================================
+   Series Banner & Navigation
+   ============================================== */
+
+/* Compact banner shown inside the post header (hero area) */
+.series-banner {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.series-banner a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.series-banner a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.series-banner .series-prev-link {
+  display: inline-block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Prev/Next navigation shown at the bottom of each post */
+.series-post-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+  flex-wrap: wrap;
+}
+
+.series-post-nav .series-nav-btn {
+  flex: 1 1 calc(50% - 0.4rem);
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  text-decoration: none;
+  color: #333;
+  background: #f8f9fa;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  font-size: 0.875rem;
+}
+
+.series-post-nav .series-nav-btn:hover {
+  background: #e9ecef;
+  border-color: #17a2b8;
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.15);
+  color: #17a2b8;
+}
+
+.series-post-nav .series-nav-btn.next-post {
+  flex-direction: row-reverse;
+  text-align: right;
+  margin-left: auto;
+}
+
+.series-post-nav .nav-icon {
+  font-size: 1.1rem;
+  color: #17a2b8;
+  flex-shrink: 0;
+}
+
+.series-post-nav .series-nav-btn:hover .nav-icon {
+  color: inherit;
+}
+
+.series-post-nav .nav-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6c757d;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.series-post-nav .nav-title {
+  display: block;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+@media (max-width: 575px) {
+  .series-post-nav .series-nav-btn {
+    flex: 1 1 100%;
+  }
+  .series-post-nav .series-nav-btn.next-post {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+/* Series page: post list items */
+.series-post-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.series-post-item:last-child {
+  border-bottom: none;
+}
+
+.series-post-item:hover .series-part-badge {
+  background: #17a2b8;
+  color: #fff;
+}
+
+.series-part-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #e9ecef;
+  color: #495057;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+  margin-top: 0.1rem;
+}
+
+.series-post-title {
+  font-weight: 600;
+  line-height: 1.3;
+  font-size: 0.95rem;
+}
+
+.series-post-title a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+
+.series-post-title a:hover {
+  color: #17a2b8;
+}
+
+.series-level-heading {
+  color: #17a2b8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.25rem;
+  margin-top: 1.5rem;
+}
+}

@@ -1,0 +1,88 @@
+{%- comment -%}
+  series_nav.html
+  Renders series navigation for a post.
+  Reads series membership and order from site.data.series[page.series].
+  page.series must be a series key (e.g. "browser-hacks").
+  variant="header"  → compact banner shown inside the hero header.
+  variant="footer"  → full prev/next navigation bar shown at the bottom of the post.
+{%- endcomment -%}
+{%- if page.series -%}
+  {%- assign _series = site.data.series[page.series] -%}
+  {%- if _series -%}
+    {%- comment -%} Build a flat ordered list of post IDs from all levels {%- endcomment -%}
+    {%- assign _flat_ids = "" | split: "" -%}
+    {%- for _level in _series.levels -%}
+      {%- for _entry in _level.posts -%}
+        {%- assign _flat_ids = _flat_ids | push: _entry.id -%}
+      {%- endfor -%}
+    {%- endfor -%}
+    {%- assign _total = _flat_ids | size -%}
+
+    {%- comment -%} Find part number, prev ID, and next ID {%- endcomment -%}
+    {%- assign _part = 0 -%}
+    {%- assign _prev_id = nil -%}
+    {%- assign _next_id = nil -%}
+    {%- assign _capture_next = false -%}
+    {%- assign _last_id = nil -%}
+    {%- for _pid in _flat_ids -%}
+      {%- if _capture_next -%}
+        {%- assign _next_id = _pid -%}
+        {%- assign _capture_next = false -%}
+      {%- endif -%}
+      {%- if _pid == page.id -%}
+        {%- assign _part = forloop.index -%}
+        {%- assign _prev_id = _last_id -%}
+        {%- assign _capture_next = true -%}
+      {%- endif -%}
+      {%- assign _last_id = _pid -%}
+    {%- endfor -%}
+
+    {%- assign _s_prev_post = nil -%}
+    {%- assign _s_next_post = nil -%}
+    {%- if _prev_id -%}
+      {%- assign _s_prev_post = site.posts | where: "id", _prev_id | first -%}
+    {%- endif -%}
+    {%- if _next_id -%}
+      {%- assign _s_next_post = site.posts | where: "id", _next_id | first -%}
+    {%- endif -%}
+
+    {%- if include.variant == "header" -%}
+    <div class="series-banner">
+      <i class="fas fa-layer-group me-1" aria-hidden="true"></i>
+      Part {{ _part }} of {{ _total }} &mdash;
+      <a href="{{ _series.url | relative_url }}">{{ _series.name }}</a> series
+      {%- if _s_prev_post %}
+      <br>
+      <a class="series-prev-link" href="{{ _s_prev_post.url | relative_url }}">
+        <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>Previous: {{ _s_prev_post.title }}
+      </a>
+      {%- endif %}
+    </div>
+    {%- elsif include.variant == "footer" -%}
+      {%- if _s_prev_post or _s_next_post -%}
+      <div class="series-post-nav" role="navigation" aria-label="Series navigation">
+        {%- if _s_prev_post -%}
+        <a href="{{ _s_prev_post.url | relative_url }}" class="series-nav-btn prev-post">
+          <i class="fas fa-arrow-left nav-icon" aria-hidden="true"></i>
+          <div>
+            <span class="nav-label">Previous in series</span>
+            <span class="nav-title">{% if _s_prev_post.icon %}<i class="{{ _s_prev_post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _s_prev_post.title }}</span>
+          </div>
+        </a>
+        {%- else -%}
+        <div></div>
+        {%- endif -%}
+        {%- if _s_next_post -%}
+        <a href="{{ _s_next_post.url | relative_url }}" class="series-nav-btn next-post">
+          <i class="fas fa-arrow-right nav-icon" aria-hidden="true"></i>
+          <div>
+            <span class="nav-label">Next in series</span>
+            <span class="nav-title">{% if _s_next_post.icon %}<i class="{{ _s_next_post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _s_next_post.title }}</span>
+          </div>
+        </a>
+        {%- endif -%}
+      </div>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
