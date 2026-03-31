@@ -1,0 +1,6 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/ruby:latest",
+  "postCreateCommand": "gem install bundler && bundle install",
+  "forwardPorts": [4000],
+  "postAttachCommand": "bundle exec jekyll serve --host 0.0.0.0"
+}
