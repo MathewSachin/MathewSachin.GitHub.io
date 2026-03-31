@@ -46,7 +46,7 @@ jobs:
       - name: Disable Google Analytics for preview
         if: inputs.preview
         run: |
-          echo "google-analytics: ''" >> _config.yml
+          echo "google-analytics: false" >> _config.yml
 
       - name: Build Jekyll site
         uses: actions/jekyll-build-pages@v1
