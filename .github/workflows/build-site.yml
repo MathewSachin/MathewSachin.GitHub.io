@@ -64,7 +64,7 @@ jobs:
         env:
           BASEURL: ${{ inputs.baseurl }}
         run: |
-          ARGS=(--ignore-urls "/^https?:/,/^#/")
+          ARGS=(--ignore-urls "/^https?:/,/^#/" --ignore-empty-mailto)
           if [ -n "$BASEURL" ]; then
             ARGS+=(--swap-urls "${BASEURL}:")
           fi
