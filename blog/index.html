@@ -26,10 +26,11 @@ title: Blog Posts
       <ul class="pagination justify-content-center flex-wrap">
         {% if paginator.previous_page %}
         <li class="page-item">
+          <a href="{{ paginator.previous_page_path | relative_url }}" class="page-link" aria-label="Previous page"><i class="fas fa-chevron-left"></i></a>
         {% else %}
         <li class="page-item disabled">
+          <span class="page-link" aria-label="Previous page"><i class="fas fa-chevron-left"></i></span>
         {% endif %}
-          <a href="{{ paginator.previous_page_path | relative_url }}" class="page-link" aria-label="Previous page"><i class="fas fa-chevron-left"></i></a>
         </li>
 
         {% assign current = paginator.page %}
@@ -82,10 +83,11 @@ title: Blog Posts
 
         {% if paginator.next_page %}
         <li class="page-item">
+          <a href="{{ paginator.next_page_path | relative_url }}" class="page-link" aria-label="Next page"><i class="fas fa-chevron-right"></i></a>
         {% else %}
         <li class="page-item disabled">
+          <span class="page-link" aria-label="Next page"><i class="fas fa-chevron-right"></i></span>
         {% endif %}
-          <a href="{{ paginator.next_page_path | relative_url }}" class="page-link" aria-label="Next page"><i class="fas fa-chevron-right"></i></a>
         </li>
       </ul>
     </nav>

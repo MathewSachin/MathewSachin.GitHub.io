@@ -11,3 +11,5 @@ group :jekyll_plugins do
   gem 'jekyll-minifier'
   gem 'jekyll_picture_tag', '~> 2.1'
 end
+
+gem 'html-proofer', '~> 5.0'
