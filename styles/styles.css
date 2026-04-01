@@ -17,3 +17,8 @@ body {
 .text-info {
   color: #17a2b8 !important;
 }
+
+.pintora-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
