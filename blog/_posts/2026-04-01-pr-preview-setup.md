@@ -60,19 +60,19 @@ activityDiagram
     endif
     :Deploy or teardown preview;
   }
-  partition "deploy.yml" {
-    :Push to main;
-    :Call build-site.yml;
-    :baseurl = empty;
-    :preview = false;
-    :Deploy to gh-pages root;
-  }
   partition "build-site.yml" {
     :npm ci + npm run build;
     :Inject baseurl into _config.yml;
     :Disable Google Analytics if preview;
     :jekyll build;
     :Upload site artifact;
+  }
+  partition "deploy.yml" {
+    :Push to main;
+    :Call build-site.yml;
+    :baseurl = empty;
+    :preview = false;
+    :Deploy to gh-pages root;
   }
 </pre>
 
