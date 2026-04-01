@@ -50,29 +50,29 @@ All of this is wired up in three GitHub Actions workflow files.
 <pre class="pintora">
 activityDiagram
   partition "pr-preview.yml" {
-    :PR opened / pushed / closed;
-    if (action == closed?) then
-      :Skip build;
-    else
-      :Call build-site.yml;
-      :baseurl = /pr-preview/pr-N;
-      :preview = true;
-    endif
-    :Deploy or teardown preview;
+    :PR opened / pushed;
+    :baseurl = /pr-preview/pr-N;
+    :preview = true;
+    group "build-site.yml (reusable workflow)" {
+      :npm ci + npm run build;
+      :Inject baseurl into _config.yml;
+      :Disable Google Analytics;
+      :jekyll build;
+      :Upload site artifact;
+    }
+    :Deploy preview;
   }
   partition "deploy.yml" {
     :Push to main;
-    :Call build-site.yml;
     :baseurl = empty;
     :preview = false;
+    group "build-site.yml (reusable workflow)" {
+      :npm ci + npm run build;
+      :Inject baseurl into _config.yml;
+      :jekyll build;
+      :Upload site artifact;
+    }
     :Deploy to gh-pages root;
-  }
-  partition "build-site.yml" {
-    :npm ci + npm run build;
-    :Inject baseurl into _config.yml;
-    :Disable Google Analytics if preview;
-    :jekyll build;
-    :Upload site artifact;
   }
 </pre>
 
