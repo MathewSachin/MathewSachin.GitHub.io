@@ -3,21 +3,17 @@
 </code></pre></div></div> <p>The preview is:</p> <ul> <li><strong>Automatically created</strong> when a PR is opened or updated</li> <li><strong>Automatically updated</strong> on every new commit to the PR branch</li> <li><strong>Automatically deleted</strong> when the PR is closed or merged</li> <li><strong>Hosted in the same <code class="language-plaintext highlighter-rouge">gh-pages</code> branch</strong> as the production site — no extra infrastructure</li> </ul> <p>All of this is wired up in three GitHub Actions workflow files.</p> <h2 id="the-three-workflow-architecture">The Three-Workflow Architecture</h2> <pre class="pintora">
 activityDiagram
   partition "pr-preview.yml" {
-    :PR opened / pushed / closed;
-    if (action == closed?) then
-      :Teardown preview;
-    else
-      :baseurl = /pr-preview/pr-N;
-      :preview = true;
-      group "build-site.yml (reusable workflow)" {
-        :npm ci + npm run build;
-        :Inject baseurl into _config.yml;
-        :Disable Google Analytics;
-        :jekyll build;
-        :Upload site artifact;
-      }
-      :Deploy preview;
-    endif
+    :PR opened / pushed;
+    :baseurl = /pr-preview/pr-N;
+    :preview = true;
+    group "build-site.yml (reusable workflow)" {
+      :npm ci + npm run build;
+      :Inject baseurl into _config.yml;
+      :Disable Google Analytics;
+      :jekyll build;
+      :Upload site artifact;
+    }
+    :Deploy preview;
   }
   partition "deploy.yml" {
     :Push to main;
