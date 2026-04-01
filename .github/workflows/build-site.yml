@@ -60,6 +60,12 @@ jobs:
       - name: Build Jekyll site
         run: JEKYLL_ENV=production bundle exec jekyll build --destination ./_site
 
+      - name: Run html-proofer
+        run: |
+          bundle exec htmlproofer ./_site \
+            --disable-external \
+            --ignore-urls "^#"
+
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
         with:
