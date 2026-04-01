@@ -52,26 +52,30 @@ activityDiagram
   partition "pr-preview.yml" {
     :PR opened / pushed / closed;
     if (action == closed?) then
-      :Skip build;
+      :Teardown preview;
     else
-      :Call build-site.yml;
       :baseurl = /pr-preview/pr-N;
       :preview = true;
+      group "build-site.yml (reusable workflow)" {
+        :npm ci + npm run build;
+        :Inject baseurl into _config.yml;
+        :Disable Google Analytics;
+        :jekyll build;
+        :Upload site artifact;
+      }
+      :Deploy preview;
     endif
-    :Deploy or teardown preview;
-  }
-  partition "build-site.yml" {
-    :npm ci + npm run build;
-    :Inject baseurl into _config.yml;
-    :Disable Google Analytics if preview;
-    :jekyll build;
-    :Upload site artifact;
   }
   partition "deploy.yml" {
     :Push to main;
-    :Call build-site.yml;
     :baseurl = empty;
     :preview = false;
+    group "build-site.yml (reusable workflow)" {
+      :npm ci + npm run build;
+      :Inject baseurl into _config.yml;
+      :jekyll build;
+      :Upload site artifact;
+    }
     :Deploy to gh-pages root;
   }
 </pre>
