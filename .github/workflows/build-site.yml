@@ -54,7 +54,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.3'
           bundler-cache: true
 
       - name: Build Jekyll site
@@ -64,14 +64,11 @@ jobs:
         env:
           BASEURL: ${{ inputs.baseurl }}
         run: |
-          echo "=== html-proofer version ===" && bundle exec htmlproofer --version
-          echo "=== _site HTML count ===" && find ./_site -name "*.html" | wc -l
-          echo "=== sample links in index.html ===" && grep -o 'href="[^"]*"' ./_site/index.html | head -5 || true
-          ARGS=(--ignore-urls "/^https?:/,/^#/" --log-level debug)
+          ARGS=(--ignore-urls "/^https?:/,/^#/")
           if [ -n "$BASEURL" ]; then
             ARGS+=(--swap-urls "${BASEURL}:")
           fi
-          bundle exec htmlproofer ./_site "${ARGS[@]}" 2>&1 | head -100 || true
+          bundle exec htmlproofer ./_site "${ARGS[@]}"
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
