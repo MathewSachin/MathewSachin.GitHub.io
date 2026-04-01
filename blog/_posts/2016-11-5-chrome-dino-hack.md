@@ -249,7 +249,7 @@ Try `20` for floaty, sky-high jumps that easily clear everything on screen, or d
 
 Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
 
-<img alt="Chrome Dino walking in air" src="/images/sky_dino.jpg" width="400">
+{% picture sky_dino.jpg alt="Chrome Dino walking in air" width="400" %}
 
 The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
 

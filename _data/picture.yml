@@ -1,0 +1,12 @@
+presets:
+  # Default preset for post content images (JPEG/PNG only; GIF and SVG pass through)
+  default:
+    widths: [400, 800]
+    formats: [webp, original]
+    size: "(max-width: 575px) 100vw, 800px"
+
+  # Avatar preset for the homepage profile photo (200×200 fixed via CSS)
+  avatar:
+    widths: [200, 400]
+    formats: [webp, original]
+    size: "200px"

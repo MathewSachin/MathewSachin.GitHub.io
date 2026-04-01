@@ -46,3 +46,7 @@ jekyll-minifier:
   exclude:
     - "dino/offline.js"
     - "scripts/orama.js"
+
+picture:
+  source: "images"
+  output: "generated"
