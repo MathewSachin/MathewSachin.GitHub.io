@@ -3,29 +3,29 @@
 </code></pre></div></div> <p>The preview is:</p> <ul> <li><strong>Automatically created</strong> when a PR is opened or updated</li> <li><strong>Automatically updated</strong> on every new commit to the PR branch</li> <li><strong>Automatically deleted</strong> when the PR is closed or merged</li> <li><strong>Hosted in the same <code class="language-plaintext highlighter-rouge">gh-pages</code> branch</strong> as the production site — no extra infrastructure</li> </ul> <p>All of this is wired up in three GitHub Actions workflow files.</p> <h2 id="the-three-workflow-architecture">The Three-Workflow Architecture</h2> <pre class="pintora">
 activityDiagram
   partition "pr-preview.yml" {
-    :PR opened / pushed / closed;
-    if (action == closed?) then
-      :Skip build;
-    else
-      :Call build-site.yml;
-      :baseurl = /pr-preview/pr-N;
-      :preview = true;
-    endif
-    :Deploy or teardown preview;
+    :PR opened / pushed;
+    :baseurl = /pr-preview/pr-N;
+    :preview = true;
+    group "build-site.yml (reusable workflow)" {
+      :npm ci + npm run build;
+      :Inject baseurl into _config.yml;
+      :Disable Google Analytics;
+      :jekyll build;
+      :Upload site artifact;
+    }
+    :Deploy preview;
   }
   partition "deploy.yml" {
     :Push to main;
-    :Call build-site.yml;
     :baseurl = empty;
     :preview = false;
+    group "build-site.yml (reusable workflow)" {
+      :npm ci + npm run build;
+      :Inject baseurl into _config.yml;
+      :jekyll build;
+      :Upload site artifact;
+    }
     :Deploy to gh-pages root;
-  }
-  partition "build-site.yml" {
-    :npm ci + npm run build;
-    :Inject baseurl into _config.yml;
-    :Disable Google Analytics if preview;
-    :jekyll build;
-    :Upload site artifact;
   }
 </pre> <p>The key design decision is that <code class="language-plaintext highlighter-rouge">build-site.yml</code> is a <strong>reusable workflow</strong> (<code class="language-plaintext highlighter-rouge">workflow_call</code>). Both the PR preview workflow and the production deploy workflow call it — they just pass different inputs.</p> <h2 id="build-siteyml-the-reusable-build">build-site.yml: The Reusable Build</h2> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">on</span><span class="pi">:</span>
   <span class="na">workflow_call</span><span class="pi">:</span>
