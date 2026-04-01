@@ -1,0 +1,31 @@
+presets:
+  # Default preset for raster images (PNG, JPG, GIF) in post content
+  default:
+    formats: [webp, original]
+    widths: [400, 800, 1200]
+    fallback_width: 800
+    fallback_format: webp
+    attributes:
+      img: 'loading="lazy"'
+
+  # Hero preset for full-width images at the top of posts (including SVGs)
+  # SVGs are rasterised to WebP since libvips cannot write SVG format
+  # markup: picture forces <picture> output so the hero-picture class is applied
+  hero:
+    markup: picture
+    formats: [webp]
+    widths: [640, 1280, 1920]
+    fallback_width: 1280
+    fallback_format: webp
+    attributes:
+      picture: 'class="hero-picture"'
+      img: 'loading="eager"'
+
+  # Avatar preset for the profile photo on the homepage
+  avatar:
+    formats: [webp, original]
+    widths: [200, 400]
+    fallback_width: 200
+    fallback_format: webp
+    attributes:
+      img: 'class="avatar mb-3" loading="eager"'

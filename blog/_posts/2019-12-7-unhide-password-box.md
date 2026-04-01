@@ -66,7 +66,7 @@ The fastest way to jump to the password field:
 
 DevTools will jump straight to the `<input>` element for that field.
 
-![Revealing password with DevTools](/images/unhide-psw.gif)
+{% picture unhide-psw.gif alt="Revealing password with DevTools" %}
 
 <div class="alert alert-info">
   💡 <b>Tip:</b> Can't find the element picker? You can also right-click <i>directly on the password box</i> and choose <b>Inspect</b> — this opens DevTools with that element already highlighted.

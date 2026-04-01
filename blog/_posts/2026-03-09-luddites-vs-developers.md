@@ -11,7 +11,7 @@ related:
 
 *Every programmer, at some point, gets asked the question. Maybe by a new teammate, maybe in a job interview, maybe by a stranger on the internet at 2 AM. "What editor do you use?" What follows is never just an answer — it's a declaration of identity.*
 
-<img alt="Three editor panels side by side: Vim with green-on-black terminal, Sublime Text with colorful syntax highlighting, and VS Code with file explorer and AI autocomplete" src="/images/editor-wars-hero.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero editor-wars-hero.svg alt="Three editor panels side by side: Vim with green-on-black terminal, Sublime Text with colorful syntax highlighting, and VS Code with file explorer and AI autocomplete" %}
 
 ## The Luddite Label
 

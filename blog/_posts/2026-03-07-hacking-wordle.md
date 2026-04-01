@@ -16,7 +16,7 @@ related:
 
 ## What's Wordle?
 
-<img alt="Wordle game board showing a solved puzzle with green tiles" src="/images/wordle-hero.svg" width="320" style="display:block;margin:1rem auto;">
+{% picture hero wordle-hero.svg alt="Wordle game board showing a solved puzzle with green tiles" %}
 
 Wordle is a hugely popular word-guessing game. Every day there's a new secret 5-letter word, and you get 6 attempts to figure it out. Green tiles mean the right letter in the right spot, yellow means right letter but wrong place, and grey means that letter isn't in the word at all.
 
@@ -35,7 +35,7 @@ This is the magic panel that web developers use to peek under the hood of any we
   👉 {% include post_link.html url="/blog/2026/03/19/hacking-wordle-mobile-bookmarklet" %}
 </div>
 
-<img alt="Browser window with DevTools panel open showing the Elements tab" src="/images/wordle-devtools-open.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero wordle-devtools-open.svg alt="Browser window with DevTools panel open showing the Elements tab" %}
 
 1. Open [Wordle](https://www.nytimes.com/games/wordle/index.html) in your browser.
 2. Press **`F12`** on your keyboard (or **`Ctrl + Shift + I`** on Windows/Linux, **`Cmd + Option + I`** on Mac).
@@ -45,7 +45,7 @@ This is the magic panel that web developers use to peek under the hood of any we
 
 At the top of the DevTools panel, you'll see a row of tabs: *Elements, Console, Sources, Network...* Click on **Network**.
 
-<img alt="DevTools Network tab showing Fetch/XHR filter and the date-named JSON file highlighted" src="/images/wordle-network-tab.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero wordle-network-tab.svg alt="DevTools Network tab showing Fetch/XHR filter and the date-named JSON file highlighted" %}
 
 This tab shows you every single request your browser makes — every image, script, and piece of data it fetches from the internet.
 
@@ -85,7 +85,7 @@ Once you've clicked on the `.json` file, a new panel opens on the right. You'll 
 
 Click on **Preview**.
 
-<img alt="DevTools Preview tab showing the JSON response with the solution field highlighted" src="/images/wordle-preview-answer.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero wordle-preview-answer.svg alt="DevTools Preview tab showing the JSON response with the solution field highlighted" %}
 
 You'll see something like this:
 

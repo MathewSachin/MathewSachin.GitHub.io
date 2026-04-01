@@ -11,7 +11,7 @@ related:
 
 *Comment sections are supposed to be the friendly bit at the bottom of a post. A place to ask questions, share thoughts, push back. So why did mine feel like a billboard?*
 
-<img alt="Before and after comparison: Disqus with ad banners, tracking scripts and slow loading on the left; clean giscus GitHub Discussions widget on the right" src="/images/giscus-hero.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero giscus-hero.svg alt="Before and after comparison: Disqus with ad banners, tracking scripts and slow loading on the left; clean giscus GitHub Discussions widget on the right" %}
 
 ## The Problem with Disqus
 

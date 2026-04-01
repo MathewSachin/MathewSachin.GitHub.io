@@ -11,7 +11,7 @@ related:
 
 *Meta renamed itself after a virtual world nobody wanted to live in, spent over $40 billion building it, and is now quietly pulling the plug — world by world, studio by studio, headset by headset.*
 
-<img alt="A virtual horizon fading into darkness, representing the end of Meta's Metaverse vision" src="/images/meta-metaverse-over-hero.svg" width="640" style="display:block;margin:1rem auto;">
+{% picture hero meta-metaverse-over-hero.svg alt="A virtual horizon fading into darkness, representing the end of Meta's Metaverse vision" %}
 
 On March 17th, Meta announced that Horizon Worlds — the flagship VR social platform that was supposed to be the beating heart of the metaverse — will be shut down on Quest headsets on **June 15, 2026**. After that date, if you want to visit a Horizon World, you'll be doing it on your phone.
 

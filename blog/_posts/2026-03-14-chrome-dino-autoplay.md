@@ -12,7 +12,7 @@ related:
 
 *Want the dino to play itself? Here's a bot you can drop into the Chrome DevTools Console — no installs, no extensions, just JavaScript.*
 
-<img alt="Chrome DevTools Console showing the dino autoplay script with the dino mid-jump over a cactus" src="/images/dino-autoplay-hero.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero dino-autoplay-hero.svg alt="Chrome DevTools Console showing the dino autoplay script with the dino mid-jump over a cactus" %}
 
 
 ## The Full Auto-play Script

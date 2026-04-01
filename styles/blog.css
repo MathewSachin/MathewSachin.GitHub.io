@@ -85,6 +85,26 @@ div.highlight pre {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
+/* picture element: behave as block container like a standalone img */
+.page-content picture {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* img inside picture: no additional vertical margins (picture handles them) */
+.page-content picture img {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* hero-picture: center the contained img */
+.page-content picture.hero-picture img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Lightbox modal */
 #img-lightbox .modal-dialog {
   max-width: 90vw;

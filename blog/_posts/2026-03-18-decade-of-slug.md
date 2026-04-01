@@ -11,7 +11,7 @@ related:
 
 *On March 17, 2026, a researcher quietly filed a single form with the US Patent Office and terminated a patent twelve years early. The beneficiaries: game studios, equation editors, CAD tools — and anyone who wants to render fonts beautifully on a GPU without paying anyone.*
 
-<img alt="Side-by-side comparison showing the letter G rendered with blocky pixel/SDF artifacts on the left versus a crisp, smooth Slug algorithm GPU rendering on the right" src="/images/slug-font-hero.svg" width="560" style="display:block;margin:1rem auto;">
+{% picture hero slug-font-hero.svg alt="Side-by-side comparison showing the letter G rendered with blocky pixel/SDF artifacts on the left versus a crisp, smooth Slug algorithm GPU rendering on the right" %}
 
 ## The Problem with Fonts on a GPU
 

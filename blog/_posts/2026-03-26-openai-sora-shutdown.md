@@ -11,7 +11,7 @@ related:
 
 *OpenAI announced Sora with "we are giving early access to a small group of creative professionals" in February 2024. By March 2026, they've given it a burial instead.*
 
-<img alt="A film strip fading from vivid color to dead static, with four frames spanning Feb 2024 to Mar 2026, and the word DISCONTINUED in red. The right panel lists the five reasons Sora failed: cost, competition, strategy, quality, and revenue." src="/images/openai-sora-shutdown-hero.svg" width="640" style="display:block;margin:1rem auto;">
+{% picture hero openai-sora-shutdown-hero.svg alt="A film strip fading from vivid color to dead static, with four frames spanning Feb 2024 to Mar 2026, and the word DISCONTINUED in red. The right panel lists the five reasons Sora failed: cost, competition, strategy, quality, and revenue." %}
 
 Last week, OpenAI quietly updated its product page with a banner that most users noticed only because someone screenshot it on X: "Sora will no longer be available as a standalone product. Existing subscribers will be transitioned to ChatGPT Pro." The model isn't being open-sourced. The Sora.com domain will redirect to ChatGPT. The API is being deprecated. After twenty-six months of existence — fourteen of those in a closed "red team" preview that most people couldn't access — OpenAI's flagship text-to-video model is finished.
 

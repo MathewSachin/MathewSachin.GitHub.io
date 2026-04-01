@@ -22,7 +22,7 @@ It is no longer maintained, but the [source-code is still archived on GitHub](ht
 - **Support:** No bug fixes, feature requests, or security patches will be issued.
 - **Safety:** Captura has not received updates in several years. Use it at your own risk, especially on sensitive systems or newer versions of Windows.
 
-![Captura](/images/captura.png)
+{% picture captura.png alt="Captura" %}
 
 ## Some history
 In 2015, while I was a high school student, I started Captura as a "toy project" — a practical way to learn C#.

@@ -11,7 +11,7 @@ related:
 
 *For years, the honest answer to "is Python's JIT any good?" was "not really." That changed yesterday.*
 
-<img alt="Bar chart comparing Python version speeds: 3.11 and 3.12 in grey as baseline, 3.13 JIT in red showing slower performance, and 3.15 JIT in green showing 45% faster than baseline" src="/images/python-jit-hero.svg" width="480" style="display:block;margin:1rem auto;">
+{% picture hero python-jit-hero.svg alt="Bar chart comparing Python version speeds: 3.11 and 3.12 in grey as baseline, 3.13 JIT in red showing slower performance, and 3.15 JIT in green showing 45% faster than baseline" %}
 
 On March 17, 2026, CPython core contributor Ken Jin posted an update that's been quietly anticipated by the Python performance community for over a year: [the Python 3.15 JIT is back on track](https://fidget-spinner.github.io/posts/jit-on-track.html). The 3.15 alpha is now **11–12% faster than the tail-calling interpreter on macOS AArch64** and **5–6% faster on x86_64 Linux** — hitting the team's target goals for 3.15 over a year ahead of schedule.
 

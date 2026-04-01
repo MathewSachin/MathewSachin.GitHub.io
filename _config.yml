@@ -35,6 +35,7 @@ plugins:
   - jekyll-feed # Atom Feed
   - jekyll-redirect-from
   - jekyll-minifier # Minify HTML/CSS/JS output
+  - jekyll_picture_tag # Responsive images
 
 # Pagination
 paginate: 10
@@ -46,3 +47,7 @@ jekyll-minifier:
   exclude:
     - "dino/offline.js"
     - "scripts/orama.js"
+
+picture:
+  source: "images"
+  output: "generated"
