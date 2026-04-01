@@ -10,7 +10,7 @@ redirect_from:
 ads: true
 ---
 
-![Logo](/images/fga.png)
+{% picture fga.png alt="Logo" %}
 
 Auto-battle app for F/GO (Android 7 or later, no need for root on phones).  
 

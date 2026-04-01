@@ -5,3 +5,4 @@ _site/
 Gemfile.lock
 debug.log.bundle/
 node_modules/
+generated/
