@@ -64,11 +64,14 @@ jobs:
         env:
           BASEURL: ${{ inputs.baseurl }}
         run: |
-          ARGS=(--ignore-urls "/^https?:/,/^#/")
+          echo "=== html-proofer version ===" && bundle exec htmlproofer --version
+          echo "=== _site HTML count ===" && find ./_site -name "*.html" | wc -l
+          echo "=== sample links in index.html ===" && grep -o 'href="[^"]*"' ./_site/index.html | head -5 || true
+          ARGS=(--ignore-urls "/^https?:/,/^#/" --log-level debug)
           if [ -n "$BASEURL" ]; then
             ARGS+=(--swap-urls "${BASEURL}:")
           fi
-          bundle exec htmlproofer ./_site "${ARGS[@]}"
+          bundle exec htmlproofer ./_site "${ARGS[@]}" 2>&1 | head -100 || true
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
