@@ -61,10 +61,14 @@ jobs:
         run: JEKYLL_ENV=production bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
+        env:
+          BASEURL: ${{ inputs.baseurl }}
         run: |
-          bundle exec htmlproofer ./_site \
-            --disable-external \
-            --ignore-urls "^#"
+          ARGS=(--ignore-urls "/^https?:/,/^#/")
+          if [ -n "$BASEURL" ]; then
+            ARGS+=(--swap-urls "${BASEURL}:")
+          fi
+          bundle exec htmlproofer ./_site "${ARGS[@]}"
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
