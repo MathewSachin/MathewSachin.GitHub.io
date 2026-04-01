@@ -22,7 +22,15 @@
 
     {% if page.pintora %}
       <script src="https://cdn.jsdelivr.net/npm/@pintora/standalone@0.8.1/lib/pintora-standalone.umd.js" integrity="sha384-ukZa5IV7d3VoeDYJXNQpvzCwORRKOUcKApRymElNTgfB7+bTsSzu3rJfsy3PPbGS" crossorigin="anonymous"></script>
-      <script>pintora.default.initBrowser();</script>
+      <script>
+        document.querySelectorAll('pre.pintora').forEach(function(pre) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'pintora-wrapper';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+        });
+        pintora.default.initBrowser();
+      </script>
     {% endif %}
   </body>
 </html>
