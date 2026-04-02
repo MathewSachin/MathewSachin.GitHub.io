@@ -3,6 +3,7 @@ title: "AdSense Auto Ads vs. Custom Placement: Why I Chose to Control Every Ad o
 icon: "fas fa-rectangle-ad"
 tags: [adsense, ads, jekyll, monetization, web, tutorial]
 highlight: true
+series: blogging-with-jekyll
 related:
   - /blog/2026/03/12/ditching-disqus-for-giscus
   - /blog/2026/03/25/how-site-search-works

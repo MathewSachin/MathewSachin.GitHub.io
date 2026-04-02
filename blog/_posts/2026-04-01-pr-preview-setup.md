@@ -4,6 +4,7 @@ icon: "fas fa-code-branch"
 tags: [github-actions, ci-cd, jekyll, github-pages, devops, tutorial]
 highlight: true
 pintora: true
+series: blogging-with-jekyll
 related:
   - /blog/2026/03/25/how-site-search-works
   - /blog/2026/03/12/ai-blog-generation-flow

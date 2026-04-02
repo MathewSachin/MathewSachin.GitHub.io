@@ -1,3 +1,48 @@
+blogging-with-jekyll:
+  name: "Blogging with Jekyll"
+  url: "/blog/series/blogging-with-jekyll/"
+  description: >
+    A 6-part series on building and running a Jekyll blog hosted on GitHub Pages —
+    from automating posts with AI to adding offline search, comments, live PR previews,
+    ads, and faster CI builds. Each part is a standalone deep-dive you can apply to your own site.
+  levels:
+    - title: "Level 1 — Writing &amp; Automation"
+      icon: "fas fa-pencil-alt"
+      intro: >
+        Before you optimise anything, you need a fast, frictionless way to write and publish.
+        This post shows how to go from a prompt on your phone to a live blog post in minutes —
+        no laptop, no manual deployments.
+      posts:
+        - id: "/blog/2026/03/12/ai-blog-generation-flow"
+          blurb: "Write posts on your phone with GitHub Copilot and have them live in minutes without ever touching a laptop. Teaches: GitHub Copilot as editor, PRs as a publishing pipeline, GitHub Pages automation."
+
+    - title: "Level 2 — Reader Features"
+      icon: "fas fa-users"
+      intro: >
+        A static site doesn't have to feel static to readers. These two posts add
+        a fully-featured comment section and instant full-text search — both running
+        entirely in the browser with zero backend or cloud subscription required.
+      posts:
+        - id: "/blog/2026/03/12/ditching-disqus-for-giscus"
+          blurb: "Replace a slow, ad-heavy comment system with GitHub Discussions — zero backend, zero cost. Teaches: giscus setup, GitHub Apps, data ownership."
+        - id: "/blog/2026/03/25/how-site-search-works"
+          blurb: "Add fully offline full-text search to your static site — no server, no API, no subscription. Teaches: Orama, JSON search indexes, offline-first JavaScript."
+
+    - title: "Level 3 — Dev Workflow &amp; Operations"
+      icon: "fas fa-cogs"
+      intro: >
+        The finishing touches that turn a hobby blog into a well-oiled publishing platform.
+        Live PR previews so you can review every post before it goes live, controlled ad
+        placement instead of Google putting ads wherever it likes, and a custom Docker image
+        that cuts CI build times dramatically.
+      posts:
+        - id: "/blog/2026/04/01/pr-preview-setup"
+          blurb: "Get a live preview URL for every pull request so you can review posts exactly as readers will see them. Teaches: GitHub Actions, GitHub Pages environments, PR automation."
+        - id: "/blog/2026/04/02/adsense-auto-vs-custom-placement"
+          blurb: "Control exactly where ads appear instead of letting Google inject them anywhere. Teaches: Google AdSense custom placement, Jekyll includes for ads, reader-friendly ad strategy."
+        - id: "/blog/2026/04/02/docker-faster-github-actions"
+          blurb: "Pre-bake your entire build toolchain into a Docker image and cut CI build times dramatically. Teaches: custom Docker base images, GitHub Container Registry, GitHub Actions optimisation."
+
 browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
