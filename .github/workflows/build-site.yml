@@ -44,6 +44,17 @@ jobs:
         run: |
           echo "google-analytics: false" >> _config.yml
 
+      - name: Diagnose libvips
+        run: |
+          echo "=== LD_LIBRARY_PATH ==="
+          echo "${LD_LIBRARY_PATH:-UNSET}"
+          echo "=== ldconfig libvips ==="
+          ldconfig -p | grep -i vips || echo "NOT IN LDCONFIG"
+          echo "=== libvips files on disk ==="
+          find /usr /lib -name "libvips*" 2>/dev/null || echo "NONE FOUND"
+          echo "=== /etc/ld.so.conf.d ==="
+          cat /etc/ld.so.conf.d/*.conf 2>/dev/null || echo "NONE"
+
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
