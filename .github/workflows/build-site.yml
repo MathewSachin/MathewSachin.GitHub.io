@@ -62,6 +62,7 @@ jobs:
       - name: Run html-proofer
         env:
           BASEURL: ${{ inputs.baseurl }}
+        shell: bash
         run: |
           ARGS=(--ignore-urls "/^https?:/,/^#/" --ignore-empty-mailto)
           if [ -n "$BASEURL" ]; then
