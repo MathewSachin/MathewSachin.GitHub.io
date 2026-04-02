@@ -23,11 +23,7 @@ layout: default
             <div id="post" class="card">
                 <div class="card-body">
                     <div class="page-content">
-                    {% if page.in_content_ads %}
-                      {% include post_content_with_ads.html content=content %}
-                    {% else %}
-                      {{ content }}
-                    {% endif %}
+                    {% include post_content_with_ads.html content=content %}
                     </div>
                 </div>
             </div>
