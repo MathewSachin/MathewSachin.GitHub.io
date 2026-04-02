@@ -849,8 +849,8 @@ div.highlight pre {
   max-width: 100%;
 }
 
-/* Hide the ad card (but not the "Advertisement" label) when AdSense reports the slot is unfilled */
-.in-content-ad:has(ins[data-ad-status="unfilled"]) .card {
+/* Hide the whole ad block when AdSense reports the slot is unfilled */
+.in-content-ad:has(ins[data-ad-status="unfilled"]) {
   display: none;
 }
 
