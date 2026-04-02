@@ -14,7 +14,11 @@ layout: default
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                {{ content }}
+                {% if page.in_content_ads %}
+                  {% include post_content_with_ads.html content=content %}
+                {% else %}
+                  {{ content }}
+                {% endif %}
             </div>
             <div class="col-md-2">
                 <div class="sticky-top" style="top: 10px">

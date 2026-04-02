@@ -1,17 +1,18 @@
 {% comment %}
-  Renders post content with in-content ad blocks injected after every
-  `site.ads_every_n_paragraphs` content elements (paragraphs, headings h2–h6,
-  tables, figures, and picture elements).
+  Renders content with in-content ad blocks injected after every
+  `site.ad_density` content elements (paragraphs, headings h2–h6,
+  code blocks, tables, figures, and picture elements).
 
   Usage:
     {% include post_content_with_ads.html content=content %}
 {% endcomment %}
 
-{% assign n = site.ads_every_n_paragraphs | default: 5 %}
+{% assign n = site.ad_density | default: 5 %}
 
 {% comment %}
   Insert a unique split marker after each counted closing tag.
   We use a string that cannot appear in normal post HTML.
+  </pre> signals the end of a code block (div.highlight > pre).
 {% endcomment %}
 {% assign marked = include.content
   | replace: '</p>',       '</p>SPLITHERE'
@@ -20,6 +21,7 @@
   | replace: '</h4>',      '</h4>SPLITHERE'
   | replace: '</h5>',      '</h5>SPLITHERE'
   | replace: '</h6>',      '</h6>SPLITHERE'
+  | replace: '</pre>',     '</pre>SPLITHERE'
   | replace: '</picture>', '</picture>SPLITHERE'
   | replace: '</figure>',  '</figure>SPLITHERE'
   | replace: '</table>',   '</table>SPLITHERE' %}
