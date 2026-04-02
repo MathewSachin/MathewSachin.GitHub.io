@@ -3,6 +3,7 @@ title: "Ditching Disqus for giscus — and I Should Have Done It Sooner"
 icon: "fas fa-comments"
 tags: [giscus, disqus, comments, jekyll, github-pages, github]
 highlight: true
+series: blogging-with-jekyll
 related:
   - /blog/2023/04/09/captura-unmaintained
   - /blog/2026/03/09/luddites-vs-developers

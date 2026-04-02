@@ -4,6 +4,7 @@ icon: "fab fa-docker"
 tags: [github-actions, docker, ci-cd, jekyll, devops, tutorial]
 highlight: true
 pintora: true
+series: blogging-with-jekyll
 related:
   - /blog/2026/04/01/pr-preview-setup
   - /blog/2026/03/12/ai-blog-generation-flow

@@ -4,6 +4,7 @@ icon: "fas fa-search"
 tags: [search, javascript, orama, jekyll, tutorial, github-pages]
 highlight: true
 pintora: true
+series: blogging-with-jekyll
 related:
   - /blog/2026/03/12/ai-blog-generation-flow
   - /blog/2026/03/12/ditching-disqus-for-giscus
