@@ -38,7 +38,8 @@ layout: default
 <div class="container post-content-container">
     <div class="row">
         <div class="col-md-10">
-            {% include toc.html %}
+            {% capture toc_html %}{{ content | toc_only }}{% endcapture %}
+            {% include toc.html toc_html=toc_html %}
 
             <div id="post" class="card">
                 <div class="card-body">
@@ -69,7 +70,7 @@ layout: default
                             <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
                         </div>
                         <div class="card-body p-0">
-                            <nav id="toc-nav" aria-label="Table of contents"></nav>
+                            <nav id="toc-nav" aria-label="Table of contents">{{ toc_html }}</nav>
                         </div>
                     </div>
                 </div>

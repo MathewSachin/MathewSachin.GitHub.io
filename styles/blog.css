@@ -472,6 +472,19 @@ div.highlight pre {
   padding: 0.4rem 0.6rem;
 }
 
+#toc-nav ul,
+#toc-nav-mobile ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#toc-nav li,
+#toc-nav-mobile li {
+  margin: 0;
+  padding: 0;
+}
+
 #toc-nav a,
 #toc-nav-mobile a {
   display: block;
@@ -499,8 +512,8 @@ div.highlight pre {
   font-weight: 600;
 }
 
-#toc-nav a.toc-h3,
-#toc-nav-mobile a.toc-h3 {
+#toc-nav .toc-h3 > a,
+#toc-nav-mobile .toc-h3 > a {
   padding-left: 1.2rem;
   font-size: 0.75rem;
   color: #6c757d;

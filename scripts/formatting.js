@@ -38,7 +38,7 @@ $(function () {
         });
     }
 
-    // Table of contents: auto-generated from h2/h3 headings
+    // Table of contents: scroll-spy for statically generated TOC
     var $tocNav = $("#toc-nav");
     var $tocNavMobile = $("#toc-nav-mobile");
     var $tocSidebar = $("#toc-sidebar");
@@ -50,20 +50,6 @@ $(function () {
         var SCROLL_OFFSET = 90;
 
         if ($headings.length >= 3) {
-            $headings.each(function () {
-                var $h = $(this);
-                var id = $h.attr("id");
-                // Kramdown auto-generates IDs for all headings; skip any that lack one
-                if (!id) return;
-                var isH3 = this.tagName.toUpperCase() === "H3";
-                var $link = $("<a>")
-                    .attr("href", "#" + id)
-                    .addClass(isH3 ? "toc-h3" : "")
-                    .text($h.text());
-                $tocNav.append($link);
-                $tocNavMobile.append($link.clone());
-            });
-
             $tocSidebar.show();
             $tocMobile.removeClass("d-none");
 
