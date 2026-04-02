@@ -10,6 +10,7 @@ group :jekyll_plugins do
   gem 'jekyll-redirect-from'
   gem 'jekyll-minifier'
   gem 'jekyll_picture_tag', '~> 2.1'
+  gem 'jekyll-toc'
 end
 
 gem 'html-proofer', '~> 5.0'

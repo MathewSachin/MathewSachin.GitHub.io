@@ -24,8 +24,17 @@ defaults:
       # Default to `post` layout for posts
       layout: "post"
 
+      # Generate table of contents for all posts (shown by JS if 3+ headings)
+      toc: true
+
       # Ads shown on all posts by default
       ads: true
+
+  - scope:
+      path: "blog/series"
+    values:
+      # Generate table of contents for series pages
+      toc: true
 
 plugins:
   - jekyll-seo-tag  # Search Engine Optimization
@@ -35,6 +44,11 @@ plugins:
   - jekyll-feed # Atom Feed
   - jekyll-redirect-from
   - jekyll-minifier # Minify HTML/CSS/JS output
+  - jekyll-toc # Static table of contents
+
+toc:
+  min_level: 2
+  max_level: 3
 
 # Pagination
 paginate: 10
