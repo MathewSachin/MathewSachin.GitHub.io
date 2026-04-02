@@ -42,7 +42,14 @@
 
   function renderResults(hits) {
     if (!hits.length) {
-      resultsEl.innerHTML = '<p class="text-muted">No posts matched your search.</p>';
+      resultsEl.innerHTML = '<p class="text-muted">No posts matched your search.</p>
+  
+    
+    
+    
+  
+
+  ';
       return;
     }
     resultsEl.innerHTML = hits.map(({ document: doc }) => {
