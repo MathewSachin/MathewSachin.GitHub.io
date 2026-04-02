@@ -30,6 +30,12 @@ defaults:
       # Ads shown on all posts by default
       ads: true
 
+  - scope:
+      path: "blog/series"
+    values:
+      # Generate table of contents for series pages
+      toc: true
+
 plugins:
   - jekyll-seo-tag  # Search Engine Optimization
   - jekyll-paginate # Pagination
