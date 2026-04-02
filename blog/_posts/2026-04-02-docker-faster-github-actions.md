@@ -21,11 +21,11 @@ This blog's build needs:
 | Tool | Why it's needed | Install cost |
 |---|---|---|
 | **Node.js 20** | Builds the Orama search index and bundles scripts | Fast — NodeSource apt package |
-| **libvips** | `jekyll_picture_tag` uses it to generate responsive images | Moderate — apt package |
-| **Ruby 3.3.7** | Runs Jekyll and all the gems | **Slow** — compiled from source |
-| **Bundler + gems** | Jekyll, plugins, html-proofer | Moderate — gem install |
+| **libvips** | `jekyll_picture_tag` uses it to generate responsive images | **Slow** — 6-7 min apt install |
+| **Ruby 3.3.7** | Runs Jekyll and all the gems | Moderate — compiled from source via ruby-build |
+| **Bundler + gems** | Jekyll, plugins, html-proofer | Fast with gem cache |
 
-The Ruby compilation is the real killer. Installing Ruby via `ruby-build` compiles it from C source. On a GitHub Actions runner, that takes over two minutes — for every single build, on every single push, on every single PR.
+The libvips install is the real killer. `libvips-dev` and its dependencies pull in a large tree of image-processing libraries — on a fresh GitHub Actions runner, `apt-get install libvips-dev` consistently takes **6-7 minutes**. That's before a single line of Jekyll has run.
 
 Multiply that across dozens of pushes while iterating on a new post or layout change, and you're burning a lot of time waiting.
 
@@ -40,10 +40,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Ruby
-        run: # ... compile from source, takes 2+ minutes
       - name: Install libvips
-        run: apt-get install libvips-dev
+        run: apt-get install libvips-dev  # takes 6-7 minutes
+      - name: Install Ruby
+        run: # ... compile from source via ruby-build
       # ... etc
 ```
 
@@ -126,7 +126,7 @@ on:
   workflow_dispatch:
 ```
 
-It only runs when `ci/Dockerfile` or the workflow file itself changes — not on every push. The Ruby compilation happens here, once, and the result is cached as a container image.
+It only runs when `ci/Dockerfile` or the workflow file itself changes — not on every push. The slow libvips installation and the Ruby compilation happen here, once, and the result is cached as a container image.
 
 The image is pushed to [GitHub Container Registry](https://ghcr.io) using the built-in `GITHUB_TOKEN` for authentication:
 
@@ -192,7 +192,7 @@ activityDiagram
   }
 </pre>
 
-The slow, infrequent work happens in the first workflow. The fast, frequent work happens in the second. The expensive Ruby compilation runs once per Dockerfile change rather than on every commit.
+The slow, infrequent work happens in the first workflow. The fast, frequent work happens in the second. The 6-7 minute libvips install runs once per Dockerfile change rather than on every commit.
 
 ## What Gets Cached vs What Doesn't
 
@@ -236,7 +236,7 @@ It's overkill when:
 - You build rarely enough that the install time doesn't add up
 - The image build complexity outweighs the time saved
 
-For this blog — Jekyll with `jekyll_picture_tag` requiring libvips and a specific Ruby version — the custom image is squarely in the "worth it" category. The Ruby compilation alone justifies it.
+For this blog — Jekyll with `jekyll_picture_tag` requiring libvips — the 6-7 minute install cost alone justifies the custom image.
 
 ## Summary
 
