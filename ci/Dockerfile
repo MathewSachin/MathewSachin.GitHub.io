@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl git build-essential pkg-config \
     libvips-dev \
+    libvips-tools \
     libffi-dev libgmp-dev libyaml-dev zlib1g-dev libssl-dev \
     libreadline-dev autoconf bison \
     && rm -rf /var/lib/apt/lists/*

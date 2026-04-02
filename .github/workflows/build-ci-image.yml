@@ -2,7 +2,7 @@ name: Build CI image
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, copilot/fix-bundle-install-path-error ]
     paths:
       - "ci/Dockerfile"
       - ".github/workflows/build-ci-image.yml"
