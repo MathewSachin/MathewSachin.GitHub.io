@@ -14,6 +14,10 @@ google-analytics: "UA-70778035-4"
 
 adsense: "ca-pub-4251360406988977"
 
+# Insert an in-content ad block after every N content elements
+# (counts: paragraphs, headings h2-h6, tables, figures, picture elements)
+ads_every_n_paragraphs: 5
+
 exclude: ["Gemfile", "Gemfile.lock", "README.md", "node_modules", "package.json", "package-lock.json", "vendor"]
 
 defaults:

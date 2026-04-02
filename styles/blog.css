@@ -832,3 +832,9 @@ div.highlight pre {
   border-color: #17a2b8;
 }
 
+
+/* In-content advertisement block */
+.in-content-ad .card {
+  box-shadow: none;
+  border-color: rgba(0, 0, 0, 0.125);
+}

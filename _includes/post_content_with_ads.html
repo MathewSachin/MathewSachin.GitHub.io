@@ -1,0 +1,39 @@
+{% comment %}
+  Renders post content with in-content ad blocks injected after every
+  `site.ads_every_n_paragraphs` content elements (paragraphs, headings h2–h6,
+  tables, figures, and picture elements).
+
+  Usage:
+    {% include post_content_with_ads.html content=content %}
+{% endcomment %}
+
+{% assign n = site.ads_every_n_paragraphs | default: 5 %}
+
+{% comment %}
+  Insert a unique split marker after each counted closing tag.
+  We use a string that cannot appear in normal post HTML.
+{% endcomment %}
+{% assign marked = include.content
+  | replace: '</p>',       '</p>SPLITHERE'
+  | replace: '</h2>',      '</h2>SPLITHERE'
+  | replace: '</h3>',      '</h3>SPLITHERE'
+  | replace: '</h4>',      '</h4>SPLITHERE'
+  | replace: '</h5>',      '</h5>SPLITHERE'
+  | replace: '</h6>',      '</h6>SPLITHERE'
+  | replace: '</picture>', '</picture>SPLITHERE'
+  | replace: '</figure>',  '</figure>SPLITHERE'
+  | replace: '</table>',   '</table>SPLITHERE' %}
+
+{% assign parts = marked | split: 'SPLITHERE' %}
+{% assign count = 0 %}
+
+{% for part in parts %}
+  {{ part }}
+  {% unless forloop.last %}
+    {% assign count = count | plus: 1 %}
+    {% assign mod = count | modulo: n %}
+    {% if mod == 0 %}
+      {% include in-content-ad.html %}
+    {% endif %}
+  {% endunless %}
+{% endfor %}

@@ -44,7 +44,11 @@ layout: default
             <div id="post" class="card">
                 <div class="card-body">
                     <div class="page-content">
-                    {{ content }}
+                    {% if page.in_content_ads %}
+                      {% include post_content_with_ads.html content=content %}
+                    {% else %}
+                      {{ content }}
+                    {% endif %}
                     </div>
 
                     <br><hr><br>
