@@ -52,7 +52,6 @@ Every blog post is processed through a Liquid template (`_includes/post_content_
 
 - Paragraphs (`</p>`)
 - Headings h2–h6 (`</h2>` through `</h6>`)
-- Code blocks (`</pre>`)
 - Tables (`</table>`)
 - Figures and images (`</figure>`, `</picture>`)
 
@@ -161,7 +160,8 @@ All posts default to `ads: true` via `_config.yml`, so you only need the overrid
 To replicate this on your own Jekyll site:
 
 1. **Add to `_config.yml`:**
-   ```yaml
+{% raw %}
+   
    adsense: "ca-pub-XXXXXXXXXXXXXXXXX"
    ad_density: 7
    defaults:
@@ -170,7 +170,7 @@ To replicate this on your own Jekyll site:
          type: "posts"
        values:
          ads: true
-   ```
+   
 
 2. **Create `_includes/ad-unit.html`** with your AdSense responsive unit (one unit ID can serve multiple placements).
 
