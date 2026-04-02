@@ -69,12 +69,12 @@ The injection logic in Liquid looks like this (simplified):
 ```liquid
 {% assign n = site.ad_density | default: 5 %}
 {% assign marked = include.content
-  | replace: '</p>', '</p>SPLITHERE'
-  | replace: '</h2>', '</h2>SPLITHERE'
-  | replace: '</table>', '</table>SPLITHERE' %}
+  | replace: '</p>', '</p>MARKER'
+  | replace: '</h2>', '</h2>MARKER'
+  | replace: '</table>', '</table>MARKER' %}
   {%- comment -%}(other element types too){%- endcomment -%}
 
-{% assign parts = marked | split: 'SPLITHERE' %}
+{% assign parts = marked | split: 'MARKER' %}
 {% assign count = 0 %}
 {% for part in parts %}
   {{ part }}
@@ -88,7 +88,7 @@ The injection logic in Liquid looks like this (simplified):
 ```
 {% endraw %}
 
-The marker string `SPLITHERE` is chosen to be a value that can never appear in real post HTML. The result is that the post is split into chunks at element boundaries, with ad blocks stitched in between every `ad_density` chunks. Code blocks are intentionally excluded from the split markers — Jekyll wraps `<pre>` tags in outer `<div>` elements, so splitting at `</pre>` would inject an ad inside the wrapper divs rather than between top-level content blocks.
+The marker string `MARKER` is chosen to be a value that can never appear in real post HTML. The result is that the post is split into chunks at element boundaries, with ad blocks stitched in between every `ad_density` chunks. Code blocks are intentionally excluded from the split markers — Jekyll wraps `<pre>` tags in outer `<div>` elements, so splitting at `</pre>` would inject an ad inside the wrapper divs rather than between top-level content blocks.
 
 ### What the Ad Unit Looks Like
 
