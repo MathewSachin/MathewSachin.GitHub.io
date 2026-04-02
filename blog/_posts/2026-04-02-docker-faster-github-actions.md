@@ -179,10 +179,10 @@ activityDiagram
     :Install Node.js 20 via NodeSource;
     :ruby-build compiles Ruby 3.3.7 from source;
     :gem install bundler;
-    :Push image to GHCR with :latest and :df-hash tags;
+    :Push image to GHCR with latest and df-hash tags;
   }
   partition "build-site.yml - runs on every push" {
-    :Pull ghcr.io/mathewsachin/mathewsachin-github-io-ci:latest;
+    :Pull CI image from GHCR;
     :npm ci;
     :npm run build - Orama index + JS bundle;
     :bundle install - Jekyll + plugins;
