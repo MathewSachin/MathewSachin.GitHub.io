@@ -70,7 +70,7 @@ jobs:
         env:
           JEKYLL_ENV: production
         run: |
-          bundle exec ruby -e "require 'jekyll'; require 'vips'; puts 'vips OK after jekyll: ' + Vips::VERSION" 2>&1 || echo "vips FAILED after requiring jekyll"
+          bundle exec ruby -e "require 'jekyll'; Bundler.require(:jekyll_plugins) rescue puts 'Error: '+\$!.to_s; puts 'Vips defined: '+(defined?(Vips)||'NO').inspect" 2>&1
           bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
