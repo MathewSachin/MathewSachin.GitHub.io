@@ -52,7 +52,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gems-
 
       - name: Install Ruby gems
-        run: bundle install --path vendor/bundle
+        run: bundle config set path 'vendor/bundle' && bundle install
 
       - name: Build Jekyll site
         run: JEKYLL_ENV=production bundle exec jekyll build --destination ./_site
