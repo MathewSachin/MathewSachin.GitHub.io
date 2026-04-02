@@ -161,7 +161,7 @@ To replicate this on your own Jekyll site:
 
 1. **Add to `_config.yml`:**
 {% raw %}
-   
+   ```
    adsense: "ca-pub-XXXXXXXXXXXXXXXXX"
    ad_density: 7
    defaults:
@@ -170,6 +170,8 @@ To replicate this on your own Jekyll site:
          type: "posts"
        values:
          ads: true
+   ```
+{% endraw %}
    
 
 2. **Create `_includes/ad-unit.html`** with your AdSense responsive unit (one unit ID can serve multiple placements).
