@@ -69,8 +69,9 @@ jobs:
       - name: Build Jekyll site
         env:
           JEKYLL_ENV: production
-          LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu
-        run: bundle exec jekyll build --destination ./_site
+        run: |
+          bundle exec ruby -e "require 'vips'; puts 'vips OK: ' + Vips::VERSION; puts Vips.at_least_libvips?(8,6).inspect" 2>&1 || echo "vips FAILED in this env"
+          bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
         env:
