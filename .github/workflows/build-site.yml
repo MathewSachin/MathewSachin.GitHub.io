@@ -70,7 +70,7 @@ jobs:
         env:
           JEKYLL_ENV: production
         run: |
-          bundle exec ruby -e "require 'jekyll'; Bundler.require(:jekyll_plugins) rescue puts 'Error: '+\$!.to_s; puts 'Vips defined: '+(defined?(Vips)||'NO').inspect" 2>&1
+          bundle exec ruby -e "require 'jekyll'; Bundler.require(:jekyll_plugins) rescue nil; puts 'Vips defined: '+(defined?(Vips)||'NO').inspect; (puts 'VERSION: '+Vips::VERSION_ARRAY.inspect; puts 'at_least_libvips?: '+Vips.at_least_libvips?(8,6).inspect) rescue puts 'Error checking Vips: '+\$!.to_s" 2>&1
           bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
