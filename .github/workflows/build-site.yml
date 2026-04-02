@@ -55,7 +55,10 @@ jobs:
         run: bundle config set path 'vendor/bundle' && bundle install
 
       - name: Build Jekyll site
-        run: JEKYLL_ENV=production bundle exec jekyll build --destination ./_site
+        env:
+          JEKYLL_ENV: production
+          LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu
+        run: bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
         env:
