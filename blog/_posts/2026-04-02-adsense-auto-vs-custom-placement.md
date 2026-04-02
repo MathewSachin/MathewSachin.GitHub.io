@@ -65,6 +65,7 @@ ad_density: 7
 
 The injection logic in Liquid looks like this (simplified):
 
+{% raw %}
 ```liquid
 {% assign n = site.ad_density | default: 5 %}
 {% assign marked = include.content
@@ -85,6 +86,7 @@ The injection logic in Liquid looks like this (simplified):
   {% endunless %}
 {% endfor %}
 ```
+{% endraw %}
 
 The marker string `SPLITHERE` is chosen to be a value that can never appear in real post HTML. The result is that the post is split into chunks at element boundaries, with ad blocks stitched in between every `ad_density` chunks.
 
@@ -152,7 +154,7 @@ ads: false
 ---
 ```
 
-All posts default to `ads: true` via `_config.yml`, so you only need the override when you want to suppress ads. The Liquid templates check `{% if page.ads %}` before injecting anything — no ads load at all if the key is false, including the AdSense script itself.
+All posts default to `ads: true` via `_config.yml`, so you only need the override when you want to suppress ads. The Liquid templates check {% raw %}`{% if page.ads %}`{% endraw %} before injecting anything — no ads load at all if the key is false, including the AdSense script itself.
 
 ## The Implementation, All In One Place
 
@@ -176,10 +178,12 @@ To replicate this on your own Jekyll site:
 
 4. **Create `_includes/post_content_with_ads.html`** with the splitting logic shown above.
 
-5. **In your post layout**, replace `{{ content }}` with:
+5. **In your post layout**, replace {% raw %}`{{ content }}`{% endraw %} with:
+{% raw %}
    ```liquid
    {% include post_content_with_ads.html content=content %}
    ```
+{% endraw %}
 
 6. **Add the CSS** to collapse unfilled slots and handle mobile width.
 
