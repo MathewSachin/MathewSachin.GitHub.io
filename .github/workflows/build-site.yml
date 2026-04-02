@@ -70,7 +70,7 @@ jobs:
         env:
           JEKYLL_ENV: production
         run: |
-          bundle exec ruby -e "require 'vips'; puts 'vips OK: ' + Vips::VERSION; puts Vips.at_least_libvips?(8,6).inspect" 2>&1 || echo "vips FAILED in this env"
+          bundle exec ruby -e "require 'jekyll'; require 'vips'; puts 'vips OK after jekyll: ' + Vips::VERSION" 2>&1 || echo "vips FAILED after requiring jekyll"
           bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
