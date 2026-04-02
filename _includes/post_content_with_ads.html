@@ -1,7 +1,7 @@
 {% comment %}
   Renders content with in-content ad blocks injected after every
   `site.ad_density` content elements (paragraphs, headings h2–h6,
-  code blocks, tables, figures, and picture elements).
+  tables, figures, and picture elements).
 
   Usage:
     {% include post_content_with_ads.html content=content %}
@@ -12,7 +12,9 @@
 {% comment %}
   Insert a unique split marker after each counted closing tag.
   We use a string that cannot appear in normal post HTML.
-  </pre> signals the end of a code block (div.highlight > pre).
+  Note: </pre> is intentionally excluded — Jekyll wraps <pre> in outer
+  <div class="highlight"> elements, so splitting at </pre> would inject
+  an ad inside those wrapper divs rather than between top-level blocks.
 {% endcomment %}
 {% assign marked = include.content
   | replace: '</p>',       '</p>SPLITHERE'
@@ -21,7 +23,6 @@
   | replace: '</h4>',      '</h4>SPLITHERE'
   | replace: '</h5>',      '</h5>SPLITHERE'
   | replace: '</h6>',      '</h6>SPLITHERE'
-  | replace: '</pre>',     '</pre>SPLITHERE'
   | replace: '</picture>', '</picture>SPLITHERE'
   | replace: '</figure>',  '</figure>SPLITHERE'
   | replace: '</table>',   '</table>SPLITHERE' %}
