@@ -834,7 +834,22 @@ div.highlight pre {
 
 
 /* In-content advertisement block */
+.in-content-ad {
+  overflow: hidden;
+  max-width: 100%;
+}
+
 .in-content-ad .card {
   box-shadow: none;
   border-color: rgba(0, 0, 0, 0.125);
+  overflow: hidden;
+}
+
+.in-content-ad ins.adsbygoogle {
+  max-width: 100%;
+}
+
+/* Hide the whole ad block when AdSense reports the slot is unfilled */
+.in-content-ad:has(ins[data-ad-status="unfilled"]) {
+  display: none;
 }
