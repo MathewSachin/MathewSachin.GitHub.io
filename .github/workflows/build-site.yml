@@ -62,8 +62,7 @@ jobs:
       - name: Run html-proofer
         env:
           BASEURL: ${{ inputs.baseurl }}
-          LANG: en_US.UTF-8
-          LC_ALL: en_US.UTF-8
+          RUBYOPT: "-E UTF-8:UTF-8"
         shell: bash
         run: |
           ARGS=(--ignore-urls "/^https?:/,/^#/" --ignore-empty-mailto)
