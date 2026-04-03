@@ -2,9 +2,9 @@ blogging-with-jekyll:
   name: "Blogging with Jekyll"
   url: "/blog/series/blogging-with-jekyll/"
   description: >
-    A 6-part series on building and running a Jekyll blog hosted on GitHub Pages —
+    A 7-part series on building and running a Jekyll blog hosted on GitHub Pages —
     from automating posts with AI to adding offline search, comments, live PR previews,
-    ads, and faster CI builds. Each part is a standalone deep-dive you can apply to your own site.
+    ads, faster CI builds, and hitting Good Core Web Vitals. Each part is a standalone deep-dive you can apply to your own site.
   levels:
     - title: "Level 1 — Writing &amp; Automation"
       icon: "fas fa-pencil-alt"
@@ -42,6 +42,16 @@ blogging-with-jekyll:
           blurb: "Control exactly where ads appear instead of letting Google inject them anywhere. Teaches: Google AdSense custom placement, Jekyll includes for ads, reader-friendly ad strategy."
         - id: "/blog/2026/04/02/docker-faster-github-actions"
           blurb: "Pre-bake your entire build toolchain into a Docker image and cut CI build times dramatically. Teaches: custom Docker base images, GitHub Container Registry, GitHub Actions optimisation."
+
+    - title: "Level 4 — Performance"
+      icon: "fas fa-tachometer-alt"
+      intro: >
+        A fast site is a better site — for readers, for search ranking, and for Core Web Vitals.
+        This post covers every change that moved this blog from "Needs improvement" to Good on LCP,
+        CLS, and INP: responsive images, build-time diagrams, minification, and removing runtime JavaScript.
+      posts:
+        - id: "/blog/2026/04/03/core-web-vitals-jekyll"
+          blurb: "Go from 'Needs improvement' to Good on all three Core Web Vitals. Teaches: jekyll-picture-tag, Rouge vs highlight.js, Pintora at build time, clipboard.js, build-time TOC, HTML minification, and custom AdSense placement."
 
 browser-hacks:
   name: "Browser Hacks"
