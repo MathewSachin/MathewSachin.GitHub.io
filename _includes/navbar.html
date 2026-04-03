@@ -39,7 +39,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="{{ '/' | relative_url }}">Mathew Sachin</a>
-        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent">
             <span class="icon-bar bar-t"></span>
             <span class="icon-bar bar-m"></span>
             <span class="icon-bar bar-b"></span>
@@ -61,3 +61,16 @@
         </div>
     </div>
 </nav>
+<script>
+(function () {
+    var toggler = document.querySelector(".navbar-toggler");
+    var content = document.getElementById("navbarContent");
+    if (toggler && content) {
+        toggler.addEventListener("click", function () {
+            content.classList.toggle("show");
+            toggler.classList.toggle("collapsed");
+            toggler.setAttribute("aria-expanded", content.classList.contains("show").toString());
+        });
+    }
+}());
+</script>
