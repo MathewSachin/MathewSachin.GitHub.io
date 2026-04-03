@@ -9,5 +9,5 @@
   {%- else -%}
     {%- assign _link_text = _post.title -%}
   {%- endif -%}
-  <a href="{{ _post.url | relative_url }}" class="post-link"{% if _link_text != _post.title %} aria-label="{{ _post.title | escape }}"{% endif %}>{% if _post.icon %}<i class="{{ _post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _link_text }}</a>
+  <a href="{{ _post.url | relative_url }}" class="post-link"{% if _link_text != _post.title %} aria-label="{{ _post.title | escape }}"{% endif %}>{% if _post.icon %}<i class="{{ _post.icon }} post-icon mr-1" aria-hidden="true"></i>{% endif %}{{ _link_text }}</a>
 {%- endif -%}

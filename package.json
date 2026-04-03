@@ -5,7 +5,8 @@
   "scripts": {
     "build-search-index": "node scripts/build-search-index.mjs",
     "bundle-orama": "esbuild --bundle --format=esm --minify --outfile=scripts/orama.js node_modules/@orama/orama/dist/browser/index.js",
-    "build": "npm run bundle-orama && npm run build-search-index"
+    "build-tailwind": "tailwindcss -i styles/tailwind.input.css -o styles/tailwind.css --minify --config tailwind.config.cjs",
+    "build": "npm run bundle-orama && npm run build-search-index && npm run build-tailwind"
   },
   "dependencies": {
     "@orama/orama": "^3.1.18",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@pintora/standalone": "^0.8.1",
     "esbuild": "^0.27.4",
-    "jsdom": "^26.1.0"
+    "jsdom": "^26.1.0",
+    "tailwindcss": "^3.4.19"
   }
 }

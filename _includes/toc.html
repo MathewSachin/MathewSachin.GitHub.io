@@ -1,16 +1,15 @@
-<!-- Mobile TOC: collapsible, hidden on md+ screens -->
-<div id="toc-mobile" class="d-none d-md-none mb-3">
+<!-- Mobile TOC: collapsible, hidden on md+ screens; shown via formatting.js when ≥3 headings -->
+<div id="toc-mobile" class="hidden mb-4">
     <div class="card toc-card">
         <button type="button"
-                class="card-header toc-header toc-mobile-toggle w-100 text-start"
-                data-bs-toggle="collapse"
-                data-bs-target="#toc-nav-mobile-collapse"
+                id="toc-mobile-btn"
+                class="card-header toc-header toc-mobile-toggle w-full text-left"
                 aria-expanded="false"
                 aria-controls="toc-nav-mobile-collapse">
-            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
-            <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+            <small><i class="fas fa-list mr-1" aria-hidden="true"></i>Contents</small>
+            <i class="fas fa-chevron-down toc-chevron ml-auto" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="toc-nav-mobile-collapse">
+        <div id="toc-nav-mobile-collapse" class="hidden">
             <div class="card-body p-0">
                 <nav id="toc-nav-mobile" aria-label="Table of contents">{{ include.toc_html }}</nav>
             </div>

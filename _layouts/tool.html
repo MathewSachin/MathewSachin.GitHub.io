@@ -2,8 +2,10 @@
 layout: default
 ---
 
+<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
+
 <div class="bg-dark">
-    <div class="py-4 bg-info text-white google-anno-skip">
+    <div class="py-6 bg-info text-white google-anno-skip">
         <div class="container">
             <h2>{{ page.title }}</h2>
         </div>
@@ -12,12 +14,12 @@ layout: default
     <br>
 
     <div class="container">
-        <div class="row">
-            <div class="col-md-10">
+        <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-10/12 px-2">
                 {% include post_content_with_ads.html content=content %}
             </div>
-            <div class="col-md-2">
-                <div class="sticky-top" style="top: 10px">
+            <div class="w-full md:w-2/12 px-2">
+                <div class="sticky top-2.5">
                     {% include ad-unit.html %}
                 </div>
             </div>

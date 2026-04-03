@@ -1,5 +1,5 @@
 body {
-  background-color: var(--bs-dark);
+  background-color: #212529;
 }
 
 .avatar {
@@ -7,15 +7,6 @@ body {
   width: 200px;
   height: 200px;
   object-fit: cover;
-}
-
-/* Preserve the Bootstrap 4 teal info color for design continuity */
-.bg-info {
-  background-color: #17a2b8 !important;
-}
-
-.text-info {
-  color: #17a2b8 !important;
 }
 
 .pintora-wrapper {

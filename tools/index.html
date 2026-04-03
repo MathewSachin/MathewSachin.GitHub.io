@@ -7,8 +7,8 @@ ads: false
 <link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 
 <div class="home-cards-section">
-  <div class="row">
-    <div class="col-md mb-3">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div>
       <a href="{{ '/tools/timestamp' | relative_url }}" class="home-card-link" aria-label="Timestamp Converter">
         <div class="card h-100">
           <div class="card-body">
@@ -16,12 +16,12 @@ ads: false
             <p class="card-text">Convert between Unix epoch and human-readable timestamps.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/base64' | relative_url }}" class="home-card-link" aria-label="Base64 Encoder / Decoder">
         <div class="card h-100">
           <div class="card-body">
@@ -29,12 +29,12 @@ ads: false
             <p class="card-text">Encode plain text to Base64 or decode Base64 back to text.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/json' | relative_url }}" class="home-card-link" aria-label="JSON Formatter &amp; Validator">
         <div class="card h-100">
           <div class="card-body">
@@ -42,12 +42,12 @@ ads: false
             <p class="card-text">Format, minify, and validate JSON documents.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/cron' | relative_url }}" class="home-card-link" aria-label="CRON Expression Generator">
         <div class="card h-100">
           <div class="card-body">
@@ -55,12 +55,12 @@ ads: false
             <p class="card-text">Build CRON expressions from frequency dropdowns — minute, hour, day, week, or month.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/hash' | relative_url }}" class="home-card-link" aria-label="Hash Generator">
         <div class="card h-100">
           <div class="card-body">
@@ -68,12 +68,12 @@ ads: false
             <p class="card-text">Generate MD5, SHA-1, and SHA-256 hashes from any input text.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/scratchpad' | relative_url }}" class="home-card-link" aria-label="Smart Scratchpad">
         <div class="card h-100">
           <div class="card-body">
@@ -81,12 +81,12 @@ ads: false
             <p class="card-text">Distraction-free notepad that auto-saves every keystroke. Instantly strips formatting from pasted text.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/imgcompress' | relative_url }}" class="home-card-link" aria-label="Image Compressor">
         <div class="card h-100">
           <div class="card-body">
@@ -94,12 +94,12 @@ ads: false
             <p class="card-text">Compress and convert images to JPEG, PNG, or WebP entirely in your browser — powered by ImageMagick WebAssembly.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/llm' | relative_url }}" class="home-card-link" aria-label="Local LLM Chat">
         <div class="card h-100">
           <div class="card-body">
@@ -107,12 +107,12 @@ ads: false
             <p class="card-text">Chat with a local language model that runs entirely in your browser — powered by Transformers.js WebAssembly. No data sent to any server.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/tokenizer' | relative_url }}" class="home-card-link" aria-label="AI Tokenizer &amp; Cost Calculator">
         <div class="card h-100">
           <div class="card-body">
@@ -120,12 +120,12 @@ ads: false
             <p class="card-text">Visualize how AI models tokenize your text with colour-coded token boundaries, and calculate the real-time API cost across GPT-4o, Claude, and Gemini.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-md mb-3">
+    <div>
       <a href="{{ '/tools/bookmarklet' | relative_url }}" class="home-card-link" aria-label="Bookmarklet Compiler">
         <div class="card h-100">
           <div class="card-body">
@@ -133,7 +133,7 @@ ads: false
             <p class="card-text">Minify and compile raw JavaScript into a drag-and-drop bookmarklet — strips comments, compresses whitespace, and URI-encodes for the browser.</p>
           </div>
           <div class="card-footer">
-            <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+            <small><i class="fas fa-arrow-right mr-1"></i>Open tool</small>
           </div>
         </div>
       </a>

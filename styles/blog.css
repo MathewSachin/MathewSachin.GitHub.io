@@ -16,6 +16,10 @@ figure.highlight {
 }
 
 .code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0.75rem;
   background: #1c1c2e;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   min-height: 2.25rem;
@@ -95,24 +99,24 @@ figure.highlight pre {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
-/* Lightbox modal */
-#img-lightbox .modal-dialog {
+/* Lightbox (native <dialog>) */
+dialog#img-lightbox {
   max-width: 90vw;
-}
-
-#img-lightbox .modal-content {
+  width: auto;
   background: rgba(0, 0, 0, 0.9);
   border: none;
-}
-
-#img-lightbox .modal-body {
+  border-radius: 4px;
+  padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
 }
 
-#img-lightbox .modal-body img {
+dialog#img-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+#img-lightbox img {
   max-width: 100%;
   max-height: 85vh;
   object-fit: contain;
@@ -122,19 +126,26 @@ figure.highlight pre {
   cursor: default;
 }
 
-#img-lightbox .modal-body img:hover {
+#img-lightbox img:hover {
   transform: none;
   opacity: 1;
   box-shadow: none;
   border-color: transparent;
 }
 
-#img-lightbox .btn-close {
+#lightbox-close {
   filter: invert(1);
   position: absolute;
   top: 0.5rem;
   right: 0.75rem;
   z-index: 10;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: white;
+  padding: 0.25rem;
 }
 
 /* Home page project cards */

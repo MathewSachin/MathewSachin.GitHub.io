@@ -7,3 +7,4 @@ debug.log.bundle/
 node_modules/
 generated/
 styles/syntax.css
+styles/tailwind.css

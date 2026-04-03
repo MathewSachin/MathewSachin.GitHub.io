@@ -6,23 +6,23 @@ ads: true
 
 <link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 
-<div class="tag-cloud mb-4 p-3 bg-light rounded">
+<div class="tag-cloud mb-6 p-4 bg-light rounded">
   {% for tag in site.tags %}
-    <a href="#{{ tag[0] }}" class="btn btn-outline-info btn-sm m-1">{{ tag[0] }} <span class="badge bg-info ms-1">{{ tag[1].size }}</span></a>
+    <a href="#{{ tag[0] }}" class="btn btn-outline-info btn-sm m-1">{{ tag[0] }} <span class="badge bg-info ml-1">{{ tag[1].size }}</span></a>
   {% endfor %}
 </div>
 
 {% for tag in site.tags %}
-  <div class="tag-section mb-4" id="{{ tag[0] }}">
-    <h5 class="tag-section-title d-flex align-items-center gap-2 mb-2">
+  <div class="tag-section mb-6" id="{{ tag[0] }}">
+    <h5 class="tag-section-title flex items-center gap-2 mb-2">
       <span class="badge bg-info">{{ tag[0] }}</span>
       <span class="text-muted small">{{ tag[1].size }} post{% if tag[1].size != 1 %}s{% endif %}</span>
     </h5>
     {% for post in tag[1] %}
-      <a href="{{ post.url | relative_url }}" class="tag-post-link text-decoration-none text-reset">
-        <div class="tag-post-item d-flex justify-content-between align-items-center py-2">
-          <span class="tag-post-title">{% if post.icon %}<i class="{{ post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ post.title }}</span>
-          <span class="small text-muted text-nowrap ms-3">{{ post.date | date: "%b %-d, %Y" }}</span>
+      <a href="{{ post.url | relative_url }}" class="tag-post-link no-underline text-reset">
+        <div class="tag-post-item flex justify-between items-center py-2">
+          <span class="tag-post-title">{% if post.icon %}<i class="{{ post.icon }} post-icon mr-1" aria-hidden="true"></i>{% endif %}{{ post.title }}</span>
+          <span class="small text-muted text-nowrap ml-3">{{ post.date | date: "%b %-d, %Y" }}</span>
         </div>
       </a>
     {% endfor %}

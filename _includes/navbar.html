@@ -1,63 +1,67 @@
 <style>
-.icon-bar {
-	width: 25px; 
-	height: 3px;
-	background-color: #B6B6B6;
-	display: block;
-	transition: all 0.2s;
-    margin-top: 5px;
+.nav-bar {
+    width: 1.5rem;
+    height: 0.1875rem;
+    background-color: #B6B6B6;
+    display: block;
+    transition: all 0.2s;
+    margin-top: 0;
 }
+.nav-bar + .nav-bar { margin-top: 5px; }
 
-.navbar-toggler .bar-t {
-  margin-top: 0;
-  transform: rotate(45deg);
-  transform-origin: left center;
+#nav-toggle[aria-expanded="true"] .bar-t {
+    transform: rotate(45deg);
+    transform-origin: left center;
 }
- 
-.navbar-toggler .bar-m {
-  opacity: 0;
-}
-
-.navbar-toggler .bar-b {
-  transform: rotate(-45deg);
-  transform-origin: left center;
-}
- 
-.navbar-toggler.collapsed .bar-t {
-  transform: rotate(0);
-}
- 
-.navbar-toggler.collapsed .bar-m {
-  opacity: 1;
-}
- 
-.navbar-toggler.collapsed .bar-b {
-  transform: rotate(0);
+#nav-toggle[aria-expanded="true"] .bar-m { opacity: 0; }
+#nav-toggle[aria-expanded="true"] .bar-b {
+    transform: rotate(-45deg);
+    transform-origin: left center;
 }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{{ '/' | relative_url }}">Mathew Sachin</a>
-        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="icon-bar bar-t"></span>
-            <span class="icon-bar bar-m"></span>
-            <span class="icon-bar bar-b"></span>
+<nav class="bg-[#212529] sticky top-0 z-50">
+    <div class="container flex items-center justify-between py-2">
+        <a class="text-white font-semibold no-underline text-lg" href="{{ '/' | relative_url }}">Mathew Sachin</a>
+        <button id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"
+                class="md:hidden p-2 bg-transparent border-0 cursor-pointer">
+            <span class="nav-bar bar-t"></span>
+            <span class="nav-bar bar-m"></span>
+            <span class="nav-bar bar-b"></span>
         </button>
-    
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ '/blog' | relative_url }}">Blog</a>
-		</li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ '/tools' | relative_url }}">Tools</a>
+
+        <div id="nav-menu" class="hidden md:flex md:items-center absolute md:static top-full left-0 right-0 bg-[#212529] px-4 md:px-0 pb-4 md:pb-0 z-40">
+            <ul class="flex flex-col md:flex-row mr-auto list-none p-0 m-0">
+                <li>
+                    <a class="block px-3 py-2 text-gray-300 hover:text-white no-underline" href="{{ '/blog' | relative_url }}">Blog</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ '/privacy_policy' | relative_url }}">Privacy Policy</a>
+                <li>
+                    <a class="block px-3 py-2 text-gray-300 hover:text-white no-underline" href="{{ '/tools' | relative_url }}">Tools</a>
+                </li>
+                <li>
+                    <a class="block px-3 py-2 text-gray-300 hover:text-white no-underline" href="{{ '/privacy_policy' | relative_url }}">Privacy Policy</a>
                 </li>
             </ul>
-            <a class="btn btn-outline-info btn-sm ms-2" href="{{ '/search' | relative_url }}"><i class="fas fa-search me-1"></i>Search</a>
+            <a class="btn btn-outline-info btn-sm mt-2 md:mt-0 ml-0 md:ml-2" href="{{ '/search' | relative_url }}"><i class="fas fa-search mr-1"></i>Search</a>
         </div>
     </div>
 </nav>
+
+<script>
+(function () {
+    var btn = document.getElementById('nav-toggle');
+    var menu = document.getElementById('nav-menu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function () {
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', String(!expanded));
+        menu.classList.toggle('hidden');
+    });
+    document.addEventListener('click', function (e) {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            btn.setAttribute('aria-expanded', 'false');
+            menu.classList.add('hidden');
+        }
+    });
+})();
+</script>
