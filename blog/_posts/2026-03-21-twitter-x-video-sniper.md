@@ -1,6 +1,7 @@
 ---
 title: "Twitter/X Video Sniper: Download Any Video Directly from Your Browser"
 icon: "fab fa-twitter"
+accent_color: "#1D9BF0"
 tags: [twitter, hack, javascript, browser, devtools]
 series: browser-hacks
 related:

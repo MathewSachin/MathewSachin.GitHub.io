@@ -3,6 +3,11 @@
   margin-top: -7.5rem;
 }
 
+/* Post hero / title section — uses --post-accent CSS variable (set per-post via frontmatter) */
+.post-hero {
+  background-color: var(--post-accent, #17a2b8);
+}
+
 /* Copy code button: positioned inside the code block, top-right, visible on hover */
 div.highlight,
 figure.highlight {
@@ -234,7 +239,7 @@ figure.highlight pre {
 
 /* Bottom variant: inside the post card body (white background) */
 .related-posts-section.bottom-variant .related-posts-heading {
-  color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -242,14 +247,14 @@ figure.highlight pre {
 }
 
 .related-posts-section.bottom-variant .card {
-  background: #17a2b8;
+  background: var(--card-accent, var(--post-accent, #17a2b8));
   border: none;
   color: white;
 }
 
 .related-posts-section.bottom-variant .card:hover {
-  background: #138496;
-  box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+  filter: brightness(0.85);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .related-posts-section.bottom-variant .card-footer {
@@ -270,7 +275,7 @@ figure.highlight pre {
 
 /* Post icon (Font Awesome icon set via frontmatter) */
 .post-icon {
-  color: #17a2b8;
+  color: var(--item-accent, var(--post-accent, #17a2b8));
   font-size: 0.85em;
   opacity: 0.85;
   flex-shrink: 0;
@@ -284,13 +289,18 @@ figure.highlight pre {
 
 /* Inline post links with icon (post_link.html include) */
 .post-link {
-  color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
   text-decoration: none;
 }
 
+/* Icon inside a post-link should always match the link colour */
+.post-link .post-icon {
+  color: inherit;
+}
+
 .post-link:hover {
-  color: #138496;
   text-decoration: underline;
+  filter: brightness(0.85);
 }
 
 .post-link:visited {
@@ -333,7 +343,7 @@ figure.highlight pre {
 }
 
 .blog-post-title {
-  color: #17a2b8;
+  color: var(--item-accent, #17a2b8);
   line-height: 1.4;
 }
 
@@ -363,7 +373,7 @@ figure.highlight pre {
 }
 
 .archive-post-title {
-  color: #17a2b8;
+  color: var(--item-accent, #17a2b8);
 }
 
 .archive-post-link:hover .archive-post-title {
@@ -423,7 +433,7 @@ figure.highlight pre {
 }
 
 .tag-post-title {
-  color: #17a2b8;
+  color: var(--item-accent, #17a2b8);
 }
 
 .tag-post-link:hover .tag-post-title {
@@ -442,7 +452,7 @@ figure.highlight pre {
   left: 0;
   height: 4px;
   width: 0%;
-  background: linear-gradient(90deg, #17a2b8, #0d6efd);
+  background: linear-gradient(90deg, var(--post-accent, #17a2b8), #0d6efd);
   z-index: 9999;
   transition: width 0.1s linear;
   pointer-events: none;
@@ -486,7 +496,7 @@ figure.highlight pre {
 .toc-header {
   background: rgba(23, 162, 184, 0.08);
   border-bottom: 1px solid rgba(23, 162, 184, 0.25);
-  color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -521,15 +531,15 @@ figure.highlight pre {
 #toc-nav a:focus-visible,
 #toc-nav-mobile a:hover,
 #toc-nav-mobile a:focus-visible {
-  color: #17a2b8;
-  border-left-color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
+  border-left-color: var(--post-accent, #17a2b8);
   background: rgba(23, 162, 184, 0.06);
 }
 
 #toc-nav a.toc-active,
 #toc-nav-mobile a.toc-active {
-  color: #17a2b8;
-  border-left-color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
+  border-left-color: var(--post-accent, #17a2b8);
   font-weight: 600;
 }
 
@@ -815,6 +825,17 @@ figure.highlight pre {
 
 .series-post-title a:hover {
   color: #17a2b8;
+}
+
+/* When the <a> itself is the series-post-title (direct link pattern) */
+a.series-post-title {
+  text-decoration: none;
+  color: var(--item-accent, #17a2b8);
+  transition: color 0.15s ease;
+}
+
+a.series-post-title:hover {
+  filter: brightness(0.85);
 }
 
 .series-level-heading {
