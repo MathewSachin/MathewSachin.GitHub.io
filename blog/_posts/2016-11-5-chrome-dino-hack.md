@@ -53,7 +53,7 @@ function dinoApply(fn) {
   if (!frame) return;
   var w = frame.contentWindow;
   if (!w || !w.Runner) return;
-  var runner = typeof w.Runner.getInstance === 'function' ? w.Runner.getInstance() : w.Runner.instance_;
+  var runner = w.Runner.instance_ || w.Runner.getInstance();
   if (!runner) return;
   try { fn(w, runner); } catch(e) { console.error('Dino hack error:', e); }
 }
@@ -146,7 +146,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="speed-pre" class="dino-hack-pre">{% highlight js %}(Runner.getInstance ? Runner.getInstance() : Runner.instance_).setSpeed(6){% endhighlight %}</div>
+<div id="speed-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).setSpeed(6){% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -159,7 +159,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
     slider.value = val;
     input.value = val;
     var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.getInstance ? Runner.getInstance() : Runner.instance_).setSpeed(' + val + ')'; }
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).setSpeed(' + val + ')'; }
     dinoApply(function(w, runner) { runner.setSpeed(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -179,7 +179,7 @@ Want to jump right into the action with a specific score? You can set the score 
 <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="score-pre" class="dino-hack-pre">{% highlight js %}(Runner.getInstance ? Runner.getInstance() : Runner.instance_).distanceRan = 12345 / 0.025{% endhighlight %}</div>
+<div id="score-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025{% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -192,7 +192,7 @@ Want to jump right into the action with a specific score? You can set the score 
     if (val > 99999) val = 99999;
     input.value = val;
     var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.getInstance ? Runner.getInstance() : Runner.instance_).distanceRan = ' + val + ' / 0.025'; }
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).distanceRan = ' + val + ' / 0.025'; }
     dinoApply(function(w, runner) { runner.distanceRan = val / 0.025; });
   }
   input.addEventListener('input', function() { update(this.value); });
@@ -222,7 +222,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
 <button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="jump-pre" class="dino-hack-pre">{% highlight js %}(Runner.getInstance ? Runner.getInstance() : Runner.instance_).tRex.setJumpVelocity(10){% endhighlight %}</div>
+<div id="jump-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10){% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -235,7 +235,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
     slider.value = val;
     input.value = val;
     var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.getInstance ? Runner.getInstance() : Runner.instance_).tRex.setJumpVelocity(' + val + ')'; }
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(' + val + ')'; }
     dinoApply(function(w, runner) { runner.tRex.setJumpVelocity(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -264,7 +264,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="ground-pre" class="dino-hack-pre">{% highlight js %}(Runner.getInstance ? Runner.getInstance() : Runner.instance_).tRex.groundYPos = 93{% endhighlight %}</div>
+<div id="ground-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93{% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -279,7 +279,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
     slider.value = val;
     input.value = val;
     var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.getInstance ? Runner.getInstance() : Runner.instance_).tRex.groundYPos = ' + val; }
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = ' + val; }
     dinoApply(function(w, runner) { runner.tRex.groundYPos = val; });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -301,7 +301,7 @@ Want to make your dino invisible? It’s easy to do by simply disabling its draw
 ##### Make the Dino Invisible
 
 ```js
-const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const runner = Runner.instance_ || Runner.getInstance();
 const originalDraw = runner.tRex.draw;
 runner.tRex.draw = function() {};
 ```
@@ -314,7 +314,7 @@ This code replaces the dino's draw function with an empty one, meaning the dino 
 To bring the dino back, simply restore the original draw function:
 
 ```js
-const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const runner = Runner.instance_ || Runner.getInstance();
 runner.tRex.draw = originalDraw;
 ```
 
