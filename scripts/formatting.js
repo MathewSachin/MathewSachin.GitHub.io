@@ -106,53 +106,54 @@
         // Track TOC link clicks in both desktop and mobile navs
         [tocNav, tocNavMobile].forEach(function (nav) {
             if (!nav) return;
-            nav.addEventListener("click", function (e) {
-                var a = e.target.closest("a");
-                if (a) trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
+            nav.querySelectorAll("a").forEach(function (a) {
+                a.addEventListener("click", function () {
+                    trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
+                });
             });
         });
     }
 
     // Copy code button
-    document.addEventListener("click", function (e) {
-        var btn = e.target.closest(".btn-clip");
-        if (!btn) return;
-        var selector = btn.getAttribute("data-clipboard-target");
-        var target = selector ? document.querySelector(selector) : null;
-        if (!target) return;
-        navigator.clipboard.writeText(target.textContent).catch(function () {});
-        trackEvent("code_copy");
+    document.querySelectorAll(".btn-clip").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var selector = btn.getAttribute("data-clipboard-target");
+            var target = selector ? document.querySelector(selector) : null;
+            if (!target) return;
+            navigator.clipboard.writeText(target.textContent).catch(function () {});
+            trackEvent("code_copy");
+        });
     });
 
     // Series prev/next navigation clicks
-    document.addEventListener("click", function (e) {
-        var seriesNavLink = e.target.closest(".series-nav-btn, .series-prev-link");
-        if (!seriesNavLink) return;
-        var direction = seriesNavLink.classList.contains("next-post") ? "next" : "previous";
-        var titleEl = seriesNavLink.querySelector(".nav-title");
-        trackEvent("series_nav_click", { direction: direction, post_title: titleEl ? titleEl.textContent.trim() : "" });
+    document.querySelectorAll(".series-nav-btn, .series-prev-link").forEach(function (seriesNavLink) {
+        seriesNavLink.addEventListener("click", function () {
+            var direction = seriesNavLink.classList.contains("next-post") ? "next" : "previous";
+            var titleEl = seriesNavLink.querySelector(".nav-title");
+            trackEvent("series_nav_click", { direction: direction, post_title: titleEl ? titleEl.textContent.trim() : "" });
+        });
     });
 
     // Related post clicks
-    document.addEventListener("click", function (e) {
-        var link = e.target.closest(".related-post-link");
-        if (!link) return;
-        var titleEl = link.querySelector(".card-title");
-        trackEvent("related_post_click", { post_title: titleEl ? titleEl.textContent.trim() : "" });
+    document.querySelectorAll(".related-post-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+            var titleEl = link.querySelector(".card-title");
+            trackEvent("related_post_click", { post_title: titleEl ? titleEl.textContent.trim() : "" });
+        });
     });
 
     // Post tag badge clicks
-    document.addEventListener("click", function (e) {
-        var badge = e.target.closest(".post-tag .badge");
-        if (!badge) return;
-        trackEvent("tag_click", { tag_name: badge.textContent.trim() });
+    document.querySelectorAll(".post-tag .badge").forEach(function (badge) {
+        badge.addEventListener("click", function () {
+            trackEvent("tag_click", { tag_name: badge.textContent.trim() });
+        });
     });
 
     // Social share button clicks (Twitter / email) in the post header
-    document.addEventListener("click", function (e) {
-        var twitterLink = e.target.closest('a[href*="twitter.com/intent/tweet"]');
-        if (twitterLink) { trackEvent("post_share", { method: "twitter" }); return; }
-        var emailLink = e.target.closest('a[href^="mailto:"]');
-        if (emailLink && emailLink.closest(".bg-info")) { trackEvent("post_share", { method: "email" }); }
+    document.querySelectorAll('a[href*="twitter.com/intent/tweet"]').forEach(function (link) {
+        link.addEventListener("click", function () { trackEvent("post_share", { method: "twitter" }); });
+    });
+    document.querySelectorAll('.bg-info a[href^="mailto:"]').forEach(function (link) {
+        link.addEventListener("click", function () { trackEvent("post_share", { method: "email" }); });
     });
 }());
