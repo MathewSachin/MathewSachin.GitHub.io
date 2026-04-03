@@ -16,6 +16,16 @@ const statusEl = document.getElementById('search-status');
 const inputEl  = document.getElementById('search-input');
 const resultsEl = document.getElementById('search-results');
 
+// Safe GA event tracker — no-ops gracefully if analytics is blocked
+function trackEvent(name, params) {
+  try {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', name, params || {});
+    }
+  } catch (_) {}
+}
+}
+
 let db = null;
 
 async function initIndex() {
@@ -49,7 +59,7 @@ function renderResults(hits) {
     // Only allow safe relative paths (prevent javascript: URL injection)
     const safeUrl = /^\/[^"<>]*$/.test(doc.url) ? BASE_PATH + doc.url : '#';
     return `
-    <a href="${safeUrl}" class="tag-post-link text-decoration-none text-reset">
+    <a href="${safeUrl}" class="tag-post-link text-decoration-none text-reset search-result-link" data-result-title="${escapeHtml(doc.title)}">
       <div class="blog-post-item py-3 mb-1">
         <div class="d-flex justify-content-between align-items-start gap-2">
           <span class="blog-post-title fw-semibold">${escapeHtml(doc.title)}</span>
@@ -86,7 +96,13 @@ inputEl.addEventListener('input', () => {
       limit: 20,
     });
     renderResults(results.hits);
+    trackEvent('search', { search_term: term, result_count: results.hits.length });
   }, 150);
+});
+
+resultsEl.addEventListener('click', (e) => {
+  const link = e.target.closest('.search-result-link');
+  if (link) trackEvent('search_result_click', { post_title: link.dataset.resultTitle || '' });
 });
 
 initIndex();
