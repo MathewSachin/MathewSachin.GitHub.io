@@ -1,16 +1,4 @@
 (function () {
-    // Table and blockquote formatting
-    document.querySelectorAll(".page-content table").forEach(function (table) {
-        table.classList.add("table", "table-bordered", "table-striped", "table-sm");
-        var wrapper = document.createElement("div");
-        wrapper.className = "table-responsive";
-        table.parentNode.insertBefore(wrapper, table);
-        wrapper.appendChild(table);
-    });
-    document.querySelectorAll("blockquote").forEach(function (el) {
-        el.classList.add("blockquote", "fw-light");
-    });
-
     // Lightbox: click on blog post images to expand
     var lightbox = document.getElementById("img-lightbox");
     if (lightbox) {
