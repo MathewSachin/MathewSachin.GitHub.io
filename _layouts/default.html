@@ -15,18 +15,5 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha384-J08i8An/QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
       <script src="{{ '/scripts/copy-code.js' | relative_url }}"></script>
     {% endif %}
-
-    {% if page.pintora %}
-      <script src="https://cdn.jsdelivr.net/npm/@pintora/standalone@0.8.1/lib/pintora-standalone.umd.js" integrity="sha384-ukZa5IV7d3VoeDYJXNQpvzCwORRKOUcKApRymElNTgfB7+bTsSzu3rJfsy3PPbGS" crossorigin="anonymous"></script>
-      <script>
-        document.querySelectorAll('pre.pintora').forEach(function(pre) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'pintora-wrapper';
-          pre.parentNode.insertBefore(wrapper, pre);
-          wrapper.appendChild(pre);
-        });
-        pintora.default.initBrowser();
-      </script>
-    {% endif %}
   </body>
 </html>

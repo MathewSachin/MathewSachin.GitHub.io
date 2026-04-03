@@ -3,7 +3,6 @@ title: "Using a Custom Docker Image to Speed Up GitHub Actions Builds"
 icon: "fab fa-docker"
 tags: [github-actions, docker, ci-cd, jekyll, devops, tutorial]
 highlight: true
-pintora: true
 series: blogging-with-jekyll
 related:
   - /blog/2026/04/01/pr-preview-setup

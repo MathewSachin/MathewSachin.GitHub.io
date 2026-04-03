@@ -3,7 +3,6 @@ title: "Did Nature Vibe Code Us Humans?"
 icon: "fas fa-leaf"
 tags: [nature, evolution, vibe-coding, ai, biology, philosophy]
 highlight: true
-pintora: true
 related:
   - /blog/2026/03/09/luddites-vs-developers
   - /blog/2026/03/12/ai-blog-generation-flow
