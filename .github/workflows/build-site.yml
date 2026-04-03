@@ -54,6 +54,9 @@ jobs:
       - name: Install Ruby gems
         run: bundle config set path 'vendor/bundle' && bundle install
 
+      - name: Generate Rouge syntax stylesheet
+        run: bundle exec rougify style monokai.sublime > styles/syntax.css
+
       - name: Build Jekyll site
         env:
           JEKYLL_ENV: production

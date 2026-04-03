@@ -4,7 +4,8 @@
 }
 
 /* Copy code button: positioned inside the code block, top-right, visible on hover */
-div.highlight {
+div.highlight,
+figure.highlight {
   position: relative;
   border-radius: 0.5rem;
   overflow: hidden;
@@ -53,11 +54,20 @@ div.highlight {
   outline-offset: 2px;
 }
 
-div.highlight pre {
+div.highlight pre,
+figure.highlight pre {
   margin: 0;
   border-radius: 0;
   border: none;
   overflow-x: auto;
+  padding: 1rem;
+}
+
+/* Dino-hack-pre is a wrapper div containing a figure.highlight block */
+.dino-hack-pre figure.highlight {
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
 }
 
 .page-content h2 {
@@ -562,8 +572,6 @@ div.highlight pre {
   margin: 0;
   border-radius: 0;
   border: none;
-  background: #282b2e;
-  padding: 1em;
 }
 
 .btn-dino-reset {
