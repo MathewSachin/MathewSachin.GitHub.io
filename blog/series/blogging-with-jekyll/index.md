@@ -1,7 +1,7 @@
 ---
 layout: series
 title: "Blogging with Jekyll"
-description: "A 6-part series on building and running a Jekyll blog hosted on GitHub Pages — from automating posts with AI to adding offline search, comments, live PR previews, ads, and faster CI builds."
+description: "A 7-part series on building and running a Jekyll blog hosted on GitHub Pages — from automating posts with AI to adding offline search, comments, live PR previews, ads, faster CI builds, and hitting Good Core Web Vitals."
 ads: true
 ---
 
