@@ -51,7 +51,7 @@ blogging-with-jekyll:
         CLS, and INP: responsive images, build-time diagrams, minification, and removing runtime JavaScript.
       posts:
         - id: "/blog/2026/04/03/core-web-vitals-jekyll"
-          blurb: "Go from 'Needs improvement' to Good on all three Core Web Vitals. Teaches: jekyll-picture-tag, Rouge vs highlight.js, Pintora at build time, clipboard.js, build-time TOC, HTML minification, and custom AdSense placement."
+          blurb: "Go from 'Needs improvement' to Good on all three Core Web Vitals. Teaches: jekyll-picture-tag, Rouge vs highlight.js, Pintora at build time, build-time TOC, HTML minification, and custom AdSense placement."
 
 browser-hacks:
   name: "Browser Hacks"
