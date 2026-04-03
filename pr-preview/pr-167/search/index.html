@@ -1,0 +1,100 @@
+<!DOCTYPE html> <html lang="en-us"> <head> <meta charset="UTF-8"/> <title>Search</title> <meta name="viewport" content="width=device-width, initial-scale=1"/> <link rel="icon" href="/pr-preview/pr-167/images/favicon.ico"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous"> <link rel="stylesheet" href="/pr-preview/pr-167/styles/tailwind.css"> <link rel="stylesheet" href="/pr-preview/pr-167/styles/styles.css"> <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-167/feed.xml" title="Mathew Sachin"/> <title>Search | Mathew Sachin</title> <meta name="generator" content="Jekyll v4.4.1"/> <meta property="og:title" content="Search"/> <meta name="author" content="Mathew Sachin"/> <meta property="og:locale" content="en_US"/> <meta name="description" content="My Website where I blog using jekyll"/> <meta property="og:description" content="My Website where I blog using jekyll"/> <link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-167/search/"/> <meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-167/search/"/> <meta property="og:site_name" content="Mathew Sachin"/> <meta property="og:type" content="website"/> <meta name="twitter:card" content="summary"/> <meta property="twitter:title" content="Search"/> <meta name="twitter:site" content="@"/> <meta name="twitter:creator" content="@Mathew Sachin"/> <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"My Website where I blog using jekyll","headline":"Search","url":"https://mathewsachin.github.io/pr-preview/pr-167/search/"}</script> </head> <body> <style>.nav-bar{width:1.5rem;height:.1875rem;background-color:#b6b6b6;display:block;transition:all .2s;margin-top:0}.nav-bar+.nav-bar{margin-top:5px}#nav-toggle[aria-expanded="true"] .bar-t{transform:rotate(45deg);transform-origin:left center}#nav-toggle[aria-expanded="true"] .bar-m{opacity:0}#nav-toggle[aria-expanded="true"] .bar-b{transform:rotate(-45deg);transform-origin:left center}</style> <nav class="bg-dark sticky top-0 z-50"> <div class="container flex items-center justify-between py-2"> <a class="text-white font-semibold no-underline text-lg" href="/pr-preview/pr-167/">Mathew Sachin</a> <button id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" class="md:hidden p-2 bg-transparent border-0 cursor-pointer"> <span class="nav-bar bar-t"></span> <span class="nav-bar bar-m"></span> <span class="nav-bar bar-b"></span> </button> <div id="nav-menu" class="hidden md:flex md:items-center absolute md:static top-full left-0 right-0 bg-dark px-4 md:px-0 pb-4 md:pb-0 z-40"> <ul class="flex flex-col md:flex-row mr-auto list-none p-0 m-0"> <li> <a class="block px-3 py-2 text-gray-300 hover:text-white no-underline" href="/pr-preview/pr-167/blog">Blog</a> </li> <li> <a class="block px-3 py-2 text-gray-300 hover:text-white no-underline" href="/pr-preview/pr-167/tools">Tools</a> </li> <li> <a class="block px-3 py-2 text-gray-300 hover:text-white no-underline" href="/pr-preview/pr-167/privacy_policy">Privacy Policy</a> </li> </ul> <a class="btn btn-outline-info btn-sm mt-2 md:mt-0 ml-0 md:ml-2" href="/pr-preview/pr-167/search"><i class="fas fa-search mr-1"></i>Search</a> </div> </div> </nav> <script>!function(){var t=document.getElementById("nav-toggle"),e=document.getElementById("nav-menu");t&&e&&(t.addEventListener("click",function(){var t="true"===this.getAttribute("aria-expanded");this.setAttribute("aria-expanded",String(!t)),e.classList.toggle("hidden")}),document.addEventListener("click",function(n){t.contains(n.target)||e.contains(n.target)||(t.setAttribute("aria-expanded","false"),e.classList.add("hidden"))}))}();</script> <link rel="stylesheet" href="/pr-preview/pr-167/styles/blog.css"> <div class="bg-dark"> <div class="py-6 bg-info text-white"> <div class="container"> <h2>Search</h2> </div> </div> <br> <div class="container"> <div class="card"> <div class="card-body"> <link rel="stylesheet" href="/pr-preview/pr-167/styles/blog.css"> <div id="search-status" class="text-muted small mb-3"> <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Loading search index&hellip; </div> <div class="input-group mb-4"> <span class="input-group-text bg-info text-white border-info"><i class="fas fa-search"></i></span> <input id="search-input" type="search" class="form-control form-control-lg" placeholder="Search posts&hellip;" aria-label="Search posts" disabled autocomplete="off"> </div> <div id="search-results"></div> <p class="text-muted small mt-4"> Curious how this search works? <a href="/pr-preview/pr-167/pr-preview/pr-167/blog/2026/03/25/how-site-search-works.html">Read the post — fully offline, no server required.</a> </p> <script type="module">
+  import { create, load, search } from '/pr-preview/pr-167/scripts/orama.js';
+
+  const SCHEMA = {
+    title: 'string',
+    url: 'string',
+    content: 'string',
+    tags: 'string[]',
+    date: 'string',
+  };
+
+  const BASE_PATH = '/pr-preview/pr-167';
+
+  const statusEl = document.getElementById('search-status');
+  const inputEl  = document.getElementById('search-input');
+  const resultsEl = document.getElementById('search-results');
+
+  let db = null;
+
+  async function initIndex() {
+    try {
+      const resp = await fetch('/pr-preview/pr-167/search-index.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const rawIndex = await resp.json();
+      db = await create({ schema: SCHEMA });
+      await load(db, rawIndex);
+      statusEl.textContent = '';
+      inputEl.disabled = false;
+      inputEl.focus();
+    } catch (err) {
+      statusEl.innerHTML = '<i class="fas fa-exclamation-triangle text-warning me-1"></i>Search index unavailable.';
+      console.error('Search index load failed:', err);
+    }
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00Z');
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  }
+
+  function renderResults(hits) {
+    if (!hits.length) {
+      resultsEl.innerHTML = '<p class="text-muted">No posts matched your search.</p>
+  
+    
+    
+    
+  
+
+  ';
+      return;
+    }
+    resultsEl.innerHTML = hits.map(({ document: doc }) => {
+      // Only allow safe relative paths (prevent javascript: URL injection)
+      const safeUrl = /^\/[^"<>]*$/.test(doc.url) ? BASE_PATH + doc.url : '#';
+      return `
+      <a href="${safeUrl}" class="tag-post-link text-decoration-none text-reset">
+        <div class="blog-post-item py-3 mb-1">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <span class="blog-post-title fw-semibold">${escapeHtml(doc.title)}</span>
+            <span class="small text-muted text-nowrap">${formatDate(doc.date)}</span>
+          </div>
+          ${doc.tags && doc.tags.length ? `
+            <div class="mt-1">
+              ${doc.tags.map(t => `<span class="badge rounded-pill bg-secondary me-1">${escapeHtml(t)}</span>`).join('')}
+            </div>` : ''}
+        </div>
+      </a>
+    `}).join('');
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  let debounceTimer;
+  inputEl.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      const term = inputEl.value.trim();
+      if (!term) { resultsEl.innerHTML = ''; return; }
+      if (!db) return;
+      const results = await search(db, {
+        term,
+        properties: ['title', 'content', 'tags'],
+        tolerance: 1,
+        limit: 20,
+      });
+      renderResults(results.hits);
+    }, 150);
+  });
+
+  initIndex();
+</script> </div> </div> </div> <br> </div> <script src="/pr-preview/pr-167/scripts/formatting.js"></script> </body> </html>
