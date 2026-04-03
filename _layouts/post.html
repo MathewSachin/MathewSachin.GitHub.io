@@ -26,10 +26,10 @@ layout: default
         </div>
         
         {% if page.series %}
-            <hr class="border-[rgba(255,255,255,0.5)] mt-4 mb-0">
+            <hr class="border-white/50 mt-4 mb-0">
             {% include series_nav.html variant="header" %}
         {% elsif page.related %}
-            <hr class="border-[rgba(255,255,255,0.5)] mt-4 mb-4">
+            <hr class="border-white/50 mt-4 mb-4">
             {% include related_posts.html related=page.related variant="top-variant" %}
         {% endif %}
         <div class="pt-12"></div>
