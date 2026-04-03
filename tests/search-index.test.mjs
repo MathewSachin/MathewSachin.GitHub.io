@@ -6,10 +6,11 @@
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
+import { readFile, unlink, access } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { create, load, search } from '@orama/orama'
+import { spawn } from 'node:child_process'
 
 import {
   stripMarkdown,
@@ -178,4 +179,41 @@ test('search-index.json: every entry has required fields', async () => {
     assert.match(doc.url, /^\/blog\/\d{4}\/\d{2}\/\d{2}\//, 'url should match /blog/YYYY/MM/DD/ format')
     assert.match(doc.date, /^\d{4}-\d{2}-\d{2}$/, 'date should be in YYYY-MM-DD format')
   }
+})
+
+// ---------------------------------------------------------------------------
+// Regeneration test: build script creates search-index.json when run directly
+// ---------------------------------------------------------------------------
+
+test('build-search-index.mjs: regenerates search-index.json when run as a script', async () => {
+  const outputFile = join(REPO_ROOT, 'search-index.json')
+
+  // Remove the file so we can confirm it is freshly created by the script
+  await unlink(outputFile)
+
+  // Verify it is gone
+  await assert.rejects(
+    () => access(outputFile),
+    'search-index.json should not exist before the script runs'
+  )
+
+  // Run the build script directly (simulating `npm run build-search-index`)
+  await new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ['scripts/build-search-index.mjs'], {
+      cwd: REPO_ROOT,
+      stdio: 'pipe',
+    })
+    let stderr = ''
+    child.stderr.on('data', chunk => { stderr += chunk })
+    child.on('close', code => {
+      if (code !== 0) reject(new Error(`Script exited with code ${code}:\n${stderr}`))
+      else resolve()
+    })
+  })
+
+  // Verify the file was recreated with valid content
+  const raw = await readFile(outputFile, 'utf8')
+  const parsed = JSON.parse(raw)
+  assert.ok('internalDocumentIDStore' in parsed, 'regenerated index should have internalDocumentIDStore')
+  assert.ok('docs' in parsed, 'regenerated index should have docs field')
 })

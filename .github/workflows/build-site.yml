@@ -32,6 +32,9 @@ jobs:
       - name: Build Orama bundle and search index
         run: npm run build
 
+      - name: Run tests
+        run: npm test
+
       - name: Set baseurl
         if: inputs.baseurl != ''
         env:
