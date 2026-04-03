@@ -247,7 +247,7 @@ figure.highlight pre {
 }
 
 .related-posts-section.bottom-variant .card {
-  background: var(--post-accent, #17a2b8);
+  background: var(--card-accent, var(--post-accent, #17a2b8));
   border: none;
   color: white;
 }
@@ -293,8 +293,12 @@ figure.highlight pre {
   text-decoration: none;
 }
 
+/* Icon inside a post-link should always match the link colour */
+.post-link .post-icon {
+  color: inherit;
+}
+
 .post-link:hover {
-  color: var(--post-accent, #17a2b8);
   text-decoration: underline;
   filter: brightness(0.85);
 }
