@@ -16,7 +16,7 @@ blocks.each(function(i) {
     // Use safe DOM construction so the language label is always treated as text
     var $langSpan = $('<span>').addClass(lang ? 'code-lang' : '').text(lang);
     var $copyBtn = $('<button class="btn btn-sm btn-clip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy to clipboard">')
-        .attr('data-clipboard-target', '#' + id)
+        .attr('data-copy-target', '#' + id)
         .attr('aria-label', 'Copy code to clipboard')
         .html('<i class="fa fa-copy" aria-hidden="true"></i>');
 
@@ -30,4 +30,9 @@ blocks.each(function(i) {
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
     new bootstrap.Tooltip(el);
 });
-new ClipboardJS('.btn-clip');
+$(document).on('click', '.btn-clip', function() {
+    var selector = $(this).data('copy-target') || $(this).data('clipboard-target');
+    var $target = $(selector);
+    if (!$target.length) return;
+    navigator.clipboard.writeText($target.text()).catch(function() {});
+});
