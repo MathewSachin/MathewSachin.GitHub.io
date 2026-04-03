@@ -8,7 +8,7 @@
 
 require 'nokogiri'
 
-Jekyll::Hooks.register [:pages, :posts, :documents], :post_render do |doc|
+Jekyll::Hooks.register [:pages, :documents], :post_render do |doc|
   next unless doc.output_ext == '.html'
   next unless doc.output.include?('class="highlight"')
 

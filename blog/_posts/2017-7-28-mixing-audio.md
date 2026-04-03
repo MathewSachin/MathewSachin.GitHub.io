@@ -2,7 +2,6 @@
 title: Mixing Microphone input and Speaker output (Windows)
 icon: "fas fa-music"
 tags: [windows, bass, audio]
-highlight: true
 related:
   - /blog/2017/07/28/ffmpeg-pipe-csharp
   - /blog/2023/04/09/captura-unmaintained

@@ -2,7 +2,6 @@
 title: "Save Instagram Photos: Remove the Right-Click Block"
 icon: "fab fa-instagram"
 tags: [instagram, hack, javascript, browser, devtools, bookmarklet, social-media]
-highlight: true
 series: browser-hacks
 related:
   - /blog/2026/03/30/instagram-userscript-download-buttons

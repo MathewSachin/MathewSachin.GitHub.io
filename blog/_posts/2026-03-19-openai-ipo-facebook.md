@@ -2,7 +2,6 @@
 title: "OpenAI Is Going Full Facebook — And Nobody Should Be Surprised"
 icon: "fas fa-money-bill-wave"
 tags: [ai, openai, anthropic, ipo, tech-industry]
-highlight: true
 related:
   - /blog/2026/03/18/mistral-forge-enterprise-ai
   - /blog/2026/03/17/gemini-gems

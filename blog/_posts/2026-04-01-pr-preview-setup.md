@@ -2,7 +2,6 @@
 title: "How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages"
 icon: "fas fa-code-branch"
 tags: [github-actions, ci-cd, jekyll, github-pages, devops, tutorial]
-highlight: true
 series: blogging-with-jekyll
 related:
   - /blog/2026/03/25/how-site-search-works

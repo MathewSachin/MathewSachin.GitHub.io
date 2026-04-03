@@ -2,7 +2,6 @@
 title: "Reveal a Saved Password Hidden Behind Dots"
 icon: "fas fa-eye"
 tags: [chrome, hack, browser, devtools]
-highlight: true
 series: browser-hacks
 related:
   - /blog/2016/11/05/chrome-dino-hack

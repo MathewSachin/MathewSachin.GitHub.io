@@ -2,7 +2,6 @@
 title: "Sora Is Dead. OpenAI Killed the Future of Video — and Nobody Is Shocked."
 icon: "fas fa-video"
 tags: [ai, openai, video-generation, sora, tech-industry]
-highlight: true
 related:
   - /blog/2026/03/19/openai-ipo-facebook
   - /blog/2026/03/18/mistral-forge-enterprise-ai
