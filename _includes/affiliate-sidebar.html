@@ -26,14 +26,30 @@
 
 <script>
 (function () {
-    fetch('https://api.country.is/')
+    var CACHE_KEY = 'affiliate_country';
+    var cached = sessionStorage.getItem(CACHE_KEY);
+    if (cached !== null) {
+        if (cached === 'IN') {
+            var el = document.getElementById('affiliate-sidebar');
+            if (el) el.style.display = '';
+        }
+        return;
+    }
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = controller ? setTimeout(function () { controller.abort(); }, 3000) : null;
+    fetch('https://api.country.is/', controller ? { signal: controller.signal } : undefined)
         .then(function (r) { return r.json(); })
         .then(function (d) {
-            if (d && d.country === 'IN') {
+            clearTimeout(timer);
+            var country = (d && d.country) || '';
+            sessionStorage.setItem(CACHE_KEY, country);
+            if (country === 'IN') {
                 var el = document.getElementById('affiliate-sidebar');
                 if (el) el.style.display = '';
             }
         })
-        .catch(function () { /* silently ignore */ });
+        .catch(function (err) {
+            console.debug('[affiliate-sidebar] country detection failed:', err);
+        });
 }());
 </script>
