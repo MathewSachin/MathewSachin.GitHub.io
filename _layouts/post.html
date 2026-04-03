@@ -86,14 +86,10 @@ layout: default
 
 {% include back_to_top.html %}
 
-<!-- Lightbox modal for blog post images -->
-<div class="modal fade" id="img-lightbox" tabindex="-1" aria-label="Image lightbox" aria-hidden="true" data-proofer-ignore>
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <img src="" alt="Expanded image">
-      </div>
-    </div>
+<!-- Lightbox dialog for blog post images -->
+<dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore>
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="Expanded image">
   </div>
-</div>
+</dialog>
