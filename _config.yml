@@ -1,5 +1,12 @@
 lsi: false
 
+highlighter: rouge
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 name: Mathew Sachin
 description: My Website where I blog using jekyll
 author: Mathew Sachin

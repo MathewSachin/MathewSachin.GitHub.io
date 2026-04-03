@@ -145,7 +145,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<pre id="speed-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().setSpeed(6)</code></pre>
+<div id="speed-pre" class="dino-hack-pre">{% highlight js %}Runner.getInstance().setSpeed(6){% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -157,8 +157,8 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
     var val = Math.max(1, Math.min(1000, parseInt(v, 10) || DEFAULT));
     slider.value = val;
     input.value = val;
-    code.textContent = 'Runner.getInstance().setSpeed(' + val + ')';
-    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
+    var numSpan = code.querySelector('.mi');
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = 'Runner.getInstance().setSpeed(' + val + ')'; }
     dinoApply(function(w) { w.Runner.getInstance().setSpeed(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -178,7 +178,7 @@ Want to jump right into the action with a specific score? You can set the score 
 <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<pre id="score-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().distanceRan = 12345 / 0.025</code></pre>
+<div id="score-pre" class="dino-hack-pre">{% highlight js %}Runner.getInstance().distanceRan = 12345 / 0.025{% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -190,8 +190,8 @@ Want to jump right into the action with a specific score? You can set the score 
     if (isNaN(val) || val < 0) val = 0;
     if (val > 99999) val = 99999;
     input.value = val;
-    code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / 0.025';
-    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
+    var numSpan = code.querySelector('.mi');
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = 'Runner.getInstance().distanceRan = ' + val + ' / 0.025'; }
     dinoApply(function(w) { w.Runner.getInstance().distanceRan = val / 0.025; });
   }
   input.addEventListener('input', function() { update(this.value); });
@@ -221,7 +221,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
 <button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<pre id="jump-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().tRex.setJumpVelocity(10)</code></pre>
+<div id="jump-pre" class="dino-hack-pre">{% highlight js %}Runner.getInstance().tRex.setJumpVelocity(10){% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -233,8 +233,8 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
     var val = Math.max(1, Math.min(50, parseInt(v, 10) || DEFAULT));
     slider.value = val;
     input.value = val;
-    code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')';
-    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
+    var numSpan = code.querySelector('.mi');
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = 'Runner.getInstance().tRex.setJumpVelocity(' + val + ')'; }
     dinoApply(function(w) { w.Runner.getInstance().tRex.setJumpVelocity(val); });
   }
   slider.addEventListener('input', function() { update(this.value); });
@@ -263,7 +263,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<pre id="ground-pre" class="dino-hack-pre"><code class="language-js">Runner.getInstance().tRex.groundYPos = 93</code></pre>
+<div id="ground-pre" class="dino-hack-pre">{% highlight js %}Runner.getInstance().tRex.groundYPos = 93{% endhighlight %}</div>
 </div>
 <script>
 (function() {
@@ -277,8 +277,8 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
     if (val > 130) val = 130;
     slider.value = val;
     input.value = val;
-    code.textContent = 'Runner.getInstance().tRex.groundYPos = ' + val;
-    if (window.hljs) { delete code.dataset.highlighted; hljs.highlightElement(code); }
+    var numSpan = code.querySelector('.mi');
+    if (numSpan) { numSpan.textContent = val; } else { code.textContent = 'Runner.getInstance().tRex.groundYPos = ' + val; }
     dinoApply(function(w) { w.Runner.getInstance().tRex.groundYPos = val; });
   }
   slider.addEventListener('input', function() { update(this.value); });
