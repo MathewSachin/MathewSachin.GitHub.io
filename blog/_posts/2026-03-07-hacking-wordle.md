@@ -1,6 +1,7 @@
 ---
 title: "Hacking Wordle: Solve It in One Try Using Browser DevTools"
 icon: "fas fa-puzzle-piece"
+accent_color: "#538D4E"
 tags: [wordle, hack, browser, devtools]
 series: browser-hacks
 related:

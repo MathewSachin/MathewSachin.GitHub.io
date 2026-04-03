@@ -3,6 +3,11 @@
   margin-top: -7.5rem;
 }
 
+/* Post hero / title section — uses --post-accent CSS variable (set per-post via frontmatter) */
+.post-hero {
+  background-color: var(--post-accent, #17a2b8);
+}
+
 /* Copy code button: positioned inside the code block, top-right, visible on hover */
 div.highlight,
 figure.highlight {
@@ -234,7 +239,7 @@ figure.highlight pre {
 
 /* Bottom variant: inside the post card body (white background) */
 .related-posts-section.bottom-variant .related-posts-heading {
-  color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -242,14 +247,14 @@ figure.highlight pre {
 }
 
 .related-posts-section.bottom-variant .card {
-  background: #17a2b8;
+  background: var(--post-accent, #17a2b8);
   border: none;
   color: white;
 }
 
 .related-posts-section.bottom-variant .card:hover {
-  background: #138496;
-  box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+  filter: brightness(0.85);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .related-posts-section.bottom-variant .card-footer {
@@ -270,7 +275,7 @@ figure.highlight pre {
 
 /* Post icon (Font Awesome icon set via frontmatter) */
 .post-icon {
-  color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
   font-size: 0.85em;
   opacity: 0.85;
   flex-shrink: 0;
@@ -284,13 +289,14 @@ figure.highlight pre {
 
 /* Inline post links with icon (post_link.html include) */
 .post-link {
-  color: #17a2b8;
+  color: var(--post-accent, #17a2b8);
   text-decoration: none;
 }
 
 .post-link:hover {
-  color: #138496;
+  color: var(--post-accent, #17a2b8);
   text-decoration: underline;
+  filter: brightness(0.85);
 }
 
 .post-link:visited {
@@ -442,7 +448,7 @@ figure.highlight pre {
   left: 0;
   height: 4px;
   width: 0%;
-  background: linear-gradient(90deg, #17a2b8, #0d6efd);
+  background: linear-gradient(90deg, var(--post-accent, #17a2b8), #0d6efd);
   z-index: 9999;
   transition: width 0.1s linear;
   pointer-events: none;

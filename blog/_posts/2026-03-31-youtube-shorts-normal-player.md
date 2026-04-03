@@ -1,6 +1,7 @@
 ---
 title: "Watch YouTube Shorts in the Normal Player (No Extensions Required)"
 icon: "fab fa-youtube"
+accent_color: "#CC0000"
 tags: [youtube, hack, browser, bookmarklet]
 series: browser-hacks
 related:

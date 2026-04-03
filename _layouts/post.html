@@ -4,11 +4,12 @@ layout: default
 
 <link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/styles/syntax.css' | relative_url }}">
+{% if page.accent_color %}<style>:root { --post-accent: {{ page.accent_color }}; }</style>{% endif %}
 
 {% include reading_progress.html %}
 
 <div class="bg-dark">
-<div class="pt-4 pb-5 bg-info text-white">
+<div class="pt-4 pb-5 post-hero text-white">
     <div class="container">
         <h2>{{ page.title }}</h2>
         <em>{{ page.date | date_to_string }}</em> &nbsp; - &nbsp;

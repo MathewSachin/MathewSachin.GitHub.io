@@ -1,6 +1,7 @@
 ---
 title: "Instagram Reel Sniper: Download Any Reel Directly from Your Browser"
 icon: "fab fa-instagram"
+accent_color: "#C13584"
 tags: [instagram, hack, javascript, browser, devtools, bookmarklet]
 series: browser-hacks
 related:

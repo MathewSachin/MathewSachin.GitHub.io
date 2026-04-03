@@ -1,6 +1,7 @@
 ---
 title: "Reddit Video Sniper: Download Any Reddit Video Directly from Your Browser"
 icon: "fab fa-reddit"
+accent_color: "#FF4500"
 tags: [reddit, hack, javascript, browser, devtools]
 series: browser-hacks
 related:
