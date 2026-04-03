@@ -156,4 +156,70 @@
     document.querySelectorAll('.bg-info a[href^="mailto:"]').forEach(function (link) {
         link.addEventListener("click", function () { trackEvent("post_share", { method: "email" }); });
     });
+
+    // Intersection Observer: fire once when a code block or image/diagram enters the viewport.
+    // Uses the browser-native async API so it never blocks the main thread.
+    if (typeof IntersectionObserver !== "undefined") {
+        var viewTargets = document.querySelectorAll("div.highlight, img, svg");
+        if (viewTargets.length) {
+            var viewObserver = new IntersectionObserver(function (entries, obs) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var tag = entry.target.tagName.toLowerCase();
+                        trackEvent("element_viewed", {
+                            element_type: tag === "div" ? "code_block" : "image_or_diagram",
+                            page_path: window.location.pathname
+                        });
+                        obs.unobserve(entry.target); // track each element only once
+                    }
+                });
+            }, { threshold: 0.5 });
+            viewTargets.forEach(function (el) { viewObserver.observe(el); });
+        }
+    }
+
+    // Manual code highlight tracker: debounced so it fires at most once per 500 ms of
+    // selection inactivity, preventing a flood of events while the user drags.
+    (function () {
+        // Ignore micro-selections (accidental clicks, word double-clicks, etc.)
+        var MIN_SELECTION_LENGTH = 15;
+        var highlightTimer = null;
+        document.addEventListener("selectionchange", function () {
+            clearTimeout(highlightTimer);
+            highlightTimer = setTimeout(function () {
+                var selection = document.getSelection();
+                if (!selection || selection.toString().length <= MIN_SELECTION_LENGTH) return;
+                var node = selection.anchorNode;
+                if (!node) return;
+                var el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+                if (el && el.closest("div.highlight")) {
+                    trackEvent("manual_code_highlight", { page_path: window.location.pathname });
+                }
+            }, 500);
+        });
+    }());
+
+    // Scroll depth milestones: passive listener avoids any scroll jank; the per-event
+    // work is a single arithmetic expression plus an O(4) array walk.
+    (function () {
+        var scrollMilestones = [25, 50, 75, 90];
+        var milestonesReached = [];
+        window.addEventListener("scroll", function () {
+            var pct = Math.min(
+                Math.round(
+                    (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100
+                ),
+                100
+            );
+            scrollMilestones.forEach(function (milestone) {
+                if (pct >= milestone && milestonesReached.indexOf(milestone) === -1) {
+                    milestonesReached.push(milestone);
+                    trackEvent("scroll_depth", {
+                        percent_scrolled: milestone,
+                        page_path: window.location.pathname
+                    });
+                }
+            });
+        }, { passive: true });
+    }());
 }());
