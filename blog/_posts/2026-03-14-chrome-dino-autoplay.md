@@ -23,14 +23,15 @@ Paste this into the Chrome DevTools Console (press `F12` → **Console** tab) wh
 function dispatchKey(type, key) {
     document.dispatchEvent(new KeyboardEvent(type, {keyCode: key}));
 }
+const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
 const autoPlay = setInterval(function () {
     const KEY_CODE_SPACE_BAR = 32
     const KEY_CODE_ARROW_DOWN = 40
-    const CANVAS_HEIGHT = Runner.getInstance().dimensions.height
-    const DINO_HEIGHT = Runner.getInstance().tRex.config.height
+    const CANVAS_HEIGHT = runner.dimensions.HEIGHT || runner.dimensions.height
+    const DINO_HEIGHT = runner.tRex.config.HEIGHT || runner.tRex.config.height
 
-    const obstacle = Runner.getInstance().horizon.obstacles[0]
-    const speed = Runner.getInstance().currentSpeed
+    const obstacle = runner.horizon.obstacles[0]
+    const speed = runner.currentSpeed
 
     if (obstacle) {
         const w = obstacle.width
@@ -52,7 +53,7 @@ const autoPlay = setInterval(function () {
             }
         }
     }
-}, Runner.getInstance().msPerFrame);
+}, runner.msPerFrame);
 ```
 
 That's it — copy, paste, run, and watch your dino become a pro! 🦕
@@ -77,12 +78,13 @@ By dispatching these events programmatically, the bot can trigger jumps and duck
 ## The Game Loop
 
 ```js
+const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
 const autoPlay = setInterval(function () {
     // ... check and react to obstacles
-}, Runner.getInstance().msPerFrame);
+}, runner.msPerFrame);
 ```
 
-`setInterval` runs our callback repeatedly at the interval we specify. Instead of a hard-coded value like 16 ms, we use `Runner.getInstance().msPerFrame` — the exact frame duration the game itself uses.
+`setInterval` runs our callback repeatedly at the interval we specify. Instead of a hard-coded value like 16 ms, we use `runner.msPerFrame` — the exact frame duration the game itself uses.
 
 This means the bot checks for obstacles **once per frame**, keeping it perfectly in sync with the game's own rendering loop and avoiding both over-checking and under-checking.
 
@@ -91,10 +93,11 @@ We store the return value in `autoPlay` so we can stop the bot later — see [St
 ## Finding the Nearest Obstacle
 
 ```js
-const obstacle = Runner.getInstance().horizon.obstacles[0]
+const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const obstacle = runner.horizon.obstacles[0]
 ```
 
-The game stores all active obstacles in `Runner.getInstance().horizon.obstacles`, an array ordered from left to right. Index `0` is always the closest obstacle ahead of the dino — the one we need to react to first.
+The game stores all active obstacles in `runner.horizon.obstacles`, an array ordered from left to right. Index `0` is always the closest obstacle ahead of the dino — the one we need to react to first.
 
 If the array is empty (no obstacles on screen yet), `obstacle` will be `undefined` and the whole `if (obstacle)` block is skipped safely.
 
@@ -108,7 +111,7 @@ const isObstacleNearby = x < 25 * speed - w / 2
 
 We don't want to jump the moment an obstacle appears — that would be far too early. Instead, we calculate a **reaction threshold** based on the current game speed:
 
-- `speed` is `Runner.getInstance().currentSpeed` — it increases as the game progresses.
+- `speed` is `runner.currentSpeed` — it increases as the game progresses.
 - The threshold `25 * speed - w / 2` grows with speed, so the bot reacts earlier when things are moving faster (giving it enough time to complete the jump or duck before the obstacle arrives).
 - Subtracting half the obstacle's width (`w / 2`) centres the threshold on the obstacle rather than its left edge.
 
@@ -117,8 +120,10 @@ The bot only acts when `x` (the obstacle's left edge, measured from the left of 
 ## Jump, Duck, or Do Nothing?
 
 ```js
+const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const CANVAS_HEIGHT = runner.dimensions.HEIGHT || runner.dimensions.height
 const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
-const DINO_HEIGHT = Runner.getInstance().tRex.config.height
+const DINO_HEIGHT = runner.tRex.config.HEIGHT || runner.tRex.config.height
 
 if (yFromBottom > DINO_HEIGHT) {
     // Pterodactyl going from above, do nothing
