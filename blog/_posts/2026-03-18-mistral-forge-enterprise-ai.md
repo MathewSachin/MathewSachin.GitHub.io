@@ -2,7 +2,6 @@
 title: "Mistral Forge: The Bet That Smarter, Domain-Trained AI Beats Just Bigger AI"
 icon: "fas fa-brain"
 tags: [ai, machine-learning, enterprise, mistral, open-source]
-highlight: true
 related:
   - /blog/2026/03/17/gemini-gems
   - /blog/2026/03/12/ai-blog-generation-flow

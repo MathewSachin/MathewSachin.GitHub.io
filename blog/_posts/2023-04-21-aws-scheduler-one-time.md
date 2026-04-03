@@ -2,7 +2,6 @@
 title: One-time schedules using AWS EventBridge Scheduler
 icon: "fab fa-aws"
 tags: [aws, scheduler, eventbridge, kotlin]
-highlight: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
   - /blog/2023/04/02/pure-functions

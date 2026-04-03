@@ -98,14 +98,14 @@ figure.highlight pre {
 /* Lightbox dialog */
 #img-lightbox {
   max-width: 90vw;
-  background: rgba(0, 0, 0, 0.9);
+  background: #343a40;
   border: none;
   border-radius: 4px;
   padding: 0;
 }
 
 #img-lightbox::backdrop {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .lightbox-content {

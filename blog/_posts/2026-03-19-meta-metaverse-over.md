@@ -2,7 +2,6 @@
 title: "The Metaverse Is Dead. Mark Zuckerberg Killed It."
 icon: "fas fa-vr-cardboard"
 tags: [meta, facebook, metaverse, vr, ai, tech-industry]
-highlight: true
 related:
   - /blog/2026/03/19/openai-ipo-facebook
   - /blog/2026/03/17/gemini-gems

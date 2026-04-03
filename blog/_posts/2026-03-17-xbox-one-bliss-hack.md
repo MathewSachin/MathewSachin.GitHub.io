@@ -2,7 +2,6 @@
 title: "The 'Unhackable' Console Finally Got Hacked — 12 Years Later"
 icon: "fab fa-xbox"
 tags: [hack, security, hardware, xbox, console]
-highlight: true
 related:
   - /blog/2016/11/05/chrome-dino-hack
   - /blog/2026/03/07/hacking-wordle

@@ -2,7 +2,6 @@
 title: "Hacking TypeRacer: The Human-Mimic Bot"
 icon: "fas fa-keyboard"
 tags: [typeracer, hack, javascript, browser, devtools, bookmarklet]
-highlight: true
 series: browser-hacks
 related:
   - /blog/2016/11/05/chrome-dino-hack

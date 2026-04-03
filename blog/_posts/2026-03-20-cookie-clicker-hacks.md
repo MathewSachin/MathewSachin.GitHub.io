@@ -2,7 +2,6 @@
 title: "Cookie Clicker Hacks: Three Backdoors the Developer Left Wide Open"
 icon: "fas fa-cookie-bite"
 tags: [cookie-clicker, hack, javascript, browser, devtools, bookmarklet, game]
-highlight: true
 series: browser-hacks
 related:
   - /blog/2016/11/05/chrome-dino-hack

@@ -2,7 +2,6 @@
 title: WTH is a Pure function
 icon: "fas fa-infinity"
 tags: [fp]
-highlight: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
   - /blog/2023/04/16/creating-if-statement-kotlin

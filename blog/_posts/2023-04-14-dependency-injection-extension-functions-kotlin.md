@@ -2,7 +2,6 @@
 title: Dependency Injection of extension functions in Kotlin
 icon: "fas fa-plug"
 tags: [di, extensions, functions, kotlin]
-highlight: true
 related:
   - /blog/2023/04/16/creating-if-statement-kotlin
   - /blog/2023/04/09/captura-unmaintained

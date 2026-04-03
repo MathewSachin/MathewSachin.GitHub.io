@@ -2,7 +2,6 @@
 title: "Fate/Grand Automata: A Developer's Deep Dive"
 icon: "fas fa-robot"
 tags: [android, kotlin, opencv, automation, fga]
-highlight: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
   - /blog/2023/04/16/creating-if-statement-kotlin

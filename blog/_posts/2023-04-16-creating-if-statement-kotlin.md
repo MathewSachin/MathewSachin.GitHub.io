@@ -2,7 +2,6 @@
 title: Creating your own if statement in Kotlin
 icon: "fas fa-code-branch"
 tags: [kotlin, if]
-highlight: true
 related:
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
   - /blog/2023/04/02/pure-functions

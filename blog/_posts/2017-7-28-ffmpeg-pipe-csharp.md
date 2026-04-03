@@ -2,7 +2,6 @@
 title: Piping to ffmpeg.exe with C#
 icon: "fas fa-film"
 tags: [ffmpeg]
-highlight: true
 related:
   - /blog/2017/07/28/mixing-audio
   - /blog/2023/04/09/captura-unmaintained

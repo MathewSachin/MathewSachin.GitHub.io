@@ -2,7 +2,6 @@
 title: "Vim, Sublime, or an IDE? The Never-Ending Developer Holy War"
 icon: "fas fa-terminal"
 tags: [vim, editor, ide, productivity, coding]
-highlight: true
 related:
   - /blog/2023/04/16/creating-if-statement-kotlin
   - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
