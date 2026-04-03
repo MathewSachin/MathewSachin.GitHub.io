@@ -30,7 +30,10 @@ jobs:
         run: npm ci
 
       - name: Build Orama bundle and search index
-        run: npm run build
+        run: |
+          rm -f search-index.json
+          npm run build
+          test -f search-index.json || { echo "search-index.json was not generated"; exit 1; }
 
       - name: Run tests
         run: npm test
