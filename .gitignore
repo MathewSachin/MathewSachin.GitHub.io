@@ -6,3 +6,4 @@ Gemfile.lock
 debug.log.bundle/
 node_modules/
 generated/
+styles/syntax.css
