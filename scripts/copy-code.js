@@ -30,4 +30,9 @@ blocks.each(function(i) {
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
     new bootstrap.Tooltip(el);
 });
-new ClipboardJS('.btn-clip');
+$(document).on('click', '.btn-clip', function() {
+    var selector = $(this).data('clipboard-target');
+    var $target = $(selector);
+    if (!$target.length) return;
+    navigator.clipboard.writeText($target.text()).catch(function() {});
+});
