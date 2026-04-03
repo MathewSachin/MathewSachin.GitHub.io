@@ -1,1 +1,0 @@
-document.addEventListener("click",function(t){var e=t.target.closest(".btn-clip");if(e){var c=e.getAttribute("data-clipboard-target"),n=c?document.querySelector(c):null;n&&navigator.clipboard.writeText(n.textContent).catch(function(){})}});
