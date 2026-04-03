@@ -18,7 +18,7 @@ const OUTPUT_FILE = join(REPO_ROOT, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
 /** Strip common Markdown/HTML syntax to produce plain text for indexing. */
-function stripMarkdown(text) {
+export function stripMarkdown(text) {
   return text
     // Remove fenced code blocks entirely (not useful for full-text search)
     .replace(/```[\s\S]*?```/g, ' ')
@@ -44,7 +44,7 @@ function stripMarkdown(text) {
  * Filename pattern: YYYY-MM-DD-slug.md  (M and D may be 1 or 2 digits)
  * Jekyll URL:       /blog/YYYY/MM/DD/slug/
  */
-function postUrlFromFilename(filename) {
+export function postUrlFromFilename(filename) {
   const name = basename(filename, '.md')
   const match = name.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/)
   if (!match) return null
@@ -99,7 +99,10 @@ async function main() {
   console.log(`Search index written to search-index.json (${inserted} posts)`)
 }
 
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+// Only run when executed directly (not when imported by tests)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
+}
