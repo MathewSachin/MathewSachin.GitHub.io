@@ -24,7 +24,6 @@ function trackEvent(name, params) {
     }
   } catch (_) {}
 }
-}
 
 let db = null;
 
