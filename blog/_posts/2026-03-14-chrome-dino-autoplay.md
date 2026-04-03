@@ -22,7 +22,7 @@ Paste this into the Chrome DevTools Console (press `F12` → **Console** tab) wh
 function dispatchKey(type, key) {
     document.dispatchEvent(new KeyboardEvent(type, {keyCode: key}));
 }
-const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const runner = Runner.instance_ || Runner.getInstance();
 const autoPlay = setInterval(function () {
     const KEY_CODE_SPACE_BAR = 32
     const KEY_CODE_ARROW_DOWN = 40
@@ -77,7 +77,7 @@ By dispatching these events programmatically, the bot can trigger jumps and duck
 ## The Game Loop
 
 ```js
-const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const runner = Runner.instance_ || Runner.getInstance();
 const autoPlay = setInterval(function () {
     // ... check and react to obstacles
 }, runner.msPerFrame);
@@ -92,7 +92,7 @@ We store the return value in `autoPlay` so we can stop the bot later — see [St
 ## Finding the Nearest Obstacle
 
 ```js
-const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const runner = Runner.instance_ || Runner.getInstance();
 const obstacle = runner.horizon.obstacles[0]
 ```
 
@@ -119,7 +119,7 @@ The bot only acts when `x` (the obstacle's left edge, measured from the left of 
 ## Jump, Duck, or Do Nothing?
 
 ```js
-const runner = Runner.getInstance ? Runner.getInstance() : Runner.instance_;
+const runner = Runner.instance_ || Runner.getInstance();
 const CANVAS_HEIGHT = runner.dimensions.HEIGHT || runner.dimensions.height
 const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
 const DINO_HEIGHT = runner.tRex.config.HEIGHT || runner.tRex.config.height
