@@ -26,7 +26,7 @@ ads: true
 <div class="series-post-item">
   <span class="series-part-badge">{{ _part_counter }}</span>
   <div>
-    <a href="{{ _post.url | relative_url }}" class="series-post-title">{% if _post.icon %}<i class="{{ _post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _post.title }}</a>
+    <a href="{{ _post.url | relative_url }}" class="series-post-title"{% if _post.accent_color %} style="--item-accent: {{ _post.accent_color }}"{% endif %}>{% if _post.icon %}<i class="{{ _post.icon }} post-icon me-1" aria-hidden="true"></i>{% endif %}{{ _post.title }}</a>
     <br><small class="text-muted">{{ _entry.blurb }}</small>
   </div>
 </div>
