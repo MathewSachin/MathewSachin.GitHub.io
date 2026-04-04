@@ -1,0 +1,404 @@
+---
+title: "Beyond Pageviews: Tracking 'Invisible' Reader Engagement on a Static Jekyll Blog"
+icon: "fas fa-chart-line"
+tags: [analytics, google-analytics, javascript, jekyll, tutorial, github-pages]
+series: blogging-with-jekyll
+related:
+  - /blog/2026/04/03/core-web-vitals-jekyll
+  - /blog/2026/03/25/how-site-search-works
+  - /blog/2026/04/02/adsense-auto-vs-custom-placement
+---
+
+*Pageviews tell you someone opened a tab. They don't tell you whether anyone read a word. This post covers every custom engagement signal wired into this blog — scroll depth, code interaction, social shares, and more — with the exact JavaScript behind each one.*
+
+## Why Pageviews Aren't Enough
+
+Google Analytics gives you pageviews out of the box. A pageview fires the moment the browser loads your page. That's it — it says nothing about whether the reader scrolled past the hero image, copied a code snippet, or bailed after three seconds.
+
+For a technical blog, the interesting questions are different:
+
+- Did readers reach the conclusion, or did they drop off halfway?
+- Which posts get people to copy code?
+- Does the table of contents actually get used?
+- Are people sharing posts, and on which platform?
+
+None of these are answered by pageviews. They require deliberately instrumenting the behaviors you care about. On a static Jekyll site there is no server-side session data, no heatmap SaaS — just JavaScript, the browser's event APIs, and whatever you choose to record.
+
+Here is every engagement signal tracked on this blog, how it works, and why it matters.
+
+---
+
+## The Tracking Wrapper
+
+Before any specific event, there is one shared utility function used throughout:
+
+```javascript
+function trackEvent(name, params) {
+    try {
+        if (typeof window.gtag === "function") {
+            window.gtag("event", name, params || {});
+        }
+    } catch (_) {}
+}
+```
+
+Two things to notice:
+
+1. **It checks for `gtag` before calling it.** Ad blockers and privacy extensions commonly block Google Analytics entirely. If they do, `window.gtag` is `undefined` — calling it without checking throws an uncaught exception that can break unrelated features. The guard makes every tracking call a silent no-op when analytics is unavailable.
+2. **The whole thing is inside a `try/catch`.** Even with the `typeof` guard, there are edge cases — third-party browser extensions that shim `gtag` with a broken implementation, for example. The catch swallows any error that reaches it. Tracking is never allowed to crash the page.
+
+This same pattern appears in `scripts/search.js` for search-specific events. A single consistent pattern means the guard is never accidentally omitted.
+
+---
+
+## Scroll Depth: Did They Actually Read It?
+
+Scroll depth is the closest proxy for reading completion available without a server. The implementation fires a `scroll_depth` event each time the reader crosses a milestone:
+
+```javascript
+const SCROLL_MILESTONES = [25, 50, 75, 90]; // percent-scroll milestones to report
+
+(function () {
+    const milestonesReached = [];
+    window.addEventListener("scroll", function () {
+        const pct = Math.min(
+            Math.round(
+                ((window.scrollY + window.innerHeight) /
+                document.documentElement.scrollHeight) * 100
+            ),
+            100
+        );
+        SCROLL_MILESTONES.forEach(function (milestone) {
+            if (pct >= milestone && milestonesReached.indexOf(milestone) === -1) {
+                milestonesReached.push(milestone);
+                trackEvent("scroll_depth", {
+                    percent_scrolled: milestone,
+                    page_path: window.location.pathname
+                });
+            }
+        });
+    }, { passive: true });
+}());
+```
+
+Three design choices worth unpacking:
+
+**`{ passive: true }` on the scroll listener.** Passive event listeners cannot call `preventDefault()`, so the browser knows it doesn't need to wait for the handler to finish before scrolling. Without this flag, even an empty scroll handler can cause jank. Passive listeners are free.
+
+**`milestonesReached` is an array, not a boolean flag per milestone.** Each milestone fires exactly once per page load. Storing reached milestones in an array rather than four separate booleans keeps the code compact, but more importantly, it makes the milestone set easy to change — add `95` to the array and it just works.
+
+**The formula adds `window.innerHeight` to `window.scrollY`.** This measures how much of the document the reader has *seen*, not how far the top of the viewport has scrolled. A reader on a tall monitor who hasn't scrolled at all has already seen the top portion of the article — using `scrollY` alone would undercount their engagement. The combined measure is more accurate.
+
+The result in Google Analytics is four filterable events per page, with `percent_scrolled` as a custom dimension. Filtering `scroll_depth` where `percent_scrolled = 90` across all posts quickly shows which posts hold attention to the end.
+
+---
+
+## Reading Progress Bar: Visual Feedback, Zero Extra Events
+
+The progress bar at the top of every post is not just decoration. It gives readers a sense of how long a post is before they commit, and it encourages completion once they have started. It also doubles as a passive signal for developers watching the live site.
+
+```javascript
+const progressBar = document.getElementById("reading-progress-bar");
+if (progressBar) {
+    function updateProgress() {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0
+            ? Math.min((window.scrollY / docHeight) * 100, 100)
+            : 0;
+        progressBar.style.width = progress + "%";
+        progressBar.setAttribute("aria-valuenow", Math.round(progress));
+    }
+    window.addEventListener("scroll", updateProgress);
+    window.addEventListener("resize", updateProgress);
+    updateProgress();
+}
+```
+
+The `resize` listener handles the case where the reader resizes the browser window mid-read, which changes `scrollHeight` and `innerHeight` and would otherwise leave the bar at a stale percentage. The `aria-valuenow` attribute keeps screen readers informed — the bar is not just a visual element.
+
+No `trackEvent` call here. The progress bar is a reader-facing feature, not an analytics signal. Its data is already captured by scroll depth.
+
+---
+
+## Viewport-Entry Tracking: What Did They See?
+
+Scroll depth tells you how far down a reader scrolled. But a post can have code blocks halfway through that a reader skipped over by scrolling fast, or diagrams below the fold that a reader never reached even though they scrolled to 100%.
+
+The `IntersectionObserver` API detects when a specific element actually enters the viewport:
+
+```javascript
+if (typeof IntersectionObserver !== "undefined") {
+    const viewTargets = document.querySelectorAll("div.highlight, img, svg");
+    if (viewTargets.length) {
+        const viewObserver = new IntersectionObserver(function (entries, obs) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    const tag = entry.target.tagName.toLowerCase();
+                    trackEvent("element_viewed", {
+                        element_type: tag === "div" ? "code_block" : "image_or_diagram",
+                        page_path: window.location.pathname
+                    });
+                    obs.unobserve(entry.target); // fire only once per element
+                }
+            });
+        }, { threshold: 0.5 });
+        viewTargets.forEach(function (el) { viewObserver.observe(el); });
+    }
+}
+```
+
+Key details:
+
+- **`threshold: 0.5`** — the event fires when 50% of the element is visible. This avoids firing for elements that just barely peeked above the fold while the reader was scrolling past. Half of the element in view means the reader had a genuine opportunity to see it.
+- **`obs.unobserve(entry.target)`** — each element is tracked only once. Without this, scrolling back up and down would fire duplicate events. The observer is detached immediately after the first intersection.
+- **Feature detection with `typeof IntersectionObserver !== "undefined"`** — older browsers don't support the API. The code degrades silently rather than throwing.
+
+The `element_type` dimension distinguishes code blocks from images and diagrams in downstream analysis. A post where the code blocks have low `element_viewed` counts despite high scroll depth is a signal that readers are consuming the prose but not engaging with the technical examples.
+
+---
+
+## Code Interaction: Two Ways to Engage
+
+Code blocks are a primary reason readers arrive at a technical blog. There are two meaningful interactions: copying the code, and manually selecting part of it.
+
+### Copy Button
+
+Every code block has a copy button. When clicked:
+
+```javascript
+addListeners(".btn-clip", "click", function (btn) {
+    const selector = btn.getAttribute("data-clipboard-target");
+    const target = selector ? document.querySelector(selector) : null;
+    if (!target) return;
+    navigator.clipboard.writeText(target.textContent).catch(function () {});
+    trackEvent("code_copy");
+});
+```
+
+Simple and direct. The `code_copy` event fires on every button click. Combined with `page_path` (available in every GA event via the page context), this shows which posts produce the most code copies — a reasonable proxy for which posts have immediately usable examples.
+
+### Manual Selection
+
+Some readers select code manually rather than using the copy button — to copy a specific portion, or just out of habit. This is captured with a debounced `selectionchange` listener:
+
+```javascript
+(function () {
+    const MIN_SELECTION_LENGTH = 15;
+    let highlightTimer = null;
+    document.addEventListener("selectionchange", function () {
+        clearTimeout(highlightTimer);
+        highlightTimer = setTimeout(function () {
+            const selection = document.getSelection();
+            if (!selection || selection.toString().length <= MIN_SELECTION_LENGTH) return;
+            const node = selection.anchorNode;
+            if (!node) return;
+            const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+            if (el && el.closest("div.highlight")) {
+                trackEvent("manual_code_highlight", { page_path: window.location.pathname });
+            }
+        }, DEBOUNCE_DELAY);
+    });
+}());
+```
+
+Three noise-reduction measures:
+
+1. **Debouncing (`DEBOUNCE_DELAY = 500 ms`).** `selectionchange` fires on every character of a drag selection — dozens of events per second. Without debouncing, a single text drag produces a flood of GA events and risks hitting rate limits. The timer resets on each event and only fires after 500 ms of inactivity.
+2. **`MIN_SELECTION_LENGTH = 15`.** Accidental clicks create a selection of zero characters. Double-clicking selects a single word. Neither is intentional code engagement. 15 characters is enough to represent a meaningful snippet — a variable name, a short expression — while filtering out accidental micro-selections.
+3. **`el.closest("div.highlight")`** — the event only fires if the selection is anchored inside a highlighted code block. Selecting prose text, headings, or anything outside a code block is ignored entirely.
+
+---
+
+## Navigation Signals: How Readers Move Through the Site
+
+### Table of Contents
+
+The TOC is generated at build time (no DOM-scanning JavaScript), but clicks on TOC links are still tracked:
+
+```javascript
+tocLinks.forEach(function (a) {
+    a.addEventListener("click", function () {
+        trackEvent("toc_click", {
+            section: a.getAttribute("href") || "",
+            link_text: a.textContent.trim()
+        });
+    });
+});
+```
+
+The `section` dimension is the anchor hash (`#how-it-works`). Aggregating `toc_click` by `section` shows which headings readers jump to most — directly revealing which sections of a post attract the most interest without requiring readers to scroll through the whole thing.
+
+On mobile, the TOC is behind a collapse toggle, and that interaction is tracked separately:
+
+```javascript
+tocToggle.addEventListener("click", function () {
+    const expanded = tocToggle.getAttribute("aria-expanded") === "true";
+    trackEvent("toc_mobile_toggle", { action: expanded ? "collapse" : "expand" });
+});
+```
+
+Comparing `toc_mobile_toggle` rates between mobile and desktop sessions tells you how often mobile readers bother opening the TOC at all — useful for deciding whether it's worth the real estate.
+
+### Series Navigation
+
+Posts in a series have previous/next navigation. Clicks are tracked with a direction dimension:
+
+```javascript
+addListeners(".series-nav-btn, .series-prev-link", "click", function (seriesNavLink) {
+    const direction = seriesNavLink.classList.contains("next-post") ? "next" : "previous";
+    const titleEl = seriesNavLink.querySelector(".nav-title");
+    trackEvent("series_nav_click", {
+        direction: direction,
+        post_title: titleEl ? titleEl.textContent.trim() : ""
+    });
+});
+```
+
+`series_nav_click` with `direction = next` measures series continuation rate — the fraction of readers who finish one post and immediately start the next. A low continuation rate on a specific transition suggests that post may be a natural stopping point, or that the series ordering needs adjustment.
+
+### Related Posts
+
+```javascript
+addListeners(".related-post-link", "click", function (link) {
+    const titleEl = link.querySelector(".card-title");
+    trackEvent("related_post_click", {
+        post_title: titleEl ? titleEl.textContent.trim() : ""
+    });
+});
+```
+
+Related post clicks indicate which recommendations are actually compelling. If one related post consistently gets clicked across many referring posts, it's a strong signal that it's well-matched to a broad audience.
+
+### Tag Clicks
+
+```javascript
+addListeners(".post-tag .badge", "click", function (badge) {
+    trackEvent("tag_click", { tag_name: badge.textContent.trim() });
+});
+```
+
+Tag clicks show which topic labels readers use as navigation, rather than just descriptors.
+
+### Back to Top
+
+```javascript
+backToTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    trackEvent("back_to_top");
+});
+```
+
+A `back_to_top` event means the reader reached a point where clicking the button was worth the effort — they got far enough down the page that they wanted to return to the top. It's a weak engagement signal on its own, but combined with scroll depth, it separates readers who scrolled to the bottom and then scrolled back up from readers who just tapped it reflexively.
+
+---
+
+## Social Sharing
+
+Share button clicks cover six methods with a single event and a `method` dimension:
+
+```javascript
+addListeners("[data-share-method]", "click", function (el) {
+    trackEvent("post_share", { method: el.getAttribute("data-share-method") });
+});
+```
+
+The `data-share-method` attribute is set in the HTML for each share button — `twitter`, `linkedin`, `reddit`, `whatsapp`, `email`. The copy-link button is handled separately because it has async clipboard logic, but it fires the same event:
+
+```javascript
+trackEvent("post_share", { method: "copy_link" });
+```
+
+Using a single `post_share` event with a `method` dimension (rather than six separate events) keeps the event list clean in the GA interface and makes it easy to aggregate total share count across all methods with a single filter.
+
+---
+
+## Image Lightbox
+
+Blog post images can be clicked to open a full-size lightbox. The interaction is tracked with the image's alt text (or filename as fallback):
+
+```javascript
+addListeners(".page-content img", "click", function (img) {
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || "";
+    lightbox.showModal();
+    trackEvent("image_expand", {
+        image_alt: img.alt || img.src.split("/").pop()
+    });
+});
+```
+
+The `image_alt` dimension identifies which specific image was expanded. A post where a particular diagram gets expanded frequently suggests readers found it interesting enough to examine in detail — a signal that the image is earning its space.
+
+---
+
+## Search Analytics
+
+The search page tracks two events in `scripts/search.js`, using the same `trackEvent` pattern:
+
+```javascript
+// After a search completes
+trackEvent('search', {
+    search_term: term,
+    result_count: results.hits.length
+});
+
+// When a search result is clicked
+trackEvent('search_result_click', {
+    post_title: link.dataset.resultTitle || ''
+});
+```
+
+`search` events with `result_count = 0` identify queries the site fails to answer — either there is genuinely no relevant content, or the terminology used in posts doesn't match what readers search for. Either way, it's actionable.
+
+`search_result_click` events with `post_title` tell you which posts readers actually wanted when they searched. Comparing this against which posts appear at the top of results for a given term reveals whether the search ranking is serving readers well.
+
+---
+
+## What Is Not Tracked
+
+There are deliberate omissions:
+
+**Session duration.** Google Analytics estimates time on page by comparing the timestamp of the current pageview against the timestamp of the next one. For the last page in a session, there is no next pageview — the time on the final page is always zero. The scroll depth signal is more reliable for single-page sessions, which are common on a blog.
+
+**Mouse movement or cursor position.** This would require a continuous stream of events — not feasible without a dedicated session-recording tool and a separate data pipeline.
+
+**Precise reading speed or word count consumed.** The scroll depth + viewport entry combination is a reasonable proxy without building character-level reading position tracking.
+
+**Any personally identifiable information.** User IDs, IP addresses, and device fingerprints are not collected. The tracking is scoped entirely to anonymous engagement signals.
+
+---
+
+## The Full Event Reference
+
+| Event | Dimensions | What it means |
+|---|---|---|
+| `scroll_depth` | `percent_scrolled`, `page_path` | Reader reached a scroll milestone |
+| `element_viewed` | `element_type`, `page_path` | Code block or image entered the viewport |
+| `code_copy` | — | Copy button clicked on a code block |
+| `manual_code_highlight` | `page_path` | Reader manually selected ≥ 15 chars of code |
+| `image_expand` | `image_alt` | Image opened in lightbox |
+| `toc_click` | `section`, `link_text` | TOC anchor link clicked |
+| `toc_mobile_toggle` | `action` | Mobile TOC opened or closed |
+| `series_nav_click` | `direction`, `post_title` | Prev/next series link clicked |
+| `related_post_click` | `post_title` | Related post card clicked |
+| `tag_click` | `tag_name` | Tag badge clicked |
+| `post_share` | `method` | Share button or copy-link clicked |
+| `back_to_top` | — | Back-to-top button clicked |
+| `search` | `search_term`, `result_count` | Search query submitted |
+| `search_result_click` | `post_title` | Search result clicked |
+
+Every event is recorded with the standard GA4 page context (URL, title, referrer). The custom dimensions above are what make the events useful for analysis rather than just counting.
+
+---
+
+## Putting It Together
+
+Pageviews are the floor, not the ceiling. A post with 10,000 pageviews and a median scroll depth of 25% is performing worse than a post with 2,000 pageviews and a median scroll depth of 75%. The code-copy rate tells you whether your examples are landing. The series continuation rate tells you whether your writing is compelling enough to pull readers into the next post.
+
+None of this requires a paid analytics product, a backend, or a session-recording service. It requires deciding what you want to know, writing about 200 lines of careful JavaScript, and committing to reading the data.
+
+The full implementation is in [`scripts/formatting.js`](https://github.com/MathewSachin/MathewSachin.GitHub.io/blob/main/scripts/formatting.js) and [`scripts/search.js`](https://github.com/MathewSachin/MathewSachin.GitHub.io/blob/main/scripts/search.js). Every technique described in this post is live on the page you are reading right now.
+
+---
+
+*This post was generated with the assistance of AI as part of an {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" %}. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
