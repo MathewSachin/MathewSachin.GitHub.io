@@ -57,7 +57,7 @@
 
     // Mobile TOC collapse toggle
     var tocToggle = document.querySelector(".toc-mobile-toggle");
-    var tocCollapse = document.getElementById("toc-nav-mobile-collapse");
+    var tocCollapse = document.getElementById("toc-collapse");
     if (tocToggle && tocCollapse) {
         tocToggle.addEventListener("click", function () {
             var expanded = tocToggle.getAttribute("aria-expanded") === "true";
@@ -69,9 +69,7 @@
 
     // Table of contents: scroll-spy for statically generated TOC
     var tocNav = document.getElementById("toc-nav");
-    var tocNavMobile = document.getElementById("toc-nav-mobile");
     var tocSidebar = document.getElementById("toc-sidebar");
-    var tocMobile = document.getElementById("toc-mobile");
     if (tocNav) {
         var postContent = document.querySelector("#post .page-content");
         var headings = postContent ? Array.from(postContent.querySelectorAll("h2, h3")) : [];
@@ -80,9 +78,8 @@
 
         if (headings.length >= 3) {
             tocSidebar.style.display = "";
-            tocMobile.classList.remove("d-none");
 
-            // Scroll-spy: highlight active section in both navs
+            // Scroll-spy: highlight active section in TOC nav
             function updateToc() {
                 var scrollPos = window.scrollY + SCROLL_OFFSET;
                 var activeId = null;
@@ -92,24 +89,19 @@
                     }
                 });
                 tocNav.querySelectorAll("a").forEach(function (a) { a.classList.remove("toc-active"); });
-                tocNavMobile.querySelectorAll("a").forEach(function (a) { a.classList.remove("toc-active"); });
                 if (activeId) {
                     var sel = 'a[href="#' + activeId + '"]';
                     tocNav.querySelectorAll(sel).forEach(function (a) { a.classList.add("toc-active"); });
-                    tocNavMobile.querySelectorAll(sel).forEach(function (a) { a.classList.add("toc-active"); });
                 }
             }
             window.addEventListener("scroll", updateToc);
             window.addEventListener("resize", updateToc);
         }
 
-        // Track TOC link clicks in both desktop and mobile navs
-        [tocNav, tocNavMobile].forEach(function (nav) {
-            if (!nav) return;
-            nav.querySelectorAll("a").forEach(function (a) {
-                a.addEventListener("click", function () {
-                    trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
-                });
+        // Track TOC link clicks
+        tocNav.querySelectorAll("a").forEach(function (a) {
+            a.addEventListener("click", function () {
+                trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
             });
         });
     }

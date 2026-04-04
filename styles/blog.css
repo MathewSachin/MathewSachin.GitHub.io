@@ -503,21 +503,18 @@ figure.highlight pre {
   padding: 0.4rem 0.6rem;
 }
 
-#toc-nav ul,
-#toc-nav-mobile ul {
+#toc-nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-#toc-nav li,
-#toc-nav-mobile li {
+#toc-nav li {
   margin: 0;
   padding: 0;
 }
 
-#toc-nav a,
-#toc-nav-mobile a {
+#toc-nav a {
   display: block;
   padding: 0.3rem 0.6rem;
   color: #495057;
@@ -528,23 +525,19 @@ figure.highlight pre {
 }
 
 #toc-nav a:hover,
-#toc-nav a:focus-visible,
-#toc-nav-mobile a:hover,
-#toc-nav-mobile a:focus-visible {
+#toc-nav a:focus-visible {
   color: var(--post-accent, #17a2b8);
   border-left-color: var(--post-accent, #17a2b8);
   background: rgba(23, 162, 184, 0.06);
 }
 
-#toc-nav a.toc-active,
-#toc-nav-mobile a.toc-active {
+#toc-nav a.toc-active {
   color: var(--post-accent, #17a2b8);
   border-left-color: var(--post-accent, #17a2b8);
   font-weight: 600;
 }
 
-#toc-nav .toc-h3 > a,
-#toc-nav-mobile .toc-h3 > a {
+#toc-nav .toc-h3 > a {
   padding-left: 1.2rem;
   font-size: 0.75rem;
   color: #6c757d;
