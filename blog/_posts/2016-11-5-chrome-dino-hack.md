@@ -96,17 +96,12 @@ A few things to keep in mind:
 
 Want to make your dino un-killable? Let’s activate **God Mode** using a little JavaScript magic.
 
-##### Step 1: Save the Original Function  
-This is **very important** if you want to bring the game back to normal later.
+##### Activate God Mode
+
+Paste this into the Console to save the original function and disable game over in one go:
 
 ```js
 var original = Runner.prototype.gameOver;
-```
-
-##### Step 2: Disable Game Over  
-Now, we override the `gameOver` function so that it does… nothing.
-
-```js
 Runner.prototype.gameOver = function() {};
 ```
 
@@ -120,7 +115,7 @@ If you want to restore the game to normal (or get bored of being a god), use thi
 Runner.prototype.gameOver = original;
 ```
 
-This only works if you **saved the original function** first (step 1). Otherwise, go ahead and refresh the page.
+This only works if you ran the block above first. Otherwise, just refresh the page.
 
 ##### How does it work?
 
