@@ -17,24 +17,29 @@ const POSTS_DIR = join(REPO_ROOT, 'blog', '_posts')
 const OUTPUT_FILE = join(REPO_ROOT, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
-/** Strip common Markdown/HTML syntax to produce plain text for indexing. */
+/**
+ * Strip common Markdown/HTML syntax to produce plain text for indexing.
+ * Order matters: fenced code blocks must be removed before inline code,
+ * and HTML tags before link/image syntax so angle brackets don't interfere.
+ */
 export function stripMarkdown(text) {
   return text
-    // Remove fenced code blocks entirely (not useful for full-text search)
+    // Remove fenced and inline code blocks first (their content isn't useful for search)
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/`[^`]*`/g, ' ')
-    // Remove HTML tags
+    // Remove HTML tags (must precede link/image patterns to avoid matching < in attributes)
     .replace(/<[^>]+>/g, ' ')
-    // Remove images and links, keep their text
+    // Remove images (![alt](url)) — keep the alt text only
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Remove links ([text](url)) — keep the link text only
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    // Remove headings markup
+    // Remove ATX heading markers (e.g. ## Section)
     .replace(/^#{1,6}\s+/gm, '')
-    // Remove emphasis/bold markers
+    // Remove emphasis/bold markers while preserving their content
     .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1')
-    // Remove horizontal rules
+    // Remove horizontal rules (---, ***, ___)
     .replace(/^[-*_]{3,}\s*$/gm, ' ')
-    // Collapse whitespace
+    // Collapse all whitespace to single spaces
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -50,6 +55,27 @@ export function postUrlFromFilename(filename) {
   if (!match) return null
   const [, year, month, day, slug] = match
   return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${slug}.html`
+}
+
+/**
+ * Extract the post date as a YYYY-MM-DD string.
+ * Preference order: frontmatter `date` field → filename prefix → first 10 chars of filename.
+ */
+function parsePostDate(frontmatter, filename) {
+  if (frontmatter.date) {
+    return String(frontmatter.date).slice(0, 10)
+  }
+  const dateMatch = filename.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-/)
+  if (dateMatch) {
+    return `${dateMatch[1]}-${dateMatch[2].padStart(2, '0')}-${dateMatch[3].padStart(2, '0')}`
+  }
+  return filename.slice(0, 10)
+}
+
+/** Normalise a frontmatter tags value to a plain string array. */
+function toStringArray(value) {
+  if (Array.isArray(value)) return value.map(String)
+  return value ? [String(value)] : []
 }
 
 async function main() {
@@ -76,18 +102,9 @@ async function main() {
     const raw = await readFile(join(POSTS_DIR, file), 'utf8')
     const { data: frontmatter, content } = matter(raw)
 
-    const title = String(frontmatter.title ?? '')
-    const tags = Array.isArray(frontmatter.tags)
-      ? frontmatter.tags.map(String)
-      : frontmatter.tags
-        ? [String(frontmatter.tags)]
-        : []
-    const dateMatch = file.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-/)
-    const date = frontmatter.date
-      ? String(frontmatter.date).slice(0, 10)
-      : dateMatch
-        ? `${dateMatch[1]}-${dateMatch[2].padStart(2, '0')}-${dateMatch[3].padStart(2, '0')}`
-        : file.slice(0, 10)
+    const title        = String(frontmatter.title ?? '')
+    const tags         = toStringArray(frontmatter.tags)
+    const date         = parsePostDate(frontmatter, file)
     const plainContent = stripMarkdown(content).slice(0, MAX_CONTENT_LENGTH)
 
     await insert(db, { title, url, content: plainContent, tags, date })

@@ -1,4 +1,10 @@
 (function () {
+    // Named constants — avoid magic numbers scattered through the file
+    const BACK_TO_TOP_THRESHOLD = 300;          // px of scroll before button appears
+    const COPY_RESET_DELAY      = 2000;         // ms before copy icon reverts to link icon
+    const DEBOUNCE_DELAY        = 500;          // ms of inactivity before selection is tracked
+    const SCROLL_MILESTONES     = [25, 50, 75, 90]; // percent-scroll milestones to report
+
     // Safe GA event tracker — no-ops gracefully if analytics is blocked
     function trackEvent(name, params) {
         try {
@@ -8,17 +14,22 @@
         } catch (_) {}
     }
 
+    // Shorthand: attach the same event listener to every element matching a selector
+    function addListeners(selector, event, handler) {
+        document.querySelectorAll(selector).forEach(function (el) {
+            el.addEventListener(event, function () { handler(el); });
+        });
+    }
+
     // Lightbox: click on blog post images to expand
-    var lightbox = document.getElementById("img-lightbox");
+    const lightbox = document.getElementById("img-lightbox");
     if (lightbox) {
-        var lightboxImg = lightbox.querySelector("img");
-        document.querySelectorAll(".page-content img").forEach(function (img) {
-            img.addEventListener("click", function () {
-                lightboxImg.src = img.src;
-                lightboxImg.alt = img.alt || "";
-                lightbox.showModal();
-                trackEvent("image_expand", { image_alt: img.alt || img.src.split("/").pop() });
-            });
+        const lightboxImg = lightbox.querySelector("img");
+        addListeners(".page-content img", "click", function (img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt || "";
+            lightbox.showModal();
+            trackEvent("image_expand", { image_alt: img.alt || img.src.split("/").pop() });
         });
         lightbox.querySelector(".lightbox-close").addEventListener("click", function () {
             lightbox.close();
@@ -30,11 +41,11 @@
     }
 
     // Reading progress bar
-    var progressBar = document.getElementById("reading-progress-bar");
+    const progressBar = document.getElementById("reading-progress-bar");
     if (progressBar) {
         function updateProgress() {
-            var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            var progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
             progressBar.style.width = progress + "%";
             progressBar.setAttribute("aria-valuenow", Math.round(progress));
         }
@@ -44,10 +55,10 @@
     }
 
     // Back to top button
-    var backToTop = document.getElementById("back-to-top");
+    const backToTop = document.getElementById("back-to-top");
     if (backToTop) {
         window.addEventListener("scroll", function () {
-            backToTop.classList.toggle("visible", window.scrollY > 300);
+            backToTop.classList.toggle("visible", window.scrollY > BACK_TO_TOP_THRESHOLD);
         });
         backToTop.addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -56,11 +67,11 @@
     }
 
     // Mobile TOC collapse toggle
-    var tocToggle = document.querySelector(".toc-mobile-toggle");
-    var tocCollapse = document.getElementById("toc-collapse");
+    const tocToggle = document.querySelector(".toc-mobile-toggle");
+    const tocCollapse = document.getElementById("toc-collapse");
     if (tocToggle && tocCollapse) {
         tocToggle.addEventListener("click", function () {
-            var expanded = tocToggle.getAttribute("aria-expanded") === "true";
+            const expanded = tocToggle.getAttribute("aria-expanded") === "true";
             tocToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
             tocCollapse.classList.toggle("show");
             trackEvent("toc_mobile_toggle", { action: expanded ? "collapse" : "expand" });
@@ -68,29 +79,31 @@
     }
 
     // Table of contents: scroll-spy for statically generated TOC
-    var tocNav = document.getElementById("toc-nav");
-    var tocSidebar = document.getElementById("toc-sidebar");
+    const tocNav = document.getElementById("toc-nav");
+    const tocSidebar = document.getElementById("toc-sidebar");
     if (tocNav) {
-        var postContent = document.querySelector("#post .page-content");
-        var headings = postContent ? Array.from(postContent.querySelectorAll("h2, h3")) : [];
+        const postContent = document.querySelector("#post .page-content");
+        const headings = postContent ? Array.from(postContent.querySelectorAll("h2, h3")) : [];
         // Offset in px to account for the fixed navbar when scroll-spying
-        var SCROLL_OFFSET = 90;
+        const SCROLL_OFFSET = 90;
+        // Cache anchor list — reused for both scroll-spy and click tracking
+        const tocLinks = tocNav.querySelectorAll("a");
 
         if (headings.length >= 3) {
             tocSidebar.style.display = "";
 
             // Scroll-spy: highlight active section in TOC nav
             function updateToc() {
-                var scrollPos = window.scrollY + SCROLL_OFFSET;
-                var activeId = null;
+                const scrollPos = window.scrollY + SCROLL_OFFSET;
+                let activeId = null;
                 headings.forEach(function (h) {
                     if (h.getBoundingClientRect().top + window.scrollY <= scrollPos) {
                         activeId = h.id;
                     }
                 });
-                tocNav.querySelectorAll("a").forEach(function (a) { a.classList.remove("toc-active"); });
+                tocLinks.forEach(function (a) { a.classList.remove("toc-active"); });
                 if (activeId) {
-                    var sel = 'a[href="#' + activeId + '"]';
+                    const sel = 'a[href="#' + activeId + '"]';
                     tocNav.querySelectorAll(sel).forEach(function (a) { a.classList.add("toc-active"); });
                 }
             }
@@ -99,7 +112,7 @@
         }
 
         // Track TOC link clicks
-        tocNav.querySelectorAll("a").forEach(function (a) {
+        tocLinks.forEach(function (a) {
             a.addEventListener("click", function () {
                 trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
             });
@@ -107,73 +120,62 @@
     }
 
     // Copy code button
-    document.querySelectorAll(".btn-clip").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-            var selector = btn.getAttribute("data-clipboard-target");
-            var target = selector ? document.querySelector(selector) : null;
-            if (!target) return;
-            navigator.clipboard.writeText(target.textContent).catch(function () {});
-            trackEvent("code_copy");
-        });
+    addListeners(".btn-clip", "click", function (btn) {
+        const selector = btn.getAttribute("data-clipboard-target");
+        const target = selector ? document.querySelector(selector) : null;
+        if (!target) return;
+        navigator.clipboard.writeText(target.textContent).catch(function () {});
+        trackEvent("code_copy");
     });
 
     // Series prev/next navigation clicks
-    document.querySelectorAll(".series-nav-btn, .series-prev-link").forEach(function (seriesNavLink) {
-        seriesNavLink.addEventListener("click", function () {
-            var direction = seriesNavLink.classList.contains("next-post") ? "next" : "previous";
-            var titleEl = seriesNavLink.querySelector(".nav-title");
-            trackEvent("series_nav_click", { direction: direction, post_title: titleEl ? titleEl.textContent.trim() : "" });
-        });
+    addListeners(".series-nav-btn, .series-prev-link", "click", function (seriesNavLink) {
+        const direction = seriesNavLink.classList.contains("next-post") ? "next" : "previous";
+        const titleEl = seriesNavLink.querySelector(".nav-title");
+        trackEvent("series_nav_click", { direction: direction, post_title: titleEl ? titleEl.textContent.trim() : "" });
     });
 
     // Related post clicks
-    document.querySelectorAll(".related-post-link").forEach(function (link) {
-        link.addEventListener("click", function () {
-            var titleEl = link.querySelector(".card-title");
-            trackEvent("related_post_click", { post_title: titleEl ? titleEl.textContent.trim() : "" });
-        });
+    addListeners(".related-post-link", "click", function (link) {
+        const titleEl = link.querySelector(".card-title");
+        trackEvent("related_post_click", { post_title: titleEl ? titleEl.textContent.trim() : "" });
     });
 
     // Post tag badge clicks
-    document.querySelectorAll(".post-tag .badge").forEach(function (badge) {
-        badge.addEventListener("click", function () {
-            trackEvent("tag_click", { tag_name: badge.textContent.trim() });
-        });
+    addListeners(".post-tag .badge", "click", function (badge) {
+        trackEvent("tag_click", { tag_name: badge.textContent.trim() });
     });
 
     // Social share button clicks
-    document.querySelectorAll("[data-share-method]").forEach(function (el) {
-        el.addEventListener("click", function () { trackEvent("post_share", { method: el.getAttribute("data-share-method") }); });
+    addListeners("[data-share-method]", "click", function (el) {
+        trackEvent("post_share", { method: el.getAttribute("data-share-method") });
     });
 
     // Copy post link button
-    var copyPostLink = document.getElementById("copy-post-link");
+    const copyPostLink = document.getElementById("copy-post-link");
     if (copyPostLink) {
-        copyPostLink.addEventListener("click", function () {
-            var url = window.location.href;
-            var icon = copyPostLink.querySelector("i");
-            function onSuccess() {
-                if (icon) { icon.className = "fa fa-check"; }
-                setTimeout(function () { if (icon) { icon.className = "fa fa-link"; } }, 2000);
-                trackEvent("post_share", { method: "copy_link" });
-            }
-            function onFail() {
+        copyPostLink.addEventListener("click", async function () {
+            const url = window.location.href;
+            const icon = copyPostLink.querySelector("i");
+            let copied = false;
+            try {
+                await navigator.clipboard.writeText(url);
+                copied = true;
+            } catch (_) {
                 // Fallback: create a temporary textarea for manual copy
-                var textarea = document.createElement("textarea");
+                const textarea = document.createElement("textarea");
                 textarea.value = url;
                 textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0";
                 document.body.appendChild(textarea);
                 textarea.focus();
                 textarea.select();
-                try {
-                    if (document.execCommand("copy")) { onSuccess(); }
-                } catch (_) {}
+                try { copied = !!document.execCommand("copy"); } catch (_) {}
                 document.body.removeChild(textarea);
             }
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(onSuccess).catch(onFail);
-            } else {
-                onFail();
+            if (copied) {
+                if (icon) { icon.className = "fa fa-check"; }
+                setTimeout(function () { if (icon) { icon.className = "fa fa-link"; } }, COPY_RESET_DELAY);
+                trackEvent("post_share", { method: "copy_link" });
             }
         });
     }
@@ -181,12 +183,12 @@
     // Intersection Observer: fire once when a code block or image/diagram enters the viewport.
     // Uses the browser-native async API so it never blocks the main thread.
     if (typeof IntersectionObserver !== "undefined") {
-        var viewTargets = document.querySelectorAll("div.highlight, img, svg");
+        const viewTargets = document.querySelectorAll("div.highlight, img, svg");
         if (viewTargets.length) {
-            var viewObserver = new IntersectionObserver(function (entries, obs) {
+            const viewObserver = new IntersectionObserver(function (entries, obs) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
-                        var tag = entry.target.tagName.toLowerCase();
+                        const tag = entry.target.tagName.toLowerCase();
                         trackEvent("element_viewed", {
                             element_type: tag === "div" ? "code_block" : "image_or_diagram",
                             page_path: window.location.pathname
@@ -199,40 +201,39 @@
         }
     }
 
-    // Manual code highlight tracker: debounced so it fires at most once per 500 ms of
-    // selection inactivity, preventing a flood of events while the user drags.
+    // Manual code highlight tracker: debounced so it fires at most once per DEBOUNCE_DELAY ms
+    // of selection inactivity, preventing a flood of events while the user drags.
     (function () {
         // Ignore micro-selections (accidental clicks, word double-clicks, etc.)
-        var MIN_SELECTION_LENGTH = 15;
-        var highlightTimer = null;
+        const MIN_SELECTION_LENGTH = 15;
+        let highlightTimer = null;
         document.addEventListener("selectionchange", function () {
             clearTimeout(highlightTimer);
             highlightTimer = setTimeout(function () {
-                var selection = document.getSelection();
+                const selection = document.getSelection();
                 if (!selection || selection.toString().length <= MIN_SELECTION_LENGTH) return;
-                var node = selection.anchorNode;
+                const node = selection.anchorNode;
                 if (!node) return;
-                var el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+                const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
                 if (el && el.closest("div.highlight")) {
                     trackEvent("manual_code_highlight", { page_path: window.location.pathname });
                 }
-            }, 500);
+            }, DEBOUNCE_DELAY);
         });
     }());
 
     // Scroll depth milestones: passive listener avoids any scroll jank; the per-event
     // work is a single arithmetic expression plus an O(4) array walk.
     (function () {
-        var scrollMilestones = [25, 50, 75, 90];
-        var milestonesReached = [];
+        const milestonesReached = [];
         window.addEventListener("scroll", function () {
-            var pct = Math.min(
+            const pct = Math.min(
                 Math.round(
                     (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100
                 ),
                 100
             );
-            scrollMilestones.forEach(function (milestone) {
+            SCROLL_MILESTONES.forEach(function (milestone) {
                 if (pct >= milestone && milestonesReached.indexOf(milestone) === -1) {
                     milestonesReached.push(milestone);
                     trackEvent("scroll_depth", {
