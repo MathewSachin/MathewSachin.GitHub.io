@@ -18,7 +18,7 @@ The {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" tex
 <pre class="pintora">
 activityDiagram
   :GitHub Actions workflow runs;
-  :gh issue create --assignee "@copilot";
+  :gh issue create --assignee @copilot;
   :Copilot agent wakes up;
   -> Reads repo structure and existing posts;
   :Writes new blog post in blog/_posts/;
