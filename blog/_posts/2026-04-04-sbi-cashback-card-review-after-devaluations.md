@@ -29,14 +29,14 @@ The fee waiver at ₹2 lakh annual spend was easy to hit — roughly ₹17,000/m
 
 ## The First Devaluation: Utility and Insurance Exclusions
 
-The first significant change arrived in late 2023. SBI excluded **utility bill payments** (electricity, water, gas, telephone) and **insurance premium payments** from the 5% online cashback. These transactions were reclassified: they would earn cashback at **1%**, same as offline spends.
+The first significant change took effect on **May 1, 2023**. SBI excluded **utility bill payments** (electricity, water, gas, telephone), **insurance premium payments**, **rent**, **education payments**, and **wallet loads** from the rewards programme entirely. These categories were not reclassified at a lower rate — they were removed altogether and earn **0% cashback**.
 
 On paper, this sounds limited. In practice, utility and insurance payments are two of the most consistently large online spend categories for Indian households, especially those using BBPS (Bharat Bill Payment System) aggregators, net banking bill payments, or direct insurer portals.
 
 The impact varies significantly by profile:
 
-- **Renters paying rent + utilities online**: the exclusion hurts if you're routing electricity and broadband through the card. Those bills could represent ₹5,000–₹8,000/month that now earns 1% instead of 5%.
-- **Households with significant insurance premiums**: annual life or health insurance premiums run ₹15,000–₹60,000 for many middle-class families. Losing 4% on a ₹40,000 premium is ₹1,600 gone.
+- **Renters paying rent + utilities online**: the exclusion eliminates all cashback on those spends. Bills that could represent ₹5,000–₹8,000/month now earn 0% instead of 5%.
+- **Households with significant insurance premiums**: annual life or health insurance premiums run ₹15,000–₹60,000 for many middle-class families. Losing 5% on a ₹40,000 premium is ₹2,000 gone.
 - **People without these categories**: if your online spending is dominated by shopping, food delivery, and subscriptions, the exclusion barely registers.
 
 ## The Second Devaluation: Merchant Category Restrictions
@@ -44,7 +44,7 @@ The impact varies significantly by profile:
 The more significant change, introduced in 2024–2025, was the expansion of exclusions to specific **merchant category codes (MCCs)**. SBI progressively limited the 5% cashback by excluding:
 
 - Wallet loads (Paytm, PhonePe wallet top-ups, etc.)
-- Fuel purchases (already earning 0.8% surcharge waiver instead)
+- Fuel purchases (earning a **1% surcharge waiver**, capped at ₹100 per statement cycle for transactions between ₹500–₹3,000)
 - Government payments (e.g., tax payments, challans via government portals)
 - Jewellery and certain luxury categories
 - Some grocery merchants reclassified as offline even when transacted online
@@ -76,8 +76,9 @@ After all three rounds of changes, the current structure is:
 | Category | Cashback Rate | Cap |
 |---|---|---|
 | Online shopping (e-commerce, food delivery, OTT, travel) | 5% | ₹2,000/month |
-| Online utilities, insurance | 1% | Counts toward offline cap |
-| Online wallet loads, govt payments, fuel, tolls, digital gaming | 0% / excluded | — |
+| Online utilities, insurance, rent, education, wallet loads | **0% (excluded)** | — |
+| Fuel | 0% cashback; 1% surcharge waiver (capped ₹100/cycle, txns ₹500–₹3,000) | — |
+| Govt payments, tolls, digital gaming | 0% (excluded) | — |
 | All offline / POS transactions | 1% | ₹2,000/month |
 | EMI transactions | 0% | — |
 | **Combined monthly maximum** | | **₹4,000/month** |
@@ -93,37 +94,39 @@ Let's run four scenarios under the new April 2026 structure.
 | Spend Type | Monthly Amount | Rate | Monthly Cashback |
 |---|---|---|---|
 | Online shopping / food / OTT | ₹15,000 | 5% | ₹750 |
-| Online utilities + insurance (averaged) | ₹5,000 | 1% | ₹50 |
+| Online utilities + insurance (averaged) | ₹5,000 | 0% (excluded) | ₹0 |
 | Offline / POS | ₹15,000 | 1% | ₹150 |
-| **Total** | **₹35,000** | | **₹950/month** |
+| **Total** | **₹35,000** | | **₹900/month** |
 
-Online cashback is ₹750 — comfortably under the new ₹2,000 cap. **No impact from the April 2026 change.** Annual cashback: ~₹11,400. Fee: waived. Net benefit: ~₹11,400.
+Online cashback is ₹750 — comfortably under the new ₹2,000 cap. **No impact from the April 2026 cap change.** Annual cashback: ~₹10,800. Fee: waived. Net benefit: ~₹10,800.
+
+Note: the May 2023 exclusion of utilities at 0% is already baked into this figure. Any spend that migrated to another card after that devaluation would have improved the returns shown above.
 
 ### Scenario B: Utility-Heavy Spender (₹50,000/month total spend)
 
 | Spend Type | Monthly Amount | Rate | Monthly Cashback |
 |---|---|---|---|
 | Online shopping / food / OTT | ₹10,000 | 5% | ₹500 |
-| Online utilities + insurance (high) | ₹15,000 | 1% | ₹150 |
+| Online utilities + insurance (high) | ₹15,000 | 0% (excluded) | ₹0 |
 | Offline / POS | ₹25,000 | 1% | ₹250 |
-| **Total** | **₹50,000** | | **₹900/month** |
+| **Total** | **₹50,000** | | **₹750/month** |
 
-Online 5% cashback is ₹500 — well under the ₹2,000 cap. The cap cut makes no difference here. Annual cashback: ~₹10,800. Fee: waived. Net benefit: ~₹10,800.
+Online 5% cashback is ₹500 — well under the ₹2,000 cap. The April 2026 cap cut makes no difference here. Annual cashback: ~₹9,000. Fee: waived. Net benefit: ~₹9,000.
 
-But note: a card like **Amazon Pay ICICI** (no fee) returning 5% on Amazon purchases and 2% on Amazon Pay merchants might outperform this if Amazon is where the online shopping actually happens. The SBI Cashback card wins when online spend is spread across multiple merchants rather than concentrated on Amazon.
+This profile is where the May 2023 utility exclusion hurts most. ₹15,000 of utility/insurance spend earns nothing. Routing those payments to **Axis Ace** (which includes utilities at its flat rate) or paying them via a no-fee card would recover meaningful value.
 
 ### Scenario C: Low-Income / Early-Career (₹20,000/month total spend)
 
 | Spend Type | Monthly Amount | Rate | Monthly Cashback |
 |---|---|---|---|
 | Online shopping / food / OTT | ₹8,000 | 5% | ₹400 |
-| Online utilities | ₹3,000 | 1% | ₹30 |
+| Online utilities | ₹3,000 | 0% (excluded) | ₹0 |
 | Offline | ₹9,000 | 1% | ₹90 |
-| **Total** | **₹20,000** | | **₹520/month** |
+| **Total** | **₹20,000** | | **₹490/month** |
 
-Annual cashback: ~₹6,240. At ₹20k/month you're at ₹2.4L annual spend — fee is waived. Net benefit: ~₹6,240.
+Annual cashback: ~₹5,880. At ₹20k/month you're at ₹2.4L annual spend — fee is waived. Net benefit: ~₹5,880.
 
-If spend is slightly lower and fee isn't waived: ₹6,240 − ₹1,179 = **₹5,061 net**. Still positive, but the margins shrink. If you're spending under ₹17,000/month, you'll pay the fee and the net return compresses further.
+If spend is slightly lower and fee isn't waived: ₹5,880 − ₹1,179 = **₹4,701 net**. Still positive, but the margins shrink. If you're spending under ₹17,000/month, you'll pay the fee and the net return compresses further.
 
 ### Scenario D: Heavy Online Spender (₹80,000/month online spend) — Most Impacted
 
@@ -156,7 +159,7 @@ Families routing grocery delivery, food apps, streaming, and online pharmacies t
 
 ### ⚠️ Diminished value: utility-heavy, insurance-heavy spenders
 
-If your primary use case was paying large insurance premiums and utility bills online, both the earlier exclusion devaluations and the new cap change hurt you. Utilities and insurance now earn only 1%, and even the general offline cap is ₹2,000. An **Axis Ace** card (1.5% flat on all categories including utilities, ₹499 fee) or even a no-fee card may serve you better.
+If your primary use case was paying large insurance premiums and utility bills online, the May 2023 exclusion has already zeroed out cashback on those categories entirely. These spends earn **0%** on the SBI Cashback card. An **Axis Ace** card (flat rate on all categories including utilities, ₹499 fee) or any no-fee card will serve you materially better for those transactions.
 
 ### ⚠️ May not be right: Amazon-first households
 
@@ -178,7 +181,7 @@ If you already hold HDFC Infinia, Axis Reserve, or Amex Platinum, the SBI Cashba
 
 | Card | Annual Fee | Online Cashback | Offline Cashback | Key Caveat |
 |---|---|---|---|---|
-| **SBI Cashback** | ₹999 (waived at ₹2L) | 5% (excl. utilities, insurance) | 1% | ₹2k/month online cap; ₹4k combined |
+| **SBI Cashback** | ₹999 (waived at ₹2L) | 5% (utilities, insurance, rent etc. excluded at 0%) | 1% | ₹2k/month online cap; ₹4k combined |
 | **Amazon Pay ICICI** | Free | 5% (Amazon only), 2% (Amazon Pay) | 1% | Amazon-centric; no monthly cap |
 | **Axis Ace** | ₹499 (waived at ₹2L) | 2% flat (5% on Google Pay) | 2% flat | Lower rate but no restrictive cap |
 | **HDFC Millennia** | ₹1,000 (waived at ₹1L) | 5% on 10 partners, 1% elsewhere | 1% | Partner-restricted 5% |
@@ -213,7 +216,7 @@ The April 2026 cap cut is the most significant devaluation this card has seen. T
 **Skip it or reassess** if:
 
 1. You previously spent ₹60,000–₹1,00,000+ online per month and relied on the old ₹5,000 cap — the cap cut has eliminated a large chunk of your annual return
-2. Your biggest online expense categories are utilities and insurance — the 1% rate there combined with the earlier exclusions makes this card irrelevant for those spends
+2. Your biggest online expense categories are utilities and insurance — these earn **0%** (completely excluded since May 2023), making the card irrelevant for those spends
 3. You're an Amazon-heavy spender — Amazon Pay ICICI has no monthly cap and no annual fee
 4. You spend under ₹15,000/month in total — no-fee alternatives will serve you better
 
