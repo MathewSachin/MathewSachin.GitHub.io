@@ -876,6 +876,7 @@ a.series-post-title:hover {
   border-left: 0.25em solid var(--post-accent, var(--color-accent));
   background: transparent;
   font-style: normal;
+  font-size: 0.9em;
 }
 
 .page-content blockquote > :last-child {
