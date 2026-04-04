@@ -9,25 +9,7 @@ related:
   - /blog/2026/04/02/docker-faster-github-actions
 ---
 
-*This blog auto-generates posts by triggering GitHub Copilot from a scheduled or manually dispatched GitHub Actions workflow. Here's exactly how that works — including the one token setup step that isn't obvious.*
-
-## What's Happening Under the Hood
-
-The {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="AI blog generation flow" %} for this site boils down to one key trick: a GitHub Actions workflow creates a GitHub Issue and assigns it to `@copilot`. Copilot's coding agent picks up the assignment, reads the repo, writes a Markdown file in `blog/_posts/`, and opens a pull request — all automatically.
-
-<pre class="pintora">
-activityDiagram
-  :GitHub Actions workflow runs;
-  :gh issue create --assignee @copilot;
-  :Copilot agent wakes up;
-  -> Reads repo structure and existing posts;
-  :Writes new blog post in blog/_posts/;
-  :Opens a Pull Request;
-  :You review and merge on mobile or desktop;
-  :GitHub Pages deploys the post 🎉;
-</pre>
-
-The entire pipeline is cloud-based. You can kick it off from a phone.
+*GitHub Copilot can act as a coding agent: assign it to an issue and it opens a pull request with working code. This post shows how to trigger that automatically from a GitHub Actions workflow — including the one token setup step that isn't obvious.*
 
 ## Why You Can't Use `GITHUB_TOKEN`
 
@@ -80,6 +62,7 @@ The name `COPILOT_PAT` is what the workflow will reference.
 
 Here's the complete workflow that uses this token to trigger Copilot:
 
+{% raw %}
 ```yaml
 name: AI Blog Post Generator
 
@@ -111,10 +94,11 @@ inaccuracies. Always verify technical details from primary sources.</em></small>
 
           echo "Created Copilot task: ${ISSUE_URL}"
 ```
+{% endraw %}
 
 A few things worth calling out:
 
-- **`GH_TOKEN: ${{ secrets.COPILOT_PAT }}`** — the `gh` CLI picks up the token from this environment variable. This is how you pass the fine-grained PAT to `gh` without hardcoding it.
+- {% raw %}**`GH_TOKEN: ${{ secrets.COPILOT_PAT }}`**{% endraw %} — the `gh` CLI picks up the token from this environment variable. This is how you pass the fine-grained PAT to `gh` without hardcoding it.
 - **`--assignee "@copilot"`** — this is what activates the Copilot agent. GitHub recognises `@copilot` as a special assignee that triggers a coding agent session.
 - **`--body-file /tmp/issue-body.txt`** — the instructions go into the issue body via a temp file rather than directly as a shell argument, which avoids quoting issues with long strings.
 - **`workflow_dispatch`** — the trigger is manual for now. You can change this to `schedule` for fully automated runs (see below).
@@ -123,12 +107,14 @@ A few things worth calling out:
 
 The `workflow_dispatch` trigger requires you to manually click **Run workflow** in the Actions tab. If you want Copilot to generate a post on a schedule — say, every Monday morning — swap the trigger:
 
+{% raw %}
 ```yaml
 on:
   schedule:
     - cron: '0 8 * * 1'  # Every Monday at 08:00 UTC
   workflow_dispatch:       # Keep this so you can also trigger manually
 ```
+{% endraw %}
 
 Keeping `workflow_dispatch` alongside `schedule` is good practice — it lets you trigger a one-off post without waiting for the schedule.
 
@@ -150,9 +136,9 @@ The issue body is Copilot's brief. The agent reads it, then browses your reposit
 
 The more context you give Copilot about your site's conventions, the better the generated posts match your existing content. You can also create a `.github/copilot-instructions.md` file in your repository with standing instructions that apply to every Copilot session — not just this workflow.
 
-## The Full Picture
+## Example: How This Blog Uses It
 
-When everything is in place, the complete flow looks like this:
+This is exactly how this blog auto-generates posts. A scheduled workflow creates an issue, assigns it to `@copilot`, and Copilot opens a pull request with a new Markdown file in `blog/_posts/`. The entire pipeline runs in the cloud — you can kick it off from a phone.
 
 <pre class="pintora">
 activityDiagram
@@ -177,7 +163,7 @@ activityDiagram
   }
 </pre>
 
-Your involvement is limited to reviewing and merging the PR. Everything else is automated.
+The {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="AI blog generation flow overview" %} covers the broader picture of how posts go from Copilot's PR to a live Jekyll page on GitHub Pages.
 
 ## Troubleshooting
 
@@ -205,5 +191,3 @@ Make sure you added the token as a *repository* secret (not an environment secre
 | 6 | Review and merge the PR Copilot opens |
 
 The only non-obvious part is the fine-grained token — everything else is standard GitHub Actions. Once the token is in place, the workflow is a handful of lines of shell script.
-
-*The {% include post_link.html url="/blog/2026/03/12/ai-blog-generation-flow" text="AI blog generation flow overview" %} covers the broader picture of how posts go from Copilot's PR to a live Jekyll page on GitHub Pages, if you want to see the full pipeline.*
