@@ -5,7 +5,7 @@ tags: [personal-finance, credit-cards, india, sbi, card-review]
 highlight: false
 ---
 
-The SBI SimplyCLICK Elite (commonly called the SBI Elite) is one of the more marketed premium credit cards from India's largest public sector bank. I held mine from 2020 until recently, when I finally pulled the plug. This post is a transparent look at every frustration that led to that decision — from a credit limit that refused to grow to a rewards structure that barely justified the fee.
+The SBI Elite is one of the more marketed premium credit cards from India's largest public sector bank. I held mine from 2020 until recently, when I finally pulled the plug. This post is a transparent look at every frustration that led to that decision — from a credit limit that refused to grow to a rewards structure that barely justified the fee.
 
 ## How I Ended Up With the Card
 
@@ -30,40 +30,55 @@ Getting a limit increase with SBI required:
 - Waiting through a slow approval process with no clear timeline
 - Accepting whatever number they offered, which was rarely dramatic
 
-After years of this, I eventually reached **₹1.8 lakh**. The ceiling felt arbitrary and immovable regardless of income growth. Other issuers were extending 5–8× annual income limits to customers with similar profiles; SBI was sitting at roughly 1.8× with no indication it would go further.
+After years of this, I eventually reached **₹1.8 lakh**. The ceiling felt arbitrary and immovable regardless of income growth. To put this in perspective, at around the same time I applied for other cards and received:
+
+| Card | Limit Offered |
+|---|---|
+| SBI Elite | ₹1.8 lakh |
+| Amazon Pay ICICI | ₹2.6 lakh |
+| Axis Select | ₹3.5 lakh |
+| HDFC Swiggy (not even a premium card) | ₹5.3 lakh |
+
+The HDFC Swiggy card — a no-annual-fee card targeting food delivery spend — offered nearly 3× the limit that SBI's flagship premium card had reached after years of relationship history and repeated income documentation. That comparison alone tells you how conservative SBI's underwriting is on limits.
 
 ### Why the Limit Mattered: The ₹10 Lakh Milestone
 
 The SBI Elite has a well-known annual fee waiver structure tied to spending milestones. To get the ₹4,999 annual fee waived, you need to hit **₹10 lakh in annual spends**.
 
-With a ₹1.8 lakh limit, reaching ₹10 lakh annually means **spending your entire credit limit roughly 5.5 times over** — which in practice means paying your outstanding bill multiple times per month just to free up headroom. Not because you're over-spending in absolute terms, but because the limit is too low to accommodate your natural monthly spend in a single cycle.
-
-This kind of forced mid-cycle payment is friction that wears you down. It's also entirely avoidable if the card issuer had been willing to extend a reasonable limit in the first place.
+With the initial ₹80,000 limit, hitting ₹10 lakh annually meant cycling through the entire limit more than ten times — which in practice required paying the outstanding bill multiple times per month just to free up headroom. Even at the later ₹1.8 lakh limit, you still need to turn over the card's entire credit limit roughly 5–6 times across the year, which isn't natural behaviour for most spenders.
 
 ### Fee Waivers: Occasional, Not Sustainable
 
-I did get the fee waived a couple of times over the life of the card, when spend patterns aligned with the milestone. But it required active management — tracking spends, timing purchases, sometimes forcing spend onto this card when another card would have been more rewarding. That's effort that should be going towards actual financial decisions, not gaming a card's mechanics.
+I did get the fee waived a couple of times over the life of the card, when spend patterns aligned with the milestone. One stretch where it worked: I put corporate team outing expenses — restaurant bills, event bookings — on this card. That inflated the spend numbers enough to clear the milestone. But relying on irregular corporate outings to justify a personal credit card's fee is not a repeatable strategy. In the years without those concentrated spends, hitting ₹10 lakh organically just wasn't happening.
 
 ## The Rewards Problem
 
-The Elite's reward rate sounds acceptable on paper but underdelivers in practice.
+The Elite earns **2 reward points per ₹100** as a base rate, with accelerated earning in select categories. Each reward point redeems at **₹0.25** when used as statement credit (the best redemption option — more on that below).
 
-| Spend Category | Reward Rate |
-|---|---|
-| Dining, movies, departmental stores, grocery | 10× reward points |
-| International spends | 4× reward points |
-| Utilities (up to ₹2,000/month) | 2× reward points |
-| All other spends | 2× reward points |
+Translating that into actual cashback percentages:
 
-The issue isn't the headline rates on categories — it's the **redemption side**. Reward points on the SBI Elite are worth the most when redeemed against the statement (as a credit to your outstanding balance). The points store — merchandise, vouchers, and other options — offers poor value per point by comparison.
+| Spend Category | Reward Points per ₹100 | Effective Cashback (Statement Credit) |
+|---|---|---|
+| Dining, movies, departmental stores, grocery | 10× | **2.5%** |
+| International spends | 4× | **1.0%** |
+| Utilities (up to ₹2,000/month spend) | 2× | **0.5%** |
+| All other spends | 2× | **0.5%** |
 
-Exclusively using statement credit is effectively a small cashback card wearing a premium card's clothing. If you're going to do cashback, there are cards purpose-built for it with better rates and no hoops to jump through.
+On the surface, 2.5% on dining and grocery looks competitive for a premium card. The problem is context: a no-fee Amazon Pay ICICI card returns 5% on Amazon purchases (where most household shopping has shifted) and 2% on other Amazon Pay merchant transactions. The HDFC Swiggy card returns 10% on Swiggy and Instamart orders — a single-use-case card beating a premium card's headline rate without any annual fee.
+
+The SBI Elite's categories were well-designed for 2018 spending patterns. By the mid-2020s, where you actually spend has shifted significantly.
+
+### The Redemption Problem
+
+Reward points on the SBI Elite are worth the most when redeemed as statement credit (₹0.25 per point). The points store — merchandise, vouchers, brand partnerships — offers substantially worse per-point value. In practice, I exclusively used statement credit, which means the card was functioning as a cashback card returning 0.5–2.5% depending on category.
+
+For a card with a ₹4,999 annual fee, a 0.5% base cashback rate is difficult to justify unless your spend is heavily concentrated in the accelerated categories — and even then, there are no-fee alternatives at comparable or better rates.
 
 ## The Benefits That Looked Better Than They Were
 
-### Movie Tickets
+### Movie Tickets and Amazon Discounts
 
-The Elite offers **2 free movie tickets per month** via BookMyShow (up to ₹250 each, with some terms). In 2020, this was a distinguishing perk. By 2026, multiple cards across various issuers offer similar or equivalent movie benefits — Axis Ace, HDFC Millennia, ICICI Coral, and others. It's no longer a differentiated reason to hold the card.
+The Elite offers **2 free movie tickets per month** via BookMyShow (up to ₹250 each, with some terms). There's also a periodic **10% discount on Amazon** purchases. In 2020, both were distinguishing perks. By 2026, movie ticket benefits appear across Axis Ace, HDFC Millennia, ICICI Coral, and many others — and the Amazon discount is available on several cards as well. Neither benefit is a compelling differentiator anymore.
 
 ### Priority Pass and Vistara Membership
 
@@ -93,26 +108,36 @@ I declined and closed the card.
 |---|---|
 | Starting limit (2020) | ₹80,000 — low for a premium card |
 | Maximum limit reached | ₹1.8 lakh — despite multiple attempts over years |
-| Fee waiver milestone | ₹10 lakh/year — impossible to reach organically at ₹1.8L limit |
-| Rewards redemption | Statement credit only (rest of points store is poor value) |
-| Movie tickets | Decent, but now common across many cards |
+| Competing cards' limits (same time) | Amazon Pay ICICI ₹2.6L · Axis Select ₹3.5L · HDFC Swiggy ₹5.3L |
+| Fee waiver milestone | ₹10 lakh/year — required mid-cycle payments at initial 80k limit; needed corporate spend to hit at 1.8L |
+| Base reward rate | 0.5% cashback equivalent (statement credit) |
+| Accelerated reward rate | 2.5% on dining/movies/grocery/departmental stores |
+| Rewards redemption | Statement credit only practical (points store is poor value) |
+| Movie tickets & Amazon discount | Present but now common across many cards |
 | Priority Pass | Year 1 only |
 | Vistara benefit | Year 1 only; couldn't use due to COVID |
 | Domestic lounge access | ✅ Unconditional — genuinely good |
 | Retention offer at closure | Points worth pre-tax fee amount — not compelling |
 
-## What I'd Tell Someone Considering the SBI Elite Today
+## Should You Get the SBI Elite?
 
-If you already bank with SBI and want a credit card with minimal friction to apply: the Elite is easy to get approved for. But go in with clear expectations.
+Honest answer: **probably not**, unless your situation fits a very specific profile.
 
-- The limit growth will require active effort and patience, and may plateau below what you need for milestone-linked benefits.
-- The rewards programme is best treated as a mediocre cashback card — use statement credit, ignore the points store.
-- The first-year benefits (Priority Pass, Vistara) are a one-time bonus, not an ongoing value proposition.
-- Unconditional domestic lounge access is a genuine advantage — if that's a priority and you'd use it regularly, it's worth factoring in.
+The card is easy to get if you already bank with SBI — that's its main attraction. But the inertia that makes it easy to get is the same inertia that makes it easy to keep holding even after it stops delivering value. Here's what you're actually signing up for:
 
-If your goal is a card that grows with your income, offers flexible redemptions, and delivers consistent value beyond year one, the SBI Elite is likely to disappoint. There are better options from HDFC, Axis, and ICICI for the same fee bracket — though they come with their own trade-offs.
+- A credit limit that SBI will be reluctant to grow, even as your income increases and other banks offer you 2–3× more without the friction.
+- A rewards programme that works out to 0.5% on most of your spending — at a ₹4,999 annual fee — and 2.5% on a category set that hasn't aged well against no-fee alternatives.
+- A first-year benefits package (Priority Pass, Vistara Silver) that disappears entirely after year one. If you can't use those benefits in year one — COVID being one example — you've effectively received nothing.
+- A fee waiver milestone that requires either concentrated corporate spending, mid-cycle bill payments, or just accepting the fee most years.
+- An Amazon discount that exists but is also available on better-structured cards.
+- The one unconditional positive: domestic lounge access with no spend conditions. If that alone is worth ₹4,999 per year to you and you'll use it regularly, there's a case to be made. For most people, there are better lounge-access cards available.
 
-Sometimes the right financial decision is simply to stop optimising a sub-optimal product and move on.
+**Better alternatives to consider:**
+- **Amazon Pay ICICI Card** (no fee): 5% on Amazon, 2% on pay-merchant transactions, no annual fee — immediately better on the biggest spend category for most households.
+- **Axis Atlas / Axis Reserve**: Proper travel card with meaningful mile earning if you fly regularly.
+- **HDFC Infinia / Diners Black**: If you want a genuinely premium SBI-fee-tier card, these earn more and the points actually transfer to airlines and hotels at good rates.
+
+If you already hold the SBI Elite and are on the fence about closing: the fact that you're on the fence is usually the answer. The card doesn't get better over time — the limits won't magically grow, the benefits won't improve, and the rewards programme isn't going to beat what newer cards are offering. Closing it and redirecting that annual fee toward a card that fits your actual spend is almost certainly the right call.
 
 ---
 
