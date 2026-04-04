@@ -1,3 +1,14 @@
+/* ============================================================
+   CSS custom properties — change one place to retheme the site
+   ============================================================ */
+:root {
+  --color-accent:    #17a2b8;        /* Primary teal accent */
+  --color-code-bg:   #1c1c2e;        /* Dark code-block background */
+  --shadow-sm:       0 2px 12px rgba(0, 0, 0, 0.2);
+  --shadow-md:       0 4px 16px rgba(0, 0, 0, 0.25);
+  --transition-base: 0.2s ease;
+}
+
 /* Pull the post content card up to overlap the teal header section */
 .post-content-container {
   margin-top: -7.5rem;
@@ -5,7 +16,7 @@
 
 /* Post hero / title section — uses --post-accent CSS variable (set per-post via frontmatter) */
 .post-hero {
-  background-color: var(--post-accent, #17a2b8);
+  background-color: var(--post-accent, var(--color-accent));
 }
 
 /* Copy code button: positioned inside the code block, top-right, visible on hover */
@@ -15,13 +26,13 @@ figure.highlight {
   border-radius: 0.5rem;
   overflow: hidden;
   max-width: 100%;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
   margin-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .code-block-header {
-  background: #1c1c2e;
+  background: var(--color-code-bg);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   min-height: 2.25rem;
 }
@@ -43,19 +54,19 @@ figure.highlight {
   background: transparent;
   border: none;
   padding: 0.15rem 0.4rem;
-  transition: color 0.2s ease;
+  transition: color var(--transition-base);
   line-height: 1;
 }
 
 .btn-clip:hover,
 .btn-clip:focus {
-  color: #17a2b8;
+  color: var(--color-accent);
   background: transparent;
   box-shadow: none;
 }
 
 .btn-clip:focus-visible {
-  outline: 2px solid #17a2b8;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -87,17 +98,17 @@ figure.highlight pre {
   max-width: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: 1px solid grey;
+  border: 1px solid var(--bs-border-color);
   border-radius: 4px;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--transition-base), opacity var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .page-content img:hover {
   transform: scale(1.02);
   opacity: 0.88;
-  border-color: #17a2b8;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
 }
 
 /* Lightbox dialog */
@@ -161,7 +172,7 @@ figure.highlight pre {
 }
 
 .home-cards-section .card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   border-radius: 8px;
 }
 
@@ -187,7 +198,7 @@ figure.highlight pre {
 }
 
 .home-section-divider .btn-outline-secondary:focus-visible {
-  outline: 2px solid #17a2b8;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -199,7 +210,7 @@ figure.highlight pre {
 }
 
 .related-posts-section .card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   border-radius: 8px;
 }
 
@@ -207,13 +218,18 @@ figure.highlight pre {
   transform: translateY(-4px);
 }
 
-/* Top variant: inside the hero section (blue/info background) */
-.related-posts-section.top-variant .related-posts-heading {
-  color: rgba(255, 255, 255, 0.85);
+/* Shared heading styles for both top and bottom related-posts variants */
+.related-posts-section.top-variant .related-posts-heading,
+.related-posts-section.bottom-variant .related-posts-heading {
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.75rem;
+}
+
+/* Top variant: inside the hero section (blue/info background) */
+.related-posts-section.top-variant .related-posts-heading {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .related-posts-section.top-variant .card {
@@ -239,15 +255,11 @@ figure.highlight pre {
 
 /* Bottom variant: inside the post card body (white background) */
 .related-posts-section.bottom-variant .related-posts-heading {
-  color: var(--post-accent, #17a2b8);
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
+  color: var(--post-accent, var(--color-accent));
 }
 
 .related-posts-section.bottom-variant .card {
-  background: var(--card-accent, var(--post-accent, #17a2b8));
+  background: var(--card-accent, var(--post-accent, var(--color-accent)));
   border: none;
   color: white;
 }
@@ -275,7 +287,7 @@ figure.highlight pre {
 
 /* Post icon (Font Awesome icon set via frontmatter) */
 .post-icon {
-  color: var(--item-accent, var(--post-accent, #17a2b8));
+  color: var(--item-accent, var(--post-accent, var(--color-accent)));
   font-size: 0.85em;
   opacity: 0.85;
   flex-shrink: 0;
@@ -289,7 +301,7 @@ figure.highlight pre {
 
 /* Inline post links with icon (post_link.html include) */
 .post-link {
-  color: var(--post-accent, #17a2b8);
+  color: var(--post-accent, var(--color-accent));
   text-decoration: none;
 }
 
@@ -316,97 +328,91 @@ figure.highlight pre {
   color: #6f42c1;
 }
 
-/* Visited state distinction for post list entries */
-.blog-post-link:visited .blog-post-title {
-  color: #6c757d;
-}
-
-.archive-post-link:visited .archive-post-title {
-  color: #6c757d;
-}
-
+/* Visited state for post list items */
+.blog-post-link:visited .blog-post-title,
+.archive-post-link:visited .archive-post-title,
 .tag-post-link:visited .tag-post-title {
   color: #6c757d;
 }
 
-/* Blog index post list */
-.blog-post-item {
+/* ============================================================
+   Post list items — shared base styles
+   (.blog-post-item, .archive-post-item, .tag-post-item)
+   ============================================================ */
+.blog-post-item,
+.archive-post-item,
+.tag-post-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  transition: background-color 0.15s ease;
   border-radius: 4px;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  transition: background-color 0.15s ease;
 }
 
-.blog-post-link:hover .blog-post-item {
-  background-color: rgba(23, 162, 184, 0.06);
+/* Tag list uses a slightly lighter separator */
+.tag-post-item {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+.blog-post-link:hover .blog-post-item,
+.archive-post-link:hover .archive-post-item,
+.tag-post-link:hover .tag-post-item {
+  background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+}
+
+/* Post list title colours */
+.blog-post-title,
+.archive-post-title,
+.tag-post-title {
+  color: var(--item-accent, var(--color-accent));
 }
 
 .blog-post-title {
-  color: var(--item-accent, #17a2b8);
   line-height: 1.4;
 }
 
-.blog-post-link:hover .blog-post-title {
+.blog-post-link:hover .blog-post-title,
+.archive-post-link:hover .archive-post-title,
+.tag-post-link:hover .tag-post-title {
   text-decoration: underline;
 }
 
 /* Archive page */
 .archive-year {
-  color: #17a2b8;
+  color: var(--color-accent);
   font-weight: 600;
-  border-bottom: 2px solid #17a2b8;
+  border-bottom: 2px solid var(--color-accent);
   padding-bottom: 0.25rem;
   margin-top: 1.5rem !important;
 }
 
-.archive-post-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 4px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  transition: background-color 0.15s ease;
-}
-
-.archive-post-link:hover .archive-post-item {
-  background-color: rgba(23, 162, 184, 0.06);
-}
-
-.archive-post-title {
-  color: var(--item-accent, #17a2b8);
-}
-
-.archive-post-link:hover .archive-post-title {
-  text-decoration: underline;
-}
-
 /* Pagination */
 .pagination .page-link {
-  color: #17a2b8;
-  border-color: rgba(23, 162, 184, 0.3);
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
   border-radius: 50rem !important;
   margin: 0 0.15rem;
   min-width: 2.25rem;
   text-align: center;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), transform 0.15s ease;
 }
 
 .pagination .page-link:hover {
   color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   transform: translateY(-1px);
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: #fff;
 }
 
 .pagination .page-item.disabled .page-link {
-  color: rgba(23, 162, 184, 0.4);
-  border-color: rgba(23, 162, 184, 0.15);
+  color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
   background-color: transparent;
 }
 
@@ -420,29 +426,9 @@ figure.highlight pre {
   padding-bottom: 0.4rem;
 }
 
-.tag-post-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  transition: background-color 0.15s ease;
-}
-
-.tag-post-link:hover .tag-post-item {
-  background-color: rgba(23, 162, 184, 0.06);
-}
-
-.tag-post-title {
-  color: var(--item-accent, #17a2b8);
-}
-
-.tag-post-link:hover .tag-post-title {
-  text-decoration: underline;
-}
-
 .page-content h2 {
   padding-bottom: 0.3rem;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 /* Reading progress bar */
@@ -452,7 +438,7 @@ figure.highlight pre {
   left: 0;
   height: 4px;
   width: 0%;
-  background: linear-gradient(90deg, var(--post-accent, #17a2b8), #0d6efd);
+  background: linear-gradient(90deg, var(--post-accent, var(--color-accent)), #0d6efd);
   z-index: 9999;
   transition: width 0.1s linear;
   pointer-events: none;
@@ -466,7 +452,7 @@ figure.highlight pre {
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform var(--transition-base);
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
@@ -482,21 +468,21 @@ figure.highlight pre {
 
 #back-to-top:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(23, 162, 184, 0.4);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 /* Table of contents sidebar */
 .toc-card {
   font-size: 0.8rem;
-  border: 1px solid rgba(23, 162, 184, 0.3);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .toc-header {
-  background: rgba(23, 162, 184, 0.08);
-  border-bottom: 1px solid rgba(23, 162, 184, 0.25);
-  color: var(--post-accent, #17a2b8);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
+  color: var(--post-accent, var(--color-accent));
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -526,14 +512,14 @@ figure.highlight pre {
 
 #toc-nav a:hover,
 #toc-nav a:focus-visible {
-  color: var(--post-accent, #17a2b8);
-  border-left-color: var(--post-accent, #17a2b8);
-  background: rgba(23, 162, 184, 0.06);
+  color: var(--post-accent, var(--color-accent));
+  border-left-color: var(--post-accent, var(--color-accent));
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
 }
 
 #toc-nav a.toc-active {
-  color: var(--post-accent, #17a2b8);
-  border-left-color: var(--post-accent, #17a2b8);
+  color: var(--post-accent, var(--color-accent));
+  border-left-color: var(--post-accent, var(--color-accent));
   font-weight: 600;
 }
 
@@ -547,19 +533,19 @@ figure.highlight pre {
 .dino-hack-widget {
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
   margin-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .dino-hack-controls {
-  background: #1c1c2e;
+  background: var(--color-code-bg);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   min-height: 2.5rem;
 }
 
 .dino-hack-controls .form-range {
-  accent-color: #17a2b8;
+  accent-color: var(--color-accent);
 }
 
 .dino-hack-controls .dino-hack-num {
@@ -573,12 +559,12 @@ figure.highlight pre {
 .dino-hack-controls .dino-hack-num:focus {
   background: rgba(255, 255, 255, 0.12);
   color: white;
-  border-color: #17a2b8;
-  box-shadow: 0 0 0 0.15rem rgba(23, 162, 184, 0.3);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .dino-hack-controls .dino-hack-num:focus-visible {
-  outline: 2px solid #17a2b8;
+  outline: 2px solid var(--color-accent);
   outline-offset: 0;
 }
 
@@ -593,19 +579,19 @@ figure.highlight pre {
   background: transparent;
   border: none;
   padding: 0.15rem 0.4rem;
-  transition: color 0.2s ease;
+  transition: color var(--transition-base);
   line-height: 1;
   white-space: nowrap;
   font-size: 0.72rem;
 }
 
 .btn-dino-reset:hover {
-  color: #17a2b8;
+  color: var(--color-accent);
   background: transparent;
 }
 
 .btn-dino-reset:focus-visible {
-  outline: 2px solid #17a2b8;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -614,7 +600,7 @@ figure.highlight pre {
   margin: 1rem 0 1.5rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .dino-embed-frame {
@@ -628,7 +614,7 @@ figure.highlight pre {
 .dino-embed-caption {
   display: block;
   padding: 0.35rem 0.75rem;
-  background: #1c1c2e;
+  background: var(--color-code-bg);
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.4);
 }
@@ -638,7 +624,7 @@ figure.highlight pre {
 }
 
 .dino-embed-caption a:hover {
-  color: #17a2b8;
+  color: var(--color-accent);
 }
 
 /* Mobile TOC collapsible toggle */
@@ -650,13 +636,13 @@ figure.highlight pre {
 }
 
 .toc-mobile-toggle:focus-visible {
-  outline: 2px solid #17a2b8;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
 .toc-chevron {
   font-size: 0.75rem;
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-base);
 }
 
 .toc-mobile-toggle[aria-expanded="true"] .toc-chevron {
@@ -724,9 +710,9 @@ figure.highlight pre {
 
 .series-post-nav .series-nav-btn:hover {
   background: #e9ecef;
-  border-color: #17a2b8;
-  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.15);
-  color: #17a2b8;
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
 }
 
 .series-post-nav .series-nav-btn.next-post {
@@ -737,7 +723,7 @@ figure.highlight pre {
 
 .series-post-nav .nav-icon {
   font-size: 1.1rem;
-  color: #17a2b8;
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 
@@ -784,7 +770,7 @@ figure.highlight pre {
 }
 
 .series-post-item:hover .series-part-badge {
-  background: #17a2b8;
+  background: var(--color-accent);
   color: #fff;
 }
 
@@ -817,13 +803,13 @@ figure.highlight pre {
 }
 
 .series-post-title a:hover {
-  color: #17a2b8;
+  color: var(--color-accent);
 }
 
 /* When the <a> itself is the series-post-title (direct link pattern) */
 a.series-post-title {
   text-decoration: none;
-  color: var(--item-accent, #17a2b8);
+  color: var(--item-accent, var(--color-accent));
   transition: color 0.15s ease;
 }
 
@@ -832,7 +818,7 @@ a.series-post-title:hover {
 }
 
 .series-level-heading {
-  color: #17a2b8;
+  color: var(--color-accent);
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -854,15 +840,15 @@ a.series-post-title:hover {
 }
 
 .series-showcase-card {
-  border: 1px solid rgba(23, 162, 184, 0.3);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
 .series-showcase-link:hover .series-showcase-card {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(23, 162, 184, 0.2);
-  border-color: #17a2b8;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  border-color: var(--color-accent);
 }
 
 
