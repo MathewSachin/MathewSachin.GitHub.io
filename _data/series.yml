@@ -2,7 +2,7 @@ blogging-with-jekyll:
   name: "Blogging with Jekyll"
   url: "/blog/series/blogging-with-jekyll/"
   description: >
-    An 8-part series on building and running a Jekyll blog hosted on GitHub Pages —
+    A 9-part series on building and running a Jekyll blog hosted on GitHub Pages —
     from automating posts with AI to adding offline search, comments, live PR previews,
     ads, faster CI builds, Good Core Web Vitals, and deep reader engagement analytics. Each part is a standalone deep-dive you can apply to your own site.
   levels:
@@ -15,6 +15,8 @@ blogging-with-jekyll:
       posts:
         - id: "/blog/2026/03/12/ai-blog-generation-flow"
           blurb: "Write posts on your phone with GitHub Copilot and have them live in minutes without ever touching a laptop. Teaches: GitHub Copilot as editor, PRs as a publishing pipeline, GitHub Pages automation."
+        - id: "/blog/2026/04/04/trigger-copilot-from-github-actions"
+          blurb: "Set up a GitHub Actions workflow that creates an issue and assigns it to @copilot — automatically triggering the Copilot coding agent to write and PR a new blog post. Teaches: fine-grained PATs, GitHub Actions triggers, gh CLI, Copilot agent activation."
 
     - title: "Level 2 — Reader Features"
       icon: "fas fa-users"
