@@ -94,7 +94,7 @@ Here the gap widens in absolute terms. However, a financially engaged investor w
 | DIY Portfolio | ₹30,000 | — | **~₹1.71 Cr** |
 | Difference | — | +₹60 L in multi-asset | — |
 
-At high incomes, **tax efficiency** becomes the dominant factor. Multi-asset funds taxed at 20% LTCG (equity-oriented if >65% in equity) vs a DIY portfolio where debt funds are taxed at your income slab (30%+ for this bracket). This can swing the net-of-tax outcome significantly in favour of DIY using SGBs (tax-free on maturity) and equity index funds.
+At high incomes, **tax efficiency** becomes the dominant factor. Multi-asset funds taxed at 12.5% LTCG (equity-oriented if >65% in equity) vs a DIY portfolio where debt funds are taxed at your income slab (30%+ for this bracket). This can swing the net-of-tax outcome significantly in favour of DIY using SGBs (tax-free on maturity) and equity index funds.
 
 ## Lumpsum Comparison
 
@@ -123,16 +123,17 @@ The table below summarises where each approach tends to win, qualitatively.
 This is where DIY often wins at higher incomes.
 
 **Multi-Asset Funds:**
-- If equity allocation ≥ 65%: treated as equity fund — 12.5% LTCG (> ₹1.25 L gains/year, as per Finance Act 2024 / Union Budget 2024-25)
-- If equity < 65%: treated as debt fund — gains taxed at your income tax slab rate
+- If equity allocation ≥ 65%: treated as equity fund — 12.5% LTCG (> ₹1.25 L gains/year, as per Finance Act 2024 / Union Budget 2024-25), 20% STCG
+- If equity is between 35% and 65%: qualifies for 12.5% LTCG if held for more than 24 months; STCG taxed at your income tax slab rate
+- If equity < 35% (Specified Mutual Fund, e.g. > 65% in debt/money market): taxed entirely at your income tax slab rate regardless of holding period
 
-Most popular multi-asset funds maintain 65–80% equity to retain equity taxation, which is favourable.
+Most popular multi-asset funds maintain 65–80% equity to retain full equity taxation, which is most favourable.
 
 **DIY Portfolio:**
 - Equity index funds: 12.5% LTCG after 1 year (same as above)
 - Debt funds (post-April 2023): gains taxed at slab rate regardless of holding period
 - SGBs: **0% tax on maturity redemption (8-year tenure)** — a massive advantage for high earners
-- Gold ETFs: taxed at slab rate for < 3 years, 12.5% beyond 3 years
+- Gold ETFs: taxed at slab rate for < 12 months, 12.5% beyond 12 months (holding period reduced from 36 to 12 months per Union Budget 2024, effective July 23, 2024)
 
 For a taxpayer in the 30% bracket, replacing the debt component with SGBs and the gold component with SGBs makes the DIY portfolio significantly more tax-efficient.
 
