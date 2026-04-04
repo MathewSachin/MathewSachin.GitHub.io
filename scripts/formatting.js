@@ -141,13 +141,42 @@
         });
     });
 
-    // Social share button clicks (Twitter / email) in the post header
-    document.querySelectorAll('a[href*="twitter.com/intent/tweet"]').forEach(function (link) {
-        link.addEventListener("click", function () { trackEvent("post_share", { method: "twitter" }); });
+    // Social share button clicks
+    document.querySelectorAll("[data-share-method]").forEach(function (el) {
+        el.addEventListener("click", function () { trackEvent("post_share", { method: el.getAttribute("data-share-method") }); });
     });
-    document.querySelectorAll('.bg-info a[href^="mailto:"]').forEach(function (link) {
-        link.addEventListener("click", function () { trackEvent("post_share", { method: "email" }); });
-    });
+
+    // Copy post link button
+    var copyPostLink = document.getElementById("copy-post-link");
+    if (copyPostLink) {
+        copyPostLink.addEventListener("click", function () {
+            var url = window.location.href;
+            var icon = copyPostLink.querySelector("i");
+            function onSuccess() {
+                if (icon) { icon.className = "fa fa-check"; }
+                setTimeout(function () { if (icon) { icon.className = "fa fa-link"; } }, 2000);
+                trackEvent("post_share", { method: "copy_link" });
+            }
+            function onFail() {
+                // Fallback: create a temporary textarea for manual copy
+                var textarea = document.createElement("textarea");
+                textarea.value = url;
+                textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                try {
+                    if (document.execCommand("copy")) { onSuccess(); }
+                } catch (_) {}
+                document.body.removeChild(textarea);
+            }
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(onSuccess).catch(onFail);
+            } else {
+                onFail();
+            }
+        });
+    }
 
     // Intersection Observer: fire once when a code block or image/diagram enters the viewport.
     // Uses the browser-native async API so it never blocks the main thread.
