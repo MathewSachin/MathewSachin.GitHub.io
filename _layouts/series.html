@@ -18,7 +18,6 @@ layout: default
     <div class="row">
         <div class="col-md-10">
             {% capture toc_html %}{{ content | toc_only }}{% endcapture %}
-            {% include toc.html toc_html=toc_html %}
 
             <div id="post" class="card">
                 <div class="card-body">
@@ -28,19 +27,28 @@ layout: default
                 </div>
             </div>
         </div>
-        <div class="col-md-2 d-none d-md-block">
-            <div class="sticky-top" style="top: 10px">
-                <div id="toc-sidebar" class="mb-3" style="display:none">
+        <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none">
+            <div class="sticky-md-top" style="top: 10px">
+                <div class="mb-3">
                     <div class="card toc-card">
-                        <div class="card-header toc-header">
+                        <button type="button"
+                                class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none"
+                                aria-expanded="false"
+                                aria-controls="toc-collapse">
+                            <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                            <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+                        </button>
+                        <div class="card-header toc-header d-none d-md-block">
                             <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
                         </div>
-                        <div class="card-body p-0">
-                            <nav id="toc-nav" aria-label="Table of contents">{{ toc_html }}</nav>
+                        <div class="collapse d-md-block" id="toc-collapse">
+                            <div class="card-body p-0">
+                                <nav id="toc-nav" aria-label="Table of contents">{{ toc_html }}</nav>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {% include ad-unit.html %}
+                <div class="d-none d-md-block">{% include ad-unit.html %}</div>
             </div>
         </div>
     </div>
