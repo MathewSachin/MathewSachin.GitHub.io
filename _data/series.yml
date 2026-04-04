@@ -2,9 +2,9 @@ blogging-with-jekyll:
   name: "Blogging with Jekyll"
   url: "/blog/series/blogging-with-jekyll/"
   description: >
-    A 7-part series on building and running a Jekyll blog hosted on GitHub Pages —
+    An 8-part series on building and running a Jekyll blog hosted on GitHub Pages —
     from automating posts with AI to adding offline search, comments, live PR previews,
-    ads, faster CI builds, and hitting Good Core Web Vitals. Each part is a standalone deep-dive you can apply to your own site.
+    ads, faster CI builds, Good Core Web Vitals, and deep reader engagement analytics. Each part is a standalone deep-dive you can apply to your own site.
   levels:
     - title: "Level 1 — Writing &amp; Automation"
       icon: "fas fa-pencil-alt"
@@ -52,6 +52,16 @@ blogging-with-jekyll:
       posts:
         - id: "/blog/2026/04/03/core-web-vitals-jekyll"
           blurb: "Go from 'Needs improvement' to Good on all three Core Web Vitals. Teaches: jekyll-picture-tag, Rouge vs highlight.js, Pintora at build time, build-time TOC, HTML minification, and custom AdSense placement."
+
+    - title: "Level 5 — Analytics &amp; Engagement"
+      icon: "fas fa-chart-line"
+      intro: >
+        Pageviews tell you someone opened a tab — they don't tell you whether anyone read a word.
+        This post instruments every "invisible" reader behaviour: scroll depth, code interaction,
+        viewport entry, social shares, and search, using only GA4 custom events and vanilla JavaScript.
+      posts:
+        - id: "/blog/2026/04/04/beyond-pageviews-tracking-engagement"
+          blurb: "Track scroll depth, code copies, TOC clicks, social shares, and more — without any paid analytics tool. Teaches: GA4 custom events, IntersectionObserver, passive scroll listeners, debounced selectionchange."
 
 browser-hacks:
   name: "Browser Hacks"
