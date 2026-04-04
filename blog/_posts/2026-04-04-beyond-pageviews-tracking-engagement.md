@@ -279,7 +279,7 @@ addListeners(".post-tag .badge", "click", function (badge) {
 
 Tag clicks show which topic labels readers use as navigation, rather than just descriptors.
 
-### Back to Top
+### Back-to-Top Button
 
 ```javascript
 backToTop.addEventListener("click", function () {
