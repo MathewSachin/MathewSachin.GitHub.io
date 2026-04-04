@@ -868,6 +868,20 @@ a.series-post-title:hover {
   max-width: 100%;
 }
 
+/* GitHub-style blockquotes — left accent bar uses the per-post accent colour */
+.page-content blockquote {
+  padding: 0.5em 1em;
+  margin: 0 0 1rem;
+  color: #6c757d;
+  border-left: 0.25em solid var(--post-accent, var(--color-accent));
+  background: transparent;
+  font-style: normal;
+}
+
+.page-content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
 /* Hide the whole ad block when AdSense reports the slot is unfilled */
 .in-content-ad:has(ins[data-ad-status="unfilled"]) {
   display: none;
