@@ -92,6 +92,14 @@ ads: true
           </select>
         </div>
 
+        <div class="mb-3">
+          <label class="form-label text-muted small mb-1" for="format-select">Recording format</label>
+          <select id="format-select" class="form-select form-select-sm">
+            <option value="webm-vp9-opus" selected>WebM — VP9 + Opus</option>
+            <option value="mp4-h264-aac">MP4 — H.264 + AAC</option>
+          </select>
+        </div>
+
         <hr>
 
         <!-- PiP position -->
@@ -153,10 +161,11 @@ ads: true
         capturing other apps' screens. Use Chrome or Edge on a desktop.
       </li>
       <li>
-        <strong>WebM/VP9 output only</strong> — the recorder always produces a
-        <code>.webm</code> file encoded with VP9 video and Opus audio via the
+        <strong>WebM or MP4 output</strong> — the recorder can produce either a
+        <code>.webm</code> file (VP9 + Opus) or an <code>.mp4</code> file (H.264 + AAC) via the
         <a href="https://github.com/Vanilagy/mediabunny" target="_blank" rel="noopener noreferrer">Mediabunny</a>
-        library (WebCodecs API). MP4/H.264 is not supported.
+        library (WebCodecs API). Select the desired format from the <em>Recording format</em>
+        dropdown before starting. The choice is saved for future visits.
       </li>
       <li>
         <strong>File System Access API required</strong> — the recorder streams video directly to
@@ -273,7 +282,8 @@ ads: true
       you to re-grant it. If permission is denied, recording is cancelled gracefully.
     </p>
     <p>
-      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> is created
+      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> (or
+      <code>.mp4</code>, depending on the chosen format) is created
       inside the chosen folder, and a <code>FileSystemWritableFileStream</code> is opened on it.
       This writable stream is passed directly to Mediabunny's <code>StreamTarget</code>, which
       writes encoded frames to disk incrementally as they are produced by the hardware encoder.
@@ -328,14 +338,28 @@ ads: true
 
     <h6><i class="fas fa-film me-1 text-muted"></i>Codec &amp; Container (Mediabunny)</h6>
     <p>
-      Video is encoded using <strong>VP9</strong> and audio using
-      <strong>Opus</strong>, muxed into a <strong>WebM</strong> container by the
+      The recorder supports two output formats, selectable from the <em>Recording format</em>
+      dropdown:
+    </p>
+    <ul>
+      <li>
+        <strong>WebM — VP9 + Opus:</strong> video encoded with <strong>VP9</strong>, audio with
+        <strong>Opus</strong> at 128 kbps, muxed into a <strong>WebM</strong> container.
+      </li>
+      <li>
+        <strong>MP4 — H.264 + AAC:</strong> video encoded with <strong>H.264 (AVC)</strong>,
+        audio with <strong>AAC</strong> at 128 kbps, muxed into an <strong>MP4</strong> container.
+        MP4 files are broadly compatible with most media players, devices, and video editors.
+      </li>
+    </ul>
+    <p>
+      Both formats are handled by the
       <a href="https://github.com/Vanilagy/mediabunny" target="_blank" rel="noopener noreferrer">Mediabunny</a>
-      library. Mediabunny drives the browser's hardware <code>VideoEncoder</code> and
+      library, which drives the browser's hardware <code>VideoEncoder</code> and
       <code>AudioEncoder</code> (WebCodecs API) directly and writes the muxed output
       incrementally to the <code>FileSystemWritableFileStream</code> via its
-      <code>StreamTarget</code>. On finalization it rewrites the WebM <code>Duration</code>
-      element at the start of the file — a step that the native <code>MediaRecorder</code> API
+      <code>StreamTarget</code>. On finalization it rewrites the duration metadata at the
+      start of the file — a step that the native <code>MediaRecorder</code> API
       skips, making its output unscrubbable in many players.
     </p>
   </div>
