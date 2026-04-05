@@ -4,6 +4,8 @@
   // ── Constants ────────────────────────────────────────────────────────────────
   const DEFAULT_WIDTH  = 1280;
   const DEFAULT_HEIGHT = 720;
+  const VIDEO_READY_TIMEOUT_MS  = 3000;
+  const BLOB_URL_REVOKE_DELAY_MS = 5 * 60 * 1000; // 5 minutes — enough for download + new-tab view
 
   // ── State ───────────────────────────────────────────────────────────────────
   let screenStream    = null;
@@ -15,6 +17,7 @@
   let writableStream  = null;   // FSA writable
   let recordedChunks  = [];     // FSA fallback
   let animFrameId     = null;
+  let drawIntervalId  = null;
   let timerIntervalId = null;
   let elapsedSecs     = 0;
   let isRecording     = false;
@@ -161,8 +164,34 @@
       ctx.textAlign    = 'left';
       ctx.textBaseline = 'alphabetic';
     }
+  }
 
-    animFrameId = requestAnimationFrame(compositeFrame);
+  function stopCompositor() {
+    if (animFrameId)    { cancelAnimationFrame(animFrameId); animFrameId = null; }
+    if (drawIntervalId) { clearInterval(drawIntervalId);     drawIntervalId = null; }
+  }
+
+  // fps=0 → rAF (preview, throttled in background — fine when not recording)
+  // fps>0 → setInterval (recording, must keep running in background tabs)
+  function startCompositor(fps) {
+    stopCompositor();
+    if (fps > 0) {
+      drawIntervalId = setInterval(compositeFrame, Math.round(1000 / fps));
+    } else {
+      (function rafLoop() {
+        compositeFrame();
+        animFrameId = requestAnimationFrame(rafLoop);
+      })();
+    }
+  }
+
+  // Resolves once a video element has at least one decoded frame, or after a timeout.
+  function waitForVideoReady(vid) {
+    return new Promise(resolve => {
+      if (vid.readyState >= 2) { resolve(); return; }
+      vid.addEventListener('loadeddata', resolve, { once: true });
+      setTimeout(resolve, VIDEO_READY_TIMEOUT_MS);
+    });
   }
 
   function roundRect(x, y, w, h, r) {
@@ -231,19 +260,26 @@
       canvas.height     = settings.height || DEFAULT_HEIGHT;
 
       // 2 — Webcam
-      if (webcamSel.value) {
+      if (webcamSel.selectedIndex > 0) {
+        const vidConstraint = webcamSel.value
+          ? { deviceId: { exact: webcamSel.value } }
+          : true;
         webcamStream = await navigator.mediaDevices.getUserMedia({
-          video: { deviceId: { exact: webcamSel.value } },
+          video: vidConstraint,
           audio: false
         });
         webcamVid.srcObject = webcamStream;
         await webcamVid.play();
+        await waitForVideoReady(webcamVid);
       }
 
       // 3 — Microphone
-      if (micSel.value) {
+      if (micSel.selectedIndex > 0) {
+        const audConstraint = micSel.value
+          ? { deviceId: { exact: micSel.value }, echoCancellation: true }
+          : { echoCancellation: true };
         micStream = await navigator.mediaDevices.getUserMedia({
-          audio: { deviceId: { exact: micSel.value }, echoCancellation: true },
+          audio: audConstraint,
           video: false
         });
       }
@@ -309,7 +345,7 @@
         if (writableStream) {
           await writableStream.close();
           writableStream = null;
-          showAlert('Recording saved to disk via File System Access API.', 'success');
+          showAlert('Recording saved to disk.', 'success');
         } else {
           const blob = new Blob(recordedChunks, { type: mimeType });
           const url  = URL.createObjectURL(blob);
@@ -317,9 +353,19 @@
             href: url, download: `recording-${dateStamp()}.${ext}`
           });
           a.click();
-          // Revoke on page unload so the download has ample time to start
+          // Revoke after a delay so the download and any open-in-tab view have time to complete
+          setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_DELAY_MS);
           window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
-          showAlert('Recording downloaded.', 'success');
+
+          // Show alert with open-in-new-tab link
+          const msg  = document.createDocumentFragment();
+          msg.append('Recording downloaded. ');
+          const link = Object.assign(document.createElement('a'), {
+            href: url, target: '_blank', rel: 'noopener noreferrer',
+            textContent: 'Open in new tab'
+          });
+          msg.append(link);
+          showAlert(msg, 'success');
         }
         cleanup();
       };
@@ -335,6 +381,9 @@
       // Emit chunks every second so we can stream to disk incrementally
       mediaRecorder.start(1000);
       isRecording = true;
+
+      // Switch compositor to setInterval so it keeps running when the tab is hidden
+      startCompositor(fps);
 
       elapsedSecs = 0;
       timerEl.textContent = '00:00';
@@ -370,6 +419,9 @@
     if (audioCtx) { audioCtx.close(); audioCtx = null; }
     screenVid.srcObject = webcamVid.srcObject = null;
     isRecording = false;
+
+    // Return compositor to preview (rAF) mode
+    startCompositor(0);
   }
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -416,10 +468,14 @@
     if (!rec) timerEl.textContent = '00:00';
   }
 
-  function showAlert(msg, type) {
-    alertBox.className   = 'alert alert-' + type + ' mb-3';
-    alertBox.textContent = msg;
-    alertBox.hidden      = false;
+  function showAlert(msgOrNode, type) {
+    alertBox.className = 'alert alert-' + type + ' mb-3';
+    alertBox.hidden    = false;
+    if (typeof msgOrNode === 'string') {
+      alertBox.textContent = msgOrNode;
+    } else {
+      alertBox.replaceChildren(msgOrNode);
+    }
   }
 
   function clearAlert() { alertBox.hidden = true; }
@@ -428,7 +484,7 @@
   startBtn.addEventListener('click', startRecording);
   stopBtn .addEventListener('click', stopRecording);
 
-  // Kick off the compositor loop
-  compositeFrame();
+  // Kick off the compositor loop (preview mode)
+  startCompositor(0);
 
 })();
