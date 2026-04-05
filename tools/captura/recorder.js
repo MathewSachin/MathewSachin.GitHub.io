@@ -1129,11 +1129,15 @@
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
 
-  const updateBar = document.getElementById('pwa-update-bar');
-  const updateBtn = document.getElementById('pwa-update-btn');
+  const updateBar    = document.getElementById('pwa-update-bar');
+  const updateBtn    = document.getElementById('pwa-update-btn');
+  const dismissBtn   = document.getElementById('pwa-dismiss-btn');
   if (!updateBar || !updateBtn) return;
   let newWorker  = null;
   let reloading  = false;
+
+  // Only show the update notification when running as an installed PWA.
+  const isPwa = () => window.matchMedia('(display-mode: standalone)').matches;
 
   // Reload the page once the new service worker takes control.
   navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -1147,8 +1151,9 @@ function registerServiceWorker() {
       newWorker = reg.installing;
       newWorker.addEventListener('statechange', () => {
         // An update is available only when there is already a controller
-        // (i.e. this is not the very first install).
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+        // (i.e. this is not the very first install) and the app is running
+        // as an installed PWA.
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller && isPwa()) {
           updateBar.hidden = false;
         }
       });
@@ -1162,6 +1167,12 @@ function registerServiceWorker() {
     updateBtn.disabled = true;
     if (newWorker) newWorker.postMessage('SKIP_WAITING');
   });
+
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', () => {
+      updateBar.hidden = true;
+    });
+  }
 }
 
 registerServiceWorker();

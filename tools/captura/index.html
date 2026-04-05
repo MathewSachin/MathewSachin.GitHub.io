@@ -7,9 +7,10 @@ ads: true
 <link rel="manifest" href="{{ '/tools/captura/manifest.json' | relative_url }}">
 <link rel="stylesheet" href="{{ '/tools/captura/recorder.css' | relative_url }}">
 
-<div id="pwa-update-bar" class="alert alert-info d-flex align-items-center justify-content-between mb-3" hidden>
-  <span><i class="fas fa-sync-alt me-2"></i>A new version of Captura is available!</span>
-  <button id="pwa-update-btn" class="btn btn-sm btn-primary ms-3 flex-shrink-0">Update Now</button>
+<div id="pwa-update-bar" class="d-flex align-items-center gap-2" hidden>
+  <span><i class="fas fa-sync-alt me-1"></i>A new version of Captura is available!</span>
+  <button id="pwa-update-btn" class="btn btn-sm btn-light flex-shrink-0">Update Now</button>
+  <button id="pwa-dismiss-btn" class="btn btn-sm btn-close flex-shrink-0" aria-label="Dismiss"></button>
 </div>
 
 <div id="alert-box" class="alert mb-3" hidden></div>
