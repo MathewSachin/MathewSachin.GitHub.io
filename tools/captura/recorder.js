@@ -597,6 +597,7 @@
     stopCompositor();
     clearInterval(timerIntervalId);
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
+    if (silentAudioEl) silentAudioEl.pause();
     setUIState('paused');
   }
 
@@ -610,6 +611,7 @@
       timerEl.textContent = fmtTime(elapsedSecs);
     }, 1000);
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
+    if (silentAudioEl) silentAudioEl.play().catch(() => {});
     setUIState('recording');
   }
 
