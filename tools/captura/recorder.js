@@ -943,9 +943,9 @@
             const url  = URL.createObjectURL(file);
             const link = Object.assign(document.createElement('a'), {
               href: url, target: '_blank', rel: 'noopener noreferrer',
-              textContent: 'Open in new tab'
+              textContent: 'Open in new tab',
+              className: 'toast-link'
             });
-            link.style.cssText = 'color:#fff;text-decoration:underline;font-weight:600;';
             msg.append(link);
             // Revoke the blob URL when the tab navigates away or after 5 minutes
             setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
@@ -975,7 +975,9 @@
     clearInterval(timerIntervalId);
     // Suspend the AudioContext so no audio samples flow to the encoder during
     // pause; this keeps the audio timeline in sync with the video timeline.
-    if (audioCtx) audioCtx.suspend().catch(() => {});
+    // suspend() returns a Promise; errors are non-fatal (browser may already
+    // be suspended or context may be in a state that prevents suspension).
+    if (audioCtx) audioCtx.suspend().catch(err => console.warn('audioCtx.suspend():', err));
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     if (silentAudioEl) silentAudioEl.pause();
     setUIState('paused');
@@ -986,8 +988,8 @@
     totalPausedMs += performance.now() - pauseStartTime;
     isPaused = false;
     // Resume AudioContext before restarting the compositor so audio and video
-    // start together.
-    if (audioCtx) audioCtx.resume().catch(() => {});
+    // start together. Errors are non-fatal.
+    if (audioCtx) audioCtx.resume().catch(err => console.warn('audioCtx.resume():', err));
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
       elapsedSecs++;
