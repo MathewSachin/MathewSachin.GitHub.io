@@ -16,6 +16,8 @@ redirect_from:
 Captura **was** a screen capture (screenshot, recording) app for Windows which could capture screen, webcam, audio and keystrokes.
 It is no longer maintained, but the [source-code is still archived on GitHub](https://github.com/MathewSachin/Captura) with 8k+ stars and 1.5k+ forks.
 
+> **Want to record your screen right now?** Try the [Captura Web Recorder]({{ '/tools/captura/' | relative_url }}) — a browser-based screen recorder inspired by Captura that runs entirely in your browser with no installation required.
+
 ## Status / TL;DR
 - **Maintained?** No. Development stopped around 2019.
 - **Download:** Releases are still available [on GitHub](https://github.com/MathewSachin/Captura/releases). In the `Assets` section of the release you want, download either the Portable or Setup package.
