@@ -71,6 +71,33 @@ ads: true
 
         <hr>
 
+        <!-- Audio Mix -->
+        <h6 class="mb-3">Audio Mix</h6>
+
+        <div class="mb-3">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <label class="form-label text-muted small mb-0" for="mic-gain-slider">
+              <i class="fas fa-microphone me-1"></i>Mic level
+            </label>
+            <span id="mic-gain-label" class="text-muted small font-monospace">100%</span>
+          </div>
+          <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" value="1">
+          <canvas id="mic-level-canvas" class="audio-meter mt-1" width="200" height="10"></canvas>
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <label class="form-label text-muted small mb-0" for="sys-gain-slider">
+              <i class="fas fa-desktop me-1"></i>System level
+            </label>
+            <span id="sys-gain-label" class="text-muted small font-monospace">100%</span>
+          </div>
+          <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" value="1">
+          <canvas id="sys-level-canvas" class="audio-meter mt-1" width="200" height="10"></canvas>
+        </div>
+
+        <hr>
+
         <!-- Quality -->
         <h6 class="mb-3">Quality</h6>
 
@@ -250,13 +277,22 @@ ads: true
     <ol>
       <li>An <code>AudioContext</code> is created.</li>
       <li>Each source stream is wrapped in a <code>MediaStreamSourceNode</code>.</li>
-      <li>Both source nodes are connected to a single <code>MediaStreamDestinationNode</code>.</li>
+      <li>Each source node is routed through a <code>GainNode</code>, whose gain value is bound
+          to the corresponding slider in the <em>Audio Mix</em> panel. Moving a slider while
+          recording instantly changes the mix without any interruption.</li>
+      <li>Each gain node feeds into an <code>AnalyserNode</code> that is read every animation
+          frame to drive the live level meters in the UI. The RMS amplitude of the time-domain
+          samples is computed, scaled, and painted as a green/yellow/red bar — green up to 70 %
+          of full scale, yellow from 70–85 %, and red above 85 % — so you can confirm your mic
+          is live before committing to a long recording.</li>
+      <li>Both analyser nodes connect to a single <code>MediaStreamDestinationNode</code>.</li>
       <li>The destination node exposes a mixed <code>MediaStream</code> whose audio track is then
           passed to Mediabunny as a <code>MediaStreamAudioTrackSource</code>.</li>
     </ol>
     <p>
       This approach lets the browser's audio engine handle the mixing in real time with no
-      additional libraries required.
+      additional libraries required. Gain and mixer settings are persisted to
+      <code>localStorage</code> so your preferred levels are restored on the next visit.
     </p>
 
     <hr>

@@ -27,6 +27,11 @@
   let micStream       = null;
   let audioCtx        = null;
   let audioDestNode   = null;
+  let micGainNode     = null;   // GainNode for microphone channel
+  let sysGainNode     = null;   // GainNode for system-audio channel
+  let micAnalyser     = null;   // AnalyserNode for mic level meter
+  let sysAnalyser     = null;   // AnalyserNode for system-audio level meter
+  let meterRafId      = null;   // rAF id for the meter animation loop
   let silentAudioEl   = null;   // <audio> element that opens a Core Audio session for Media Session
   let silentAudioUrl  = null;   // object URL for the silent WAV blob (revoked on cleanup)
   let mediabunnyOutput       = null;  // Mediabunny Output instance
@@ -74,6 +79,12 @@
   const timerEl     = document.getElementById('timer-text');
   const alertBox    = document.getElementById('alert-box');
   const mimeDisplay = document.getElementById('mime-display');
+  const micGainSlider  = document.getElementById('mic-gain-slider');
+  const sysGainSlider  = document.getElementById('sys-gain-slider');
+  const micGainLabel   = document.getElementById('mic-gain-label');
+  const sysGainLabel   = document.getElementById('sys-gain-label');
+  const micLevelCanvas = document.getElementById('mic-level-canvas');
+  const sysLevelCanvas = document.getElementById('sys-level-canvas');
 
   // ── Mobile / capability check ────────────────────────────────────────────────
   const hasGetDisplayMedia = !!(navigator.mediaDevices &&
@@ -142,6 +153,8 @@
     pipPos   : 'captura-pipPos',
     webcam   : 'captura-webcam',
     mic      : 'captura-mic',
+    micGain  : 'captura-micGain',
+    sysGain  : 'captura-sysGain',
   };
 
   function savePref(key, value) {
@@ -151,6 +164,8 @@
   function loadPref(key) {
     try { return localStorage.getItem(key); } catch (_) { return null; }
   }
+
+  function gainPct(v) { return Math.round(parseFloat(v) * 100) + '%'; }
 
   // Restore non-device preferences immediately (no async enumeration needed)
   function restoreSimplePrefs() {
@@ -175,6 +190,18 @@
     }
 
     updateMimeDisplay();
+
+    const micGain = loadPref(PREFS.micGain);
+    if (micGain !== null) {
+      micGainSlider.value      = micGain;
+      micGainLabel.textContent = gainPct(micGain);
+    }
+
+    const sysGain = loadPref(PREFS.sysGain);
+    if (sysGain !== null) {
+      sysGainSlider.value      = sysGain;
+      sysGainLabel.textContent = gainPct(sysGain);
+    }
   }
 
   // Restore device selections after options have been populated
@@ -369,15 +396,93 @@
 
     if (sysAudioTracks.length > 0) {
       const src = audioCtx.createMediaStreamSource(new MediaStream(sysAudioTracks));
-      src.connect(audioDestNode);
+      sysGainNode = audioCtx.createGain();
+      sysGainNode.gain.value = parseFloat(sysGainSlider.value);
+      sysAnalyser = audioCtx.createAnalyser();
+      sysAnalyser.fftSize = 512;
+      sysAnalyser.smoothingTimeConstant = 0.75;
+      src.connect(sysGainNode);
+      sysGainNode.connect(sysAnalyser);
+      sysAnalyser.connect(audioDestNode);
     }
 
     if (micMStream) {
       const src = audioCtx.createMediaStreamSource(micMStream);
-      src.connect(audioDestNode);
+      micGainNode = audioCtx.createGain();
+      micGainNode.gain.value = parseFloat(micGainSlider.value);
+      micAnalyser = audioCtx.createAnalyser();
+      micAnalyser.fftSize = 512;
+      micAnalyser.smoothingTimeConstant = 0.75;
+      src.connect(micGainNode);
+      micGainNode.connect(micAnalyser);
+      micAnalyser.connect(audioDestNode);
     }
 
+    startMeterAnimation();
     return audioDestNode.stream;
+  }
+
+  // ── Level meters ─────────────────────────────────────────────────────────────
+  // Draws a green/yellow/red RMS bar on a canvas for one audio channel.
+  function drawMeter(analyser, mCanvas) {
+    const mCtx = mCanvas.getContext('2d');
+    const W    = mCanvas.width;
+    const H    = mCanvas.height;
+
+    // Background
+    mCtx.fillStyle = '#1e1e1e';
+    mCtx.fillRect(0, 0, W, H);
+
+    if (!analyser) return;
+
+    const buf = new Uint8Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(buf);
+
+    // Compute RMS of the time-domain signal (samples are unsigned 8-bit; 128 = silence)
+    let sum = 0;
+    for (let i = 0; i < buf.length; i++) {
+      const v = (buf[i] - 128) / 128;
+      sum += v * v;
+    }
+    const rms   = Math.sqrt(sum / buf.length);
+    const level = Math.min(1, rms * 8); // scale so typical speech is visually meaningful
+
+    const filled    = level * W;
+    const greenEnd  = W * 0.70;
+    const yellowEnd = W * 0.85;
+
+    if (filled > 0) {
+      mCtx.fillStyle = '#22c55e';
+      mCtx.fillRect(0, 0, Math.min(filled, greenEnd), H);
+    }
+    if (filled > greenEnd) {
+      mCtx.fillStyle = '#eab308';
+      mCtx.fillRect(greenEnd, 0, Math.min(filled - greenEnd, yellowEnd - greenEnd), H);
+    }
+    if (filled > yellowEnd) {
+      mCtx.fillStyle = '#ef4444';
+      mCtx.fillRect(yellowEnd, 0, filled - yellowEnd, H);
+    }
+  }
+
+  function startMeterAnimation() {
+    stopMeterAnimation();
+    (function tick() {
+      if (!audioCtx || (!micAnalyser && !sysAnalyser)) return;
+      drawMeter(micAnalyser, micLevelCanvas);
+      drawMeter(sysAnalyser, sysLevelCanvas);
+      meterRafId = requestAnimationFrame(tick);
+    })();
+  }
+
+  function stopMeterAnimation() {
+    if (meterRafId) { cancelAnimationFrame(meterRafId); meterRafId = null; }
+    // Reset meters to dark/inactive state
+    [micLevelCanvas, sysLevelCanvas].forEach(c => {
+      const mCtx = c.getContext('2d');
+      mCtx.fillStyle = '#1e1e1e';
+      mCtx.fillRect(0, 0, c.width, c.height);
+    });
   }
 
   // ── Media Session API ────────────────────────────────────────────────────────
@@ -707,6 +812,9 @@
     webcamStream = micStream = null;
 
     if (audioCtx)      { audioCtx.close(); audioCtx = null; }
+    micGainNode = sysGainNode = null;
+    micAnalyser = sysAnalyser = null;
+    stopMeterAnimation();
     if (silentAudioEl) {
       silentAudioEl.pause();
       if (silentAudioEl.parentNode) silentAudioEl.parentNode.removeChild(silentAudioEl);
@@ -893,6 +1001,20 @@
   sysAudioChk.addEventListener('change', () => savePref(PREFS.sysAudio, sysAudioChk.checked));
   webcamSel  .addEventListener('change', () => savePref(PREFS.webcam,   webcamSel.value));
   micSel     .addEventListener('change', () => savePref(PREFS.mic,      micSel.value));
+
+  micGainSlider.addEventListener('input', () => {
+    const v = parseFloat(micGainSlider.value);
+    micGainLabel.textContent = gainPct(v);
+    if (micGainNode) micGainNode.gain.value = v;
+    savePref(PREFS.micGain, v);
+  });
+
+  sysGainSlider.addEventListener('input', () => {
+    const v = parseFloat(sysGainSlider.value);
+    sysGainLabel.textContent = gainPct(v);
+    if (sysGainNode) sysGainNode.gain.value = v;
+    savePref(PREFS.sysGain, v);
+  });
 
   // Kick off the compositor loop (preview mode) and initialise IndexedDB
   startCompositor(0);
