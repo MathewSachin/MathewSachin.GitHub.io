@@ -15,7 +15,9 @@
   let audioDestNode   = null;
   let silentAudioEl   = null;   // <audio> element that opens a Core Audio session for Media Session
   let silentAudioUrl  = null;   // object URL for the silent WAV blob (revoked on cleanup)
-  let mediaRecorder   = null;
+  let mediabunnyOutput       = null;  // Mediabunny Output instance
+  let mediabunnyCanvasSource = null;  // Mediabunny CanvasSource (video)
+  let mediabunnyAudioSource  = null;  // Mediabunny MediaStreamAudioTrackSource (audio)
   let writableStream  = null;   // FSA writable
   let savedFileHandle = null;   // FSA file handle (for open-in-new-tab after stop)
   let dirHandle       = null;   // FSA directory handle (persisted in IndexedDB)
@@ -27,6 +29,12 @@
   let isRecording     = false;
   let isPaused        = false;
   let pipPos          = 'bottom-left';
+  let recordingLoopActive = false;             // guards the async recording loop
+  let recordingLoopDone   = Promise.resolve(); // resolves when the current loop exits
+  let recordingStartTime  = 0;   // performance.now() at the moment encoding started
+  let totalPausedMs       = 0;   // cumulative pause duration (ms) within this recording
+  let pauseStartTime      = 0;   // performance.now() when the last pause began
+  let sleepResolve        = null; // resolve fn for the inter-frame sleep; called by stopCompositor to unblock the loop
 
   // Offscreen video elements used by compositor
   const screenVid = Object.assign(document.createElement('video'),
@@ -103,8 +111,7 @@
   }
 
   // ── Capability display ──────────────────────────────────────────────────────
-  const mimeType = getSupportedMimeType();
-  mimeDisplay.textContent = mimeType || '(none detected)';
+  mimeDisplay.textContent = 'video/webm;codecs=vp9,opus (Mediabunny)';
 
   // ── Preferences (localStorage) ──────────────────────────────────────────────
   const PREFS = {
@@ -261,16 +268,41 @@
   }
 
   function stopCompositor() {
+    recordingLoopActive = false;
     if (animFrameId)    { cancelAnimationFrame(animFrameId); animFrameId = null; }
-    if (drawIntervalId) { clearInterval(drawIntervalId);     drawIntervalId = null; }
+    if (drawIntervalId) { clearTimeout(drawIntervalId);      drawIntervalId = null; }
+    // If the recording loop is suspended in its inter-frame sleep, wake it up
+    // immediately so it can check recordingLoopActive and exit cleanly.
+    if (sleepResolve)   { sleepResolve();                    sleepResolve = null; }
   }
 
   // fps=0 → rAF (preview, throttled in background — fine when not recording)
-  // fps>0 → setInterval (recording, must keep running in background tabs)
+  // fps>0 → async self-scheduling loop (recording, must keep running and apply backpressure)
   function startCompositor(fps) {
     stopCompositor();
     if (fps > 0) {
-      drawIntervalId = setInterval(compositeFrame, Math.round(1000 / fps));
+      const interval = Math.round(1000 / fps);
+      recordingLoopActive = true;
+      recordingLoopDone = (async function recordingLoop() {
+        while (recordingLoopActive) {
+          const frameStart = performance.now();
+          compositeFrame();
+          if (mediabunnyCanvasSource) {
+            const ts = (frameStart - recordingStartTime - totalPausedMs) / 1000;
+            await mediabunnyCanvasSource.add(ts);
+          }
+          if (!recordingLoopActive) break;
+          const elapsed = performance.now() - frameStart;
+          await new Promise(resolve => {
+            sleepResolve = resolve;
+            drawIntervalId = setTimeout(() => {
+              sleepResolve  = null;
+              drawIntervalId = null;
+              resolve();
+            }, Math.max(0, interval - elapsed));
+          });
+        }
+      })();
     } else {
       (function rafLoop() {
         compositeFrame();
@@ -369,13 +401,13 @@
     });
 
     navigator.mediaSession.setActionHandler('play', () => {
-      if (mediaRecorder && mediaRecorder.state === 'paused') resumeRecording();
+      if (isPaused) resumeRecording();
     });
     navigator.mediaSession.setActionHandler('pause', () => {
-      if (mediaRecorder && mediaRecorder.state === 'recording') pauseRecording();
+      if (isRecording && !isPaused) pauseRecording();
     });
     navigator.mediaSession.setActionHandler('stop', () => {
-      if (mediaRecorder && mediaRecorder.state !== 'inactive') stopRecording();
+      if (isRecording) stopRecording();
     });
   }
 
@@ -485,20 +517,14 @@
         mixedAudioTracks  = mixedStream.getAudioTracks();
       }
 
-      // 5 — Canvas stream + audio
-      const fps          = parseInt(fpsSel.value);
-      const canvasStream = canvas.captureStream(fps);
-      mixedAudioTracks.forEach(t => canvasStream.addTrack(t));
-
-      // 6 — Output: File System Access API (directory-based)
-      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-
+      // 5 — Output: File System Access API (directory-based)
+      const fps    = parseInt(fpsSel.value);
       const dirOk = await ensureDirectoryAccess();
       if (!dirOk) { cleanup(); return; }
 
       try {
         const fileHandle = await dirHandle.getFileHandle(
-          `recording-${dateStamp()}.${ext}`, { create: true }
+          `recording-${dateStamp()}.webm`, { create: true }
         );
         writableStream  = await fileHandle.createWritable();
         savedFileHandle = fileHandle;
@@ -508,24 +534,84 @@
         return;
       }
 
-      // 7 — MediaRecorder
-      mediaRecorder = new MediaRecorder(canvasStream, {
-        mimeType,
-        videoBitsPerSecond: videoBitrate()
+      // 6 — Mediabunny output
+      // Dynamic import is cached by the browser after the first load.
+      const { Output, WebMOutputFormat, StreamTarget, CanvasSource, MediaStreamAudioTrackSource } =
+        await import('https://cdn.jsdelivr.net/npm/mediabunny@1.40.1/+esm');
+
+      mediabunnyOutput = new Output({
+        format: new WebMOutputFormat(),
+        target: new StreamTarget(writableStream)
       });
 
-      mediaRecorder.ondataavailable = async (e) => {
-        if (!e.data || e.data.size === 0) return;
-        await writableStream.write(e.data);
-      };
+      mediabunnyCanvasSource = new CanvasSource(canvas, {
+        codec:   'vp9',
+        bitrate: videoBitrate()
+      });
+      mediabunnyOutput.addVideoTrack(mediabunnyCanvasSource);
 
-      mediaRecorder.onstop = async () => {
-        await writableStream.close();
+      if (hasAudio) {
+        mediabunnyAudioSource = new MediaStreamAudioTrackSource(mixedAudioTracks[0], {
+          codec:   'opus',
+          bitrate: 128_000
+        });
+        mediabunnyOutput.addAudioTrack(mediabunnyAudioSource);
+      }
+
+      // 7 — Start encoding
+      recordingStartTime = performance.now();
+      totalPausedMs      = 0;
+      await mediabunnyOutput.start();
+      isRecording = true;
+
+      // Activate Media Session API so hardware media keys can control the recording
+      startSilentAudio();
+      setupMediaSession();
+      if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
+
+      // Switch compositor to async recording loop so it keeps running when the tab is hidden
+      startCompositor(fps);
+
+      elapsedSecs = 0;
+      timerEl.textContent = '00:00';
+      timerIntervalId = setInterval(() => {
+        elapsedSecs++;
+        timerEl.textContent = fmtTime(elapsedSecs);
+      }, 1000);
+
+      setUIState('recording');
+    } catch (err) {
+      if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+        showAlert('Error starting recording: ' + err.message, 'danger');
+      }
+      cleanup();
+    }
+  }
+
+  function stopRecording() {
+    if (!isRecording && !isPaused) return;
+    isRecording = false;
+    isPaused    = false;
+    stopCompositor();
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'none';
+    clearInterval(timerIntervalId);
+    setUIState(masterStream && masterStream.active ? 'session' : 'idle');
+
+    if (mediabunnyOutput) {
+      const output = mediabunnyOutput;
+      const handle = savedFileHandle;
+      mediabunnyOutput       = null;
+      mediabunnyCanvasSource = null;
+      mediabunnyAudioSource  = null;
+      savedFileHandle        = null;
+
+      // Wait for any in-flight canvasSource.add() to finish before finalizing.
+      // finalize() flushes hardware encoders, writes the correct duration header,
+      // and automatically closes the writableStream — do NOT call close() manually.
+      recordingLoopDone.then(() => output.finalize()).then(async () => {
         writableStream = null;
 
         // Build success alert with an open-in-new-tab link
-        const handle = savedFileHandle;
-        savedFileHandle = null;
         const msg = document.createDocumentFragment();
         msg.append('Recording saved to disk. ');
         if (handle) {
@@ -546,54 +632,21 @@
         }
         showAlert(msg, 'success');
         cleanup();
-      };
-
-      // Stop if the user ends the screen-share from the browser UI
-      // 'ended' listener is already set up in ensureStreamActive(); no duplicate needed here.
-
-      // Emit chunks every second so we can stream to disk incrementally
-      mediaRecorder.start(1000);
-      isRecording = true;
-
-      // Activate Media Session API so hardware media keys can control the recording
-      startSilentAudio();
-      setupMediaSession();
-      if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
-
-      // Switch compositor to setInterval so it keeps running when the tab is hidden
-      startCompositor(fps);
-
-      elapsedSecs = 0;
-      timerEl.textContent = '00:00';
-      timerIntervalId = setInterval(() => {
-        elapsedSecs++;
-        timerEl.textContent = fmtTime(elapsedSecs);
-      }, 1000);
-
-      setUIState('recording');
-    } catch (err) {
-      if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
-        showAlert('Error starting recording: ' + err.message, 'danger');
-      }
-      cleanup();
+      }).catch(err => {
+        showAlert('Error saving recording: ' + err.message, 'danger');
+        if (writableStream) {
+          try { writableStream.close(); } catch (_) {}
+          writableStream = null;
+        }
+        cleanup();
+      });
     }
-  }
-
-  function stopRecording() {
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      mediaRecorder.stop();
-    }
-    isRecording = false;
-    isPaused    = false;
-    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'none';
-    clearInterval(timerIntervalId);
-    setUIState(masterStream && masterStream.active ? 'session' : 'idle');
   }
 
   function pauseRecording() {
-    if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
-    mediaRecorder.pause();
-    isPaused = true;
+    if (!isRecording || isPaused) return;
+    isPaused       = true;
+    pauseStartTime = performance.now();
     stopCompositor();
     clearInterval(timerIntervalId);
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
@@ -602,8 +655,8 @@
   }
 
   function resumeRecording() {
-    if (!mediaRecorder || mediaRecorder.state !== 'paused') return;
-    mediaRecorder.resume();
+    if (!isRecording || !isPaused) return;
+    totalPausedMs += performance.now() - pauseStartTime;
     isPaused = false;
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
@@ -631,6 +684,9 @@
     }
     if (silentAudioUrl) { URL.revokeObjectURL(silentAudioUrl); silentAudioUrl = null; }
     webcamVid.srcObject = null;
+    mediabunnyOutput       = null;
+    mediabunnyCanvasSource = null;
+    mediabunnyAudioSource  = null;
     isRecording = false;
     isPaused    = false;
 
@@ -654,17 +710,6 @@
   }
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
-  function getSupportedMimeType() {
-    const candidates = [
-      'video/webm;codecs=vp9,opus',
-      'video/webm;codecs=vp8,opus',
-      'video/webm',
-      'video/mp4;codecs=h264,aac',
-      'video/mp4'
-    ];
-    return candidates.find(t => MediaRecorder.isTypeSupported(t)) || '';
-  }
-
   function resolutionConstraints() {
     const map = {
       '480':  { width: { ideal: 854  }, height: { ideal: 480  } },
