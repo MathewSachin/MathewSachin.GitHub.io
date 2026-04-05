@@ -14,7 +14,7 @@
   // browser tab is in the background (main-thread setTimeout can be clamped to
   // ≥1 s in hidden tabs; Worker timers are not subject to that restriction).
   const _timerWorkerBlob = new Blob(
-    ['self.onmessage=function(e){setTimeout(function(){self.postMessage(null);},e.data);}'],
+    ['let t;self.onmessage=function(e){clearTimeout(t);t=setTimeout(function(){self.postMessage(null);},e.data);}'],
     { type: 'application/javascript' }
   );
   const _timerWorkerUrl = URL.createObjectURL(_timerWorkerBlob);
