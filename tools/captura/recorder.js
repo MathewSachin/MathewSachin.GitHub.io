@@ -467,6 +467,12 @@
     const rec = state === 'recording';
     startBtn.disabled       = rec;
     stopBtn.disabled        = !rec;
+    // Settings that cannot be changed mid-recording
+    webcamSel.disabled      = rec;
+    micSel.disabled         = rec;
+    sysAudioChk.disabled    = rec;
+    fpsSel.disabled         = rec;
+    qualitySel.disabled     = rec;
     statusBadge.textContent = rec ? '⏺ Recording' : 'Idle';
     statusBadge.className   = rec ? 'badge bg-danger' : 'badge bg-secondary';
     if (!rec) timerEl.textContent = '00:00';
