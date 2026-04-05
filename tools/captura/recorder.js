@@ -57,6 +57,7 @@
   let recordingStartTime  = 0;   // performance.now() at the moment encoding started
   let totalPausedMs       = 0;   // cumulative pause duration (ms) within this recording
   let pauseStartTime      = 0;   // performance.now() when the last pause began
+  let videoTimestampSec   = 0;   // presentation timestamp of the next video frame (seconds); only advances while recording, so pauses are invisible to the encoder
   let sleepResolve        = null; // resolve fn for the inter-frame sleep; called by stopCompositor to unblock the loop
 
   // Preview audio state (mic metering before/between recordings; sys metering during session)
@@ -431,12 +432,14 @@
       const interval = Math.round(1000 / fps);
       recordingLoopActive = true;
       recordingLoopDone = (async function recordingLoop() {
+        const frameDurationSec = 1 / fps;
         while (recordingLoopActive) {
           const frameStart = performance.now();
           compositeFrame();
           if (mediabunnyCanvasSource) {
-            const ts = (frameStart - recordingStartTime - totalPausedMs) / 1000;
-            await mediabunnyCanvasSource.add(ts);
+            const ts = videoTimestampSec;
+            videoTimestampSec += frameDurationSec;
+            await mediabunnyCanvasSource.add(ts, frameDurationSec);
           }
           if (!recordingLoopActive) break;
           const elapsed = performance.now() - frameStart;
@@ -882,8 +885,9 @@
       }
 
       // 7 — Start encoding
-      recordingStartTime = performance.now();
-      totalPausedMs      = 0;
+      recordingStartTime  = performance.now();
+      totalPausedMs       = 0;
+      videoTimestampSec   = 0;
       await mediabunnyOutput.start();
       isRecording = true;
 
