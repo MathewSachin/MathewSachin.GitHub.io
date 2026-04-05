@@ -99,6 +99,17 @@ ads: true
 
         <hr>
 
+        <!-- Save location -->
+        <h6 class="mb-2">Save Location</h6>
+        <div class="mb-3 d-flex align-items-center gap-2">
+          <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">(no folder selected)</span>
+          <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0">
+            <i class="fas fa-folder-open me-1"></i>Choose Folder
+          </button>
+        </div>
+
+        <hr>
+
         <div class="mb-2">
           <label class="form-label text-muted small mb-1">Detected MIME type</label>
           <code id="mime-display" class="d-block small text-break"></code>
@@ -141,7 +152,8 @@ ads: true
       </li>
       <li>
         <strong>File System Access API required</strong> — the recorder streams video directly to
-        disk using the File System Access API. This requires Chrome or Edge; Firefox does not
+        disk using the File System Access API. It stores the chosen save folder in IndexedDB so
+        you only need to grant folder access once. This requires Chrome or Edge; Firefox does not
         support this API and cannot be used to record.
       </li>
     </ul>
@@ -232,12 +244,23 @@ ads: true
       streaming compressed video data directly to a file on disk.
     </p>
     <p>
-      When recording starts, <code>window.showSaveFilePicker()</code> opens the browser's
-      native Save dialog. The user picks a location and filename, and the browser returns a
-      <code>FileSystemFileHandle</code>. A <code>FileSystemWritableFileStream</code> is opened
-      on that handle, giving the recorder a writable stream backed by the actual file.
+      Before recording starts, the recorder asks for access to a <strong>folder</strong> of your
+      choice via <code>window.showDirectoryPicker()</code>. The chosen folder handle is stored in
+      <strong>IndexedDB</strong> so it persists across page reloads — you only need to pick a
+      folder once. A <em>Choose Folder</em> button in the settings panel lets you switch to a
+      different folder at any time.
     </p>
     <p>
+      When recording starts, the recorder verifies it still has write permission for the stored
+      folder using <code>FileSystemDirectoryHandle.queryPermission()</code>. If permission has
+      lapsed (e.g. after a browser restart), <code>requestPermission()</code> is called to prompt
+      you to re-grant it. If permission is denied, recording is cancelled gracefully.
+    </p>
+    <p>
+      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> (or
+      <code>.mp4</code>) is created inside the chosen folder with
+      <code>dirHandle.getFileHandle(name, { create: true })</code>, and a
+      <code>FileSystemWritableFileStream</code> is opened on it.
       The <code>MediaRecorder</code> emits compressed video chunks every second via its
       <code>ondataavailable</code> callback. Each chunk is immediately written to the writable
       stream with <code>writableStream.write(chunk)</code>. The stream is closed — and the file
