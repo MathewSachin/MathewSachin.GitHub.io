@@ -301,8 +301,6 @@
               resolve();
             }, Math.max(0, interval - elapsed));
           });
-          sleepResolve  = null;
-          drawIntervalId = null;
         }
       })();
     } else {
