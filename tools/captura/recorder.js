@@ -24,7 +24,6 @@
   let animFrameId     = null;
   let drawIntervalId  = null;
   let timerIntervalId = null;
-  let elapsedSecs     = 0;
   let isRecording     = false;
   let isPaused        = false;
   // Duration tracking: wall-clock ms elapsed, accounting for pauses
@@ -593,13 +592,12 @@
       // Switch compositor to setInterval so it keeps running when the tab is hidden
       startCompositor(fps);
 
-      elapsedSecs = 0;
       accumulatedDurationMs = 0;
       recordingStartTime    = Date.now();
       timerEl.textContent = '00:00';
       timerIntervalId = setInterval(() => {
-        elapsedSecs++;
-        timerEl.textContent = fmtTime(elapsedSecs);
+        const totalMs = accumulatedDurationMs + (Date.now() - recordingStartTime);
+        timerEl.textContent = fmtTime(Math.floor(totalMs / 1000));
       }, 1000);
 
       setUIState('recording');
@@ -647,8 +645,8 @@
     recordingStartTime = Date.now(); // restart wall-clock for this segment
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
-      elapsedSecs++;
-      timerEl.textContent = fmtTime(elapsedSecs);
+      const totalMs = accumulatedDurationMs + (Date.now() - recordingStartTime);
+      timerEl.textContent = fmtTime(Math.floor(totalMs / 1000));
     }, 1000);
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
     if (silentAudioEl) silentAudioEl.play().catch(() => {});
