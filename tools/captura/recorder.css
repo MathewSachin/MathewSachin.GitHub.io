@@ -42,6 +42,7 @@
 
 /* ── PWA standalone mode: hide sections irrelevant to the installed app ── */
 @media (display-mode: standalone) {
+  nav.navbar,
   #tool-header,
   #tool-sidebar,
   #tool-giscus-section,
