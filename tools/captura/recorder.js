@@ -1124,3 +1124,45 @@
   if (hasFSA) initDB();
 
 })();
+
+// ── PWA Service Worker Registration ──────────────────────────────────────────
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+
+  const updateBar = document.getElementById('pwa-update-bar');
+  const updateBtn = document.getElementById('pwa-update-btn');
+  if (!updateBar || !updateBtn) return;
+  let newWorker  = null;
+  let reloading  = false;
+
+  // Reload the page once the new service worker takes control.
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading) return;
+    reloading = true;
+    window.location.reload();
+  });
+
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        // An update is available only when there is already a controller
+        // (i.e. this is not the very first install).
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          updateBar.hidden = false;
+        }
+      });
+    });
+  }).catch(err => {
+    console.warn('Service worker registration failed:', err);
+  });
+
+  updateBtn.addEventListener('click', () => {
+    updateBtn.textContent = 'Updating…';
+    updateBtn.disabled = true;
+    if (newWorker) newWorker.postMessage('SKIP_WAITING');
+  });
+}
+
+registerServiceWorker();
+

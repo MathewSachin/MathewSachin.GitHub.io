@@ -21,3 +21,20 @@
   border-radius: 3px;
   background: #1e1e1e;
 }
+
+/* ── PWA standalone mode: hide sections irrelevant to the installed app ── */
+@media (display-mode: standalone) {
+  #tool-header,
+  #tool-sidebar,
+  #tool-giscus-section,
+  #captura-about,
+  #captura-how-it-works {
+    display: none !important;
+  }
+
+  /* Expand the main content column to full width when sidebar is hidden */
+  #tool-main-content {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

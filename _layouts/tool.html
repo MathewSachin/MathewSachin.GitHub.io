@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div class="bg-dark">
-    <div class="py-4 bg-info text-white google-anno-skip">
+    <div id="tool-header" class="py-4 bg-info text-white google-anno-skip">
         <div class="container">
             <h2>{{ page.title }}</h2>
             {% include share.html btn_class="btn-outline-light" label_class="text-white" %}
@@ -14,10 +14,10 @@ layout: default
 
     <div class="container">
         <div class="row">
-            <div class="col-md-10">
+            <div id="tool-main-content" class="col-md-10">
                 {% include post_content_with_ads.html content=content %}
             </div>
-            <div class="col-md-2">
+            <div id="tool-sidebar" class="col-md-2">
                 <div class="sticky-top" style="top: 10px">
                     {% include ad-unit.html %}
                 </div>
@@ -27,7 +27,7 @@ layout: default
 
     <br>
 
-    <div class="container">
+    <div id="tool-giscus-section" class="container">
         <div class="row">
             <div class="col-md-10">
                 <div class="card">
