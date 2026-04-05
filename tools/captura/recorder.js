@@ -4,8 +4,7 @@
   // ── Constants ────────────────────────────────────────────────────────────────
   const DEFAULT_WIDTH  = 1280;
   const DEFAULT_HEIGHT = 720;
-  const VIDEO_READY_TIMEOUT_MS  = 3000;
-  const BLOB_URL_REVOKE_DELAY_MS = 5 * 60 * 1000; // 5 minutes — enough for download + new-tab view
+  const VIDEO_READY_TIMEOUT_MS = 3000;
 
   // ── State ───────────────────────────────────────────────────────────────────
   let screenStream    = null;
@@ -15,7 +14,6 @@
   let audioDestNode   = null;
   let mediaRecorder   = null;
   let writableStream  = null;   // FSA writable
-  let recordedChunks  = [];     // FSA fallback
   let animFrameId     = null;
   let drawIntervalId  = null;
   let timerIntervalId = null;
@@ -62,10 +60,10 @@
 
   // ── Capability display ──────────────────────────────────────────────────────
   const mimeType = getSupportedMimeType();
-  mimeDisplay.textContent = mimeType || '(none detected)';
-  saveMethod.textContent  = typeof window.showSaveFilePicker === 'function'
+  mimeDisplay.textContent  = mimeType || '(none detected)';
+  saveMethod.textContent   = typeof window.showSaveFilePicker === 'function'
     ? 'File System Access API (direct-to-disk)'
-    : 'In-memory → auto download';
+    : 'Not supported — use Chrome or Edge';
 
   // ── PiP position picker ─────────────────────────────────────────────────────
   document.querySelectorAll('.pip-corner-btn').forEach(btn => {
@@ -300,30 +298,33 @@
       const canvasStream = canvas.captureStream(fps);
       mixedAudioTracks.forEach(t => canvasStream.addTrack(t));
 
-      // 6 — Output: File System Access API → fallback to in-memory
-      const useFSA = typeof window.showSaveFilePicker === 'function';
-      const ext    = mimeType.includes('mp4') ? 'mp4' : 'webm';
+      // 6 — Output: File System Access API (required)
+      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
 
-      if (useFSA) {
-        try {
-          const fileHandle = await window.showSaveFilePicker({
-            suggestedName: `recording-${dateStamp()}.${ext}`,
-            types: [{
-              description: 'Video file',
-              accept: { [mimeType.split(';')[0]]: ['.' + ext] }
-            }]
-          });
-          writableStream = await fileHandle.createWritable();
-          recordedChunks = [];
-        } catch (pickErr) {
-          if (pickErr.name === 'AbortError') { cleanup(); return; }
-          // FSA picker failed — fall back to in-memory
-          writableStream = null;
-          recordedChunks = [];
-        }
-      } else {
-        writableStream = null;
-        recordedChunks = [];
+      if (typeof window.showSaveFilePicker !== 'function') {
+        showAlert(
+          'Your browser does not support the File System Access API. ' +
+          'Please use Chrome or Edge to record.',
+          'danger'
+        );
+        cleanup();
+        return;
+      }
+
+      try {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: `recording-${dateStamp()}.${ext}`,
+          types: [{
+            description: 'Video file',
+            accept: { [mimeType.split(';')[0]]: ['.' + ext] }
+          }]
+        });
+        writableStream = await fileHandle.createWritable();
+      } catch (pickErr) {
+        if (pickErr.name === 'AbortError') { cleanup(); return; }
+        showAlert('Could not open save file: ' + pickErr.message, 'danger');
+        cleanup();
+        return;
       }
 
       // 7 — MediaRecorder
@@ -334,39 +335,13 @@
 
       mediaRecorder.ondataavailable = async (e) => {
         if (!e.data || e.data.size === 0) return;
-        if (writableStream) {
-          await writableStream.write(e.data);
-        } else {
-          recordedChunks.push(e.data);
-        }
+        await writableStream.write(e.data);
       };
 
       mediaRecorder.onstop = async () => {
-        if (writableStream) {
-          await writableStream.close();
-          writableStream = null;
-          showAlert('Recording saved to disk.', 'success');
-        } else {
-          const blob = new Blob(recordedChunks, { type: mimeType });
-          const url  = URL.createObjectURL(blob);
-          const a    = Object.assign(document.createElement('a'), {
-            href: url, download: `recording-${dateStamp()}.${ext}`
-          });
-          a.click();
-          // Revoke after a delay so the download and any open-in-tab view have time to complete
-          setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_DELAY_MS);
-          window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
-
-          // Show alert with open-in-new-tab link
-          const msg  = document.createDocumentFragment();
-          msg.append('Recording downloaded. ');
-          const link = Object.assign(document.createElement('a'), {
-            href: url, target: '_blank', rel: 'noopener noreferrer',
-            textContent: 'Open in new tab'
-          });
-          msg.append(link);
-          showAlert(msg, 'success');
-        }
+        await writableStream.close();
+        writableStream = null;
+        showAlert('Recording saved to disk.', 'success');
         cleanup();
       };
 

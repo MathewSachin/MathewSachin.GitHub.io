@@ -137,16 +137,16 @@ ads: true
       <li>
         <strong>Desktop only</strong> — mobile browsers do not expose
         <code>getDisplayMedia</code> because the mobile OS sandbox prevents web pages from
-        capturing other apps' screens. Use a desktop browser (Chrome, Edge, or Firefox).
+        capturing other apps' screens. Use Chrome or Edge on a desktop.
       </li>
       <li>
         <strong>Codec support varies</strong> — WebM/VP9 is widely supported; MP4/H.264 depends
         on the browser. The recorder automatically selects the best available codec.
       </li>
       <li>
-        <strong>File System Access API</strong> — Chrome/Edge support streaming directly to disk
-        (preventing RAM exhaustion for long recordings). Firefox falls back to an in-memory
-        recording with an automatic download on stop.
+        <strong>File System Access API required</strong> — the recorder streams video directly to
+        disk using the File System Access API. This requires Chrome or Edge; Firefox does not
+        support this API and cannot be used to record.
       </li>
     </ul>
 
