@@ -13,6 +13,8 @@
   let micStream       = null;
   let audioCtx        = null;
   let audioDestNode   = null;
+  let silentAudioEl   = null;   // <audio> element that opens a Core Audio session for Media Session
+  let silentAudioUrl  = null;   // object URL for the silent WAV blob (revoked on cleanup)
   let mediaRecorder   = null;
   let writableStream  = null;   // FSA writable
   let savedFileHandle = null;   // FSA file handle (for open-in-new-tab after stop)
@@ -318,6 +320,73 @@
     return audioDestNode.stream;
   }
 
+  // ── Media Session API ────────────────────────────────────────────────────────
+
+  // macOS Now Playing and hardware media key forwarding in Chrome require an
+  // actual Core Audio session to be open. Chrome only opens one when a media
+  // element plays with volume > 0. A MediaStream srcObject (live/infinite) is
+  // not forwarded to the OS widget; a finite, looping file-backed src is.
+  //
+  // We build a minimal 100 ms silent PCM WAV in memory, expose it via a Blob
+  // URL, and play it looped at volume 0.001 (−60 dB, inaudible). That is
+  // enough for Chrome to open the audio session and register the page with
+  // macOS Now Playing / hardware media keys.
+  //
+  // Must be called within a user-gesture event chain (autoplay policy).
+  function startSilentAudio() {
+    // Build a minimal silent WAV: 8 kHz, 8-bit unsigned PCM, mono, 100 ms.
+    const rate = 8000, numSamples = rate / 10; // 100 ms
+    const buf  = new ArrayBuffer(44 + numSamples);
+    const d    = new DataView(buf);
+    const str  = (off, s) => { for (let i = 0; i < s.length; i++) d.setUint8(off + i, s.charCodeAt(i)); };
+    str(0, 'RIFF'); d.setUint32(4, 36 + numSamples, true);
+    str(8, 'WAVE'); str(12, 'fmt '); d.setUint32(16, 16, true);
+    d.setUint16(20, 1, true);           // PCM
+    d.setUint16(22, 1, true);           // mono
+    d.setUint32(24, rate, true);        // sample rate
+    d.setUint32(28, rate, true);        // byte rate
+    d.setUint16(32, 1, true);           // block align
+    d.setUint16(34, 8, true);           // 8-bit
+    str(36, 'data'); d.setUint32(40, numSamples, true);
+    for (let i = 0; i < numSamples; i++) d.setUint8(44 + i, 128); // 128 = silence (unsigned 8-bit midpoint)
+
+    silentAudioUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+    silentAudioEl  = new Audio();
+    silentAudioEl.src    = silentAudioUrl;
+    silentAudioEl.loop   = true;
+    silentAudioEl.volume = 0.001; // −60 dBFS: inaudible, but non-zero so Chrome opens a Core Audio session
+    document.body.appendChild(silentAudioEl);
+    silentAudioEl.play().catch(() => {});
+  }
+
+  function setupMediaSession() {
+    if (!navigator.mediaSession) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title:   'Captura Web',
+      artist:  'Recording Session Active',
+      artwork: [{ src: new URL('/images/captura.png', location.href).href, sizes: '512x512', type: 'image/png' }]
+    });
+
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (mediaRecorder && mediaRecorder.state === 'paused') resumeRecording();
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') pauseRecording();
+    });
+    navigator.mediaSession.setActionHandler('stop', () => {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') stopRecording();
+    });
+  }
+
+  function clearMediaSession() {
+    if (!navigator.mediaSession) return;
+    navigator.mediaSession.metadata = null;
+    ['play', 'pause', 'stop'].forEach(action => {
+      try { navigator.mediaSession.setActionHandler(action, null); } catch (_) {}
+    });
+  }
+
   // ── Recording ────────────────────────────────────────────────────────────────
 
   // Returns the persistent master stream, acquiring a new one only when needed.
@@ -486,6 +555,11 @@
       mediaRecorder.start(1000);
       isRecording = true;
 
+      // Activate Media Session API so hardware media keys can control the recording
+      startSilentAudio();
+      setupMediaSession();
+      if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
+
       // Switch compositor to setInterval so it keeps running when the tab is hidden
       startCompositor(fps);
 
@@ -511,6 +585,7 @@
     }
     isRecording = false;
     isPaused    = false;
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'none';
     clearInterval(timerIntervalId);
     setUIState(masterStream && masterStream.active ? 'session' : 'idle');
   }
@@ -521,6 +596,8 @@
     isPaused = true;
     stopCompositor();
     clearInterval(timerIntervalId);
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
+    if (silentAudioEl) silentAudioEl.pause();
     setUIState('paused');
   }
 
@@ -533,6 +610,8 @@
       elapsedSecs++;
       timerEl.textContent = fmtTime(elapsedSecs);
     }, 1000);
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
+    if (silentAudioEl) silentAudioEl.play().catch(() => {});
     setUIState('recording');
   }
 
@@ -544,7 +623,13 @@
     });
     webcamStream = micStream = null;
 
-    if (audioCtx) { audioCtx.close(); audioCtx = null; }
+    if (audioCtx)      { audioCtx.close(); audioCtx = null; }
+    if (silentAudioEl) {
+      silentAudioEl.pause();
+      if (silentAudioEl.parentNode) silentAudioEl.parentNode.removeChild(silentAudioEl);
+      silentAudioEl = null;
+    }
+    if (silentAudioUrl) { URL.revokeObjectURL(silentAudioUrl); silentAudioUrl = null; }
     webcamVid.srcObject = null;
     isRecording = false;
     isPaused    = false;
@@ -564,6 +649,7 @@
 
     screenVid.srcObject = null;
     cleanup();
+    clearMediaSession();
     setUIState('idle');
   }
 
