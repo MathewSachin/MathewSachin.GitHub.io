@@ -165,6 +165,8 @@
     try { return localStorage.getItem(key); } catch (_) { return null; }
   }
 
+  function gainPct(v) { return Math.round(parseFloat(v) * 100) + '%'; }
+
   // Restore non-device preferences immediately (no async enumeration needed)
   function restoreSimplePrefs() {
     const fps = loadPref(PREFS.fps);
@@ -191,14 +193,14 @@
 
     const micGain = loadPref(PREFS.micGain);
     if (micGain !== null) {
-      micGainSlider.value    = micGain;
-      micGainLabel.textContent = Math.round(micGain * 100) + '%';
+      micGainSlider.value      = micGain;
+      micGainLabel.textContent = gainPct(micGain);
     }
 
     const sysGain = loadPref(PREFS.sysGain);
     if (sysGain !== null) {
-      sysGainSlider.value    = sysGain;
-      sysGainLabel.textContent = Math.round(sysGain * 100) + '%';
+      sysGainSlider.value      = sysGain;
+      sysGainLabel.textContent = gainPct(sysGain);
     }
   }
 
@@ -466,7 +468,7 @@
   function startMeterAnimation() {
     stopMeterAnimation();
     (function tick() {
-      if (!audioCtx) return;
+      if (!audioCtx || (!micAnalyser && !sysAnalyser)) return;
       drawMeter(micAnalyser, micLevelCanvas);
       drawMeter(sysAnalyser, sysLevelCanvas);
       meterRafId = requestAnimationFrame(tick);
@@ -1002,14 +1004,14 @@
 
   micGainSlider.addEventListener('input', () => {
     const v = parseFloat(micGainSlider.value);
-    micGainLabel.textContent = Math.round(v * 100) + '%';
+    micGainLabel.textContent = gainPct(v);
     if (micGainNode) micGainNode.gain.value = v;
     savePref(PREFS.micGain, v);
   });
 
   sysGainSlider.addEventListener('input', () => {
     const v = parseFloat(sysGainSlider.value);
-    sysGainLabel.textContent = Math.round(v * 100) + '%';
+    sysGainLabel.textContent = gainPct(v);
     if (sysGainNode) sysGainNode.gain.value = v;
     savePref(PREFS.sysGain, v);
   });
