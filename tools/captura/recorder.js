@@ -16,6 +16,8 @@
   let mediaRecorder   = null;
   let writableStream  = null;   // FSA writable
   let savedFileHandle = null;   // FSA file handle (for open-in-new-tab after stop)
+  let dirHandle       = null;   // FSA directory handle (persisted in IndexedDB)
+  let idbDb           = null;   // IndexedDB database instance
   let animFrameId     = null;
   let drawIntervalId  = null;
   let timerIntervalId = null;
@@ -39,6 +41,8 @@
   const sysAudioChk = document.getElementById('sys-audio-chk');
   const startBtn    = document.getElementById('start-btn');
   const stopBtn     = document.getElementById('stop-btn');
+  const pickDirBtn  = document.getElementById('pick-dir-btn');
+  const dirNameEl   = document.getElementById('dir-name');
   const statusBadge = document.getElementById('status-badge');
   const timerEl     = document.getElementById('timer-text');
   const alertBox    = document.getElementById('alert-box');
@@ -47,7 +51,7 @@
   // ── Mobile / capability check ────────────────────────────────────────────────
   const hasGetDisplayMedia = !!(navigator.mediaDevices &&
     typeof navigator.mediaDevices.getDisplayMedia === 'function');
-  const hasFSA = typeof window.showSaveFilePicker === 'function';
+  const hasFSA = typeof window.showDirectoryPicker === 'function';
 
   if (!hasGetDisplayMedia) {
     showAlert(
@@ -65,6 +69,32 @@
       'warning'
     );
     document.getElementById('recorder-ui').hidden = true;
+  }
+
+  // ── IndexedDB helpers ────────────────────────────────────────────────────────
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('captura-db', 1);
+      req.onupgradeneeded = e => e.target.result.createObjectStore('settings');
+      req.onsuccess = e => resolve(e.target.result);
+      req.onerror   = e => reject(e.target.error);
+    });
+  }
+
+  function idbGet(key) {
+    return new Promise((resolve, reject) => {
+      const req = idbDb.transaction('settings', 'readonly').objectStore('settings').get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror   = () => reject(req.error);
+    });
+  }
+
+  function idbPut(key, value) {
+    return new Promise((resolve, reject) => {
+      const req = idbDb.transaction('settings', 'readwrite').objectStore('settings').put(value, key);
+      req.onsuccess = () => resolve();
+      req.onerror   = () => reject(req.error);
+    });
   }
 
   // ── Capability display ──────────────────────────────────────────────────────
@@ -359,32 +389,20 @@
       const canvasStream = canvas.captureStream(fps);
       mixedAudioTracks.forEach(t => canvasStream.addTrack(t));
 
-      // 6 — Output: File System Access API (required)
+      // 6 — Output: File System Access API (directory-based)
       const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
 
-      if (typeof window.showSaveFilePicker !== 'function') {
-        showAlert(
-          'Your browser does not support the File System Access API. ' +
-          'Please use Chrome or Edge to record.',
-          'danger'
-        );
-        cleanup();
-        return;
-      }
+      const dirOk = await ensureDirectoryAccess();
+      if (!dirOk) { cleanup(); return; }
 
       try {
-        const fileHandle = await window.showSaveFilePicker({
-          suggestedName: `recording-${dateStamp()}.${ext}`,
-          types: [{
-            description: 'Video file',
-            accept: { [mimeType.split(';')[0]]: ['.' + ext] }
-          }]
-        });
+        const fileHandle = await dirHandle.getFileHandle(
+          `recording-${dateStamp()}.${ext}`, { create: true }
+        );
         writableStream  = await fileHandle.createWritable();
         savedFileHandle = fileHandle;
       } catch (pickErr) {
-        if (pickErr.name === 'AbortError') { cleanup(); return; }
-        showAlert('Could not open save file: ' + pickErr.message, 'danger');
+        showAlert('Could not create recording file: ' + pickErr.message, 'danger');
         cleanup();
         return;
       }
@@ -522,6 +540,7 @@
     const rec = state === 'recording';
     startBtn.disabled       = rec;
     stopBtn.disabled        = !rec;
+    pickDirBtn.disabled     = rec;
     // Settings that cannot be changed mid-recording
     webcamSel.disabled      = rec;
     micSel.disabled         = rec;
@@ -545,9 +564,81 @@
 
   function clearAlert() { alertBox.hidden = true; }
 
+  // ── Directory handle management ──────────────────────────────────────────────
+  function updateDirUI() {
+    dirNameEl.textContent = dirHandle ? dirHandle.name : '(no folder selected)';
+  }
+
+  async function pickDirectory() {
+    try {
+      const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+      dirHandle = handle;
+      updateDirUI();
+      if (idbDb) {
+        try { await idbPut('dir-handle', dirHandle); } catch (e) { console.warn('IndexedDB put failed:', e); }
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        showAlert('Could not select folder: ' + err.message, 'warning');
+      }
+    }
+  }
+
+  // Verifies (and if needed re-requests) write permission for the stored directory handle.
+  // If no handle exists, prompts the user to pick one. Returns true when access is granted.
+  async function ensureDirectoryAccess() {
+    if (!dirHandle) {
+      try {
+        const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        dirHandle = handle;
+        updateDirUI();
+        if (idbDb) {
+          try { await idbPut('dir-handle', dirHandle); } catch (e) { console.warn('IndexedDB put failed:', e); }
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          showAlert('Could not select a save folder: ' + err.message, 'warning');
+        }
+        return false;
+      }
+    }
+
+    let perm = await dirHandle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      try {
+        perm = await dirHandle.requestPermission({ mode: 'readwrite' });
+      } catch (_) {
+        perm = 'denied';
+      }
+    }
+    if (perm !== 'granted') {
+      showAlert(
+        'Write permission for the save folder was denied. ' +
+        'Please choose a different folder with the "Choose Folder" button.',
+        'warning'
+      );
+      return false;
+    }
+    return true;
+  }
+
+  async function initDB() {
+    try {
+      idbDb = await openDB();
+      const handle = await idbGet('dir-handle');
+      if (handle) {
+        dirHandle = handle;
+        updateDirUI();
+      }
+    } catch (_) {
+      // IndexedDB unavailable; proceed without persistence
+    }
+  }
+
   // ── Bootstrap ───────────────────────────────────────────────────────────────
-  startBtn.addEventListener('click', startRecording);
-  stopBtn .addEventListener('click', stopRecording);
+  startBtn  .addEventListener('click', startRecording);
+  stopBtn   .addEventListener('click', stopRecording);
+  pickDirBtn.addEventListener('click', pickDirectory);
 
   // Persist configuration changes to localStorage
   fpsSel     .addEventListener('change', () => savePref(PREFS.fps,      fpsSel.value));
@@ -556,7 +647,8 @@
   webcamSel  .addEventListener('change', () => savePref(PREFS.webcam,   webcamSel.value));
   micSel     .addEventListener('change', () => savePref(PREFS.mic,      micSel.value));
 
-  // Kick off the compositor loop (preview mode)
+  // Kick off the compositor loop (preview mode) and initialise IndexedDB
   startCompositor(0);
+  if (hasFSA) initDB();
 
 })();
