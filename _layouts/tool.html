@@ -6,6 +6,7 @@ layout: default
     <div class="py-4 bg-info text-white google-anno-skip">
         <div class="container">
             <h2>{{ page.title }}</h2>
+            {% include share.html %}
         </div>
     </div>
 
@@ -22,6 +23,12 @@ layout: default
                 </div>
             </div>
         </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        {% include giscus.html %}
     </div>
 
     <br>
