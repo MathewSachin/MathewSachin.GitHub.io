@@ -71,12 +71,66 @@
   const mimeType = getSupportedMimeType();
   mimeDisplay.textContent = mimeType || '(none detected)';
 
+  // ── Preferences (localStorage) ──────────────────────────────────────────────
+  const PREFS = {
+    sysAudio : 'captura-sysAudio',
+    fps      : 'captura-fps',
+    quality  : 'captura-quality',
+    pipPos   : 'captura-pipPos',
+    webcam   : 'captura-webcam',
+    mic      : 'captura-mic',
+  };
+
+  function savePref(key, value) {
+    try { localStorage.setItem(key, value); } catch (_) {}
+  }
+
+  function loadPref(key) {
+    try { return localStorage.getItem(key); } catch (_) { return null; }
+  }
+
+  // Restore non-device preferences immediately (no async enumeration needed)
+  function restoreSimplePrefs() {
+    const fps = loadPref(PREFS.fps);
+    if (fps) fpsSel.value = fps;
+
+    const quality = loadPref(PREFS.quality);
+    if (quality) qualitySel.value = quality;
+
+    const sysAudio = loadPref(PREFS.sysAudio);
+    if (sysAudio !== null) sysAudioChk.checked = sysAudio === 'true';
+
+    const pos = loadPref(PREFS.pipPos);
+    if (pos) {
+      pipPos = pos;
+      document.querySelectorAll('.pip-corner-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.pos === pos);
+      });
+    }
+  }
+
+  // Restore device selections after options have been populated
+  function restoreDevicePrefs() {
+    const webcamId = loadPref(PREFS.webcam);
+    if (webcamId && webcamSel.querySelector(`option[value="${CSS.escape(webcamId)}"]`)) {
+      webcamSel.value = webcamId;
+    }
+
+    const micId = loadPref(PREFS.mic);
+    if (micId && micSel.querySelector(`option[value="${CSS.escape(micId)}"]`)) {
+      micSel.value = micId;
+    }
+  }
+
+  restoreSimplePrefs();
+
   // ── PiP position picker ─────────────────────────────────────────────────────
   document.querySelectorAll('.pip-corner-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.pip-corner-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       pipPos = btn.dataset.pos;
+      savePref(PREFS.pipPos, pipPos);
     });
   });
 
@@ -96,6 +150,7 @@
       audioDevs.forEach((d, i) => {
         micSel.add(new Option(d.label || `Microphone ${i + 1}`, d.deviceId));
       });
+      restoreDevicePrefs();
     } catch (err) {
       showAlert('Could not enumerate devices: ' + err.message, 'warning');
     }
@@ -493,6 +548,13 @@
   // ── Bootstrap ───────────────────────────────────────────────────────────────
   startBtn.addEventListener('click', startRecording);
   stopBtn .addEventListener('click', stopRecording);
+
+  // Persist configuration changes to localStorage
+  fpsSel     .addEventListener('change', () => savePref(PREFS.fps,      fpsSel.value));
+  qualitySel .addEventListener('change', () => savePref(PREFS.quality,  qualitySel.value));
+  sysAudioChk.addEventListener('change', () => savePref(PREFS.sysAudio, sysAudioChk.checked));
+  webcamSel  .addEventListener('change', () => savePref(PREFS.webcam,   webcamSel.value));
+  micSel     .addEventListener('change', () => savePref(PREFS.mic,      micSel.value));
 
   // Kick off the compositor loop (preview mode)
   startCompositor(0);
