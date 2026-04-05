@@ -22,8 +22,9 @@
   URL.revokeObjectURL(_timerWorkerUrl);
 
   // ── State ───────────────────────────────────────────────────────────────────
-  let masterStream    = null;   // persistent display-capture stream (reused across recordings)
-  let webcamStream    = null;
+  let masterStream        = null;   // persistent display-capture stream (reused across recordings)
+  let webcamStream        = null;
+  let previewWebcamStream = null;   // webcam stream active before/between recordings for positioning
   let micStream       = null;
   let audioCtx        = null;
   let audioDestNode   = null;
@@ -46,7 +47,11 @@
   let elapsedSecs     = 0;
   let isRecording     = false;
   let isPaused        = false;
-  let pipPos          = 'bottom-left';
+  let pipX            = -1;   // fractional x (0-1) of pip top-left; -1 = default (bottom-left corner)
+  let pipY            = -1;   // fractional y (0-1) of pip top-left; -1 = default (bottom-left corner)
+  let pipDragging     = false;
+  let pipDragOffX     = 0;    // canvas-pixel offset from pip top-left to mousedown point
+  let pipDragOffY     = 0;
   let recordingLoopActive = false;             // guards the async recording loop
   let recordingLoopDone   = Promise.resolve(); // resolves when the current loop exits
   let recordingStartTime  = 0;   // performance.now() at the moment encoding started
@@ -150,7 +155,8 @@
     fps      : 'captura-fps',
     quality  : 'captura-quality',
     format   : 'captura-format',
-    pipPos   : 'captura-pipPos',
+    pipX     : 'captura-pipX',
+    pipY     : 'captura-pipY',
     webcam   : 'captura-webcam',
     mic      : 'captura-mic',
     micGain  : 'captura-micGain',
@@ -181,12 +187,11 @@
     const sysAudio = loadPref(PREFS.sysAudio);
     if (sysAudio !== null) sysAudioChk.checked = sysAudio === 'true';
 
-    const pos = loadPref(PREFS.pipPos);
-    if (pos) {
-      pipPos = pos;
-      document.querySelectorAll('.pip-corner-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.pos === pos);
-      });
+    const storedPipX = loadPref(PREFS.pipX);
+    const storedPipY = loadPref(PREFS.pipY);
+    if (storedPipX !== null && storedPipY !== null) {
+      pipX = parseFloat(storedPipX);
+      pipY = parseFloat(storedPipY);
     }
 
     updateMimeDisplay();
@@ -219,15 +224,69 @@
 
   restoreSimplePrefs();
 
-  // ── PiP position picker ─────────────────────────────────────────────────────
-  document.querySelectorAll('.pip-corner-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.pip-corner-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      pipPos = btn.dataset.pos;
-      savePref(PREFS.pipPos, pipPos);
-    });
+  // ── Webcam PiP drag ─────────────────────────────────────────────────────────
+  // Converts a MouseEvent position to canvas-pixel coordinates.
+  function canvasPos(e) {
+    const rect  = canvas.getBoundingClientRect();
+    const scaleX = canvas.width  / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left)  * scaleX,
+      y: (e.clientY - rect.top)   * scaleY,
+    };
+  }
+
+  // Returns the current pip pixel rect on the canvas (or null when webcam is off).
+  function getPipRect() {
+    if (!webcamStream && !previewWebcamStream) return null;
+    const W    = canvas.width;
+    const H    = canvas.height;
+    const pipW = Math.round(W / 4);
+    const pipH = Math.round(H / 4);
+    const marg = Math.round(W / 80);
+    const px   = pipX < 0 ? marg              : Math.round(pipX * W);
+    const py   = pipY < 0 ? H - pipH - marg   : Math.round(pipY * H);
+    return { px, py, pipW, pipH };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const r = getPipRect();
+    if (!r) return;
+    const { x, y } = canvasPos(e);
+    if (x >= r.px && x <= r.px + r.pipW && y >= r.py && y <= r.py + r.pipH) {
+      pipDragging  = true;
+      pipDragOffX  = x - r.px;
+      pipDragOffY  = y - r.py;
+      canvas.style.cursor = 'grabbing';
+      e.preventDefault();
+    }
   });
+
+  canvas.addEventListener('mousemove', e => {
+    const r = getPipRect();
+    if (r) {
+      const { x, y } = canvasPos(e);
+      const overPip = x >= r.px && x <= r.px + r.pipW && y >= r.py && y <= r.py + r.pipH;
+      if (!pipDragging) canvas.style.cursor = overPip ? 'grab' : '';
+    }
+    if (!pipDragging || !r) return;
+    const W    = canvas.width;
+    const H    = canvas.height;
+    const { x, y } = canvasPos(e);
+    pipX = Math.max(0, Math.min((x - pipDragOffX) / W, (W - r.pipW) / W));
+    pipY = Math.max(0, Math.min((y - pipDragOffY) / H, (H - r.pipH) / H));
+  });
+
+  function stopPipDrag() {
+    if (!pipDragging) return;
+    pipDragging = false;
+    canvas.style.cursor = '';
+    savePref(PREFS.pipX, pipX);
+    savePref(PREFS.pipY, pipY);
+  }
+
+  canvas.addEventListener('mouseup',    stopPipDrag);
+  canvas.addEventListener('mouseleave', stopPipDrag);
 
   // ── Device enumeration ──────────────────────────────────────────────────────
   async function enumerateDevices() {
@@ -246,6 +305,7 @@
         micSel.add(new Option(d.label || `Microphone ${i + 1}`, d.deviceId));
       });
       restoreDevicePrefs();
+      if (!isRecording) startWebcamPreview();
     } catch (err) {
       showAlert('Could not enumerate devices: ' + err.message, 'warning');
     }
@@ -254,6 +314,34 @@
   if (hasGetDisplayMedia) {
     navigator.mediaDevices.addEventListener('devicechange', enumerateDevices);
     enumerateDevices();
+  }
+
+  // ── Webcam preview (pre-recording) ──────────────────────────────────────────
+  async function startWebcamPreview() {
+    stopWebcamPreview();
+    if (webcamSel.selectedIndex <= 0) return;
+    try {
+      const constraint = webcamSel.value
+        ? { deviceId: { exact: webcamSel.value } }
+        : true;
+      previewWebcamStream = await navigator.mediaDevices.getUserMedia({
+        video: constraint, audio: false,
+      });
+      webcamVid.srcObject = previewWebcamStream;
+      await webcamVid.play();
+    } catch (err) {
+      previewWebcamStream = null;
+      showAlert('Could not start webcam preview: ' + err.message, 'warning');
+    }
+  }
+
+  function stopWebcamPreview() {
+    if (previewWebcamStream) {
+      previewWebcamStream.getTracks().forEach(t => t.stop());
+      previewWebcamStream = null;
+    }
+    // Only clear webcamVid when no recording stream is actively using it
+    if (!webcamStream) webcamVid.srcObject = null;
   }
 
   // ── Canvas compositor ───────────────────────────────────────────────────────
@@ -278,31 +366,40 @@
       if (screenVid.readyState >= 2) {
         ctx.drawImage(screenVid, 0, 0, W, H);
       }
+    }
 
-      // Webcam PiP
-      if (webcamStream && webcamVid.readyState >= 2) {
-        const pipW = Math.round(W / 4);
-        const pipH = Math.round(H / 4);
-        const marg = Math.round(W / 80);
-        let px, py;
+    // Webcam PiP — rendered in both preview and recording modes
+    if ((webcamStream || previewWebcamStream) && webcamVid.readyState >= 2) {
+      const pipW = Math.round(W / 4);
+      const pipH = Math.round(H / 4);
+      const marg = Math.round(W / 80);
+      const px   = pipX < 0 ? marg            : Math.round(pipX * W);
+      const py   = pipY < 0 ? H - pipH - marg : Math.round(pipY * H);
 
-        if      (pipPos === 'top-left')     { px = marg;             py = marg; }
-        else if (pipPos === 'top-right')    { px = W - pipW - marg;  py = marg; }
-        else if (pipPos === 'bottom-right') { px = W - pipW - marg;  py = H - pipH - marg; }
-        else                                { px = marg;             py = H - pipH - marg; } // bottom-left
+      ctx.save();
+      roundRect(px, py, pipW, pipH, 8);
+      ctx.clip();
+      ctx.drawImage(webcamVid, px, py, pipW, pipH);
+      ctx.restore();
 
-        ctx.save();
-        roundRect(px, py, pipW, pipH, 8);
-        ctx.clip();
-        ctx.drawImage(webcamVid, px, py, pipW, pipH);
-        ctx.restore();
+      ctx.strokeStyle = 'rgba(255,255,255,0.75)';
+      ctx.lineWidth   = 2;
+      roundRect(px, py, pipW, pipH, 8);
+      ctx.stroke();
 
-        ctx.strokeStyle = 'rgba(255,255,255,0.75)';
-        ctx.lineWidth   = 2;
-        roundRect(px, py, pipW, pipH, 8);
-        ctx.stroke();
+      // Drag hint (only in preview/pre-recording state)
+      if (!isRecording) {
+        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        ctx.font      = `${Math.round(W / 80)}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText('drag to reposition', px + pipW / 2, py + pipH - 4);
+        ctx.textAlign    = 'left';
+        ctx.textBaseline = 'alphabetic';
       }
+    }
 
+    if (isRecording) {
       // Timestamp overlay
       const ts  = new Date().toLocaleTimeString();
       const pad = 6;
@@ -614,7 +711,8 @@
       canvas.width      = settings.width  || DEFAULT_WIDTH;
       canvas.height     = settings.height || DEFAULT_HEIGHT;
 
-      // 2 — Webcam
+      // 2 — Webcam (stop preview first to release the camera before re-acquiring)
+      stopWebcamPreview();
       if (webcamSel.selectedIndex > 0) {
         const vidConstraint = webcamSel.value
           ? { deviceId: { exact: webcamSel.value } }
@@ -828,8 +926,9 @@
     isRecording = false;
     isPaused    = false;
 
-    // Return compositor to preview (rAF) mode
+    // Return compositor to preview (rAF) mode, then restart webcam preview
     startCompositor(0);
+    startWebcamPreview();
   }
 
   // Tears down the persistent screen stream and resets all state to idle.
@@ -842,6 +941,7 @@
     }
 
     screenVid.srcObject = null;
+    stopWebcamPreview();
     cleanup();
     clearMediaSession();
     setUIState('idle');
@@ -999,7 +1099,10 @@
   qualitySel .addEventListener('change', () => savePref(PREFS.quality,  qualitySel.value));
   formatSel  .addEventListener('change', () => { savePref(PREFS.format, formatSel.value); updateMimeDisplay(); });
   sysAudioChk.addEventListener('change', () => savePref(PREFS.sysAudio, sysAudioChk.checked));
-  webcamSel  .addEventListener('change', () => savePref(PREFS.webcam,   webcamSel.value));
+  webcamSel  .addEventListener('change', () => {
+    savePref(PREFS.webcam, webcamSel.value);
+    if (!isRecording) startWebcamPreview();
+  });
   micSel     .addEventListener('change', () => savePref(PREFS.mic,      micSel.value));
 
   micGainSlider.addEventListener('input', () => {

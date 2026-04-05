@@ -5,27 +5,6 @@
   background: #111;
   border-radius: 6px;
 }
-.pip-corner-btn {
-  width: 40px; height: 40px;
-  border: 2px solid #6c757d;
-  background: transparent;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-}
-.pip-corner-btn.active { border-color: #0dcaf0; background: rgba(13,202,240,.15); }
-.pip-corner-btn::after {
-  content: '';
-  position: absolute;
-  width: 30%; height: 25%;
-  background: #6c757d;
-  border-radius: 2px;
-}
-.pip-corner-btn.active::after { background: #0dcaf0; }
-#pip-tl::after { top: 4px; left: 4px; }
-#pip-tr::after { top: 4px; right: 4px; }
-#pip-bl::after { bottom: 4px; left: 4px; }
-#pip-br::after { bottom: 4px; right: 4px; }
 .rec-dot {
   display: inline-block;
   width: 10px; height: 10px;
