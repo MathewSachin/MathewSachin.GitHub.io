@@ -46,7 +46,11 @@
   let elapsedSecs     = 0;
   let isRecording     = false;
   let isPaused        = false;
-  let pipPos          = 'bottom-left';
+  let pipX            = -1;   // fractional x (0-1) of pip top-left; -1 = default (bottom-left corner)
+  let pipY            = -1;   // fractional y (0-1) of pip top-left; -1 = default (bottom-left corner)
+  let pipDragging     = false;
+  let pipDragOffX     = 0;    // canvas-pixel offset from pip top-left to mousedown point
+  let pipDragOffY     = 0;
   let recordingLoopActive = false;             // guards the async recording loop
   let recordingLoopDone   = Promise.resolve(); // resolves when the current loop exits
   let recordingStartTime  = 0;   // performance.now() at the moment encoding started
@@ -150,7 +154,8 @@
     fps      : 'captura-fps',
     quality  : 'captura-quality',
     format   : 'captura-format',
-    pipPos   : 'captura-pipPos',
+    pipX     : 'captura-pipX',
+    pipY     : 'captura-pipY',
     webcam   : 'captura-webcam',
     mic      : 'captura-mic',
     micGain  : 'captura-micGain',
@@ -181,12 +186,11 @@
     const sysAudio = loadPref(PREFS.sysAudio);
     if (sysAudio !== null) sysAudioChk.checked = sysAudio === 'true';
 
-    const pos = loadPref(PREFS.pipPos);
-    if (pos) {
-      pipPos = pos;
-      document.querySelectorAll('.pip-corner-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.pos === pos);
-      });
+    const storedPipX = loadPref(PREFS.pipX);
+    const storedPipY = loadPref(PREFS.pipY);
+    if (storedPipX !== null && storedPipY !== null) {
+      pipX = parseFloat(storedPipX);
+      pipY = parseFloat(storedPipY);
     }
 
     updateMimeDisplay();
@@ -219,15 +223,69 @@
 
   restoreSimplePrefs();
 
-  // ── PiP position picker ─────────────────────────────────────────────────────
-  document.querySelectorAll('.pip-corner-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.pip-corner-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      pipPos = btn.dataset.pos;
-      savePref(PREFS.pipPos, pipPos);
-    });
+  // ── Webcam PiP drag ─────────────────────────────────────────────────────────
+  // Converts a MouseEvent position to canvas-pixel coordinates.
+  function canvasPos(e) {
+    const rect  = canvas.getBoundingClientRect();
+    const scaleX = canvas.width  / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left)  * scaleX,
+      y: (e.clientY - rect.top)   * scaleY,
+    };
+  }
+
+  // Returns the current pip pixel rect on the canvas (or null when webcam is off).
+  function getPipRect() {
+    if (!webcamStream) return null;
+    const W    = canvas.width;
+    const H    = canvas.height;
+    const pipW = Math.round(W / 4);
+    const pipH = Math.round(H / 4);
+    const marg = Math.round(W / 80);
+    const px   = pipX < 0 ? marg              : Math.round(pipX * W);
+    const py   = pipY < 0 ? H - pipH - marg   : Math.round(pipY * H);
+    return { px, py, pipW, pipH };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const r = getPipRect();
+    if (!r) return;
+    const { x, y } = canvasPos(e);
+    if (x >= r.px && x <= r.px + r.pipW && y >= r.py && y <= r.py + r.pipH) {
+      pipDragging  = true;
+      pipDragOffX  = x - r.px;
+      pipDragOffY  = y - r.py;
+      canvas.style.cursor = 'grabbing';
+      e.preventDefault();
+    }
   });
+
+  canvas.addEventListener('mousemove', e => {
+    const r = getPipRect();
+    if (r) {
+      const { x, y } = canvasPos(e);
+      const overPip = x >= r.px && x <= r.px + r.pipW && y >= r.py && y <= r.py + r.pipH;
+      if (!pipDragging) canvas.style.cursor = overPip ? 'grab' : '';
+    }
+    if (!pipDragging || !r) return;
+    const W    = canvas.width;
+    const H    = canvas.height;
+    const { x, y } = canvasPos(e);
+    pipX = Math.max(0, Math.min((x - pipDragOffX) / W, (W - r.pipW) / W));
+    pipY = Math.max(0, Math.min((y - pipDragOffY) / H, (H - r.pipH) / H));
+  });
+
+  function stopPipDrag() {
+    if (!pipDragging) return;
+    pipDragging = false;
+    canvas.style.cursor = '';
+    savePref(PREFS.pipX, pipX);
+    savePref(PREFS.pipY, pipY);
+  }
+
+  canvas.addEventListener('mouseup',    stopPipDrag);
+  canvas.addEventListener('mouseleave', stopPipDrag);
 
   // ── Device enumeration ──────────────────────────────────────────────────────
   async function enumerateDevices() {
@@ -284,12 +342,8 @@
         const pipW = Math.round(W / 4);
         const pipH = Math.round(H / 4);
         const marg = Math.round(W / 80);
-        let px, py;
-
-        if      (pipPos === 'top-left')     { px = marg;             py = marg; }
-        else if (pipPos === 'top-right')    { px = W - pipW - marg;  py = marg; }
-        else if (pipPos === 'bottom-right') { px = W - pipW - marg;  py = H - pipH - marg; }
-        else                                { px = marg;             py = H - pipH - marg; } // bottom-left
+        const px   = pipX < 0 ? marg            : Math.round(pipX * W);
+        const py   = pipY < 0 ? H - pipH - marg : Math.round(pipY * H);
 
         ctx.save();
         roundRect(px, py, pipW, pipH, 8);
