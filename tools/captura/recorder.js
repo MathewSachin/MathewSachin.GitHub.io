@@ -6,6 +6,7 @@
   const DEFAULT_HEIGHT = 720;
   const VIDEO_READY_TIMEOUT_MS      = 3000;
   const BLOB_URL_REVOKE_TIMEOUT_MS  = 5 * 60 * 1000; // 5 minutes
+  const WEBM_HEADER_MAX_BYTES       = 100_000;        // 100 KB — safely contains the full EBML header
 
   // ── State ───────────────────────────────────────────────────────────────────
   let masterStream    = null;   // persistent display-capture stream (reused across recordings)
@@ -26,6 +27,9 @@
   let elapsedSecs     = 0;
   let isRecording     = false;
   let isPaused        = false;
+  // Duration tracking: wall-clock ms elapsed, accounting for pauses
+  let recordingStartTime  = 0;   // Date.now() when recording/last-resume started
+  let accumulatedDurationMs = 0; // ms accumulated before the current segment
   let pipPos          = 'bottom-left';
 
   // Offscreen video elements used by compositor
@@ -491,7 +495,7 @@
       mixedAudioTracks.forEach(t => canvasStream.addTrack(t));
 
       // 6 — Output: File System Access API (directory-based)
-      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+      const ext = 'webm';
 
       const dirOk = await ensureDirectoryAccess();
       if (!dirOk) { cleanup(); return; }
@@ -523,9 +527,35 @@
         await writableStream.close();
         writableStream = null;
 
-        // Build success alert with an open-in-new-tab link
+        // Calculate total recording duration in ms (accounting for pauses).
+        // accumulatedDurationMs is finalized by stopRecording() before .stop() is called.
+        const finalDurationMs = accumulatedDurationMs;
+
         const handle = savedFileHandle;
         savedFileHandle = null;
+
+        // Patch the WebM header to inject accurate duration metadata.
+        // Only the first 100 KB (which safely contains the full EBML header)
+        // is read into RAM; the rest of the file is never loaded.
+        if (handle) {
+          try {
+            const file       = await handle.getFile();
+            const headerBlob = file.slice(0, WEBM_HEADER_MAX_BYTES);
+            const buffer     = await headerBlob.arrayBuffer();
+            const patched    = patchWebMDuration(buffer, finalDurationMs);
+
+            // Seek-and-overwrite only the header — keepExistingData prevents truncation
+            const patchStream = await handle.createWritable({ keepExistingData: true });
+            await patchStream.seek(0);
+            await patchStream.write(patched);
+            await patchStream.close();
+          } catch (patchErr) {
+            // Duration patching is best-effort; the file is still valid without it
+            console.warn('Failed to patch WebM duration:', patchErr);
+          }
+        }
+
+        // Build success alert with an open-in-new-tab link
         const msg = document.createDocumentFragment();
         msg.append('Recording saved to disk. ');
         if (handle) {
@@ -564,6 +594,8 @@
       startCompositor(fps);
 
       elapsedSecs = 0;
+      accumulatedDurationMs = 0;
+      recordingStartTime    = Date.now();
       timerEl.textContent = '00:00';
       timerIntervalId = setInterval(() => {
         elapsedSecs++;
@@ -581,6 +613,11 @@
 
   function stopRecording() {
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      // Finalize duration before stopping: if currently recording (not paused),
+      // add the time since the last resume/start to the accumulator.
+      if (!isPaused) {
+        accumulatedDurationMs += Date.now() - recordingStartTime;
+      }
       mediaRecorder.stop();
     }
     isRecording = false;
@@ -594,6 +631,8 @@
     if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
     mediaRecorder.pause();
     isPaused = true;
+    // Accumulate elapsed time before the pause
+    accumulatedDurationMs += Date.now() - recordingStartTime;
     stopCompositor();
     clearInterval(timerIntervalId);
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
@@ -605,6 +644,7 @@
     if (!mediaRecorder || mediaRecorder.state !== 'paused') return;
     mediaRecorder.resume();
     isPaused = false;
+    recordingStartTime = Date.now(); // restart wall-clock for this segment
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
       elapsedSecs++;
@@ -658,9 +698,7 @@
     const candidates = [
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
-      'video/webm',
-      'video/mp4;codecs=h264,aac',
-      'video/mp4'
+      'video/webm'
     ];
     return candidates.find(t => MediaRecorder.isTypeSupported(t)) || '';
   }

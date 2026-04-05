@@ -274,8 +274,8 @@ ads: true
       you to re-grant it. If permission is denied, recording is cancelled gracefully.
     </p>
     <p>
-      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> (or
-      <code>.mp4</code>) is created inside the chosen folder with
+      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code>
+      is created inside the chosen folder with
       <code>dirHandle.getFileHandle(name, { create: true })</code>, and a
       <code>FileSystemWritableFileStream</code> is opened on it.
       The <code>MediaRecorder</code> emits compressed video chunks every second via its
@@ -338,15 +338,15 @@ ads: true
       <li><code>video/webm;codecs=vp9,opus</code> — VP9 video + Opus audio (best quality/size ratio)</li>
       <li><code>video/webm;codecs=vp8,opus</code> — VP8 video + Opus audio (wider compatibility)</li>
       <li><code>video/webm</code> — WebM with browser-default codecs</li>
-      <li><code>video/mp4;codecs=h264,aac</code> — H.264 video + AAC audio</li>
-      <li><code>video/mp4</code> — MP4 with browser-default codecs</li>
     </ol>
     <p>
       The detected MIME type is shown in the recorder settings panel so you always know what
-      format will be produced. The file extension (<code>.webm</code> or <code>.mp4</code>) is
-      set automatically to match.
+      format will be produced. The output file is always saved with the <code>.webm</code> extension.
+      After recording stops, the EBML header is patched in-place to embed the exact duration
+      (accounting for any pause/resume cycles) without loading the full video into memory.
     </p>
   </div>
 </div>
 
+<script src="{{ '/tools/captura/webm-duration.js' | relative_url }}"></script>
 <script src="{{ '/tools/captura/recorder.js' | relative_url }}"></script>
