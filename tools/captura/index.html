@@ -153,8 +153,10 @@ ads: true
         capturing other apps' screens. Use Chrome or Edge on a desktop.
       </li>
       <li>
-        <strong>Codec support varies</strong> — WebM/VP9 is widely supported; MP4/H.264 depends
-        on the browser. The recorder automatically selects the best available codec.
+        <strong>WebM/VP9 output only</strong> — the recorder always produces a
+        <code>.webm</code> file encoded with VP9 video and Opus audio via the
+        <a href="https://github.com/Vanilagy/mediabunny" target="_blank" rel="noopener noreferrer">Mediabunny</a>
+        library (WebCodecs API). MP4/H.264 is not supported.
       </li>
       <li>
         <strong>File System Access API required</strong> — the recorder streams video directly to
@@ -326,7 +328,7 @@ ads: true
 
     <h6><i class="fas fa-film me-1 text-muted"></i>Codec &amp; Container (Mediabunny)</h6>
     <p>
-      Video is encoded using <strong>VP9</strong> (<code>vp09.00.10.08</code>) and audio using
+      Video is encoded using <strong>VP9</strong> and audio using
       <strong>Opus</strong>, muxed into a <strong>WebM</strong> container by the
       <a href="https://github.com/Vanilagy/mediabunny" target="_blank" rel="noopener noreferrer">Mediabunny</a>
       library. Mediabunny drives the browser's hardware <code>VideoEncoder</code> and
