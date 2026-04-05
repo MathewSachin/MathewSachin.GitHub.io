@@ -4,7 +4,8 @@
   // ── Constants ────────────────────────────────────────────────────────────────
   const DEFAULT_WIDTH  = 1280;
   const DEFAULT_HEIGHT = 720;
-  const VIDEO_READY_TIMEOUT_MS = 3000;
+  const VIDEO_READY_TIMEOUT_MS      = 3000;
+  const BLOB_URL_REVOKE_TIMEOUT_MS  = 5 * 60 * 1000; // 5 minutes
 
   // ── State ───────────────────────────────────────────────────────────────────
   let screenStream    = null;
@@ -14,6 +15,7 @@
   let audioDestNode   = null;
   let mediaRecorder   = null;
   let writableStream  = null;   // FSA writable
+  let savedFileHandle = null;   // FSA file handle (for open-in-new-tab after stop)
   let animFrameId     = null;
   let drawIntervalId  = null;
   let timerIntervalId = null;
@@ -41,18 +43,25 @@
   const timerEl     = document.getElementById('timer-text');
   const alertBox    = document.getElementById('alert-box');
   const mimeDisplay = document.getElementById('mime-display');
-  const saveMethod  = document.getElementById('save-method');
 
   // ── Mobile / capability check ────────────────────────────────────────────────
   const hasGetDisplayMedia = !!(navigator.mediaDevices &&
     typeof navigator.mediaDevices.getDisplayMedia === 'function');
+  const hasFSA = typeof window.showSaveFilePicker === 'function';
 
   if (!hasGetDisplayMedia) {
     showAlert(
       'Screen recording is not supported on this device. ' +
       'Mobile browsers run inside a security sandbox that prevents access to the device screen — ' +
       'this is where native desktop apps still shine. ' +
-      'Please open this page on a desktop browser (Chrome, Edge, or Firefox) to use the recorder.',
+      'Please open this page on a desktop browser (Chrome or Edge) to use the recorder.',
+      'warning'
+    );
+    document.getElementById('recorder-ui').hidden = true;
+  } else if (!hasFSA) {
+    showAlert(
+      'Your browser does not support the File System Access API, which this recorder requires to ' +
+      'stream video directly to disk. Please open this page in Chrome or Edge to use the recorder.',
       'warning'
     );
     document.getElementById('recorder-ui').hidden = true;
@@ -60,10 +69,7 @@
 
   // ── Capability display ──────────────────────────────────────────────────────
   const mimeType = getSupportedMimeType();
-  mimeDisplay.textContent  = mimeType || '(none detected)';
-  saveMethod.textContent   = typeof window.showSaveFilePicker === 'function'
-    ? 'File System Access API (direct-to-disk)'
-    : 'Not supported — use Chrome or Edge';
+  mimeDisplay.textContent = mimeType || '(none detected)';
 
   // ── PiP position picker ─────────────────────────────────────────────────────
   document.querySelectorAll('.pip-corner-btn').forEach(btn => {
@@ -319,7 +325,8 @@
             accept: { [mimeType.split(';')[0]]: ['.' + ext] }
           }]
         });
-        writableStream = await fileHandle.createWritable();
+        writableStream  = await fileHandle.createWritable();
+        savedFileHandle = fileHandle;
       } catch (pickErr) {
         if (pickErr.name === 'AbortError') { cleanup(); return; }
         showAlert('Could not open save file: ' + pickErr.message, 'danger');
@@ -341,7 +348,29 @@
       mediaRecorder.onstop = async () => {
         await writableStream.close();
         writableStream = null;
-        showAlert('Recording saved to disk.', 'success');
+
+        // Build success alert with an open-in-new-tab link
+        const handle = savedFileHandle;
+        savedFileHandle = null;
+        const msg = document.createDocumentFragment();
+        msg.append('Recording saved to disk. ');
+        if (handle) {
+          try {
+            const file = await handle.getFile();
+            const url  = URL.createObjectURL(file);
+            const link = Object.assign(document.createElement('a'), {
+              href: url, target: '_blank', rel: 'noopener noreferrer',
+              textContent: 'Open in new tab'
+            });
+            msg.append(link);
+            // Revoke the blob URL when the tab navigates away or after 5 minutes
+            setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
+            window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
+          } catch (_) {
+            // getFile() may fail if the user moved/deleted the file; skip the link
+          }
+        }
+        showAlert(msg, 'success');
         cleanup();
       };
 
