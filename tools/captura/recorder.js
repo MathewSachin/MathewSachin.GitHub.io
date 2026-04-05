@@ -111,7 +111,7 @@
   }
 
   // ── Capability display ──────────────────────────────────────────────────────
-  mimeDisplay.textContent = 'video/webm;codecs=vp09.00.10.08,opus (Mediabunny)';
+  mimeDisplay.textContent = 'video/webm;codecs=vp9,opus (Mediabunny)';
 
   // ── Preferences (localStorage) ──────────────────────────────────────────────
   const PREFS = {
@@ -545,7 +545,7 @@
       });
 
       mediabunnyCanvasSource = new CanvasSource(canvas, {
-        codec:   'vp09.00.10.08',
+        codec:   'vp9',
         bitrate: videoBitrate()
       });
       mediabunnyOutput.addVideoTrack(mediabunnyCanvasSource);
