@@ -59,6 +59,12 @@
   let pauseStartTime      = 0;   // performance.now() when the last pause began
   let sleepResolve        = null; // resolve fn for the inter-frame sleep; called by stopCompositor to unblock the loop
 
+  // Preview audio state (mic metering before/between recordings; sys metering during session)
+  let previewAudioCtx    = null;
+  let previewMicAnalyser = null;
+  let previewSysAnalyser = null;
+  let previewMicStream   = null;
+
   // Offscreen video elements used by compositor
   const screenVid = Object.assign(document.createElement('video'),
     { muted: true, autoplay: true, playsInline: true });
@@ -83,7 +89,6 @@
   const statusBadge = document.getElementById('status-badge');
   const timerEl     = document.getElementById('timer-text');
   const alertBox    = document.getElementById('alert-box');
-  const mimeDisplay = document.getElementById('mime-display');
   const micGainSlider  = document.getElementById('mic-gain-slider');
   const sysGainSlider  = document.getElementById('sys-gain-slider');
   const micGainLabel   = document.getElementById('mic-gain-label');
@@ -140,15 +145,6 @@
     });
   }
 
-  // ── Capability display ──────────────────────────────────────────────────────
-  function updateMimeDisplay() {
-    const isMp4 = formatSel.value === FORMAT_MP4;
-    mimeDisplay.textContent = isMp4
-      ? 'video/mp4;codecs=avc1,mp4a.40.2 (Mediabunny)'
-      : 'video/webm;codecs=vp9,opus (Mediabunny)';
-  }
-  updateMimeDisplay();
-
   // ── Preferences (localStorage) ──────────────────────────────────────────────
   const PREFS = {
     sysAudio : 'captura-sysAudio',
@@ -193,8 +189,6 @@
       pipX = parseFloat(storedPipX);
       pipY = parseFloat(storedPipY);
     }
-
-    updateMimeDisplay();
 
     const micGain = loadPref(PREFS.micGain);
     if (micGain !== null) {
@@ -305,9 +299,12 @@
         micSel.add(new Option(d.label || `Microphone ${i + 1}`, d.deviceId));
       });
       restoreDevicePrefs();
-      if (!isRecording) startWebcamPreview();
+      if (!isRecording) {
+        startWebcamPreview();
+        startMicLevelPreview().catch(() => {});
+      }
     } catch (err) {
-      showAlert('Could not enumerate devices: ' + err.message, 'warning');
+      showErrorDialog('Device Error', 'Could not enumerate devices: ' + err.message);
     }
   }
 
@@ -331,7 +328,7 @@
       await webcamVid.play();
     } catch (err) {
       previewWebcamStream = null;
-      showAlert('Could not start webcam preview: ' + err.message, 'warning');
+      showErrorDialog('Webcam Error', 'Could not start webcam preview: ' + err.message);
     }
   }
 
@@ -352,8 +349,11 @@
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, W, H);
 
-    if (!isRecording) {
-      // Placeholder
+    // Show screen layer whenever a live stream is available (recording OR session active)
+    if (screenVid.srcObject && screenVid.readyState >= 2) {
+      ctx.drawImage(screenVid, 0, 0, W, H);
+    } else {
+      // Placeholder shown only when no stream is active yet
       ctx.fillStyle = 'rgba(255,255,255,0.15)';
       ctx.font = `${Math.round(W / 40)}px sans-serif`;
       ctx.textAlign = 'center';
@@ -361,11 +361,6 @@
       ctx.fillText('Click "Start Recording" to begin', W / 2, H / 2);
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
-    } else {
-      // Screen layer
-      if (screenVid.readyState >= 2) {
-        ctx.drawImage(screenVid, 0, 0, W, H);
-      }
     }
 
     // Webcam PiP — rendered in both preview and recording modes
@@ -565,21 +560,96 @@
   function startMeterAnimation() {
     stopMeterAnimation();
     (function tick() {
-      if (!audioCtx || (!micAnalyser && !sysAnalyser)) return;
-      drawMeter(micAnalyser, micLevelCanvas);
-      drawMeter(sysAnalyser, sysLevelCanvas);
+      const micAn = micAnalyser || previewMicAnalyser;
+      const sysAn = sysAnalyser || previewSysAnalyser;
+      if (!micAn && !sysAn) {
+        // Reset meters to dark/inactive state when nothing is connected
+        [micLevelCanvas, sysLevelCanvas].forEach(c => {
+          const mCtx = c.getContext('2d');
+          mCtx.fillStyle = '#1e1e1e';
+          mCtx.fillRect(0, 0, c.width, c.height);
+        });
+        return;
+      }
+      drawMeter(micAn, micLevelCanvas);
+      drawMeter(sysAn, sysLevelCanvas);
       meterRafId = requestAnimationFrame(tick);
     })();
   }
 
   function stopMeterAnimation() {
     if (meterRafId) { cancelAnimationFrame(meterRafId); meterRafId = null; }
-    // Reset meters to dark/inactive state
-    [micLevelCanvas, sysLevelCanvas].forEach(c => {
-      const mCtx = c.getContext('2d');
-      mCtx.fillStyle = '#1e1e1e';
-      mCtx.fillRect(0, 0, c.width, c.height);
-    });
+  }
+
+  // ── Preview audio metering ───────────────────────────────────────────────────
+  // Shows mic / system-audio level meters outside of an active recording so the
+  // user can confirm levels before committing to a capture session.
+
+  async function startMicLevelPreview() {
+    // Stop any existing preview mic stream
+    if (previewMicStream) {
+      previewMicStream.getTracks().forEach(t => t.stop());
+      previewMicStream = null;
+    }
+    previewMicAnalyser = null;
+
+    if (isRecording || isPaused || micSel.selectedIndex <= 0) return;
+
+    try {
+      const constraint = micSel.value
+        ? { deviceId: { exact: micSel.value }, echoCancellation: false }
+        : { echoCancellation: false };
+      previewMicStream = await navigator.mediaDevices.getUserMedia({ audio: constraint, video: false });
+
+      if (!previewAudioCtx || previewAudioCtx.state === 'closed') {
+        previewAudioCtx = new AudioContext();
+      }
+      const src = previewAudioCtx.createMediaStreamSource(previewMicStream);
+      previewMicAnalyser = previewAudioCtx.createAnalyser();
+      previewMicAnalyser.fftSize = 512;
+      previewMicAnalyser.smoothingTimeConstant = 0.75;
+      src.connect(previewMicAnalyser);
+      startMeterAnimation();
+    } catch (_) {
+      // Silently fail — preview metering is optional
+      previewMicStream   = null;
+      previewMicAnalyser = null;
+    }
+  }
+
+  function stopMicLevelPreview() {
+    if (previewMicStream) {
+      previewMicStream.getTracks().forEach(t => t.stop());
+      previewMicStream = null;
+    }
+    previewMicAnalyser = null;
+    if (previewAudioCtx && !previewSysAnalyser) {
+      previewAudioCtx.close().catch(() => {});
+      previewAudioCtx = null;
+    }
+  }
+
+  function startSysLevelPreview(tracks) {
+    previewSysAnalyser = null;
+    if (!tracks || tracks.length === 0) return;
+
+    if (!previewAudioCtx || previewAudioCtx.state === 'closed') {
+      previewAudioCtx = new AudioContext();
+    }
+    const src = previewAudioCtx.createMediaStreamSource(new MediaStream(tracks));
+    previewSysAnalyser = previewAudioCtx.createAnalyser();
+    previewSysAnalyser.fftSize = 512;
+    previewSysAnalyser.smoothingTimeConstant = 0.75;
+    src.connect(previewSysAnalyser);
+    startMeterAnimation();
+  }
+
+  function stopSysLevelPreview() {
+    previewSysAnalyser = null;
+    if (previewAudioCtx && !previewMicAnalyser) {
+      previewAudioCtx.close().catch(() => {});
+      previewAudioCtx = null;
+    }
   }
 
   // ── Media Session API ────────────────────────────────────────────────────────
@@ -686,14 +756,12 @@
   }
 
   async function startRecording() {
-    clearAlert();
-
     if (!hasGetDisplayMedia) {
-      showAlert(
+      showErrorDialog(
+        'Not Supported',
         'Screen recording is not supported on this device. ' +
         'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
-        'Please use a desktop browser (Chrome, Edge, or Firefox).',
-        'warning'
+        'Please use a desktop browser (Chrome or Edge).'
       );
       return;
     }
@@ -739,6 +807,28 @@
 
       // 4 — Audio mix
       const sysAudioTracks = stream.getAudioTracks();
+
+      // If the user requested system audio but the browser share dialog didn't
+      // provide any audio tracks, abort and explain what to do.
+      if (sysAudioChk.checked && sysAudioTracks.length === 0) {
+        showErrorDialog(
+          'System Audio Not Captured',
+          'System audio was not captured. In the browser share dialog, make sure to enable ' +
+          '"Share system audio" (or "Share tab audio"). ' +
+          'Uncheck "Capture system audio" in settings to record without it.'
+        );
+        if (webcamStream) { webcamStream.getTracks().forEach(t => t.stop()); webcamStream = null; }
+        if (micStream)    { micStream.getTracks().forEach(t => t.stop());    micStream    = null; }
+        setUIState(masterStream && masterStream.active ? 'session' : 'idle');
+        startCompositor(0);
+        startWebcamPreview();
+        startMicLevelPreview().catch(() => {});
+        return;
+      }
+
+      // Stop preview audio before building the recording mix
+      stopMicLevelPreview();
+      stopSysLevelPreview();
       const hasMic         = !!(micStream && micStream.getAudioTracks().length);
       const hasAudio       = sysAudioTracks.length > 0 || hasMic;
 
@@ -761,7 +851,7 @@
         writableStream  = await fileHandle.createWritable();
         savedFileHandle = fileHandle;
       } catch (pickErr) {
-        showAlert('Could not create recording file: ' + pickErr.message, 'danger');
+        showErrorDialog('File Error', 'Could not create recording file: ' + pickErr.message);
         cleanup();
         return;
       }
@@ -815,7 +905,7 @@
       setUIState('recording');
     } catch (err) {
       if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
-        showAlert('Error starting recording: ' + err.message, 'danger');
+        showErrorDialog('Recording Error', 'Error starting recording: ' + err.message);
       }
       cleanup();
     }
@@ -853,7 +943,8 @@
             const url  = URL.createObjectURL(file);
             const link = Object.assign(document.createElement('a'), {
               href: url, target: '_blank', rel: 'noopener noreferrer',
-              textContent: 'Open in new tab'
+              textContent: 'Open in new tab',
+              className: 'toast-link'
             });
             msg.append(link);
             // Revoke the blob URL when the tab navigates away or after 5 minutes
@@ -863,10 +954,10 @@
             // getFile() may fail if the user moved/deleted the file; skip the link
           }
         }
-        showAlert(msg, 'success');
+        showToast(msg, 'success');
         cleanup();
       }).catch(err => {
-        showAlert('Error saving recording: ' + err.message, 'danger');
+        showErrorDialog('Save Error', 'Error saving recording: ' + err.message);
         if (writableStream) {
           try { writableStream.close(); } catch (_) {}
           writableStream = null;
@@ -882,6 +973,11 @@
     pauseStartTime = performance.now();
     stopCompositor();
     clearInterval(timerIntervalId);
+    // Suspend the AudioContext so no audio samples flow to the encoder during
+    // pause; this keeps the audio timeline in sync with the video timeline.
+    // suspend() returns a Promise; errors are non-fatal (browser may already
+    // be suspended or context may be in a state that prevents suspension).
+    if (audioCtx) audioCtx.suspend().catch(err => console.warn('audioCtx.suspend():', err));
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     if (silentAudioEl) silentAudioEl.pause();
     setUIState('paused');
@@ -891,6 +987,9 @@
     if (!isRecording || !isPaused) return;
     totalPausedMs += performance.now() - pauseStartTime;
     isPaused = false;
+    // Resume AudioContext before restarting the compositor so audio and video
+    // start together. Errors are non-fatal.
+    if (audioCtx) audioCtx.resume().catch(err => console.warn('audioCtx.resume():', err));
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
       elapsedSecs++;
@@ -926,9 +1025,13 @@
     isRecording = false;
     isPaused    = false;
 
-    // Return compositor to preview (rAF) mode, then restart webcam preview
+    // Return compositor to preview (rAF) mode, then restart webcam and audio previews
     startCompositor(0);
     startWebcamPreview();
+    startMicLevelPreview().catch(() => {});
+    if (masterStream && masterStream.active) {
+      startSysLevelPreview(masterStream.getAudioTracks());
+    }
   }
 
   // Tears down the persistent screen stream and resets all state to idle.
@@ -986,8 +1089,8 @@
       ? '<i class="fas fa-play me-1"></i>Resume'
       : '<i class="fas fa-pause me-1"></i>Pause';
     pauseBtn.className      = paused ? 'btn btn-success' : 'btn btn-warning text-dark';
-    stopBtn.disabled        = !active;
-    endSessionBtn.disabled  = !session;
+    stopBtn.hidden          = !active;
+    endSessionBtn.hidden    = !session;
     pickDirBtn.disabled     = active;
     // Settings that cannot be changed mid-recording
     webcamSel.disabled      = active;
@@ -1014,7 +1117,74 @@
     }
   }
 
-  function clearAlert() { alertBox.hidden = true; }
+  const TOAST_FADE_MS = 150; // ms to match Bootstrap fade transition
+
+  // Success toast (auto-hides after 8 s, dismissable).
+  function showToast(msgOrNode, type, autohide = true) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show mb-2`;
+    toast.setAttribute('role', type === 'danger' ? 'alert' : 'status');
+    toast.setAttribute('aria-atomic', 'true');
+
+    const inner = document.createElement('div');
+    inner.className = 'd-flex';
+
+    const body = document.createElement('div');
+    body.className = 'toast-body';
+    if (typeof msgOrNode === 'string') {
+      body.textContent = msgOrNode;
+    } else {
+      body.appendChild(msgOrNode);
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = type === 'warning'
+      ? 'btn-close me-2 m-auto flex-shrink-0'
+      : 'btn-close btn-close-white me-2 m-auto flex-shrink-0';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.addEventListener('click', () => {
+      toast.classList.remove('show');
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, TOAST_FADE_MS);
+    });
+
+    inner.appendChild(body);
+    inner.appendChild(closeBtn);
+    toast.appendChild(inner);
+    container.appendChild(toast);
+
+    if (autohide) {
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, TOAST_FADE_MS);
+      }, 8000);
+    }
+  }
+
+  // Centered error/warning dialog (more prominent than a toast for issues that
+  // require user attention before proceeding).
+  const errorDialog = document.getElementById('captura-error-dialog');
+  if (errorDialog) {
+    const closeEl = document.getElementById('captura-error-close');
+    const closeDialog = () => errorDialog.close();
+    if (closeEl) closeEl.addEventListener('click', closeDialog);
+    // Click on backdrop (outside dialog box) to close
+    errorDialog.addEventListener('click', e => { if (e.target === errorDialog) closeDialog(); });
+  }
+
+  function showErrorDialog(title, message) {
+    if (!errorDialog) {
+      // Fallback if dialog element is missing
+      showAlert(message, 'danger');
+      return;
+    }
+    document.getElementById('captura-error-title').textContent = title;
+    document.getElementById('captura-error-body').textContent  = message;
+    errorDialog.showModal();
+  }
 
   // ── Directory handle management ──────────────────────────────────────────────
   function updateDirUI() {
@@ -1031,7 +1201,7 @@
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
-        showAlert('Could not select folder: ' + err.message, 'warning');
+        showErrorDialog('Folder Error', 'Could not select folder: ' + err.message);
       }
     }
   }
@@ -1049,7 +1219,7 @@
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
-          showAlert('Could not select a save folder: ' + err.message, 'warning');
+          showErrorDialog('Folder Error', 'Could not select a save folder: ' + err.message);
         }
         return false;
       }
@@ -1064,10 +1234,10 @@
       }
     }
     if (perm !== 'granted') {
-      showAlert(
+      showErrorDialog(
+        'Permission Denied',
         'Write permission for the save folder was denied. ' +
-        'Please choose a different folder with the "Choose Folder" button.',
-        'warning'
+        'Please choose a different folder with the "Choose Folder" button.'
       );
       return false;
     }
@@ -1097,13 +1267,16 @@
   // Persist configuration changes to localStorage
   fpsSel     .addEventListener('change', () => savePref(PREFS.fps,      fpsSel.value));
   qualitySel .addEventListener('change', () => savePref(PREFS.quality,  qualitySel.value));
-  formatSel  .addEventListener('change', () => { savePref(PREFS.format, formatSel.value); updateMimeDisplay(); });
+  formatSel  .addEventListener('change', () => savePref(PREFS.format, formatSel.value));
   sysAudioChk.addEventListener('change', () => savePref(PREFS.sysAudio, sysAudioChk.checked));
   webcamSel  .addEventListener('change', () => {
     savePref(PREFS.webcam, webcamSel.value);
     if (!isRecording) startWebcamPreview();
   });
-  micSel     .addEventListener('change', () => savePref(PREFS.mic,      micSel.value));
+  micSel     .addEventListener('change', () => {
+    savePref(PREFS.mic, micSel.value);
+    if (!isRecording && !isPaused) startMicLevelPreview().catch(() => {});
+  });
 
   micGainSlider.addEventListener('input', () => {
     const v = parseFloat(micGainSlider.value);
