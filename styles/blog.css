@@ -868,6 +868,28 @@ a.series-post-title:hover {
   max-width: 100%;
 }
 
+/* Inline tool promo card — used in post bodies to highlight a related tool */
+.inline-tool-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin: 1.5rem 0;
+}
+
+.inline-tool-card {
+  background: var(--post-accent, var(--color-accent));
+  border: none;
+  color: white;
+  border-radius: 8px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.inline-tool-card-link:hover .inline-tool-card {
+  transform: translateY(-4px);
+  filter: brightness(0.9);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
 /* GitHub-style blockquotes — left accent bar uses the per-post accent colour */
 .page-content blockquote {
   padding: 0.5em 1em;
