@@ -1,0 +1,1 @@
+#recorder-canvas{width:100%;height:auto;display:block;background:#111;border-radius:6px}.rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc3545;animation:blink 1s step-start infinite;margin-right:4px}@keyframes blink{50%{opacity:0}}.audio-meter{width:100%;height:10px;display:block;border-radius:3px;background:#1e1e1e}
