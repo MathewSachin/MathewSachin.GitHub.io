@@ -77,7 +77,7 @@ ads: true
 
     <div class="alert alert-info mb-0 py-2">
       <i class="fas fa-shield-alt me-1"></i>
-      <strong>Privacy:</strong> This tool runs 100 % in your browser. No video, audio, or metadata
+      <strong>Privacy:</strong> This tool runs 100% in your browser. No video, audio, or metadata
       is ever uploaded or transmitted anywhere.
     </div>
   </div>
@@ -194,6 +194,10 @@ ads: true
 <script>
 (function () {
   'use strict';
+
+  // ── Constants ────────────────────────────────────────────────────────────────
+  const DEFAULT_WIDTH  = 1280;
+  const DEFAULT_HEIGHT = 720;
 
   // ── State ───────────────────────────────────────────────────────────────────
   let screenStream  = null;
@@ -388,9 +392,10 @@ ads: true
       await screenVid.play();
 
       // Resize canvas to actual captured dimensions
-      const settings   = screenStream.getVideoTracks()[0].getSettings();
-      canvas.width      = settings.width  || 1280;
-      canvas.height     = settings.height || 720;
+      const videoTracks = screenStream.getVideoTracks();
+      const settings    = videoTracks.length > 0 ? videoTracks[0].getSettings() : {};
+      canvas.width      = settings.width  || DEFAULT_WIDTH;
+      canvas.height     = settings.height || DEFAULT_HEIGHT;
 
       // 2 — Webcam
       if (webcamSel.value) {
@@ -479,16 +484,20 @@ ads: true
             href: url, download: `recording-${dateStamp()}.${ext}`
           });
           a.click();
-          setTimeout(() => URL.revokeObjectURL(url), 30_000);
+          // Revoke on page unload so the download has ample time to start
+          window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
           showAlert('Recording downloaded.', 'success');
         }
         cleanup();
       };
 
       // Stop if the user ends the screen-share from the browser UI
-      screenStream.getVideoTracks()[0].addEventListener('ended', () => {
-        if (isRecording) stopRecording();
-      });
+      const firstVideoTrack = screenStream.getVideoTracks()[0];
+      if (firstVideoTrack) {
+        firstVideoTrack.addEventListener('ended', () => {
+          if (isRecording) stopRecording();
+        });
+      }
 
       // Emit chunks every second so we can stream to disk incrementally
       mediaRecorder.start(1000);
