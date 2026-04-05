@@ -34,6 +34,7 @@
   let recordingStartTime  = 0;   // performance.now() at the moment encoding started
   let totalPausedMs       = 0;   // cumulative pause duration (ms) within this recording
   let pauseStartTime      = 0;   // performance.now() when the last pause began
+  let sleepResolve        = null; // resolve fn for the inter-frame sleep; called by stopCompositor to unblock the loop
 
   // Offscreen video elements used by compositor
   const screenVid = Object.assign(document.createElement('video'),
@@ -270,6 +271,9 @@
     recordingLoopActive = false;
     if (animFrameId)    { cancelAnimationFrame(animFrameId); animFrameId = null; }
     if (drawIntervalId) { clearTimeout(drawIntervalId);      drawIntervalId = null; }
+    // If the recording loop is suspended in its inter-frame sleep, wake it up
+    // immediately so it can check recordingLoopActive and exit cleanly.
+    if (sleepResolve)   { sleepResolve();                    sleepResolve = null; }
   }
 
   // fps=0 → rAF (preview, throttled in background — fine when not recording)
@@ -290,8 +294,14 @@
           if (!recordingLoopActive) break;
           const elapsed = performance.now() - frameStart;
           await new Promise(resolve => {
-            drawIntervalId = setTimeout(resolve, Math.max(0, interval - elapsed));
+            sleepResolve = resolve;
+            drawIntervalId = setTimeout(() => {
+              sleepResolve  = null;
+              drawIntervalId = null;
+              resolve();
+            }, Math.max(0, interval - elapsed));
           });
+          sleepResolve  = null;
           drawIntervalId = null;
         }
       })();
@@ -626,7 +636,10 @@
         cleanup();
       }).catch(err => {
         showAlert('Error saving recording: ' + err.message, 'danger');
-        writableStream = null;
+        if (writableStream) {
+          try { writableStream.close(); } catch (_) {}
+          writableStream = null;
+        }
         cleanup();
       });
     }
