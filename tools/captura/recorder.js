@@ -23,6 +23,7 @@
   let timerIntervalId = null;
   let elapsedSecs     = 0;
   let isRecording     = false;
+  let isPaused        = false;
   let pipPos          = 'bottom-left';
 
   // Offscreen video elements used by compositor
@@ -40,6 +41,7 @@
   const qualitySel  = document.getElementById('quality-select');
   const sysAudioChk = document.getElementById('sys-audio-chk');
   const startBtn    = document.getElementById('start-btn');
+  const pauseBtn    = document.getElementById('pause-btn');
   const stopBtn     = document.getElementById('stop-btn');
   const endSessionBtn = document.getElementById('end-session-btn');
   const pickDirBtn  = document.getElementById('pick-dir-btn');
@@ -508,8 +510,30 @@
       mediaRecorder.stop();
     }
     isRecording = false;
+    isPaused    = false;
     clearInterval(timerIntervalId);
     setUIState(masterStream && masterStream.active ? 'session' : 'idle');
+  }
+
+  function pauseRecording() {
+    if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
+    mediaRecorder.pause();
+    isPaused = true;
+    stopCompositor();
+    clearInterval(timerIntervalId);
+    setUIState('paused');
+  }
+
+  function resumeRecording() {
+    if (!mediaRecorder || mediaRecorder.state !== 'paused') return;
+    mediaRecorder.resume();
+    isPaused = false;
+    startCompositor(parseInt(fpsSel.value, 10));
+    timerIntervalId = setInterval(() => {
+      elapsedSecs++;
+      timerEl.textContent = fmtTime(elapsedSecs);
+    }, 1000);
+    setUIState('recording');
   }
 
   // Cleans up per-recording resources (webcam, mic, audio graph) but leaves
@@ -523,6 +547,7 @@
     if (audioCtx) { audioCtx.close(); audioCtx = null; }
     webcamVid.srcObject = null;
     isRecording = false;
+    isPaused    = false;
 
     // Return compositor to preview (rAF) mode
     startCompositor(0);
@@ -577,22 +602,37 @@
     return new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
   }
 
+  function togglePauseResume() {
+    if (isPaused) resumeRecording(); else pauseRecording();
+  }
+
   function setUIState(state) {
     const rec     = state === 'recording';
-    const session = state === 'session' || state === 'recording';
-    startBtn.disabled       = rec;
-    stopBtn.disabled        = !rec;
+    const paused  = state === 'paused';
+    const active  = rec || paused;
+    const session = state === 'session' || active;
+    startBtn.hidden         = active;
+    pauseBtn.hidden         = !active;
+    pauseBtn.innerHTML      = paused
+      ? '<i class="fas fa-play me-1"></i>Resume'
+      : '<i class="fas fa-pause me-1"></i>Pause';
+    pauseBtn.className      = paused ? 'btn btn-success' : 'btn btn-warning text-dark';
+    stopBtn.disabled        = !active;
     endSessionBtn.disabled  = !session;
-    pickDirBtn.disabled     = rec;
+    pickDirBtn.disabled     = active;
     // Settings that cannot be changed mid-recording
-    webcamSel.disabled      = rec;
-    micSel.disabled         = rec;
-    sysAudioChk.disabled    = rec;
-    fpsSel.disabled         = rec;
-    qualitySel.disabled     = rec;
-    statusBadge.textContent = rec ? '⏺ Recording' : session ? '◉ Session Active' : 'Idle';
-    statusBadge.className   = rec ? 'badge bg-danger' : session ? 'badge bg-warning text-dark' : 'badge bg-secondary';
-    if (!rec) timerEl.textContent = '00:00';
+    webcamSel.disabled      = active;
+    micSel.disabled         = active;
+    sysAudioChk.disabled    = active;
+    fpsSel.disabled         = active;
+    qualitySel.disabled     = active;
+    statusBadge.textContent = rec    ? '⏺ Recording'
+      : paused ? '⏸ Paused'
+      : session ? '◉ Session Active' : 'Idle';
+    // paused and session intentionally share the same yellow badge style
+    statusBadge.className   = rec    ? 'badge bg-danger'
+      : paused || session ? 'badge bg-warning text-dark' : 'badge bg-secondary';
+    if (!active) timerEl.textContent = '00:00';
   }
 
   function showAlert(msgOrNode, type) {
@@ -680,6 +720,7 @@
 
   // ── Bootstrap ───────────────────────────────────────────────────────────────
   startBtn     .addEventListener('click', startRecording);
+  pauseBtn     .addEventListener('click', togglePauseResume);
   stopBtn      .addEventListener('click', stopRecording);
   endSessionBtn.addEventListener('click', endSession);
   pickDirBtn   .addEventListener('click', pickDirectory);
