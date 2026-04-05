@@ -6,6 +6,8 @@
   const DEFAULT_HEIGHT = 720;
   const VIDEO_READY_TIMEOUT_MS      = 3000;
   const BLOB_URL_REVOKE_TIMEOUT_MS  = 5 * 60 * 1000; // 5 minutes
+  const FORMAT_MP4  = 'mp4-h264-aac';
+  const FORMAT_WEBM = 'webm-vp9-opus';
 
   // ── State ───────────────────────────────────────────────────────────────────
   let masterStream    = null;   // persistent display-capture stream (reused across recordings)
@@ -49,6 +51,7 @@
   const micSel      = document.getElementById('mic-select');
   const fpsSel      = document.getElementById('fps-select');
   const qualitySel  = document.getElementById('quality-select');
+  const formatSel   = document.getElementById('format-select');
   const sysAudioChk = document.getElementById('sys-audio-chk');
   const startBtn    = document.getElementById('start-btn');
   const pauseBtn    = document.getElementById('pause-btn');
@@ -111,13 +114,20 @@
   }
 
   // ── Capability display ──────────────────────────────────────────────────────
-  mimeDisplay.textContent = 'video/webm;codecs=vp9,opus (Mediabunny)';
+  function updateMimeDisplay() {
+    const isMp4 = formatSel.value === FORMAT_MP4;
+    mimeDisplay.textContent = isMp4
+      ? 'video/mp4;codecs=avc1,mp4a.40.2 (Mediabunny)'
+      : 'video/webm;codecs=vp9,opus (Mediabunny)';
+  }
+  updateMimeDisplay();
 
   // ── Preferences (localStorage) ──────────────────────────────────────────────
   const PREFS = {
     sysAudio : 'captura-sysAudio',
     fps      : 'captura-fps',
     quality  : 'captura-quality',
+    format   : 'captura-format',
     pipPos   : 'captura-pipPos',
     webcam   : 'captura-webcam',
     mic      : 'captura-mic',
@@ -139,6 +149,9 @@
     const quality = loadPref(PREFS.quality);
     if (quality) qualitySel.value = quality;
 
+    const format = loadPref(PREFS.format);
+    if (format) formatSel.value = format;
+
     const sysAudio = loadPref(PREFS.sysAudio);
     if (sysAudio !== null) sysAudioChk.checked = sysAudio === 'true';
 
@@ -149,6 +162,8 @@
         b.classList.toggle('active', b.dataset.pos === pos);
       });
     }
+
+    updateMimeDisplay();
   }
 
   // Restore device selections after options have been populated
@@ -523,8 +538,9 @@
       if (!dirOk) { cleanup(); return; }
 
       try {
+        const ext = formatSel.value === FORMAT_MP4 ? 'mp4' : 'webm';
         const fileHandle = await dirHandle.getFileHandle(
-          `recording-${dateStamp()}.webm`, { create: true }
+          `recording-${dateStamp()}.${ext}`, { create: true }
         );
         writableStream  = await fileHandle.createWritable();
         savedFileHandle = fileHandle;
@@ -536,23 +552,24 @@
 
       // 6 — Mediabunny output
       // Dynamic import is cached by the browser after the first load.
-      const { Output, WebMOutputFormat, StreamTarget, CanvasSource, MediaStreamAudioTrackSource } =
+      const { Output, WebMOutputFormat, Mp4OutputFormat, StreamTarget, CanvasSource, MediaStreamAudioTrackSource } =
         await import('https://cdn.jsdelivr.net/npm/mediabunny@1.40.1/+esm');
 
+      const isMp4 = formatSel.value === FORMAT_MP4;
       mediabunnyOutput = new Output({
-        format: new WebMOutputFormat(),
+        format: isMp4 ? new Mp4OutputFormat() : new WebMOutputFormat(),
         target: new StreamTarget(writableStream)
       });
 
       mediabunnyCanvasSource = new CanvasSource(canvas, {
-        codec:   'vp9',
+        codec:   isMp4 ? 'avc' : 'vp9',
         bitrate: videoBitrate()
       });
       mediabunnyOutput.addVideoTrack(mediabunnyCanvasSource);
 
       if (hasAudio) {
         mediabunnyAudioSource = new MediaStreamAudioTrackSource(mixedAudioTracks[0], {
-          codec:   'opus',
+          codec:   isMp4 ? 'aac' : 'opus',
           bitrate: 128_000
         });
         mediabunnyOutput.addAudioTrack(mediabunnyAudioSource);
@@ -859,6 +876,7 @@
   // Persist configuration changes to localStorage
   fpsSel     .addEventListener('change', () => savePref(PREFS.fps,      fpsSel.value));
   qualitySel .addEventListener('change', () => savePref(PREFS.quality,  qualitySel.value));
+  formatSel  .addEventListener('change', () => { savePref(PREFS.format, formatSel.value); updateMimeDisplay(); });
   sysAudioChk.addEventListener('change', () => savePref(PREFS.sysAudio, sysAudioChk.checked));
   webcamSel  .addEventListener('change', () => savePref(PREFS.webcam,   webcamSel.value));
   micSel     .addEventListener('change', () => savePref(PREFS.mic,      micSel.value));
