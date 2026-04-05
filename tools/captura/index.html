@@ -117,7 +117,7 @@ ads: true
         <hr>
 
         <div class="mb-2">
-          <label class="form-label text-muted small mb-1">Detected MIME type</label>
+          <label class="form-label text-muted small mb-1">Video format</label>
           <code id="mime-display" class="d-block small text-break"></code>
         </div>
 
@@ -218,17 +218,14 @@ ads: true
       stamps a live timestamp in the bottom-right.
     </p>
     <p>
-      During recording the compositor runs on <code>setInterval</code> at your chosen frame rate
-      (e.g. every ~33 ms for 30 fps). <code>setInterval</code> is used — rather than
-      <code>requestAnimationFrame</code> — so that compositing continues reliably even when
+      During recording the compositor runs in an async self-scheduling loop at your chosen frame
+      rate (e.g. every ~33 ms for 30 fps). After drawing each frame it calls
+      <code>canvasSource.add(timestamp)</code> from the Mediabunny library, which reads the
+      canvas pixels and submits them to the hardware video encoder. The call is <code>await</code>ed
+      so that if the encoder or disk I/O falls behind, the loop naturally slows down rather than
+      overflowing an unbounded queue (back-pressure). The loop is a plain async function rather
+      than <code>requestAnimationFrame</code> so that compositing continues reliably even when
       the browser tab is hidden or you switch to another application.
-      <code>requestAnimationFrame</code> is throttled or paused by the browser for invisible
-      tabs, which is why it was causing the "stuck video" bug when switching away from the page.
-    </p>
-    <p>
-      The canvas stream is obtained with <code>canvas.captureStream(fps)</code>, which exposes the
-      canvas contents as a live <code>MediaStream</code> video track ready to be fed into the
-      <code>MediaRecorder</code>.
     </p>
 
     <hr>
@@ -244,7 +241,7 @@ ads: true
       <li>Each source stream is wrapped in a <code>MediaStreamSourceNode</code>.</li>
       <li>Both source nodes are connected to a single <code>MediaStreamDestinationNode</code>.</li>
       <li>The destination node exposes a mixed <code>MediaStream</code> whose audio track is then
-          added to the canvas stream before it reaches the <code>MediaRecorder</code>.</li>
+          passed to Mediabunny as a <code>MediaStreamAudioTrackSource</code>.</li>
     </ol>
     <p>
       This approach lets the browser's audio engine handle the mixing in real time with no
@@ -274,15 +271,14 @@ ads: true
       you to re-grant it. If permission is denied, recording is cancelled gracefully.
     </p>
     <p>
-      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> (or
-      <code>.mp4</code>) is created inside the chosen folder with
-      <code>dirHandle.getFileHandle(name, { create: true })</code>, and a
-      <code>FileSystemWritableFileStream</code> is opened on it.
-      The <code>MediaRecorder</code> emits compressed video chunks every second via its
-      <code>ondataavailable</code> callback. Each chunk is immediately written to the writable
-      stream with <code>writableStream.write(chunk)</code>. The stream is closed — and the file
-      finalised — only when recording stops. Memory usage therefore stays near-constant
-      regardless of recording length.
+      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> is created
+      inside the chosen folder, and a <code>FileSystemWritableFileStream</code> is opened on it.
+      This writable stream is passed directly to Mediabunny's <code>StreamTarget</code>, which
+      writes encoded frames to disk incrementally as they are produced by the hardware encoder.
+      When recording stops, <code>output.finalize()</code> flushes the encoder, rewrites the
+      correct video duration into the file header, and closes the stream. Memory usage therefore
+      stays near-constant regardless of recording length, and the output file always has a valid
+      duration — unlike the truncated headers produced by the native <code>MediaRecorder</code> API.
     </p>
     <p>
       This API is currently supported only in Chromium-based browsers (Chrome, Edge).
@@ -328,23 +324,17 @@ ads: true
 
     <hr>
 
-    <h6><i class="fas fa-film me-1 text-muted"></i>Codec Selection</h6>
+    <h6><i class="fas fa-film me-1 text-muted"></i>Codec &amp; Container (Mediabunny)</h6>
     <p>
-      <code>MediaRecorder</code> supports different video codecs depending on the browser.
-      The recorder tries the following MIME types in order of preference and uses the first
-      one the browser reports as supported via <code>MediaRecorder.isTypeSupported()</code>:
-    </p>
-    <ol>
-      <li><code>video/webm;codecs=vp9,opus</code> — VP9 video + Opus audio (best quality/size ratio)</li>
-      <li><code>video/webm;codecs=vp8,opus</code> — VP8 video + Opus audio (wider compatibility)</li>
-      <li><code>video/webm</code> — WebM with browser-default codecs</li>
-      <li><code>video/mp4;codecs=h264,aac</code> — H.264 video + AAC audio</li>
-      <li><code>video/mp4</code> — MP4 with browser-default codecs</li>
-    </ol>
-    <p>
-      The detected MIME type is shown in the recorder settings panel so you always know what
-      format will be produced. The file extension (<code>.webm</code> or <code>.mp4</code>) is
-      set automatically to match.
+      Video is encoded using <strong>VP9</strong> (<code>vp09.00.10.08</code>) and audio using
+      <strong>Opus</strong>, muxed into a <strong>WebM</strong> container by the
+      <a href="https://github.com/Vanilagy/mediabunny" target="_blank" rel="noopener noreferrer">Mediabunny</a>
+      library. Mediabunny drives the browser's hardware <code>VideoEncoder</code> and
+      <code>AudioEncoder</code> (WebCodecs API) directly and writes the muxed output
+      incrementally to the <code>FileSystemWritableFileStream</code> via its
+      <code>StreamTarget</code>. On finalization it rewrites the WebM <code>Duration</code>
+      element at the start of the file — a step that the native <code>MediaRecorder</code> API
+      skips, making its output unscrubbable in many players.
     </p>
   </div>
 </div>
