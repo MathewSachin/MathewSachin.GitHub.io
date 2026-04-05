@@ -13,6 +13,7 @@
   let micStream       = null;
   let audioCtx        = null;
   let audioDestNode   = null;
+  let silentAudioCtx  = null;   // keeps Media Session API alive (silent oscillator)
   let mediaRecorder   = null;
   let writableStream  = null;   // FSA writable
   let savedFileHandle = null;   // FSA file handle (for open-in-new-tab after stop)
@@ -318,6 +319,49 @@
     return audioDestNode.stream;
   }
 
+  // ── Media Session API ────────────────────────────────────────────────────────
+
+  // Browsers only activate the Media Session API when audio is playing.
+  // A silent oscillator (gain = 0) satisfies this requirement without any
+  // audible output. Must be called within a user-gesture event chain.
+  function startSilentAudio() {
+    silentAudioCtx = new AudioContext();
+    const osc  = silentAudioCtx.createOscillator();
+    const gain = silentAudioCtx.createGain();
+    gain.gain.value = 0;
+    osc.connect(gain);
+    gain.connect(silentAudioCtx.destination);
+    osc.start();
+  }
+
+  function setupMediaSession() {
+    if (!navigator.mediaSession) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title:   'Captura Web',
+      artist:  'Recording Session Active',
+      artwork: [{ src: new URL('/images/captura.png', location.href).href, sizes: '512x512', type: 'image/png' }]
+    });
+
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (mediaRecorder && mediaRecorder.state === 'paused') resumeRecording();
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') pauseRecording();
+    });
+    navigator.mediaSession.setActionHandler('stop', () => {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') stopRecording();
+    });
+  }
+
+  function clearMediaSession() {
+    if (!navigator.mediaSession) return;
+    navigator.mediaSession.metadata = null;
+    ['play', 'pause', 'stop'].forEach(action => {
+      try { navigator.mediaSession.setActionHandler(action, null); } catch (_) {}
+    });
+  }
+
   // ── Recording ────────────────────────────────────────────────────────────────
 
   // Returns the persistent master stream, acquiring a new one only when needed.
@@ -486,6 +530,11 @@
       mediaRecorder.start(1000);
       isRecording = true;
 
+      // Activate Media Session API so hardware media keys can control the recording
+      startSilentAudio();
+      setupMediaSession();
+      if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
+
       // Switch compositor to setInterval so it keeps running when the tab is hidden
       startCompositor(fps);
 
@@ -511,6 +560,7 @@
     }
     isRecording = false;
     isPaused    = false;
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'none';
     clearInterval(timerIntervalId);
     setUIState(masterStream && masterStream.active ? 'session' : 'idle');
   }
@@ -521,6 +571,7 @@
     isPaused = true;
     stopCompositor();
     clearInterval(timerIntervalId);
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     setUIState('paused');
   }
 
@@ -533,6 +584,7 @@
       elapsedSecs++;
       timerEl.textContent = fmtTime(elapsedSecs);
     }, 1000);
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
     setUIState('recording');
   }
 
@@ -544,7 +596,8 @@
     });
     webcamStream = micStream = null;
 
-    if (audioCtx) { audioCtx.close(); audioCtx = null; }
+    if (audioCtx)       { audioCtx.close();      audioCtx = null; }
+    if (silentAudioCtx) { silentAudioCtx.close(); silentAudioCtx = null; }
     webcamVid.srcObject = null;
     isRecording = false;
     isPaused    = false;
@@ -564,6 +617,7 @@
 
     screenVid.srcObject = null;
     cleanup();
+    clearMediaSession();
     setUIState('idle');
   }
 
