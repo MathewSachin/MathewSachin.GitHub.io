@@ -602,6 +602,10 @@
     return new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
   }
 
+  function togglePauseResume() {
+    if (isPaused) resumeRecording(); else pauseRecording();
+  }
+
   function setUIState(state) {
     const rec     = state === 'recording';
     const paused  = state === 'paused';
@@ -625,9 +629,9 @@
     statusBadge.textContent = rec    ? '⏺ Recording'
       : paused ? '⏸ Paused'
       : session ? '◉ Session Active' : 'Idle';
+    // paused and session intentionally share the same yellow badge style
     statusBadge.className   = rec    ? 'badge bg-danger'
-      : paused ? 'badge bg-warning text-dark'
-      : session ? 'badge bg-warning text-dark' : 'badge bg-secondary';
+      : paused || session ? 'badge bg-warning text-dark' : 'badge bg-secondary';
     if (!active) timerEl.textContent = '00:00';
   }
 
@@ -716,7 +720,7 @@
 
   // ── Bootstrap ───────────────────────────────────────────────────────────────
   startBtn     .addEventListener('click', startRecording);
-  pauseBtn     .addEventListener('click', () => { if (isPaused) resumeRecording(); else pauseRecording(); });
+  pauseBtn     .addEventListener('click', togglePauseResume);
   stopBtn      .addEventListener('click', stopRecording);
   endSessionBtn.addEventListener('click', endSession);
   pickDirBtn   .addEventListener('click', pickDirectory);
