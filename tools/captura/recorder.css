@@ -21,3 +21,39 @@
   border-radius: 3px;
   background: #1e1e1e;
 }
+
+/* ── PWA update notification — fixed floating bar at top ─────────────────── */
+#pwa-update-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  padding: 0.6rem 1rem;
+  background-color: #0dcaf0;
+  color: #000;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+#pwa-update-bar[hidden] {
+  display: none !important;
+}
+
+/* ── PWA standalone mode: hide sections irrelevant to the installed app ── */
+@media (display-mode: standalone) {
+  nav.navbar,
+  #tool-header,
+  #tool-sidebar,
+  #tool-giscus-section,
+  #captura-about,
+  #captura-how-it-works {
+    display: none !important;
+  }
+
+  /* Expand the main content column to full width when sidebar is hidden */
+  #tool-main-content {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

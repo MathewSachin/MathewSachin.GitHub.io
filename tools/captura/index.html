@@ -2,9 +2,16 @@
 layout: tool
 title: Captura Web Recorder
 ads: true
+manifest: /tools/captura/manifest.json
 ---
 
 <link rel="stylesheet" href="{{ '/tools/captura/recorder.css' | relative_url }}">
+
+<div id="pwa-update-bar" class="d-flex align-items-center gap-2" hidden>
+  <span><i class="fas fa-sync-alt me-1"></i>A new version of Captura is available!</span>
+  <button id="pwa-update-btn" class="btn btn-sm btn-light flex-shrink-0">Update Now</button>
+  <button id="pwa-dismiss-btn" class="btn btn-sm btn-close flex-shrink-0" aria-label="Dismiss"></button>
+</div>
 
 <div id="alert-box" class="alert mb-3" hidden></div>
 
@@ -152,7 +159,7 @@ ads: true
 </div><!-- /.card -->
 
 <!-- ── About ─────────────────────────────────────────────────────────────── -->
-<div class="card google-anno-skip">
+<div id="captura-about" class="card google-anno-skip">
   <div class="card-body">
     <h5 class="card-title">About Captura Web Recorder</h5>
     <p class="mb-2">
@@ -211,7 +218,7 @@ ads: true
 </div>
 
 <!-- ── Technical deep-dive ──────────────────────────────────────────────── -->
-<div class="card mt-4 google-anno-skip">
+<div id="captura-how-it-works" class="card mt-4 google-anno-skip">
   <div class="card-body">
     <h5 class="card-title">How It Works</h5>
     <p class="text-muted small mb-4">
