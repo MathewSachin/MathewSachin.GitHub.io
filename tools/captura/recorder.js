@@ -9,6 +9,18 @@
   const FORMAT_MP4  = 'mp4-h264-aac';
   const FORMAT_WEBM = 'webm-vp9-opus';
 
+  // ── Timer Worker ─────────────────────────────────────────────────────────────
+  // Uses a Web Worker so that inter-frame sleeps are not throttled when the
+  // browser tab is in the background (main-thread setTimeout can be clamped to
+  // ≥1 s in hidden tabs; Worker timers are not subject to that restriction).
+  const _timerWorkerBlob = new Blob(
+    ['self.onmessage=function(e){setTimeout(function(){self.postMessage(null);},e.data);}'],
+    { type: 'application/javascript' }
+  );
+  const _timerWorkerUrl = URL.createObjectURL(_timerWorkerBlob);
+  const timerWorker = new Worker(_timerWorkerUrl);
+  URL.revokeObjectURL(_timerWorkerUrl);
+
   // ── State ───────────────────────────────────────────────────────────────────
   let masterStream    = null;   // persistent display-capture stream (reused across recordings)
   let webcamStream    = null;
@@ -25,7 +37,6 @@
   let dirHandle       = null;   // FSA directory handle (persisted in IndexedDB)
   let idbDb           = null;   // IndexedDB database instance
   let animFrameId     = null;
-  let drawIntervalId  = null;
   let timerIntervalId = null;
   let elapsedSecs     = 0;
   let isRecording     = false;
@@ -284,11 +295,13 @@
 
   function stopCompositor() {
     recordingLoopActive = false;
-    if (animFrameId)    { cancelAnimationFrame(animFrameId); animFrameId = null; }
-    if (drawIntervalId) { clearTimeout(drawIntervalId);      drawIntervalId = null; }
+    if (animFrameId)  { cancelAnimationFrame(animFrameId); animFrameId = null; }
+    // Clear the worker message handler so any in-flight tick from the previous
+    // recording session cannot accidentally resolve a future session's sleep.
+    timerWorker.onmessage = null;
     // If the recording loop is suspended in its inter-frame sleep, wake it up
     // immediately so it can check recordingLoopActive and exit cleanly.
-    if (sleepResolve)   { sleepResolve();                    sleepResolve = null; }
+    if (sleepResolve) { sleepResolve();                    sleepResolve = null; }
   }
 
   // fps=0 → rAF (preview, throttled in background — fine when not recording)
@@ -310,11 +323,11 @@
           const elapsed = performance.now() - frameStart;
           await new Promise(resolve => {
             sleepResolve = resolve;
-            drawIntervalId = setTimeout(() => {
-              sleepResolve  = null;
-              drawIntervalId = null;
+            timerWorker.onmessage = () => {
+              sleepResolve = null;
               resolve();
-            }, Math.max(0, interval - elapsed));
+            };
+            timerWorker.postMessage(Math.max(0, interval - elapsed));
           });
         }
       })();
