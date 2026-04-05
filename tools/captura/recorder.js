@@ -94,7 +94,7 @@
     }
   }
 
-  if (navigator.mediaDevices) {
+  if (hasGetDisplayMedia) {
     navigator.mediaDevices.addEventListener('devicechange', enumerateDevices);
     enumerateDevices();
   }
