@@ -6,7 +6,7 @@ layout: default
     <div class="py-4 bg-info text-white google-anno-skip">
         <div class="container">
             <h2>{{ page.title }}</h2>
-            {% include share.html %}
+            {% include share.html btn_class="btn-outline-light" label_class="text-white" %}
         </div>
     </div>
 
@@ -28,7 +28,15 @@ layout: default
     <br>
 
     <div class="container">
-        {% include giscus.html %}
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        {% include giscus.html %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <br>
