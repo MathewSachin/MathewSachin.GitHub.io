@@ -17,6 +17,14 @@ manifest: /tools/captura/manifest.json
 
 <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
+<dialog id="captura-error-dialog" aria-labelledby="captura-error-title">
+  <div class="captura-dialog-content">
+    <button type="button" class="captura-dialog-close" id="captura-error-close" aria-label="Close">&times;</button>
+    <h5 id="captura-error-title" class="captura-dialog-title"></h5>
+    <p id="captura-error-body" class="captura-dialog-body"></p>
+  </div>
+</dialog>
+
 <!-- ── Recorder ──────────────────────────────────────────────────────────── -->
 <div id="recorder-ui" class="card mb-4 google-anno-skip">
   <div class="card-body">

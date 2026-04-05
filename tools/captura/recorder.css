@@ -22,7 +22,56 @@
   background: #1e1e1e;
 }
 
-/* ── PWA update notification — fixed floating bar at top ─────────────────── */
+/* ── Centered error/warning dialog ───────────────────────────────────────── */
+#captura-error-dialog {
+  background: #212529;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0;
+  max-width: 480px;
+  width: 90vw;
+  color: #e9ecef;
+}
+
+#captura-error-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.captura-dialog-content {
+  position: relative;
+  padding: 1.5rem 1.75rem;
+}
+
+.captura-dialog-title {
+  margin: 0 2rem 0.75rem 0;
+  font-size: 1.05rem;
+}
+
+.captura-dialog-body {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #adb5bd;
+}
+
+.captura-dialog-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.9rem;
+  background: transparent;
+  border: none;
+  color: #adb5bd;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.captura-dialog-close:hover {
+  color: #e9ecef;
+}
+
+
 #pwa-update-bar {
   position: fixed;
   top: 0;

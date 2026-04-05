@@ -304,7 +304,7 @@
         startMicLevelPreview().catch(() => {});
       }
     } catch (err) {
-      showToast('Could not enumerate devices: ' + err.message, 'warning');
+      showErrorDialog('Device Error', 'Could not enumerate devices: ' + err.message);
     }
   }
 
@@ -328,7 +328,7 @@
       await webcamVid.play();
     } catch (err) {
       previewWebcamStream = null;
-      showToast('Could not start webcam preview: ' + err.message, 'warning');
+      showErrorDialog('Webcam Error', 'Could not start webcam preview: ' + err.message);
     }
   }
 
@@ -757,11 +757,11 @@
 
   async function startRecording() {
     if (!hasGetDisplayMedia) {
-      showToast(
+      showErrorDialog(
+        'Not Supported',
         'Screen recording is not supported on this device. ' +
         'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
-        'Please use a desktop browser (Chrome or Edge).',
-        'warning', false
+        'Please use a desktop browser (Chrome or Edge).'
       );
       return;
     }
@@ -811,11 +811,11 @@
       // If the user requested system audio but the browser share dialog didn't
       // provide any audio tracks, abort and explain what to do.
       if (sysAudioChk.checked && sysAudioTracks.length === 0) {
-        showToast(
+        showErrorDialog(
+          'System Audio Not Captured',
           'System audio was not captured. In the browser share dialog, make sure to enable ' +
           '"Share system audio" (or "Share tab audio"). ' +
-          'Uncheck "Capture system audio" in settings to record without it.',
-          'danger', false
+          'Uncheck "Capture system audio" in settings to record without it.'
         );
         if (webcamStream) { webcamStream.getTracks().forEach(t => t.stop()); webcamStream = null; }
         if (micStream)    { micStream.getTracks().forEach(t => t.stop());    micStream    = null; }
@@ -851,7 +851,7 @@
         writableStream  = await fileHandle.createWritable();
         savedFileHandle = fileHandle;
       } catch (pickErr) {
-        showToast('Could not create recording file: ' + pickErr.message, 'danger', false);
+        showErrorDialog('File Error', 'Could not create recording file: ' + pickErr.message);
         cleanup();
         return;
       }
@@ -905,7 +905,7 @@
       setUIState('recording');
     } catch (err) {
       if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
-        showToast('Error starting recording: ' + err.message, 'danger', false);
+        showErrorDialog('Recording Error', 'Error starting recording: ' + err.message);
       }
       cleanup();
     }
@@ -945,6 +945,7 @@
               href: url, target: '_blank', rel: 'noopener noreferrer',
               textContent: 'Open in new tab'
             });
+            link.style.cssText = 'color:#fff;text-decoration:underline;font-weight:600;';
             msg.append(link);
             // Revoke the blob URL when the tab navigates away or after 5 minutes
             setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
@@ -956,7 +957,7 @@
         showToast(msg, 'success');
         cleanup();
       }).catch(err => {
-        showToast('Error saving recording: ' + err.message, 'danger', false);
+        showErrorDialog('Save Error', 'Error saving recording: ' + err.message);
         if (writableStream) {
           try { writableStream.close(); } catch (_) {}
           writableStream = null;
@@ -972,6 +973,9 @@
     pauseStartTime = performance.now();
     stopCompositor();
     clearInterval(timerIntervalId);
+    // Suspend the AudioContext so no audio samples flow to the encoder during
+    // pause; this keeps the audio timeline in sync with the video timeline.
+    if (audioCtx) audioCtx.suspend().catch(() => {});
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     if (silentAudioEl) silentAudioEl.pause();
     setUIState('paused');
@@ -981,6 +985,9 @@
     if (!isRecording || !isPaused) return;
     totalPausedMs += performance.now() - pauseStartTime;
     isPaused = false;
+    // Resume AudioContext before restarting the compositor so audio and video
+    // start together.
+    if (audioCtx) audioCtx.resume().catch(() => {});
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
       elapsedSecs++;
@@ -1110,6 +1117,7 @@
 
   const TOAST_FADE_MS = 150; // ms to match Bootstrap fade transition
 
+  // Success toast (auto-hides after 8 s, dismissable).
   function showToast(msgOrNode, type, autohide = true) {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -1154,6 +1162,28 @@
     }
   }
 
+  // Centered error/warning dialog (more prominent than a toast for issues that
+  // require user attention before proceeding).
+  const errorDialog = document.getElementById('captura-error-dialog');
+  if (errorDialog) {
+    const closeEl = document.getElementById('captura-error-close');
+    const closeDialog = () => errorDialog.close();
+    if (closeEl) closeEl.addEventListener('click', closeDialog);
+    // Click on backdrop (outside dialog box) to close
+    errorDialog.addEventListener('click', e => { if (e.target === errorDialog) closeDialog(); });
+  }
+
+  function showErrorDialog(title, message) {
+    if (!errorDialog) {
+      // Fallback if dialog element is missing
+      showAlert(message, 'danger');
+      return;
+    }
+    document.getElementById('captura-error-title').textContent = title;
+    document.getElementById('captura-error-body').textContent  = message;
+    errorDialog.showModal();
+  }
+
   // ── Directory handle management ──────────────────────────────────────────────
   function updateDirUI() {
     dirNameEl.textContent = dirHandle ? dirHandle.name : '(no folder selected)';
@@ -1169,7 +1199,7 @@
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
-        showToast('Could not select folder: ' + err.message, 'warning');
+        showErrorDialog('Folder Error', 'Could not select folder: ' + err.message);
       }
     }
   }
@@ -1187,7 +1217,7 @@
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
-          showToast('Could not select a save folder: ' + err.message, 'warning');
+          showErrorDialog('Folder Error', 'Could not select a save folder: ' + err.message);
         }
         return false;
       }
@@ -1202,10 +1232,10 @@
       }
     }
     if (perm !== 'granted') {
-      showToast(
+      showErrorDialog(
+        'Permission Denied',
         'Write permission for the save folder was denied. ' +
-        'Please choose a different folder with the "Choose Folder" button.',
-        'warning', false
+        'Please choose a different folder with the "Choose Folder" button.'
       );
       return false;
     }
