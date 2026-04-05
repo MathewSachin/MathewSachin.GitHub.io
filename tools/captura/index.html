@@ -300,11 +300,14 @@ ads: true
       widget) can control the recording even when the tab is in the background.
     </p>
     <p>
-      Browsers only activate the Media Session API when audio is playing. To satisfy this
-      requirement silently, the recorder creates an <code>OscillatorNode</code> connected
-      through a <code>GainNode</code> with its gain set to <code>0</code>. This produces
-      absolute silence while still counting as active audio playback from the browser's
-      perspective — no additional hardware resources are consumed.
+      Browsers only activate the Media Session API when a media element is playing. A raw Web
+      Audio <code>AudioContext</code> is not sufficient in Chrome — an actual
+      <code>&lt;audio&gt;</code> or <code>&lt;video&gt;</code> element must be playing.
+      To satisfy this without any audible output, the recorder creates a silent
+      <code>OscillatorNode</code> (gain = 0) routed through a
+      <code>MediaStreamDestinationNode</code>, then plays the resulting stream through a
+      hidden <code>&lt;audio&gt;</code> element. Chrome sees the element as actively playing
+      and activates the Media Session — no sound is ever produced.
     </p>
     <p>
       The handlers registered are <strong>play</strong> (resume a paused recording),

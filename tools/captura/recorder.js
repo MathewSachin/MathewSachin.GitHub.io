@@ -14,6 +14,7 @@
   let audioCtx        = null;
   let audioDestNode   = null;
   let silentAudioCtx  = null;   // keeps Media Session API alive (silent oscillator)
+  let silentAudioEl   = null;   // <audio> element required by Chrome to activate Media Session
   let mediaRecorder   = null;
   let writableStream  = null;   // FSA writable
   let savedFileHandle = null;   // FSA file handle (for open-in-new-tab after stop)
@@ -321,17 +322,25 @@
 
   // ── Media Session API ────────────────────────────────────────────────────────
 
-  // Browsers only activate the Media Session API when audio is playing.
-  // A silent oscillator (gain = 0) satisfies this requirement without any
+  // Browsers activate the Media Session API only when a media element is playing.
+  // A Web Audio oscillator alone is not sufficient on Chrome/macOS — an actual
+  // <audio> element must be playing. We create a silent oscillator (gain = 0),
+  // route it to a MediaStreamDestinationNode, and play that stream through a
+  // hidden <audio> element. This satisfies Chrome's requirement without any
   // audible output. Must be called within a user-gesture event chain.
   function startSilentAudio() {
     silentAudioCtx = new AudioContext();
     const osc  = silentAudioCtx.createOscillator();
     const gain = silentAudioCtx.createGain();
+    const dest = silentAudioCtx.createMediaStreamDestination();
     gain.gain.value = 0;
     osc.connect(gain);
-    gain.connect(silentAudioCtx.destination);
+    gain.connect(dest);
     osc.start();
+
+    silentAudioEl = new Audio();
+    silentAudioEl.srcObject = dest.stream;
+    silentAudioEl.play().catch(() => {});
   }
 
   function setupMediaSession() {
@@ -598,6 +607,7 @@
 
     if (audioCtx)       { audioCtx.close();      audioCtx = null; }
     if (silentAudioCtx) { silentAudioCtx.close(); silentAudioCtx = null; }
+    if (silentAudioEl)  { silentAudioEl.pause();  silentAudioEl.srcObject = null; silentAudioEl = null; }
     webcamVid.srcObject = null;
     isRecording = false;
     isPaused    = false;
