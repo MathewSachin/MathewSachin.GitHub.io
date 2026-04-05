@@ -8,7 +8,7 @@
   const BLOB_URL_REVOKE_TIMEOUT_MS  = 5 * 60 * 1000; // 5 minutes
 
   // ── State ───────────────────────────────────────────────────────────────────
-  let screenStream    = null;
+  let masterStream    = null;   // persistent display-capture stream (reused across recordings)
   let webcamStream    = null;
   let micStream       = null;
   let audioCtx        = null;
@@ -41,6 +41,7 @@
   const sysAudioChk = document.getElementById('sys-audio-chk');
   const startBtn    = document.getElementById('start-btn');
   const stopBtn     = document.getElementById('stop-btn');
+  const endSessionBtn = document.getElementById('end-session-btn');
   const pickDirBtn  = document.getElementById('pick-dir-btn');
   const dirNameEl   = document.getElementById('dir-name');
   const statusBadge = document.getElementById('status-badge');
@@ -316,6 +317,41 @@
   }
 
   // ── Recording ────────────────────────────────────────────────────────────────
+
+  // Returns the persistent master stream, acquiring a new one only when needed.
+  // Sets up a one-time 'ended' listener so that the native "Stop Sharing" button
+  // is handled gracefully.
+  async function ensureStreamActive() {
+    if (masterStream && masterStream.active &&
+        masterStream.getVideoTracks()[0]?.readyState === 'live') return masterStream;
+
+    masterStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        displaySurface: 'monitor',
+        frameRate: { ideal: parseInt(fpsSel.value) },
+        ...resolutionConstraints()
+      },
+      audio: { systemAudio: 'include' },
+      surfaceSwitching: 'include'
+    });
+
+    const videoTrack = masterStream.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.addEventListener('ended', () => {
+        masterStream = null;
+        if (isRecording) {
+          stopRecording();
+        } else {
+          screenVid.srcObject = null;
+          cleanup();
+          setUIState('idle');
+        }
+      }, { once: true });
+    }
+
+    return masterStream;
+  }
+
   async function startRecording() {
     clearAlert();
 
@@ -330,20 +366,14 @@
     }
 
     try {
-      // 1 — Screen capture
-      screenStream = await navigator.mediaDevices.getDisplayMedia({
-        video: {
-          frameRate: { ideal: parseInt(fpsSel.value) },
-          ...resolutionConstraints()
-        },
-        audio: sysAudioChk.checked
-      });
+      // 1 — Ensure the persistent screen stream is alive
+      const stream = await ensureStreamActive();
 
-      screenVid.srcObject = screenStream;
+      screenVid.srcObject = stream;
       await screenVid.play();
 
       // Resize canvas to actual captured dimensions
-      const videoTracks = screenStream.getVideoTracks();
+      const videoTracks = stream.getVideoTracks();
       const settings    = videoTracks.length > 0 ? videoTracks[0].getSettings() : {};
       canvas.width      = settings.width  || DEFAULT_WIDTH;
       canvas.height     = settings.height || DEFAULT_HEIGHT;
@@ -374,7 +404,7 @@
       }
 
       // 4 — Audio mix
-      const sysAudioTracks = screenStream.getAudioTracks();
+      const sysAudioTracks = stream.getAudioTracks();
       const hasMic         = !!(micStream && micStream.getAudioTracks().length);
       const hasAudio       = sysAudioTracks.length > 0 || hasMic;
 
@@ -448,12 +478,7 @@
       };
 
       // Stop if the user ends the screen-share from the browser UI
-      const firstVideoTrack = screenStream.getVideoTracks()[0];
-      if (firstVideoTrack) {
-        firstVideoTrack.addEventListener('ended', () => {
-          if (isRecording) stopRecording();
-        });
-      }
+      // 'ended' listener is already set up in ensureStreamActive(); no duplicate needed here.
 
       // Emit chunks every second so we can stream to disk incrementally
       mediaRecorder.start(1000);
@@ -484,21 +509,37 @@
     }
     isRecording = false;
     clearInterval(timerIntervalId);
-    setUIState('idle');
+    setUIState(masterStream && masterStream.active ? 'session' : 'idle');
   }
 
+  // Cleans up per-recording resources (webcam, mic, audio graph) but leaves
+  // masterStream alive so the next recording can reuse it without re-prompting.
   function cleanup() {
-    [screenStream, webcamStream, micStream].forEach(s => {
+    [webcamStream, micStream].forEach(s => {
       if (s) s.getTracks().forEach(t => t.stop());
     });
-    screenStream = webcamStream = micStream = null;
+    webcamStream = micStream = null;
 
     if (audioCtx) { audioCtx.close(); audioCtx = null; }
-    screenVid.srcObject = webcamVid.srcObject = null;
+    webcamVid.srcObject = null;
     isRecording = false;
 
     // Return compositor to preview (rAF) mode
     startCompositor(0);
+  }
+
+  // Tears down the persistent screen stream and resets all state to idle.
+  function endSession() {
+    if (isRecording) stopRecording();
+
+    if (masterStream) {
+      masterStream.getTracks().forEach(t => t.stop());
+      masterStream = null;
+    }
+
+    screenVid.srcObject = null;
+    cleanup();
+    setUIState('idle');
   }
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -537,9 +578,11 @@
   }
 
   function setUIState(state) {
-    const rec = state === 'recording';
+    const rec     = state === 'recording';
+    const session = state === 'session' || state === 'recording';
     startBtn.disabled       = rec;
     stopBtn.disabled        = !rec;
+    endSessionBtn.disabled  = !session;
     pickDirBtn.disabled     = rec;
     // Settings that cannot be changed mid-recording
     webcamSel.disabled      = rec;
@@ -547,8 +590,8 @@
     sysAudioChk.disabled    = rec;
     fpsSel.disabled         = rec;
     qualitySel.disabled     = rec;
-    statusBadge.textContent = rec ? '⏺ Recording' : 'Idle';
-    statusBadge.className   = rec ? 'badge bg-danger' : 'badge bg-secondary';
+    statusBadge.textContent = rec ? '⏺ Recording' : session ? '◉ Session Active' : 'Idle';
+    statusBadge.className   = rec ? 'badge bg-danger' : session ? 'badge bg-warning text-dark' : 'badge bg-secondary';
     if (!rec) timerEl.textContent = '00:00';
   }
 
@@ -636,9 +679,10 @@
   }
 
   // ── Bootstrap ───────────────────────────────────────────────────────────────
-  startBtn  .addEventListener('click', startRecording);
-  stopBtn   .addEventListener('click', stopRecording);
-  pickDirBtn.addEventListener('click', pickDirectory);
+  startBtn     .addEventListener('click', startRecording);
+  stopBtn      .addEventListener('click', stopRecording);
+  endSessionBtn.addEventListener('click', endSession);
+  pickDirBtn   .addEventListener('click', pickDirectory);
 
   // Persist configuration changes to localStorage
   fpsSel     .addEventListener('change', () => savePref(PREFS.fps,      fpsSel.value));
