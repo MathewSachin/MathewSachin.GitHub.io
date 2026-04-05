@@ -54,7 +54,7 @@
       'Please open this page on a desktop browser (Chrome, Edge, or Firefox) to use the recorder.',
       'warning'
     );
-    startBtn.disabled = true;
+    document.getElementById('recorder-ui').hidden = true;
   }
 
   // ── Capability display ──────────────────────────────────────────────────────
