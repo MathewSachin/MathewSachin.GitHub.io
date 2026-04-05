@@ -1108,6 +1108,8 @@
     }
   }
 
+  const TOAST_FADE_MS = 150; // ms to match Bootstrap fade transition
+
   function showToast(msgOrNode, type, autohide = true) {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -1136,7 +1138,7 @@
     closeBtn.setAttribute('aria-label', 'Close');
     closeBtn.addEventListener('click', () => {
       toast.classList.remove('show');
-      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 150);
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, TOAST_FADE_MS);
     });
 
     inner.appendChild(body);
@@ -1147,7 +1149,7 @@
     if (autohide) {
       setTimeout(() => {
         toast.classList.remove('show');
-        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 150);
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, TOAST_FADE_MS);
       }, 8000);
     }
   }
