@@ -14,8 +14,14 @@ jobs:
     permissions:
       contents: read
 
-  deploy:
+  frontend-tests:
     needs: build
+    uses: ./.github/workflows/frontend-tests.yml
+    permissions:
+      contents: read
+
+  deploy:
+    needs: [build, frontend-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write
