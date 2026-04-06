@@ -431,13 +431,12 @@
       const interval = Math.round(1000 / fps);
       recordingLoopActive = true;
       recordingLoopDone = (async function recordingLoop() {
-        const frameDurationSec = 1 / fps;
         while (recordingLoopActive) {
           const frameStart = performance.now();
           compositeFrame();
           if (mediabunnyCanvasSource) {
             const ts = (frameStart - recordingStartTime - totalPausedMs) / 1000;
-            await mediabunnyCanvasSource.add(ts, frameDurationSec);
+            await mediabunnyCanvasSource.add(ts);
           }
           if (!recordingLoopActive) break;
           const elapsed = performance.now() - frameStart;
@@ -978,6 +977,7 @@
     // pause; this keeps the audio timeline in sync with the video timeline.
     // suspend() returns a Promise; errors are non-fatal (browser may already
     // be suspended or context may be in a state that prevents suspension).
+    if (mediabunnyAudioSource) mediabunnyAudioSource.pause();
     if (audioCtx) audioCtx.suspend().catch(err => console.warn('audioCtx.suspend():', err));
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     if (silentAudioEl) silentAudioEl.pause();
@@ -990,6 +990,7 @@
     isPaused = false;
     // Resume AudioContext before restarting the compositor so audio and video
     // start together. Errors are non-fatal.
+    if (mediabunnyAudioSource) mediabunnyAudioSource.resume();
     if (audioCtx) audioCtx.resume().catch(err => console.warn('audioCtx.resume():', err));
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
