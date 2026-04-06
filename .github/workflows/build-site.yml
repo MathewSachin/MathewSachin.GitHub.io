@@ -11,6 +11,14 @@ on:
         description: 'Whether this is a PR preview build (disables Google Analytics)'
         type: boolean
         default: false
+      testing:
+        description: 'Whether this is a testing build (disables AdSense and Analytics)'
+        type: boolean
+        default: false
+      artifact_name:
+        description: 'Name of the uploaded site artifact'
+        type: string
+        default: 'site'
 
 jobs:
   build:
@@ -50,6 +58,13 @@ jobs:
         run: |
           echo "google-analytics: false" >> _config.yml
 
+      # Disables both AdSense and Analytics independently of the preview flag
+      - name: Disable AdSense and Analytics for testing
+        if: inputs.testing
+        run: |
+          echo "google-analytics: false" >> _config.yml
+          echo "adsense: false" >> _config.yml
+
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
@@ -86,5 +101,5 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
         with:
-          name: site
+          name: ${{ inputs.artifact_name }}
           path: ./_site
