@@ -74,6 +74,7 @@ For anything involving sensitive content or a production environment, consider a
 ## Alternatives
 A few well-known tools for common use cases:
 
+- **Screen recording (browser):** [Captura Web Recorder]({{ '/tools/captura/' | relative_url }}) — a spiritual successor to Captura that runs entirely in Chrome with no installation required.
 - **Screen recording:** [OBS Studio](https://obsproject.com/) — free, open-source, Windows / macOS / Linux.
 - **Screenshots & recording:** [ShareX](https://getsharex.com/) — free, open-source, Windows.
 - **GIF capture:** [ScreenToGif](https://www.screentogif.com/) — free, open-source, Windows.
