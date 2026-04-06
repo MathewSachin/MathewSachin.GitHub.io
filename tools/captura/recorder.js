@@ -973,11 +973,14 @@
     pauseStartTime = performance.now();
     stopCompositor();
     clearInterval(timerIntervalId);
-    // Suspend the AudioContext so no audio samples flow to the encoder during
-    // pause; this keeps the audio timeline in sync with the video timeline.
-    // suspend() returns a Promise; errors are non-fatal (browser may already
-    // be suspended or context may be in a state that prevents suspension).
-    if (audioCtx) audioCtx.suspend().catch(err => console.warn('audioCtx.suspend():', err));
+    // Pause the Mediabunny audio source so it discards incoming samples while
+    // accumulating a pauseOffset. This keeps the audio timeline in sync with
+    // the video timeline: when resumed, Mediabunny subtracts the total dropped
+    // duration from subsequent sample timestamps, eliminating any silence gap.
+    // Do NOT suspend audioCtx here — the AudioContext must keep running so
+    // that audio samples continue to flow into the source, giving Mediabunny
+    // the data it needs to measure the pause duration accurately.
+    if (mediabunnyAudioSource) mediabunnyAudioSource.pause();
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     if (silentAudioEl) silentAudioEl.pause();
     setUIState('paused');
@@ -987,9 +990,11 @@
     if (!isRecording || !isPaused) return;
     totalPausedMs += performance.now() - pauseStartTime;
     isPaused = false;
-    // Resume AudioContext before restarting the compositor so audio and video
-    // start together. Errors are non-fatal.
-    if (audioCtx) audioCtx.resume().catch(err => console.warn('audioCtx.resume():', err));
+    // Resume the Mediabunny audio source. Mediabunny has been accumulating a
+    // pauseOffset from the samples it discarded during the pause, so it will
+    // automatically stamp the resumed audio with the correct timestamp — no
+    // silence gap in the output.
+    if (mediabunnyAudioSource) mediabunnyAudioSource.resume();
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
       elapsedSecs++;
