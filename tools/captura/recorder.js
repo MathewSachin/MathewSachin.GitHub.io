@@ -977,6 +977,7 @@
     // pause; this keeps the audio timeline in sync with the video timeline.
     // suspend() returns a Promise; errors are non-fatal (browser may already
     // be suspended or context may be in a state that prevents suspension).
+    if (audioCtx) audioCtx.suspend().catch(err => console.warn('audioCtx.suspend():', err));
     if (mediabunnyAudioSource) mediabunnyAudioSource.pause();
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
     if (silentAudioEl) silentAudioEl.pause();
@@ -989,6 +990,7 @@
     isPaused = false;
     // Resume AudioContext before restarting the compositor so audio and video
     // start together. Errors are non-fatal.
+    if (audioCtx) audioCtx.resume().catch(err => console.warn('audioCtx.resume():', err));
     if (mediabunnyAudioSource) mediabunnyAudioSource.resume();
     startCompositor(parseInt(fpsSel.value, 10));
     timerIntervalId = setInterval(() => {
