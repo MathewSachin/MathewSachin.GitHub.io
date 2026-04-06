@@ -25,7 +25,7 @@ const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
 // ── Formatters ─────────────────────────────────────────────────────────────────
 
-// Format a gain value (0–2) as a percentage string, e.g. 0.75 → '75%'.
+// Format a gain multiplier (0–2) as a percentage string, e.g. 1.0 → '100%', 0.5 → '50%'.
 const gainPct = v => Math.round(parseFloat(v) * 100) + '%';
 
 // Format elapsed seconds as MM:SS, e.g. 65 → '01:05'.
@@ -391,7 +391,7 @@ startBtn.addEventListener('click', () => {
       'Not Supported',
       'Screen recording is not supported on this device. ' +
       'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
-      'Please use a desktop browser (Chrome or Edge) to use the recorder.'
+      'Please use a desktop browser with screen-recording support (Chrome, Edge, or Firefox) to use the recorder.'
     );
     return;
   }
