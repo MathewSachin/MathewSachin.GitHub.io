@@ -79,6 +79,33 @@ test('stripMarkdown: returns empty string for empty input', () => {
   assert.equal(stripMarkdown(''), '')
 })
 
+test('stripMarkdown: removes horizontal rules', () => {
+  const result = stripMarkdown('Before\n---\nAfter')
+  assert.ok(!result.includes('---'), 'horizontal rule (---) should be removed')
+  assert.ok(result.includes('Before'), 'text before rule should remain')
+  assert.ok(result.includes('After'), 'text after rule should remain')
+})
+
+test('stripMarkdown: removes single-asterisk emphasis', () => {
+  const result = stripMarkdown('This is *italic* text')
+  assert.ok(!result.includes('*'), '* markers should be removed')
+  assert.ok(result.includes('italic'), 'italic text should remain')
+})
+
+test('stripMarkdown: removes bold-italic triple markers', () => {
+  const result = stripMarkdown('This is ***important*** text')
+  assert.ok(!result.includes('***'), '*** markers should be removed')
+  assert.ok(result.includes('important'), 'bold-italic text should remain')
+})
+
+test('stripMarkdown: handles multiple consecutive fenced code blocks', () => {
+  const input = '```js\ncode1\n```\nMiddle\n```py\ncode2\n```'
+  const result = stripMarkdown(input)
+  assert.ok(!result.includes('code1'), 'first code block content should be removed')
+  assert.ok(!result.includes('code2'), 'second code block content should be removed')
+  assert.ok(result.includes('Middle'), 'text between blocks should remain')
+})
+
 // ---------------------------------------------------------------------------
 // Unit tests: postUrlFromFilename
 // ---------------------------------------------------------------------------
