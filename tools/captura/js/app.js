@@ -11,7 +11,7 @@ import { Compositor }              from './compositor.js';
 import { Metronome }               from './metronome.js';
 import { StorageManager, dateStamp } from './storage.js';
 import { RecorderCore }            from './recorder-core.js';
-import { PREFS, savePref, loadPref, gainPct, fmtTime } from './prefs.js';
+import { PREFS, savePref, loadPref } from './prefs.js';
 import { showAlert, showToast, showErrorDialog } from './dialogs.js';
 import { setupMediaSession, clearMediaSession }  from './media-session.js';
 import { registerServiceWorker }                 from './register-service-worker.js';
@@ -22,6 +22,14 @@ const DEFAULT_WIDTH  = 1280;
 const DEFAULT_HEIGHT = 720;
 const FORMAT_MP4     = 'mp4-h264-aac';
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+
+// ── Formatters ─────────────────────────────────────────────────────────────────
+
+// Format a gain value (0–1 or 0–2) as a percentage string, e.g. 0.75 → '75%'.
+const gainPct = v => Math.round(parseFloat(v) * 100) + '%';
+
+// Format elapsed seconds as MM:SS, e.g. 65 → '01:05'.
+const fmtTime = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
 // ── DOM refs ───────────────────────────────────────────────────────────────────
 
