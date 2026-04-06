@@ -37,68 +37,54 @@ ads: true
 
 </div>
 
-<script>
-(function () {
-  var textInput = document.getElementById('text-input');
-  var b64Input  = document.getElementById('b64-input');
-  var textError = document.getElementById('text-error');
-  var b64Error  = document.getElementById('b64-error');
+<script type="module">
+import { encodeBase64, decodeBase64 } from './base64.js';
 
-  function clearError(el) { el.textContent = ''; el.classList.add('d-none'); }
-  function showError(el, msg) { el.textContent = msg; el.classList.remove('d-none'); }
+var textInput = document.getElementById('text-input');
+var b64Input  = document.getElementById('b64-input');
+var textError = document.getElementById('text-error');
+var b64Error  = document.getElementById('b64-error');
 
-  // Unicode-safe Base64 encoding via TextEncoder
-  function encodeBase64(str) {
-    var bytes = new TextEncoder().encode(str);
-    var binary = Array.from(bytes, function (b) { return String.fromCharCode(b); }).join('');
-    return btoa(binary);
+function clearError(el) { el.textContent = ''; el.classList.add('d-none'); }
+function showError(el, msg) { el.textContent = msg; el.classList.remove('d-none'); }
+
+document.getElementById('encode-btn').addEventListener('click', function () {
+  clearError(textError);
+  try {
+    b64Input.value = encodeBase64(textInput.value);
+  } catch (e) {
+    showError(textError, 'Encoding failed: ' + e.message);
   }
+});
 
-  // Unicode-safe Base64 decoding via TextDecoder
-  function decodeBase64(b64) {
-    var binary = atob(b64);
-    var bytes = Uint8Array.from(binary, function (c) { return c.charCodeAt(0); });
-    return new TextDecoder().decode(bytes);
+document.getElementById('decode-btn').addEventListener('click', function () {
+  clearError(b64Error);
+  try {
+    textInput.value = decodeBase64(b64Input.value.trim());
+  } catch (e) {
+    showError(b64Error, 'Invalid Base64 string: ' + e.message);
   }
+});
 
-  document.getElementById('encode-btn').addEventListener('click', function () {
-    clearError(textError);
-    try {
-      b64Input.value = encodeBase64(textInput.value);
-    } catch (e) {
-      showError(textError, 'Encoding failed: ' + e.message);
-    }
-  });
+document.getElementById('clear-btn').addEventListener('click', function () {
+  textInput.value = '';
+  b64Input.value = '';
+  clearError(textError);
+  clearError(b64Error);
+});
 
-  document.getElementById('decode-btn').addEventListener('click', function () {
-    clearError(b64Error);
-    try {
-      textInput.value = decodeBase64(b64Input.value.trim());
-    } catch (e) {
-      showError(b64Error, 'Invalid Base64 string: ' + e.message);
-    }
+document.getElementById('copy-btn').addEventListener('click', function () {
+  var btn = this;
+  navigator.clipboard.writeText(b64Input.value).then(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-check text-success me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+  }).catch(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-times text-danger me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
   });
-
-  document.getElementById('clear-btn').addEventListener('click', function () {
-    textInput.value = '';
-    b64Input.value = '';
-    clearError(textError);
-    clearError(b64Error);
-  });
-
-  document.getElementById('copy-btn').addEventListener('click', function () {
-    var btn = this;
-    navigator.clipboard.writeText(b64Input.value).then(function () {
-      var icon = btn.querySelector('i');
-      icon.className = 'fas fa-check text-success me-1';
-      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-    }).catch(function () {
-      var icon = btn.querySelector('i');
-      icon.className = 'fas fa-times text-danger me-1';
-      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-    });
-  });
-}());
+});
 </script>
 
 </div>

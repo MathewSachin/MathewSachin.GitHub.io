@@ -34,53 +34,51 @@ ads: true
   </div>
 </div>
 
-<script>
-(function () {
-  var jsonInput  = document.getElementById('json-input');
-  var jsonOutput = document.getElementById('json-output');
-  var jsonError  = document.getElementById('json-error');
-  var jsonOk     = document.getElementById('json-ok');
+<script type="module">
+import { formatJson } from './json-formatter.js';
 
-  function clearFeedback() {
-    jsonError.textContent = '';
-    jsonError.classList.add('d-none');
-    jsonOk.classList.add('d-none');
+var jsonInput  = document.getElementById('json-input');
+var jsonOutput = document.getElementById('json-output');
+var jsonError  = document.getElementById('json-error');
+var jsonOk     = document.getElementById('json-ok');
+
+function clearFeedback() {
+  jsonError.textContent = '';
+  jsonError.classList.add('d-none');
+  jsonOk.classList.add('d-none');
+}
+
+function applyFormat(indent) {
+  clearFeedback();
+  var result = formatJson(jsonInput.value, indent);
+  if (result.error) {
+    jsonOutput.value = '';
+    jsonError.textContent = result.error;
+    jsonError.classList.remove('d-none');
+  } else {
+    jsonOutput.value = result.output;
+    if (result.output) jsonOk.classList.remove('d-none');
   }
+}
 
-  function jsonFormat(indent) {
-    clearFeedback();
-    var raw = jsonInput.value.trim();
-    if (!raw) return;
-    try {
-      var parsed = JSON.parse(raw);
-      jsonOutput.value = JSON.stringify(parsed, null, indent);
-      jsonOk.classList.remove('d-none');
-    } catch (e) {
-      jsonOutput.value = '';
-      jsonError.textContent = e.message;
-      jsonError.classList.remove('d-none');
-    }
-  }
-
-  document.getElementById('json-format-btn').addEventListener('click', function () { jsonFormat(2); });
-  document.getElementById('json-minify-btn').addEventListener('click', function () { jsonFormat(0); });
-  document.getElementById('json-clear-btn').addEventListener('click', function () {
-    jsonInput.value = ''; jsonOutput.value = '';
-    clearFeedback();
+document.getElementById('json-format-btn').addEventListener('click', function () { applyFormat(2); });
+document.getElementById('json-minify-btn').addEventListener('click', function () { applyFormat(0); });
+document.getElementById('json-clear-btn').addEventListener('click', function () {
+  jsonInput.value = ''; jsonOutput.value = '';
+  clearFeedback();
+});
+document.getElementById('json-copy-btn').addEventListener('click', function () {
+  var btn = this;
+  navigator.clipboard.writeText(jsonOutput.value).then(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-check text-success me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+  }).catch(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-times text-danger me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
   });
-  document.getElementById('json-copy-btn').addEventListener('click', function () {
-    var btn = this;
-    navigator.clipboard.writeText(jsonOutput.value).then(function () {
-      var icon = btn.querySelector('i');
-      icon.className = 'fas fa-check text-success me-1';
-      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-    }).catch(function () {
-      var icon = btn.querySelector('i');
-      icon.className = 'fas fa-times text-danger me-1';
-      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-    });
-  });
-}());
+});
 </script>
 
 </div>

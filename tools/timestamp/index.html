@@ -88,88 +88,87 @@ ads: true
   </div>
 </div>
 
-<script>
-(function () {
-  // Utility: copy text and briefly swap icon to a check mark
-  function copyText(text, btn) {
-    navigator.clipboard.writeText(text).then(function () {
-      var icon = btn.querySelector('i');
-      icon.className = 'fas fa-check text-success';
-      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-    }).catch(function () {
-      var icon = btn.querySelector('i');
-      icon.className = 'fas fa-times text-danger';
-      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-    });
-  }
+<script type="module">
+import { epochToMs, datetimeLocalToMs } from './timestamp.js';
 
-  // --- DateTime → Epoch ---
-  var dtInput = document.getElementById('dt-input');
-  var dtResult = document.getElementById('dt-result');
-  var dtSeconds = document.getElementById('dt-seconds');
-  var dtMillis = document.getElementById('dt-millis');
-
-  // Pre-fill with the current local time
-  var now = new Date();
-  dtInput.value = new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-
-  document.getElementById('dt-convert-btn').addEventListener('click', function () {
-    var val = dtInput.value;
-    if (!val) return;
-    var ms = new Date(val).getTime();
-    dtSeconds.textContent = Math.floor(ms / 1000);
-    dtMillis.textContent = ms;
-    dtResult.classList.remove('d-none');
+// Utility: copy text and briefly swap icon to a check mark
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-check text-success';
+    setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+  }).catch(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-times text-danger';
+    setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
   });
+}
 
-  document.getElementById('dt-copy-seconds').addEventListener('click', function () {
-    copyText(dtSeconds.textContent, this);
-  });
-  document.getElementById('dt-copy-millis').addEventListener('click', function () {
-    copyText(dtMillis.textContent, this);
-  });
+// --- DateTime → Epoch ---
+var dtInput = document.getElementById('dt-input');
+var dtResult = document.getElementById('dt-result');
+var dtSeconds = document.getElementById('dt-seconds');
+var dtMillis = document.getElementById('dt-millis');
 
-  // --- Epoch → DateTime ---
-  var epochInput = document.getElementById('epoch-input');
-  var epochResult = document.getElementById('epoch-result');
-  var epochUtc = document.getElementById('epoch-utc');
-  var epochLocal = document.getElementById('epoch-local');
-  var epochIso = document.getElementById('epoch-iso');
+// Pre-fill with the current local time
+var now = new Date();
+dtInput.value = new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
-  document.getElementById('epoch-convert-btn').addEventListener('click', function () {
-    var raw = epochInput.value.trim();
-    if (!raw) return;
-    var n = parseInt(raw, 10);
-    // Heuristic: values > 1e10 (Nov 2286 in seconds) are treated as milliseconds
-    var ms = n > 1e10 ? n : n * 1000;
-    var d = new Date(ms);
-    epochUtc.textContent = d.toUTCString();
-    epochLocal.textContent = d.toLocaleString();
-    epochIso.textContent = d.toISOString();
-    epochResult.classList.remove('d-none');
-  });
+document.getElementById('dt-convert-btn').addEventListener('click', function () {
+  var val = dtInput.value;
+  if (!val) return;
+  var ms = datetimeLocalToMs(val);
+  dtSeconds.textContent = Math.floor(ms / 1000);
+  dtMillis.textContent = ms;
+  dtResult.classList.remove('d-none');
+});
 
-  document.getElementById('epoch-copy-utc').addEventListener('click', function () {
-    copyText(epochUtc.textContent, this);
-  });
-  document.getElementById('epoch-copy-local').addEventListener('click', function () {
-    copyText(epochLocal.textContent, this);
-  });
-  document.getElementById('epoch-copy-iso').addEventListener('click', function () {
-    copyText(epochIso.textContent, this);
-  });
+document.getElementById('dt-copy-seconds').addEventListener('click', function () {
+  copyText(dtSeconds.textContent, this);
+});
+document.getElementById('dt-copy-millis').addEventListener('click', function () {
+  copyText(dtMillis.textContent, this);
+});
 
-  // --- Live clock ---
-  function tick() {
-    var t = new Date();
-    var ms = t.getTime();
-    document.getElementById('now-seconds').textContent = Math.floor(ms / 1000);
-    document.getElementById('now-millis').textContent = ms;
-    document.getElementById('now-utc').textContent = t.toUTCString();
-  }
-  tick();
-  setInterval(tick, 1000);
-}());
+// --- Epoch → DateTime ---
+var epochInput = document.getElementById('epoch-input');
+var epochResult = document.getElementById('epoch-result');
+var epochUtc = document.getElementById('epoch-utc');
+var epochLocal = document.getElementById('epoch-local');
+var epochIso = document.getElementById('epoch-iso');
+
+document.getElementById('epoch-convert-btn').addEventListener('click', function () {
+  var raw = epochInput.value.trim();
+  if (!raw) return;
+  var n = parseInt(raw, 10);
+  var ms = epochToMs(n);
+  var d = new Date(ms);
+  epochUtc.textContent = d.toUTCString();
+  epochLocal.textContent = d.toLocaleString();
+  epochIso.textContent = d.toISOString();
+  epochResult.classList.remove('d-none');
+});
+
+document.getElementById('epoch-copy-utc').addEventListener('click', function () {
+  copyText(epochUtc.textContent, this);
+});
+document.getElementById('epoch-copy-local').addEventListener('click', function () {
+  copyText(epochLocal.textContent, this);
+});
+document.getElementById('epoch-copy-iso').addEventListener('click', function () {
+  copyText(epochIso.textContent, this);
+});
+
+// --- Live clock ---
+function tick() {
+  var t = new Date();
+  var ms = t.getTime();
+  document.getElementById('now-seconds').textContent = Math.floor(ms / 1000);
+  document.getElementById('now-millis').textContent = ms;
+  document.getElementById('now-utc').textContent = t.toUTCString();
+}
+tick();
+setInterval(tick, 1000);
 </script>
 
 </div>
