@@ -2,17 +2,22 @@
  * Cache-First strategy with versioned cache and user-controlled update flow.
  */
 
-const CACHE_NAME = 'captura-v1.2.0';
+const CACHE_NAME = 'captura-v2.0.0';
 
 // Local assets that must be available offline.
 // External CDN resources are cached dynamically on first request.
 const ASSETS_TO_CACHE = [
   './',
   './recorder.css',
-  './recorder.js',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './js/app.js',
+  './js/audio-mixer.js',
+  './js/compositor.js',
+  './js/metronome.js',
+  './js/storage.js',
+  './js/recorder-core.js',
   '/styles/styles.css',
   '/scripts/formatting.js',
 ];
