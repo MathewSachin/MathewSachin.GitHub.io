@@ -1,0 +1,16 @@
+name: Frontend Tests (PR)
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-site.yml
+    permissions:
+      contents: read
+
+  frontend-tests:
+    needs: build
+    uses: ./.github/workflows/frontend-tests.yml
+    permissions:
+      contents: read
