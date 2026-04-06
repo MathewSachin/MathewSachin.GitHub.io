@@ -1,0 +1,1 @@
+export function encodeBase64(e){var r=(new TextEncoder).encode(e),n=Array.from(r,function(e){return String.fromCharCode(e)}).join("");return btoa(n)}export function decodeBase64(e){var r=atob(e),n=Uint8Array.from(r,function(e){return e.charCodeAt(0)});return(new TextDecoder).decode(n)}
