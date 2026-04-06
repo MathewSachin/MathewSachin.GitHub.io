@@ -1,24 +1,35 @@
 // ── app.js ────────────────────────────────────────────────────────────────────
-// The Orchestrator: the only file that touches the DOM.
+// The Orchestrator.
 // Responsibilities:
-//   • Own all document.getElementById() calls and event listener bindings.
-//   • Import the five engine modules and wire them together.
+//   • Wire the engine modules and UI modules together.
 //   • Drive the recording lifecycle: startRecording, pauseRecording,
 //     resumeRecording, stopRecording, endSession, cleanup.
-//   • Manage UI state, preferences, device enumeration, and Media Session.
+//   • Manage UI state, device enumeration, and screen-stream acquisition.
 
 import { AudioMixer }              from './audio-mixer.js';
 import { Compositor }              from './compositor.js';
 import { Metronome }               from './metronome.js';
 import { StorageManager, dateStamp } from './storage.js';
 import { RecorderCore }            from './recorder-core.js';
+import { PREFS, savePref, loadPref } from './prefs.js';
+import { showAlert, showToast, showErrorDialog } from './dialogs.js';
+import { setupMediaSession, clearMediaSession }  from './media-session.js';
+import { registerServiceWorker }                 from './register-service-worker.js';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 const DEFAULT_WIDTH  = 1280;
 const DEFAULT_HEIGHT = 720;
-const FORMAT_MP4  = 'mp4-h264-aac';
+const FORMAT_MP4     = 'mp4-h264-aac';
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+
+// ── Formatters ─────────────────────────────────────────────────────────────────
+
+// Format a gain value (0–1 or 0–2) as a percentage string, e.g. 0.75 → '75%'.
+const gainPct = v => Math.round(parseFloat(v) * 100) + '%';
+
+// Format elapsed seconds as MM:SS, e.g. 65 → '01:05'.
+const fmtTime = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
 // ── DOM refs ───────────────────────────────────────────────────────────────────
 
@@ -37,39 +48,17 @@ const pickDirBtn    = document.getElementById('pick-dir-btn');
 const dirNameEl     = document.getElementById('dir-name');
 const statusBadge   = document.getElementById('status-badge');
 const timerEl       = document.getElementById('timer-text');
-const alertBox      = document.getElementById('alert-box');
 const micGainSlider = document.getElementById('mic-gain-slider');
 const sysGainSlider = document.getElementById('sys-gain-slider');
 const micGainLabel  = document.getElementById('mic-gain-label');
 const sysGainLabel  = document.getElementById('sys-gain-label');
 const micLevelCanvas = document.getElementById('mic-level-canvas');
 const sysLevelCanvas = document.getElementById('sys-level-canvas');
-const errorDialog   = document.getElementById('captura-error-dialog');
 
 // ── Capability checks ──────────────────────────────────────────────────────────
 
 const hasGetDisplayMedia = !!(navigator.mediaDevices?.getDisplayMedia);
 const hasFSA = typeof window.showDirectoryPicker === 'function';
-
-// ── Preferences ────────────────────────────────────────────────────────────────
-
-const PREFS = {
-  sysAudio: 'captura-sysAudio',
-  fps:      'captura-fps',
-  quality:  'captura-quality',
-  format:   'captura-format',
-  pipX:     'captura-pipX',
-  pipY:     'captura-pipY',
-  webcam:   'captura-webcam',
-  mic:      'captura-mic',
-  micGain:  'captura-micGain',
-  sysGain:  'captura-sysGain',
-};
-
-const savePref = (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} };
-const loadPref = k      => { try { return localStorage.getItem(k); } catch (_) { return null; } };
-const gainPct  = v      => Math.round(parseFloat(v) * 100) + '%';
-const fmtTime  = s      => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
 // ── Engine instances ───────────────────────────────────────────────────────────
 
@@ -98,7 +87,7 @@ let recordingStartTime = 0;
 let totalPausedMs   = 0;
 let pauseStartTime  = 0;
 
-// ── UI helpers ─────────────────────────────────────────────────────────────────
+// ── UI state ───────────────────────────────────────────────────────────────────
 
 function setUIState(state) {
   const rec     = state === 'recording';
@@ -129,62 +118,6 @@ function setUIState(state) {
     : paused || session  ? 'badge bg-warning text-dark' : 'badge bg-secondary';
 
   if (!active) timerEl.textContent = '00:00';
-}
-
-function showAlert(msgOrNode, type) {
-  alertBox.className = 'alert alert-' + type + ' mb-3';
-  alertBox.hidden    = false;
-  if (typeof msgOrNode === 'string') alertBox.textContent = msgOrNode;
-  else alertBox.replaceChildren(msgOrNode);
-}
-
-const TOAST_FADE_MS = 150;
-
-function showToast(msgOrNode, type, autohide = true) {
-  const container = document.getElementById('toast-container');
-  if (!container) return;
-
-  const toast = document.createElement('div');
-  toast.className = `toast align-items-center text-bg-${type} border-0 show mb-2`;
-  toast.setAttribute('role', type === 'danger' ? 'alert' : 'status');
-  toast.setAttribute('aria-atomic', 'true');
-
-  const inner = document.createElement('div');
-  inner.className = 'd-flex';
-
-  const body = document.createElement('div');
-  body.className = 'toast-body';
-  if (typeof msgOrNode === 'string') body.textContent = msgOrNode;
-  else body.appendChild(msgOrNode);
-
-  const closeBtn = document.createElement('button');
-  closeBtn.type      = 'button';
-  closeBtn.className = type === 'warning'
-    ? 'btn-close me-2 m-auto flex-shrink-0'
-    : 'btn-close btn-close-white me-2 m-auto flex-shrink-0';
-  closeBtn.setAttribute('aria-label', 'Close');
-  closeBtn.addEventListener('click', () => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.parentNode?.removeChild(toast), TOAST_FADE_MS);
-  });
-
-  inner.append(body, closeBtn);
-  toast.appendChild(inner);
-  container.appendChild(toast);
-
-  if (autohide) {
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.parentNode?.removeChild(toast), TOAST_FADE_MS);
-    }, 8000);
-  }
-}
-
-function showErrorDialog(title, message) {
-  if (!errorDialog) { showAlert(message, 'danger'); return; }
-  document.getElementById('captura-error-title').textContent = title;
-  document.getElementById('captura-error-body').textContent  = message;
-  errorDialog.showModal();
 }
 
 // ── Resolution / bitrate helpers ───────────────────────────────────────────────
@@ -250,28 +183,6 @@ async function enumerateDevices() {
   } catch (err) {
     showErrorDialog('Device Error', 'Could not enumerate devices: ' + err.message);
   }
-}
-
-// ── Media Session API ──────────────────────────────────────────────────────────
-
-function setupMediaSession() {
-  if (!navigator.mediaSession) return;
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title:   'Captura Web',
-    artist:  'Recording Session Active',
-    artwork: [{ src: new URL('/images/captura.png', location.href).href, sizes: '512x512', type: 'image/png' }],
-  });
-  navigator.mediaSession.setActionHandler('play',  () => { if (isPaused) resumeRecording(); });
-  navigator.mediaSession.setActionHandler('pause', () => { if (isRecording && !isPaused) pauseRecording(); });
-  navigator.mediaSession.setActionHandler('stop',  () => { if (isRecording) stopRecording(); });
-}
-
-function clearMediaSession() {
-  if (!navigator.mediaSession) return;
-  navigator.mediaSession.metadata = null;
-  ['play', 'pause', 'stop'].forEach(a => {
-    try { navigator.mediaSession.setActionHandler(a, null); } catch (_) {}
-  });
 }
 
 // ── Screen stream ──────────────────────────────────────────────────────────────
@@ -422,7 +333,11 @@ async function startRecording() {
     compositor.isRecording = true;
 
     audioMixer.startSilentAudio();
-    setupMediaSession();
+    setupMediaSession(
+      () => { if (isPaused) resumeRecording(); },
+      () => { if (isRecording && !isPaused) pauseRecording(); },
+      () => { if (isRecording) stopRecording(); }
+    );
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
 
     startRecordingLoop(parseInt(fpsSel.value));
@@ -634,13 +549,6 @@ if (!hasGetDisplayMedia) {
   document.getElementById('recorder-ui').hidden = true;
 }
 
-// Error dialog close handlers
-if (errorDialog) {
-  const closeDialog = () => errorDialog.close();
-  document.getElementById('captura-error-close')?.addEventListener('click', closeDialog);
-  errorDialog.addEventListener('click', e => { if (e.target === errorDialog) closeDialog(); });
-}
-
 restoreSimplePrefs();
 
 if (hasGetDisplayMedia) {
@@ -691,43 +599,4 @@ sysGainSlider.addEventListener('input', () => {
 
 // ── PWA Service Worker Registration ───────────────────────────────────────────
 
-(function registerServiceWorker() {
-  if (!('serviceWorker' in navigator)) return;
-
-  const updateBar  = document.getElementById('pwa-update-bar');
-  const updateBtn  = document.getElementById('pwa-update-btn');
-  const dismissBtn = document.getElementById('pwa-dismiss-btn');
-  if (!updateBar || !updateBtn) return;
-
-  let newWorker = null;
-  let reloading = false;
-
-  // Only show the update notification when running as an installed PWA.
-  const isPwa = () => window.matchMedia('(display-mode: standalone)').matches;
-
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloading) return;
-    reloading = true;
-    window.location.reload();
-  });
-
-  // sw.js lives one directory above js/app.js
-  navigator.serviceWorker.register('../sw.js').then(reg => {
-    reg.addEventListener('updatefound', () => {
-      newWorker = reg.installing;
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller && isPwa()) {
-          updateBar.hidden = false;
-        }
-      });
-    });
-  }).catch(err => console.warn('Service worker registration failed:', err));
-
-  updateBtn.addEventListener('click', () => {
-    updateBtn.textContent = 'Updating…';
-    updateBtn.disabled    = true;
-    newWorker?.postMessage('SKIP_WAITING');
-  });
-
-  dismissBtn?.addEventListener('click', () => { updateBar.hidden = true; });
-}());
+registerServiceWorker();
