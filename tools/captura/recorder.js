@@ -815,7 +815,7 @@
           'System Audio Not Captured',
           'System audio was not captured. In the browser share dialog, make sure to enable ' +
           '"Share system audio" (or "Share tab audio"). ' +
-          'Uncheck "Capture system audio" in settings to record without it.'
+          'Click "End Session" and try again, or uncheck "Capture system audio" in settings to record without it.'
         );
         if (webcamStream) { webcamStream.getTracks().forEach(t => t.stop()); webcamStream = null; }
         if (micStream)    { micStream.getTracks().forEach(t => t.stop());    micStream    = null; }
