@@ -14,3 +14,7 @@ group :jekyll_plugins do
 end
 
 gem 'html-proofer', '~> 5.0'
+
+group :test do
+  gem 'rspec', '~> 3.13'
+end
