@@ -8,9 +8,14 @@ jobs:
     uses: ./.github/workflows/build-site.yml
     permissions:
       contents: read
+    with:
+      testing: true
+      artifact_name: site-testing
 
   frontend-tests:
     needs: build
     uses: ./.github/workflows/frontend-tests.yml
     permissions:
       contents: read
+    with:
+      artifact_name: site-testing

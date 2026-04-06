@@ -14,11 +14,21 @@ jobs:
     permissions:
       contents: read
 
+  build-for-testing:
+    uses: ./.github/workflows/build-site.yml
+    permissions:
+      contents: read
+    with:
+      testing: true
+      artifact_name: site-testing
+
   frontend-tests:
-    needs: build
+    needs: build-for-testing
     uses: ./.github/workflows/frontend-tests.yml
     permissions:
       contents: read
+    with:
+      artifact_name: site-testing
 
   deploy:
     needs: [build, frontend-tests]
