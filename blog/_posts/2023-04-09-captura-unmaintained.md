@@ -21,8 +21,8 @@ It is no longer maintained, but the [source-code is still archived on GitHub](ht
     <div class="card-body d-flex align-items-center gap-3">
       <i class="fas fa-video fa-2x flex-shrink-0"></i>
       <div>
-        <div class="fw-bold">Want to record your screen right now?</div>
-        <div class="small mt-1">Try the <strong>Captura Web Recorder</strong> — a browser-based screen recorder inspired by Captura that runs entirely in your browser with no installation required.</div>
+        <div class="fw-bold">Captura Web Recorder</div>
+        <div class="small mt-1">Record your screen in the browser — no installation needed.</div>
       </div>
       <i class="fas fa-arrow-right ms-auto flex-shrink-0"></i>
     </div>
@@ -74,6 +74,7 @@ For anything involving sensitive content or a production environment, consider a
 ## Alternatives
 A few well-known tools for common use cases:
 
+- **Screen recording (browser):** [Captura Web Recorder]({{ '/tools/captura/' | relative_url }}) — a spiritual successor to Captura that runs entirely in Chrome with no installation required.
 - **Screen recording:** [OBS Studio](https://obsproject.com/) — free, open-source, Windows / macOS / Linux.
 - **Screenshots & recording:** [ShareX](https://getsharex.com/) — free, open-source, Windows.
 - **GIF capture:** [ScreenToGif](https://www.screentogif.com/) — free, open-source, Windows.

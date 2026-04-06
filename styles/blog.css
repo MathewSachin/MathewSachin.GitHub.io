@@ -877,17 +877,17 @@ a.series-post-title:hover {
 }
 
 .inline-tool-card {
-  background: var(--post-accent, var(--color-accent));
-  border: none;
-  color: white;
+  background: white;
+  border: 1px solid color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
+  color: var(--post-accent, var(--color-accent));
   border-radius: 8px;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--post-accent, var(--color-accent)) 15%, transparent);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .inline-tool-card-link:hover .inline-tool-card {
   transform: translateY(-4px);
-  filter: brightness(0.9);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
 }
 
 /* GitHub-style blockquotes — left accent bar uses the per-post accent colour */
