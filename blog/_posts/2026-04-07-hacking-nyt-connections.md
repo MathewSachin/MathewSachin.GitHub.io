@@ -1,0 +1,142 @@
+---
+title: "Hacking NYT Connections: Reveal All Answers in One Console Command"
+icon: "fas fa-th"
+accent_color: "#6750A4"
+tags: [nyt, connections, hack, browser, devtools, javascript, network]
+series: browser-hacks
+related:
+  - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/22/reddit-video-sniper
+  - /blog/2026/03/14/chrome-dino-autoplay
+  - /blog/2016/11/05/chrome-dino-hack
+  - /blog/2026/03/20/cookie-clicker-hacks
+---
+
+*NYT Connections groups 16 words into four colour-coded categories. What if your browser already fetched all four answers before you picked a single tile? It did. Here's how to read them.*
+
+## What Is NYT Connections?
+
+[NYT Connections](https://www.nytimes.com/games/connections) is a daily puzzle published by The New York Times. You're shown a 4×4 grid of 16 words and must sort them into four groups of four — each group sharing a hidden theme. The groups are colour-coded by difficulty: yellow (easiest), green, blue, and purple (hardest).
+
+Like Wordle, the puzzle resets every day. And like Wordle, **your browser downloads the full answer data before you make a single guess.**
+
+## Step 1 — Open DevTools and Go to the Network Tab
+
+Open [NYT Connections](https://www.nytimes.com/games/connections) in your browser, then open DevTools:
+
+| OS | Shortcut |
+|---|---|
+| Windows / Linux | `F12` or `Ctrl + Shift + I` |
+| Mac | `Cmd + Option + I` |
+
+Click the **Network** tab at the top of the DevTools panel.
+
+## Step 2 — Filter by Fetch/XHR and Reload
+
+Near the top of the Network tab, click **Fetch/XHR**. This hides scripts, stylesheets, and images — showing only the raw data requests the page makes to servers.
+
+Now press `Ctrl + R` (or `Cmd + R` on Mac) to reload the page. The Network tab will fill with requests captured from scratch.
+
+## Step 3 — Find the Date JSON File
+
+Scroll through the filtered list and look for a file named after today's date — something like:
+
+```
+2026-04-07.json
+```
+
+Click on it, then click the **Preview** tab in the panel that opens on the right. You'll see the raw JSON response the game fetched — including all four categories and their 16 words:
+
+![DevTools Network tab with the Fetch/XHR filter active, showing the 2026-04-07.json file selected and its JSON preview open — categories array visible with titles like COMPETITION, ON BOARD, WORDS FOR UNSPECIFIED CHOICES](/images/nyt-connections-network-tab.png)
+
+> If you don't see a date-named file, type `.json` into the filter box at the top of the Network panel to narrow the list down.
+
+That's the full answer set — already sitting in your browser. But reading nested JSON in the Preview pane is fiddly. The next step prints it cleanly to the Console.
+
+## The One-Shot Console Script
+
+Switch to the **Console** tab, paste the script below, and press **Enter**:
+
+```js
+(async function() {
+    // Dynamically grab today's date for the URL
+    const today = new Date().toISOString().split('T')[0];
+    const apiUrl = `https://www.nytimes.com/svc/connections/v2/${today}.json`;
+
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+        throw new Error(`Endpoint blocked or date mismatch (HTTP ${response.status})`);
+    }
+
+    const data = await response.json();
+
+    data.categories.forEach(cat => {
+        const words = cat.cards.map(c => c.content).join(', ');
+
+        console.log(`[${cat.title}]: ${words}`);
+    });
+})();
+```
+
+The Console will immediately print all four groups, for example:
+
+```
+[COMPETITION]: RACE, MATCH, BOUT, HEAT
+[ON BOARD]: PLANK, PANEL, DECK, SLAB
+[WORDS FOR UNSPECIFIED CHOICES]: THIS, THAT, WHATEVER, THING
+[___LIFE]: STILL, SHELF, WILD, NIGHT
+```
+
+## How the Code Works
+
+### Building the API URL
+
+```js
+const today = new Date().toISOString().split('T')[0];
+const apiUrl = `https://www.nytimes.com/svc/connections/v2/${today}.json`;
+```
+
+`new Date().toISOString()` returns the current datetime in ISO 8601 format — something like `"2026-04-07T18:11:56.000Z"`. Splitting on `'T'` and taking index `[0]` trims it down to just the date portion: `"2026-04-07"`. That gets injected into the URL template, giving us the exact endpoint the game itself uses.
+
+### Fetching the Data
+
+```js
+const response = await fetch(apiUrl);
+
+if (!response.ok) {
+    throw new Error(`Endpoint blocked or date mismatch (HTTP ${response.status})`);
+}
+```
+
+[`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is the browser's built-in function for making HTTP requests — the same mechanism the Connections page itself uses to load the puzzle. We call it with the same URL the page calls, so we get exactly the same JSON response. The `await` keyword pauses execution until the response arrives. `response.ok` is `true` for any 2xx HTTP status; if the API returns an error (for example a 404 because the date is wrong, or a 403 if NYT tightens access), the error message tells you exactly why.
+
+### Parsing and Printing
+
+```js
+const data = await response.json();
+
+data.categories.forEach(cat => {
+    const words = cat.cards.map(c => c.content).join(', ');
+
+    console.log(`[${cat.title}]: ${words}`);
+});
+```
+
+`response.json()` parses the raw response body as JSON, giving us a plain JavaScript object. The structure has a `categories` array — one entry per colour group. Each category has a `title` (the hidden theme) and a `cards` array. Each card has a `content` field — the word shown on the tile.
+
+The script maps `cards` to just the `content` strings, joins them with `', '`, and logs the whole group on one line. Four calls to `console.log`, four answers.
+
+### Why an IIFE?
+
+```js
+(async function() {
+    // ...
+})();
+```
+
+The entire script is wrapped in an **Immediately Invoked Function Expression** — a function that defines itself and calls itself in the same breath. This does two things: it lets us use `await` (which requires an `async` context), and it keeps all the variables (`today`, `apiUrl`, `response`, `data`) scoped inside the function so they don't leak into the global `window` object and clash with the game's own variables.
+
+---
+
+*Want to go further with NYT browser tricks? See {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle: Solve It in One Try" %} for the same network-sniffing technique applied to Wordle, or {% include post_link.html url="/blog/2026/03/22/reddit-video-sniper" text="Reddit Video Sniper" %} for another public JSON API exploit.*
