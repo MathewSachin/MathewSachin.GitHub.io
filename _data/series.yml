@@ -69,7 +69,7 @@ browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
   description: >
-    A 20-part series that takes you from your very first <kbd>F12</kbd> press all the way
+    A 21-part series that takes you from your very first <kbd>F12</kbd> press all the way
     to writing persistent browser scripts. Every technique builds on the last.
     Most chapters need nothing but a browser and a curious mind — the final chapter
     adds Tampermonkey to make your scripts persistent.
@@ -155,3 +155,5 @@ browser-hacks:
           blurb: "Instagram Stories vanish after 24 hours and there's no Save button anywhere. This script reaches into the browser's React fiber tree to pull the original CDN URL. Teaches: React internal fibers, <code>__reactFiber</code> traversal."
         - id: "/blog/2026/03/30/instagram-userscript-download-buttons"
           blurb: "All three Instagram techniques bundled into one persistent userscript that injects a ⬇ button directly into the Instagram UI. Teaches: Tampermonkey/Greasemonkey userscripts, <code>@grant</code> directives, persistent DOM injection."
+        - id: "/blog/2026/04/07/hacking-nyt-connections"
+          blurb: "NYT Connections downloads the full answer JSON before you pick a single tile. Intercept it in the Network tab, then fetch and print all four colour-coded groups in one console command. Teaches: Fetch/XHR filtering, public JSON API exploitation, async IIFE pattern."
