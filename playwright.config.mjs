@@ -6,6 +6,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4000',
     permissions: ['camera', 'microphone'],
+    serviceWorkers: 'block',
   },
   projects: [
     {
