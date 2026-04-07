@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { opfsMockScript, runRecordingPipeline, verifyWebmFile } from './captura-helpers.js';
 
 test('PWA loads and functions while strictly offline', async ({ page, context }) => {
+  test.setTimeout(90000); // SW lifecycle + recording + offline reload needs extra time
   await page.addInitScript(opfsMockScript);
   await page.goto('/tools/captura/');
 
