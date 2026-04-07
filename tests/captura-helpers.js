@@ -24,15 +24,32 @@ export async function runRecordingPipeline(page) {
 
 // Reads the OPFS root and asserts that a .webm file > 1 kB exists.
 export async function verifyWebmFile(page) {
-  const fileSize = await page.evaluate(async () => {
+  await verifyFileByExtension(page, '.webm');
+}
+
+// Reads the OPFS root and asserts that a file with the given extension > 1 kB exists.
+export async function verifyFileByExtension(page, ext) {
+  const fileSize = await page.evaluate(async (extension) => {
     const opfsRoot = await navigator.storage.getDirectory();
     for await (const [name, handle] of opfsRoot.entries()) {
-      if (name.endsWith('.webm')) {
+      if (name.endsWith(extension)) {
         const file = await handle.getFile();
         return file.size;
       }
     }
     return 0;
-  });
+  }, ext);
   expect(fileSize).toBeGreaterThan(1000);
+}
+
+// Returns the number of files in OPFS that end with the given extension.
+export async function countFilesWithExtension(page, ext) {
+  return page.evaluate(async (extension) => {
+    const opfsRoot = await navigator.storage.getDirectory();
+    let count = 0;
+    for await (const [name] of opfsRoot.entries()) {
+      if (name.endsWith(extension)) count++;
+    }
+    return count;
+  }, ext);
 }
