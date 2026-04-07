@@ -47,7 +47,7 @@ Scroll through the filtered list and look for a file named after today's date â€
 
 Click on it, then click the **Preview** tab in the panel that opens on the right. You'll see the raw JSON response the game fetched â€” including all four categories and their 16 words:
 
-![DevTools Network tab with Fetch/XHR filter active. The file 2026-04-07.json is selected in the left panel. The Preview tab on the right shows the JSON response with a categories array expanded, revealing titles: COMPETITION, ON BOARD, WORDS FOR UNSPECIFIED CHOICES, and ___LIFE.](/images/nyt-connections-network-tab.png)
+![DevTools Network tab with Fetch/XHR filter active. The file 2026-04-07.json is selected in the left panel. The Preview tab on the right shows the JSON response with a categories array expanded, revealing titles: COMPETITION, ON BOARD, WORDS FOR UNSPECIFIED CHOICES, and ___LIFE.]({{ '/images/nyt-connections-network-tab.png' | relative_url }})
 
 > If you don't see a date-named file, type `.json` into the filter box at the top of the Network panel to narrow the list down.
 
