@@ -1,16 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { runRecordingPipeline, verifyWebmFile } from './recording.spec.js';
-
-// Inject the OPFS mock before each navigation (persists across reloads on the
-// same page object because addInitScript runs on every navigation).
-const opfsMockScript = () => {
-  window.showDirectoryPicker = async () => {
-    const root = await navigator.storage.getDirectory();
-    root.queryPermission    = async () => 'granted';
-    root.requestPermission  = async () => 'granted';
-    return root;
-  };
-};
+import { opfsMockScript, runRecordingPipeline, verifyWebmFile } from './captura-helpers.js';
 
 test('PWA loads and functions while strictly offline', async ({ page, context }) => {
   await page.addInitScript(opfsMockScript);
