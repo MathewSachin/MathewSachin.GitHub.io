@@ -235,16 +235,14 @@ test.describe('Captura Web Recorder', () => {
   });
 
   test('preferences are restored after page reload', async ({ page }) => {
-    // Two-step approach: first reset to defaults, then set targets, so the
-    // change event fires even if these values were left over by a prior test.
-    await page.selectOption('#fps-select', '30');
-    await page.selectOption('#fps-select', '60');
-
-    await page.selectOption('#quality-select', '720');
-    await page.selectOption('#quality-select', '480');
-
-    await page.selectOption('#format-select', 'webm-vp9-opus');
-    await page.selectOption('#format-select', 'mp4-h264-aac');
+    // Directly write the target prefs to localStorage, then reload.
+    // This decouples the restoration test from the change-event persistence
+    // tests above and makes it immune to shared-state carry-over between tests.
+    await page.evaluate(() => {
+      localStorage.setItem('captura-fps', '60');
+      localStorage.setItem('captura-quality', '480');
+      localStorage.setItem('captura-format', 'mp4-h264-aac');
+    });
 
     await page.reload();
 
