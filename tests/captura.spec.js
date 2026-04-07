@@ -218,8 +218,11 @@ test.describe('Captura Web Recorder', () => {
   test('format preference is persisted to localStorage on change', async ({ page }) => {
     await page.selectOption('#format-select', 'webm-vp9-opus');
     await page.selectOption('#format-select', 'mp4-h264-aac');
-    const stored = await page.evaluate(() => localStorage.getItem('captura-format'));
-    expect(stored).toBe('mp4-h264-aac');
+    // Use expect.poll to tolerate any slight delay between the Playwright
+    // selectOption dispatch and the synchronous savePref call completing.
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem('captura-format')))
+      .toBe('mp4-h264-aac');
   });
 
   test('system audio preference is persisted to localStorage on change', async ({ page }) => {
