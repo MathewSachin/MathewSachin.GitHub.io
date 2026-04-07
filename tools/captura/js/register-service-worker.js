@@ -21,8 +21,8 @@ export function registerServiceWorker() {
     window.location.reload();
   });
 
-  // sw.js lives one directory above js/
-  navigator.serviceWorker.register('../sw.js').then(reg => {
+  // sw.js lives at the same level as js/
+  navigator.serviceWorker.register('./sw.js').then(reg => {
     reg.addEventListener('updatefound', () => {
       newWorker = reg.installing;
       newWorker.addEventListener('statechange', () => {
