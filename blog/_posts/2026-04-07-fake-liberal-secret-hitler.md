@@ -34,7 +34,7 @@ All of that is just HTML and `<img>` tags sitting in your DOM. And you know what
 The script targets three things on the role-reveal screen:
 
 1. **Image swap** — replaces the Fascist role images (`bad.jpg`, `boss.jpg`, `a-bad.jpg`) with the Liberal equivalents (`good.jpg`, `a-good.jpg`)
-2. **Heading scrub** — rewrites `"You are a Fascist"` to `"You are a liberal"`
+2. **Heading scrub** — rewrites `"You are a Fascist"` to `"You are a Liberal"`
 3. **Teammate purge** — removes the `<h4>` elements that list your Fascist teammates, so no names leak through
 
 ---
@@ -74,9 +74,8 @@ Paste the following code into the Console and press **Enter**:
         // 2. Heading Scrubbing
         document.querySelectorAll('h4').forEach(h4 => {
             if (h4.innerText.includes("You are a Fascist")) {
-                h4.innerText = "You are a liberal";
+                h4.innerText = "You are a Liberal";
 
-                // Get all siblings of this h4
                 const siblings = Array.from(h4.parentNode.children);
                 siblings.forEach(sibling => {
                     // Remove all other h4 siblings to clear teammate info
@@ -119,7 +118,7 @@ Open your bookmarks, find the one you just saved, and tap **Edit**:
 - Delete the entire **URL** and paste this one-liner in its place (copy the whole thing — it must be one continuous line):
 
 ```
-javascript:(function(){const a=()=>{document.querySelectorAll('img').forEach(i=>{const s=i.getAttribute('src');if(s==='/images/original/bad.jpg'||s==='/images/original/boss.jpg')i.src='/images/original/good.jpg';if(s==='/images/original/a-bad.jpg')i.src='/images/original/a-good.jpg'});document.querySelectorAll('h4').forEach(h=>{if(h.innerText.includes('You are a Fascist')){h.innerText='You are a liberal';Array.from(h.parentNode.children).forEach(s=>{if(s!==h&&s.tagName==='H4')s.remove()})}})};a();new MutationObserver(a).observe(document.body,{childList:true,subtree:true});})();
+javascript:(function(){const a=()=>{document.querySelectorAll('img').forEach(i=>{const s=i.getAttribute('src');if(s==='/images/original/bad.jpg'||s==='/images/original/boss.jpg')i.src='/images/original/good.jpg';if(s==='/images/original/a-bad.jpg')i.src='/images/original/a-good.jpg'});document.querySelectorAll('h4').forEach(h=>{if(h.innerText.includes('You are a Fascist')){h.innerText='You are a Liberal';Array.from(h.parentNode.children).forEach(s=>{if(s!==h&&s.tagName==='H4')s.remove()})}})};a();new MutationObserver(a).observe(document.body,{childList:true,subtree:true});})();
 ```
 
 Save the bookmark.
@@ -166,7 +165,7 @@ Note the use of `getAttribute('src')` rather than `img.src`. The DOM property `i
 ```js
 document.querySelectorAll('h4').forEach(h4 => {
     if (h4.innerText.includes("You are a Fascist")) {
-        h4.innerText = "You are a liberal";
+        h4.innerText = "You are a Liberal";
 
         const siblings = Array.from(h4.parentNode.children);
         siblings.forEach(sibling => {
