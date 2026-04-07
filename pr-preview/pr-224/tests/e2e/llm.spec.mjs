@@ -3,7 +3,14 @@ import { test, expect } from '@playwright/test';
 // Fake ES module returned in place of the real @huggingface/transformers CDN bundle.
 // This avoids any network download of multi-hundred-MB model weights while still
 // exercising every code path in llm.js.
-const MOCK_TRANSFORMERS = `
+//
+// Strategy: rather than intercepting the CDN URL directly (which runs into the
+// SRI integrity check on the <link rel="modulepreload"> tag), we intercept the
+// local llm.js response and swap its CDN import URL for a local test URL that
+// we serve ourselves.  This completely side-steps SRI and cross-origin issues.
+const MOCK_URL = '/test-mock/transformers.js';
+
+const MOCK_TRANSFORMERS_GOOD = `
 export const env = { allowLocalModels: false };
 
 export class TextStreamer {
@@ -30,12 +37,43 @@ export async function pipeline(task, modelId, opts) {
 }
 `;
 
+const MOCK_TRANSFORMERS_FAIL = `
+export const env = { allowLocalModels: false };
+export class TextStreamer {}
+export async function pipeline() { throw new Error('Network error'); }
+`;
+
+/**
+ * Register the two routes needed for every test:
+ * 1. Serve our local mock module at MOCK_URL.
+ * 2. Intercept llm.js and replace its CDN import URL with MOCK_URL so that
+ *    the SRI integrity attribute on the <link rel="modulepreload"> is never
+ *    evaluated against our mock body.
+ */
+async function setupRoutes(page, mockBody = MOCK_TRANSFORMERS_GOOD) {
+  await page.route('**/test-mock/transformers.js', route =>
+    route.fulfill({ contentType: 'application/javascript; charset=utf-8', body: mockBody })
+  );
+
+  await page.route('**/tools/llm/llm.js', async route => {
+    const response = await route.fetch();
+    const original = await response.text();
+    // Replace the CDN import URL (however it is formatted) with our local URL.
+    const modified = original.replace(
+      /from\s+['"]https:\/\/cdn\.jsdelivr\.net\/[^'"]+['"]/,
+      `from '${MOCK_URL}'`
+    );
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/javascript; charset=utf-8',
+      body: modified,
+    });
+  });
+}
+
 test.describe('Local LLM Chat tool', () => {
   test.beforeEach(async ({ page }) => {
-    // Intercept both the modulepreload hint and the actual import request.
-    await page.route('**/transformers.min.js', route =>
-      route.fulfill({ contentType: 'application/javascript; charset=utf-8', body: MOCK_TRANSFORMERS })
-    );
+    await setupRoutes(page);
     await page.goto('/tools/llm/');
   });
 
@@ -135,17 +173,11 @@ test.describe('Local LLM Chat tool', () => {
   });
 
   test('model load failure shows error status', async ({ page }) => {
-    // Override the mock to simulate a pipeline failure.
-    await page.route('**/transformers.min.js', route =>
-      route.fulfill({
-        contentType: 'application/javascript; charset=utf-8',
-        body: `
-export const env = { allowLocalModels: false };
-export class TextStreamer {}
-export async function pipeline() { throw new Error('Network error'); }
-`
-      })
-    );
+    // Re-register routes with the failing mock so the override is explicit and
+    // order-independent.  setupRoutes adds routes in reverse-precedence order,
+    // but here we want MOCK_TRANSFORMERS_FAIL and a fresh navigation so that
+    // the module is re-evaluated with the throwing pipeline.
+    await setupRoutes(page, MOCK_TRANSFORMERS_FAIL);
     await page.goto('/tools/llm/');
 
     await page.locator('#load-btn').click();
