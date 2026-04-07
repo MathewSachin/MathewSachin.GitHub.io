@@ -157,7 +157,7 @@ test.describe('Captura Web Recorder', () => {
   // ── Multiple recordings ───────────────────────────────────────────────────────
 
   test('two recordings in one session produce two separate WebM files', async ({ page }) => {
-    test.setTimeout(30000);
+    test.setTimeout(20000);
     await page.click('#pick-dir-btn');
 
     // First recording
@@ -219,8 +219,9 @@ test.describe('Captura Web Recorder', () => {
     const checkbox = page.locator('#sys-audio-chk');
     const initialChecked = await checkbox.isChecked();
     await checkbox.click();
+    const expectedValue = String(!initialChecked);
     const stored = await page.evaluate(() => localStorage.getItem('captura-sysAudio'));
-    expect(stored).toBe(String(!initialChecked));
+    expect(stored).toBe(expectedValue);
   });
 
   test('preferences are restored after page reload', async ({ page }) => {
