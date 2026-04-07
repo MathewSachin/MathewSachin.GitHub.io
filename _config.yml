@@ -71,6 +71,7 @@ jekyll-minifier:
   exclude:
     - "dino/offline.js"
     - "scripts/orama.js"
+    - "tools/llm/llm.js"
 
 picture:
   source: "images"
