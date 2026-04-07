@@ -14,6 +14,8 @@ import { create, load, search } from '@orama/orama'
 import {
   stripMarkdown,
   postUrlFromFilename,
+  parsePostDate,
+  toStringArray,
 } from '../scripts/build-search-index.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -142,6 +144,66 @@ test('postUrlFromFilename: returns null for non-matching filename', () => {
   assert.equal(postUrlFromFilename('README.md'), null)
   assert.equal(postUrlFromFilename('about.md'), null)
   assert.equal(postUrlFromFilename('not-a-post.md'), null)
+})
+
+// ---------------------------------------------------------------------------
+// Unit tests: parsePostDate
+// ---------------------------------------------------------------------------
+
+test('parsePostDate: uses frontmatter date when present', () => {
+  assert.equal(parsePostDate({ date: '2023-06-15T12:00:00Z' }, '2023-06-15-my-post.md'), '2023-06-15')
+})
+
+test('parsePostDate: frontmatter date as plain string is sliced to 10 chars', () => {
+  assert.equal(parsePostDate({ date: '2022-01-01' }, 'any-file.md'), '2022-01-01')
+})
+
+test('parsePostDate: falls back to filename prefix when no frontmatter date', () => {
+  assert.equal(parsePostDate({}, '2021-03-07-some-slug.md'), '2021-03-07')
+})
+
+test('parsePostDate: pads single-digit month and day from filename', () => {
+  assert.equal(parsePostDate({}, '2020-5-3-hello.md'), '2020-05-03')
+})
+
+test('parsePostDate: uses first 10 chars of filename when no date pattern matches', () => {
+  assert.equal(parsePostDate({}, 'ABCDEFGHIJKLMNO.md'), 'ABCDEFGHIJ')
+})
+
+test('parsePostDate: frontmatter date takes priority over filename date', () => {
+  assert.equal(parsePostDate({ date: '1999-12-31' }, '2000-01-01-slug.md'), '1999-12-31')
+})
+
+// ---------------------------------------------------------------------------
+// Unit tests: toStringArray
+// ---------------------------------------------------------------------------
+
+test('toStringArray: converts an array of strings unchanged', () => {
+  assert.deepEqual(toStringArray(['a', 'b', 'c']), ['a', 'b', 'c'])
+})
+
+test('toStringArray: converts an array of mixed types to strings', () => {
+  assert.deepEqual(toStringArray([1, true, null]), ['1', 'true', 'null'])
+})
+
+test('toStringArray: wraps a single string value in an array', () => {
+  assert.deepEqual(toStringArray('javascript'), ['javascript'])
+})
+
+test('toStringArray: wraps a non-string scalar in an array', () => {
+  assert.deepEqual(toStringArray(42), ['42'])
+})
+
+test('toStringArray: returns empty array for undefined', () => {
+  assert.deepEqual(toStringArray(undefined), [])
+})
+
+test('toStringArray: returns empty array for null', () => {
+  assert.deepEqual(toStringArray(null), [])
+})
+
+test('toStringArray: returns empty array for empty string', () => {
+  assert.deepEqual(toStringArray(''), [])
 })
 
 // ---------------------------------------------------------------------------

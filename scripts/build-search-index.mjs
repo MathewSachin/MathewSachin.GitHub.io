@@ -61,7 +61,7 @@ export function postUrlFromFilename(filename) {
  * Extract the post date as a YYYY-MM-DD string.
  * Preference order: frontmatter `date` field → filename prefix → first 10 chars of filename.
  */
-function parsePostDate(frontmatter, filename) {
+export function parsePostDate(frontmatter, filename) {
   if (frontmatter.date) {
     return String(frontmatter.date).slice(0, 10)
   }
@@ -73,7 +73,7 @@ function parsePostDate(frontmatter, filename) {
 }
 
 /** Normalise a frontmatter tags value to a plain string array. */
-function toStringArray(value) {
+export function toStringArray(value) {
   if (Array.isArray(value)) return value.map(String)
   return value ? [String(value)] : []
 }
