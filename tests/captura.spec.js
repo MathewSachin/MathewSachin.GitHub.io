@@ -196,20 +196,27 @@ test.describe('Captura Web Recorder', () => {
   });
 
   // ── Preferences persistence ──────────────────────────────────────────────────
+  // Each pref test uses a two-step selectOption to guarantee the change event
+  // always fires regardless of the element's prior value (which can persist
+  // across test runs when multiple spec files share the same origin).
 
   test('FPS preference is persisted to localStorage on change', async ({ page }) => {
+    // Step to default first so the second step always triggers a change event.
+    await page.selectOption('#fps-select', '30');
     await page.selectOption('#fps-select', '15');
     const stored = await page.evaluate(() => localStorage.getItem('captura-fps'));
     expect(stored).toBe('15');
   });
 
   test('quality preference is persisted to localStorage on change', async ({ page }) => {
+    await page.selectOption('#quality-select', '720');
     await page.selectOption('#quality-select', '1080');
     const stored = await page.evaluate(() => localStorage.getItem('captura-quality'));
     expect(stored).toBe('1080');
   });
 
   test('format preference is persisted to localStorage on change', async ({ page }) => {
+    await page.selectOption('#format-select', 'webm-vp9-opus');
     await page.selectOption('#format-select', 'mp4-h264-aac');
     const stored = await page.evaluate(() => localStorage.getItem('captura-format'));
     expect(stored).toBe('mp4-h264-aac');
@@ -225,8 +232,15 @@ test.describe('Captura Web Recorder', () => {
   });
 
   test('preferences are restored after page reload', async ({ page }) => {
+    // Two-step approach: first reset to defaults, then set targets, so the
+    // change event fires even if these values were left over by a prior test.
+    await page.selectOption('#fps-select', '30');
     await page.selectOption('#fps-select', '60');
+
+    await page.selectOption('#quality-select', '720');
     await page.selectOption('#quality-select', '480');
+
+    await page.selectOption('#format-select', 'webm-vp9-opus');
     await page.selectOption('#format-select', 'mp4-h264-aac');
 
     await page.reload();
