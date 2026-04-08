@@ -69,7 +69,7 @@ browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
   description: >
-    A 21-part series that takes you from your very first <kbd>F12</kbd> press all the way
+    A 22-part series that takes you from your very first <kbd>F12</kbd> press all the way
     to writing persistent browser scripts. Every technique builds on the last.
     Most chapters need nothing but a browser and a curious mind — the final chapter
     adds Tampermonkey to make your scripts persistent.
@@ -157,3 +157,5 @@ browser-hacks:
           blurb: "All three Instagram techniques bundled into one persistent userscript that injects a ⬇ button directly into the Instagram UI. Teaches: Tampermonkey/Greasemonkey userscripts, <code>@grant</code> directives, persistent DOM injection."
         - id: "/blog/2026/04/07/hacking-nyt-connections"
           blurb: "NYT Connections downloads the full answer JSON before you pick a single tile. Intercept it in the Network tab, then fetch and print all four colour-coded groups in one console command. Teaches: Fetch/XHR filtering, public JSON API exploitation, async IIFE pattern."
+        - id: "/blog/2026/04/08/hacking-nyt-spelling-bee"
+          blurb: "NYT Spelling Bee ships the full answer list — every valid word and every pangram — in a global <code>window.gameData</code> variable before you type a single letter. One console command reads it out; a bookmarklet wraps it in a collapsible floating panel. Teaches: reading game state from global JS variables, dynamic DOM overlay construction, IIFE scoping, bookmarklet UI patterns."
