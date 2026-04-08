@@ -1,1 +1,0 @@
-import{test}from"@playwright/test";import{opfsMockScript,runRecordingPipeline,verifyWebmFile}from"./captura-helpers.js";test("Full recording pipeline writes a WebM file to disk",async({page:i})=>{await i.addInitScript(opfsMockScript),await i.goto("/tools/captura/"),await i.click("#pick-dir-btn"),await runRecordingPipeline(i),await verifyWebmFile(i)});
