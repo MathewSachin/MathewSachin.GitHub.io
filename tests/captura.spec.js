@@ -236,7 +236,7 @@ test.describe('Captura Web Recorder', () => {
     // to whether a change event fires (e.g. when the element already holds the
     // same value as the first step of a two-step selectOption sequence).
     await page.evaluate(() => {
-      localStorage.setItem('captura-fps',    '60');
+      localStorage.setItem('captura-fps', '60');
       localStorage.setItem('captura-quality', '480');
       localStorage.setItem('captura-format', 'mp4-h264-aac');
     });
