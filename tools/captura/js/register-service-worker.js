@@ -17,6 +17,7 @@ export function registerServiceWorker() {
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (reloading) return;
+    if (!isPwa()) return;
     reloading = true;
     window.location.reload();
   });
