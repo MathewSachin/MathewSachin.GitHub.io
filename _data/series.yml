@@ -69,7 +69,7 @@ browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
   description: >
-    A 23-part series that takes you from your very first <kbd>F12</kbd> press all the way
+    A 24-part series that takes you from your very first <kbd>F12</kbd> press all the way
     to writing persistent browser scripts. Every technique builds on the last.
     Most chapters need nothing but a browser and a curious mind — the final chapter
     adds Tampermonkey to make your scripts persistent.
@@ -161,3 +161,15 @@ browser-hacks:
           blurb: "NYT Spelling Bee ships the full answer list — every valid word and every pangram — in a global <code>window.gameData</code> variable before you type a single letter. One console command reads it out; a bookmarklet wraps it in a collapsible floating panel. Teaches: reading game state from global JS variables, dynamic DOM overlay construction, IIFE scoping, bookmarklet UI patterns."
         - id: "/blog/2026/04/08/hacking-nyt-strands"
           blurb: "NYT Strands fetches the full puzzle payload — theme clue, spangram, and every theme word — from a public JSON endpoint before you place a single word. One <code>fetch()</code> call reads it all; a bookmarklet wraps it in a collapsible floating panel. Teaches: Fetch/XHR network sniffing, same-origin <code>fetch()</code>, local date construction, dynamic DOM overlay construction."
+
+    - title: "Level 6 — API Interception &amp; Response Spoofing"
+      icon: "fas fa-random"
+      intro: >
+        The final leap: instead of reading what a server sends, you replace it.
+        By monkey-patching <code>window.fetch</code> before the game loads,
+        you intercept outgoing requests mid-flight and hand the game a response
+        you fabricated yourself — the ultimate technique for bending any
+        API-driven browser game to your will.
+      posts:
+        - id: "/blog/2026/04/08/hacking-infinite-craft"
+          blurb: "Infinite Craft asks a server for every combination result. This script replaces <code>window.fetch</code> with its own version, intercepts the pair API call, and returns a fake response — letting you inject any item with any emoji as a brand-new discovery. Teaches: monkey-patching <code>window.fetch</code>, constructing <code>new Response()</code>, URL-targeted interception, queued injection pattern."
