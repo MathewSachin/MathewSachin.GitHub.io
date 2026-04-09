@@ -1,4 +1,5 @@
 ---
+layout: page
 title: Fate-Grand-Automata (FGA)
 tags: [fga, opencv, android, fgo]
 related:
