@@ -18,6 +18,7 @@ import { setupMediaSession, clearMediaSession }  from './media-session.js';
 import { registerServiceWorker }               from './register-service-worker.js';
 import { RecorderAPI }                         from './recorder-api.js';
 import { RecorderStateMachine, STATE, EVENT }  from './recorder-state-machine.js';
+import { trackEvent }                          from './analytics.js';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -181,6 +182,39 @@ function render(state) {
 
 machine.onStateChange((state, event, payload) => {
   render(state);
+
+  // ── Analytics ─────────────────────────────────────────────────────────────
+  // Capture elapsedSecs before resetTimer() zeroes it below.
+  if (state === STATE.RECORDING) {
+    if (event === EVENT.ENCODER_READY) {
+      trackEvent('captura_recording_start', {
+        fps:        payload?.fps,
+        quality:    payload?.quality,
+        format:     payload?.format,
+        has_webcam: payload?.webcamSelected,
+        has_mic:    payload?.micSelected,
+        sys_audio:  payload?.wantSysAudio,
+      });
+    } else if (event === EVENT.USER_RESUME) {
+      trackEvent('captura_recording_resume', { elapsed_secs: elapsedSecs });
+    }
+  } else if (state === STATE.PAUSED) {
+    trackEvent('captura_recording_pause', { elapsed_secs: elapsedSecs });
+  } else if (state === STATE.STOPPING) {
+    trackEvent('captura_recording_stop', { elapsed_secs: elapsedSecs, format: formatSel.value });
+  } else if (state === STATE.IDLE && event === EVENT.END_SESSION) {
+    trackEvent('captura_session_end');
+  }
+
+  if (event === EVENT.STREAMS_FAILED) {
+    trackEvent('captura_stream_failed', { error_name: payload?.name ?? 'unknown' });
+  } else if (state === STATE.ERROR) {
+    trackEvent('captura_error', { error_message: payload?.message ?? String(payload ?? '') });
+  }
+
+  if (event === EVENT.FINALIZE_DONE && payload) {
+    trackEvent('captura_recording_saved', { format: formatSel.value });
+  }
 
   // ── Timer ──────────────────────────────────────────────────────────────────
   if (state === STATE.RECORDING) {
@@ -372,6 +406,11 @@ if (!hasGetDisplayMedia) {
 
 restoreSimplePrefs();
 
+trackEvent('captura_page_view', {
+  has_screen_capture:  hasGetDisplayMedia,
+  has_file_system_api: hasFSA,
+});
+
 if (hasGetDisplayMedia) {
   navigator.mediaDevices.addEventListener('devicechange', enumerateDevices);
   enumerateDevices();
@@ -410,7 +449,10 @@ stopBtn.addEventListener('click', () => machine.transition(EVENT.USER_STOP));
 
 endSessionBtn.addEventListener('click', () => machine.transition(EVENT.END_SESSION));
 
-pickDirBtn.addEventListener('click', () => storage.pickDirectory());
+pickDirBtn.addEventListener('click', () => {
+  trackEvent('captura_folder_pick');
+  storage.pickDirectory();
+});
 
 // Error dialog close → return the machine to idle / session
 errorDialog?.addEventListener('close', () => {
@@ -420,10 +462,15 @@ errorDialog?.addEventListener('close', () => {
 });
 
 // Persist configuration changes to localStorage
-fpsSel     .addEventListener('change', () => savePref(PREFS.fps,      fpsSel.value));
-qualitySel .addEventListener('change', () => savePref(PREFS.quality,  qualitySel.value));
-formatSel  .addEventListener('change', () => savePref(PREFS.format,   formatSel.value));
-sysAudioChk.addEventListener('change', () => savePref(PREFS.sysAudio, sysAudioChk.checked));
+function saveAndTrackPref(key, value, analyticsKey) {
+  savePref(key, value);
+  trackEvent('captura_pref_change', { pref: analyticsKey, value: String(value) });
+}
+
+fpsSel     .addEventListener('change', () => saveAndTrackPref(PREFS.fps,      fpsSel.value,          'fps'));
+qualitySel .addEventListener('change', () => saveAndTrackPref(PREFS.quality,  qualitySel.value,      'quality'));
+formatSel  .addEventListener('change', () => saveAndTrackPref(PREFS.format,   formatSel.value,       'format'));
+sysAudioChk.addEventListener('change', () => saveAndTrackPref(PREFS.sysAudio, sysAudioChk.checked,   'sys_audio'));
 
 webcamSel.addEventListener('change', () => {
   savePref(PREFS.webcam, webcamSel.value);
