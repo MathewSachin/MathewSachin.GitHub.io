@@ -50,7 +50,7 @@ test.describe('Chrome Dino Hack post', () => {
   });
 
   test('speed copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('#speed-pre').locator('..').locator('.btn-clip');
+    const copyBtn = page.locator('[data-clipboard-target="#speed-pre"]');
     await expect(copyBtn).toBeVisible();
     await expect(copyBtn).toBeEnabled();
   });
@@ -79,7 +79,7 @@ test.describe('Chrome Dino Hack post', () => {
   });
 
   test('score copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('#score-pre').locator('..').locator('.btn-clip');
+    const copyBtn = page.locator('[data-clipboard-target="#score-pre"]');
     await expect(copyBtn).toBeVisible();
     await expect(copyBtn).toBeEnabled();
   });
@@ -114,7 +114,7 @@ test.describe('Chrome Dino Hack post', () => {
   });
 
   test('jump copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('#jump-pre').locator('..').locator('.btn-clip');
+    const copyBtn = page.locator('[data-clipboard-target="#jump-pre"]');
     await expect(copyBtn).toBeVisible();
     await expect(copyBtn).toBeEnabled();
   });
@@ -149,7 +149,7 @@ test.describe('Chrome Dino Hack post', () => {
   });
 
   test('ground copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('#ground-pre').locator('..').locator('.btn-clip');
+    const copyBtn = page.locator('[data-clipboard-target="#ground-pre"]');
     await expect(copyBtn).toBeVisible();
     await expect(copyBtn).toBeEnabled();
   });
