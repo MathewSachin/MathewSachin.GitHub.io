@@ -1,1 +1,0 @@
-export function epochToMs(e){return e>1e10?e:1e3*e}export function datetimeLocalToMs(e){return new Date(e).getTime()}
