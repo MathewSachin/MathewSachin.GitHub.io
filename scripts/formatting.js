@@ -116,9 +116,10 @@
                 if (shouldBeSticky === tocStickyActive) { return; }
                 tocStickyActive = shouldBeSticky;
                 if (shouldBeSticky) {
-                    // Reserve the space the card occupied so the page doesn't jump
+                    // Measure offsetHeight BEFORE applying position:fixed (line below) so the
+                    // sidebar retains the same occupied space and the page doesn't jump.
                     tocSidebar.style.minHeight = tocCard.offsetHeight + "px";
-                    // Always show the sticky card collapsed so it's out of the way
+                    // Collapse the TOC contents every time it becomes sticky so it stays compact.
                     if (tocCollapse) { tocCollapse.classList.remove("show"); }
                     if (tocToggle) { tocToggle.setAttribute("aria-expanded", "false"); }
                 } else {
