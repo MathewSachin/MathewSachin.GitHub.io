@@ -99,7 +99,10 @@
             // Mobile: float only the TOC card at the top of the viewport when scrolling up,
             //         but only after the TOC has scrolled completely off-screen.
             const mobileBreakpoint = window.matchMedia("(max-width: 767.98px)");
-            const tocCard = tocSidebar.querySelector(".toc-card");
+            // Select the specific TOC card that contains the collapse — not the affiliate sidebar
+            // card which also carries the .toc-card class and is hidden on mobile.
+            const tocCard = document.getElementById("toc-collapse") &&
+                document.getElementById("toc-collapse").closest(".toc-card");
             // Capture the stable scroll threshold once before any stickiness changes layout
             const tocOffscreenAt = tocSidebar.getBoundingClientRect().bottom + window.scrollY;
             let tocLastScrollY = window.scrollY;
