@@ -147,10 +147,15 @@
             window.addEventListener("resize", updateToc);
         }
 
-        // Track TOC link clicks
+        // Track TOC link clicks and collapse mobile TOC on selection
         tocLinks.forEach(function (a) {
             a.addEventListener("click", function () {
                 trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
+                // Collapse the TOC on mobile after the user taps a link
+                if (tocCollapse && tocCollapse.classList.contains("show")) {
+                    tocCollapse.classList.remove("show");
+                    if (tocToggle) { tocToggle.setAttribute("aria-expanded", "false"); }
+                }
             });
         });
     }
