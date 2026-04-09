@@ -11,7 +11,7 @@ redirect_from:
 ads: true
 ---
 
-{% picture fga.png alt="Logo" %}
+{% picture fga.png alt="Logo" width="200" %}
 
 Auto-battle app for F/GO (Android 7 or later, no need for root on phones).  
 
@@ -26,5 +26,7 @@ Download from: [https://fate-grand-automata.github.io](https://fate-grand-automa
 Need help? Check [Troubleshooting Guide](https://github.com/Fate-Grand-Automata/FGA/wiki/Troubleshooting)
 
 ---
+
+Check [Fate/Grand Automata: A Developer's Deep Dive]({% post_url /blog/2026-3-12-fate-grand-automata-developer-guide %}) for a detailed look into the architecture and implementation of FGA.
 
 Check [Dependency Injection of extension functions in Kotlin]({% post_url /blog/2023-04-14-dependency-injection-extension-functions-kotlin %}) to see a kind of a design pattern I came up with while implementing FGA.
