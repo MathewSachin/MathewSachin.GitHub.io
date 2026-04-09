@@ -47,25 +47,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 <small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
 </div>
 
-<script>
-function dinoApply(fn) {
-  var frame = document.getElementById('dino-game-frame');
-  if (!frame) return;
-  var w = frame.contentWindow;
-  if (!w || !w.Runner) return;
-  var runner = w.Runner.instance_ || w.Runner.getInstance();
-  if (!runner) return;
-  try { fn(w, runner); } catch(e) { console.error('Dino hack error:', e); }
-}
-// Prevent Up/Down arrow keys from scrolling the page while the game is in focus
-document.addEventListener('keydown', function(e) {
-  var frame = document.getElementById('dino-game-frame');
-  if (frame && document.activeElement === frame &&
-      (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === ' ')) {
-    e.preventDefault();
-  }
-}, { passive: false });
-</script>
+
 
 ## Opening Developer Tools / Chrome Console
 
@@ -143,25 +125,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 </div>
 <div id="speed-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).setSpeed(6){% endhighlight %}</div>
 </div>
-<script>
-(function() {
-  var DEFAULT = 6;
-  var slider = document.getElementById('speed-slider');
-  var input = document.getElementById('speed-input');
-  var code = document.querySelector('#speed-pre code');
-  function update(v) {
-    var val = Math.max(1, Math.min(1000, parseInt(v, 10) || DEFAULT));
-    slider.value = val;
-    input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).setSpeed(' + val + ')'; }
-    dinoApply(function(w, runner) { runner.setSpeed(val); });
-  }
-  slider.addEventListener('input', function() { update(this.value); });
-  input.addEventListener('input', function() { update(this.value); });
-  document.getElementById('speed-reset').addEventListener('click', function() { update(DEFAULT); });
-})();
-</script>
+
 
 ## Setting the Current Score
 
@@ -176,24 +140,7 @@ Want to jump right into the action with a specific score? You can set the score 
 </div>
 <div id="score-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025{% endhighlight %}</div>
 </div>
-<script>
-(function() {
-  var DEFAULT = 12345;
-  var input = document.getElementById('score-input');
-  var code = document.querySelector('#score-pre code');
-  function update(v) {
-    var val = parseInt(v, 10);
-    if (isNaN(val) || val < 0) val = 0;
-    if (val > 99999) val = 99999;
-    input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).distanceRan = ' + val + ' / 0.025'; }
-    dinoApply(function(w, runner) { runner.distanceRan = val / 0.025; });
-  }
-  input.addEventListener('input', function() { update(this.value); });
-  document.getElementById('score-reset').addEventListener('click', function() { update(DEFAULT); });
-})();
-</script>
+
 
 ##### How does it work?
 
@@ -219,25 +166,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
 </div>
 <div id="jump-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10){% endhighlight %}</div>
 </div>
-<script>
-(function() {
-  var DEFAULT = 10;
-  var slider = document.getElementById('jump-slider');
-  var input = document.getElementById('jump-input');
-  var code = document.querySelector('#jump-pre code');
-  function update(v) {
-    var val = Math.max(1, Math.min(50, parseInt(v, 10) || DEFAULT));
-    slider.value = val;
-    input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(' + val + ')'; }
-    dinoApply(function(w, runner) { runner.tRex.setJumpVelocity(val); });
-  }
-  slider.addEventListener('input', function() { update(this.value); });
-  input.addEventListener('input', function() { update(this.value); });
-  document.getElementById('jump-reset').addEventListener('click', function() { update(DEFAULT); });
-})();
-</script>
+
 
 Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
 
@@ -261,27 +190,7 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 </div>
 <div id="ground-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93{% endhighlight %}</div>
 </div>
-<script>
-(function() {
-  var DEFAULT = 93;
-  var slider = document.getElementById('ground-slider');
-  var input = document.getElementById('ground-input');
-  var code = document.querySelector('#ground-pre code');
-  function update(v) {
-    var val = parseInt(v, 10);
-    if (isNaN(val) || val < 0) val = 0;
-    if (val > 130) val = 130;
-    slider.value = val;
-    input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = ' + val; }
-    dinoApply(function(w, runner) { runner.tRex.groundYPos = val; });
-  }
-  slider.addEventListener('input', function() { update(this.value); });
-  input.addEventListener('input', function() { update(this.value); });
-  document.getElementById('ground-reset').addEventListener('click', function() { update(DEFAULT); });
-})();
-</script>
+<script src="{{ '/blog/chrome-dino-hack.js' | relative_url }}" defer></script>
 
 ## Auto-play
 
