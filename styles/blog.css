@@ -627,6 +627,20 @@ figure.highlight pre {
   color: var(--color-accent);
 }
 
+/* Mobile: float the TOC card at the top of the viewport when scrolling up */
+@media (max-width: 767.98px) {
+  #toc-sidebar.toc-mobile-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
 /* Mobile TOC collapsible toggle */
 .toc-mobile-toggle {
   display: flex;

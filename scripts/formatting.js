@@ -54,11 +54,15 @@
         updateProgress();
     }
 
-    // Back to top button
+    // Back to top button — only visible when scrolling up past the threshold
     const backToTop = document.getElementById("back-to-top");
     if (backToTop) {
+        let backToTopLastY = window.scrollY;
         window.addEventListener("scroll", function () {
-            backToTop.classList.toggle("visible", window.scrollY > BACK_TO_TOP_THRESHOLD);
+            const currentScrollY = window.scrollY;
+            const scrollingUp = currentScrollY < backToTopLastY;
+            backToTopLastY = currentScrollY;
+            backToTop.classList.toggle("visible", scrollingUp && currentScrollY > BACK_TO_TOP_THRESHOLD);
         });
         backToTop.addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -91,6 +95,17 @@
 
         if (headings.length >= 3) {
             tocSidebar.style.display = "";
+
+            // Mobile: float the TOC card at the top of the viewport only when scrolling up
+            const mobileBreakpoint = window.matchMedia("(max-width: 767.98px)");
+            let tocLastScrollY = window.scrollY;
+            window.addEventListener("scroll", function () {
+                if (!mobileBreakpoint.matches) { return; }
+                const currentScrollY = window.scrollY;
+                const scrollingUp = currentScrollY < tocLastScrollY;
+                tocLastScrollY = currentScrollY;
+                tocSidebar.classList.toggle("toc-mobile-sticky", scrollingUp && currentScrollY > 0);
+            });
 
             // Scroll-spy: highlight active section in TOC nav
             function updateToc() {
