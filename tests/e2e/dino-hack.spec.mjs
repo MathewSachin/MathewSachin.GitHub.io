@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const DINO_HACK_URL = '/blog/2016/11/05/chrome-dino-hack/';
+const DINO_HACK_URL = '/blog/2016/11/05/chrome-dino-hack.html';
 
 test.describe('Chrome Dino Hack post', () => {
   test.beforeEach(async ({ page }) => {
