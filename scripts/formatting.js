@@ -100,15 +100,16 @@
             //         but only after the TOC has scrolled completely off-screen.
             const mobileBreakpoint = window.matchMedia("(max-width: 767.98px)");
             const tocCard = tocSidebar.querySelector(".toc-card");
+            // Capture the stable scroll threshold once before any stickiness changes layout
+            const tocOffscreenAt = tocSidebar.getBoundingClientRect().bottom + window.scrollY;
             let tocLastScrollY = window.scrollY;
             window.addEventListener("scroll", function () {
                 if (!mobileBreakpoint.matches || !tocCard) { return; }
                 const currentScrollY = window.scrollY;
                 const scrollingUp = currentScrollY < tocLastScrollY;
                 tocLastScrollY = currentScrollY;
-                // Only make sticky once the original TOC position has scrolled above the viewport
-                const pastToc = tocSidebar.getBoundingClientRect().bottom < 0;
-                tocCard.classList.toggle("toc-mobile-sticky", scrollingUp && pastToc);
+                // Only make sticky once we've scrolled past the TOC's original bottom position
+                tocCard.classList.toggle("toc-mobile-sticky", scrollingUp && currentScrollY > tocOffscreenAt);
             });
 
             // Scroll-spy: highlight active section in TOC nav
