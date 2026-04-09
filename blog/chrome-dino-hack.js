@@ -25,6 +25,16 @@ function trackEvent(name, params) {
   }
 }
 
+// Returns a debounced version of fn that delays invocation by `wait` ms
+function debounce(fn, wait) {
+  var timer;
+  return function() {
+    var ctx = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function() { fn.apply(ctx, args); }, wait);
+  };
+}
+
 // Track when the user clicks into the dino game iframe
 (function() {
   var frame = document.getElementById('dino-game-frame');
@@ -46,6 +56,9 @@ function trackEvent(name, params) {
   var slider = document.getElementById('speed-slider');
   var input = document.getElementById('speed-input');
   var code = document.querySelector('#speed-pre code');
+  var trackSpeed = debounce(function(val) {
+    trackEvent('dino_speed_change', { event_category: 'dino_hack', value: val });
+  }, 500);
   function update(v) {
     var val = Math.max(1, Math.min(1000, parseInt(v, 10) || DEFAULT));
     slider.value = val;
@@ -56,11 +69,11 @@ function trackEvent(name, params) {
   }
   slider.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_speed_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackSpeed(parseInt(this.value, 10));
   });
   input.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_speed_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackSpeed(parseInt(this.value, 10));
   });
   document.getElementById('speed-reset').addEventListener('click', function() {
     update(DEFAULT);
@@ -73,6 +86,9 @@ function trackEvent(name, params) {
   var DEFAULT = 12345;
   var input = document.getElementById('score-input');
   var code = document.querySelector('#score-pre code');
+  var trackScore = debounce(function(val) {
+    trackEvent('dino_score_change', { event_category: 'dino_hack', value: val });
+  }, 500);
   function update(v) {
     var val = parseInt(v, 10);
     if (isNaN(val) || val < 0) val = 0;
@@ -84,7 +100,7 @@ function trackEvent(name, params) {
   }
   input.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_score_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackScore(parseInt(this.value, 10));
   });
   document.getElementById('score-reset').addEventListener('click', function() {
     update(DEFAULT);
@@ -98,6 +114,9 @@ function trackEvent(name, params) {
   var slider = document.getElementById('jump-slider');
   var input = document.getElementById('jump-input');
   var code = document.querySelector('#jump-pre code');
+  var trackJump = debounce(function(val) {
+    trackEvent('dino_jump_change', { event_category: 'dino_hack', value: val });
+  }, 500);
   function update(v) {
     var val = Math.max(1, Math.min(50, parseInt(v, 10) || DEFAULT));
     slider.value = val;
@@ -108,11 +127,11 @@ function trackEvent(name, params) {
   }
   slider.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_jump_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackJump(parseInt(this.value, 10));
   });
   input.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_jump_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackJump(parseInt(this.value, 10));
   });
   document.getElementById('jump-reset').addEventListener('click', function() {
     update(DEFAULT);
@@ -126,6 +145,9 @@ function trackEvent(name, params) {
   var slider = document.getElementById('ground-slider');
   var input = document.getElementById('ground-input');
   var code = document.querySelector('#ground-pre code');
+  var trackGround = debounce(function(val) {
+    trackEvent('dino_ground_change', { event_category: 'dino_hack', value: val });
+  }, 500);
   function update(v) {
     var val = parseInt(v, 10);
     if (isNaN(val) || val < 0) val = 0;
@@ -138,11 +160,11 @@ function trackEvent(name, params) {
   }
   slider.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_ground_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackGround(parseInt(this.value, 10));
   });
   input.addEventListener('input', function() {
     update(this.value);
-    trackEvent('dino_ground_change', { event_category: 'dino_hack', value: parseInt(this.value, 10) });
+    trackGround(parseInt(this.value, 10));
   });
   document.getElementById('ground-reset').addEventListener('click', function() {
     update(DEFAULT);
