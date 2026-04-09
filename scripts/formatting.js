@@ -96,15 +96,19 @@
         if (headings.length >= 3) {
             tocSidebar.style.display = "";
 
-            // Mobile: float the TOC card at the top of the viewport only when scrolling up
+            // Mobile: float only the TOC card at the top of the viewport when scrolling up,
+            //         but only after the TOC has scrolled completely off-screen.
             const mobileBreakpoint = window.matchMedia("(max-width: 767.98px)");
+            const tocCard = tocSidebar.querySelector(".toc-card");
             let tocLastScrollY = window.scrollY;
             window.addEventListener("scroll", function () {
-                if (!mobileBreakpoint.matches) { return; }
+                if (!mobileBreakpoint.matches || !tocCard) { return; }
                 const currentScrollY = window.scrollY;
                 const scrollingUp = currentScrollY < tocLastScrollY;
                 tocLastScrollY = currentScrollY;
-                tocSidebar.classList.toggle("toc-mobile-sticky", scrollingUp && currentScrollY > 0);
+                // Only make sticky once the original TOC position has scrolled above the viewport
+                const pastToc = tocSidebar.getBoundingClientRect().bottom < 0;
+                tocCard.classList.toggle("toc-mobile-sticky", scrollingUp && pastToc);
             });
 
             // Scroll-spy: highlight active section in TOC nav
