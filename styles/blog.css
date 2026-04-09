@@ -627,6 +627,13 @@ figure.highlight pre {
   color: var(--color-accent);
 }
 
+/* Slide-in keyframe for the sticky mobile TOC card — defined at root level so
+   CSS minifiers and autoprefixers don't drop it from inside a @media block */
+@keyframes toc-slide-down {
+  from { transform: translateY(calc(-100% - 0.75rem)); }
+  to   { transform: translateY(0); }
+}
+
 /* Mobile: float only the TOC card at the top of the viewport when scrolling up */
 @media (max-width: 767.98px) {
   .toc-card.toc-mobile-sticky {
@@ -636,12 +643,7 @@ figure.highlight pre {
     right: 1rem;
     z-index: 1030;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    animation: toc-slide-down 0.25s ease;
-  }
-
-  @keyframes toc-slide-down {
-    from { transform: translateY(calc(-100% - 0.75rem)); }
-    to   { transform: translateY(0); }
+    animation: toc-slide-down 0.35s ease;
   }
 
   /* Smooth expand/collapse animation for mobile TOC — use max-height instead
