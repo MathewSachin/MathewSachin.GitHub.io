@@ -105,13 +105,26 @@
             // Capture the stable scroll threshold once before any stickiness changes layout
             const tocOffscreenAt = tocSidebar.getBoundingClientRect().bottom + window.scrollY;
             let tocLastScrollY = window.scrollY;
+            let tocStickyActive = false;
             window.addEventListener("scroll", function () {
                 if (!mobileBreakpoint.matches || !tocCard) { return; }
                 const currentScrollY = window.scrollY;
                 const scrollingUp = currentScrollY < tocLastScrollY;
                 tocLastScrollY = currentScrollY;
                 // Only make sticky once we've scrolled past the TOC's original bottom position
-                tocCard.classList.toggle("toc-mobile-sticky", scrollingUp && currentScrollY > tocOffscreenAt);
+                const shouldBeSticky = scrollingUp && currentScrollY > tocOffscreenAt;
+                if (shouldBeSticky === tocStickyActive) { return; }
+                tocStickyActive = shouldBeSticky;
+                if (shouldBeSticky) {
+                    // Reserve the space the card occupied so the page doesn't jump
+                    tocSidebar.style.minHeight = tocCard.offsetHeight + "px";
+                    // Always show the sticky card collapsed so it's out of the way
+                    if (tocCollapse) { tocCollapse.classList.remove("show"); }
+                    if (tocToggle) { tocToggle.setAttribute("aria-expanded", "false"); }
+                } else {
+                    tocSidebar.style.minHeight = "";
+                }
+                tocCard.classList.toggle("toc-mobile-sticky", shouldBeSticky);
             });
 
             // Scroll-spy: highlight active section in TOC nav

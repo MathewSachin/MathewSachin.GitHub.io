@@ -631,11 +631,17 @@ figure.highlight pre {
 @media (max-width: 767.98px) {
   .toc-card.toc-mobile-sticky {
     position: fixed;
-    top: 0;
+    top: 0.75rem;
     left: 1rem;
     right: 1rem;
     z-index: 1030;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: toc-slide-down 0.25s ease;
+  }
+
+  @keyframes toc-slide-down {
+    from { transform: translateY(calc(-100% - 0.75rem)); }
+    to   { transform: translateY(0); }
   }
 
   /* Smooth expand/collapse animation for mobile TOC — use max-height instead
