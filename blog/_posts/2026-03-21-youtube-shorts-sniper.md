@@ -209,3 +209,7 @@ The core philosophy is the same: use `captureStream` to intercept what the brows
 ---
 
 > **Disclaimer:** This script is provided for **educational purposes only**. It demonstrates browser APIs (`captureStream`, `MediaRecorder`, `timeupdate`) that are freely documented and publicly available. Downloading content from YouTube may be against [YouTube's Terms of Service](https://www.youtube.com/static?template=terms). Only use this on content you own, have explicit permission to download, or that is explicitly licensed for offline use. Respect copyright and the work of content creators.
+
+---
+
+*Looking for a simpler YouTube trick? The **[YouTube Thumbnail Grabber](/tools/yt-thumbnail/)** lets you fetch the full-resolution thumbnail of any video — no scripts required, just paste the URL.*
