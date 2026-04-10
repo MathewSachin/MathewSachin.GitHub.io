@@ -163,6 +163,8 @@ browser-hacks:
           blurb: "NYT Strands fetches the full puzzle payload — theme clue, spangram, and every theme word — from a public JSON endpoint before you place a single word. One <code>fetch()</code> call reads it all; a bookmarklet wraps it in a collapsible floating panel. Teaches: Fetch/XHR network sniffing, same-origin <code>fetch()</code>, local date construction, dynamic DOM overlay construction."
         - id: "/blog/2026/04/10/whatsapp-web-devtools-statuses"
           blurb: "WhatsApp has no download button for Statuses. DevTools does — and it's already in your browser. Extracts photo Statuses via blob URLs in the Elements panel, downloads video Statuses with the Network tab Media filter, and bypasses CSS <code>user-select: none</code> to copy 'uncopyable' text Statuses. No extensions, no code."
+        - id: "/blog/2026/04/10/pinterest-devtools-hacks"
+          blurb: "Pinterest's login wall is three layers deep: a modal, a click-shield overlay, and a CSS scroll-lock. This post takes each one down with Inspect Element, then shows how to rewrite the CDN URL to pull the full-resolution original instead of the compressed thumbnail. Teaches: DOM element deletion, <code>overflow: hidden</code> CSS override, CDN URL structure."
 
     - title: "Level 6 — API Interception &amp; Response Spoofing"
       icon: "fas fa-random"
