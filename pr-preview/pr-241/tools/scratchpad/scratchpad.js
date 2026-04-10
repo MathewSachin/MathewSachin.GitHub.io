@@ -1,0 +1,1 @@
+export function countWords(t){return""===t.trim()?0:t.trim().split(/\s+/).length}
