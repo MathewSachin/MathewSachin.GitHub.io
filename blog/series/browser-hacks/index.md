@@ -1,7 +1,7 @@
 ---
 layout: series
 title: "Browser Hacks: From Zero to Browser Wizard"
-description: "An 18-part series that takes you from your very first F12 press to writing persistent userscripts — mostly just your browser, with Tampermonkey for the final chapter."
+description: "A 26-part series that takes you from your very first F12 press to writing persistent userscripts — mostly just your browser, with Tampermonkey for the final chapter."
 ads: true
 ---
 
