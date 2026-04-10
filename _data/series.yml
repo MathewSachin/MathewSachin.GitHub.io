@@ -69,7 +69,7 @@ browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
   description: >
-    A 26-part series that takes you from your very first <kbd>F12</kbd> press all the way
+    A 27-part series that takes you from your very first <kbd>F12</kbd> press all the way
     to writing persistent browser scripts. Every technique builds on the last.
     Most chapters need nothing but a browser and a curious mind — the final chapter
     adds Tampermonkey to make your scripts persistent.
@@ -165,6 +165,8 @@ browser-hacks:
           blurb: "WhatsApp has no download button for Statuses. DevTools does — and it's already in your browser. Extracts photo Statuses via blob URLs in the Elements panel, downloads video Statuses with the Network tab Media filter, and bypasses CSS <code>user-select: none</code> to copy 'uncopyable' text Statuses. No extensions, no code."
         - id: "/blog/2026/04/10/pinterest-devtools-hacks"
           blurb: "Pinterest's login wall is three layers deep: a modal, a click-shield overlay, and a CSS scroll-lock. This post takes each one down with Inspect Element, then shows how to rewrite the CDN URL to pull the full-resolution original instead of the compressed thumbnail. Teaches: DOM element deletion, <code>overflow: hidden</code> CSS override, CDN URL structure."
+        - id: "/blog/2026/04/10/quora-devtools-bypass"
+          blurb: "Quora wraps its answers in a login modal, a click-shield overlay, and a <code>filter: blur()</code> CSS wall. The <code>?share=1</code> URL trick bypasses the wall on reload; the Triple Threat (DOM deletion + a one-line console command) clears all three layers without leaving the page. Teaches: URL query parameters, DOM element deletion, CSS filter override, <code>querySelectorAll</code> console scripting."
 
     - title: "Level 6 — API Interception &amp; Response Spoofing"
       icon: "fas fa-random"
