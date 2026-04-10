@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300">
+  <!-- Background -->
+  <rect width="480" height="300" rx="8" fill="#f1f3f4" stroke="#dadce0" stroke-width="1"/>
+  <!-- Title bar -->
+  <rect width="480" height="38" rx="8" fill="#3c4043"/>
+  <rect x="0" y="30" width="480" height="8" fill="#3c4043"/>
+  <!-- Traffic lights -->
+  <circle cx="18" cy="19" r="6" fill="#ff5f56"/>
+  <circle cx="38" cy="19" r="6" fill="#ffbd2e"/>
+  <circle cx="58" cy="19" r="6" fill="#27c93f"/>
+  <!-- Address bar -->
+  <rect x="80" y="8" width="320" height="22" rx="11" fill="#ffffff"/>
+  <text x="240" y="23" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#5f6368">chrome://dino</text>
+
+  <!-- Game canvas area -->
+  <rect x="0" y="38" width="480" height="140" fill="#ffffff"/>
+  <!-- Ground line -->
+  <line x1="0" y1="148" x2="480" y2="148" stroke="#535353" stroke-width="2"/>
+
+  <!-- Score -->
+  <text x="440" y="60" font-family="monospace" font-size="12" text-anchor="end" fill="#535353">00450</text>
+
+  <!-- Dino (simple pixelated rectangle shapes, mid-jump at y=100) -->
+  <!-- Body -->
+  <rect x="80" y="98" width="24" height="22" fill="#535353"/>
+  <!-- Head -->
+  <rect x="92" y="86" width="18" height="16" fill="#535353"/>
+  <!-- Eye -->
+  <rect x="104" y="89" width="4" height="4" fill="#ffffff"/>
+  <!-- Mouth / jaw -->
+  <rect x="108" y="97" width="6" height="3" fill="#535353"/>
+  <!-- Legs (mid-jump: both down) -->
+  <rect x="84" y="120" width="6" height="10" fill="#535353"/>
+  <rect x="94" y="120" width="6" height="10" fill="#535353"/>
+  <!-- Tail -->
+  <rect x="68" y="104" width="14" height="8" fill="#535353"/>
+  <rect x="62" y="110" width="8" height="6" fill="#535353"/>
+
+  <!-- Cactus obstacle -->
+  <!-- Main stem -->
+  <rect x="220" y="118" width="10" height="30" fill="#535353"/>
+  <!-- Left arm -->
+  <rect x="210" y="126" width="12" height="8" fill="#535353"/>
+  <rect x="210" y="118" width="8" height="12" fill="#535353"/>
+  <!-- Right arm -->
+  <rect x="228" y="122" width="12" height="8" fill="#535353"/>
+  <rect x="232" y="114" width="8" height="14" fill="#535353"/>
+
+  <!-- Second cactus -->
+  <rect x="270" y="122" width="8" height="26" fill="#535353"/>
+  <rect x="262" y="128" width="10" height="6" fill="#535353"/>
+  <rect x="276" y="126" width="10" height="6" fill="#535353"/>
+
+  <!-- Cloud -->
+  <ellipse cx="350" cy="70" rx="30" ry="12" fill="#e8e8e8"/>
+  <ellipse cx="330" cy="74" rx="18" ry="10" fill="#e8e8e8"/>
+  <ellipse cx="370" cy="74" rx="20" ry="10" fill="#e8e8e8"/>
+
+  <!-- DevTools panel divider -->
+  <rect x="0" y="178" width="480" height="1" fill="#5f6368"/>
+
+  <!-- DevTools console panel -->
+  <rect x="0" y="179" width="480" height="121" fill="#1e1e1e"/>
+  <!-- DevTools tabs bar -->
+  <rect x="0" y="179" width="480" height="26" fill="#292929"/>
+  <text x="16" y="196" font-family="Arial, sans-serif" font-size="10" fill="#9e9e9e">Elements</text>
+  <text x="72" y="196" font-family="Arial, sans-serif" font-size="10" fill="#e8e8e8">Console</text>
+  <!-- Active tab underline -->
+  <line x1="72" y1="204" x2="112" y2="204" stroke="#8ab4f8" stroke-width="2"/>
+  <text x="120" y="196" font-family="Arial, sans-serif" font-size="10" fill="#9e9e9e">Sources</text>
+  <text x="172" y="196" font-family="Arial, sans-serif" font-size="10" fill="#9e9e9e">Network</text>
+
+  <!-- Console prompt -->
+  <text x="14" y="222" font-family="monospace" font-size="10" fill="#9e9e9e">▸</text>
+  <text x="24" y="222" font-family="monospace" font-size="10" fill="#4ec9b0">const</text>
+  <text x="58" y="222" font-family="monospace" font-size="10" fill="#9cdcfe"> autoPlay </text>
+  <text x="116" y="222" font-family="monospace" font-size="10" fill="#d4d4d4">=</text>
+  <text x="124" y="222" font-family="monospace" font-size="10" fill="#4ec9b0"> setInterval</text>
+  <text x="200" y="222" font-family="monospace" font-size="10" fill="#d4d4d4">(</text>
+  <text x="206" y="222" font-family="monospace" font-size="10" fill="#569cd6">function</text>
+  <text x="252" y="222" font-family="monospace" font-size="10" fill="#d4d4d4">() {</text>
+
+  <text x="24" y="238" font-family="monospace" font-size="10" fill="#4ec9b0">  const</text>
+  <text x="64" y="238" font-family="monospace" font-size="10" fill="#9cdcfe"> obstacle </text>
+  <text x="118" y="238" font-family="monospace" font-size="10" fill="#d4d4d4">=</text>
+  <text x="126" y="238" font-family="monospace" font-size="10" fill="#9cdcfe"> Runner</text>
+  <text x="168" y="238" font-family="monospace" font-size="10" fill="#d4d4d4">.</text>
+  <text x="173" y="238" font-family="monospace" font-size="10" fill="#dcdcaa">getInstance</text>
+  <text x="244" y="238" font-family="monospace" font-size="10" fill="#d4d4d4">().</text>
+  <text x="258" y="238" font-family="monospace" font-size="10" fill="#9cdcfe">horizon</text>
+  <text x="302" y="238" font-family="monospace" font-size="10" fill="#d4d4d4">.</text>
+  <text x="307" y="238" font-family="monospace" font-size="10" fill="#9cdcfe">obstacles</text>
+  <text x="361" y="238" font-family="monospace" font-size="10" fill="#d4d4d4">[</text>
+  <text x="366" y="238" font-family="monospace" font-size="10" fill="#b5cea8">0</text>
+  <text x="372" y="238" font-family="monospace" font-size="10" fill="#d4d4d4">]</text>
+
+  <text x="24" y="254" font-family="monospace" font-size="10" fill="#4ec9b0">  if</text>
+  <text x="44" y="254" font-family="monospace" font-size="10" fill="#d4d4d4"> (obstacle) </text>
+  <text x="114" y="254" font-family="monospace" font-size="10" fill="#dcdcaa">dispatchKey</text>
+  <text x="184" y="254" font-family="monospace" font-size="10" fill="#d4d4d4">(</text>
+  <text x="189" y="254" font-family="monospace" font-size="10" fill="#ce9178">'keydown'</text>
+  <text x="245" y="254" font-family="monospace" font-size="10" fill="#d4d4d4">,</text>
+  <text x="250" y="254" font-family="monospace" font-size="10" fill="#b5cea8"> 32</text>
+  <text x="268" y="254" font-family="monospace" font-size="10" fill="#d4d4d4">);</text>
+
+  <text x="14" y="270" font-family="monospace" font-size="10" fill="#d4d4d4">}, </text>
+  <text x="30" y="270" font-family="monospace" font-size="10" fill="#b5cea8">150</text>
+  <text x="48" y="270" font-family="monospace" font-size="10" fill="#d4d4d4">);</text>
+
+  <!-- Blinking cursor -->
+  <rect x="62" y="260" width="6" height="11" fill="#d4d4d4" opacity="0.8"/>
+</svg>
