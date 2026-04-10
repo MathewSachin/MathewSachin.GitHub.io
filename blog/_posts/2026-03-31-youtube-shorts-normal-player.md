@@ -149,4 +149,4 @@ Drop a comment below if you found this useful, or if you know other YouTube URL 
 
 ---
 
-*If you also need the raw thumbnail image of any YouTube video, check out the **[YouTube Thumbnail Grabber](/tools/yt-thumbnail/)** — paste any YouTube URL and download the full-resolution thumbnail JPG in one click.*
+*If you also need the raw thumbnail image of any YouTube video, check out the **<a href="{{ '/tools/yt-thumbnail/' | relative_url }}">YouTube Thumbnail Grabber</a>** — paste any YouTube URL and download the full-resolution thumbnail JPG in one click.*

@@ -212,4 +212,4 @@ The core philosophy is the same: use `captureStream` to intercept what the brows
 
 ---
 
-*Looking for a simpler YouTube trick? The **[YouTube Thumbnail Grabber](/tools/yt-thumbnail/)** lets you fetch the full-resolution thumbnail of any video — no scripts required, just paste the URL.*
+*Looking for a simpler YouTube trick? The **<a href="{{ '/tools/yt-thumbnail/' | relative_url }}">YouTube Thumbnail Grabber</a>** lets you fetch the full-resolution thumbnail of any video — no scripts required, just paste the URL.*
