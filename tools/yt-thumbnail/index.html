@@ -44,20 +44,20 @@ ads: true
 <script type="module">
 import { extractVideoId, thumbnailUrl, getResolutions } from './yt-thumbnail.js';
 
-var input    = document.getElementById('yt-input');
-var btn      = document.getElementById('grab-btn');
-var errEl    = document.getElementById('yt-error');
-var result   = document.getElementById('yt-result');
-var preview  = document.getElementById('yt-preview');
-var resSel   = document.getElementById('yt-res-select');
-var openBtn  = document.getElementById('yt-open-btn');
-var dlBtn    = document.getElementById('yt-download-btn');
+const input    = document.getElementById('yt-input');
+const btn      = document.getElementById('grab-btn');
+const errEl    = document.getElementById('yt-error');
+const result   = document.getElementById('yt-result');
+const preview  = document.getElementById('yt-preview');
+const resSel   = document.getElementById('yt-res-select');
+const openBtn  = document.getElementById('yt-open-btn');
+const dlBtn    = document.getElementById('yt-download-btn');
 
-var currentId = null;
+let currentId = null;
 
 // Populate resolution dropdown once
 getResolutions().forEach(function (r) {
-  var opt = document.createElement('option');
+  const opt = document.createElement('option');
   opt.value = r.key;
   opt.textContent = r.label;
   resSel.appendChild(opt);
@@ -76,7 +76,8 @@ function clearError() {
 
 function updatePreview() {
   if (!currentId) return;
-  var url = thumbnailUrl(currentId, resSel.value);
+  // thumbnailUrl validates the key against the known-safe list
+  const url = thumbnailUrl(currentId, resSel.value);
   preview.src = url;
   openBtn.href = url;
   dlBtn.href = url;
@@ -85,7 +86,7 @@ function updatePreview() {
 
 btn.addEventListener('click', function () {
   clearError();
-  var id = extractVideoId(input.value);
+  const id = extractVideoId(input.value);
   if (!id) {
     showError('Could not find a valid YouTube video ID. Paste a full YouTube URL or the 11-character video ID.');
     return;
