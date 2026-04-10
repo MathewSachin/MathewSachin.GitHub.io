@@ -117,6 +117,19 @@ The PR preview workflow triggers automatically on every push to a PR branch and 
 
 All code changes (anything that is not a self-contained blog post with no interactive JS) must go through a pull request so the build, tests, and PR preview run via GitHub Actions.
 
+## Internal Links — Always Use `relative_url`
+
+All internal references to assets (images, JS, CSS) and pages **must** go through the `relative_url` filter so they resolve correctly both on the main site and on PR preview deployments (which are served from a sub-path):
+
+```liquid
+<link rel="stylesheet" href="{{ '/styles/blog.css' | relative_url }}">
+<script src="{{ '/blog/chrome-dino-hack.js' | relative_url }}"></script>
+<img src="{{ '/images/screenshot.png' | relative_url }}" alt="...">
+<a href="{{ '/tools/base64/' | relative_url }}">Base64 tool</a>
+```
+
+Never hard-code absolute paths (e.g. `href="/styles/blog.css"`) — they break on PR preview URLs.
+
 ## Linting / HTML Proofer
 
 The build pipeline runs `htmlproofer` on the generated `_site/`. Ensure all internal links are valid and no `href` targets are broken.
