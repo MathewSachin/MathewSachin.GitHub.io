@@ -146,3 +146,7 @@ You're simply telling YouTube which player skin to use to display a video you ha
 Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡
 
 Drop a comment below if you found this useful, or if you know other YouTube URL tricks! 👇
+
+---
+
+*If you also need the raw thumbnail image of any YouTube video, check out the **<a href="{{ '/tools/yt-thumbnail/' | relative_url }}">YouTube Thumbnail Grabber</a>** — paste any YouTube URL and download the full-resolution thumbnail JPG in one click.*
