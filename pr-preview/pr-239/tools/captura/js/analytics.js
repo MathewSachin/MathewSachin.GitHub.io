@@ -1,1 +1,0 @@
-export function trackEvent(t,n){try{"function"==typeof window.gtag&&window.gtag("event",t,n||{})}catch(t){}}
