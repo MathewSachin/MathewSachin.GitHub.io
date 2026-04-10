@@ -69,7 +69,7 @@ browser-hacks:
   name: "Browser Hacks"
   url: "/blog/series/browser-hacks/"
   description: >
-    A 24-part series that takes you from your very first <kbd>F12</kbd> press all the way
+    A 25-part series that takes you from your very first <kbd>F12</kbd> press all the way
     to writing persistent browser scripts. Every technique builds on the last.
     Most chapters need nothing but a browser and a curious mind — the final chapter
     adds Tampermonkey to make your scripts persistent.
@@ -161,6 +161,8 @@ browser-hacks:
           blurb: "NYT Spelling Bee ships the full answer list — every valid word and every pangram — in a global <code>window.gameData</code> variable before you type a single letter. One console command reads it out; a bookmarklet wraps it in a collapsible floating panel. Teaches: reading game state from global JS variables, dynamic DOM overlay construction, IIFE scoping, bookmarklet UI patterns."
         - id: "/blog/2026/04/08/hacking-nyt-strands"
           blurb: "NYT Strands fetches the full puzzle payload — theme clue, spangram, and every theme word — from a public JSON endpoint before you place a single word. One <code>fetch()</code> call reads it all; a bookmarklet wraps it in a collapsible floating panel. Teaches: Fetch/XHR network sniffing, same-origin <code>fetch()</code>, local date construction, dynamic DOM overlay construction."
+        - id: "/blog/2026/04/10/whatsapp-web-devtools-statuses"
+          blurb: "WhatsApp has no download button for Statuses. DevTools does — and it's already in your browser. Extracts photo Statuses via blob URLs in the Elements panel, downloads video Statuses with the Network tab Media filter, and bypasses CSS <code>user-select: none</code> to copy 'uncopyable' text Statuses. No extensions, no code."
 
     - title: "Level 6 — API Interception &amp; Response Spoofing"
       icon: "fas fa-random"
