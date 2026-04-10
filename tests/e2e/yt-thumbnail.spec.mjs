@@ -74,11 +74,11 @@ test.describe('YouTube Thumbnail Grabber tool', () => {
     await expect(page.locator('#yt-result')).not.toHaveClass(/d-none/);
   });
 
-  test('download link has correct filename', async ({ page }) => {
+  test('download button has correct filename stored', async ({ page }) => {
     await page.locator('#yt-input').fill('dQw4w9WgXcQ');
     await page.locator('#grab-btn').click();
     await expect(page.locator('#yt-download-btn')).toHaveAttribute(
-      'download',
+      'data-filename',
       'thumbnail-dQw4w9WgXcQ-maxresdefault.jpg'
     );
   });

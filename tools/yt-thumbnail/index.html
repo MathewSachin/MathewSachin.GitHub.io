@@ -21,7 +21,7 @@ ads: true
   <div id="yt-result" class="mt-4 d-none">
     <div class="mb-3">
       <img id="yt-preview" alt="YouTube thumbnail preview"
-        class="img-fluid rounded border" style="max-width:640px;" data-proofer-ignore>
+        class="img-fluid rounded border d-block" data-proofer-ignore>
     </div>
 
     <div class="mb-3">
@@ -34,10 +34,10 @@ ads: true
         class="btn btn-outline-secondary">
         <i class="fas fa-external-link-alt me-1"></i>Open Image
       </a>
-      <a id="yt-download-btn" href="#" download=""
+      <button id="yt-download-btn" type="button"
         class="btn btn-primary">
         <i class="fas fa-download me-1"></i>Download
-      </a>
+      </button>
     </div>
   </div>
 
@@ -80,8 +80,8 @@ function updatePreview() {
   const url = thumbnailUrl(currentId, resSel.value);
   preview.src = url;
   openBtn.href = url;
-  dlBtn.href = url;
-  dlBtn.download = 'thumbnail-' + currentId + '-' + resSel.value + '.jpg';
+  dlBtn.dataset.url = url;
+  dlBtn.dataset.filename = 'thumbnail-' + currentId + '-' + resSel.value + '.jpg';
 }
 
 btn.addEventListener('click', function () {
@@ -100,6 +100,27 @@ resSel.addEventListener('change', updatePreview);
 
 input.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') btn.click();
+});
+
+dlBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  const url = dlBtn.dataset.url;
+  const filename = dlBtn.dataset.filename;
+  if (!url) return;
+  fetch(url)
+    .then(r => r.blob())
+    .then(blob => {
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+    })
+    .catch(() => {
+      // Fallback: open in new tab if fetch fails
+      window.open(url, '_blank');
+    });
 });
 </script>
 
