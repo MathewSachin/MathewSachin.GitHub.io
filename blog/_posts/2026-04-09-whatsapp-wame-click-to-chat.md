@@ -258,4 +258,3 @@ The next time someone gives you a phone number for a one-off WhatsApp conversati
 
 And if you're a creator or small business owner who hasn't put a wa.me link in your bio yet — that's lost revenue sitting on the table. The link generator above takes thirty seconds.
 
-**How are you planning to use it?** Drop a comment or message me — I'd genuinely like to hear the creative ways people end up using this.
