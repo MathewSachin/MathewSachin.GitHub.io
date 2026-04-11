@@ -17,7 +17,8 @@ import { showAlert, showToast, showErrorDialog } from './dialogs.js';
 import { setupMediaSession, clearMediaSession }  from './media-session.js';
 import { registerServiceWorker }               from './register-service-worker.js';
 import { RecorderAPI }                         from './recorder-api.js';
-import { RecorderStateMachine, STATE, EVENT }  from './recorder-state-machine.js';import { trackEvent }                          from './analytics.js';
+import { RecorderStateMachine, STATE, EVENT }  from './recorder-state-machine.js';
+import { trackEvent }                          from './analytics.js';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -140,11 +141,10 @@ function startCountdownOverlay(secs, onDone) {
       stopCountdownOverlay();
       onDone();
     } else {
-      // Re-trigger the pop animation by cloning/replacing the span content.
+      // Re-trigger the pop animation by forcing a reflow between style changes.
       countdownNumberEl.textContent = remaining;
       countdownNumberEl.style.animation = 'none';
-      // eslint-disable-next-line no-unused-expressions
-      countdownNumberEl.offsetWidth; // trigger reflow
+      void countdownNumberEl.offsetWidth; // trigger reflow
       countdownNumberEl.style.animation = '';
     }
   }, 1000);
