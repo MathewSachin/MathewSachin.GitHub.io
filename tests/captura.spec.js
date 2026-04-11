@@ -9,6 +9,10 @@ import {
 
 test.describe('Captura Web Recorder', () => {
   test.beforeEach(async ({ page }) => {
+    // 1. Block the Service Worker so it doesn't trigger random page reloads
+    // halfway through our tests while trying to update cached assets.
+    await page.route('**/sw.js', route => route.abort());
+
     await page.addInitScript(opfsMockScript);
     await page.goto('/tools/captura/');
   });
