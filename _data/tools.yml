@@ -32,7 +32,6 @@
   name: Smart Scratchpad
   description: Distraction-free notepad that auto-saves every keystroke. Instantly strips formatting from pasted text.
   icon: fas fa-pencil
-  quick_tool: true
 
 - id: imgcompress
   name: Image Compressor
@@ -44,7 +43,6 @@
   name: Local LLM Chat
   description: Chat with a local language model that runs entirely in your browser — powered by Transformers.js WebAssembly. No data sent to any server.
   icon: fas fa-robot
-  quick_tool: true
 
 - id: tokenizer
   name: AI Tokenizer & Cost Calculator
@@ -55,14 +53,20 @@
   name: Bookmarklet Compiler
   description: Minify and compile raw JavaScript into a drag-and-drop bookmarklet — strips comments, compresses whitespace, and URI-encodes for the browser.
   icon: fas fa-bookmark
+  quick_tool: true
+
 
 - id: captura
   name: Captura Web Recorder
   description: Record your screen with webcam overlay and microphone audio — streams directly to disk. Runs entirely in your browser, no data sent to any server.
   icon: fas fa-video
+  quick_tool: true
+
 
 - id: yt-thumbnail
   name: YouTube Thumbnail Grabber
   description: Instantly fetch the full-resolution thumbnail of any YouTube video — paste any YouTube URL or video ID and download the raw JPG.
   icon: fab fa-youtube
   accent_color: "#CC0000"
+  quick_tool: true
+
