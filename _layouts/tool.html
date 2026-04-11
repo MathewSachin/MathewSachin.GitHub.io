@@ -2,8 +2,12 @@
 layout: default
 ---
 
+{% assign tool_id = page.url | split: '/' | last | split: '.' | first %}
+{% assign tool = site.data.tools | where: "id", tool_id | first %}
+{% if tool and tool.accent_color %}<style>:root { --post-accent: {{ tool.accent_color }}; }</style>{% endif %}
+
 <div class="bg-dark">
-    <div id="tool-header" class="py-4 bg-info text-white google-anno-skip">
+    <div id="tool-header" class="py-4 text-white google-anno-skip" style="background-color: var(--post-accent);">
         <div class="container">
             <h2>{{ page.title }}</h2>
             {% include share.html btn_class="btn-outline-light" label_class="text-white" %}
