@@ -1,3 +1,19 @@
+/* Quick Tools pill button custom style */
+.quick-tool-pill {
+  --quick-tool-accent: var(--color-accent);
+  border-color: var(--quick-tool-accent) !important;
+  color: var(--quick-tool-accent) !important;
+  transition: box-shadow var(--transition-base), color var(--transition-base), border-color var(--transition-base), background-color var(--transition-base);
+}
+.quick-tool-pill i {
+  color: inherit !important;
+}
+.quick-tool-pill:hover, .quick-tool-pill:focus {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  background-color: inherit !important;
+  color: var(--quick-tool-accent) !important;
+  border-color: var(--quick-tool-accent) !important;
+}
 /* ============================================================
    CSS custom properties — change one place to retheme the site
    ============================================================ */

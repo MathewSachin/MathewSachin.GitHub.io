@@ -98,7 +98,11 @@ ads: true
         </div>
         <div class="d-flex flex-wrap gap-2">
           {% for tool in site.data.tools %}{% if tool.quick_tool %}
-          <a href="{{ '/tools/' | append: tool.id | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="{{ tool.icon }} me-1"></i>{{ tool.name }}</a>
+          <a href="{{ '/tools/' | append: tool.id | relative_url }}"
+             class="btn btn-outline-secondary btn-sm rounded-pill quick-tool-pill"
+             {% if tool.accent_color %}style="--quick-tool-accent: {{ tool.accent_color }}; border-color: {{ tool.accent_color }}; color: {{ tool.accent_color }};"{% endif %}>
+            <i class="{{ tool.icon }} me-1" style="color: inherit;"></i>{{ tool.name }}
+          </a>
           {% endif %}{% endfor %}
         </div>
       </div>
