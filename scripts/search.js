@@ -9,6 +9,7 @@ const SCHEMA = {
   content: 'string',
   tags: 'string[]',
   date: 'string',
+  type: 'string',
 };
 
 const DEBOUNCE_DELAY = 150;  // ms of inactivity before triggering a search
@@ -57,7 +58,11 @@ function formatDate(iso) {
 function renderResult({ document: doc }) {
   // Only allow safe relative paths (prevent javascript: URL injection)
   const safeUrl = /^\/[^"<>]*$/.test(doc.url) ? BASE_PATH + doc.url : '#';
-  const tagsHtml = doc.tags && doc.tags.length
+  const isTool = doc.type === 'tool';
+  const metaHtml = isTool
+    ? `<span class="badge rounded-pill bg-info text-white">Tool</span>`
+    : `<span class="small text-muted text-nowrap">${formatDate(doc.date)}</span>`;
+  const tagsHtml = !isTool && doc.tags && doc.tags.length
     ? `<div class="mt-1">${doc.tags.map(t => `<span class="badge rounded-pill bg-secondary me-1">${escapeHtml(t)}</span>`).join('')}</div>`
     : '';
   return `
@@ -65,7 +70,7 @@ function renderResult({ document: doc }) {
       <div class="blog-post-item py-3 mb-1">
         <div class="d-flex justify-content-between align-items-start gap-2">
           <span class="blog-post-title fw-semibold">${escapeHtml(doc.title)}</span>
-          <span class="small text-muted text-nowrap">${formatDate(doc.date)}</span>
+          ${metaHtml}
         </div>
         ${tagsHtml}
       </div>
@@ -74,7 +79,7 @@ function renderResult({ document: doc }) {
 
 function renderResults(hits) {
   if (!hits.length) {
-    resultsEl.innerHTML = '<p class="text-muted">No posts matched your search.</p>';
+    resultsEl.innerHTML = '<p class="text-muted">No results matched your search.</p>';
     return;
   }
   resultsEl.innerHTML = hits.map(renderResult).join('');

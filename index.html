@@ -97,14 +97,9 @@ ads: true
           <a href="{{ '/tools' | relative_url }}" class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-right me-1"></i>All tools</a>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <a href="{{ '/tools/timestamp' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-clock me-1"></i>Timestamp</a>
-          <a href="{{ '/tools/base64' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-code me-1"></i>Base64</a>
-          <a href="{{ '/tools/json' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-file-code me-1"></i>JSON</a>
-          <a href="{{ '/tools/cron' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-calendar-days me-1"></i>CRON</a>
-          <a href="{{ '/tools/hash' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-hashtag me-1"></i>Hash</a>
-          <a href="{{ '/tools/scratchpad' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-pencil me-1"></i>Scratchpad</a>
-          <a href="{{ '/tools/imgcompress' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-image me-1"></i>Image Compressor</a>
-          <a href="{{ '/tools/llm' | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-robot me-1"></i>LLM Chat</a>
+          {% for tool in site.data.tools %}{% if tool.quick_tool %}
+          <a href="{{ '/tools/' | append: tool.id | relative_url }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="{{ tool.icon }} me-1"></i>{{ tool.name }}</a>
+          {% endif %}{% endfor %}
         </div>
       </div>
 

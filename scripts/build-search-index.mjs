@@ -1,5 +1,5 @@
 /**
- * Build script: reads all Jekyll blog posts and generates a pre-built
+ * Build script: reads all Jekyll blog posts and tools and generates a pre-built
  * Orama search index (`search-index.json`) for client-side search.
  *
  * Run via: npm run build-search-index
@@ -7,6 +7,7 @@
 
 import { create, insert, save } from '@orama/orama'
 import matter from 'gray-matter'
+import yaml from 'js-yaml'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -14,6 +15,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
 const POSTS_DIR = join(REPO_ROOT, 'blog', '_posts')
+const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
 const OUTPUT_FILE = join(REPO_ROOT, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
@@ -88,6 +90,7 @@ async function main() {
       content: 'string',
       tags: 'string[]',
       date: 'string',
+      type: 'string',
     },
   })
 
@@ -107,13 +110,29 @@ async function main() {
     const date         = parsePostDate(frontmatter, file)
     const plainContent = stripMarkdown(content).slice(0, MAX_CONTENT_LENGTH)
 
-    await insert(db, { title, url, content: plainContent, tags, date })
+    await insert(db, { title, url, content: plainContent, tags, date, type: 'post' })
+    inserted++
+  }
+
+  // Index tools from _data/tools.yml
+  const toolsRaw = await readFile(TOOLS_FILE, 'utf8')
+  const tools = yaml.load(toolsRaw)
+  for (const tool of tools) {
+    const url = `/tools/${tool.id}/`
+    await insert(db, {
+      title: tool.name,
+      url,
+      content: tool.description,
+      tags: [],
+      date: '',
+      type: 'tool',
+    })
     inserted++
   }
 
   const rawIndex = save(db)
   await writeFile(OUTPUT_FILE, JSON.stringify(rawIndex))
-  console.log(`Search index written to search-index.json (${inserted} posts)`)
+  console.log(`Search index written to search-index.json (${inserted} entries)`)
 }
 
 // Only run when executed directly (not when imported by tests)
