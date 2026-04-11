@@ -32,7 +32,7 @@
 
 /* Post hero / title section — uses --post-accent CSS variable (set per-post via frontmatter) */
 .post-hero {
-  background-color: var(--post-accent, var(--color-accent));
+  background-color: var(--post-accent);
 }
 
 /* Copy code button: positioned inside the code block, top-right, visible on hover */
