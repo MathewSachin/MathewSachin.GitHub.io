@@ -1,7 +1,7 @@
 ---
 title: "Hacking NYT Strands: Reveal the Theme, Spangram and All Answers Instantly"
 icon: "fas fa-puzzle-piece"
-accent_color: "#bce4f4"
+accent_color: "#3a4346"
 tags: [nyt, strands, hack, browser, devtools, javascript, bookmarklet, network]
 series: browser-hacks
 related:

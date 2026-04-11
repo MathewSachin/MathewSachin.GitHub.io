@@ -3,6 +3,7 @@ title: "Triggering GitHub Copilot from a GitHub Action via Issue Assignment"
 icon: "fas fa-bolt"
 tags: [github-actions, github-copilot, ai, automation, tutorial]
 series: blogging-with-jekyll
+accent_color: "#212526"
 related:
   - /blog/2026/03/12/ai-blog-generation-flow
   - /blog/2026/04/01/pr-preview-setup
