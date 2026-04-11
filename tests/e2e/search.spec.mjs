@@ -21,6 +21,6 @@ test.describe('Search page', () => {
     const searchInput = page.locator('#search-input');
     await expect(searchInput).toBeEnabled({ timeout: 15000 });
     await searchInput.fill('xyzzy_unlikely_query_that_matches_nothing');
-    await expect(page.locator('#search-results')).toContainText('No posts matched', { timeout: 3000 });
+    await expect(page.locator('#search-results')).toContainText('No results matched', { timeout: 3000 });
   });
 });

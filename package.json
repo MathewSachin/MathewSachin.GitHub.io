@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@orama/orama": "^3.1.18",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
     "@pintora/standalone": "^0.8.1",
