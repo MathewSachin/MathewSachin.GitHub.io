@@ -578,6 +578,17 @@ sysGainSlider.addEventListener('input', () => {
   savePref(PREFS.sysGain, v);
 });
 
+// ── Prevent navigation / tab-close during an active recording ─────────────────
+
+window.addEventListener('beforeunload', (e) => {
+  const s = machine.state;
+  if (s === STATE.RECORDING || s === STATE.PAUSED ||
+      s === STATE.STOPPING  || s === STATE.COUNTDOWN) {
+    e.preventDefault();
+    e.returnValue = ''; // Required by some browsers to trigger the dialog
+  }
+});
+
 // ── PWA Service Worker Registration ───────────────────────────────────────────
 
 registerServiceWorker();
