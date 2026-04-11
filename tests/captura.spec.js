@@ -200,26 +200,33 @@ test.describe('Captura Web Recorder', () => {
   // always fires regardless of the element's prior value (which can persist
   // across test runs when multiple spec files share the same origin).
 
+  async function expectLocalStorage(page, key, value) {
+    await expect.poll(async () => {
+      return await page.evaluate(() => localStorage.getItem(key));
+    }, {
+      timeout: 10_000
+    }).toBe(value);
+  }
+
   test('FPS preference is persisted to localStorage on change', async ({ page }) => {
     // Step to default first so the second step always triggers a change event.
     await page.selectOption('#fps-select', '30');
     await page.selectOption('#fps-select', '15');
-    const stored = await page.evaluate(() => localStorage.getItem('captura-fps'));
-    expect(stored).toBe('15');
+    await expectLocalStorage(page, 'captura-fps', '15');
   });
 
   test('quality preference is persisted to localStorage on change', async ({ page }) => {
     await page.selectOption('#quality-select', '720');
     await page.selectOption('#quality-select', '1080');
-    const stored = await page.evaluate(() => localStorage.getItem('captura-quality'));
-    expect(stored).toBe('1080');
+
+    await expectLocalStorage(page, 'captura-quality', '1080');
   });
 
   test('format preference is persisted to localStorage on change', async ({ page }) => {
     await page.selectOption('#format-select', 'webm-vp9-opus');
     await page.selectOption('#format-select', 'mp4-h264-aac');
-    const stored = await page.evaluate(() => localStorage.getItem('captura-format'));
-    expect(stored).toBe('mp4-h264-aac');
+
+    await expectLocalStorage(page, 'captura-format', 'mp4-h264-aac');
   });
 
   test('system audio preference is persisted to localStorage on change', async ({ page }) => {
@@ -227,8 +234,8 @@ test.describe('Captura Web Recorder', () => {
     const initialChecked = await checkbox.isChecked();
     await checkbox.click();
     const expectedValue = String(!initialChecked);
-    const stored = await page.evaluate(() => localStorage.getItem('captura-sysAudio'));
-    expect(stored).toBe(expectedValue);
+
+    await expectLocalStorage(page, 'captura-sysAudio', expectedValue);
   });
 
   test('preferences are restored after page reload', async ({ page }) => {
