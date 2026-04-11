@@ -202,7 +202,7 @@ test.describe('Captura Web Recorder', () => {
 
   async function expectLocalStorage(page, key, value) {
     await expect.poll(async () => {
-      return await page.evaluate(() => localStorage.getItem(key));
+      return await page.evaluate((k) => localStorage.getItem(k), key);
     }, {
       timeout: 10_000
     }).toBe(value);
