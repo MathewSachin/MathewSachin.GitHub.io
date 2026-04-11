@@ -1,7 +1,7 @@
 ---
 title: "Hacking NYT Spelling Bee: Reveal All Answers and Pangrams Instantly"
 icon: "fas fa-bee"
-accent_color: "#fce83a"
+accent_color: "#988900"
 tags: [nyt, spelling-bee, hack, browser, devtools, javascript, bookmarklet]
 series: browser-hacks
 related:
