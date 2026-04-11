@@ -164,6 +164,7 @@ test('search-index.json: can be loaded and searched with Orama', async () => {
     content: 'string',
     tags: 'string[]',
     date: 'string',
+    type: 'string',
   }
   const raw = JSON.parse(await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8'))
   const db = await create({ schema })
@@ -179,6 +180,25 @@ test('search-index.json: can be loaded and searched with Orama', async () => {
   )
 })
 
+test('search-index.json: tools are searchable', async () => {
+  const schema = {
+    title: 'string',
+    url: 'string',
+    content: 'string',
+    tags: 'string[]',
+    date: 'string',
+    type: 'string',
+  }
+  const raw = JSON.parse(await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8'))
+  const db = await create({ schema })
+  load(db, raw)
+
+  const results = await search(db, { term: 'Base64', properties: ['title'] })
+  assert.ok(results.hits.length > 0, 'search should return results for "Base64"')
+  const toolHit = results.hits.find(h => h.document.type === 'tool' && h.document.url.includes('/tools/base64'))
+  assert.ok(toolHit, 'expected base64 tool in results')
+})
+
 test('search-index.json: every entry has required fields', async () => {
   const schema = {
     title: 'string',
@@ -186,13 +206,14 @@ test('search-index.json: every entry has required fields', async () => {
     content: 'string',
     tags: 'string[]',
     date: 'string',
+    type: 'string',
   }
   const raw = JSON.parse(await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8'))
   const db = await create({ schema })
   load(db, raw)
 
   // Retrieve all documents via a broad search
-  const results = await search(db, { term: '', limit: 100 })
+  const results = await search(db, { term: '', limit: 200 })
   assert.ok(results.hits.length > 0, 'index should contain at least one entry')
 
   for (const hit of results.hits) {
@@ -202,7 +223,13 @@ test('search-index.json: every entry has required fields', async () => {
     assert.ok(typeof doc.content === 'string', `content should be a string (got ${typeof doc.content})`)
     assert.ok(Array.isArray(doc.tags), `tags should be an array (got ${typeof doc.tags})`)
     assert.ok(typeof doc.date === 'string', `date should be a string (got ${typeof doc.date})`)
-    assert.match(doc.url, /^\/blog\/\d{4}\/\d{2}\/\d{2}\//, 'url should match /blog/YYYY/MM/DD/ format')
-    assert.match(doc.date, /^\d{4}-\d{2}-\d{2}$/, 'date should be in YYYY-MM-DD format')
+    assert.ok(typeof doc.type === 'string', `type should be a string (got ${typeof doc.type})`)
+    assert.ok(doc.type === 'post' || doc.type === 'tool', `type should be 'post' or 'tool' (got '${doc.type}')`)
+    if (doc.type === 'post') {
+      assert.match(doc.url, /^\/blog\/\d{4}\/\d{2}\/\d{2}\//, 'post url should match /blog/YYYY/MM/DD/ format')
+      assert.match(doc.date, /^\d{4}-\d{2}-\d{2}$/, 'post date should be in YYYY-MM-DD format')
+    } else {
+      assert.match(doc.url, /^\/tools\//, 'tool url should start with /tools/')
+    }
   }
 })
