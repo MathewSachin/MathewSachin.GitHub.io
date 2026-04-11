@@ -17,10 +17,12 @@ My Website including a blog.
    cd MathewSachin.GitHub.io
    ```
 
-2. Install dependencies:
+2. Install dependencies (Mac):
 
    ```bash
    bundle install
+   npm ci
+   brew install vips
    ```
 
 ### Running Locally
