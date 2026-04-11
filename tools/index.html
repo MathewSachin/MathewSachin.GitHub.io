@@ -13,7 +13,12 @@ ads: false
       <a href="{{ '/tools/' | append: tool.id | relative_url }}" class="home-card-link" aria-label="{{ tool.name }}">
         <div class="card h-100">
           <div class="card-body">
-            <p class="card-title mb-1"><i class="{{ tool.icon }} text-info me-2" aria-hidden="true"></i>{{ tool.name }}</p>
+            <p class="card-title mb-1">
+              <span {% if tool.accent_color %} style="color: {{ tool.accent_color }};"{% else %} class="text-info"{% endif %}>
+                <i class="{{ tool.icon }} me-2" aria-hidden="true"></i>
+                <span>{{ tool.name }}</span>
+              </span>
+            </p>
             <p class="card-text">{{ tool.description }}</p>
           </div>
           <div class="card-footer">
