@@ -19,7 +19,7 @@ test.describe('Captura Web Recorder', () => {
     });
 
     await page.addInitScript(opfsMockScript);
-    await page.goto('/tools/captura/');
+    await page.goto('/tools/captura/', { waitUntil: 'networkidle' });
   });
 
   // ── Initial state ────────────────────────────────────────────────────────────
