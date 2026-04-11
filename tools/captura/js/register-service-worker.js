@@ -12,12 +12,8 @@ export function registerServiceWorker() {
   let newWorker = null;
   let reloading = false;
 
-  // Only show the update notification when running as an installed PWA.
-  const isPwa = () => window.matchMedia('(display-mode: standalone)').matches;
-
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (reloading) return;
-    if (!isPwa()) return;
     reloading = true;
     window.location.reload();
   });
@@ -27,7 +23,7 @@ export function registerServiceWorker() {
     reg.addEventListener('updatefound', () => {
       newWorker = reg.installing;
       newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller && isPwa()) {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
           updateBar.hidden = false;
         }
       });
