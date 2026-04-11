@@ -1,0 +1,1 @@
+export function formatJson(r,t){if(!r.trim())return{output:"",error:null};try{var u=JSON.parse(r);return{output:JSON.stringify(u,null,t),error:null}}catch(r){return{output:"",error:r.message}}}
