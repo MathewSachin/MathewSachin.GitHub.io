@@ -5,6 +5,42 @@
   background: #111;
   border-radius: 6px;
 }
+
+/* ── Canvas wrapper — needed so the countdown overlay can be positioned over it */
+.canvas-wrap {
+  position: relative;
+}
+
+/* ── Countdown overlay ────────────────────────────────────────────────────── */
+#countdown-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+#countdown-overlay[hidden] {
+  display: none !important;
+}
+
+#countdown-number {
+  font-size: clamp(4rem, 15vw, 8rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  user-select: none;
+  animation: countdown-pop 0.15s ease-out;
+}
+
+@keyframes countdown-pop {
+  from { transform: scale(1.25); opacity: 0.6; }
+  to   { transform: scale(1);    opacity: 1; }
+}
 .rec-dot {
   display: inline-block;
   width: 10px; height: 10px;

@@ -6,6 +6,7 @@
 export const STATE = Object.freeze({
   IDLE:       'IDLE',       // No active session; all controls enabled
   REQUESTING: 'REQUESTING', // Acquiring streams + initialising encoder
+  COUNTDOWN:  'COUNTDOWN',  // Streams + encoder ready; pre-recording countdown running
   RECORDING:  'RECORDING',  // Actively encoding to disk
   PAUSED:     'PAUSED',     // Recording paused; encoder holds pause offset
   STOPPING:   'STOPPING',   // Finalising encoder / flushing to disk
@@ -14,16 +15,18 @@ export const STATE = Object.freeze({
 });
 
 export const EVENT = Object.freeze({
-  USER_START:     'USER_START',
-  USER_PAUSE:     'USER_PAUSE',
-  USER_RESUME:    'USER_RESUME',
-  USER_STOP:      'USER_STOP',
-  END_SESSION:    'END_SESSION',
-  ENCODER_READY:  'ENCODER_READY',
-  STREAMS_FAILED: 'STREAMS_FAILED',
-  ENCODER_ERROR:  'ENCODER_ERROR',
-  FINALIZE_DONE:  'FINALIZE_DONE',
-  ERROR_DISMISSED:'ERROR_DISMISSED',
+  USER_START:        'USER_START',
+  USER_PAUSE:        'USER_PAUSE',
+  USER_RESUME:       'USER_RESUME',
+  USER_STOP:         'USER_STOP',
+  END_SESSION:       'END_SESSION',
+  ENCODER_READY:     'ENCODER_READY',
+  STREAMS_FAILED:    'STREAMS_FAILED',
+  ENCODER_ERROR:     'ENCODER_ERROR',
+  FINALIZE_DONE:     'FINALIZE_DONE',
+  ERROR_DISMISSED:   'ERROR_DISMISSED',
+  COUNTDOWN_DONE:    'COUNTDOWN_DONE',   // Countdown elapsed → begin recording
+  COUNTDOWN_CANCEL:  'COUNTDOWN_CANCEL', // User aborted during countdown
 });
 
 export class RecorderStateMachine {
@@ -38,7 +41,8 @@ export class RecorderStateMachine {
     // browser "Stop Sharing" button without requiring external intervention.
     api.onStreamEnded = () => {
       const s = this.#state;
-      if (s === STATE.RECORDING || s === STATE.PAUSED || s === STATE.REQUESTING) {
+      if (s === STATE.RECORDING || s === STATE.PAUSED ||
+          s === STATE.REQUESTING || s === STATE.COUNTDOWN) {
         this.transition(EVENT.USER_STOP);
       } else if (s === STATE.SESSION) {
         this.transition(EVENT.END_SESSION);
@@ -111,10 +115,29 @@ const TRANSITIONS = {
   [`${STATE.IDLE}:${EVENT.USER_START}`]:    { nextState: STATE.REQUESTING, effect: effectAcquireAndInit },
   [`${STATE.SESSION}:${EVENT.USER_START}`]: { nextState: STATE.REQUESTING, effect: effectAcquireAndInit },
 
-  // ── Encoder fully initialised → begin recording ───────────────────────────
+  // ── Encoder fully initialised → enter countdown (UI layer drives it) ─────────
   [`${STATE.REQUESTING}:${EVENT.ENCODER_READY}`]: {
+    nextState: STATE.COUNTDOWN,
+    // No immediate side-effect — the UI layer starts the countdown overlay
+    // and fires COUNTDOWN_DONE (or COUNTDOWN_CANCEL) when appropriate.
+  },
+
+  // ── Countdown elapsed → begin recording ───────────────────────────────────
+  [`${STATE.COUNTDOWN}:${EVENT.COUNTDOWN_DONE}`]: {
     nextState: STATE.RECORDING,
     effect:    (_m, api, p) => api.startEncoding(p.fps),
+  },
+
+  // ── Countdown cancelled by user ───────────────────────────────────────────
+  [`${STATE.COUNTDOWN}:${EVENT.COUNTDOWN_CANCEL}`]: {
+    nextState: api => api.hasSession ? STATE.SESSION : STATE.IDLE,
+    effect:    (_m, api) => { api.cleanupAll(); api.restartPreviews(); },
+  },
+
+  // ── Screen-share track ended during countdown ─────────────────────────────
+  [`${STATE.COUNTDOWN}:${EVENT.USER_STOP}`]: {
+    nextState: STATE.IDLE,
+    effect:    (_m, api) => { api.cleanupAll(); api.restartPreviews(); },
   },
 
   // ── Streams failed (permission denied / user cancelled) ───────────────────

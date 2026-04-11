@@ -34,28 +34,32 @@ const fmtTime = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(
 
 // ── DOM refs ───────────────────────────────────────────────────────────────────
 
-const canvas         = document.getElementById('recorder-canvas');
-const webcamSel      = document.getElementById('webcam-select');
-const micSel         = document.getElementById('mic-select');
-const fpsSel         = document.getElementById('fps-select');
-const qualitySel     = document.getElementById('quality-select');
-const formatSel      = document.getElementById('format-select');
-const sysAudioChk    = document.getElementById('sys-audio-chk');
-const startBtn       = document.getElementById('start-btn');
-const pauseBtn       = document.getElementById('pause-btn');
-const stopBtn        = document.getElementById('stop-btn');
-const endSessionBtn  = document.getElementById('end-session-btn');
-const pickDirBtn     = document.getElementById('pick-dir-btn');
-const dirNameEl      = document.getElementById('dir-name');
-const statusBadge    = document.getElementById('status-badge');
-const timerEl        = document.getElementById('timer-text');
-const micGainSlider  = document.getElementById('mic-gain-slider');
-const sysGainSlider  = document.getElementById('sys-gain-slider');
-const micGainLabel   = document.getElementById('mic-gain-label');
-const sysGainLabel   = document.getElementById('sys-gain-label');
-const micLevelCanvas = document.getElementById('mic-level-canvas');
-const sysLevelCanvas = document.getElementById('sys-level-canvas');
-const errorDialog    = document.getElementById('captura-error-dialog');
+const canvas              = document.getElementById('recorder-canvas');
+const webcamSel           = document.getElementById('webcam-select');
+const micSel              = document.getElementById('mic-select');
+const fpsSel              = document.getElementById('fps-select');
+const qualitySel          = document.getElementById('quality-select');
+const formatSel           = document.getElementById('format-select');
+const countdownSel        = document.getElementById('countdown-select');
+const sysAudioChk         = document.getElementById('sys-audio-chk');
+const startBtn            = document.getElementById('start-btn');
+const pauseBtn            = document.getElementById('pause-btn');
+const stopBtn             = document.getElementById('stop-btn');
+const cancelCountdownBtn  = document.getElementById('cancel-countdown-btn');
+const endSessionBtn       = document.getElementById('end-session-btn');
+const pickDirBtn          = document.getElementById('pick-dir-btn');
+const dirNameEl           = document.getElementById('dir-name');
+const statusBadge         = document.getElementById('status-badge');
+const timerEl             = document.getElementById('timer-text');
+const micGainSlider       = document.getElementById('mic-gain-slider');
+const sysGainSlider       = document.getElementById('sys-gain-slider');
+const micGainLabel        = document.getElementById('mic-gain-label');
+const sysGainLabel        = document.getElementById('sys-gain-label');
+const micLevelCanvas      = document.getElementById('mic-level-canvas');
+const sysLevelCanvas      = document.getElementById('sys-level-canvas');
+const errorDialog         = document.getElementById('captura-error-dialog');
+const countdownOverlay    = document.getElementById('countdown-overlay');
+const countdownNumberEl   = document.getElementById('countdown-number');
 
 // ── Capability checks ──────────────────────────────────────────────────────────
 
@@ -111,25 +115,68 @@ function resetTimer() {
   timerEl.textContent = '00:00';
 }
 
+// ── Countdown overlay state ────────────────────────────────────────────────────
+
+let countdownIntervalId = null;
+
+// Shows the overlay, ticks every second, and fires onDone() when it reaches 0.
+// If secs === 0 the overlay is never shown and onDone() fires synchronously.
+function startCountdownOverlay(secs, onDone) {
+  stopCountdownOverlay();
+
+  if (secs <= 0) {
+    onDone();
+    return;
+  }
+
+  countdownNumberEl.textContent = secs;
+  // Force a re-trigger of the CSS pop animation on each tick by removing and
+  // re-adding the element's text node (which causes a reflow / re-paint).
+  countdownOverlay.hidden = false;
+
+  let remaining = secs;
+  countdownIntervalId = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      stopCountdownOverlay();
+      onDone();
+    } else {
+      // Re-trigger the pop animation by forcing a reflow between style changes.
+      countdownNumberEl.textContent = remaining;
+      countdownNumberEl.style.animation = 'none';
+      void countdownNumberEl.offsetWidth; // trigger reflow
+      countdownNumberEl.style.animation = '';
+    }
+  }, 1000);
+}
+
+function stopCountdownOverlay() {
+  clearInterval(countdownIntervalId);
+  countdownIntervalId = null;
+  countdownOverlay.hidden = true;
+  countdownNumberEl.textContent = '';
+}
+
 // ── UI rendering ───────────────────────────────────────────────────────────────
 
 // Single source of truth for every button, badge, and control state.
 // Called on every state machine transition.
 function render(state) {
-  const isIdle      = state === STATE.IDLE;
-  const isSession   = state === STATE.SESSION;
-  const isReq       = state === STATE.REQUESTING;
-  const isRec       = state === STATE.RECORDING;
-  const isPaused    = state === STATE.PAUSED;
-  const isStopping  = state === STATE.STOPPING;
-  const isError     = state === STATE.ERROR;
-  const active      = isRec || isPaused;               // recording or paused
-  const hasSession  = isSession || active || isStopping; // screen shared
+  const isIdle       = state === STATE.IDLE;
+  const isSession    = state === STATE.SESSION;
+  const isReq        = state === STATE.REQUESTING;
+  const isCountdown  = state === STATE.COUNTDOWN;
+  const isRec        = state === STATE.RECORDING;
+  const isPaused     = state === STATE.PAUSED;
+  const isStopping   = state === STATE.STOPPING;
+  const isError      = state === STATE.ERROR;
+  const active       = isRec || isPaused;                       // recording or paused
+  const hasSession   = isSession || active || isStopping || isCountdown; // screen shared
 
   // ── Recording control buttons ──────────────────────────────────────────────
 
-  // Start: shown when not actively recording/paused/stopping
-  startBtn.hidden   = active || isStopping;
+  // Start: shown when not actively recording/paused/stopping/countdown
+  startBtn.hidden   = active || isStopping || isCountdown;
   startBtn.disabled = isReq;
 
   // Pause/Resume: shown only while active
@@ -144,36 +191,41 @@ function render(state) {
   stopBtn.hidden   = !active;
   stopBtn.disabled = false;
 
+  // Cancel Countdown: shown only during countdown
+  cancelCountdownBtn.hidden = !isCountdown;
+
   // End Session: shown whenever a screen-share session is alive
-  endSessionBtn.hidden   = !hasSession;
+  endSessionBtn.hidden   = !hasSession || isCountdown;
   endSessionBtn.disabled = isStopping || isReq;
 
   // ── Folder / settings controls ─────────────────────────────────────────────
 
-  // Locked while recording is active or a recording is being saved
-  const lockControls = active || isStopping || isReq;
-  pickDirBtn.disabled  = lockControls;
-  webcamSel.disabled   = lockControls;
-  micSel.disabled      = lockControls;
-  sysAudioChk.disabled = lockControls;
-  fpsSel.disabled      = lockControls;
-  qualitySel.disabled  = lockControls;
+  // Locked while recording is active, being saved, acquiring, or in countdown
+  const lockControls = active || isStopping || isReq || isCountdown;
+  pickDirBtn.disabled    = lockControls;
+  webcamSel.disabled     = lockControls;
+  micSel.disabled        = lockControls;
+  sysAudioChk.disabled   = lockControls;
+  fpsSel.disabled        = lockControls;
+  qualitySel.disabled    = lockControls;
+  countdownSel.disabled  = lockControls;
 
   // ── Status badge ───────────────────────────────────────────────────────────
 
   statusBadge.textContent =
-      isRec      ? '⏺ Recording'
-    : isPaused   ? '⏸ Paused'
-    : isReq      ? '⏳ Acquiring…'
-    : isStopping ? '⏳ Saving…'
-    : isSession  ? '◉ Session Active'
-    : isError    ? '⚠ Error'
-    :              'Idle';
+      isRec       ? '⏺ Recording'
+    : isPaused    ? '⏸ Paused'
+    : isReq       ? '⏳ Acquiring…'
+    : isCountdown ? '⏱ Starting…'
+    : isStopping  ? '⏳ Saving…'
+    : isSession   ? '◉ Session Active'
+    : isError     ? '⚠ Error'
+    :               'Idle';
 
   statusBadge.className =
       isRec                    ? 'badge bg-danger'
     : isPaused || isStopping   ? 'badge bg-warning text-dark'
-    : isSession                ? 'badge bg-warning text-dark'
+    : isSession || isCountdown ? 'badge bg-warning text-dark'
     : isError                  ? 'badge bg-danger'
     :                            'badge bg-secondary';
 }
@@ -186,7 +238,7 @@ machine.onStateChange((state, event, payload) => {
   // ── Analytics ─────────────────────────────────────────────────────────────
   // Capture elapsedSecs before resetTimer() zeroes it below.
   if (state === STATE.RECORDING) {
-    if (event === EVENT.ENCODER_READY) {
+    if (event === EVENT.COUNTDOWN_DONE) {
       trackEvent('captura_recording_start', {
         fps:        payload?.fps,
         quality:    payload?.quality,
@@ -216,6 +268,20 @@ machine.onStateChange((state, event, payload) => {
     trackEvent('captura_recording_saved', { format: formatSel.value });
   }
 
+  // ── Countdown overlay ──────────────────────────────────────────────────────
+  if (state === STATE.COUNTDOWN) {
+    // payload carries the full start config (fps, quality, etc.) forwarded from
+    // ENCODER_READY — pass it through so COUNTDOWN_DONE has it for startEncoding.
+    const savedPayload = payload;
+    startCountdownOverlay(
+      parseInt(countdownSel.value, 10),
+      () => machine.transition(EVENT.COUNTDOWN_DONE, savedPayload)
+    );
+  } else {
+    // Entering any other state (RECORDING, SESSION, IDLE, ERROR…) clears overlay.
+    stopCountdownOverlay();
+  }
+
   // ── Timer ──────────────────────────────────────────────────────────────────
   if (state === STATE.RECORDING) {
     // USER_RESUME continues the existing elapsed count; everything else resets.
@@ -224,7 +290,7 @@ machine.onStateChange((state, event, payload) => {
   } else if (state === STATE.PAUSED) {
     pauseTimer();
   } else {
-    // STOPPING, IDLE, SESSION, ERROR — reset the display
+    // STOPPING, IDLE, SESSION, COUNTDOWN, ERROR — reset the display
     resetTimer();
   }
 
@@ -371,6 +437,11 @@ function restoreSimplePrefs() {
     sysGainSlider.value      = sysGain;
     sysGainLabel.textContent = gainPct(sysGain);
   }
+
+  const countdown = loadPref(PREFS.countdown);
+  if (countdown !== null && countdownSel.querySelector(`option[value="${CSS.escape(countdown)}"]`)) {
+    countdownSel.value = countdown;
+  }
 }
 
 function restoreDevicePrefs() {
@@ -447,6 +518,8 @@ pauseBtn.addEventListener('click', () => {
 
 stopBtn.addEventListener('click', () => machine.transition(EVENT.USER_STOP));
 
+cancelCountdownBtn.addEventListener('click', () => machine.transition(EVENT.COUNTDOWN_CANCEL));
+
 endSessionBtn.addEventListener('click', () => machine.transition(EVENT.END_SESSION));
 
 pickDirBtn.addEventListener('click', () => {
@@ -467,10 +540,11 @@ function saveAndTrackPref(key, value, analyticsKey) {
   trackEvent('captura_pref_change', { pref: analyticsKey, value: String(value) });
 }
 
-fpsSel     .addEventListener('change', () => saveAndTrackPref(PREFS.fps,      fpsSel.value,          'fps'));
-qualitySel .addEventListener('change', () => saveAndTrackPref(PREFS.quality,  qualitySel.value,      'quality'));
-formatSel  .addEventListener('change', () => saveAndTrackPref(PREFS.format,   formatSel.value,       'format'));
-sysAudioChk.addEventListener('change', () => saveAndTrackPref(PREFS.sysAudio, sysAudioChk.checked,   'sys_audio'));
+fpsSel      .addEventListener('change', () => saveAndTrackPref(PREFS.fps,       fpsSel.value,          'fps'));
+qualitySel  .addEventListener('change', () => saveAndTrackPref(PREFS.quality,   qualitySel.value,      'quality'));
+formatSel   .addEventListener('change', () => saveAndTrackPref(PREFS.format,    formatSel.value,       'format'));
+sysAudioChk .addEventListener('change', () => saveAndTrackPref(PREFS.sysAudio,  sysAudioChk.checked,   'sys_audio'));
+countdownSel.addEventListener('change', () => saveAndTrackPref(PREFS.countdown, countdownSel.value,    'countdown'));
 
 webcamSel.addEventListener('change', () => {
   savePref(PREFS.webcam, webcamSel.value);
