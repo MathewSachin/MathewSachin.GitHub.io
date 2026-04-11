@@ -18,7 +18,7 @@ jobs:
       contents: read
     with:
       baseurl: /pr-preview/pr-${{ github.event.pull_request.number }}
-      preview: true
+      testing: true
 
   deploy-preview:
     needs: build

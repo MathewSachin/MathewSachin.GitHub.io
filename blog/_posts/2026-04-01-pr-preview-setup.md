@@ -87,8 +87,8 @@ on:
         description: 'Optional baseurl to inject into _config.yml'
         type: string
         default: ''
-      preview:
-        description: 'Whether this is a PR preview build (disables Google Analytics)'
+      testing:
+        description: 'Disables Google Analytics and AdSense'
         type: boolean
         default: false
 ```
@@ -96,7 +96,7 @@ on:
 It accepts two inputs:
 
 - **`baseurl`** — for previews this is `/pr-preview/pr-42`; for production it's empty. This gets appended to `_config.yml` at build time so every `relative_url` filter in Jekyll produces the right path.
-- **`preview`** — when `true`, a second line is appended to `_config.yml`: `google-analytics: false`. You don't want preview traffic polluting your analytics.
+- **`testing`** — when `true`, Google analytics and AdSense includes are disabled. You don't want preview traffic polluting your analytics and serving ads.
 
 The baseurl injection is a one-liner:
 
@@ -163,8 +163,6 @@ The fix is one line:
 `clean-exclude: pr-preview` tells the action to leave the `pr-preview/` directory untouched during its cleanup pass. PR previews survive production deployments.
 
 ## What Actually Gets Tested
-
-Because the preview is a full production build — same Jekyll version, same plugins, same minification, same `JEKYLL_ENV=production` flag — it catches problems that a local `jekyll serve` won't.
 
 Things that have actually been caught in preview before they hit production:
 

@@ -1,5 +1,3 @@
-{% unless site.baseurl contains 'pr-preview' %}
-{% if site.adsense and page.ads %}
+{% if site.adsense and page.ads and jekyll.environment == "production" %}
 <script data-ad-client="{{ site.adsense }}" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 {% endif %}
-{% endunless %}

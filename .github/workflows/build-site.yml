@@ -7,10 +7,6 @@ on:
         description: 'Optional baseurl to inject into _config.yml'
         type: string
         default: ''
-      preview:
-        description: 'Whether this is a PR preview build (disables Google Analytics)'
-        type: boolean
-        default: false
       testing:
         description: 'Whether this is a testing build (disables AdSense and Analytics)'
         type: boolean
@@ -53,17 +49,6 @@ jobs:
         run: |
           echo "baseurl: $BASEURL" >> _config.yml
 
-      - name: Disable Google Analytics for preview
-        if: inputs.preview
-        run: |
-          echo "google-analytics: false" >> _config.yml
-
-      # Disables both AdSense and Analytics independently of the preview flag
-      - name: Disable AdSense and Analytics for testing
-        if: inputs.testing
-        run: |
-          echo "google-analytics: false" >> _config.yml
-          echo "adsense: false" >> _config.yml
 
       - name: Cache Ruby gems
         uses: actions/cache@v4
@@ -83,7 +68,7 @@ jobs:
 
       - name: Build Jekyll site
         env:
-          JEKYLL_ENV: production
+          JEKYLL_ENV: ${{ inputs.testing && 'staging' || 'production' }}
         run: bundle exec jekyll build --destination ./_site
 
       - name: Run html-proofer
