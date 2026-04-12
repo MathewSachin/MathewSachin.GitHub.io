@@ -93,6 +93,6 @@ test.describe('PDF Password Tool', () => {
 
   test('how it works section is present', async ({ page }) => {
     await expect(page.locator('text=How It Works')).toBeVisible();
-    await expect(page.locator('text=WebAssembly')).toBeVisible();
+    await expect(page.locator('h5', { hasText: 'Implementation Details' })).toBeVisible();
   });
 });
