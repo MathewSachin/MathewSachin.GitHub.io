@@ -202,7 +202,8 @@ function render(state) {
 
   // Locked while recording is active, being saved, acquiring, or in countdown
   const lockControls = active || isStopping || isReq || isCountdown;
-  pickDirBtn.disabled    = lockControls;
+  pickDirBtn.hidden    = storage.isOPFS;
+  pickDirBtn.disabled  = lockControls;
   webcamSel.disabled     = lockControls;
   micSel.disabled        = lockControls;
   sysAudioChk.disabled   = lockControls;
@@ -358,22 +359,61 @@ function buildStartPayload() {
 
 async function showSaveSuccessToast(fileHandle) {
   const msg = document.createDocumentFragment();
-  msg.append('Recording saved to disk. ');
-  if (fileHandle) {
-    try {
-      const file = await fileHandle.getFile();
-      const url  = URL.createObjectURL(file);
-      const link = Object.assign(document.createElement('a'), {
-        href: url, target: '_blank', rel: 'noopener noreferrer',
-        textContent: 'Open in new tab', className: 'toast-link',
-      });
-      msg.append(link);
-      setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
-      window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
-    } catch (_) {
-      // getFile() may fail if the user moved/deleted the file; skip the link.
+
+  if (storage.isOPFS) {
+    // OPFS mode: the recording was staged in browser storage — trigger a download
+    // and clean up the temporary file from OPFS.
+    msg.append('Recording complete. ');
+    if (fileHandle) {
+      try {
+        const file = await fileHandle.getFile();
+        const url  = URL.createObjectURL(file);
+
+        // Trigger automatic download.
+        const dl = document.createElement('a');
+        dl.href     = url;
+        dl.download = file.name;
+        document.body.appendChild(dl);
+        dl.click();
+        document.body.removeChild(dl);
+
+        // Also surface a manual download link in case the browser blocked the
+        // automatic download (e.g. pop-up blockers or strict security settings).
+        const link = Object.assign(document.createElement('a'), {
+          href: url, download: file.name,
+          textContent: 'Download', className: 'toast-link',
+        });
+        msg.append(link);
+
+        setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
+        window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
+
+        // Remove the temporary OPFS file now that we have a blob URL for it.
+        try { await storage.dirHandle.removeEntry(file.name); } catch (_) {}
+      } catch (_) {
+        // getFile() may fail if something went wrong; skip the download link.
+      }
+    }
+  } else {
+    // FSA mode: file already saved to the user's chosen folder on disk.
+    msg.append('Recording saved to disk. ');
+    if (fileHandle) {
+      try {
+        const file = await fileHandle.getFile();
+        const url  = URL.createObjectURL(file);
+        const link = Object.assign(document.createElement('a'), {
+          href: url, target: '_blank', rel: 'noopener noreferrer',
+          textContent: 'Open in new tab', className: 'toast-link',
+        });
+        msg.append(link);
+        setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
+        window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
+      } catch (_) {
+        // getFile() may fail if the user moved/deleted the file; skip the link.
+      }
     }
   }
+
   showToast(msg, 'success');
 }
 
@@ -462,14 +502,7 @@ if (!hasGetDisplayMedia) {
     'Screen recording is not supported on this device. ' +
     'Mobile browsers run inside a security sandbox that prevents access to the device screen — ' +
     'this is where native desktop apps still shine. ' +
-    'Please open this page on a desktop browser (Chrome or Edge) to use the recorder.',
-    'warning'
-  );
-  document.getElementById('recorder-ui').hidden = true;
-} else if (!hasFSA) {
-  showAlert(
-    'Your browser does not support the File System Access API, which this recorder requires to ' +
-    'stream video directly to disk. Please open this page in Chrome or Edge to use the recorder.',
+    'Please open this page on a desktop browser (Chrome, Edge, or Firefox) to use the recorder.',
     'warning'
   );
   document.getElementById('recorder-ui').hidden = true;
@@ -490,7 +523,11 @@ if (hasGetDisplayMedia) {
 // Start the canvas preview loop immediately (devices/webcam start after enumeration)
 api.restartPreviews();
 
-if (hasFSA) storage.init();
+storage.init().then(() => {
+  // Hide the folder-picker button in OPFS mode — the user downloads the file
+  // when the recording is complete instead of choosing a save directory.
+  if (storage.isOPFS) pickDirBtn.hidden = true;
+});
 
 // ── Event listeners ────────────────────────────────────────────────────────────
 

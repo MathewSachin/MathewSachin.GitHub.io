@@ -50,6 +50,13 @@ export class StorageManager {
   #dirNameEl;
   #onError;  // (title, message) callback — keeps UI coupling out of this module
 
+  // True when the File System Access API is unavailable and we are using the
+  // Origin Private File System (OPFS) as a temporary staging area instead.
+  // Set synchronously so that ensureAccess() and render() can use it before
+  // the async init() resolves.
+  #isOPFS = typeof window.showDirectoryPicker !== 'function' &&
+            typeof navigator?.storage?.getDirectory === 'function';
+
   constructor(dirNameEl, onError) {
     this.#dirNameEl = dirNameEl;
     this.#onError   = onError;
@@ -58,20 +65,38 @@ export class StorageManager {
   // The currently selected (and permitted) directory handle, or null.
   get dirHandle() { return this.#dirHandle; }
 
-  // Opens IndexedDB and restores the previously persisted directory handle.
-  // Call once at startup (safe to call even if IndexedDB is unavailable).
+  // True when using OPFS instead of the File System Access API.
+  get isOPFS() { return this.#isOPFS; }
+
+  // Opens IndexedDB and restores the previously persisted directory handle
+  // (FSA mode), or acquires the OPFS root directory (OPFS mode).
+  // Call once at startup (safe to call even if the underlying API is unavailable).
   async init() {
-    try {
-      this.#idbDb  = await openDB();
-      const handle = await idbGet(this.#idbDb, 'dir-handle');
-      if (handle) { this.#dirHandle = handle; this.#updateDirUI(); }
-    } catch (_) {
-      // IndexedDB unavailable (e.g. private browsing); proceed without persistence.
+    if (!this.#isOPFS) {
+      // FSA path: restore persisted folder handle from IndexedDB.
+      try {
+        this.#idbDb  = await openDB();
+        const handle = await idbGet(this.#idbDb, 'dir-handle');
+        if (handle) { this.#dirHandle = handle; this.#updateDirUI(); }
+      } catch (_) {
+        // IndexedDB unavailable (e.g. private browsing); proceed without persistence.
+      }
+    } else {
+      // OPFS path: recordings are staged in the browser's private storage and
+      // downloaded by the user when the recording is complete.
+      try {
+        this.#dirHandle = await navigator.storage.getDirectory();
+        this.#updateDirUI();
+      } catch (_) {
+        // OPFS unavailable; ensureAccess() will surface the error when recording starts.
+      }
     }
   }
 
-  // Shows the directory picker and persists the chosen handle.
+  // Shows the directory picker and persists the chosen handle (FSA mode only).
+  // No-op in OPFS mode.
   async pickDirectory() {
+    if (this.#isOPFS) return;
     try {
       this.#dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
       this.#updateDirUI();
@@ -83,10 +108,25 @@ export class StorageManager {
     }
   }
 
-  // Ensures a writable directory is available, prompting if needed.
+  // Ensures a writable directory is available, prompting if needed (FSA mode)
+  // or resolving the OPFS root (OPFS mode).
   // Returns true when the caller may proceed, false when access was denied or
   // the user cancelled the picker.
   async ensureAccess() {
+    if (this.#isOPFS) {
+      // OPFS is always accessible without a user-facing permission prompt.
+      if (!this.#dirHandle) {
+        try {
+          this.#dirHandle = await navigator.storage.getDirectory();
+        } catch (err) {
+          this.#onError('Storage Error', 'Could not access browser storage: ' + err.message);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // FSA path —————————————————————————————————————————————————————————————
     if (!this.#dirHandle) {
       try {
         this.#dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
@@ -119,7 +159,11 @@ export class StorageManager {
   // ── Private helpers ──────────────────────────────────────────────────────────
 
   #updateDirUI() {
-    this.#dirNameEl.textContent = this.#dirHandle ? this.#dirHandle.name : '(no folder selected)';
+    if (this.#isOPFS) {
+      this.#dirNameEl.textContent = '(saving to browser storage — file downloads when done)';
+    } else {
+      this.#dirNameEl.textContent = this.#dirHandle ? this.#dirHandle.name : '(no folder selected)';
+    }
   }
 
   async #persistHandle() {
