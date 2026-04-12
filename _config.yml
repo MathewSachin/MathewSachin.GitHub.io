@@ -72,6 +72,7 @@ jekyll-minifier:
     - "dino/offline.js"
     - "scripts/orama.js"
     - "tools/llm/llm.js"
+    - "tools/pdf/pdf.worker.js"
 
 picture:
   source: "images"
