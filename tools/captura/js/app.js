@@ -361,41 +361,40 @@ async function showSaveSuccessToast(fileHandle) {
   const msg = document.createDocumentFragment();
 
   if (storage.isOPFS) {
-    // OPFS mode: the recording was staged in browser storage — trigger a download
-    // and clean up the temporary file from OPFS.
+    // OPFS mode: the recording was staged in browser storage.
+    // Show a "Download recording" link and keep the toast open until the user
+    // dismisses it — Firefox requires a real user click to trigger a file download,
+    // so we cannot auto-fire the download programmatically.
     msg.append('Recording complete. ');
     if (fileHandle) {
       try {
         const file = await fileHandle.getFile();
         const url  = URL.createObjectURL(file);
+        const name = file.name;
 
-        // Trigger automatic download.
-        const dl = document.createElement('a');
-        dl.href     = url;
-        dl.download = file.name;
-        document.body.appendChild(dl);
-        dl.click();
-        document.body.removeChild(dl);
-
-        // Also surface a manual download link in case the browser blocked the
-        // automatic download (e.g. pop-up blockers or strict security settings).
         const link = Object.assign(document.createElement('a'), {
-          href: url, download: file.name,
-          textContent: 'Download', className: 'toast-link',
+          href: url, download: name,
+          textContent: 'Download recording', className: 'toast-link',
         });
         msg.append(link);
 
-        setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
-        window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
-
-        // Remove the temporary OPFS file now that we have a blob URL for it.
-        // Silently ignore errors — the file may have already been removed, and
-        // a cleanup failure does not affect the download the user already received.
-        try { await storage.dirHandle.removeEntry(file.name); } catch (_) {}
+        // Revoke the blob URL and clean up the OPFS temp file together after the
+        // timeout so the file remains accessible for the entire duration.
+        // Do NOT call removeEntry() before this — Firefox's blob URL keeps a live
+        // reference to the OPFS-backed File and becomes invalid if the entry is
+        // removed while the URL is still alive.
+        const cleanup = () => {
+          URL.revokeObjectURL(url);
+          storage.dirHandle?.removeEntry(name).catch(() => {});
+        };
+        setTimeout(cleanup, BLOB_URL_REVOKE_TIMEOUT_MS);
+        window.addEventListener('beforeunload', cleanup, { once: true });
       } catch (_) {
         // getFile() may fail if something went wrong; skip the download link.
       }
     }
+    // Disable auto-hide so the download link stays visible until the user acts.
+    showToast(msg, 'success', false);
   } else {
     // FSA mode: file already saved to the user's chosen folder on disk.
     msg.append('Recording saved to disk. ');
@@ -414,9 +413,8 @@ async function showSaveSuccessToast(fileHandle) {
         // getFile() may fail if the user moved/deleted the file; skip the link.
       }
     }
+    showToast(msg, 'success');
   }
-
-  showToast(msg, 'success');
 }
 
 // ── Device enumeration ────────────────────────────────────────────────────────
