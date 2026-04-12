@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+    <meta charset="UTF-8">
+    <title>How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="/pr-preview/pr-249/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-249/styles/styles.css">
+
+    
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-249/feed.xml" title="Mathew Sachin">
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages">
+<meta name="author" content="Mathew Sachin">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Every pull request on this blog automatically gets a live, browsable preview — deployed to a real URL, no staging server required. Here’s the complete setup and why it matters.">
+<meta property="og:description" content="Every pull request on this blog automatically gets a live, browsable preview — deployed to a real URL, no staging server required. Here’s the complete setup and why it matters.">
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-249/blog/2026/04/01/pr-preview-setup.html">
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-249/blog/2026/04/01/pr-preview-setup.html">
+<meta property="og:site_name" content="Mathew Sachin">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-04-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages">
+<meta name="twitter:site" content="@">
+<meta name="twitter:creator" content="@Mathew Sachin">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mathew Sachin"},"dateModified":"2026-04-01T00:00:00+00:00","datePublished":"2026-04-01T00:00:00+00:00","description":"Every pull request on this blog automatically gets a live, browsable preview — deployed to a real URL, no staging server required. Here’s the complete setup and why it matters.","headline":"How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages","mainEntityOfPage":{"@type":"WebPage","@id":"https://mathewsachin.github.io/pr-preview/pr-249/blog/2026/04/01/pr-preview-setup.html"},"url":"https://mathewsachin.github.io/pr-preview/pr-249/blog/2026/04/01/pr-preview-setup.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-249/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-249/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-249/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-249/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-249/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+<script>
+(function () {
+    var toggler = document.querySelector(".navbar-toggler");
+    var content = document.getElementById("navbarContent");
+    if (toggler && content) {
+        toggler.addEventListener("click", function () {
+            content.classList.toggle("show");
+            toggler.classList.toggle("collapsed");
+            toggler.setAttribute("aria-expanded", content.classList.contains("show").toString());
+        });
+    }
+}());
+</script>
+
+
+    <link rel="stylesheet" href="/pr-preview/pr-249/styles/blog.css">
+<link rel="stylesheet" href="/pr-preview/pr-249/styles/syntax.css">
+
+
+<div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+
+<div class="bg-dark">
+<div class="pt-4 pb-5 post-hero text-white">
+    <div class="container">
+        <h2>How I Set Up Live PR Previews for This Jekyll Site on GitHub Pages</h2>
+        <em>01 Apr 2026</em>   -  
+        <em>
+
+
+6 min
+
+
+read</em>
+
+        <div class="post-tag my-1">
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-249/blog/tags#github-actions">github-actions</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-249/blog/tags#ci-cd">ci-cd</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-249/blog/tags#jekyll">jekyll</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-249/blog/tags#github-pages">github-pages</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-249/blog/tags#devops">devops</a>
+            
+                <a class="badge rounded-pill bg-secondary" href="/pr-preview/pr-249/blog/tags#tutorial">tutorial</a>
+            
+        </div>
+
+        
+        
+            <hr class="border-light mt-3 mb-0">
+            <div class="series-banner">
+      <i class="fas fa-layer-group me-1" aria-hidden="true"></i>
+      Part 5 of 9 —
+      <a href="/pr-preview/pr-249/blog/series/blogging-with-jekyll/">Blogging with Jekyll</a> series
+      <br>
+      <a class="series-prev-link" href="/pr-preview/pr-249/blog/2026/03/25/how-site-search-works.html">
+        <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>Previous: This Blog Has Fully Offline Search — Here's How It Works
+      </a>
+    </div>
+        
+        <div class="p-5"></div>
+    </div>
+</div>
+
+<div class="container post-content-container">
+    <div class="row">
+        <div class="col-md-10">
+            
+
+            <div id="post" class="card">
+                <div class="card-body">
+                    <div class="page-content">
+                    
+
+
+
+
+
+
+
+
+
+
+  <p><em>Every pull request on this blog automatically gets a live, browsable preview — deployed to a real URL, no staging server required. Here’s the complete setup and why it matters.</em></p>
+  
+    
+    
+    
+  
+
+  
+
+<h2 id="the-problem-testing-changes-blind">The Problem: Testing Changes Blind</h2>
+  
+    
+    
+    
+  
+
+  
+
+<p>Static sites are great. No database, no backend, no runtime surprises. But that simplicity creates a blind spot during development: you can’t see your changes running in production until you actually deploy to production.</p>
+  
+    
+    
+    
+  
+
+  
+
+<p>For a personal blog, that might sound fine — just push to main and see what happens. But it’s not ideal:</p>
+  
+    
+    
+    
+  
+
+  
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm">
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>The risk</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>New blog post with a pintora diagram</td>
+      <td>Might render incorrectly after minification</td>
+    </tr>
+    <tr>
+      <td>Layout change touching CSS</td>
+      <td>Could break other pages you didn’t check</td>
+    </tr>
+    <tr>
+      <td>Jekyll plugin upgrade</td>
+      <td>Subtle rendering differences you won’t catch locally</td>
+    </tr>
+    <tr>
+      <td>Baseurl-sensitive links</td>
+      <td>Works on localhost, breaks on GitHub Pages</td>
+    </tr>
+  </tbody>
+</table></div>
+  
+    
+    
+    
+  
+
+  
+
+<p>The standard fix for this is a <strong>staging environment</strong> — a separate deployment you can inspect before promoting changes to production. But spinning up and maintaining a whole separate server for a static blog feels wildly over-engineered.</p>
+  
+    
+    
+    
+  
+
+  
+
+<p>The better answer is <strong>PR previews</strong>: a temporary, isolated deployment of exactly what’s in your pull request, automatically created every time you open or push to a PR.</p>
+  
+    
+    
+    
+      
+<div class="in-content-ad my-4">
+  <p class="text-muted text-center mb-2"><small>Advertisement</small></p>
+  <div class="card border">
+    <div class="card-body p-2">
+      
+    </div>
+  </div>
+</div>
+
+
+    
+  
+
+  
+
+<h2 id="how-it-works-on-this-site">How It Works on This Site</h2>
+  
+    
+    
+    
+  
+
+  
+
+<p>Every PR gets a live preview at:</p>
+  
+    
+    
+    
+  
+
+  
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight">
+<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+<span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre class="highlight" id="code-block-1"><code>https://mathewsachin.github.io/pr-preview/pr-{NUMBER}/
+</code></pre>
+</div></div>
+
+<p>The preview is:</p>
+  
+    
+    
+    
+  
+
+  
+<ul>
+  <li>
+<strong>Automatically created</strong> when a PR is opened or updated</li>
+  <li>
+<strong>Automatically updated</strong> on every new commit to the PR branch</li>
+  <li>
+<strong>Automatically deleted</strong> when the PR is closed or merged</li>
+  <li>
+<strong>Hosted in the same <code class="language-plaintext highlighter-rouge">gh-pages</code> branch</strong> as the production site — no extra infrastructure</li>
+</ul>
+
+<p>All of this is wired up in three GitHub Actions workflow files.</p>
+  
+    
+    
+    
+  
+
+  
+
+<h2 id="the-three-workflow-architecture">The Three-Workflow Architecture</h2>
+  
+    
+    
+    
+  
+
+  
+
+<div class="pintora-wrapper"><svg width="617" height="1208" style="width: 617px; height: 1208px;" xmlns="http://www.w3.org/2000/svg"><defs id="defs_1"></defs><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 0,0 l 617,0 l 0,1208 l-617 0 z" fill="#fff" stroke="none"></path><g opacity="1" transform="matrix(1,0,0,1,15,15)"><g opacity="1"><path opacity="1" stroke-width="2" stroke-opacity="1" fill-opacity="1" d="M 2,0 l 583,0 a 2,2,0,0,1,2,2 l 0,602 a 2,2,0,0,1,-2,2 l -583,0 a 2,2,0,0,1,-2,-2 l 0,-602 a 2,2,0,0,1,2,-2 z" fill="#fff" stroke="#3b4044" class="activity__group-rect"></path><text alignment-baseline="before-edge" text-anchor="left" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="7" y="0" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="bold" font-variant="normal" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none" class="activity__group-rect">pr-preview.yml</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 345,15 l 128,0 l 0,34 l-128 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="32" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="108" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">PR opened / pushed</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 321,79 l 176,0 l 0,34 l-176 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="96" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="156" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">baseurl = /pr-preview/pr-N</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 357,143 l 104,0 l 0,34 l-104 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="160" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="84" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">preview = true</text></g><g opacity="1"><path opacity="1" stroke-width="2" stroke-opacity="1" fill-opacity="1" d="M 32,207 l 523,0 a 2,2,0,0,1,2,2 l 0,316 a 2,2,0,0,1,-2,2 l -523,0 a 2,2,0,0,1,-2,-2 l 0,-316 a 2,2,0,0,1,2,-2 z" fill="#fff" stroke="#3b4044" class="activity__group-rect"></path><text alignment-baseline="before-edge" text-anchor="left" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="37" y="207" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="bold" font-variant="normal" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none" class="activity__group-rect">build-site.yml (reusable workflow)</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 333,222 l 152,0 l 0,34 l-152 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="239" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="132" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">npm ci + npm run build</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 306,286 l 206,0 l 0,34 l-206 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="303" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="186" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Inject baseurl into _config.yml</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 327,350 l 164,0 l 0,34 l-164 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="367" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="144" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Disable Google Analytics</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 363,414 l 92,0 l 0,34 l-92 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="431" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="72" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">jekyll build</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 339,478 l 140,0 l 0,34 l-140 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="495" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="120" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Upload site artifact</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 357,557 l 104,0 l 0,34 l-104 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="574" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="84" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Deploy preview</text></g><g opacity="1"><path opacity="1" stroke-width="2" stroke-opacity="1" fill-opacity="1" d="M 2,636 l 583,0 a 2,2,0,0,1,2,2 l 0,538 a 2,2,0,0,1,-2,2 l -583,0 a 2,2,0,0,1,-2,-2 l 0,-538 a 2,2,0,0,1,2,-2 z" fill="#fff" stroke="#3b4044" class="activity__group-rect"></path><text alignment-baseline="before-edge" text-anchor="left" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="7" y="636" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="bold" font-variant="normal" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none" class="activity__group-rect">deploy.yml</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 363,651 l 92,0 l 0,34 l-92 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="668" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="72" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Push to main</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 354,715 l 110,0 l 0,34 l-110 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="732" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="90" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">baseurl = empty</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 354,779 l 110,0 l 0,34 l-110 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="796" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="90" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">preview = false</text></g><g opacity="1"><path opacity="1" stroke-width="2" stroke-opacity="1" fill-opacity="1" d="M 32,843 l 523,0 a 2,2,0,0,1,2,2 l 0,252 a 2,2,0,0,1,-2,2 l -523,0 a 2,2,0,0,1,-2,-2 l 0,-252 a 2,2,0,0,1,2,-2 z" fill="#fff" stroke="#3b4044" class="activity__group-rect"></path><text alignment-baseline="before-edge" text-anchor="left" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="37" y="843" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="bold" font-variant="normal" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none" class="activity__group-rect">build-site.yml (reusable workflow)</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 333,858 l 152,0 l 0,34 l-152 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="875" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="132" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">npm ci + npm run build</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 306,922 l 206,0 l 0,34 l-206 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="939" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="186" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Inject baseurl into _config.yml</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 363,986 l 92,0 l 0,34 l-92 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="1003" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="72" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">jekyll build</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 339,1050 l 140,0 l 0,34 l-140 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="1067" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="120" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Upload site artifact</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 330,1129 l 158,0 l 0,34 l-158 0 z" fill="#fdb05e" stroke="#3b4044"></path><text alignment-baseline="central" text-anchor="middle" opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="409" y="1146" font-size="14" font-family="Source Code Pro, sans-serif" font-style="normal" font-weight="normal" font-variant="normal" width="138" height="14" fill="#3b4044" paint-order="stroke" style="stroke-linecap:butt; stroke-linejoin:miter;" stroke="none">Deploy to gh-pages root</text></g><g opacity="1"><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 49L 409 64L 409 79" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="79" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 75L 409 79L 402.0717967697245 83" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,488,-330)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 113L 409 128L 409 143" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="143" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 139L 409 143L 402.0717967697245 147" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,552,-266)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 177L 409 192L 409 207L 409 222" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="222" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 218L 409 222L 402.0717967697245 226" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,631,-187)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 256L 409 271L 409 286" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="286" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 282L 409 286L 402.0717967697245 290" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,695,-123)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 320L 409 335L 409 350" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="350" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 346L 409 350L 402.0717967697245 354" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,759,-59)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 384L 409 399L 409 414" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="414" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 410L 409 414L 402.0717967697245 418" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,823,5)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 448L 409 463L 409 478" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="478" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 474L 409 478L 402.0717967697245 482" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,887,68.99999999999994)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 512L 409 527L 409 542L 409 557" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="557" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 553L 409 557L 402.0717967697245 561" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,966,147.99999999999994)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 591L 409 606L 409 621L 409 636L 409 651" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="651" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 647L 409 651L 402.0717967697245 655" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1060,241.99999999999994)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 685L 409 700L 409 715" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="715" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 711L 409 715L 402.0717967697245 719" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1124,305.99999999999994)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 749L 409 764L 409 779" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="779" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 775L 409 779L 402.0717967697245 783" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1188,369.99999999999994)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 813L 409 828L 409 843L 409 858" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="858" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 854L 409 858L 402.0717967697245 862" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1267,448.99999999999994)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 892L 409 907L 409 922" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="922" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 918L 409 922L 402.0717967697245 926" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1331,513)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 956L 409 971L 409 986" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="986" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 982L 409 986L 402.0717967697245 990" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1395,577)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 1020L 409 1035L 409 1050" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="1050" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 1046L 409 1050L 402.0717967697245 1054" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1459,641)"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" d="M 409 1084L 409 1099L 409 1114L 409 1129" stroke="#fdb05e" stroke-linejoin="round" fill="none"></path><path opacity="1" stroke-width="1" stroke-opacity="1" fill-opacity="1" x="402.0717967697245" y="1129" stroke="#fdb05e" stroke-linecap="round" d="M 402.0717967697245 1125L 409 1129L 402.0717967697245 1133" fill="none" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,1538,720)"></path></g></g></svg></div>
+
+<p>The key design decision is that <code class="language-plaintext highlighter-rouge">build-site.yml</code> is a <strong>reusable workflow</strong> (<code class="language-plaintext highlighter-rouge">workflow_call</code>). Both the PR preview workflow and the production deploy workflow call it — they just pass different inputs.</p>
+  
+    
+    
+    
+  
+
+  
+
+<h2 id="build-siteyml-the-reusable-build">build-site.yml: The Reusable Build</h2>
+  
+    
+    
+    
+      
+<div class="in-content-ad my-4">
+  <p class="text-muted text-center mb-2"><small>Advertisement</small></p>
+  <div class="card border">
+    <div class="card-body p-2">
+      
+    </div>
+  </div>
+</div>
+
+
+    
+  
+
+  
+
+<div class="language-yaml highlighter-rouge"><div class="highlight">
+<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+<span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-2" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre class="highlight" id="code-block-2"><code><span class="na">on</span><span class="pi">:</span>
+  <span class="na">workflow_call</span><span class="pi">:</span>
+    <span class="na">inputs</span><span class="pi">:</span>
+      <span class="na">baseurl</span><span class="pi">:</span>
+        <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Optional</span><span class="nv"> </span><span class="s">baseurl</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">inject</span><span class="nv"> </span><span class="s">into</span><span class="nv"> </span><span class="s">_config.yml'</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">default</span><span class="pi">:</span> <span class="s1">'</span><span class="s">'</span>
+      <span class="na">testing</span><span class="pi">:</span>
+        <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Disables</span><span class="nv"> </span><span class="s">Google</span><span class="nv"> </span><span class="s">Analytics</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">AdSense'</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">boolean</span>
+        <span class="na">default</span><span class="pi">:</span> <span class="kc">false</span>
+</code></pre>
+</div></div>
+
+<p>It accepts two inputs:</p>
+  
+    
+    
+    
+  
+
+  
+
+<ul>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">baseurl</code></strong> — for previews this is <code class="language-plaintext highlighter-rouge">/pr-preview/pr-42</code>; for production it’s empty. This gets appended to <code class="language-plaintext highlighter-rouge">_config.yml</code> at build time so every <code class="language-plaintext highlighter-rouge">relative_url</code> filter in Jekyll produces the right path.</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">testing</code></strong> — when <code class="language-plaintext highlighter-rouge">true</code>, Google analytics and AdSense includes are disabled. You don’t want preview traffic polluting your analytics and serving ads.</li>
+</ul>
+
+<p>The baseurl injection is a one-liner:</p>
+  
+    
+    
+    
+  
+
+  
+
+<div class="language-yaml highlighter-rouge"><div class="highlight">
+<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+<span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre class="highlight" id="code-block-3"><code><span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set baseurl</span>
+  <span class="na">if</span><span class="pi">:</span> <span class="s">inputs.baseurl != ''</span>
+  <span class="na">env</span><span class="pi">:</span>
+    <span class="na">BASEURL</span><span class="pi">:</span> <span class="s">$</span>
+  <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+    <span class="s">echo "baseurl: $BASEURL" &gt;&gt; _config.yml</span>
+</code></pre>
+</div></div>
+
+<p>Appending to <code class="language-plaintext highlighter-rouge">_config.yml</code> works because Jekyll takes the last value when a key appears more than once. The original file has no <code class="language-plaintext highlighter-rouge">baseurl</code> key, so this cleanly adds it for the build.</p>
+  
+    
+    
+    
+  
+
+  
+
+<h2 id="pr-previewyml-the-preview-trigger">pr-preview.yml: The Preview Trigger</h2>
+  
+    
+    
+    
+  
+
+  
+
+<div class="language-yaml highlighter-rouge"><div class="highlight">
+<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+<span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre class="highlight" id="code-block-4"><code><span class="na">on</span><span class="pi">:</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">types</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">opened</span>
+      <span class="pi">-</span> <span class="s">reopened</span>
+      <span class="pi">-</span> <span class="s">synchronize</span>
+      <span class="pi">-</span> <span class="s">closed</span>
+
+<span class="na">concurrency</span><span class="pi">:</span> <span class="s">preview-$</span>
+</code></pre>
+</div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">concurrency</code> key ensures that rapid successive pushes to a PR don’t trigger parallel preview deployments that stomp on each other. The second run waits for the first to finish (or cancels it, depending on your config).</p>
+  
+    
+    
+    
+  
+
+  
+
+<p>The actual deployment is handled by <a href="https://github.com/rossjrw/pr-preview-action">rossjrw/pr-preview-action</a>:</p>
+  
+    
+    
+    
+  
+
+  
+
+<div class="language-yaml highlighter-rouge"><div class="highlight">
+<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+<span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre class="highlight" id="code-block-5"><code><span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Deploy PR preview</span>
+  <span class="na">uses</span><span class="pi">:</span> <span class="s">rossjrw/pr-preview-action@v1</span>
+  <span class="na">with</span><span class="pi">:</span>
+    <span class="na">source-dir</span><span class="pi">:</span> <span class="s">./_site</span>
+    <span class="na">preview-branch</span><span class="pi">:</span> <span class="s">gh-pages</span>
+    <span class="na">pages-base-url</span><span class="pi">:</span> <span class="s">MathewSachin.github.io</span>
+</code></pre>
+</div></div>
+
+<p>This action does several things automatically:</p>
+  
+    
+    
+    
+      
+<div class="in-content-ad my-4">
+  <p class="text-muted text-center mb-2"><small>Advertisement</small></p>
+  <div class="card border">
+    <div class="card-body p-2">
+      
+    </div>
+  </div>
+</div>
+
+
+    
+  
+
+  
+
+<ol>
+  <li>
+<strong>Creates</strong> a subdirectory <code class="language-plaintext highlighter-rouge">/pr-preview/pr-{NUMBER}</code> in the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch and pushes the built site into it</li>
+  <li>
+<strong>Posts a comment</strong> on the PR with a link to the preview URL</li>
+  <li>
+<strong>Updates</strong> that comment on every subsequent push</li>
+  <li>
+<strong>Tears down</strong> the subdirectory and updates the comment to say “preview removed” when the PR is closed</li>
+</ol>
+
+<h2 id="deployyml-keeping-previews-safe-during-production-deploy">deploy.yml: Keeping Previews Safe During Production Deploy</h2>
+  
+    
+    
+    
+  
+
+  
+
+<p>The production deploy uses <a href="https://github.com/JamesIves/github-pages-deploy-action">JamesIves/github-pages-deploy-action</a>, which by default wipes the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch clean before deploying. That would delete every live preview.</p>
+  
+    
+    
+    
+  
+
+  
+
+<p>The fix is one line:</p>
+  
+    
+    
+    
+  
+
+  
+
+<div class="language-yaml highlighter-rouge"><div class="highlight">
+<div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+<span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<pre class="highlight" id="code-block-6"><code><span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Deploy to gh-pages branch</span>
+  <span class="na">uses</span><span class="pi">:</span> <span class="s">JamesIves/github-pages-deploy-action@v4</span>
+  <span class="na">with</span><span class="pi">:</span>
+    <span class="na">folder</span><span class="pi">:</span> <span class="s">./_site</span>
+    <span class="na">branch</span><span class="pi">:</span> <span class="s">gh-pages</span>
+    <span class="na">clean-exclude</span><span class="pi">:</span> <span class="s">pr-preview</span>
+</code></pre>
+</div></div>
+
+<p><code class="language-plaintext highlighter-rouge">clean-exclude: pr-preview</code> tells the action to leave the <code class="language-plaintext highlighter-rouge">pr-preview/</code> directory untouched during its cleanup pass. PR previews survive production deployments.</p>
+  
+    
+    
+    
+  
+
+  
+
+<h2 id="what-actually-gets-tested">What Actually Gets Tested</h2>
+  
+    
+    
+    
+  
+
+  
+
+<p>Things that have actually been caught in preview before they hit production:</p>
+  
+    
+    
+    
+  
+
+  
+
+<ul>
+  <li>
+<strong>Broken relative URLs</strong> — a link that works locally (<code class="language-plaintext highlighter-rouge">/blog/...</code>) but resolves incorrectly under the preview baseurl, revealing a hardcoded path that should have used <code class="language-plaintext highlighter-rouge">relative_url</code>
+</li>
+  <li>
+<strong>Minification quirks</strong> — <code class="language-plaintext highlighter-rouge">jekyll-minifier</code> processing JavaScript differently in production mode than in development</li>
+  <li>
+<strong>Image processing</strong> — <code class="language-plaintext highlighter-rouge">jekyll_picture_tag</code> generating images with the right dimensions but wrong paths when baseurl changes</li>
+  <li>
+<strong>Pintora diagrams</strong> — the JS-rendered diagrams look fine in dev but can have sizing issues when the layout CSS is minified</li>
+</ul>
+
+<p>The preview acts as a complete end-to-end test of the deployment pipeline itself, not just the content.</p>
+  
+    
+    
+    
+      
+<div class="in-content-ad my-4">
+  <p class="text-muted text-center mb-2"><small>Advertisement</small></p>
+  <div class="card border">
+    <div class="card-body p-2">
+      
+    </div>
+  </div>
+</div>
+
+
+    
+  
+
+  
+
+<h2 id="the-cost-zero">The Cost: Zero</h2>
+  
+    
+    
+    
+  
+
+  
+
+<p>The entire setup runs on GitHub Actions free tier. For a public repository, GitHub Actions minutes are unlimited. The <code class="language-plaintext highlighter-rouge">gh-pages</code> branch storage cost is negligible — each PR preview is just a folder of static HTML/CSS/JS, a few hundred KB at most, and it’s deleted when the PR closes.</p>
+  
+    
+    
+    
+  
+
+  
+
+<p>No Netlify subscription. No Vercel project. No Cloudflare Pages configuration. Just the same GitHub Pages hosting the production site already uses, with a clever subdirectory trick.</p>
+  
+    
+    
+    
+  
+
+  
+
+<h2 id="summary">Summary</h2>
+  
+    
+    
+    
+  
+
+  
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">build-site.yml</code></td>
+      <td>Reusable build; accepts <code class="language-plaintext highlighter-rouge">baseurl</code> and <code class="language-plaintext highlighter-rouge">preview</code> inputs</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">pr-preview.yml</code></td>
+      <td>Triggers on PR events; builds with PR-specific baseurl; deploys via rossjrw/pr-preview-action</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">deploy.yml</code></td>
+      <td>Production deploy; uses <code class="language-plaintext highlighter-rouge">clean-exclude: pr-preview</code> to preserve live previews</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">rossjrw/pr-preview-action</code></td>
+      <td>Manages the <code class="language-plaintext highlighter-rouge">gh-pages</code> subdirectory and PR comments</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">JamesIves/github-pages-deploy-action</code></td>
+      <td>Production deploy action with selective cleanup</td>
+    </tr>
+  </tbody>
+</table></div>
+  
+    
+    
+    
+  
+
+  
+
+<p>The whole thing is about 100 lines of YAML across three files. For a Jekyll site hosted on GitHub Pages, it’s the lowest-friction way to get staging-quality previews on every PR.</p>
+  
+    
+    
+    
+  
+
+  
+
+  
+
+
+                    </div>
+
+                    <hr>
+
+                    
+
+<div class="post-share my-2">
+    <span class="me-2 text-muted small">Share:</span>
+    <a class="btn btn-sm btn-outline-secondary me-1" href="https://x.com/intent/tweet?text=How+I+Set+Up+Live+PR+Previews+for+This+Jekyll+Site+on+GitHub+Pages&amp;url=https://mathewsachin.github.io/blog/2026/04/01/pr-preview-setup.html" target="_blank" rel="noopener" aria-label="Share on X" data-share-method="twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-secondary me-1" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://mathewsachin.github.io/blog/2026/04/01/pr-preview-setup.html&amp;title=How+I+Set+Up+Live+PR+Previews+for+This+Jekyll+Site+on+GitHub+Pages" target="_blank" rel="noopener" aria-label="Share on LinkedIn" data-share-method="linkedin"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-secondary me-1" href="https://www.reddit.com/submit?url=https://mathewsachin.github.io/blog/2026/04/01/pr-preview-setup.html&amp;title=How+I+Set+Up+Live+PR+Previews+for+This+Jekyll+Site+on+GitHub+Pages" target="_blank" rel="noopener" aria-label="Share on Reddit" data-share-method="reddit"><i class="fab fa-reddit-alien" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-secondary me-1" href="https://wa.me/?text=How+I+Set+Up+Live+PR+Previews+for+This+Jekyll+Site+on+GitHub+Pages%20https://mathewsachin.github.io/blog/2026/04/01/pr-preview-setup.html" target="_blank" rel="noopener" aria-label="Share on WhatsApp" data-share-method="whatsapp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-secondary me-1" href="mailto:?subject=How+I+Set+Up+Live+PR+Previews+for+This+Jekyll+Site+on+GitHub+Pages&amp;body=Check%20out%20this%20page%3A%20https://mathewsachin.github.io/blog/2026/04/01/pr-preview-setup.html" aria-label="Share via Email" data-share-method="email"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    <button type="button" class="btn btn-sm btn-outline-secondary" id="copy-post-link" aria-label="Copy link"><i class="fa fa-link" aria-hidden="true"></i></button>
+</div>
+
+
+                    <br>
+
+                    
+                        <div class="series-post-nav" role="navigation" aria-label="Series navigation">
+<a href="/pr-preview/pr-249/blog/2026/03/25/how-site-search-works.html" class="series-nav-btn prev-post">
+          <i class="fas fa-arrow-left nav-icon" aria-hidden="true"></i>
+          <div>
+            <span class="nav-label">Previous in series</span>
+            <span class="nav-title"><i class="fas fa-search post-icon me-1" aria-hidden="true"></i>This Blog Has Fully Offline Search — Here's How It Works</span>
+          </div>
+        </a><a href="/pr-preview/pr-249/blog/2026/04/02/adsense-auto-vs-custom-placement.html" class="series-nav-btn next-post">
+          <i class="fas fa-arrow-right nav-icon" aria-hidden="true"></i>
+          <div>
+            <span class="nav-label">Next in series</span>
+            <span class="nav-title"><i class="fas fa-rectangle-ad post-icon me-1" aria-hidden="true"></i>AdSense Auto Ads vs. Custom Placement: Why I Chose to Control Every Ad on This Site</span>
+          </div>
+        </a>
+</div>
+                    
+
+                    
+                        
+
+
+
+<div class="related-posts-section bottom-variant">
+    <h5 class="related-posts-heading">
+        <i class="fas fa-bookmark me-2"></i>You might also like
+    </h5>
+    <div class="row">
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-249/blog/2026/03/25/how-site-search-works.html" class="related-post-link" aria-label="Read This Blog Has Fully Offline Search — Here's How It Works">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-search post-icon me-1" aria-hidden="true"></i>This Blog Has Fully Offline Search — Here's How It Works</p>
+                        <small class="related-post-date">Mar 25, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-249/blog/2026/03/12/ditching-disqus-for-giscus.html" class="related-post-link" aria-label="Read Ditching Disqus for giscus — and I Should Have Done It Sooner">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-comments post-icon me-1" aria-hidden="true"></i>Ditching Disqus for giscus — and I Should Have Done It Sooner</p>
+                        <small class="related-post-date">Mar 12, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 mb-3">
+            <a href="/pr-preview/pr-249/blog/2026/03/12/ai-blog-generation-flow.html" class="related-post-link" aria-label="Read How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-title mb-1"><i class="fas fa-robot post-icon me-1" aria-hidden="true"></i>How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages</p>
+                        <small class="related-post-date">Mar 12, 2026</small>
+                    </div>
+                    <div class="card-footer">
+                        <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+                        <br>
+                    
+
+                    <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</script>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none">
+    <div class="sticky-md-top" style="top: 10px">
+        <div class="mb-3">
+            <div class="card toc-card">
+                <button type="button" class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none" aria-expanded="false" aria-controls="toc-collapse">
+                    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                    <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+                </button>
+                <div class="card-header toc-header d-none d-md-block">
+                    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+                </div>
+                <div class="collapse d-md-block" id="toc-collapse">
+                    <div class="card-body p-0">
+                        <nav id="toc-nav" aria-label="Table of contents"><ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#the-problem-testing-changes-blind">The Problem: Testing Changes Blind</a></li>
+<li class="toc-entry toc-h2"><a href="#how-it-works-on-this-site">How It Works on This Site</a></li>
+<li class="toc-entry toc-h2"><a href="#the-three-workflow-architecture">The Three-Workflow Architecture</a></li>
+<li class="toc-entry toc-h2"><a href="#build-siteyml-the-reusable-build">build-site.yml: The Reusable Build</a></li>
+<li class="toc-entry toc-h2"><a href="#pr-previewyml-the-preview-trigger">pr-preview.yml: The Preview Trigger</a></li>
+<li class="toc-entry toc-h2"><a href="#deployyml-keeping-previews-safe-during-production-deploy">deploy.yml: Keeping Previews Safe During Production Deploy</a></li>
+<li class="toc-entry toc-h2"><a href="#what-actually-gets-tested">What Actually Gets Tested</a></li>
+<li class="toc-entry toc-h2"><a href="#the-cost-zero">The Cost: Zero</a></li>
+<li class="toc-entry toc-h2"><a href="#summary">Summary</a></li>
+</ul></nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-none d-md-block"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<br>
+</div>
+
+<button id="back-to-top" class="btn btn-info" title="Back to top" aria-label="Back to top">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</button>
+
+
+<!-- Lightbox dialog for blog post images -->
+<dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore>
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" aria-label="Close">×</button>
+    <img src="" alt="Expanded image">
+  </div>
+</dialog>
+
+
+    <script src="/pr-preview/pr-249/scripts/formatting.js"></script>
+  </body>
+</html>
