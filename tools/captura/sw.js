@@ -2,7 +2,7 @@
  * Cache-First strategy with versioned cache and user-controlled update flow.
  */
 
-const CACHE_NAME = 'captura-v2.0.1';
+const CACHE_NAME = 'captura-v2.0.2';
 
 // Local assets that must be available offline.
 // External CDN resources are cached dynamically on first request.

@@ -6,10 +6,6 @@ related:
   - /blog/2017/07/28/ffmpeg-pipe-csharp
   - /blog/2017/07/28/mixing-audio
   - /blog/2026/03/12/fate-grand-automata-developer-guide
-redirect_from:
-  - /Captura/
-  - /captura/
-  - captura
 ---
 
 ## What's Captura?
