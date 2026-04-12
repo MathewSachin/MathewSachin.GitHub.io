@@ -332,6 +332,8 @@ redirect_from:
       <strong>IndexedDB</strong> so it persists across page reloads — you only need to pick a
       folder once. A <em>Choose Folder</em> button in the settings panel lets you switch to a
       different folder at any time.
+    </p>
+    <p>
       When recording starts, the recorder verifies it still has write permission for the stored
       folder using <code>FileSystemDirectoryHandle.queryPermission()</code>. If permission has
       lapsed (e.g. after a browser restart), <code>requestPermission()</code> is called to prompt

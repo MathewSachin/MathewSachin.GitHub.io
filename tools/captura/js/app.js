@@ -389,6 +389,8 @@ async function showSaveSuccessToast(fileHandle) {
         window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
 
         // Remove the temporary OPFS file now that we have a blob URL for it.
+        // Silently ignore errors — the file may have already been removed, and
+        // a cleanup failure does not affect the download the user already received.
         try { await storage.dirHandle.removeEntry(file.name); } catch (_) {}
       } catch (_) {
         // getFile() may fail if something went wrong; skip the download link.
@@ -523,11 +525,11 @@ if (hasGetDisplayMedia) {
 // Start the canvas preview loop immediately (devices/webcam start after enumeration)
 api.restartPreviews();
 
-storage.init().then(() => {
-  // Hide the folder-picker button in OPFS mode — the user downloads the file
-  // when the recording is complete instead of choosing a save directory.
-  if (storage.isOPFS) pickDirBtn.hidden = true;
-});
+storage.init();
+
+// isOPFS is determined synchronously at construction time; apply initial UI state now
+// rather than waiting for init() to resolve so render() stays the single source of truth.
+pickDirBtn.hidden = storage.isOPFS;
 
 // ── Event listeners ────────────────────────────────────────────────────────────
 
