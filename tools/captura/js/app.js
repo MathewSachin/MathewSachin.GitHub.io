@@ -372,14 +372,6 @@ async function showSaveSuccessToast(fileHandle) {
         const url  = URL.createObjectURL(file);
         const name = file.name;
 
-        // Trigger automatic download.
-        const dl = document.createElement('a');
-        dl.href     = url;
-        dl.download = name;
-        document.body.appendChild(dl);
-        dl.click();
-        document.body.removeChild(dl);
-
         const link = Object.assign(document.createElement('a'), {
           href: url, download: name,
           textContent: 'Download recording', className: 'toast-link',
