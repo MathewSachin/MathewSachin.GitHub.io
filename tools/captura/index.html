@@ -204,7 +204,7 @@ redirect_from:
       <li>
         <strong>Desktop only</strong> — mobile browsers do not expose
         <code>getDisplayMedia</code> because the mobile OS sandbox prevents web pages from
-        capturing other apps' screens. Use Chrome or Edge on a desktop.
+        capturing other apps' screens. Use Chrome, Edge, or Firefox on a desktop.
       </li>
       <li>
         <strong>WebM or MP4 output</strong> — the recorder can produce either a
@@ -214,10 +214,12 @@ redirect_from:
         dropdown before starting. The choice is saved for future visits.
       </li>
       <li>
-        <strong>File System Access API required</strong> — the recorder streams video directly to
-        disk using the File System Access API. It stores the chosen save folder in IndexedDB so
-        you only need to grant folder access once. This requires Chrome or Edge; Firefox does not
-        support this API and cannot be used to record.
+        <strong>File System Access API (Chrome/Edge) or OPFS (Firefox)</strong> — Chrome and
+        Edge stream the recording directly to a folder you choose on your hard drive via the
+        File System Access API; the save folder is remembered across visits. Firefox does not
+        support the File System Access API, so the recorder falls back to the browser's
+        <strong>Origin Private File System (OPFS)</strong>: the recording is staged in private
+        browser storage and a download is triggered automatically when you stop recording.
       </li>
     </ul>
 
@@ -316,14 +318,15 @@ redirect_from:
 
     <hr>
 
-    <h6><i class="fas fa-save me-1 text-muted"></i>Streaming to Disk via File System Access API</h6>
+    <h6><i class="fas fa-save me-1 text-muted"></i>Streaming to Disk</h6>
     <p>
       A naive screen recorder would accumulate the entire recording in memory as a
       <code>Blob</code> and only offer a download at the end. For long recordings this easily
       consumes gigabytes of RAM and risks a browser crash. This recorder avoids that problem by
-      streaming compressed video data directly to a file on disk.
+      streaming compressed video data directly to a file as it is produced.
     </p>
     <p>
+      <strong>Chrome / Edge (File System Access API):</strong>
       Before recording starts, the recorder asks for access to a <strong>folder</strong> of your
       choice via <code>window.showDirectoryPicker()</code>. The chosen folder handle is stored in
       <strong>IndexedDB</strong> so it persists across page reloads — you only need to pick a
@@ -334,22 +337,27 @@ redirect_from:
       When recording starts, the recorder verifies it still has write permission for the stored
       folder using <code>FileSystemDirectoryHandle.queryPermission()</code>. If permission has
       lapsed (e.g. after a browser restart), <code>requestPermission()</code> is called to prompt
-      you to re-grant it. If permission is denied, recording is cancelled gracefully.
+      you to re-grant it.
     </p>
     <p>
-      Once access is confirmed, a new file named <code>recording-TIMESTAMP.webm</code> (or
-      <code>.mp4</code>, depending on the chosen format) is created
-      inside the chosen folder, and a <code>FileSystemWritableFileStream</code> is opened on it.
-      This writable stream is passed directly to Mediabunny's <code>StreamTarget</code>, which
-      writes encoded frames to disk incrementally as they are produced by the hardware encoder.
+      <strong>Firefox (Origin Private File System fallback):</strong>
+      Firefox does not support the File System Access API's directory picker. Instead, the
+      recorder uses the <strong>Origin Private File System (OPFS)</strong> — a private,
+      origin-scoped storage area exposed via <code>navigator.storage.getDirectory()</code>.
+      No permission prompt is needed. The recording is staged in OPFS during capture; when you
+      stop recording, a file download is triggered automatically so the video lands in your
+      downloads folder. The temporary OPFS file is removed immediately after the download is
+      initiated.
+    </p>
+    <p>
+      In both cases, once a writable
+      <code>FileSystemWritableFileStream</code> is open, it is passed directly to Mediabunny's
+      <code>StreamTarget</code>, which writes encoded frames to the file incrementally as they are
+      produced by the hardware encoder.
       When recording stops, <code>output.finalize()</code> flushes the encoder, rewrites the
       correct video duration into the file header, and closes the stream. Memory usage therefore
       stays near-constant regardless of recording length, and the output file always has a valid
       duration — unlike the truncated headers produced by the native <code>MediaRecorder</code> API.
-    </p>
-    <p>
-      This API is currently supported only in Chromium-based browsers (Chrome, Edge).
-      Firefox has not implemented it, which is why the recorder requires Chrome or Edge.
     </p>
 
     <hr>

@@ -202,7 +202,8 @@ function render(state) {
 
   // Locked while recording is active, being saved, acquiring, or in countdown
   const lockControls = active || isStopping || isReq || isCountdown;
-  pickDirBtn.disabled    = lockControls;
+  pickDirBtn.hidden    = storage.isOPFS;
+  pickDirBtn.disabled  = lockControls;
   webcamSel.disabled     = lockControls;
   micSel.disabled        = lockControls;
   sysAudioChk.disabled   = lockControls;
@@ -358,23 +359,62 @@ function buildStartPayload() {
 
 async function showSaveSuccessToast(fileHandle) {
   const msg = document.createDocumentFragment();
-  msg.append('Recording saved to disk. ');
-  if (fileHandle) {
-    try {
-      const file = await fileHandle.getFile();
-      const url  = URL.createObjectURL(file);
-      const link = Object.assign(document.createElement('a'), {
-        href: url, target: '_blank', rel: 'noopener noreferrer',
-        textContent: 'Open in new tab', className: 'toast-link',
-      });
-      msg.append(link);
-      setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
-      window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
-    } catch (_) {
-      // getFile() may fail if the user moved/deleted the file; skip the link.
+
+  if (storage.isOPFS) {
+    // OPFS mode: the recording was staged in browser storage.
+    // Show a "Download recording" link and keep the toast open until the user
+    // dismisses it — Firefox requires a real user click to trigger a file download,
+    // so we cannot auto-fire the download programmatically.
+    msg.append('Recording complete. ');
+    if (fileHandle) {
+      try {
+        const file = await fileHandle.getFile();
+        const url  = URL.createObjectURL(file);
+        const name = file.name;
+
+        const link = Object.assign(document.createElement('a'), {
+          href: url, download: name,
+          textContent: 'Download recording', className: 'toast-link',
+        });
+        msg.append(link);
+
+        // Revoke the blob URL and clean up the OPFS temp file together after the
+        // timeout so the file remains accessible for the entire duration.
+        // Do NOT call removeEntry() before this — Firefox's blob URL keeps a live
+        // reference to the OPFS-backed File and becomes invalid if the entry is
+        // removed while the URL is still alive.
+        const cleanup = () => {
+          URL.revokeObjectURL(url);
+          storage.dirHandle?.removeEntry(name).catch(() => {});
+        };
+        setTimeout(cleanup, BLOB_URL_REVOKE_TIMEOUT_MS);
+        window.addEventListener('beforeunload', cleanup, { once: true });
+      } catch (_) {
+        // getFile() may fail if something went wrong; skip the download link.
+      }
     }
+    // Disable auto-hide so the download link stays visible until the user acts.
+    showToast(msg, 'success', false);
+  } else {
+    // FSA mode: file already saved to the user's chosen folder on disk.
+    msg.append('Recording saved to disk. ');
+    if (fileHandle) {
+      try {
+        const file = await fileHandle.getFile();
+        const url  = URL.createObjectURL(file);
+        const link = Object.assign(document.createElement('a'), {
+          href: url, target: '_blank', rel: 'noopener noreferrer',
+          textContent: 'Open in new tab', className: 'toast-link',
+        });
+        msg.append(link);
+        setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
+        window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
+      } catch (_) {
+        // getFile() may fail if the user moved/deleted the file; skip the link.
+      }
+    }
+    showToast(msg, 'success');
   }
-  showToast(msg, 'success');
 }
 
 // ── Device enumeration ────────────────────────────────────────────────────────
@@ -462,14 +502,7 @@ if (!hasGetDisplayMedia) {
     'Screen recording is not supported on this device. ' +
     'Mobile browsers run inside a security sandbox that prevents access to the device screen — ' +
     'this is where native desktop apps still shine. ' +
-    'Please open this page on a desktop browser (Chrome or Edge) to use the recorder.',
-    'warning'
-  );
-  document.getElementById('recorder-ui').hidden = true;
-} else if (!hasFSA) {
-  showAlert(
-    'Your browser does not support the File System Access API, which this recorder requires to ' +
-    'stream video directly to disk. Please open this page in Chrome or Edge to use the recorder.',
+    'Please open this page on a desktop browser (Chrome, Edge, or Firefox) to use the recorder.',
     'warning'
   );
   document.getElementById('recorder-ui').hidden = true;
@@ -490,7 +523,11 @@ if (hasGetDisplayMedia) {
 // Start the canvas preview loop immediately (devices/webcam start after enumeration)
 api.restartPreviews();
 
-if (hasFSA) storage.init();
+storage.init();
+
+// isOPFS is determined synchronously at construction time; apply initial UI state now
+// rather than waiting for init() to resolve so render() stays the single source of truth.
+pickDirBtn.hidden = storage.isOPFS;
 
 // ── Event listeners ────────────────────────────────────────────────────────────
 
