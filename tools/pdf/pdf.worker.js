@@ -8,22 +8,38 @@
  *   { success: false, error: string }
  */
 
-const QPDF_JS  = 'https://unpkg.com/@neslinesli93/qpdf-wasm@0.3.0/dist/qpdf.js';
-const QPDF_WASM = 'https://unpkg.com/@neslinesli93/qpdf-wasm@0.3.0/dist/qpdf.wasm';
+const QPDF_JS_URLS = [
+  'https://unpkg.com/@neslinesli93/qpdf-wasm@0.3.0/dist/qpdf.js',
+  'https://cdn.jsdelivr.net/npm/@neslinesli93/qpdf-wasm@0.3.0/dist/qpdf.js',
+];
+const QPDF_WASM_URLS = [
+  'https://unpkg.com/@neslinesli93/qpdf-wasm@0.3.0/dist/qpdf.wasm',
+  'https://cdn.jsdelivr.net/npm/@neslinesli93/qpdf-wasm@0.3.0/dist/qpdf.wasm',
+];
 
-/** Lazily loaded factory function from qpdf.js. */
+/** Lazily loaded factory function from qpdf.js, and the resolved WASM URL. */
 let qpdfFactory = null;
+let resolvedWasmUrl = null;
 
 /**
- * Load the qpdf-wasm factory function once via importScripts.
+ * Load the qpdf-wasm factory function once, trying each CDN in order.
  * @returns {Function} The Emscripten module factory.
  */
 function loadFactory() {
   if (qpdfFactory) return qpdfFactory;
-  importScripts(QPDF_JS);
-  // After importScripts, the global `Module` is the Emscripten factory function.
-  qpdfFactory = self.Module;
-  return qpdfFactory;
+
+  let lastError;
+  for (var i = 0; i < QPDF_JS_URLS.length; i++) {
+    try {
+      importScripts(QPDF_JS_URLS[i]);
+      qpdfFactory = self.Module;
+      resolvedWasmUrl = QPDF_WASM_URLS[i];
+      return qpdfFactory;
+    } catch (e) {
+      lastError = e;
+    }
+  }
+  throw new Error('Failed to load qpdf-wasm from any CDN: ' + (lastError && lastError.message));
 }
 
 /**
@@ -41,7 +57,7 @@ async function runQpdf(args, inputData) {
   const stderrLines = [];
 
   const q = await factory({
-    locateFile: () => QPDF_WASM,
+    locateFile: () => resolvedWasmUrl,
     printErr: (msg) => stderrLines.push(msg),
     // Suppress stdout noise from qpdf
     print: () => {},

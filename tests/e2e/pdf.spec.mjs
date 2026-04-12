@@ -1,8 +1,4 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Minimal valid unencrypted PDF (PDF 1.4, single empty page)
 const PLAIN_PDF_BYTES = Buffer.from(

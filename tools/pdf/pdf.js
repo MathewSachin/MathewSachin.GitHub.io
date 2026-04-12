@@ -43,26 +43,29 @@ function hideStatus() {
 }
 
 /**
- * Detect whether a PDF byte array is encrypted by scanning for the
- * `/Encrypt` keyword in the trailer dictionary (last 4 KB of the file).
+ * Detect whether a PDF byte array is encrypted by scanning for an
+ * `/Encrypt` object reference in the trailer dictionary.
+ * The trailer is near the end of the file, so only the last 4 KB is searched.
+ * The pattern `/Encrypt N N R` matches an indirect object reference as
+ * required by the PDF spec, avoiding false positives from embedded text.
  * @param {Uint8Array} bytes
  * @returns {boolean}
  */
 function isPdfEncrypted(bytes) {
   var tail = bytes.length > 4096 ? bytes.slice(bytes.length - 4096) : bytes;
   var text = new TextDecoder('latin1').decode(tail);
-  return text.includes('/Encrypt');
+  return /\/Encrypt\s+\d+\s+\d+\s+R/.test(text);
 }
 
 /**
- * Validate that the first bytes look like a PDF.
+ * Validate that the first bytes match the PDF magic bytes (`%PDF-`).
  * @param {Uint8Array} bytes
  * @returns {boolean}
  */
 function isValidPdf(bytes) {
   if (bytes.length < 5) return false;
-  var header = new TextDecoder('latin1').decode(bytes.slice(0, 5));
-  return header.startsWith('%PDF-');
+  var pdfSignature = new TextDecoder('latin1').decode(bytes.slice(0, 5));
+  return pdfSignature.startsWith('%PDF-');
 }
 
 /** Revoke any previously created object URL to prevent memory leaks. */
