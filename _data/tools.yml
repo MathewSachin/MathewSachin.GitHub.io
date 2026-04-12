@@ -63,6 +63,12 @@
   quick_tool: true
 
 
+- id: pdf
+  name: PDF Password Tool
+  description: Add or remove passwords from PDF files entirely in your browser — powered by QPDF WebAssembly. Your files never leave your device.
+  icon: fas fa-file-pdf
+  quick_tool: true
+
 - id: yt-thumbnail
   name: YouTube Thumbnail Grabber
   description: Instantly fetch the full-resolution thumbnail of any YouTube video — paste any YouTube URL or video ID and download the raw JPG.
