@@ -160,7 +160,7 @@ export class StorageManager {
 
   #updateDirUI() {
     if (this.#isOPFS) {
-      this.#dirNameEl.textContent = '(saving to browser storage — file downloads when done)';
+      this.#dirNameEl.textContent = '(saving to browser storage — Click the Download Recording toast after recording)';
     } else {
       this.#dirNameEl.textContent = this.#dirHandle ? this.#dirHandle.name : '(no folder selected)';
     }
