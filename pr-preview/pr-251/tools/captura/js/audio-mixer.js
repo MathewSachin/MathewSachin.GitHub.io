@@ -14,7 +14,6 @@ export class AudioMixer {
   // Recording audio graph
   #audioCtx      = null;
   #audioDestNode = null;
-  #micSrcNode    = null;
   #micGainNode   = null;
   #sysGainNode   = null;
   #micAnalyser   = null;
@@ -68,8 +67,7 @@ export class AudioMixer {
     }
 
     if (micStream) {
-      this.#micSrcNode  = this.#audioCtx.createMediaStreamSource(micStream);
-      const src = this.#micSrcNode;
+      const src = this.#audioCtx.createMediaStreamSource(micStream);
       this.#micGainNode = this.#audioCtx.createGain();
       this.#micGainNode.gain.value = micGainValue;
       this.#micAnalyser = this.#audioCtx.createAnalyser();
@@ -92,45 +90,8 @@ export class AudioMixer {
   // Preview state is intentionally left intact.
   teardownMix() {
     if (this.#audioCtx) { this.#audioCtx.close(); this.#audioCtx = null; }
-    this.#micSrcNode = this.#micGainNode = this.#sysGainNode = null;
+    this.#micGainNode = this.#sysGainNode = null;
     this.#micAnalyser = this.#sysAnalyser = null;
-  }
-
-  // Replaces the active microphone input in the live recording audio graph.
-  // Pass stream=null to remove the mic input (e.g. user selects "None").
-  // Returns false when no recording audio context is active (recording started
-  // without audio), in which case the caller should stop the new stream.
-  replaceMicSource(stream, gainValue) {
-    if (!this.#audioCtx) return false;
-
-    // Disconnect and discard the old mic source node
-    if (this.#micSrcNode) {
-      try { this.#micSrcNode.disconnect(); } catch (_) {}
-      this.#micSrcNode = null;
-    }
-    if (this.#micGainNode) {
-      try { this.#micGainNode.disconnect(); } catch (_) {}
-      this.#micGainNode = null;
-    }
-    if (this.#micAnalyser) {
-      try { this.#micAnalyser.disconnect(); } catch (_) {}
-      this.#micAnalyser = null;
-    }
-
-    if (stream) {
-      this.#micSrcNode  = this.#audioCtx.createMediaStreamSource(stream);
-      this.#micGainNode = this.#audioCtx.createGain();
-      this.#micGainNode.gain.value = gainValue ?? 1;
-      this.#micAnalyser = this.#audioCtx.createAnalyser();
-      this.#micAnalyser.fftSize = 512;
-      this.#micAnalyser.smoothingTimeConstant = 0.75;
-      this.#micSrcNode.connect(this.#micGainNode);
-      this.#micGainNode.connect(this.#micAnalyser);
-      this.#micAnalyser.connect(this.#audioDestNode);
-    }
-
-    this.startMeterAnimation();
-    return true;
   }
 
   // ── macOS Core Audio / Media Session workaround ──────────────────────────────

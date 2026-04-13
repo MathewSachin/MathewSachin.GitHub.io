@@ -275,7 +275,7 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#quality-select')).toBeDisabled();
     await expect(page.locator('#sys-audio-chk')).toBeDisabled();
     await expect(page.locator('#pick-dir-btn')).toBeDisabled();
-    await expect(page.locator('#webcam-select')).toBeDisabled();
+    await expect(page.locator('#webcam-select')).toBeEnabled();
     await expect(page.locator('#mic-select')).toBeDisabled();
 
     await page.click('#stop-btn');
