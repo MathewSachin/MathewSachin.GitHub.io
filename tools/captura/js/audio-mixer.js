@@ -108,8 +108,14 @@ export class AudioMixer {
       try { this.#micSrcNode.disconnect(); } catch (_) {}
       this.#micSrcNode = null;
     }
-    this.#micGainNode = null;
-    this.#micAnalyser = null;
+    if (this.#micGainNode) {
+      try { this.#micGainNode.disconnect(); } catch (_) {}
+      this.#micGainNode = null;
+    }
+    if (this.#micAnalyser) {
+      try { this.#micAnalyser.disconnect(); } catch (_) {}
+      this.#micAnalyser = null;
+    }
 
     if (stream) {
       this.#micSrcNode  = this.#audioCtx.createMediaStreamSource(stream);
