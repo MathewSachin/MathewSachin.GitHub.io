@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+
+    <meta charset="UTF-8"/>
+    <title>Base64 Encoder / Decoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="/pr-preview/pr-251/images/favicon.ico">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/pr-preview/pr-251/styles/styles.css">
+
+    
+
+    <link type="application/atom+xml" rel="alternate" href="https://mathewsachin.github.io/pr-preview/pr-251/feed.xml" title="Mathew Sachin" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Base64 Encoder / Decoder | Mathew Sachin</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Base64 Encoder / Decoder" />
+<meta name="author" content="Mathew Sachin" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My Website where I blog using jekyll" />
+<meta property="og:description" content="My Website where I blog using jekyll" />
+<link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-251/tools/base64/" />
+<meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-251/tools/base64/" />
+<meta property="og:site_name" content="Mathew Sachin" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Base64 Encoder / Decoder" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@Mathew Sachin" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Mathew Sachin"},"description":"My Website where I blog using jekyll","headline":"Base64 Encoder / Decoder","url":"https://mathewsachin.github.io/pr-preview/pr-251/tools/base64/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    
+
+</head>
+  <body>
+    <style>
+.icon-bar {
+	width: 25px; 
+	height: 3px;
+	background-color: #B6B6B6;
+	display: block;
+	transition: all 0.2s;
+    margin-top: 5px;
+}
+
+.navbar-toggler .bar-t {
+  margin-top: 0;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler .bar-m {
+  opacity: 0;
+}
+
+.navbar-toggler .bar-b {
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+ 
+.navbar-toggler.collapsed .bar-t {
+  transform: rotate(0);
+}
+ 
+.navbar-toggler.collapsed .bar-m {
+  opacity: 1;
+}
+ 
+.navbar-toggler.collapsed .bar-b {
+  transform: rotate(0);
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/pr-preview/pr-251/">Mathew Sachin</a>
+        <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent">
+            <span class="icon-bar bar-t"></span>
+            <span class="icon-bar bar-m"></span>
+            <span class="icon-bar bar-b"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-251/blog">Blog</a>
+		</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-251/tools">Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pr-preview/pr-251/privacy_policy">Privacy Policy</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-251/search"><i class="fas fa-search me-1"></i>Search</a>
+        </div>
+    </div>
+</nav>
+<script>
+(function () {
+    var toggler = document.querySelector(".navbar-toggler");
+    var content = document.getElementById("navbarContent");
+    if (toggler && content) {
+        toggler.addEventListener("click", function () {
+            content.classList.toggle("show");
+            toggler.classList.toggle("collapsed");
+            toggler.setAttribute("aria-expanded", content.classList.contains("show").toString());
+        });
+    }
+}());
+</script>
+
+
+    
+
+
+
+<div class="bg-dark">
+    <div id="tool-header" class="py-4 text-white google-anno-skip" style="background-color: var(--post-accent);">
+        <div class="container">
+            <h2>Base64 Encoder / Decoder</h2>
+            
+
+<div class="post-share my-2">
+    <span class="me-2 text-white small">Share:</span>
+    <a class="btn btn-sm btn-outline-light me-1" href="https://x.com/intent/tweet?text=Base64+Encoder+%2F+Decoder&amp;url=https://mathewsachin.github.io/tools/base64/" target="_blank" rel="noopener" aria-label="Share on X" data-share-method="twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-light me-1" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://mathewsachin.github.io/tools/base64/&amp;title=Base64+Encoder+%2F+Decoder" target="_blank" rel="noopener" aria-label="Share on LinkedIn" data-share-method="linkedin"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-light me-1" href="https://www.reddit.com/submit?url=https://mathewsachin.github.io/tools/base64/&amp;title=Base64+Encoder+%2F+Decoder" target="_blank" rel="noopener" aria-label="Share on Reddit" data-share-method="reddit"><i class="fab fa-reddit-alien" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-light me-1" href="https://wa.me/?text=Base64+Encoder+%2F+Decoder%20https://mathewsachin.github.io/tools/base64/" target="_blank" rel="noopener" aria-label="Share on WhatsApp" data-share-method="whatsapp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+    <a class="btn btn-sm btn-outline-light me-1" href="mailto:?subject=Base64+Encoder+%2F+Decoder&amp;body=Check%20out%20this%20page%3A%20https://mathewsachin.github.io/tools/base64/" aria-label="Share via Email" data-share-method="email"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    <button type="button" class="btn btn-sm btn-outline-light" id="copy-post-link" aria-label="Copy link"><i class="fa fa-link" aria-hidden="true"></i></button>
+</div>
+
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div id="tool-main-content" class="col-md-10">
+                
+
+
+
+
+
+
+
+
+
+
+  <div class="card google-anno-skip">
+<div class="card-body">
+
+<div class="row g-4">
+
+  <!-- Plain Text -->
+  <div class="col-12 col-md-6">
+    <h5 class="mb-3">Plain Text</h5>
+  
+    
+    
+    
+  
+
+  
+    <textarea id="text-input" class="form-control font-monospace" rows="8"
+      placeholder="Enter text to encode…"></textarea>
+    <div class="mt-2 d-flex gap-2 flex-wrap">
+      <button class="btn btn-info text-white" id="encode-btn">Encode &rarr;</button>
+      <button class="btn btn-outline-secondary" id="clear-btn">Clear</button>
+    </div>
+    <div id="text-error" class="text-danger small mt-1 d-none"></div>
+  </div>
+
+  <!-- Base64 -->
+  <div class="col-12 col-md-6">
+    <h5 class="mb-3">Base64</h5>
+  
+    
+    
+    
+  
+
+  
+    <textarea id="b64-input" class="form-control font-monospace" rows="8"
+      placeholder="Enter Base64 to decode…"></textarea>
+    <div class="mt-2 d-flex gap-2 flex-wrap">
+      <button class="btn btn-info text-white" id="decode-btn">&larr; Decode</button>
+      <button class="btn btn-outline-secondary" id="copy-btn">
+        <i class="fas fa-copy me-1"></i>Copy
+      </button>
+    </div>
+    <div id="b64-error" class="text-danger small mt-1 d-none"></div>
+  </div>
+
+</div>
+
+<script type="module">
+import { encodeBase64, decodeBase64 } from './base64.js';
+
+var textInput = document.getElementById('text-input');
+var b64Input  = document.getElementById('b64-input');
+var textError = document.getElementById('text-error');
+var b64Error  = document.getElementById('b64-error');
+
+function clearError(el) { el.textContent = ''; el.classList.add('d-none'); }
+function showError(el, msg) { el.textContent = msg; el.classList.remove('d-none'); }
+
+document.getElementById('encode-btn').addEventListener('click', function () {
+  clearError(textError);
+  try {
+    b64Input.value = encodeBase64(textInput.value);
+  } catch (e) {
+    showError(textError, 'Encoding failed: ' + e.message);
+  }
+});
+
+document.getElementById('decode-btn').addEventListener('click', function () {
+  clearError(b64Error);
+  try {
+    textInput.value = decodeBase64(b64Input.value.trim());
+  } catch (e) {
+    showError(b64Error, 'Invalid Base64 string: ' + e.message);
+  }
+});
+
+document.getElementById('clear-btn').addEventListener('click', function () {
+  textInput.value = '';
+  b64Input.value = '';
+  clearError(textError);
+  clearError(b64Error);
+});
+
+document.getElementById('copy-btn').addEventListener('click', function () {
+  var btn = this;
+  navigator.clipboard.writeText(b64Input.value).then(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-check text-success me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+  }).catch(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-times text-danger me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+  });
+});
+</script>
+
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+  
+    
+    
+    
+  
+
+  
+<p>
+  This tool encodes and decodes text using the
+  <a href="https://en.wikipedia.org/wiki/Base64" target="_blank" rel="noopener">Base64</a>
+  encoding scheme — entirely inside your browser. <strong>No data is ever sent to a server.</strong>
+</p>
+  
+    
+    
+    
+  
+
+  
+
+<h5 class="mt-4">What is Base64?</h5>
+  
+    
+    
+    
+  
+
+  
+<p>
+  Base64 is a binary-to-text encoding that represents binary data using 64 printable ASCII
+  characters (<code>A–Z</code>, <code>a–z</code>, <code>0–9</code>, <code>+</code>, <code>/</code>).
+  It is commonly used to embed binary content (images, files) in text-based formats such as
+  JSON, XML, HTML, and email (MIME).
+  Every 3 bytes of input become 4 Base64 characters, so encoded output is roughly 33% larger
+  than the original.
+</p>
+  
+    
+    
+    
+  
+
+  
+
+<h5 class="mt-4">Implementation Details</h5>
+  
+    
+    
+    
+      
+<div class="in-content-ad my-4">
+  <p class="text-muted text-center mb-2"><small>Advertisement</small></p>
+  <div class="card border">
+    <div class="card-body p-2">
+      
+    </div>
+  </div>
+</div>
+
+
+    
+  
+
+  
+<p>
+  The encoder uses JavaScript's built-in <code>btoa()</code> function and the decoder uses
+  <code>atob()</code> — both are available in every modern browser.
+</p>
+  
+    
+    
+    
+  
+
+  
+<p>
+  Because <code>btoa()</code> and <code>atob()</code> only handle Latin-1 (single-byte)
+  characters, the tool adds a Unicode-safe layer:
+</p>
+  
+    
+    
+    
+  
+
+  
+<ul>
+  <li>
+    <strong>Encoding:</strong> The input string is first converted to UTF-8 bytes using the
+    browser's <a href="https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder" target="_blank" rel="noopener"><code>TextEncoder</code></a>
+    API. The resulting byte array is then mapped to a binary string and passed to <code>btoa()</code>.
+  </li>
+  <li>
+    <strong>Decoding:</strong> <code>atob()</code> produces a binary string which is then
+    converted back to a <code>Uint8Array</code> and decoded as UTF-8 via
+    <a href="https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder" target="_blank" rel="noopener"><code>TextDecoder</code></a>.
+  </li>
+</ul>
+<p>
+  This approach correctly handles any Unicode text, including emoji and non-Latin scripts,
+  without relying on any third-party library.
+</p>
+  
+    
+    
+    
+  
+
+  
+
+<h5 class="mt-4">Privacy</h5>
+  
+    
+    
+    
+  
+
+  
+<p>
+  All encoding and decoding runs locally in your browser tab using standard JavaScript APIs.
+  Your input text never leaves your device.
+</p>
+  
+    
+    
+    
+  
+
+  
+
+</div>
+</div>
+
+  
+
+
+            </div>
+            <div id="tool-sidebar" class="col-md-2">
+                <div class="sticky-top" style="top: 10px">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div id="tool-giscus-section" class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <script src="https://giscus.app/client.js"
+        data-repo="MathewSachin/MathewSachin.GitHub.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw=="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOAulkj84C4PRo"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+
+    <script src="/pr-preview/pr-251/scripts/formatting.js"></script>
+  </body>
+</html>
