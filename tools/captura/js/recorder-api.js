@@ -225,6 +225,56 @@ export class RecorderAPI {
     return handle;
   }
 
+  // ── Mid-recording device switching ───────────────────────────────────────
+
+  // Swaps the webcam to a different device while a recording is in progress.
+  // webcamSelected=false stops the current webcam without opening a new one.
+  async changeWebcam(webcamDeviceId, webcamSelected) {
+    this.#webcamStream?.getTracks().forEach(t => t.stop());
+    this.#webcamStream           = null;
+    this.#compositor.webcamStream = null;
+
+    if (webcamSelected) {
+      const constraint = webcamDeviceId ? { deviceId: { exact: webcamDeviceId } } : true;
+      this.#webcamStream = await navigator.mediaDevices.getUserMedia({ video: constraint, audio: false });
+      this.#compositor.webcamStream        = this.#webcamStream;
+      this.#compositor.webcamVid.srcObject = this.#webcamStream;
+      await this.#compositor.webcamVid.play().catch(() => {});
+      await this.#compositor.waitForVideoReady(this.#compositor.webcamVid);
+    } else {
+      this.#compositor.webcamVid.srcObject = null;
+    }
+  }
+
+  // Swaps the microphone to a different device while a recording is in progress.
+  // micSelected=false removes the mic from the audio mix without stopping the recording.
+  // Throws if the recording was started with no audio (no AudioContext available).
+  async changeMic(micDeviceId, micSelected, micGain) {
+    this.#micStream?.getTracks().forEach(t => t.stop());
+    this.#micStream = null;
+
+    let newStream = null;
+    if (micSelected) {
+      const constraint = micDeviceId
+        ? { deviceId: { exact: micDeviceId }, echoCancellation: true }
+        : { echoCancellation: true };
+      newStream = await navigator.mediaDevices.getUserMedia({ audio: constraint, video: false });
+    }
+
+    const replaced = this.#audioMixer.replaceMicSource(newStream, micGain);
+    if (replaced) {
+      this.#micStream = newStream;
+    } else {
+      // No AudioContext — recording started with no audio; cannot add mic mid-recording.
+      newStream?.getTracks().forEach(t => t.stop());
+      if (micSelected) {
+        const err = new Error('Cannot add a microphone mid-recording when the recording started without audio.');
+        err.name = 'NoAudioContext';
+        throw err;
+      }
+    }
+  }
+
   // ── Session / cleanup ─────────────────────────────────────────────────────
 
   // Stops the screen-share stream and clears the compositor video source.

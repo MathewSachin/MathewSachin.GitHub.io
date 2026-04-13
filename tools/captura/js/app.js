@@ -204,8 +204,10 @@ function render(state) {
   const lockControls = active || isStopping || isReq || isCountdown;
   pickDirBtn.hidden    = storage.isOPFS;
   pickDirBtn.disabled  = lockControls;
-  webcamSel.disabled     = lockControls;
-  micSel.disabled        = lockControls;
+  // Webcam and mic can be changed mid-recording; only lock them when acquiring,
+  // saving, or during countdown — not while actively recording or paused.
+  webcamSel.disabled     = isStopping || isReq || isCountdown;
+  micSel.disabled        = isStopping || isReq || isCountdown;
   sysAudioChk.disabled   = lockControls;
   fpsSel.disabled        = lockControls;
   qualitySel.disabled    = lockControls;
@@ -586,7 +588,10 @@ countdownSel.addEventListener('change', () => saveAndTrackPref(PREFS.countdown, 
 webcamSel.addEventListener('change', () => {
   savePref(PREFS.webcam, webcamSel.value);
   const s = machine.state;
-  if (s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
+  if (s === STATE.RECORDING || s === STATE.PAUSED) {
+    api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
+      .catch(err => showToast('Failed to switch webcam: ' + err.message, 'danger'));
+  } else if (s !== STATE.STOPPING) {
     syncDevicesToApi();
     api.restartPreviews();
   }
@@ -595,7 +600,10 @@ webcamSel.addEventListener('change', () => {
 micSel.addEventListener('change', () => {
   savePref(PREFS.mic, micSel.value);
   const s = machine.state;
-  if (s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
+  if (s === STATE.RECORDING || s === STATE.PAUSED) {
+    api.changeMic(micSel.value, micSel.selectedIndex > 0, parseFloat(micGainSlider.value))
+      .catch(err => showToast('Failed to switch microphone: ' + err.message, 'danger'));
+  } else if (s !== STATE.STOPPING) {
     syncDevicesToApi();
     api.restartPreviews();
   }
