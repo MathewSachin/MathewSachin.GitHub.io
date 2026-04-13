@@ -225,6 +225,27 @@ export class RecorderAPI {
     return handle;
   }
 
+  // ── Mid-recording device switching ───────────────────────────────────────
+
+  // Swaps the webcam to a different device while a recording is in progress.
+  // webcamSelected=false stops the current webcam without opening a new one.
+  async changeWebcam(webcamDeviceId, webcamSelected) {
+    this.#webcamStream?.getTracks().forEach(t => t.stop());
+    this.#webcamStream           = null;
+    this.#compositor.webcamStream = null;
+
+    if (webcamSelected) {
+      const constraint = webcamDeviceId ? { deviceId: { exact: webcamDeviceId } } : true;
+      this.#webcamStream = await navigator.mediaDevices.getUserMedia({ video: constraint, audio: false });
+      this.#compositor.webcamStream        = this.#webcamStream;
+      this.#compositor.webcamVid.srcObject = this.#webcamStream;
+      await this.#compositor.webcamVid.play().catch(() => {});
+      await this.#compositor.waitForVideoReady(this.#compositor.webcamVid);
+    } else {
+      this.#compositor.webcamVid.srcObject = null;
+    }
+  }
+
   // ── Session / cleanup ─────────────────────────────────────────────────────
 
   // Stops the screen-share stream and clears the compositor video source.
