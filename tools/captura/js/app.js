@@ -207,7 +207,7 @@ function render(state) {
   // Webcam and mic can be changed mid-recording; only lock them when acquiring,
   // saving, or during countdown — not while actively recording or paused.
   webcamSel.disabled     = isStopping || isReq || isCountdown;
-  micSel.disabled        = isStopping || isReq || isCountdown;
+  micSel.disabled        = lockControls;
   sysAudioChk.disabled   = lockControls;
   fpsSel.disabled        = lockControls;
   qualitySel.disabled    = lockControls;
@@ -600,10 +600,7 @@ webcamSel.addEventListener('change', () => {
 micSel.addEventListener('change', () => {
   savePref(PREFS.mic, micSel.value);
   const s = machine.state;
-  if (s === STATE.RECORDING || s === STATE.PAUSED) {
-    api.changeMic(micSel.value, micSel.selectedIndex > 0, parseFloat(micGainSlider.value))
-      .catch(err => showToast('Failed to switch microphone: ' + err.message, 'danger'));
-  } else if (s !== STATE.STOPPING) {
+  if (s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
     syncDevicesToApi();
     api.restartPreviews();
   }
