@@ -200,6 +200,7 @@ The image caches the toolchain. The build still installs packages on every run â
 - `npm ci` fetches from the npm registry against a lockfile. GitHub Actions has its own transparent CDN for npm, and the packages for this site are small.
 - `bundle install` is further accelerated by an explicit gem cache in `build-site.yml`:
 
+{% raw %}
 ```yaml
 - name: Cache Ruby gems
   uses: actions/cache@v4
@@ -208,6 +209,7 @@ The image caches the toolchain. The build still installs packages on every run â
     key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
     restore-keys: ${{ runner.os }}-gems-
 ```
+{% endraw %}
 
 The gem cache hits on every push that doesn't change `Gemfile.lock`, which is most of them. So the typical build flow is: pull image (fast â€” cached by Docker layer), restore gem cache (fast â€” GitHub cache hit), `npm ci` (fast), `jekyll build` (a few seconds), done.
 
