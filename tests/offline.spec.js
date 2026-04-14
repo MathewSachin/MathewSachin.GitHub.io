@@ -6,23 +6,15 @@ test('PWA loads and functions while strictly offline', async ({ page, context })
   await page.addInitScript(opfsMockScript);
   await page.goto('/tools/captura/');
 
-  // Wait for the service worker to fully activate and claim this page.
-  // navigator.serviceWorker.ready resolves when the SW reaches 'activating' or
-  // 'activated', so we wait for statechange to 'activated' if not already there.
-  await page.evaluate(() =>
-    navigator.serviceWorker.ready.then(reg => {
-      const sw = reg.active;
-      if (!sw || sw.state === 'activated') return;
-      return new Promise(resolve => {
-        sw.addEventListener('statechange', function handler() {
-          if (sw.state === 'activated') {
-            sw.removeEventListener('statechange', handler);
-            resolve();
-          }
-        });
-      });
-    })
-  );
+  // Wait for an activated SW using polling to avoid long-lived execution
+  // contexts that can be destroyed by SW-driven navigations/reloads.
+  await page.waitForFunction(async () => {
+    const reg = await navigator.serviceWorker.getRegistration();
+    return reg?.active?.state === 'activated';
+  }, null, { timeout: 60_000 });
+
+  // Ensure this page is actually controlled by the SW before going offline.
+  await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 60_000 });
 
   // Cut the network and reload — the page must be served entirely from cache.
   await context.setOffline(true);
