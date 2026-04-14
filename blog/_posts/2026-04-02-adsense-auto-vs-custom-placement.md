@@ -48,12 +48,12 @@ The approach this site uses is different. Instead of letting Google decide, ads 
 
 ### How It Works
 
-Every blog post is processed through a Liquid template (`_includes/post_content_with_ads.html`) before it's rendered. That template walks through the HTML output of the post and counts **content elements**:
+Every blog post is processed through a Liquid template (`_includes/post_content_with_ads.html`) before it's rendered. A Nokogiri-backed filter walks through the HTML output of the post and counts **content elements**:
 
-- Paragraphs (`</p>`)
-- Headings h2–h6 (`</h2>` through `</h6>`)
-- Tables (`</table>`)
-- Figures and images (`</figure>`, `</picture>`)
+- Paragraphs (`<p>`)
+- Headings h2–h6 (`<h2>` through `<h6>`)
+- Tables (`<table>`)
+- Figures and images (`<figure>`, `<picture>`)
 
 After every 7th element, an ad unit is injected. That threshold is controlled by a single value in `_config.yml`:
 
@@ -62,32 +62,17 @@ After every 7th element, an ad unit is injected. That threshold is controlled by
 ad_density: 7
 ```
 
-The injection logic in Liquid looks like this (simplified):
+The Liquid include is simple:
 
 {% raw %}
 ```liquid
 {% assign n = site.ad_density | default: 5 %}
-{% assign marked = include.content
-  | replace: '</p>', '</p>MARKER'
-  | replace: '</h2>', '</h2>MARKER'
-  | replace: '</table>', '</table>MARKER' %}
-  {%- comment -%}(other element types too){%- endcomment -%}
-
-{% assign parts = marked | split: 'MARKER' %}
-{% assign count = 0 %}
-{% for part in parts %}
-  {{ part }}
-  {% unless forloop.last %}
-    {% assign count = count | plus: 1 %}
-    {% if count | modulo: n == 0 %}
-      {% include in-content-ad.html %}
-    {% endif %}
-  {% endunless %}
-{% endfor %}
+{% capture ad_block %}{% include in-content-ad.html %}{% endcapture %}
+{{ include.content | inject_ads_between_content_blocks: ad_block, n }}
 ```
 {% endraw %}
 
-The marker string `MARKER` is chosen to be a value that can never appear in real post HTML. The result is that the post is split into chunks at element boundaries, with ad blocks stitched in between every `ad_density` chunks. Code blocks are intentionally excluded from the split markers — Jekyll wraps `<pre>` tags in outer `<div>` elements, so splitting at `</pre>` would inject an ad inside the wrapper divs rather than between top-level content blocks.
+Because insertion is done against parsed HTML nodes (not string matching), literal `</p>`-like text inside scripts won't trigger accidental placements. Code blocks are intentionally excluded from target nodes — Jekyll wraps `<pre>` in outer `<div>` elements, and placing an ad inside that structure would break code block layout.
 
 ### What the Ad Unit Looks Like
 
@@ -178,16 +163,18 @@ To replicate this on your own Jekyll site:
 
 3. **Create `_includes/in-content-ad.html`** wrapping the ad unit in the labelled card.
 
-4. **Create `_includes/post_content_with_ads.html`** with the splitting logic shown above.
+4. **Create `_plugins/content_ad_split_markers.rb`** with a Liquid filter that injects ad HTML after every N matched content nodes.
 
-5. **In your post layout**, replace {% raw %}`{{ content }}`{% endraw %} with:
+5. **Create `_includes/post_content_with_ads.html`** and call the filter as shown above.
+
+6. **In your post layout**, replace {% raw %}`{{ content }}`{% endraw %} with:
 {% raw %}
    ```liquid
    {% include post_content_with_ads.html content=content %}
    ```
 {% endraw %}
 
-6. **Add the CSS** to collapse unfilled slots and handle mobile width.
+7. **Add the CSS** to collapse unfilled slots and handle mobile width.
 
 That's the whole system. No JavaScript framework, no external dependencies — just Liquid templates and a CSS rule.
 

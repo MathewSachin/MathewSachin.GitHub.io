@@ -10,22 +10,9 @@
 {% assign n = site.ad_density | default: 5 %}
 
 {% comment %}
-  Insert split markers after actual HTML nodes via a Nokogiri-backed filter.
-  This avoids false splits caused by literal closing-tag strings inside
-  inline scripts or text.
+  Inject ads directly between actual HTML nodes via a Nokogiri-backed filter.
+  This avoids false matches from literal closing-tag strings inside scripts/text
+  and avoids marker/split pass-through entirely.
 {% endcomment %}
-{% assign marked = include.content | inject_ad_split_markers %}
-
-{% assign parts = marked | split: 'SPLITHERE' %}
-{% assign count = 0 %}
-
-{% for part in parts %}
-  {{ part }}
-  {% unless forloop.last %}
-    {% assign count = count | plus: 1 %}
-    {% assign mod = count | modulo: n %}
-    {% if mod == 0 %}
-      {% include in-content-ad.html %}
-    {% endif %}
-  {% endunless %}
-{% endfor %}
+{% capture ad_block %}{% include in-content-ad.html %}{% endcapture %}
+{{ include.content | inject_ads_between_content_blocks: ad_block, n }}
