@@ -8,6 +8,7 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import SeriesNav from '@components/SeriesNav.astro';
+import TableOfContents from '@components/TableOfContents.astro';
 import RelatedPosts from '@components/RelatedPosts.astro';
 import Share from '@components/Share.astro';
 import Giscus from '@components/Giscus.astro';
@@ -105,25 +106,7 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
           <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none">
             <div class="sticky-md-top" style="top: 10px">
               <div class="mb-3">
-                <div class="card toc-card">
-                  <button
-                    type="button"
-                    class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none"
-                    aria-expanded="false"
-                    aria-controls="toc-collapse"
-                  >
-                    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
-                    <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
-                  </button>
-                  <div class="card-header toc-header d-none d-md-block">
-                    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
-                  </div>
-                  <div class="collapse d-md-block" id="toc-collapse">
-                    <div class="card-body p-0">
-                      <nav id="toc-nav" aria-label="Table of contents" set:html={toc} />
-                    </div>
-                  </div>
-                </div>
+                <TableOfContents toc={toc} />
               </div>
               <div class="d-none d-md-block"><AdUnit /></div>
             </div>

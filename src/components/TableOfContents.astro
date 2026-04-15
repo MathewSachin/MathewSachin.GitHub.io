@@ -1,0 +1,26 @@
+---
+const { toc } = Astro.props;
+---
+
+<div class="card toc-card">
+    <button
+    type="button"
+    class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none"
+    aria-expanded="false"
+    aria-controls="toc-collapse"
+    >
+    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+    <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+    </button>
+    <div class="card-header toc-header d-none d-md-block">
+    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+    </div>
+    <div class="collapse d-md-block" id="toc-collapse">
+    <div class="card-body p-0">
+        <nav id="toc-nav" aria-label="Table of contents" set:html={toc} />
+    </div>
+    </div>
+</div>
+
+<style>
+</style>
