@@ -49,7 +49,38 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 <small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
 </div>
 
+<style>
+.dino-embed-wrapper {
+  margin: 1rem 0 1.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
 
+.dino-embed-frame {
+  display: block;
+  width: 100%;
+  height: 175px;
+  border: none;
+  background: #f7f7f7;
+}
+
+.dino-embed-caption {
+  display: block;
+  padding: 0.35rem 0.75rem;
+  background: var(--color-code-bg);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dino-embed-caption a {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dino-embed-caption a:hover {
+  color: var(--color-accent);
+}
+</style>
 
 ## Opening Developer Tools / Chrome Console
 
@@ -234,3 +265,70 @@ Share this page around and comment down if you have tricks of your own!
 ---
 
 Time to try some other great hacks — {% include post_link.html url="/blog/2026/03/07/hacking-wordle" text="Wordle" %}, {% include post_link.html url="/blog/2026/03/20/hacking-minesweeper-online" text="Minesweeper" %}, {% include post_link.html url="/blog/2026/03/20/hacking-typeracer" text="TypeRacer" %}.
+
+<style>
+.dino-hack-widget {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dino-hack-controls {
+  background: var(--color-code-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 2.5rem;
+}
+
+.dino-hack-controls .form-range {
+  accent-color: var(--color-accent);
+}
+
+.dino-hack-controls .dino-hack-num {
+  width: 80px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+  border-color: rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+}
+
+.dino-hack-controls .dino-hack-num:focus {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.dino-hack-controls .dino-hack-num:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 0;
+}
+
+.dino-hack-pre {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.btn-dino-reset {
+  color: rgba(255, 255, 255, 0.45);
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0.4rem;
+  transition: color var(--transition-base);
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.72rem;
+}
+
+.btn-dino-reset:hover {
+  color: var(--color-accent);
+  background: transparent;
+}
+
+.btn-dino-reset:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+</style>
