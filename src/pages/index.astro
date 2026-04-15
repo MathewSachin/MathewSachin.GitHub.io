@@ -82,6 +82,23 @@ const recentPosts = allPosts.slice(0, 8);
           </div>
         </div>
 
+        <style>
+          /* Home page section dividers (Quick Tools, Browse by Topic) */
+          .home-section-divider {
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 1.25rem;
+          }
+
+          .home-section-divider .btn-outline-secondary {
+            transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+          }
+
+          .home-section-divider .btn-outline-secondary:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+          }
+        </style>
+
         {/* Quick tools */}
         <div class="home-section-divider mb-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -100,6 +117,25 @@ const recentPosts = allPosts.slice(0, 8);
             ))}
           </div>
         </div>
+
+        <style>
+          /* Quick Tools pill button custom style */
+          .quick-tool-pill {
+            --quick-tool-accent: var(--color-accent);
+            border-color: var(--quick-tool-accent) !important;
+            color: var(--quick-tool-accent) !important;
+            transition: box-shadow var(--transition-base), color var(--transition-base), border-color var(--transition-base), background-color var(--transition-base);
+          }
+          .quick-tool-pill i {
+            color: inherit !important;
+          }
+          .quick-tool-pill:hover, .quick-tool-pill:focus {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+            background-color: inherit !important;
+            color: var(--quick-tool-accent) !important;
+            border-color: var(--quick-tool-accent) !important;
+          }
+        </style>
 
         {/* Browse by Topic */}
         <div class="home-section-divider mb-4">

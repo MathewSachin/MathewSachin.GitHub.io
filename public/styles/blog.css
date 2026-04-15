@@ -1,19 +1,4 @@
-/* Quick Tools pill button custom style */
-.quick-tool-pill {
-  --quick-tool-accent: var(--color-accent);
-  border-color: var(--quick-tool-accent) !important;
-  color: var(--quick-tool-accent) !important;
-  transition: box-shadow var(--transition-base), color var(--transition-base), border-color var(--transition-base), background-color var(--transition-base);
-}
-.quick-tool-pill i {
-  color: inherit !important;
-}
-.quick-tool-pill:hover, .quick-tool-pill:focus {
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  background-color: inherit !important;
-  color: var(--quick-tool-accent) !important;
-  border-color: var(--quick-tool-accent) !important;
-}
+
 /* ============================================================
    CSS custom properties — change one place to retheme the site
    ============================================================ */
@@ -203,116 +188,12 @@ figure.highlight pre {
   line-height: 1.3;
 }
 
-/* Home page section dividers (Quick Tools, Browse by Topic) */
-.home-section-divider {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  padding-top: 1.25rem;
-}
-
-.home-section-divider .btn-outline-secondary {
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.home-section-divider .btn-outline-secondary:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-/* Related posts */
-.related-posts-section .related-post-link {
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-
-.related-posts-section .card {
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-  border-radius: 8px;
-}
-
-.related-posts-section .card:hover {
-  transform: translateY(-4px);
-}
-
-/* Shared heading styles for both top and bottom related-posts variants */
-.related-posts-section.top-variant .related-posts-heading,
-.related-posts-section.bottom-variant .related-posts-heading {
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-}
-
-/* Top variant: inside the hero section (blue/info background) */
-.related-posts-section.top-variant .related-posts-heading {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.related-posts-section.top-variant .card {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: white;
-}
-
-.related-posts-section.top-variant .card:hover {
-  background: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
-.related-posts-section.top-variant .card-footer {
-  background: rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.related-posts-section.top-variant .related-post-date {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Bottom variant: inside the post card body (white background) */
-.related-posts-section.bottom-variant .related-posts-heading {
-  color: var(--post-accent, var(--color-accent));
-}
-
-.related-posts-section.bottom-variant .card {
-  background: var(--card-accent, var(--post-accent, var(--color-accent)));
-  border: none;
-  color: white;
-}
-
-.related-posts-section.bottom-variant .card:hover {
-  filter: brightness(0.85);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.related-posts-section.bottom-variant .card-footer {
-  background: rgba(0, 0, 0, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.related-posts-section.bottom-variant .related-post-date {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.related-posts-section .card-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
 /* Post icon (Font Awesome icon set via frontmatter) */
 .post-icon {
   color: var(--item-accent, var(--post-accent, var(--color-accent)));
   font-size: 0.85em;
   opacity: 0.85;
   flex-shrink: 0;
-}
-
-/* Override icon colour inside related-posts cards (teal background) — inherit white from card */
-.related-posts-section .post-icon {
-  color: inherit;
-  opacity: 1;
 }
 
 /* Inline post links with icon (post_link.html include) */
