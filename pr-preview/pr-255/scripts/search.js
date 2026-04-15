@@ -21,14 +21,16 @@ const DEBOUNCE_DELAY = 150;
 const RESULTS_LIMIT  = 20;
 const TYPO_TOLERANCE = 1;
 
-// Derive base path from <base> tag if present, otherwise from pathname
+// Derive base path: prefer window.SEARCH_BASE injected by the Astro search page,
+// then fall back to <base> tag, then infer from the current pathname.
 // (works for both / and /pr-preview/pr-N/ deployments)
 const BASE_PATH = (() => {
+  if (typeof window !== 'undefined' && window.SEARCH_BASE) return window.SEARCH_BASE.replace(/\/$/, '');
   const base = document.querySelector('base[href]');
   if (base) return base.getAttribute('href').replace(/\/$/, '');
   // Infer base from the search page's pathname: /[base]/search/ → /[base]
   const parts = location.pathname.split('/').filter(Boolean);
-  const searchIdx = parts.lastIndexOf('search');
+  const searchIdx = parts.findIndex(p => p === 'search' || p === 'search.html');
   if (searchIdx > 0) return '/' + parts.slice(0, searchIdx).join('/');
   return '';
 })();
