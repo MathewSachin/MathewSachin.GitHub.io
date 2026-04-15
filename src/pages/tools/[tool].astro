@@ -40,7 +40,7 @@ try {
     // Rewrite relative_url filter syntax that might remain from Jekyll
     .replace(/\{\{ '([^']+)' \| relative_url \}\}/g, (_, path) => `${BASE}${path.replace(/^\//, '')}`);
 } catch {
-  toolBody = `<p class="text-danger">Tool content not found for <code>${tool.id}</code>.</p>`;
+  throw new Error(`Tool content not found for ${tool.id} at ${toolHtmlPath}`);
 }
 ---
 <ToolLayout title={tool.name} accentColor={tool.accent_color}>
