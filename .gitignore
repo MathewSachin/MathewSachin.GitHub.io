@@ -1,5 +1,6 @@
 _drafts/
 _site/
+dist/
 .DS_Store
 *.swp
 Gemfile.lock
@@ -7,3 +8,4 @@ debug.log.bundle/
 node_modules/
 generated/
 styles/syntax.css
+.astro/
