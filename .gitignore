@@ -9,3 +9,4 @@ node_modules/
 generated/
 styles/syntax.css
 .astro/
+test-results/
