@@ -8,6 +8,7 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import BackToTop from '@components/BackToTop.astro';
+import Lightbox from '@components/Lightbox.astro';
 import SeriesNav from '@components/SeriesNav.astro';
 import TableOfContents from '@components/TableOfContents.astro';
 import RelatedPosts from '@components/RelatedPosts.astro';
@@ -120,14 +121,7 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
   </div>
 
   <BackToTop />
-
-  {/* Image lightbox */}
-  <dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore>
-    <div class="lightbox-content">
-      <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
-      <img src="" alt="Expanded image" />
-    </div>
-  </dialog>
+  <Lightbox />
 
   {/* Post-specific external scripts (e.g. interactive widget JS) */}
   {scripts.map(src => (
