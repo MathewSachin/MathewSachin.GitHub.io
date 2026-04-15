@@ -45,3 +45,21 @@ function truncateWords(text: string, maxWords: number): string {
     ))}
   </div>
 )}
+
+<style>
+.series-showcase-link {
+  display: block;
+}
+
+.series-showcase-link:hover .series-showcase-card {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  border-color: var(--color-accent);
+}
+
+.series-showcase-card {
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: 8px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+</style>
