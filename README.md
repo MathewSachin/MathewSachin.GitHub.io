@@ -46,3 +46,16 @@ To make the server accessible on your local network, use:
 ```bash
 bundle exec jekyll serve --host 0.0.0.0
 ```
+
+## JavaScript → TypeScript (Phase 1)
+
+TypeScript is now enabled for a safe first migration phase with generated JavaScript output kept in place for runtime compatibility.
+
+### TypeScript commands
+
+```bash
+npm run typecheck   # runs tsc in noEmit mode
+npm run build:ts    # compiles migrated .ts files to .js
+```
+
+`npm run build` and `npm test` now compile the migrated TypeScript files before building/running tests.
