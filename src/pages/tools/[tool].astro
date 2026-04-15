@@ -8,14 +8,13 @@
 // The existing JS files (tools/[id]/[id].js) are referenced directly.
 
 import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import matter from 'gray-matter';
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import { getTools } from '../../data/index.ts';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = join(__dirname, '../../../..');
+// process.cwd() is the Astro project root at both dev and build time
+const REPO_ROOT = process.cwd();
 const BASE = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {

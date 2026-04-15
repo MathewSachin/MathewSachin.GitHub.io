@@ -3,8 +3,10 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'node:url';
+import rehypeRaw from 'rehype-raw';
 
 import {
+  remarkDisableIndentedCode,
   rehypeCodeBlockHeader,
   rehypeBootstrapFormatting,
   rehypeInjectAds,
@@ -36,8 +38,16 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: { theme: 'monokai' },
-    remarkPlugins: [],
+    remarkPlugins: [
+      // Disable 4-space indented code blocks — Jekyll/Kramdown posts use nested
+      // HTML that would otherwise be misinterpreted as indented code under CommonMark.
+      remarkDisableIndentedCode,
+    ],
     rehypePlugins: [
+      // rehype-raw must run first so that raw HTML blocks in .md files (e.g.
+      // <pre class="pintora">, inline forms) are parsed into element nodes
+      // before our custom plugins traverse the tree.
+      rehypeRaw,
       rehypeCodeBlockHeader,
       rehypeBootstrapFormatting,
       // Ad injection density (every 7 content elements, mirrors _config.yml ad_density: 7)

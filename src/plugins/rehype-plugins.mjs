@@ -14,6 +14,21 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // ---------------------------------------------------------------------------
+// 0. remarkDisableIndentedCode
+//    Disables CommonMark "indented code block" parsing (4-space indentation).
+//    Jekyll/Kramdown doesn't honour this rule, so blog posts that contain raw
+//    HTML blocks with nested indented content (e.g. a <div> with 4-space inner
+//    divs) would be incorrectly split into code blocks under CommonMark.
+//    Since all intentional code examples use fenced blocks (```), this is safe.
+// ---------------------------------------------------------------------------
+export function remarkDisableIndentedCode() {
+  const data = this.data();
+  const extensions = data.micromarkExtensions || (data.micromarkExtensions = []);
+  // Tell micromark to disable the 'codeIndented' construct
+  extensions.push({ disable: { null: ['codeIndented'] } });
+}
+
+// ---------------------------------------------------------------------------
 // 1. rehypeCodeBlockHeader
 //    Adds a .code-block-header div (language label + copy button) before
 //    every highlighted code block. Mirrors code_block_header.rb.
