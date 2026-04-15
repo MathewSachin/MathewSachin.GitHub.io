@@ -8,6 +8,27 @@
     </div>
 </dialog>
 
+<script>
+// Lightbox: click on blog post images to expand
+const lightbox = document.getElementById("img-lightbox");
+if (lightbox) {
+    const lightboxImg = lightbox.querySelector("img");
+    addListeners(".page-content img", "click", function (img) {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt || "";
+        lightbox.showModal();
+        trackEvent("image_expand", { image_alt: img.alt || img.src.split("/").pop() });
+    });
+    lightbox.querySelector(".lightbox-close").addEventListener("click", function () {
+        lightbox.close();
+    });
+    // Click on the dialog backdrop (outside content) to close
+    lightbox.addEventListener("click", function (e) {
+        if (e.target === lightbox) lightbox.close();
+    });
+}
+</script>
+
 <style>
 #img-lightbox {
   max-width: 90vw;

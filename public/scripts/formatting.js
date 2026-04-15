@@ -4,32 +4,6 @@
     const DEBOUNCE_DELAY        = 500;          // ms of inactivity before selection is tracked
     const SCROLL_MILESTONES     = [25, 50, 75, 90]; // percent-scroll milestones to report
 
-    // Shorthand: attach the same event listener to every element matching a selector
-    function addListeners(selector, event, handler) {
-        document.querySelectorAll(selector).forEach(function (el) {
-            el.addEventListener(event, function () { handler(el); });
-        });
-    }
-
-    // Lightbox: click on blog post images to expand
-    const lightbox = document.getElementById("img-lightbox");
-    if (lightbox) {
-        const lightboxImg = lightbox.querySelector("img");
-        addListeners(".page-content img", "click", function (img) {
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt || "";
-            lightbox.showModal();
-            trackEvent("image_expand", { image_alt: img.alt || img.src.split("/").pop() });
-        });
-        lightbox.querySelector(".lightbox-close").addEventListener("click", function () {
-            lightbox.close();
-        });
-        // Click on the dialog backdrop (outside content) to close
-        lightbox.addEventListener("click", function (e) {
-            if (e.target === lightbox) lightbox.close();
-        });
-    }
-
     // Reading progress bar
     const progressBar = document.getElementById("reading-progress-bar");
     if (progressBar) {
