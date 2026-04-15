@@ -28,7 +28,7 @@ export async function getStaticPaths() {
 const { tool } = Astro.props;
 
 // Read the existing tool's index.html for its body content
-const toolHtmlPath = join(REPO_ROOT, 'tools', tool.id, 'index.html');
+const toolHtmlPath = join(REPO_ROOT, 'src', 'content', 'tools', tool.id, 'index.html');
 let toolBody = '';
 try {
   const raw = readFileSync(toolHtmlPath, 'utf8');

@@ -45,7 +45,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 ## Play It Right Here
 
 <div class="dino-embed-wrapper">
-<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/index.html" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
 <small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
 </div>
 
