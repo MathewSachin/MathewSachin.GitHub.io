@@ -54,11 +54,8 @@ jobs:
           NODE_ENV: ${{ inputs.testing && 'development' || 'production' }}
         run: npx astro build
 
-      - name: Copy tool static assets
-        run: node scripts/copy-tool-assets.mjs
-
-      - name: Generate .html redirect stubs
-        run: node scripts/generate-html-redirects.mjs
+      - name: Promote blog posts to .html
+        run: node scripts/promote-blog-html.mjs
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4

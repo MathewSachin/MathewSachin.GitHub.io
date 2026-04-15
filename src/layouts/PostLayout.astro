@@ -19,17 +19,22 @@ interface Props {
   allPosts: CollectionEntry<'blog'>[];
   /** The table of contents HTML string (generated at build time). */
   toc?: string;
+  /** Override canonical URL path (e.g. /blog/YYYY/MM/DD/slug.html) */
+  canonicalPath?: string;
 }
 
-const { post, allPosts, toc } = Astro.props;
+const { post, allPosts, toc, canonicalPath } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
+const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
 
-const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true } = post.data;
+const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true, scripts = [] } = post.data;
 const date = getPostDate(post);
 const readTime = estimateReadingTime(post.body);
 const pageUrl = Astro.url.href;
+// Canonical URL: use explicit .html path if provided, else fall back to current URL
+const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;
 ---
-<BaseLayout title={title} accentColor={accent_color} ads={ads}>
+<BaseLayout title={title} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
   <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
   <link rel="stylesheet" href={`${BASE}styles/syntax.css`} slot="head" />
 
@@ -142,4 +147,9 @@ const pageUrl = Astro.url.href;
       <img src="" alt="Expanded image" />
     </div>
   </dialog>
+
+  {/* Post-specific external scripts (e.g. interactive widget JS) */}
+  {scripts.map(src => (
+    <script src={`${BASE}${src.replace(/^\//, '')}`} defer></script>
+  ))}
 </BaseLayout>

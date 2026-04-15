@@ -7,22 +7,23 @@ import type { CollectionEntry } from 'astro:content';
 /**
  * Derive the Jekyll-compatible URL path from a content collection entry id.
  * ID pattern (from glob loader):  YYYY-MM-DD-post-title
- * Jekyll URL:                      /blog/YYYY/MM/DD/post-title/
+ * Jekyll URL:                      /blog/YYYY/MM/DD/post-title.html
  */
 export function postUrlFromId(id: string): string {
   const match = id.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
-  if (!match) return `/blog/${id}/`;
+  if (!match) return `/blog/${id}.html`;
   const [, year, month, day, title] = match;
-  return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${title}/`;
+  return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${title}.html`;
 }
 
 /**
  * Derive the Jekyll post ID (used in series.yml / related arrays).
- * Format: /blog/YYYY/MM/DD/slug  (no trailing slash)
+ * Format: /blog/YYYY/MM/DD/slug  (no trailing slash, no .html)
  */
 export function postIdFromEntryId(id: string): string {
   const url = postUrlFromId(id);
-  return url.endsWith('/') ? url.slice(0, -1) : url;
+  // Strip .html extension for use as post ID
+  return url.endsWith('.html') ? url.slice(0, -5) : url;
 }
 
 // Keep alias for backward compat within this migration

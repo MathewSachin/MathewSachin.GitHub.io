@@ -9,6 +9,8 @@ related:
   - /blog/2026/03/20/hacking-typeracer
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2019/12/07/unhide-password-box
+scripts:
+  - /blog/chrome-dino-hack.js
 ---
 
 *All hacks updated as of 8th March 2026 based on game changes.*
@@ -123,7 +125,7 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="speed-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).setSpeed(6){% endhighlight %}</div>
+<div id="speed-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div>
 </div>
 
 
@@ -138,7 +140,7 @@ Want to jump right into the action with a specific score? You can set the score 
 <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="score-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025{% endhighlight %}</div>
+<div id="score-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025</code></div>
 </div>
 
 
@@ -164,7 +166,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
 <button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="jump-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10){% endhighlight %}</div>
+<div id="jump-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10)</code></div>
 </div>
 
 
@@ -188,9 +190,8 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="ground-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93{% endhighlight %}</div>
+<div id="ground-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93</code></div>
 </div>
-<script src="{{ '/blog/chrome-dino-hack.js' | relative_url }}" defer></script>
 
 ## Auto-play
 

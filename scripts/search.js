@@ -1,7 +1,5 @@
----
----
-import { create, load, search } from '{{ "/scripts/orama.js" | relative_url }}';
-import { escapeHtml } from '{{ "/scripts/utils.js" | relative_url }}';
+import { create, load, search } from './orama.js';
+import { escapeHtml } from './utils.js';
 
 const SCHEMA = {
   title: 'string',
@@ -16,7 +14,9 @@ const DEBOUNCE_DELAY = 150;  // ms of inactivity before triggering a search
 const RESULTS_LIMIT  = 20;   // max results returned per query
 const TYPO_TOLERANCE = 1;    // allowed edit distance for fuzzy matching
 
-const BASE_PATH = '{{ site.baseurl }}';
+// BASE_PATH is injected by the search page as window.SEARCH_BASE (Astro's BASE_URL).
+// Falls back to '/' for direct file access.
+const BASE_PATH = (typeof window !== 'undefined' && window.SEARCH_BASE) ? window.SEARCH_BASE : '/';
 
 const statusEl  = document.getElementById('search-status');
 const inputEl   = document.getElementById('search-input');
@@ -35,7 +35,7 @@ let db = null;
 
 async function initIndex() {
   try {
-    const resp = await fetch('{{ "/search-index.json" | relative_url }}');
+    const resp = await fetch(`${BASE_PATH}search-index.json`);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const rawIndex = await resp.json();
     db = await create({ schema: SCHEMA });

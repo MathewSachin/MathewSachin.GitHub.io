@@ -6,7 +6,7 @@
  */
 import type { CollectionEntry } from 'astro:content';
 import { getSeries, getSeriesPosition } from '@data/index';
-import { postIdFromSlug } from '@utils/posts';
+import { postIdFromSlug, postUrlFromSlug } from '@utils/posts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -37,7 +37,7 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
     {prevPost && (
       <>
         <br />
-        <a class="series-prev-link" href={`${BASE}${prevPost.id.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/, 'blog/$1/$2/$3/$4/')}/`}>
+        <a class="series-prev-link" href={`${BASE}${postUrlFromSlug(prevPost.id).slice(1)}`}>
           <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>Previous: {prevPost.data.title}
         </a>
       </>
@@ -48,7 +48,7 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
 {variant === 'footer' && (prevPost || nextPost) && (
   <div class="series-post-nav" role="navigation" aria-label="Series navigation">
     {prevPost ? (
-      <a href={`${BASE}${prevPost.id.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/, 'blog/$1/$2/$3/$4/')}/`} class="series-nav-btn prev-post">
+      <a href={`${BASE}${postUrlFromSlug(prevPost.id).slice(1)}`} class="series-nav-btn prev-post">
         <i class="fas fa-arrow-left nav-icon" aria-hidden="true"></i>
         <div>
           <span class="nav-label">Previous in series</span>
@@ -60,7 +60,7 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
       </a>
     ) : <div></div>}
     {nextPost && (
-      <a href={`${BASE}${nextPost.id.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/, 'blog/$1/$2/$3/$4/')}/`} class="series-nav-btn next-post">
+      <a href={`${BASE}${postUrlFromSlug(nextPost.id).slice(1)}`} class="series-nav-btn next-post">
         <i class="fas fa-arrow-right nav-icon" aria-hidden="true"></i>
         <div>
           <span class="nav-label">Next in series</span>

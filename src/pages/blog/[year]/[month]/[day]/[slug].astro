@@ -5,7 +5,7 @@
 
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../../../../layouts/PostLayout.astro';
-import { sortPostsByDate } from '../../../../../utils/posts.ts';
+import { sortPostsByDate, postUrlFromId } from '../../../../../utils/posts.ts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -60,6 +60,6 @@ if (tocEntries.length >= 3) {
   toc = html;
 }
 ---
-<PostLayout post={post} allPosts={allPosts} toc={toc}>
+<PostLayout post={post} allPosts={allPosts} toc={toc} canonicalPath={postUrlFromId(post.id)}>
   <Content />
 </PostLayout>

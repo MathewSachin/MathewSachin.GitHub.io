@@ -37,12 +37,14 @@ const BASE = import.meta.env.BASE_URL;
 
           <p class="text-muted small mt-4">
             Curious how this search works?
-            <a href={`${BASE}blog/2026/03/25/how-site-search-works/`}>Read the post — fully offline, no server required.</a>
+            <a href={`${BASE}blog/2026/03/25/how-site-search-works.html`}>Read the post — fully offline, no server required.</a>
           </p>
         </div>
       </div>
     </div>
   </div>
 
+  {/* Inject base URL for use by search.js (replaces Jekyll's {{ site.baseurl }}) */}
+  <script set:html={`window.SEARCH_BASE = ${JSON.stringify(BASE)};`}></script>
   <script type="module" src={`${BASE}scripts/search.js`}></script>
 </BaseLayout>
