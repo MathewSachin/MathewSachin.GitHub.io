@@ -9,7 +9,7 @@ import { create, insert, save } from '@orama/orama'
 import matter from 'gray-matter'
 import yaml from 'js-yaml'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
-import { join, basename } from 'node:path'
+import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
@@ -19,12 +19,18 @@ const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
 const OUTPUT_FILE = join(REPO_ROOT, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
+type ToolEntry = {
+  id: string
+  name: string
+  description: string
+}
+
 /**
  * Strip common Markdown/HTML syntax to produce plain text for indexing.
  * Order matters: fenced code blocks must be removed before inline code,
  * and HTML tags before link/image syntax so angle brackets don't interfere.
  */
-export function stripMarkdown(text) {
+export function stripMarkdown(text: string): string {
   return text
     // Remove fenced and inline code blocks first (their content isn't useful for search)
     .replace(/```[\s\S]*?```/g, ' ')
@@ -51,7 +57,7 @@ export function stripMarkdown(text) {
  * Filename pattern: YYYY-MM-DD-slug.md  (M and D may be 1 or 2 digits)
  * Jekyll URL:       /blog/YYYY/MM/DD/slug/
  */
-export function postUrlFromFilename(filename) {
+export function postUrlFromFilename(filename: string): string | null {
   const name = basename(filename, '.md')
   const match = name.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/)
   if (!match) return null
@@ -63,7 +69,7 @@ export function postUrlFromFilename(filename) {
  * Extract the post date as a YYYY-MM-DD string.
  * Preference order: frontmatter `date` field → filename prefix → first 10 chars of filename.
  */
-function parsePostDate(frontmatter, filename) {
+function parsePostDate(frontmatter: Record<string, unknown>, filename: string): string {
   if (frontmatter.date) {
     return String(frontmatter.date).slice(0, 10)
   }
@@ -75,12 +81,30 @@ function parsePostDate(frontmatter, filename) {
 }
 
 /** Normalise a frontmatter tags value to a plain string array. */
-function toStringArray(value) {
+function toStringArray(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String)
   return value ? [String(value)] : []
 }
 
-async function main() {
+function toToolEntries(data: unknown): ToolEntry[] {
+  if (!Array.isArray(data)) return []
+  return data
+    .filter(
+      (item): item is ToolEntry =>
+        typeof item === 'object' &&
+        item !== null &&
+        'id' in item &&
+        'name' in item &&
+        'description' in item
+    )
+    .map(item => ({
+      id: String(item.id),
+      name: String(item.name),
+      description: String(item.description),
+    }))
+}
+
+async function main(): Promise<void> {
   const files = (await readdir(POSTS_DIR)).filter(f => f.endsWith('.md'))
 
   const db = await create({
@@ -103,11 +127,12 @@ async function main() {
     }
 
     const raw = await readFile(join(POSTS_DIR, file), 'utf8')
-    const { data: frontmatter, content } = matter(raw)
+    const { data, content } = matter(raw)
+    const frontmatter = data as Record<string, unknown>
 
-    const title        = String(frontmatter.title ?? '')
-    const tags         = toStringArray(frontmatter.tags)
-    const date         = parsePostDate(frontmatter, file)
+    const title = String(frontmatter.title ?? '')
+    const tags = toStringArray(frontmatter.tags)
+    const date = parsePostDate(frontmatter, file)
     const plainContent = stripMarkdown(content).slice(0, MAX_CONTENT_LENGTH)
 
     await insert(db, { title, url, content: plainContent, tags, date, type: 'post' })
@@ -116,7 +141,7 @@ async function main() {
 
   // Index tools from _data/tools.yml
   const toolsRaw = await readFile(TOOLS_FILE, 'utf8')
-  const tools = yaml.load(toolsRaw)
+  const tools = toToolEntries(yaml.load(toolsRaw))
   for (const tool of tools) {
     const url = `/tools/${tool.id}/`
     await insert(db, {
@@ -137,7 +162,7 @@ async function main() {
 
 // Only run when executed directly (not when imported by tests)
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main().catch(err => {
+  main().catch((err: unknown) => {
     console.error(err)
     process.exit(1)
   })

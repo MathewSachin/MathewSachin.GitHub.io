@@ -14,7 +14,7 @@ import { create, load, search } from '@orama/orama'
 import {
   stripMarkdown,
   postUrlFromFilename,
-} from '../scripts/build-search-index.mjs'
+} from '../scripts/build-search-index.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = join(__dirname, '..')

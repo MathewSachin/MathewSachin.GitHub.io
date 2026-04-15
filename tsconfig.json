@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true
+  },
+  "include": [
+    "scripts/build-search-index.ts",
+    "scripts/utils.ts",
+    "tools/base64/base64.ts",
+    "tools/cron/cron.ts",
+    "tools/hash/hash.ts",
+    "tools/json/json-formatter.ts",
+    "tools/timestamp/timestamp.ts"
+  ]
+}
