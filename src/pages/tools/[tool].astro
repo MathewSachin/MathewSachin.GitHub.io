@@ -3,9 +3,9 @@
 // Dynamic tool pages: /tools/[tool]/
 // Imports each tool's HTML from the existing tools/[id]/index.html files,
 // wrapping them in ToolLayout.
-
-// During migration, we read the tool HTML files and render them with ToolLayout.
-// The existing JS files (tools/[id]/[id].js) are referenced directly.
+//
+// Each tool's HTML file already references its own JS (via relative_url filter
+// or inline <script type="module"> imports) — no additional script injection needed.
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -45,6 +45,4 @@ try {
 ---
 <ToolLayout title={tool.name} accentColor={tool.accent_color}>
   <Fragment set:html={toolBody} />
-  {/* Link tool-specific JS (tools/<id>/<id>.js) */}
-  <script is:inline src={`${BASE}tools/${tool.id}/${tool.id}.js`} type="module" defer></script>
 </ToolLayout>
