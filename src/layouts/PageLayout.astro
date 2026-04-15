@@ -1,0 +1,41 @@
+---
+/**
+ * PageLayout.astro
+ * Replaces _layouts/page.html
+ * For general content pages (privacy policy, search, tags, etc.)
+ */
+import BaseLayout from './BaseLayout.astro';
+import AdUnit from '@components/AdUnit.astro';
+
+interface Props {
+  title: string;
+  ads?: boolean;
+}
+const { title, ads = false } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+---
+<BaseLayout title={title} ads={ads}>
+  <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
+
+  <div class="bg-dark">
+    <div class="py-4 text-white">
+      <div class="container">
+        <h2>{title}</h2>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <div class="page-content">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+  </div>
+</BaseLayout>

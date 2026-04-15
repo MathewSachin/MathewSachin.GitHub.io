@@ -1,0 +1,51 @@
+---
+//
+// Dynamic tool pages: /tools/[tool]/
+// Imports each tool's HTML from the existing tools/[id]/index.html files,
+// wrapping them in ToolLayout.
+
+// During migration, we read the tool HTML files and render them with ToolLayout.
+// The existing JS files (tools/[id]/[id].js) are referenced directly.
+
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import matter from 'gray-matter';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { getTools } from '../../data/index.ts';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = join(__dirname, '../../../..');
+const BASE = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+  const tools = getTools();
+  return tools.map(tool => ({
+    params: { tool: tool.id },
+    props: { tool },
+  }));
+}
+
+const { tool } = Astro.props;
+
+// Read the existing tool's index.html for its body content
+const toolHtmlPath = join(REPO_ROOT, 'tools', tool.id, 'index.html');
+let toolBody = '';
+try {
+  const raw = readFileSync(toolHtmlPath, 'utf8');
+  const { content } = matter(raw);
+  // Rewrite relative asset URLs to use BASE path
+  toolBody = content
+    .replace(/href="\.\/([^"]+)"/g, `href="${BASE}tools/${tool.id}/$1"`)
+    .replace(/src="\.\/([^"]+)"/g, `src="${BASE}tools/${tool.id}/$1"`)
+    // Rewrite relative_url filter syntax that might remain from Jekyll
+    .replace(/\{\{ '([^']+)' \| relative_url \}\}/g, (_, path) => `${BASE}${path.replace(/^\//, '')}`);
+} catch {
+  toolBody = `<p class="text-danger">Tool content not found for <code>${tool.id}</code>.</p>`;
+}
+---
+<ToolLayout title={tool.name} accentColor={tool.accent_color}>
+  <Fragment set:html={toolBody} />
+  {/* Link tool-specific JS (tools/<id>/<id>.js) */}
+  <script is:inline src={`${BASE}tools/${tool.id}/${tool.id}.js`} type="module" defer></script>
+</ToolLayout>

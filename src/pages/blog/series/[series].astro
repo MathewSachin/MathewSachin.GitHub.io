@@ -1,0 +1,66 @@
+---
+// Series index pages: /blog/series/[series]/
+// Replaces blog/series/*/index.md
+import { getCollection } from 'astro:content';
+import SeriesLayout from '../../../layouts/SeriesLayout.astro';
+import { getSeries } from '../../../data/index.ts';
+import { postIdFromSlug, postUrlFromSlug, getPostDate, formatDateUS, sortPostsByDate } from '../../../utils/posts.ts';
+
+export async function getStaticPaths() {
+  const seriesMap = getSeries();
+  return Object.keys(seriesMap).map(key => ({
+    params: { series: key },
+    props: { seriesKey: key },
+  }));
+}
+
+const { seriesKey } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+const seriesMap = getSeries();
+const series = seriesMap[seriesKey];
+const allPosts = sortPostsByDate(await getCollection('blog'));
+
+// Find a post by its Jekyll ID
+function findPost(id) {
+  return allPosts.find(p => postIdFromSlug(p.id) === id) || null;
+}
+---
+<SeriesLayout title={series.name}>
+  <p class="lead mt-2 mb-4" set:html={series.description} />
+
+  {series.levels.map((level, lvlIdx) => {
+    let partCounter = series.levels.slice(0, lvlIdx).reduce((acc, l) => acc + l.posts.length, 0);
+    return (
+      <>
+        <hr />
+        <h2 class="series-level-heading" id={`level-${lvlIdx + 1}`}>
+          <i class={`${level.icon} me-1`} aria-hidden="true"></i>{level.title}
+        </h2>
+        <p>{level.intro}</p>
+
+        {level.posts.map((entry, entryIdx) => {
+          const part = partCounter + entryIdx + 1;
+          const post = findPost(entry.id);
+          if (!post) return null;
+          return (
+            <div class="series-post-item">
+              <span class="series-part-badge">{part}</span>
+              <div>
+                <a
+                  href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                  class="series-post-title"
+                  style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+                >
+                  {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                  {post.data.title}
+                </a>
+                <br />
+                <small class="text-muted">{entry.blurb}</small>
+              </div>
+            </div>
+          );
+        })}
+      </>
+    );
+  })}
+</SeriesLayout>

@@ -14,9 +14,19 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
-const POSTS_DIR = join(REPO_ROOT, 'blog', '_posts')
+// Support both Astro content collections (src/content/blog) and legacy Jekyll path
+const ASTRO_POSTS_DIR = join(REPO_ROOT, 'src', 'content', 'blog')
+const JEKYLL_POSTS_DIR = join(REPO_ROOT, 'blog', '_posts')
+const { existsSync } = await import('node:fs')
+const POSTS_DIR = existsSync(ASTRO_POSTS_DIR) && (await import('node:fs').then(m => m.readdirSync(ASTRO_POSTS_DIR).filter(f => f.endsWith('.md')).length > 0))
+  ? ASTRO_POSTS_DIR
+  : JEKYLL_POSTS_DIR
 const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
-const OUTPUT_FILE = join(REPO_ROOT, 'search-index.json')
+// Output to public/search-index.json for Astro static output (falls back to repo root for Jekyll)
+const PUBLIC_DIR = join(REPO_ROOT, 'public')
+const OUTPUT_FILE = existsSync(PUBLIC_DIR)
+  ? join(PUBLIC_DIR, 'search-index.json')
+  : join(REPO_ROOT, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
 /**

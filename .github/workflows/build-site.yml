@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       baseurl:
-        description: 'Optional baseurl to inject into _config.yml'
+        description: 'Optional base URL for PR previews (e.g. /pr-preview/pr-42)'
         type: string
         default: ''
       testing:
@@ -19,8 +19,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/mathewsachin/mathewsachin-github-io-ci:latest
     permissions:
       contents: read
 
@@ -30,61 +28,34 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Orama bundle and search index
-        run: |
-          rm -f search-index.json
-          npm run build
-          test -f search-index.json || { echo "search-index.json was not generated"; exit 1; }
+      - name: Bundle Orama
+        run: npm run bundle-orama
 
-      - name: Run tests
+      - name: Build search index
+        run: npm run build-search-index
+      - name: Verify search index
+        run: test -f public/search-index.json || { echo "public/search-index.json was not generated"; exit 1; }
+
+      - name: Run unit tests
         run: npm test
 
-      - name: Set baseurl
-        if: inputs.baseurl != ''
+      - name: Build Astro site
         env:
-          BASEURL: ${{ inputs.baseurl }}
-        run: |
-          echo "baseurl: $BASEURL" >> _config.yml
-
-
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
-
-      - name: Install Ruby gems
-        run: bundle config set path 'vendor/bundle' && bundle install
-
-      - name: Run Ruby plugin tests
-        run: bundle exec rspec spec/ --format documentation
-
-      - name: Generate Rouge syntax stylesheet
-        run: bundle exec rougify style monokai.sublime > styles/syntax.css
-
-      - name: Build Jekyll site
-        env:
-          JEKYLL_ENV: ${{ inputs.testing && 'staging' || 'production' }}
-        run: bundle exec jekyll build --destination ./_site
-
-      - name: Run html-proofer
-        env:
-          BASEURL: ${{ inputs.baseurl }}
-          RUBYOPT: "-E UTF-8:UTF-8"
-        shell: bash
-        run: |
-          ARGS=(--ignore-urls "/^https?:/,/^#/" --ignore-empty-mailto)
-          if [ -n "$BASEURL" ]; then
-            ARGS+=(--swap-urls "${BASEURL}:")
-          fi
-          bundle exec htmlproofer ./_site "${ARGS[@]}"
+          ASTRO_BASE: ${{ inputs.baseurl }}
+          NODE_ENV: ${{ inputs.testing && 'development' || 'production' }}
+        run: npx astro build
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}
-          path: ./_site
+          path: ./dist

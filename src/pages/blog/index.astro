@@ -1,0 +1,99 @@
+---
+//
+// Blog listing index: /blog/
+// Replaces blog/index.html with Jekyll pagination.
+// Page 1 lives at /blog/, subsequent pages at /blog/page/2/ etc.
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostItem from '../../components/PostItem.astro';
+import SeriesShowcase from '../../components/SeriesShowcase.astro';
+import AdUnit from '../../components/AdUnit.astro';
+import { sortPostsByDate } from '../../utils/posts.ts';
+
+const POSTS_PER_PAGE = 10;
+const BASE = import.meta.env.BASE_URL;
+
+const allPosts = sortPostsByDate(await getCollection('blog'));
+const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+const currentPage = 1;
+const posts = allPosts.slice(0, POSTS_PER_PAGE);
+
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+---
+<BaseLayout title="Blog Posts">
+  <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
+
+  <div class="bg-dark py-3">
+    <div class="container">
+      <h2 class="text-white mb-3">Blog Posts</h2>
+
+      <div class="d-flex gap-2 mb-3">
+        <a href={`${BASE}blog/tags/`} class="btn btn-outline-info btn-sm">
+          <i class="fas fa-tags me-1"></i>Tags
+        </a>
+        <a href={`${BASE}blog/archive/`} class="btn btn-outline-secondary btn-sm">
+          <i class="fas fa-archive me-1"></i>Archive
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <SeriesShowcase />
+
+          <div class="posts">
+            {posts.length === 0 ? (
+              <p class="text-muted">No posts found.</p>
+            ) : (
+              <>
+                {posts.map(post => <PostItem post={post} />)}
+
+                {totalPages > 1 && (
+                  <nav class="mt-3">
+                    <ul class="pagination justify-content-center flex-wrap">
+                      {/* Prev */}
+                      {hasPrev ? (
+                        <li class="page-item">
+                          <a href={currentPage === 2 ? `${BASE}blog/` : `${BASE}blog/page/${currentPage - 1}/`} class="page-link" aria-label="Previous page">
+                            <i class="fas fa-chevron-left"></i>
+                          </a>
+                        </li>
+                      ) : (
+                        <li class="page-item disabled">
+                          <span class="page-link" aria-label="Previous page"><i class="fas fa-chevron-left"></i></span>
+                        </li>
+                      )}
+
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                        <li class={`page-item ${page === currentPage ? 'active' : ''}`}>
+                          <a
+                            href={page === 1 ? `${BASE}blog/` : `${BASE}blog/page/${page}/`}
+                            class="page-link"
+                          >{page}</a>
+                        </li>
+                      ))}
+
+                      {/* Next */}
+                      {hasNext ? (
+                        <li class="page-item">
+                          <a href={`${BASE}blog/page/${currentPage + 1}/`} class="page-link" aria-label="Next page">
+                            <i class="fas fa-chevron-right"></i>
+                          </a>
+                        </li>
+                      ) : (
+                        <li class="page-item disabled">
+                          <span class="page-link" aria-label="Next page"><i class="fas fa-chevron-right"></i></span>
+                        </li>
+                      )}
+                    </ul>
+                  </nav>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

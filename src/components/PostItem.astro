@@ -1,0 +1,41 @@
+---
+/**
+ * PostItem.astro
+ * Replaces _includes/post_item.html
+ * Used in blog listing, recent posts, etc.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { postUrlFromSlug, formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+const url = `${BASE}${postUrlFromSlug(post.id).slice(1)}`;
+const date = getPostDate(post);
+const readTime = estimateReadingTime(post.body);
+---
+<a
+  href={url}
+  class="blog-post-link text-decoration-none text-reset"
+  style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+>
+  <div class="blog-post-item py-3">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
+      <span class="blog-post-title fw-semibold">
+        {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+        {post.data.title}
+      </span>
+      <span class="small text-muted text-nowrap">{formatDate(date)}</span>
+    </div>
+    <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+      <span class="small text-muted">{readTime} read</span>
+      <div class="post-tag">
+        {post.data.tags.map(tag => (
+          <span class="badge rounded-pill bg-secondary">{tag}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,75 @@
+---
+/**
+ * SeriesNav.astro
+ * Replaces _includes/series_nav.html
+ * Renders prev/next post links for a series (header or footer variant).
+ */
+import type { CollectionEntry } from 'astro:content';
+import { getSeries, getSeriesPosition } from '@data/index';
+import { postIdFromSlug } from '@utils/posts';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  variant: 'header' | 'footer';
+  allPosts: CollectionEntry<'blog'>[];
+}
+
+const { post, variant, allPosts } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+
+if (!post.data.series) return null;
+
+const seriesMap = getSeries();
+const series = seriesMap[post.data.series];
+if (!series) return null;
+
+const postId = postIdFromSlug(post.id);
+const { part, total, prevId, nextId } = getSeriesPosition(series, postId);
+
+const prevPost = prevId ? allPosts.find(p => postIdFromSlug(p.id) === prevId) : null;
+const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : null;
+---
+{variant === 'header' && (
+  <div class="series-banner">
+    <i class="fas fa-layer-group me-1" aria-hidden="true"></i>
+    Part {part} of {total} &mdash;
+    <a href={`${BASE}blog/series/${post.data.series}/`}>{series.name}</a> series
+    {prevPost && (
+      <>
+        <br />
+        <a class="series-prev-link" href={`${BASE}${prevPost.id.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/, 'blog/$1/$2/$3/$4/')}/`}>
+          <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>Previous: {prevPost.data.title}
+        </a>
+      </>
+    )}
+  </div>
+)}
+
+{variant === 'footer' && (prevPost || nextPost) && (
+  <div class="series-post-nav" role="navigation" aria-label="Series navigation">
+    {prevPost ? (
+      <a href={`${BASE}${prevPost.id.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/, 'blog/$1/$2/$3/$4/')}/`} class="series-nav-btn prev-post">
+        <i class="fas fa-arrow-left nav-icon" aria-hidden="true"></i>
+        <div>
+          <span class="nav-label">Previous in series</span>
+          <span class="nav-title">
+            {prevPost.data.icon && <i class={`${prevPost.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+            {prevPost.data.title}
+          </span>
+        </div>
+      </a>
+    ) : <div></div>}
+    {nextPost && (
+      <a href={`${BASE}${nextPost.id.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/, 'blog/$1/$2/$3/$4/')}/`} class="series-nav-btn next-post">
+        <i class="fas fa-arrow-right nav-icon" aria-hidden="true"></i>
+        <div>
+          <span class="nav-label">Next in series</span>
+          <span class="nav-title">
+            {nextPost.data.icon && <i class={`${nextPost.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+            {nextPost.data.title}
+          </span>
+        </div>
+      </a>
+    )}
+  </div>
+)}

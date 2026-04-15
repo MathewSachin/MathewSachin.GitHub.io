@@ -1,0 +1,53 @@
+---
+/**
+ * RelatedPosts.astro
+ * Replaces _includes/related_posts.html
+ */
+import type { CollectionEntry } from 'astro:content';
+import { postIdFromSlug, postUrlFromSlug, formatDateUS, getPostDate } from '@utils/posts';
+
+interface Props {
+  relatedIds: string[];
+  allPosts: CollectionEntry<'blog'>[];
+  variant?: string;
+}
+
+const { relatedIds, allPosts, variant = '' } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+
+const relatedPosts = relatedIds
+  .map(id => allPosts.find(p => postIdFromSlug(p.id) === id))
+  .filter(Boolean) as CollectionEntry<'blog'>[];
+---
+{relatedPosts.length > 0 && (
+  <div class={`related-posts-section ${variant}`}>
+    <h5 class="related-posts-heading">
+      <i class="fas fa-bookmark me-2"></i>You might also like
+    </h5>
+    <div class="row">
+      {relatedPosts.map(post => (
+        <div class="col-sm-6 col-md-4 mb-3">
+          <a
+            href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+            class="related-post-link"
+            style={post.data.accent_color ? `--card-accent: ${post.data.accent_color}` : undefined}
+            aria-label={`Read ${post.data.title}`}
+          >
+            <div class="card h-100">
+              <div class="card-body">
+                <p class="card-title mb-1">
+                  {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                  {post.data.title}
+                </p>
+                <small class="related-post-date">{formatDateUS(getPostDate(post))}</small>
+              </div>
+              <div class="card-footer">
+                <small><i class="fas fa-arrow-right me-1"></i>Read more</small>
+              </div>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

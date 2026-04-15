@@ -1,0 +1,47 @@
+---
+/**
+ * SeriesShowcase.astro
+ * Replaces _includes/series_showcase.html
+ */
+import { getSeries } from '@data/index';
+
+const BASE = import.meta.env.BASE_URL;
+const seriesMap = getSeries();
+const seriesList = Object.entries(seriesMap);
+
+function countPosts(series): number {
+  return series.levels.reduce((acc, lvl) => acc + lvl.posts.length, 0);
+}
+
+// Strip HTML tags from description for plain text preview
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function truncateWords(text: string, maxWords: number): string {
+  const words = text.split(/\s+/);
+  if (words.length <= maxWords) return text;
+  return words.slice(0, maxWords).join(' ') + '…';
+}
+---
+{seriesList.length > 0 && (
+  <div class="series-showcase mb-3">
+    {seriesList.map(([key, s]) => (
+      <a href={`${BASE}blog/series/${key}/`} class="series-showcase-link text-decoration-none mb-2">
+        <div class="series-showcase-card card">
+          <div class="card-body py-2 px-3">
+            <div class="d-flex justify-content-between align-items-center gap-2">
+              <span class="fw-semibold">
+                <i class="fas fa-layer-group me-1 text-info" aria-hidden="true"></i>{s.name}
+              </span>
+              <span class="badge bg-info text-nowrap">{countPosts(s)} parts</span>
+            </div>
+            <p class="small text-muted mb-0 mt-1">
+              {truncateWords(stripHtml(s.description), 20)}
+            </p>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+)}

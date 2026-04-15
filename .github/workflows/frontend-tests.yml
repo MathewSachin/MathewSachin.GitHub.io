@@ -24,7 +24,7 @@ jobs:
         uses: actions/download-artifact@v4.1.3
         with:
           name: ${{ inputs.artifact_name }}
-          path: ./_site
+          path: ./dist
 
       - name: Install Node.js dependencies
         run: npm ci
