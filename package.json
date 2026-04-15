@@ -12,8 +12,7 @@
     "build": "npm run bundle-orama && astro build && npm run promote-blog-html && npm run build-search-index",
     "test": "node --test tests/*.test.mjs",
     "test:e2e": "playwright test",
-    "promote-blog-html": "node scripts/promote-blog-html.mjs",
-    "copy-tool-assets": "node scripts/copy-tool-assets.mjs"
+    "promote-blog-html": "node scripts/promote-blog-html.mjs"
   },
   "dependencies": {
     "@orama/orama": "^3.1.18",
