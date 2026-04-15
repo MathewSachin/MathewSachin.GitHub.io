@@ -1,44 +1,8 @@
 (function () {
     // Named constants — avoid magic numbers scattered through the file
-    const BACK_TO_TOP_THRESHOLD = 300;          // px of scroll before button appears
     const COPY_RESET_DELAY      = 2000;         // ms before copy icon reverts to link icon
     const DEBOUNCE_DELAY        = 500;          // ms of inactivity before selection is tracked
     const SCROLL_MILESTONES     = [25, 50, 75, 90]; // percent-scroll milestones to report
-
-    // Safe GA event tracker — no-ops gracefully if analytics is blocked
-    function trackEvent(name, params) {
-        try {
-            if (typeof window.gtag === "function") {
-                window.gtag("event", name, params || {});
-            }
-        } catch (_) {}
-    }
-
-    // Shorthand: attach the same event listener to every element matching a selector
-    function addListeners(selector, event, handler) {
-        document.querySelectorAll(selector).forEach(function (el) {
-            el.addEventListener(event, function () { handler(el); });
-        });
-    }
-
-    // Lightbox: click on blog post images to expand
-    const lightbox = document.getElementById("img-lightbox");
-    if (lightbox) {
-        const lightboxImg = lightbox.querySelector("img");
-        addListeners(".page-content img", "click", function (img) {
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt || "";
-            lightbox.showModal();
-            trackEvent("image_expand", { image_alt: img.alt || img.src.split("/").pop() });
-        });
-        lightbox.querySelector(".lightbox-close").addEventListener("click", function () {
-            lightbox.close();
-        });
-        // Click on the dialog backdrop (outside content) to close
-        lightbox.addEventListener("click", function (e) {
-            if (e.target === lightbox) lightbox.close();
-        });
-    }
 
     // Reading progress bar
     const progressBar = document.getElementById("reading-progress-bar");
@@ -52,22 +16,6 @@
         window.addEventListener("scroll", updateProgress);
         window.addEventListener("resize", updateProgress);
         updateProgress();
-    }
-
-    // Back to top button — only visible when scrolling up past the threshold
-    const backToTop = document.getElementById("back-to-top");
-    if (backToTop) {
-        let backToTopLastY = window.scrollY;
-        window.addEventListener("scroll", function () {
-            const currentScrollY = window.scrollY;
-            const scrollingUp = currentScrollY < backToTopLastY;
-            backToTopLastY = currentScrollY;
-            backToTop.classList.toggle("visible", scrollingUp && currentScrollY > BACK_TO_TOP_THRESHOLD);
-        });
-        backToTop.addEventListener("click", function () {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            trackEvent("back_to_top");
-        });
     }
 
     // Mobile TOC collapse toggle

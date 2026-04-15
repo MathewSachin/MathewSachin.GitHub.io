@@ -18,13 +18,6 @@ document.addEventListener('keydown', function(e) {
   }
 }, { passive: false });
 
-// Send GA4 events when available; silently skip otherwise
-function trackEvent(name, params) {
-  if (typeof gtag === 'function') {
-    gtag('event', name, params);
-  }
-}
-
 // Returns a debounced version of fn that delays invocation by `wait` ms
 function debounce(fn, wait) {
   var timer;

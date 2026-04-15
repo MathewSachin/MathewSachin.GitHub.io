@@ -39,14 +39,6 @@ const statusEl  = document.getElementById('search-status');
 const inputEl   = document.getElementById('search-input');
 const resultsEl = document.getElementById('search-results');
 
-function trackEvent(name, params) {
-  try {
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', name, params || {});
-    }
-  } catch (_) {}
-}
-
 let db = null;
 
 async function initIndex() {
