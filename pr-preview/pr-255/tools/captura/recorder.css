@@ -1,0 +1,146 @@
+#recorder-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #111;
+  border-radius: 6px;
+}
+
+/* ── Canvas wrapper — needed so the countdown overlay can be positioned over it */
+.canvas-wrap {
+  position: relative;
+}
+
+/* ── Countdown overlay ────────────────────────────────────────────────────── */
+#countdown-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+#countdown-overlay[hidden] {
+  display: none !important;
+}
+
+#countdown-number {
+  font-size: clamp(4rem, 15vw, 8rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  user-select: none;
+  animation: countdown-pop 0.15s ease-out;
+}
+
+@keyframes countdown-pop {
+  from { transform: scale(1.25); opacity: 0.6; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.rec-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #dc3545;
+  animation: blink 1s step-start infinite;
+  margin-right: 4px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.audio-meter {
+  width: 100%;
+  height: 10px;
+  display: block;
+  border-radius: 3px;
+  background: #1e1e1e;
+}
+
+/* ── Centered error/warning dialog ───────────────────────────────────────── */
+#captura-error-dialog {
+  background: #212529;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0;
+  max-width: 480px;
+  width: 90vw;
+  color: #e9ecef;
+}
+
+#captura-error-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.captura-dialog-content {
+  position: relative;
+  padding: 1.5rem 1.75rem;
+}
+
+.captura-dialog-title {
+  margin: 0 2rem 0.75rem 0;
+  font-size: 1.05rem;
+}
+
+.captura-dialog-body {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #adb5bd;
+}
+
+.captura-dialog-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.9rem;
+  background: transparent;
+  border: none;
+  color: #adb5bd;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.toast-link {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* ── PWA update notification — fixed floating bar at top ─────────────────── */
+#pwa-update-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  padding: 0.6rem 1rem;
+  background-color: #0dcaf0;
+  color: #000;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+#pwa-update-bar[hidden] {
+  display: none !important;
+}
+
+/* ── PWA standalone mode: hide sections irrelevant to the installed app ── */
+@media (display-mode: standalone) {
+  nav.navbar,
+  #tool-header,
+  #tool-sidebar,
+  #tool-giscus-section,
+  #captura-about,
+  #captura-how-it-works {
+    display: none !important;
+  }
+
+  /* Expand the main content column to full width when sidebar is hidden */
+  #tool-main-content {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

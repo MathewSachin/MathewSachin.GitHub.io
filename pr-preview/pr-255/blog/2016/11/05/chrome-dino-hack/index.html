@@ -76,7 +76,7 @@ Part 4 of 27 &mdash;
 <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="speed-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).setSpeed(6){% endhighlight %}</div>
+<div id="speed-pre" class="dino-hack-pre"><code class="language-js">(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div>
 </div>
 <h2 id="setting-the-current-score">Setting the Current Score</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
 <p>Want to jump right into the action with a specific score? You can set the score to any value up to <strong>99999</strong> (but no higher!). Enter your target score below — <strong>it applies instantly to the game at the top of this page!</strong></p>
@@ -87,7 +87,7 @@ Part 4 of 27 &mdash;
 <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="score-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025{% endhighlight %}</div>
+<div id="score-pre" class="dino-hack-pre"><code class="language-js">(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025</code></div>
 </div>
 <h5 id="how-does-it-work-1">How does it work?</h5>
 <p>Internally, the game tracks how far the dino has run using a property called <code>distanceRan</code>. The visible score on screen is calculated by multiplying <code>distanceRan</code> by <code>0.025</code>. By dividing your desired score by that constant, you get the right internal value to set.</p>
@@ -104,7 +104,7 @@ Part 4 of 27 &mdash;
 <button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="jump-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10){% endhighlight %}</div>
+<div id="jump-pre" class="dino-hack-pre"><code class="language-js">(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10)</code></div>
 </div>
 <p>Try <code>20</code> for floaty, sky-high jumps that easily clear everything on screen, or drop it to <code>5</code> for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!</p>
 <h2 id="walk-in-air">Walk in Air</h2>
@@ -120,7 +120,7 @@ Part 4 of 27 &mdash;
 <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
 <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
 </div>
-<div id="ground-pre" class="dino-hack-pre">{% highlight js %}(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93{% endhighlight %}</div>
+<div id="ground-pre" class="dino-hack-pre"><code class="language-js">(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93</code></div>
 </div>
 <script src="{{ &#x27;/blog/chrome-dino-hack.js&#x27; | relative_url }}" defer></script>
 <h2 id="auto-play">Auto-play</h2>
