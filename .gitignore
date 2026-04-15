@@ -7,3 +7,10 @@ debug.log.bundle/
 node_modules/
 generated/
 styles/syntax.css
+scripts/build-search-index.js
+scripts/utils.js
+tools/base64/base64.js
+tools/cron/cron.js
+tools/hash/hash.js
+tools/json/json-formatter.js
+tools/timestamp/timestamp.js
