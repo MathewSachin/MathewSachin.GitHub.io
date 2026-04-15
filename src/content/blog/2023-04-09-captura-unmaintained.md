@@ -25,6 +25,30 @@ It is no longer maintained, but the [source-code is still archived on GitHub](ht
   </div>
 </a></div>
 
+<style>
+/* Inline tool promo card — used in post bodies to highlight a related tool */
+.inline-tool-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin: 1.5rem 0;
+}
+
+.inline-tool-card {
+  background: white;
+  border: 1px solid color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
+  color: var(--post-accent, var(--color-accent));
+  border-radius: 8px;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--post-accent, var(--color-accent)) 15%, transparent);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.inline-tool-card-link:hover .inline-tool-card {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
+}
+</style>
+
 ## Status / TL;DR
 - **Maintained?** No. Development stopped around 2019.
 - **Download:** Releases are still available [on GitHub](https://github.com/MathewSachin/Captura/releases). In the `Assets` section of the release you want, download either the Portable or Setup package.

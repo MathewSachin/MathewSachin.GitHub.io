@@ -580,44 +580,6 @@ figure.highlight pre {
   transform: rotate(180deg);
 }
 
-/* In-content advertisement block */
-.in-content-ad {
-  overflow: hidden;
-  max-width: 100%;
-}
-
-.in-content-ad .card {
-  box-shadow: none;
-  border-color: rgba(0, 0, 0, 0.125);
-  overflow: hidden;
-}
-
-.in-content-ad ins.adsbygoogle {
-  max-width: 100%;
-}
-
-/* Inline tool promo card — used in post bodies to highlight a related tool */
-.inline-tool-card-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  margin: 1.5rem 0;
-}
-
-.inline-tool-card {
-  background: white;
-  border: 1px solid color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
-  color: var(--post-accent, var(--color-accent));
-  border-radius: 8px;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--post-accent, var(--color-accent)) 15%, transparent);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-}
-
-.inline-tool-card-link:hover .inline-tool-card {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
-}
-
 /* GitHub-style blockquotes — left accent bar uses the per-post accent colour */
 .page-content blockquote {
   padding: 0.5em 1em;
@@ -633,21 +595,9 @@ figure.highlight pre {
   margin-bottom: 0;
 }
 
-/* Hide the whole ad block when AdSense reports the slot is unfilled */
-.in-content-ad:has(ins[data-ad-status="unfilled"]) {
-  display: none;
-}
-
 /* Full-screen-width ads on mobile (below md breakpoint where the TOC sidebar appears) */
 @media (max-width: 767.98px) {
   .post-content-container {
     overflow-x: hidden;
-  }
-
-  .in-content-ad {
-    overflow: visible;
-    width: 100vw;
-    max-width: 100vw;
-    margin-left: calc(50% - 50vw);
   }
 }
