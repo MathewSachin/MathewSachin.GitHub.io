@@ -1,0 +1,35 @@
+---
+---
+
+<button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top">
+<i class="fas fa-arrow-up" aria-hidden="true"></i>
+</button>
+
+<style>
+/* Back to top button */
+#back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform var(--transition-base);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    line-height: 1;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#back-to-top:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+</style>
