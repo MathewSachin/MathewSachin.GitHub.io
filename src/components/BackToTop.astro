@@ -33,3 +33,23 @@
     box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 </style>
+
+<script>
+const BACK_TO_TOP_THRESHOLD = 300;          // px of scroll before button appears
+
+// Back to top button — only visible when scrolling up past the threshold
+const backToTop = document.getElementById("back-to-top");
+if (backToTop) {
+    let backToTopLastY = window.scrollY;
+    window.addEventListener("scroll", function () {
+        const currentScrollY = window.scrollY;
+        const scrollingUp = currentScrollY < backToTopLastY;
+        backToTopLastY = currentScrollY;
+        backToTop.classList.toggle("visible", scrollingUp && currentScrollY > BACK_TO_TOP_THRESHOLD);
+    });
+    backToTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        trackEvent("back_to_top");
+    });
+}
+</script>
