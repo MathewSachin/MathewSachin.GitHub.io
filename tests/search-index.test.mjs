@@ -113,28 +113,28 @@ test('stripMarkdown: handles multiple consecutive fenced code blocks', () => {
 test('postUrlFromFilename: generates correct URL from standard filename', () => {
   assert.equal(
     postUrlFromFilename('2016-11-5-chrome-dino-hack.md'),
-    '/blog/2016/11/05/chrome-dino-hack/'
+    '/blog/2016/11/05/chrome-dino-hack.html'
   )
 })
 
 test('postUrlFromFilename: zero-pads single-digit month and day', () => {
   assert.equal(
     postUrlFromFilename('2023-04-09-captura-unmaintained.md'),
-    '/blog/2023/04/09/captura-unmaintained/'
+    '/blog/2023/04/09/captura-unmaintained.html'
   )
 })
 
 test('postUrlFromFilename: handles two-digit month and day', () => {
   assert.equal(
     postUrlFromFilename('2017-12-31-year-end-review.md'),
-    '/blog/2017/12/31/year-end-review/'
+    '/blog/2017/12/31/year-end-review.html'
   )
 })
 
 test('postUrlFromFilename: handles full path, uses only basename', () => {
   assert.equal(
     postUrlFromFilename('blog/_posts/2023-04-02-pure-functions.md'),
-    '/blog/2023/04/02/pure-functions/'
+    '/blog/2023/04/02/pure-functions.html'
   )
 })
 

@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw';
 
 import {
   remarkDisableIndentedCode,
+  remarkJekyllHighlight,
   rehypeCodeBlockHeader,
   rehypeBootstrapFormatting,
   rehypeInjectAds,
@@ -42,6 +43,9 @@ export default defineConfig({
       // Disable 4-space indented code blocks — Jekyll/Kramdown posts use nested
       // HTML that would otherwise be misinterpreted as indented code under CommonMark.
       remarkDisableIndentedCode,
+      // Convert Jekyll {% highlight LANG %}...{% endhighlight %} Liquid tags to
+      // inline <code class="language-LANG"> elements (used in chrome-dino-hack post).
+      remarkJekyllHighlight,
     ],
     rehypePlugins: [
       // rehype-raw must run first so that raw HTML blocks in .md files (e.g.

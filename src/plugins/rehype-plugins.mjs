@@ -29,6 +29,35 @@ export function remarkDisableIndentedCode() {
 }
 
 // ---------------------------------------------------------------------------
+// 0b. remarkJekyllHighlight
+//     Converts Jekyll Liquid {% highlight LANG %}CODE{% endhighlight %} tags
+//     to inline HTML <code> elements so they render correctly in Astro.
+//     These appear in the chrome-dino-hack post (and potentially others) where
+//     single-line snippets are embedded inside raw HTML widget divs.
+// ---------------------------------------------------------------------------
+export function remarkJekyllHighlight() {
+  return function (tree) {
+    visit(tree, 'html', (node) => {
+      // Replace {% highlight LANG %}...{% endhighlight %} with <code class="language-LANG">...</code>
+      node.value = node.value.replace(
+        /\{%\s*highlight\s+(\w+)\s*%\}([\s\S]*?)\{%\s*endhighlight\s*%\}/g,
+        (_, lang, code) => `<code class="language-${lang}">${code.trim()}</code>`
+      );
+    });
+
+    // Also handle cases where highlight tags appear inside text nodes
+    // (e.g. when the surrounding div was parsed as a text block)
+    visit(tree, 'text', (node) => {
+      if (!/\{%\s*highlight/.test(node.value)) return;
+      node.value = node.value.replace(
+        /\{%\s*highlight\s+(\w+)\s*%\}([\s\S]*?)\{%\s*endhighlight\s*%\}/g,
+        (_, lang, code) => `<code class="language-${lang}">${code.trim()}</code>`
+      );
+    });
+  };
+}
+
+// ---------------------------------------------------------------------------
 // 1. rehypeCodeBlockHeader
 //    Adds a .code-block-header div (language label + copy button) before
 //    every highlighted code block. Mirrors code_block_header.rb.
