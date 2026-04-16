@@ -51,6 +51,11 @@ export interface Tool {
   quick_tool?: boolean;
 }
 
+export interface Donation {
+  name: string;
+  amount: string;
+}
+
 // ----- Loaders -------------------------------------------------------------
 
 export function getSeries(): SeriesMap {
@@ -61,16 +66,8 @@ export function getTools(): Tool[] {
   return loadYaml('tools.yml') as Tool[];
 }
 
-export function getProjects(): unknown[] {
-  return loadYaml('projects.yml') as unknown[];
-}
-
-export function getCapturaDonations(): unknown[] {
-  return loadYaml('captura_donations.yml') as unknown[];
-}
-
-export function getPopularPages(): unknown[] {
-  return loadYaml('popular_pages.yml') as unknown[];
+export function getCapturaDonations(): Donation[] {
+  return loadYaml('captura_donations.yml') as Donation[];
 }
 
 /**
