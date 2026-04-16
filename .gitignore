@@ -2,7 +2,6 @@ dist/
 .DS_Store
 node_modules/
 generated/
-styles/syntax.css
 .astro/
 test-results/
 public/search-index.json

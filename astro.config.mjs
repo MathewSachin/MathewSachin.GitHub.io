@@ -57,9 +57,7 @@ export default defineConfig({
     ],
   },
   build: {
-    // Output each page as /path/index.html (directory URLs) for clean GitHub Pages routing.
-    // Blog posts are promoted to /path.html by scripts/promote-blog-html.mjs after the build.
-    format: 'directory',
+    format: 'preserve',
   },
   image: {
     // Use sharp for image processing (replaces jekyll-picture-tag)
