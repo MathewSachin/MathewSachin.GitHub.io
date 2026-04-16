@@ -8,10 +8,13 @@ related:
   - /blog/2026/04/02/docker-faster-github-actions
   - /blog/2026/03/12/ai-blog-generation-flow
 ---
+import { Picture } from 'astro:assets';
+import coreWebVitalsGood from '@images/core-web-vitals-good.svg';
+
 
 *Google Search Console was reporting "Needs improvement" for INP, LCP, and CLS across this blog. Here's every change that moved all three metrics into the green — without a frontend framework, a build system overhaul, or a CDN subscription.*
 
-<img alt="Google Search Console Core Web Vitals report showing all metrics in the Good range after improvements" src="/images/core-web-vitals-good.svg" width="720" style="display:block;margin:1rem auto;" />
+<Picture src={coreWebVitalsGood} alt="Google Search Console Core Web Vitals report showing all metrics in the Good range after improvements" />
 
 ## What Core Web Vitals Actually Measure
 

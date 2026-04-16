@@ -12,6 +12,10 @@ related:
 scripts:
   - /blog/chrome-dino-hack.js
 ---
+import { Picture } from 'astro:assets';
+import chromeDino from '@images/chromeDino.gif';
+import skyDino from '@images/sky_dino.jpg';
+
 
 *All hacks updated as of 8th March 2026 based on game changes.*
 
@@ -40,7 +44,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 **Pause:** Press Alt  
 **Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
 
-![Chrome Dino](/images/chromeDino.gif)
+<Picture src={chromeDino} alt="Chrome Dino" />
 
 ## Play It Right Here
 
@@ -207,7 +211,7 @@ Try `20` for floaty, sky-high jumps that easily clear everything on screen, or d
 
 Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
 
-<BlogImage src="sky_dino.jpg" alt="Chrome Dino walking in air" width="400" />
+<Picture src={skyDino} alt="Chrome Dino walking in air" />
 
 The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
 

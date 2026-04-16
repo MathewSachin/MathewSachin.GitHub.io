@@ -14,6 +14,9 @@ related:
   - /blog/2026/03/07/edit-webpage-inspect-element
   - /blog/2019/12/07/unhide-password-box
 ---
+import { Picture } from 'astro:assets';
+import whatsappDevtoolsHero from '@images/whatsapp-devtools-hero.svg';
+
 
 *WhatsApp has no download button for Statuses. DevTools does — and it's already built into your browser. This guide shows you how to pull photos, videos, and even "uncopyable" text Statuses directly to your PC without installing a single extension.*
 
@@ -43,7 +46,7 @@ Let's open the hood.
 
 ---
 
-<img alt="Isometric illustration of a magnifying glass inspecting a glowing browser tab, revealing green source code underneath. DevTools panels show Network and Elements tabs with WhatsApp media entries highlighted in teal." src="/images/whatsapp-devtools-hero.svg" width="720" style="display:block;margin:2rem auto;border-radius:8px;" />
+<Picture src={whatsappDevtoolsHero} alt="Isometric illustration of a magnifying glass inspecting a glowing browser tab, revealing green source code underneath. DevTools panels show Network and Elements tabs with WhatsApp media entries highlighted in teal." />
 
 ---
 

@@ -4,10 +4,11 @@
 // Includes redirects for /Fate-Grand-Automata/ and /fga/
 
 import PageLayout from '@layouts/PageLayout.astro';
-const BASE = import.meta.env.BASE_URL;
+import { Image } from 'astro:assets';
+import fgaLogo from '@images/fga.png';
 ---
 <PageLayout title="Fate-Grand-Automata (FGA)" ads={true}>
-  <img src={`${BASE}images/fga.png`} alt="Logo" width="200" />
+  <Image src={fgaLogo} alt="Logo" width={200} />
 
   <p>Auto-battle app for F/GO (Android 7 or later, no need for root on phones).</p>
 

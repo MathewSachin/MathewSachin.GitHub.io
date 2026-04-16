@@ -11,6 +11,9 @@ related:
   - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
   - /blog/2026/03/22/reddit-video-sniper
 ---
+import { Picture } from 'astro:assets';
+import nytStrandsNetworkTab from '@images/nyt-strands-network-tab.png';
+
 
 *NYT Strands fetches the full puzzle payload — theme, spangram, and every theme word — from a public JSON endpoint before you place a single word. One fetch call reads it all; a bookmarklet wraps it in a floating panel you can tap on mobile.*
 
@@ -47,7 +50,7 @@ Scroll through the filtered list and look for a file named after today's date �
 
 Click on it, then click the **Preview** tab in the panel that opens on the right. You'll see the full puzzle payload the game fetched — including the theme clue, the spangram, and all theme words:
 
-![DevTools Network tab with Fetch/XHR filter active. The file 2026-04-08.json is selected in the left panel. The Preview tab on the right shows the JSON response including clue, spangram, themeWords and more fields.](/images/nyt-strands-network-tab.png)
+<Picture src={nytStrandsNetworkTab} alt="DevTools Network tab with Fetch/XHR filter active. The file 2026-04-08.json is selected in the left panel. The Preview tab on the right shows the JSON response including clue, spangram, themeWords and more fields." />
 
 The `clue` field is the theme hint shown at the top of the game. `spangram` is the edge-to-edge word. `themeWords` is the array of every other answer. That's the entire puzzle, sitting in plain JSON in your browser before you've moved a single letter.
 

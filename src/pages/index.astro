@@ -9,6 +9,8 @@ import PostItem from '@components/PostItem.astro';
 import SeriesShowcase from '@components/SeriesShowcase.astro';
 import { sortPostsByDate, buildTagsMap } from '@utils/posts';
 import { getTools } from '@data/index';
+import { Image } from 'astro:assets';
+import mePhoto from '@images/Me.jpg';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
@@ -27,12 +29,12 @@ const recentPosts = allPosts.slice(0, 8);
     <div class="container">
       <div class="row headfont mb-5">
         <div class="col-12 col-md-auto text-center">
-          <img
-            src={`${BASE}images/Me.jpg`}
+          <Image
+            src={mePhoto}
             class="avatar mb-3"
             alt=""
-            width="150"
-            height="150"
+            width={150}
+            height={150}
           />
         </div>
         <div class="col">

@@ -9,10 +9,13 @@ related:
   - /blog/2026/03/12/ai-blog-generation-flow
   - /blog/2026/04/01/pr-preview-setup
 ---
+import { Picture } from 'astro:assets';
+import adsenseCustomPlacementHero from '@images/adsense-custom-placement-hero.svg';
+
 
 *Ads are a necessary trade-off on a free blog. But "necessary" doesn't mean "wherever Google feels like it." Here's why I switched from Auto Ads to custom placement — and exactly how the implementation works.*
 
-<img alt="Side-by-side comparison: Auto Ads panel showing ads injected mid-paragraph and inside code blocks, versus Custom Placement panel showing clean ads between content sections" src="/images/adsense-custom-placement-hero.svg" width="720" style="display:block;margin:1rem auto;" />
+<Picture src={adsenseCustomPlacementHero} alt="Side-by-side comparison: Auto Ads panel showing ads injected mid-paragraph and inside code blocks, versus Custom Placement panel showing clean ads between content sections" />
 
 ## The Default: AdSense Auto Ads
 
