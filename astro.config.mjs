@@ -18,11 +18,11 @@ const SITE = 'https://mathewsachin.github.io';
 
 // Only run link validation on production builds (not PR preview builds that use a
 // custom base URL, since the validator can't resolve base-prefixed links against dist/).
-const ASTRO_BASE = process.env.ASTRO_BASE;
+const isPreviewBuild = Boolean(process.env.ASTRO_BASE);
 const integrations = [
   mdx(),
   sitemap(),
-  ...(ASTRO_BASE ? [] : [linkValidator({ failOnBrokenLinks: true })]),
+  ...(isPreviewBuild ? [] : [linkValidator({ failOnBrokenLinks: true })]),
 ];
 
 export default defineConfig({
