@@ -2,9 +2,9 @@
 // Series index pages: /blog/series/[series]/
 // Replaces blog/series/*/index.md
 import { getCollection } from 'astro:content';
-import SeriesLayout from '../../../layouts/SeriesLayout.astro';
-import { getSeries } from '../../../data/index.ts';
-import { postIdFromSlug, postUrlFromSlug, getPostDate, formatDateUS, sortPostsByDate } from '../../../utils/posts.ts';
+import SeriesLayout from '@layouts/SeriesLayout.astro';
+import { getSeries } from '@data/index';
+import { postIdFromSlug, postUrlFromSlug, getPostDate, formatDateUS, sortPostsByDate } from '@utils/posts';
 
 export async function getStaticPaths() {
   const seriesMap = getSeries();

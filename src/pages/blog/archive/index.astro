@@ -4,8 +4,8 @@
 // Replaces blog/archive/index.html
 
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { sortPostsByDate, groupPostsByYear, getPostDate, postUrlFromSlug } from '../../../utils/posts.ts';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { sortPostsByDate, groupPostsByYear, getPostDate, postUrlFromSlug } from '@utils/posts';
 
 const BASE = import.meta.env.BASE_URL;
 const allPosts = sortPostsByDate(await getCollection('blog'));

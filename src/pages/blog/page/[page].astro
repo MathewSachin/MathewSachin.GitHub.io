@@ -4,10 +4,10 @@
 // Page 1 is handled by /blog/index.astro; this handles page 2+.
 
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PostItem from '../../../components/PostItem.astro';
-import SeriesShowcase from '../../../components/SeriesShowcase.astro';
-import { sortPostsByDate } from '../../../utils/posts.ts';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostItem from '@components/PostItem.astro';
+import SeriesShowcase from '@components/SeriesShowcase.astro';
+import { sortPostsByDate } from '@utils/posts';
 
 const POSTS_PER_PAGE = 10;
 const BASE = import.meta.env.BASE_URL;

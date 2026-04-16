@@ -4,8 +4,8 @@
 // URL pattern mirrors Jekyll: /blog/YYYY/MM/DD/slug/
 
 import { getCollection, render } from 'astro:content';
-import PostLayout from '../../../../../layouts/PostLayout.astro';
-import { sortPostsByDate, postUrlFromId } from '../../../../../utils/posts.ts';
+import PostLayout from '@layouts/PostLayout.astro';
+import { sortPostsByDate, postUrlFromId } from '@utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');

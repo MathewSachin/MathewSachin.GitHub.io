@@ -10,8 +10,8 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import matter from 'gray-matter';
-import ToolLayout from '../../layouts/ToolLayout.astro';
-import { getTools } from '../../data/index.ts';
+import ToolLayout from '@layouts/ToolLayout.astro';
+import { getTools } from '@data/index';
 
 // process.cwd() is the Astro project root at both dev and build time
 const REPO_ROOT = process.cwd();

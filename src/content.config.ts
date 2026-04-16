@@ -7,7 +7,7 @@ import { glob } from 'astro/loaders';
  * Filename format: YYYY-MM-DD-slug.md  (M and D may be single digit)
  */
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: 'src/content/blog' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/blog' }),
   schema: z.object({
     title: z.string(),
     icon: z.string().optional(),

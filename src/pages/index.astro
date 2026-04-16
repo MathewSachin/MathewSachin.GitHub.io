@@ -4,11 +4,11 @@
 // Replaces index.html
 
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PostItem from '../components/PostItem.astro';
-import SeriesShowcase from '../components/SeriesShowcase.astro';
-import { sortPostsByDate, buildTagsMap, postUrlFromSlug } from '../utils/posts.ts';
-import { getTools } from '../data/index.ts';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostItem from '@components/PostItem.astro';
+import SeriesShowcase from '@components/SeriesShowcase.astro';
+import { sortPostsByDate, buildTagsMap, postUrlFromSlug } from '@utils/posts';
+import { getTools } from '@data/index';
 
 const BASE = import.meta.env.BASE_URL;
 const allPosts = sortPostsByDate(await getCollection('blog'));
