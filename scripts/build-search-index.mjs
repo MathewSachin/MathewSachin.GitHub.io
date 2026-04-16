@@ -18,7 +18,7 @@ const REPO_ROOT = join(__dirname, '..')
 const ASTRO_POSTS_DIR = join(REPO_ROOT, 'src', 'content', 'blog')
 const JEKYLL_POSTS_DIR = join(REPO_ROOT, 'blog', '_posts')
 const { existsSync } = await import('node:fs')
-const POSTS_DIR = existsSync(ASTRO_POSTS_DIR) && (await import('node:fs').then(m => m.readdirSync(ASTRO_POSTS_DIR).filter(f => f.endsWith('.md')).length > 0))
+const POSTS_DIR = existsSync(ASTRO_POSTS_DIR) && (await import('node:fs').then(m => m.readdirSync(ASTRO_POSTS_DIR).filter(f => f.endsWith('.md') || f.endsWith('.mdx')).length > 0))
   ? ASTRO_POSTS_DIR
   : JEKYLL_POSTS_DIR
 const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
@@ -62,7 +62,7 @@ export function stripMarkdown(text) {
  * Jekyll URL:       /blog/YYYY/MM/DD/slug/
  */
 export function postUrlFromFilename(filename) {
-  const name = basename(filename, '.md')
+  const name = basename(filename, '.md').replace(/\.mdx$/, '')
   const match = name.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/)
   if (!match) return null
   const [, year, month, day, slug] = match
@@ -91,7 +91,7 @@ function toStringArray(value) {
 }
 
 async function main() {
-  const files = (await readdir(POSTS_DIR)).filter(f => f.endsWith('.md'))
+  const files = (await readdir(POSTS_DIR)).filter(f => f.endsWith('.md') || f.endsWith('.mdx'))
 
   const db = await create({
     schema: {
@@ -141,7 +141,12 @@ async function main() {
   }
 
   const rawIndex = save(db)
-  await writeFile(OUTPUT_FILE, JSON.stringify(rawIndex))
+  const serialised = JSON.stringify(rawIndex)
+  await writeFile(OUTPUT_FILE, serialised)
+  // Also write to repo root so unit tests (which look for search-index.json there) can find it
+  if (OUTPUT_FILE !== join(REPO_ROOT, 'search-index.json')) {
+    await writeFile(join(REPO_ROOT, 'search-index.json'), serialised)
+  }
   console.log(`Search index written to search-index.json (${inserted} entries)`)
 }
 

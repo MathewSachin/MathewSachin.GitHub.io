@@ -1,0 +1,334 @@
+---
+title: Hacking the Chrome Dino Game
+icon: "fas fa-gamepad"
+tags: [chrome, hack, game]
+series: browser-hacks
+related:
+  - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/20/hacking-minesweeper-online
+  - /blog/2026/03/20/hacking-typeracer
+  - /blog/2026/03/21/instagram-reel-sniper
+  - /blog/2019/12/07/unhide-password-box
+scripts:
+  - /blog/chrome-dino-hack.js
+---
+
+*All hacks updated as of 8th March 2026 based on game changes.*
+
+---
+
+*Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
+
+## What is the Chrome Dino Game?
+When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!
+
+But… what if we could cheat?
+
+Even if you’re not a programmer, here’s something cool: the Chrome Dino game is built using JavaScript, and its internal game code is exposed globally. That means we can actually poke around and change how the game works — right from the browser!
+
+Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. All you need is the Chrome Developer Console, and a few clever lines of code.
+
+## How to Play the Chrome Dino Game?
+<div class="alert alert-info">
+  💡 <b>Pro Tip:</b> Can’t get the <i>“No Internet”</i> screen to show up? <br />
+  Just open a new tab and go to <b>chrome://dino</b> — the game works even when you're online!
+</div>
+
+If this is your first time discovering the Dino game, welcome! It's super easy to play:  
+**Jump:** Press Spacebar or Up Arrow (this also starts the game)  
+**Duck:** Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)  
+**Pause:** Press Alt  
+**Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
+
+![Chrome Dino](/images/chromeDino.gif)
+
+## Play It Right Here
+
+<div class="dino-embed-wrapper">
+<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/index.html" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+<small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
+</div>
+
+<style>{`
+.dino-embed-wrapper {
+  margin: 1rem 0 1.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.dino-embed-frame {
+  display: block;
+  width: 100%;
+  height: 175px;
+  border: none;
+  background: #f7f7f7;
+}
+
+.dino-embed-caption {
+  display: block;
+  padding: 0.35rem 0.75rem;
+  background: var(--color-code-bg);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dino-embed-caption a {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dino-embed-caption a:hover {
+  color: var(--color-accent);
+}
+`}</style>
+
+## Opening Developer Tools / Chrome Console
+
+The [**Developer Tools** (DevTools)](/blog/2026/03/07/edit-webpage-inspect-element.html) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
+
+To open it and get to the Console:
+
+**On Windows / Linux:**
+- Press `F12` or `Ctrl + Shift + I` to open DevTools, then click the **Console** tab.
+- Shortcut: `Ctrl + Shift + J` jumps straight to the Console.
+
+**On Mac:**
+- Press `Cmd + Option + I` to open DevTools, then click the **Console** tab.
+- Shortcut: `Cmd + Option + J` jumps straight to the Console.
+
+You’ll see a blinking cursor where you can type JavaScript commands directly. After typing each command, press **Enter** to run it.
+
+A few things to keep in mind:
+- The commands are **case-sensitive** — type them exactly as shown.
+- Seeing `undefined` after a command? That’s completely normal. It just means the expression didn’t return a value, which is expected for most of these hacks.
+
+<div class="alert alert-info">
+  📱 <b>On a phone or tablet?</b> Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!<br />
+  👉 <PostLink url="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet" />
+</div>
+
+## Immortality (God Mode)
+
+Want to make your dino un-killable? Let’s activate **God Mode** using a little JavaScript magic.
+
+##### Activate God Mode
+
+Paste this into the Console to save the original function and disable game over in one go:
+
+```js
+var original = Runner.prototype.gameOver;
+Runner.prototype.gameOver = function() {};
+```
+
+Boom — your dino is now immortal. It’ll just run through cacti like a champ.
+
+##### How to Stop It
+
+If you want to restore the game to normal (or get bored of being a god), use this:
+
+```js
+Runner.prototype.gameOver = original;
+```
+
+This only works if you ran the block above first. Otherwise, just refresh the page.
+
+##### How does it work?
+
+In JavaScript, functions are just objects — and they can be replaced on the fly.
+
+The `gameOver` function is normally triggered when the dino crashes. By saving it first (`var original = ...`) and then replacing it with an empty function (`function() {}`), we stop the game from ending.
+
+When you're done, you just restore the original function by assigning it back. Think of it like temporarily muting the crash handler!
+
+This works only because JavaScript allows us to override methods of objects while the game is still running in the browser.
+
+## Tweaking Speed
+
+Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs. With this hack, you can take full control of the pace.
+
+Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion. The default starting speed is `6`. **Move the slider and the game above updates instantly!**
+
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label>
+<input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider" />
+<input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value" />
+<button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<div id="speed-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div>
+</div>
+
+
+## Setting the Current Score
+
+Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below — **it applies instantly to the game at the top of this page!**
+
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="score-input">Score:</label>
+<input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px" />
+<button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<div id="score-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025</code></div>
+</div>
+
+
+##### How does it work?
+
+Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by `0.025`. By dividing your desired score by that constant, you get the right internal value to set.
+
+⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
+
+Experiment with different values to make your dino feel like a seasoned pro right from the start!
+
+## Jumping Height
+
+Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.
+
+The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. **Drag the slider and watch the change take effect live in the game above!**
+
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="jump-slider">Jump Velocity:</label>
+<input type="range" class="form-range flex-grow-1" id="jump-slider" min="1" max="50" value="10" style="min-width:120px" aria-label="Jump velocity slider" />
+<input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="1" max="50" value="10" aria-label="Jump velocity value" />
+<button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<div id="jump-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10)</code></div>
+</div>
+
+
+Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
+
+## Walk in Air
+
+Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
+
+<BlogImage src="sky_dino.jpg" alt="Chrome Dino walking in air" width="400" />
+
+The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
+
+Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`). Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode! **Try it live — the game above updates as you drag.**
+
+<div class="dino-hack-widget">
+<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+<label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Position:</label>
+<input type="range" class="form-range flex-grow-1" id="ground-slider" min="0" max="130" value="93" style="min-width:120px" aria-label="Ground Y position slider" />
+<input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="0" max="130" value="93" aria-label="Ground Y position value" />
+<button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+<button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+</div>
+<div id="ground-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93</code></div>
+</div>
+
+## Auto-play
+
+Want the dino to play itself? There's a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.
+
+👉 <PostLink url="/blog/2026/03/14/chrome-dino-autoplay" />
+
+## Invisibility
+
+Want to make your dino invisible? It’s easy to do by simply disabling its drawing function! This will prevent the dino from being rendered on the screen, making it fully invisible.
+
+##### Make the Dino Invisible
+
+```js
+const runner = Runner.instance_ || Runner.getInstance();
+const originalDraw = runner.tRex.draw;
+runner.tRex.draw = function() {};
+```
+
+This code replaces the dino's draw function with an empty one, meaning the dino won’t be drawn on the canvas.
+
+**Note:** The dino can still die if it collides with obstacles
+
+##### Restore the Dino
+To bring the dino back, simply restore the original draw function:
+
+```js
+const runner = Runner.instance_ || Runner.getInstance();
+runner.tRex.draw = originalDraw;
+```
+
+Now the dino is visible again, and the game continues as usual!
+
+---
+
+Keep having fun and may your dino run forever!
+
+Share this page around and comment down if you have tricks of your own!
+
+---
+
+Time to try some other great hacks — <PostLink url="/blog/2026/03/07/hacking-wordle" text="Wordle" />, <PostLink url="/blog/2026/03/20/hacking-minesweeper-online" text="Minesweeper" />, <PostLink url="/blog/2026/03/20/hacking-typeracer" text="TypeRacer" />.
+
+<style>{`
+.dino-hack-widget {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dino-hack-controls {
+  background: var(--color-code-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 2.5rem;
+}
+
+.dino-hack-controls .form-range {
+  accent-color: var(--color-accent);
+}
+
+.dino-hack-controls .dino-hack-num {
+  width: 80px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+  border-color: rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+}
+
+.dino-hack-controls .dino-hack-num:focus {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.dino-hack-controls .dino-hack-num:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 0;
+}
+
+.dino-hack-pre {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.btn-dino-reset {
+  color: rgba(255, 255, 255, 0.45);
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0.4rem;
+  transition: color var(--transition-base);
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.72rem;
+}
+
+.btn-dino-reset:hover {
+  color: var(--color-accent);
+  background: transparent;
+}
+
+.btn-dino-reset:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+`}</style>

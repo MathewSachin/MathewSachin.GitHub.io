@@ -1,0 +1,233 @@
+---
+title: "Hacking NYT Strands: Reveal the Theme, Spangram and All Answers Instantly"
+icon: "fas fa-puzzle-piece"
+accent_color: "#3a4346"
+tags: [nyt, strands, hack, browser, devtools, javascript, bookmarklet, network]
+series: browser-hacks
+related:
+  - /blog/2026/04/08/hacking-nyt-spelling-bee
+  - /blog/2026/04/07/hacking-nyt-connections
+  - /blog/2026/03/07/hacking-wordle
+  - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
+  - /blog/2026/03/22/reddit-video-sniper
+---
+
+*NYT Strands fetches the full puzzle payload — theme, spangram, and every theme word — from a public JSON endpoint before you place a single word. One fetch call reads it all; a bookmarklet wraps it in a floating panel you can tap on mobile.*
+
+## What Is NYT Strands?
+
+[NYT Strands](https://www.nytimes.com/games/strands) is a daily word-search puzzle from The New York Times. You're given an 8×6 grid of letters and a one-sentence **theme clue**. Your goal is to find all the hidden theme words — plus one special word called the **spangram** that spans the entire grid from edge to edge, embodying the theme itself. Every letter in the grid belongs to exactly one theme word or the spangram.
+
+Like Connections and Spelling Bee, **the game fetches the full answer data from an NYT server before you touch the board.** The endpoint is a publicly accessible JSON file, and once you know its URL pattern, you can read today's answers in a single `fetch()` call.
+
+## Step 1 — Open DevTools and Go to the Network Tab
+
+Open [NYT Strands](https://www.nytimes.com/games/strands) in your browser, then open DevTools:
+
+| OS | Shortcut |
+|---|---|
+| Windows / Linux | `F12` or `Ctrl + Shift + I` |
+| Mac | `Cmd + Option + I` |
+
+Click the **Network** tab at the top of the DevTools panel.
+
+## Step 2 — Filter by Fetch/XHR and Reload
+
+Near the top of the Network tab, click **Fetch/XHR**. This hides scripts, stylesheets, and images — showing only the raw data requests the page makes to servers.
+
+Press `Ctrl + R` (or `Cmd + R` on Mac) to reload the page with the filter active.
+
+## Step 3 — Find the Date JSON File
+
+Scroll through the filtered list and look for a file named after today's date — something like:
+
+```
+2026-04-08.json
+```
+
+Click on it, then click the **Preview** tab in the panel that opens on the right. You'll see the full puzzle payload the game fetched — including the theme clue, the spangram, and all theme words:
+
+![DevTools Network tab with Fetch/XHR filter active. The file 2026-04-08.json is selected in the left panel. The Preview tab on the right shows the JSON response including clue, spangram, themeWords and more fields.](/images/nyt-strands-network-tab.png)
+
+The `clue` field is the theme hint shown at the top of the game. `spangram` is the edge-to-edge word. `themeWords` is the array of every other answer. That's the entire puzzle, sitting in plain JSON in your browser before you've moved a single letter.
+
+## The One-Click Console Script
+
+Switch to the **Console** tab, paste the script below, and press **Enter**:
+
+```js
+(async function() {
+    // Prevent duplicate UI panels
+    if (document.getElementById('strands-helper')) return;
+
+    // 1. Construct today's date string (YYYY-MM-DD)
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const todayStr = `${yyyy}-${mm}-${dd}`;
+    
+    // 2. The exact API endpoint you discovered
+    const apiUrl = `https://www.nytimes.com/svc/strands/v2/${todayStr}.json`;
+
+    try {
+        // 3. Fetch the data directly, bypassing the React app entirely
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const puzzleData = await response.json();
+
+        // 4. Extract the payload
+        const clue = puzzleData.clue || "Unknown Theme";
+        const spangram = puzzleData.spangram || "Unknown";
+        const themeWords = puzzleData.themeWords || [];
+
+        // 5. Build the UI (Reusing our mobile-optimized collapsible panel)
+        const wrapper = document.createElement('div');
+        wrapper.id = 'strands-helper';
+        wrapper.style.cssText = "position:fixed;top:10px;right:10px;background:#fff;border:2px solid #e6e6e6;border-radius:8px;z-index:9999;font-family:sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.15);overflow:hidden;";
+
+        const content = document.createElement('div');
+        content.style.cssText = "padding:15px;max-height:60vh;overflow-y:auto;max-width:60vw;width:220px;display:block;"; 
+
+        let h = `<p style="margin-top:0;font-style:italic;color:#555;"><b>Theme:</b> "${clue}"</p>`;
+        h += `<div><h4 style="color:#000;background:#fce83a;padding:3px 6px;display:inline-block;border-radius:4px;margin-bottom:5px;">Spangram:</h4><p style="margin:0 0 10px 0;font-weight:bold;letter-spacing:1px;">${spangram.toUpperCase()}</p></div>`;
+        h += `<div><h4 style="color:#2db1e3;margin-bottom:5px;">Theme Words:</h4><ul style="margin:0;padding-left:20px;">`;
+        themeWords.forEach(w => { h += `<li style="margin-bottom:3px;">${w.toUpperCase()}</li>` });
+        h += `</ul></div>`;
+        content.innerHTML = h;
+
+        const header = document.createElement('div');
+        header.style.cssText = "padding:10px;background:#bce4f4;cursor:pointer;font-weight:bold;user-select:none;display:flex;justify-content:space-between;align-items:center;";
+        header.innerHTML = `<span>🧩 Strands Helper</span> <span id="s-icon">▼</span>`;
+
+        let isOpen = true;
+        header.onclick = function() {
+            isOpen = !isOpen;
+            content.style.display = isOpen ? "block" : "none";
+            document.getElementById('s-icon').innerText = isOpen ? "▼" : "▲";
+        };
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(content);
+        document.body.appendChild(wrapper);
+
+    } catch (error) {
+        alert("Failed to fetch Strands data. NYT might have updated their API format!");
+        console.error(error);
+    }
+})();
+```
+
+A floating panel with a light-blue header appears in the top-right corner. It shows the theme clue in italics, the spangram highlighted in yellow, and all theme words in a list. Click the header to collapse or expand it.
+
+## Mobile Method: Bookmarklet
+
+Mobile browsers don't have a developer console, but they support **bookmarklets** — bookmarks whose URL is a `javascript:` snippet that runs when you tap it from the address bar.
+
+### Step 1 — Create a New Bookmark
+
+In your mobile browser, bookmark any page. The URL doesn't matter — you'll replace it next.
+
+### Step 2 — Edit the Bookmark
+
+Open your bookmarks, find the one you just saved, and tap **Edit**:
+
+- Change the **name** to something like `🧩 Strands Helper`
+- Delete the entire **URL** and paste this one-liner in its place (copy the whole thing — it must be one continuous line):
+
+```
+javascript:(async function(){if(document.getElementById('strands-helper'))return;const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');try{const r=await fetch(`https://www.nytimes.com/svc/strands/v2/${y}-${m}-${day}.json`);const p=await r.json();const c=p.clue,s=p.spangram,t=p.themeWords,w=document.createElement('div');w.id='strands-helper';w.style.cssText="position:fixed;top:10px;right:10px;background:#fff;border:2px solid #e6e6e6;border-radius:8px;z-index:9999;font-family:sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.15);overflow:hidden;";const pnl=document.createElement('div');pnl.style.cssText="padding:15px;max-height:60vh;overflow-y:auto;max-width:60vw;width:220px;display:block;";let h=`<p style="margin-top:0;font-style:italic;color:#555;"><b>Theme:</b> "${c}"</p><div><h4 style="color:#000;background:#fce83a;padding:3px 6px;display:inline-block;border-radius:4px;margin-bottom:5px;">Spangram:</h4><p style="margin:0 0 10px 0;font-weight:bold;letter-spacing:1px;">${s.toUpperCase()}</p></div><div><h4 style="color:#2db1e3;margin-bottom:5px;">Theme Words:</h4><ul style="margin:0;padding-left:20px;">`;t.forEach(x=>{h+=`<li style="margin-bottom:3px;">${x.toUpperCase()}</li>`});h+=`</ul></div>`;pnl.innerHTML=h;const rHead=document.createElement('div');rHead.style.cssText="padding:10px;background:#bce4f4;cursor:pointer;font-weight:bold;user-select:none;display:flex;justify-content:space-between;align-items:center;";rHead.innerHTML=`<span>🧩 Strands Helper</span> <span id="s-icon">▼</span>`;let o=true;rHead.onclick=()=>{o=!o;pnl.style.display=o?"block":"none";document.getElementById('s-icon').innerText=o?"▼":"▲"};w.appendChild(rHead);w.appendChild(pnl);document.body.appendChild(w);}catch(e){alert("Could not fetch today's Strands data!")}})();
+```
+
+Save the bookmark.
+
+### Step 3 — Run It
+
+1. Open [NYT Strands](https://www.nytimes.com/games/strands) and let the game fully load.
+2. Tap the **address bar**, type `🧩 Strands Helper`, and when the bookmark appears in the dropdown, tap it.
+3. The floating helper panel appears — theme and spangram at the top, then all theme words below.
+
+<div class="alert alert-info">
+  💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won't execute the JavaScript on mobile. Always trigger it via the address bar dropdown.
+</div>
+
+Want to generate your own bookmarklets from any script? The [Bookmarklet Compiler](/tools/bookmarklet/) handles the IIFE wrapping, minification, and URI encoding automatically.
+
+---
+
+## How the Code Works
+
+### Building the Date String
+
+```js
+const d = new Date();
+const yyyy = d.getFullYear();
+const mm = String(d.getMonth() + 1).padStart(2, '0');
+const dd = String(d.getDate()).padStart(2, '0');
+const todayStr = `${yyyy}-${mm}-${dd}`;
+```
+
+`new Date()` gives the current local date and time. `getMonth()` returns a zero-based month index (0 = January), so `+ 1` corrects that. Both month and day are zero-padded to two digits with `padStart(2, '0')` — so April 8 becomes `"04"` and `"08"` rather than `"4"` and `"8"`. The result is a zero-padded `YYYY-MM-DD` string that matches the filename pattern the NYT API uses.
+
+This is a slightly different approach from the <PostLink url="/blog/2026/04/07/hacking-nyt-connections" text="NYT Connections hack" />, which used `new Date().toISOString().split('T')[0]`. That one-liner is terser but produces UTC date — it can return yesterday's date if you're in a timezone behind UTC and it's before midnight UTC. The explicit `getFullYear` / `getMonth` / `getDate` approach always uses your local clock, matching the puzzle NYT serves to your region.
+
+### Fetching the JSON Directly
+
+```js
+const apiUrl = `https://www.nytimes.com/svc/strands/v2/${todayStr}.json`;
+const response = await fetch(apiUrl);
+if (!response.ok) throw new Error("Network response was not ok");
+const puzzleData = await response.json();
+```
+
+Unlike <PostLink url="/blog/2026/04/08/hacking-nyt-spelling-bee" text="Spelling Bee" /> — which bakes its answers into a `window.gameData` global — Strands does not expose its data in any JavaScript variable. The only way to read today's answers programmatically is to call the same JSON endpoint the game fetches in the Network tab. Because this script runs *in the context of the NYT page*, the browser automatically attaches any NYT session cookies to the request, satisfying the same-origin check. Running the same `fetch` from a different site would be blocked by CORS.
+
+`response.ok` is `true` for any HTTP 2xx status. If NYT changes the URL scheme or adds authentication, the thrown error surfaces immediately rather than producing a silent `undefined` downstream.
+
+### Extracting the Payload
+
+```js
+const clue = puzzleData.clue || "Unknown Theme";
+const spangram = puzzleData.spangram || "Unknown";
+const themeWords = puzzleData.themeWords || [];
+```
+
+The three fields you saw in the Network tab preview are pulled out directly. The `|| fallback` expressions guard against a future API change that renames or removes a field — rather than crashing the script with `TypeError: Cannot read properties of undefined`, you get a graceful default value.
+
+### Building the Overlay
+
+```js
+let h = `<p ...><b>Theme:</b> "${clue}"</p>`;
+h += `<div>...<p ...>${spangram.toUpperCase()}</p></div>`;
+h += `<div>...<ul ...>`;
+themeWords.forEach(w => { h += `<li ...>${w.toUpperCase()}</li>` });
+h += `</ul></div>`;
+content.innerHTML = h;
+```
+
+The theme clue is shown in italics to visually echo how it appears in the game. The spangram gets a yellow highlight (`background:#fce83a`) — the same yellow Strands uses for the spangram tile in-game — so it stands out at a glance. The theme words are rendered as an uppercased `<li>` list. All styling is inline so the panel is self-contained and can't be accidentally broken by NYT's own CSS.
+
+### The Toggle Mechanism
+
+```js
+let isOpen = true;
+header.onclick = function() {
+    isOpen = !isOpen;
+    content.style.display = isOpen ? "block" : "none";
+    document.getElementById('s-icon').innerText = isOpen ? "▼" : "▲";
+};
+```
+
+The same collapse pattern from the Spelling Bee and Connections helpers. `isOpen` flips on every click. `display: none` / `"block"` is the cheapest possible show/hide that avoids layout reflow of unrelated elements. The chevron updates to reflect the current state — a clear visual affordance that the panel is collapsible, which matters on mobile where the panel can cover part of the game board.
+
+### Duplicate-Injection Guard
+
+```js
+if (document.getElementById('strands-helper')) return;
+```
+
+If you run the bookmarklet twice without reloading the page, this line detects that the panel is already in the DOM and exits early. Without it, a second tap would stack a second panel on top of the first.
+
+---
+
+*For more NYT game tricks, see <PostLink url="/blog/2026/04/08/hacking-nyt-spelling-bee" text="Hacking NYT Spelling Bee" /> for reading answers from a global JavaScript variable, or <PostLink url="/blog/2026/04/07/hacking-nyt-connections" text="Hacking NYT Connections" /> for the same network-sniffing technique on the Connections puzzle.*

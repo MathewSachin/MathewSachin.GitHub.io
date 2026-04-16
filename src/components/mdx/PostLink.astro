@@ -1,0 +1,37 @@
+---
+/**
+ * PostLink.astro
+ * MDX replacement for {% include post_link.html url="..." text="..." %}
+ *
+ * Props:
+ *   url  - Jekyll-style post URL, e.g. /blog/2026/03/07/hacking-wordle
+ *          Automatically converted to .html form for navigation.
+ *   text - Optional link text. When omitted the post title is used
+ *          (look-up not implemented; falls back to the slug).
+ */
+
+interface Props {
+  url: string;
+  text?: string;
+}
+
+const { url, text } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+
+// Normalise url: strip trailing slash, ensure .html suffix
+const normalised = url.replace(/\/$/, '').replace(/\.html$/, '') + '.html';
+const href = `${BASE}${normalised.replace(/^\//, '')}`;
+
+// Derive display text from the slug if not supplied
+function slugToTitle(u: string): string {
+  const parts = u.split('/');
+  const slug = parts[parts.length - 1].replace(/\.html$/, '');
+  return slug
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+const linkText = text ?? slugToTitle(url);
+---
+<a href={href}>{linkText}</a>

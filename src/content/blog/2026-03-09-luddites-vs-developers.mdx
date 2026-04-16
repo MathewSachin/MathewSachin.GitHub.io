@@ -1,0 +1,146 @@
+---
+title: "Vim, Sublime, or an IDE? The Never-Ending Developer Holy War"
+icon: "fas fa-terminal"
+tags: [vim, editor, ide, productivity, coding]
+related:
+  - /blog/2023/04/16/creating-if-statement-kotlin
+  - /blog/2023/04/14/dependency-injection-extension-functions-kotlin
+  - /blog/2023/04/02/pure-functions
+---
+
+*Every programmer, at some point, gets asked the question. Maybe by a new teammate, maybe in a job interview, maybe by a stranger on the internet at 2 AM. "What editor do you use?" What follows is never just an answer — it's a declaration of identity.*
+
+<img alt="Three editor panels side by side: Vim with green-on-black terminal, Sublime Text with colorful syntax highlighting, and VS Code with file explorer and AI autocomplete" src="/images/editor-wars-hero.svg" width="480" style="display:block;margin:1rem auto;" />
+
+## The Luddite Label
+
+The original Luddites were 19th-century textile workers who smashed machines they feared would replace them. Today, the word gets thrown at developers who prefer older, simpler tools — and nobody gets called a Luddite more gleefully than the Vim user.
+
+But here's the thing: using a 40-year-old terminal editor in 2026 is not the same as fearing technology. Often, it's a very deliberate, very *informed* choice.
+
+Let's walk through the three tribes and see what's really going on.
+
+## The Vim Purist
+
+<div class="alert alert-info">
+  📟 <b>Fun fact:</b> Vim was released in 1991. It was itself an improvement on <code>vi</code>, which dates back to 1976. That's older than most of the developers who use it.
+</div>
+
+The Vim user doesn't just use a text editor. They have *internalized* one. After enough time, Vim stops feeling like a program and starts feeling like a direct interface to the text itself.
+
+### Why people swear by it
+
+| Feature | What it actually means |
+|---|---|
+| Modal editing | `hjkl` to move, `dd` to delete a line, `ci"` to change inside quotes — no mouse needed |
+| Speed | Once it clicks, editing feels faster than thinking |
+| Ubiquity | SSH into any Linux server in the world, Vim is there |
+| Composability | Commands combine like sentences: `d3w` deletes the next 3 words |
+| Extensibility | Plugins exist for everything — LSP, git, fuzzy finding, themes |
+| Zero distraction | It's just you and the text |
+
+### The honest downsides
+
+- The learning curve is a **wall**, not a curve. The famous joke: *"How do you exit Vim? You don't. You've been trapped since 2011."*
+- Setting up Vim to match modern IDE features (autocomplete, debugging, refactoring) takes serious time and config knowledge.
+- Pair programming with someone who doesn't know Vim? Awkward.
+
+**Who thrives here:** DevOps engineers, backend developers, anyone who lives in the terminal, people who enjoy deeply customising their tools.
+
+## The Sublime / VS Code Crowd
+
+Sublime Text launched in 2008 and felt like a revelation — fast, clean, and powerful without demanding you memorise an alien control scheme. VS Code picked up the torch in 2015 and now dominates the landscape.
+
+These editors hit a sweet spot: they feel like *editors* (not operating systems), but they don't fight you when you want modern features.
+
+### The appeal
+
+- **Open a file instantly.** No project wizard, no indexing spinner, no JVM warmup.
+- **Command Palette** (`Ctrl+Shift+P` / `Cmd+Shift+P`) — do almost anything without leaving the keyboard.
+- **Multi-cursor editing** — select 20 occurrences and edit them all simultaneously.
+- **Extensions marketplace** — add exactly what you need, nothing more.
+- **Works well with any language** — Python, JS, Go, Rust, Markdown, YAML, whatever.
+
+```
+Startup time comparison (rough, informal):
+  Vim:          ~0.1 seconds
+  VS Code:      ~1-2 seconds
+  IntelliJ:     ~10-20 seconds (depends on project)
+```
+
+### The honest downsides
+
+- VS Code can quietly balloon in memory if you install too many extensions.
+- Refactoring support rarely matches a dedicated IDE for large codebases.
+- "Just install an extension" can become a rabbit hole.
+
+**Who thrives here:** Full-stack developers, polyglot programmers, people who want power without configuration overhead, developers who switch between projects and languages frequently.
+
+## The IDE Devotee
+
+At the other end of the spectrum: the full IDE. IntelliJ IDEA, Visual Studio, Eclipse, Android Studio, Xcode. These are *environments*, not editors. They ship with everything: debugger, profiler, refactoring engine, test runner, database client, and more.
+
+The IDE devotee is not lazy — they're leveraging serious engineering that took thousands of person-years to build.
+
+### What you actually get
+
+| Capability | Example |
+|---|---|
+| Deep refactoring | Rename a method and every call site updates — across 500 files |
+| Type-aware autocomplete | Not just text matching, but understands your class hierarchy |
+| Integrated debugger | Set breakpoints, inspect variables, step through code visually |
+| Inline errors | See compiler errors *as you type*, before you even run anything |
+| Framework awareness | Spring Boot, Kotlin, Android — the IDE understands the framework, not just the language |
+| Built-in database tools | Query your DB without leaving the editor |
+
+For large, typed codebases — Java, Kotlin, C#, TypeScript — these features pay for themselves in minutes per day saved.
+
+### The honest downsides
+
+- **Slow.** Project indexing alone can take minutes on a large codebase.
+- **Heavy.** IntelliJ can comfortably use 2–4 GB of RAM.
+- **Over-engineering small tasks.** Using IntelliJ to edit a shell script feels like driving a forklift to buy groceries.
+- **You can become dependent.** Some developers find they genuinely don't know how to find a method's definition without pressing `Ctrl+Click`.
+
+**Who thrives here:** Java/Kotlin/C# developers, anyone working in large enterprise codebases, Android or iOS developers, developers who value "it just works" over tweakability.
+
+## The Actual Holy War
+
+The debate gets heated because people aren't just comparing tools — they're defending workflows, identities, and years of investment.
+
+| The Vim user says | The IDE user says |
+|---|---|
+| "Your IDE is a crutch" | "Your dotfiles are a hobby project" |
+| "I can edit anything from a terminal" | "I can refactor 10,000 lines in 30 seconds" |
+| "Sublime Text is Vim for people who gave up" | "Vim is an IDE for people who gave up on UI" |
+| "My config is version-controlled" | "Mine is managed by the vendor and just works" |
+
+The truth? **They're all right.** The Vim user really is faster at certain tasks. The IDE user really does catch more bugs before they compile. The Sublime user really does spend less time fighting their setup.
+
+## So Which Should You Use?
+
+Ask these questions instead:
+
+1. **What language and ecosystem?** Kotlin + Android = Android Studio. Python scripts = VS Code or Vim. C# + .NET = Visual Studio or Rider.
+
+2. **How large is the codebase?** 500 lines? Vim is fine. 500,000 lines? You probably want deep indexing.
+
+3. **How much do you want to customise?** Vim is a blank canvas. VS Code is a reasonable default you can customise. IDEs give you guardrails.
+
+4. **Do you work on remote servers?** Vim is unbeatable for SSH workflows.
+
+5. **Are you learning?** Start with VS Code. It's forgiving, well-documented, and the extensions ecosystem means it grows with you.
+
+<div class="alert alert-info">
+  💡 <b>The pragmatic answer:</b> Most experienced developers use <b>more than one tool</b>. Vim for quick server edits, VS Code for exploratory coding, IntelliJ for the big Java service. The real skill is knowing <i>which</i> tool to reach for.
+</div>
+
+## The Verdict
+
+Calling Vim users "Luddites" misses the point. They're not resisting technology — they've just made a different tradeoff, one that optimises for speed, portability, and minimal friction over discoverability and automation.
+
+The best developers tend to be *curious about tools*, not *dogmatic about them*. Try Vim for a month. Really learn one IDE. See what VS Code's extensions can do. Then pick the one (or combination) that makes *you* faster.
+
+The editor is not the craft. The craft is the thinking, the design, the problem-solving. The editor is just how your thoughts become code.
+
+*What's your editor of choice — and why? Drop a comment below. (And yes, Emacs users, you're always welcome at the table.) 👇*

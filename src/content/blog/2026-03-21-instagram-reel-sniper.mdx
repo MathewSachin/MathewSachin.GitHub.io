@@ -1,0 +1,228 @@
+---
+title: "Instagram Reel Sniper: Download Any Reel Directly from Your Browser"
+icon: "fab fa-instagram"
+accent_color: "#C13584"
+tags: [instagram, hack, javascript, browser, devtools, bookmarklet]
+series: browser-hacks
+related:
+  - /blog/2026/03/30/instagram-userscript-download-buttons
+  - /blog/2026/03/22/reddit-video-sniper
+  - /blog/2026/03/22/instagram-story-sniper
+  - /blog/2026/03/21/save-instagram-photos
+  - /blog/2026/03/21/youtube-shorts-sniper
+  - /blog/2026/03/21/twitter-x-video-sniper
+  - /blog/2026/03/20/cookie-clicker-hacks
+  - /blog/2026/03/07/edit-webpage-inspect-element
+---
+
+*Instagram doesn't have a "Download" button for Reels. This script adds one — right from your browser, no extensions or third-party apps required.*
+
+---
+
+You've probably been there: a Reel catches your eye, you want to save it, and Instagram gives you nothing but a "Share" button that sends a link. Third-party downloader sites exist, but they require you to copy-paste URLs, often serve ads, and you have no idea what they do with your data.
+
+This script takes a different route. It runs entirely in your browser, captures the video that's already playing on your screen using the browser's own recording API, and saves it as a `.webm` file. No external servers involved.
+
+---
+
+## Using it on Desktop
+
+### Step 1 — Open Instagram and find your Reel
+
+Go to [instagram.com](https://instagram.com) and scroll to the Reel you want to save. Make sure it is **fully visible on screen** — not partially scrolled off the top or bottom.
+
+### Step 2 — Open the Browser Console
+
+**Windows / Linux:** Press `F12` or `Ctrl + Shift + I`, then click the **Console** tab.  
+Direct shortcut: `Ctrl + Shift + J` (Chrome) jumps straight to the Console.
+
+**Mac:** Press `Cmd + Option + I`, then click the **Console** tab.  
+Direct shortcut: `Cmd + Option + J` (Chrome) jumps straight to the Console.
+
+<div class="alert alert-info">
+  ⚠️ <b>Console warning:</b> Some browsers display a warning like "Don't paste code here unless you trust it." That warning exists to protect users from social-engineering attacks. You're pasting your own code that you can read and verify — proceed.
+</div>
+
+### Step 3 — Paste and Run the Script
+
+Paste the following code into the console and press **Enter**:
+
+```js
+javascript:(function() {
+    // 1. Find the video that is actually visible on the screen
+    const allVideos = document.querySelectorAll('video');
+    let video = null;
+
+    allVideos.forEach(v => {
+        const rect = v.getBoundingClientRect();
+        // If the video is roughly in the middle of the viewport
+        if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+            video = v;
+        }
+    });
+
+    if (!video) return alert("Please make sure the Reel is fully visible on screen!");
+
+    // 2. Clean up: Stop any other videos from playing in the background
+    allVideos.forEach(v => { if(v !== video) v.pause(); });
+
+    video.pause();
+    video.muted = false;
+    video.currentTime = 0;
+
+    const startCapture = () => {
+        setTimeout(() => {
+            const stream = video.captureStream ? video.captureStream() : video.mozCaptureStream();
+            const recorder = new MediaRecorder(stream, { 
+                mimeType: 'video/webm;codecs=vp9,opus',
+                videoBitsPerSecond : 5000000 
+            });
+            
+            const chunks = [];
+            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `IG_Targeted_Capture_${Date.now()}.webm`;
+                a.click();
+                // Kill the background audio once the file is generated
+                video.pause();
+            };
+
+            video.onended = () => recorder.stop();
+
+            recorder.start();
+            video.play();
+            console.log("Sniper locked on current Reel. Recording...");
+        }, 400); 
+    };
+
+    video.addEventListener('seeked', startCapture, { once: true });
+})();
+```
+
+The Reel will rewind to the start, play through once, and then your browser will automatically download the file as `IG_Targeted_Capture_<timestamp>.webm`.
+
+---
+
+## Using it on Mobile (Bookmarklet)
+
+Mobile browsers don't have a DevTools console, but they support **bookmarklets** — bookmarks whose URL is JavaScript code. Tapping one runs the script on whatever page you're currently viewing.
+
+### Step 1 — Create a New Bookmark
+
+In your mobile browser, bookmark any page. The URL doesn't matter — you'll replace it in the next step.
+
+### Step 2 — Edit the Bookmark
+
+Open your bookmarks, find the one you just saved, and tap **Edit**:
+
+- Change the **name** to something like `IG Reel Sniper`
+- Delete the entire **URL** and paste this one-liner in its place (copy the whole thing — it must be one continuous line):
+
+```
+javascript:(function(){const allVideos=document.querySelectorAll('video');let video=null;allVideos.forEach(v=>{const rect=v.getBoundingClientRect();if(rect.top>=0&&rect.bottom<=window.innerHeight){video=v;}});if(!video)return alert("Please make sure the Reel is fully visible on screen!");allVideos.forEach(v=>{if(v!==video)v.pause();});video.pause();video.muted=false;video.currentTime=0;video.addEventListener('seeked',function startCapture(){setTimeout(()=>{const stream=video.captureStream?video.captureStream():video.mozCaptureStream();const recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9,opus',videoBitsPerSecond:5000000});const chunks=[];recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};recorder.onstop=()=>{const blob=new Blob(chunks,{type:'video/webm'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`IG_Capture_${Date.now()}.webm`;a.click();video.pause();};video.onended=()=>recorder.stop();recorder.start();video.play();console.log("Recording...");},400);},{once:true});})();
+```
+
+Save the bookmark.
+
+### Step 3 — Run It on Instagram
+
+1. Open Instagram in your mobile browser and scroll to the Reel you want — make sure it's fully visible on screen.
+2. Tap the **address bar**, type `IG Reel Sniper`, and when the bookmark appears in the dropdown, tap it.
+
+The script will inject and run. The Reel plays through once and the file downloads automatically.
+
+<div class="alert alert-info">
+  💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won't execute the JavaScript on mobile. Always trigger it via the address bar dropdown.
+</div>
+
+Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarklet/) turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.
+
+---
+
+## Tips for Best Quality
+
+- **Go fullscreen or use Large mode** before running the script. `captureStream` captures the video at the resolution it is currently rendered on screen — bigger = better.
+- **Keep the Instagram tab active** while recording. Backgrounded tabs can be throttled by the browser, which may cause stutter in the output.
+- **Enable Hardware Acceleration** in your browser settings if you notice choppy recordings. This offloads video encoding from your CPU to the GPU, which makes a noticeable difference on most machines.
+- **Close unnecessary tabs.** The browser has to simultaneously seek the video, decode frames, and run the `MediaRecorder` encoder. Fewer competing tabs means more headroom for all three tasks.
+
+---
+
+## How the Code Works
+
+If you're curious about the mechanics, here's a plain-English breakdown.
+
+### Finding the Right Video
+
+Modern web pages are like stage plays. Just because an actor (a video element) walks off-stage (scrolls off screen) doesn't mean it has left the building — it's waiting in the wings. Instagram's feed typically has multiple `<video>` elements loaded at once: the one you're watching plus several pre-loaded ones above and below it.
+
+```js
+allVideos.forEach(v => {
+    const rect = v.getBoundingClientRect();
+    if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+        video = v;
+    }
+});
+```
+
+`getBoundingClientRect()` returns the position of an element relative to the current viewport. This loop checks each video's coordinates against the window's height to find the one actually on screen — the "lead actor" — ignoring everything waiting in the wings.
+
+### Audio Management
+
+Before recording starts, the script pauses every other video on the page:
+
+```js
+allVideos.forEach(v => { if(v !== video) v.pause(); });
+```
+
+Without this step, pre-loaded background videos could bleed their audio into the recording, creating an overlapping audio mess. It also unmutes the target video (`video.muted = false`) so the audio track is included in the capture.
+
+### The 400 ms Breathing Room
+
+```js
+setTimeout(() => { /* start MediaRecorder */ }, 400);
+```
+
+After the script seeks the video back to `currentTime = 0`, there's a short intentional delay before recording starts. This gives the browser's video engine time to flush its cache and prepare a clean stream. Without it, the CPU can spike trying to handle seeking, frame decoding, and recorder initialisation simultaneously — producing a noticeable stutter at the beginning of the saved file.
+
+### Capturing the Stream
+
+```js
+const stream = video.captureStream ? video.captureStream() : video.mozCaptureStream();
+```
+
+The [MediaStream Capture API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/captureStream) lets the browser treat a playing `<video>` element as a live stream source. Chrome and Edge use `captureStream()`; Firefox uses `mozCaptureStream()`. The ternary operator picks whichever is available.
+
+### Recording and Saving
+
+`MediaRecorder` encodes the stream into VP9 video + Opus audio at 5 Mbps — a reasonable quality ceiling for a Reel. Data arrives in chunks via `ondataavailable`, accumulated in an array. When the video ends (`video.onended`), the recorder stops, all chunks are assembled into a `Blob`, and a temporary `<a>` element triggers the download.
+
+### The Kill Switch
+
+```js
+video.pause();
+```
+
+The last line in `recorder.onstop` pauses the video after the download has been triggered. This is the "kill switch" — once the file is generated there's no reason for the Reel to keep looping and playing audio in the background.
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely Cause | Fix |
+|---|---|---|
+| Alert: "Reel not fully visible" | Video is partially scrolled off screen | Scroll until the Reel is fully in view |
+| Stutter at the start of the saved file | CPU overload during seek + recorder init | The 400 ms delay usually handles this; if not, check Hardware Acceleration in browser settings |
+| Recording is low resolution | Reel is small on screen at capture time | Use fullscreen or Large view before running the script |
+| Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for instagram.com in browser settings |
+| Script does nothing on mobile | Bookmarklet triggered from menu, not address bar | Tap the address bar, type the bookmark name, tap from dropdown |
+
+*Using the same browser-only approach, you can also <PostLink url="/blog/2026/03/22/reddit-video-sniper" text="download Reddit videos" />, <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="download Instagram Stories" />, <PostLink url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" />, <PostLink url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" />, and <PostLink url="/blog/2026/03/21/save-instagram-photos" text="save Instagram photos" />.*
+
+---
+
+> **Disclaimer:** This script is provided for **educational purposes only**. It demonstrates browser APIs (`getBoundingClientRect`, `captureStream`, `MediaRecorder`) that are freely documented and publicly available. Downloading content from Instagram may be against [Instagram's Terms of Service](https://help.instagram.com/581066165581870). Only use this on content you own, have explicit permission to download, or that is explicitly available for download. Respect copyright and the work of content creators.
