@@ -1,3 +1,5 @@
+import { addListeners, trackEvent } from './utils.js';
+
 (function () {
     // Named constants — avoid magic numbers scattered through the file
     const COPY_RESET_DELAY      = 2000;         // ms before copy icon reverts to link icon

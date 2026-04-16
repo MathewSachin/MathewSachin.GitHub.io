@@ -6,7 +6,7 @@
  * both the main site and PR preview deployments.
  */
 import { create, load, search } from '@orama/orama';
-import { escapeHtml } from './utils.js';
+import { escapeHtml, trackEvent } from './utils';
 
 const SCHEMA = {
   title: 'string',

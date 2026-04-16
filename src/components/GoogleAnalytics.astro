@@ -14,18 +14,3 @@ const IS_PROD = import.meta.env.PROD;
     </script>
 </>
 )}
-
-<script>
-// Safe GA event tracker — no-ops gracefully if analytics is blocked
-window.trackEvent = function(name, params) {
-    try {
-        if (typeof window.gtag === "function") {
-            window.gtag("event", name, params || {});
-        } else {
-            console.debug("Google Analytics is not initialized. Event not tracked:", name, params);
-        }
-    } catch (_) {
-        console.warn("Failed to track event:", name, params);
-    }
-}
-</script>

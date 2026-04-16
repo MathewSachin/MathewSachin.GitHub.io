@@ -41,14 +41,6 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
 <html lang="en-us">
 <head>
   <GoogleAnalytics />
-  <script>
-    // Shorthand: attach the same event listener to every element matching a selector
-    window.addListeners = function(selector, event, handler) {
-        document.querySelectorAll(selector).forEach(function (el) {
-            el.addEventListener(event, function () { handler(el); });
-        });
-    }
-  </script>
 
   <meta charset="UTF-8" />
   <title>{pageTitle}</title>
