@@ -7,8 +7,9 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostItem from '@components/PostItem.astro';
 import SeriesShowcase from '@components/SeriesShowcase.astro';
-import { sortPostsByDate, buildTagsMap, postUrlFromSlug } from '@utils/posts';
+import { sortPostsByDate, buildTagsMap } from '@utils/posts';
 import { getTools } from '@data/index';
+import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
 const allPosts = sortPostsByDate(await getCollection('blog'));
@@ -22,8 +23,6 @@ const topTags = [...tagsMap.entries()].slice(0, 10);
 const recentPosts = allPosts.slice(0, 8);
 ---
 <BaseLayout title="Mathew Sachin" ads={true}>
-  <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
-
   <div class="pt-3">
     <div class="container">
       <div class="row headfont mb-5">

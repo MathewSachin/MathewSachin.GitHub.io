@@ -5,7 +5,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import AdUnit from '@components/AdUnit.astro';
-import Giscus from '@components/Giscus.astro';
+import '@styles/blog.css';
 
 interface Props {
   title: string;
@@ -15,8 +15,6 @@ const { title, ads = true } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 ---
 <BaseLayout title={title} ads={ads}>
-  <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
-
   <div class="bg-dark">
     <div class="pt-4 pb-5 text-white">
       <div class="container">

@@ -6,7 +6,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostItem from '@components/PostItem.astro';
-import SeriesShowcase from '@components/SeriesShowcase.astro';
+import '@styles/blog.css';
 import { sortPostsByDate } from '@utils/posts';
 
 const POSTS_PER_PAGE = 10;
@@ -35,8 +35,6 @@ const hasPrev = currentPage > 1;
 const hasNext = currentPage < totalPages;
 ---
 <BaseLayout title={`Blog Posts — Page ${currentPage}`}>
-  <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
-
   <div class="bg-dark py-3">
     <div class="container">
       <h2 class="text-white mb-3">Blog Posts</h2>

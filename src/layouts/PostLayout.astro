@@ -17,6 +17,7 @@ import Giscus from '@components/Giscus.astro';
 import AdUnit from '@components/AdUnit.astro';
 import ReadingProgressBar from '@components/ReadingProgressBar.astro';
 import { formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
+import '@styles/blog.css';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -39,7 +40,6 @@ const pageUrl = Astro.url.href;
 const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;
 ---
 <BaseLayout title={title} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
-  <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
 
   <ReadingProgressBar />
 

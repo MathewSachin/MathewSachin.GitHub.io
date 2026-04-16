@@ -5,7 +5,7 @@
  * Resolves base path from the current page URL so it works on
  * both the main site and PR preview deployments.
  */
-import { create, load, search } from './orama.js';
+import { create, load, search } from '@orama/orama';
 import { escapeHtml } from './utils.js';
 
 const SCHEMA = {

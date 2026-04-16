@@ -8,8 +8,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "build-search-index": "node scripts/build-search-index.mjs",
-    "bundle-orama": "esbuild --bundle --format=esm --minify --outfile=public/scripts/orama.js node_modules/@orama/orama/dist/browser/index.js",
-    "build": "npm run bundle-orama && astro build && npm run build-search-index",
+    "build": "astro build && npm run build-search-index",
     "test": "node --test tests/*.test.mjs",
     "test:e2e": "playwright test"
   },

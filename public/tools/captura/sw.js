@@ -18,8 +18,6 @@ const ASSETS_TO_CACHE = [
   './js/metronome.js',
   './js/storage.js',
   './js/recorder-core.js',
-  '/styles/styles.css',
-  '/scripts/formatting.js',
 ];
 
 // ── Install ──────────────────────────────────────────────────────────────────

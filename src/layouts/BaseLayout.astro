@@ -1,6 +1,7 @@
 ---
 import GoogleAnalytics from '@components/GoogleAnalytics.astro';
 import Navbar from '@components/Navbar.astro';
+import '@styles/styles.css';
 
 /**
  * BaseLayout.astro
@@ -83,8 +84,6 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
     crossorigin="anonymous"
   />
 
-  <link rel="stylesheet" href={`${BASE}styles/styles.css`} />
-
   {manifest && <link rel="manifest" href={`${BASE}${manifest}`} />}
 
   {/* RSS Feed */}
@@ -104,7 +103,7 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
   <Navbar />
   <slot />
 
-  <script src={`${BASE}scripts/formatting.js`}></script>
+  <script src='@scripts/formatting.js'></script>
 </body>
 </html>
 

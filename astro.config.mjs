@@ -33,6 +33,8 @@ export default defineConfig({
         '@data': fileURLToPath(new URL('./src/data', import.meta.url)),
         '@utils': fileURLToPath(new URL('./src/utils', import.meta.url)),
         '@images': fileURLToPath(new URL('./src/content/images', import.meta.url)),
+        '@scripts': fileURLToPath(new URL('./src/scripts', import.meta.url)),
+        '@styles': fileURLToPath(new URL('./src/styles', import.meta.url)),
       },
     },
   },
