@@ -21,7 +21,11 @@ window.trackEvent = function(name, params) {
     try {
         if (typeof window.gtag === "function") {
             window.gtag("event", name, params || {});
+        } else {
+            console.debug("Google Analytics is not initialized. Event not tracked:", name, params);
         }
-    } catch (_) {}
+    } catch (_) {
+        console.warn("Failed to track event:", name, params);
+    }
 }
 </script>

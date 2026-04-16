@@ -155,27 +155,6 @@
         });
     }
 
-    // Intersection Observer: fire once when a code block or image/diagram enters the viewport.
-    // Uses the browser-native async API so it never blocks the main thread.
-    if (typeof IntersectionObserver !== "undefined") {
-        const viewTargets = document.querySelectorAll("div.highlight, img, svg");
-        if (viewTargets.length) {
-            const viewObserver = new IntersectionObserver(function (entries, obs) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        const tag = entry.target.tagName.toLowerCase();
-                        trackEvent("element_viewed", {
-                            element_type: tag === "div" ? "code_block" : "image_or_diagram",
-                            page_path: window.location.pathname
-                        });
-                        obs.unobserve(entry.target); // track each element only once
-                    }
-                });
-            }, { threshold: 0.5 });
-            viewTargets.forEach(function (el) { viewObserver.observe(el); });
-        }
-    }
-
     // Manual code highlight tracker: debounced so it fires at most once per DEBOUNCE_DELAY ms
     // of selection inactivity, preventing a flood of events while the user drags.
     (function () {
