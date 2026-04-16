@@ -4,20 +4,6 @@
     const DEBOUNCE_DELAY        = 500;          // ms of inactivity before selection is tracked
     const SCROLL_MILESTONES     = [25, 50, 75, 90]; // percent-scroll milestones to report
 
-    // Reading progress bar
-    const progressBar = document.getElementById("reading-progress-bar");
-    if (progressBar) {
-        function updateProgress() {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
-            progressBar.style.width = progress + "%";
-            progressBar.setAttribute("aria-valuenow", Math.round(progress));
-        }
-        window.addEventListener("scroll", updateProgress);
-        window.addEventListener("resize", updateProgress);
-        updateProgress();
-    }
-
     // Mobile TOC collapse toggle
     const tocToggle = document.querySelector(".toc-mobile-toggle");
     const tocCollapse = document.getElementById("toc-collapse");

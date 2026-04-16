@@ -15,6 +15,7 @@ import RelatedPosts from '@components/RelatedPosts.astro';
 import Share from '@components/Share.astro';
 import Giscus from '@components/Giscus.astro';
 import AdUnit from '@components/AdUnit.astro';
+import ReadingProgressBar from '@components/ReadingProgressBar.astro';
 import { formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
 
 interface Props {
@@ -40,8 +41,7 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
 <BaseLayout title={title} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
   <link rel="stylesheet" href={`${BASE}styles/blog.css`} slot="head" />
 
-  {/* Reading progress bar */}
-  <div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  <ReadingProgressBar />
 
   <div class="bg-dark">
     <div class="pt-4 pb-5 post-hero text-white">
