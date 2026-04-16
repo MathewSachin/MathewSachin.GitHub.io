@@ -24,9 +24,7 @@ const POSTS_DIR = existsSync(ASTRO_POSTS_DIR) && (await import('node:fs').then(m
 const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
 // Output to public/search-index.json for Astro static output (falls back to repo root for Jekyll)
 const PUBLIC_DIR = join(REPO_ROOT, 'public')
-const OUTPUT_FILE = existsSync(PUBLIC_DIR)
-  ? join(PUBLIC_DIR, 'search-index.json')
-  : join(REPO_ROOT, 'search-index.json')
+const OUTPUT_FILE = join(PUBLIC_DIR, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
 /**
@@ -143,10 +141,6 @@ async function main() {
   const rawIndex = save(db)
   const serialised = JSON.stringify(rawIndex)
   await writeFile(OUTPUT_FILE, serialised)
-  // Also write to repo root so unit tests (which look for search-index.json there) can find it
-  if (OUTPUT_FILE !== join(REPO_ROOT, 'search-index.json')) {
-    await writeFile(join(REPO_ROOT, 'search-index.json'), serialised)
-  }
   console.log(`Search index written to search-index.json (${inserted} entries)`)
 }
 

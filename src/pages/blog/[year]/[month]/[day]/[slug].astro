@@ -8,7 +8,8 @@ import PostLayout from '@layouts/PostLayout.astro';
 import { sortPostsByDate, postUrlFromId } from '@utils/posts';
 import PostLink from '@components/mdx/PostLink.astro';
 import BlogImage from '@components/mdx/BlogImage.astro';
-import Giscus from '@components/Giscus.astro';
+import { Picture } from 'astro:assets';
+import AlertInfo from '@components/AlertInfo.astro'
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -64,5 +65,5 @@ if (tocEntries.length >= 3) {
 }
 ---
 <PostLayout post={post} allPosts={allPosts} toc={toc} canonicalPath={postUrlFromId(post.id)}>
-  <Content components={{ PostLink, BlogImage, Giscus }} />
+  <Content components={{ PostLink, BlogImage, AlertInfo, Picture }} />
 </PostLayout>
