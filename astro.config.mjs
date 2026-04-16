@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'node:url';
 import rehypeRaw from 'rehype-raw';
+import linkValidator from 'astro-link-validator';
 
 import {
   remarkDisableIndentedCode,
@@ -15,16 +16,22 @@ import {
 
 const SITE = 'https://mathewsachin.github.io';
 
+// Only run link validation on production builds (not PR preview builds that use a
+// custom base URL, since the validator can't resolve base-prefixed links against dist/).
+const ASTRO_BASE = process.env.ASTRO_BASE;
+const integrations = [
+  mdx(),
+  sitemap(),
+  ...(ASTRO_BASE ? [] : [linkValidator({ failOnBrokenLinks: true })]),
+];
+
 export default defineConfig({
   site: SITE,
   // base is injected at build time via ASTRO_BASE env variable (used for PR previews)
   base: process.env.ASTRO_BASE || '/',
   trailingSlash: 'always',
   output: 'static',
-  integrations: [
-    mdx(),
-    sitemap(),
-  ],
+  integrations,
   vite: {
     resolve: {
       alias: {

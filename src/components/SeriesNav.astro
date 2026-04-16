@@ -33,7 +33,7 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
   <div class="series-banner">
     <i class="fas fa-layer-group me-1" aria-hidden="true"></i>
     Part {part} of {total} &mdash;
-    <a href={`${BASE}blog/series/${post.data.series}/`}>{series.name}</a> series
+    <a href={`${BASE}blog/series/${post.data.series}.html`}>{series.name}</a> series
     {prevPost && (
       <>
         <br />
