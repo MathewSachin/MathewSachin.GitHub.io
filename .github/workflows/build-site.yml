@@ -37,14 +37,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Bundle Orama
-        run: npm run bundle-orama
-
-      - name: Build search index
-        run: npm run build-search-index
-      - name: Verify search index
-        run: test -f public/search-index.json || { echo "public/search-index.json was not generated"; exit 1; }
-
       - name: Run unit tests
         run: npm test
 
@@ -52,10 +44,10 @@ jobs:
         env:
           ASTRO_BASE: ${{ inputs.baseurl }}
           NODE_ENV: ${{ inputs.testing && 'development' || 'production' }}
-        run: npx astro build
+        run: npm run build
 
-      - name: Promote blog posts to .html
-        run: node scripts/promote-blog-html.mjs
+      - name: Verify search index
+        run: test -f public/search-index.json || { echo "public/search-index.json was not generated"; exit 1; }
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
