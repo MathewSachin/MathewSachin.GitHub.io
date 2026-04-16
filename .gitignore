@@ -5,3 +5,4 @@ generated/
 .astro/
 test-results/
 public/search-index.json
+public/scripts/orama.js
