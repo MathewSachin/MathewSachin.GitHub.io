@@ -97,6 +97,7 @@ figure.highlight pre {
 
 .page-content img {
   max-width: 100%;
+  height: auto;
   margin-top: 20px;
   margin-bottom: 20px;
   border: 1px solid var(--bs-border-color);

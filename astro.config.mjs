@@ -32,6 +32,7 @@ export default defineConfig({
         '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
         '@data': fileURLToPath(new URL('./src/data', import.meta.url)),
         '@utils': fileURLToPath(new URL('./src/utils', import.meta.url)),
+        '@images': fileURLToPath(new URL('./src/content/images', import.meta.url)),
       },
     },
   },
@@ -63,5 +64,6 @@ export default defineConfig({
   image: {
     // Use sharp for image processing (replaces jekyll-picture-tag)
     service: { entrypoint: 'astro/assets/services/sharp' },
+    responsiveStyles: true
   },
 });
