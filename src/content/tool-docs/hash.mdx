@@ -1,0 +1,71 @@
+<div class="card mt-4">
+<div class="card-body">
+
+<h4>How It Works</h4>
+<p>
+  This tool computes cryptographic hash digests of any text input — entirely inside your browser.
+  <strong>Your input is never sent to a server.</strong>
+</p>
+
+<h5 class="mt-4">What is a Hash?</h5>
+<p>
+  A hash function maps an arbitrary-length input to a fixed-length output (the <em>digest</em>).
+  Good hash functions are deterministic (same input → same output), fast to compute, and
+  practically irreversible — you cannot reconstruct the original text from the digest alone.
+  They are widely used for data integrity verification, checksums, digital signatures, and
+  password storage.
+</p>
+
+<h5 class="mt-4">Supported Algorithms</h5>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered">
+    <thead class="table-light">
+      <tr><th>Algorithm</th><th>Digest length</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>MD5</td>
+        <td>128 bits (32 hex chars)</td>
+        <td>Fast; considered cryptographically broken — use only for checksums, not security.</td>
+      </tr>
+      <tr>
+        <td>SHA-1</td>
+        <td>160 bits (40 hex chars)</td>
+        <td>Deprecated for security use since 2017; still common in legacy systems.</td>
+      </tr>
+      <tr>
+        <td>SHA-256</td>
+        <td>256 bits (64 hex chars)</td>
+        <td>Part of the SHA-2 family; the current standard for most security applications.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="mt-4">Implementation Details</h5>
+<p>
+  <strong>SHA-1 and SHA-256</strong> are computed using the browser's native
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest" target="_blank" rel="noopener">Web Crypto API</a>
+  (<code>crypto.subtle.digest()</code>). The input text is first encoded to UTF-8 bytes via
+  <code>TextEncoder</code> and the resulting <code>ArrayBuffer</code> is converted to a
+  lowercase hexadecimal string.
+</p>
+<p>
+  <strong>MD5</strong> is computed using a compact, self-contained JavaScript implementation
+  based on the public-domain algorithm by Paul Johnston. The input string is encoded to UTF-8
+  bytes before being processed by the MD5 algorithm to ensure consistent results for non-ASCII
+  characters.
+</p>
+<p>
+  All three digests are rendered instantly in the page without any page reload or network
+  request.
+</p>
+
+<h5 class="mt-4">Privacy</h5>
+<p>
+  All hashing runs locally in your browser tab. Sensitive text you enter — passwords, API
+  keys, personal data — never leaves your device.
+</p>
+
+</div>
+</div>
