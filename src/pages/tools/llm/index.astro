@@ -1,7 +1,6 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import Docs from '@content/tool-docs/llm.mdx';
-import llmScriptUrl from '../../../scripts/tools/llm.js?url';
 ---
 <ToolLayout title="Local LLM Chat" ads={true}>
 
@@ -101,7 +100,9 @@ import llmScriptUrl from '../../../scripts/tools/llm.js?url';
 </div>
 </div>
 
-<script type="module" src={llmScriptUrl}></script>
+<script>
+  import '/src/scripts/tools/llm.js';
+</script>
 
 <Docs />
 </ToolLayout>

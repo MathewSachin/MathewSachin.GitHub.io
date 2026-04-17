@@ -1,77 +1,42 @@
 import { test, expect } from '@playwright/test';
 
-// Fake ES module returned in place of the real @huggingface/transformers bundle.
-// This avoids any network download of multi-hundred-MB model weights while still
-// exercising every code path in llm.js.
-//
-// Strategy: intercept the llm.js response and swap its transformers import URL
-// for a local test URL that we serve ourselves.
-const MOCK_URL = '/test-mock/transformers.js';
-// Matches both legacy static llm.js path and Astro bundled llm chunk path.
-const LLM_SCRIPT_ROUTE = /.*(?:\/tools\/llm\/llm\.js|\/_astro\/llm\.[^/]+\.js)(?:\?.*)?$/;
-
-const MOCK_TRANSFORMERS_GOOD = `
-export const env = { allowLocalModels: false };
-
-export class TextStreamer {
-  constructor(tokenizer, opts) {
-    this.callback_function = opts.callback_function || null;
-  }
-}
-
-export async function pipeline(task, modelId, opts) {
-  if (opts && opts.progress_callback) {
-    opts.progress_callback({ status: 'initiate', file: 'model.onnx' });
-    opts.progress_callback({ status: 'progress', file: 'model.onnx', progress: 50, name: 'model.onnx' });
-    opts.progress_callback({ status: 'done',     file: 'model.onnx' });
-    opts.progress_callback({ status: 'ready' });
-  }
-  async function gen(input, genOpts) {
-    if (genOpts && genOpts.streamer && genOpts.streamer.callback_function) {
-      genOpts.streamer.callback_function('Hello ');
-      genOpts.streamer.callback_function('world!');
-    }
-  }
-  gen.tokenizer = {};
-  return gen;
-}
-`;
-
-const MOCK_TRANSFORMERS_FAIL = `
-export const env = { allowLocalModels: false };
-export class TextStreamer {}
-export async function pipeline() { throw new Error('Network error'); }
-`;
-
 /**
- * Register the two routes needed for every test:
- * 1. Serve our local mock module at MOCK_URL.
- * 2. Intercept llm.js and replace its transformers import URL with MOCK_URL.
+ * Inject a lightweight transformers mock before app scripts execute.
  */
-async function setupRoutes(page, mockBody = MOCK_TRANSFORMERS_GOOD) {
-  await page.route('**/test-mock/transformers.js', route =>
-    route.fulfill({ contentType: 'application/javascript; charset=utf-8', body: mockBody })
-  );
+async function setupRoutes(page, shouldFail = false) {
+  await page.addInitScript(({ shouldFail: fail }) => {
+    window.__HF_TRANSFORMERS_MOCK__ = {
+      env: { allowLocalModels: false },
+      TextStreamer: class {
+        constructor(tokenizer, opts) {
+          // `tokenizer` (first arg) is unused in this mock but kept to mirror real constructor shape.
+          this.callback_function = opts?.callback_function || null;
+        }
+      },
+      pipeline: async (task, modelId, opts) => {
+        if (fail) {
+          throw new Error('Network error');
+        }
 
-  await page.route(LLM_SCRIPT_ROUTE, async route => {
-    const response = await route.fetch();
-    const original = await response.text();
-    // Replace the transformers import URL (however it is formatted) with our local URL.
-    const modified = original
-      .replace(
-        /from\s+['"]@huggingface\/transformers['"]/,
-        `from '${MOCK_URL}'`
-      )
-      .replace(
-        /from\s+['"][^'"]*huggingface[^'"]*transformers[^'"]*['"]/,
-        `from '${MOCK_URL}'`
-      );
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/javascript; charset=utf-8',
-      body: modified,
-    });
-  });
+        if (opts?.progress_callback) {
+          opts.progress_callback({ status: 'initiate', file: 'model.onnx' });
+          opts.progress_callback({ status: 'progress', file: 'model.onnx', progress: 50, name: 'model.onnx' });
+          opts.progress_callback({ status: 'done', file: 'model.onnx' });
+          opts.progress_callback({ status: 'ready' });
+        }
+
+        const generateFn = async (input, genOpts) => {
+          if (genOpts?.streamer?.callback_function) {
+            genOpts.streamer.callback_function('Hello ');
+            genOpts.streamer.callback_function('world!');
+          }
+        };
+
+        generateFn.tokenizer = {};
+        return generateFn;
+      },
+    };
+  }, { shouldFail });
 }
 
 test.describe('Local LLM Chat tool', () => {
@@ -180,7 +145,7 @@ test.describe('Local LLM Chat tool', () => {
     // order-independent.  setupRoutes adds routes in reverse-precedence order,
     // but here we want MOCK_TRANSFORMERS_FAIL and a fresh navigation so that
     // the module is re-evaluated with the throwing pipeline.
-    await setupRoutes(page, MOCK_TRANSFORMERS_FAIL);
+    await setupRoutes(page, true);
     await page.goto('/tools/llm/');
 
     await page.locator('#load-btn').click();

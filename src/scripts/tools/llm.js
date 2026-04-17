@@ -1,4 +1,11 @@
-import { pipeline, TextStreamer, env } from '@huggingface/transformers';
+import * as transformersImport from '@huggingface/transformers';
+
+// Test-time injection point used by e2e tests to avoid downloading real model assets.
+const transformers =
+  globalThis.__HF_TRANSFORMERS_MOCK__ ||
+  transformersImport;
+
+const { pipeline, TextStreamer, env } = transformers;
 
 env.allowLocalModels = false;
 
