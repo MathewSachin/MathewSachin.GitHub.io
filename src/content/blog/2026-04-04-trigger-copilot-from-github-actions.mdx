@@ -137,7 +137,7 @@ The more context you give Copilot about your site's conventions, the better the 
 
 This is exactly how this blog auto-generates posts. A scheduled workflow creates an issue, assigns it to `@copilot`, and Copilot opens a pull request with a new Markdown file in `blog/_posts/`. The entire pipeline runs in the cloud — you can kick it off from a phone.
 
-<pre class="pintora">{`
+<Pintora code={`
 activityDiagram
   partition "GitHub Actions (ai-blog-post.yml)" {
     :workflow_dispatch or cron trigger;
@@ -158,7 +158,7 @@ activityDiagram
     :Jekyll builds site;
     :Post is live 🎉;
   }
-`}</pre>
+`} />
 
 The <PostLink url="/blog/2026/03/12/ai-blog-generation-flow" text="AI blog generation flow overview" /> covers the broader picture of how posts go from Copilot's PR to a live Jekyll page on GitHub Pages.
 

@@ -170,7 +170,7 @@ GitHub Actions pulls the container image, starts the job inside it, and every su
 
 ## The Full Picture
 
-<pre class="pintora">{`
+<Pintora code={`
 activityDiagram
   partition "build-ci-image.yml - runs once per Dockerfile change" {
     :ci/Dockerfile changed;
@@ -189,7 +189,7 @@ activityDiagram
     :htmlproofer;
     :Upload site artifact;
   }
-`}</pre>
+`} />
 
 The slow, infrequent work happens in the first workflow. The fast, frequent work happens in the second. The 6-7 minute libvips install runs once per Dockerfile change rather than on every commit.
 

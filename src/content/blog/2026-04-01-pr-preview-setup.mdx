@@ -46,7 +46,7 @@ All of this is wired up in three GitHub Actions workflow files.
 
 ## The Three-Workflow Architecture
 
-<pre class="pintora">{`
+<Pintora code={`
 activityDiagram
   partition "pr-preview.yml" {
     :PR opened / pushed;
@@ -73,7 +73,7 @@ activityDiagram
     }
     :Deploy to gh-pages root;
   }
-`}</pre>
+`} />
 
 The key design decision is that `build-site.yml` is a **reusable workflow** (`workflow_call`). Both the PR preview workflow and the production deploy workflow call it — they just pass different inputs.
 

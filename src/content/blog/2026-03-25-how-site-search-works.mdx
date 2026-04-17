@@ -32,7 +32,7 @@ The search on this site is powered by [Orama](https://orama.com), an open-source
 
 The key insight is that the index is **pre-built at deploy time**, not at search time. When you open the [search page](/search/), your browser downloads one JSON file (`search-index.json`) containing the entire pre-processed search index. After that, every query runs instantly — no network requests, no latency, no server.
 
-<pre class="pintora">{`
+<Pintora code={`
 activityDiagram
   partition "🔨 Build time - Node.js" {
     :Blog posts .md files;
@@ -46,7 +46,7 @@ activityDiagram
     :User types a query;
     :Orama searches locally → results;
   }
-`}</pre>
+`} />
 
 ## Building the Index
 
@@ -170,7 +170,7 @@ When it does run, the steps are straightforward:
 
 The `[skip ci]` tag in the commit message tells GitHub Actions not to re-trigger workflows on that commit — preventing an infinite loop where the bot's own commit kicks off another build.
 
-<pre class="pintora">{`
+<Pintora code={`
 activityDiagram
   :New post merged to main;
   :GitHub Actions build-search-index workflow triggers;
@@ -178,7 +178,7 @@ activityDiagram
   :Bot commits updated index back to main;
   :GitHub Pages rebuilds the static site;
   :Search results include the new post ✅;
-`}</pre>
+`} />
 
 The whole pipeline takes about 30 seconds. By the time GitHub Pages has rebuilt the site and the new post is live, the search index is already up to date — no manual step required.
 
