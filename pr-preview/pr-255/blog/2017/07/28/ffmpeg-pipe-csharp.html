@@ -15,7 +15,7 @@ You must also specify the input framerate — ffmpeg needs it to produce a corre
 <h2 id="piping-audio">Piping Audio</h2>
 <p>When piping raw audio, specify a format such as <code>s16le</code> (16-bit signed little-endian PCM).
 Use <code>-ar</code> to set the sample rate and <code>-ac</code> to set the channel count.</p>
-<h2 id="piping-raw-video">Piping Raw Video</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="piping-raw-video">Piping Raw Video</h2>
 <p>When piping raw pixel data, use the <code>rawvideo</code> format.
 In addition to the framerate, you must provide:</p>
 <ul>
@@ -56,7 +56,7 @@ In addition to the framerate, you must provide:</p>
 <span class="line"><span style="color:#F8F8F2">process.</span><span style="color:#A6E22E">WaitForExit</span><span style="color:#F8F8F2">();</span></span></code></pre></div>
 <h2 id="piping-multiple-streams">Piping Multiple Streams</h2>
 <p>When you have both audio and video (or any combination of multiple inputs), Standard Input is no longer enough — it can only carry one stream.
-The solution is to create a <strong>Named Pipe</strong> for each stream using <code>System.IO.Pipes.NamedPipeServerStream</code>.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+The solution is to create a <strong>Named Pipe</strong> for each stream using <code>System.IO.Pipes.NamedPipeServerStream</code>.</p>
 <p>ffmpeg reads all of its inputs sequentially, so the pipes must be written to independently of each other, or ffmpeg may stall waiting for data on one pipe while another is blocked.
 The safest approach is to make each pipe asynchronous and write to it with <code>WriteAsync</code>.</p>
 <p>Create a named pipe (here called <code>ffpipe</code>):</p>
@@ -79,7 +79,7 @@ Process creation is the same as for a single stream.</p>
 <p>When you are done with a pipe, flush and dispose it:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">csharp</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="csharp" id="code-block-5"><code><span class="line"><span style="color:#F8F8F2">pipe.</span><span style="color:#A6E22E">Flush</span><span style="color:#F8F8F2">();</span></span>
 <span class="line"><span style="color:#F8F8F2">pipe.</span><span style="color:#A6E22E">Dispose</span><span style="color:#F8F8F2">();</span></span></code></pre></div>
-<h2 id="logging">Logging</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="logging">Logging</h2>
 <p>When something goes wrong it is helpful to see ffmpeg’s own output, which it writes to stderr.
 Redirect stderr and subscribe to the <code>ErrorDataReceived</code> event to capture it:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">csharp</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="csharp" id="code-block-6"><code><span class="line"><span style="color:#66D9EF;font-style:italic">var</span><span style="color:#F8F8F2"> process </span><span style="color:#F92672">=</span><span style="color:#F92672"> new</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Process</span></span>

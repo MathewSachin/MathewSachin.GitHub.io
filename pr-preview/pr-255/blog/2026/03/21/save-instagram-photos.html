@@ -18,7 +18,7 @@ Part 14 of 27 &mdash;
 <p>This script reverses those CSS overrides directly in the page — and crucially, keeps reversing them as you scroll and new posts are injected into the DOM.</p>
 <hr/>
 <h2 id="why-persistence-matters">Why Persistence Matters</h2>
-<p>A naive one-shot approach — run the script once, unlock everything on the page — has an obvious weak point: Instagram’s feed is <strong>infinite-scroll</strong>. As you scroll down, Instagram’s JavaScript continuously:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>A naive one-shot approach — run the script once, unlock everything on the page — has an obvious weak point: Instagram’s feed is <strong>infinite-scroll</strong>. As you scroll down, Instagram’s JavaScript continuously:</p>
 <ol>
 <li>Fetches new batches of posts from the server</li>
 <li>Creates brand-new <code>&lt;img&gt;</code> DOM nodes and inserts them into the page</li>
@@ -31,7 +31,7 @@ Part 14 of 27 &mdash;
 <h2 id="using-it-on-desktop">Using it on Desktop</h2>
 <h3 id="step-1--open-instagram">Step 1 — Open Instagram</h3>
 <p>Go to <a href="https://instagram.com">instagram.com</a> and navigate to the photo or profile page you want.</p>
-<h3 id="step-2--open-the-browser-console">Step 2 — Open the Browser Console</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="step-2--open-the-browser-console">Step 2 — Open the Browser Console</h3>
 <p><strong>Windows / Linux:</strong> Press <code>F12</code> or <code>Ctrl + Shift + I</code>, then click the <strong>Console</strong> tab.<br/>
 Direct shortcut: <code>Ctrl + Shift + J</code> (Chrome) jumps straight to the Console.</p>
 <p><strong>Mac:</strong> Press <code>Cmd + Option + I</code>, then click the <strong>Console</strong> tab.<br/>
@@ -66,7 +66,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <span class="line"><span style="color:#F8F8F2">})();</span></span></code></pre></div>
 <p>You’ll see a bright pink <strong>“🛡️ Shield-Killer Observer Active…”</strong> message in the console, followed by a confirmation alert. Every image on the page is now right-clickable — and any new images that load as you scroll will be unlocked automatically.</p>
 <h3 id="step-4--save-the-photo">Step 4 — Save the Photo</h3>
-<p>Right-click any photo and choose <strong>Save image as…</strong> — or drag it straight to your desktop or a folder.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Right-click any photo and choose <strong>Save image as…</strong> — or drag it straight to your desktop or a folder.</p>
 <div class="alert alert-info"><p>⚠️ <b>The Stories Trap:</b> This script works well for Feed posts and Profile grids, but <b>Stories use a completely different layering system</b>. The Next / Previous navigation will still work, but right-clicking on a Story image won’t give you a save option — the Story rendering pipeline doesn’t expose a plain <code>&lt;img&gt;</code> you can interact with in the same way. Stick to Feed and Profile pages for reliable saving.</p></div>
 <hr/>
 <h2 id="using-it-on-mobile-bookmarklet">Using it on Mobile (Bookmarklet)</h2>
@@ -80,7 +80,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <li>Delete the entire <strong>URL</strong> and paste this one-liner in its place (copy the whole thing — it must be one continuous line):</li>
 </ul>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="plaintext" id="code-block-3"><code><span class="line"><span>javascript:(function(){console.log(&quot;%c \uD83D\uDEE1\uFE0F Shield-Killer Observer Active...&quot;,&quot;color: #ff00ff; font-weight: bold;&quot;);const killShields=()=&gt;{document.querySelectorAll(&#39;img&#39;).forEach(img=&gt;{img.style.setProperty(&#39;z-index&#39;,&#39;999&#39;,&#39;important&#39;);img.style.setProperty(&#39;pointer-events&#39;,&#39;auto&#39;,&#39;important&#39;);img.style.setProperty(&#39;position&#39;,&#39;relative&#39;,&#39;important&#39;);img.style.setProperty(&#39;user-select&#39;,&#39;auto&#39;,&#39;important&#39;);});};killShields();const observer=new MutationObserver(()=&gt;{killShields();});observer.observe(document.body,{childList:true,subtree:true});alert(&quot;Persistent Sniper Active! Shields will be auto-killed as you scroll.&quot;);})();</span></span></code></pre></div>
-<p>Save the bookmark.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Save the bookmark.</p>
 <h3 id="step-3--run-it-on-instagram">Step 3 — Run It on Instagram</h3>
 <ol>
 <li>Open Instagram in your mobile browser and navigate to the feed or profile you want.</li>
@@ -97,7 +97,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <span class="line"><span style="color:#88846F">    // ...</span></span>
 <span class="line"><span style="color:#F8F8F2">})();</span></span></code></pre></div>
 <p>This is an <strong>Immediately Invoked Function Expression (IIFE)</strong>. Wrapping the code in a function and calling it immediately keeps all variables — including <code>killShields</code> and <code>observer</code> — scoped locally, so the script doesn’t pollute the page’s global namespace or accidentally clash with Instagram’s own JavaScript variables.</p>
-<h3 id="styled-console-logging">Styled Console Logging</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="styled-console-logging">Styled Console Logging</h3>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">js</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js" id="code-block-5"><code><span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#A6E22E">log</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;%c 🛡️ Shield-Killer Observer Active...&quot;</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">&quot;color: #ff00ff; font-weight: bold;&quot;</span><span style="color:#F8F8F2">);</span></span></code></pre></div>
 <p><code>console.log</code> accepts CSS formatting when the message starts with <code>%c</code>. The second argument is a CSS string applied to everything after <code>%c</code>. This is a small UX touch — the bright magenta text makes it immediately obvious in a crowded console that the observer is running and ready.</p>
 <h3 id="the-killshields-helper-function">The <code>killShields</code> Helper Function</h3>
@@ -120,7 +120,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <h3 id="running-immediately">Running Immediately</h3>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">js</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-7" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js" id="code-block-7"><code><span class="line"><span style="color:#A6E22E">killShields</span><span style="color:#F8F8F2">();</span></span></code></pre></div>
 <p>This first call handles every image that was already in the DOM when the script ran. Without it, all currently visible photos would remain locked until the observer first fires.</p>
-<h3 id="the-mutationobserver--watching-for-new-posts">The MutationObserver — Watching for New Posts</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="the-mutationobserver--watching-for-new-posts">The MutationObserver — Watching for New Posts</h3>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">js</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js" id="code-block-8"><code><span class="line"><span style="color:#66D9EF;font-style:italic">const</span><span style="color:#F8F8F2"> observer </span><span style="color:#F92672">=</span><span style="color:#F92672"> new</span><span style="color:#A6E22E"> MutationObserver</span><span style="color:#F8F8F2">((</span><span style="color:#FD971F;font-style:italic">mutations</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF;font-style:italic">=&gt;</span><span style="color:#F8F8F2"> {</span></span>
 <span class="line"><span style="color:#A6E22E">    killShields</span><span style="color:#F8F8F2">();</span></span>
 <span class="line"><span style="color:#F8F8F2">});</span></span>
@@ -138,7 +138,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <p>A simple <code>alert()</code> to confirm the observer is running before you close the console and start scrolling. Dismiss it and the observer keeps running silently in the background.</p>
 <hr/>
 <h2 id="why-does-instagram-block-this">Why Does Instagram Block This?</h2>
-<p>Platforms restrict right-clicking and image saving for a few reasons:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Platforms restrict right-clicking and image saving for a few reasons:</p>
 <ul>
 <li><strong>Copyright protection</strong> — Many photos are the intellectual property of the creator or a brand, and the platform wants to discourage easy copying.</li>
 <li><strong>Engagement funnel</strong> — Keeping content inside the platform (via “Share” or “Save to Collection”) keeps users on-site and feeds their recommendation algorithms.</li>

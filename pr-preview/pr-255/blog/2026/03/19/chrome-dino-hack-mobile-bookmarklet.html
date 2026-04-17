@@ -13,7 +13,7 @@ Part 11 of 27 &mdash;
 <p>A bookmarklet is a regular web bookmark — but instead of a website URL, it contains JavaScript code. When you tap the bookmark, the browser executes that code on whatever page you’re currently viewing.</p>
 <p>It’s a technique that has been around for decades and works in virtually every mobile browser, because tapping a bookmark is just a normal browser action, not a developer feature.</p>
 <p>Want to create your own bookmarklets from any JavaScript snippet? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> handles the IIFE wrapping, minification, and URI encoding for you — just paste your code and it’s ready to use.</p>
-<h2 id="the-catch--native-chromedino-wont-work">The Catch — Native <code>chrome://dino</code> Won’t Work</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="the-catch--native-chromedino-wont-work">The Catch — Native <code>chrome://dino</code> Won’t Work</h2>
 <p>For security reasons, modern mobile Chrome blocks bookmarklets from running on native <code>chrome://</code> pages. So you <strong>cannot</strong> use this method on the built-in <code>chrome://dino</code> page.</p>
 <div class="alert alert-info"><p>🎮 <b>Use a hosted mirror instead.</b> Head to <a href="https://chromedino.com" target="_blank" rel="noopener">chromedino.com</a> (or any other web-hosted copy of the game). The bookmarklet will work perfectly there.</p></div>
 <h2 id="setting-it-up">Setting It Up</h2>
@@ -26,7 +26,7 @@ Part 11 of 27 &mdash;
 <li>Delete the <strong>URL</strong> completely and paste this exact code in its place:</li>
 </ul>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="plaintext" id="code-block-1"><code><span class="line"><span>javascript:var originalGameOver=Runner.prototype.gameOver;Runner.prototype.gameOver=function(){};</span></span></code></pre></div>
-<p>Save the bookmark.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Save the bookmark.</p>
 <h3 id="step-3--go-to-the-hosted-game">Step 3 — Go to the Hosted Game</h3>
 <p>Navigate to <a href="https://chromedino.com">chromedino.com</a> (or another hosted mirror). Start a game so the dino is running.</p>
 <h3 id="step-4--inject-the-script">Step 4 — Inject the Script</h3>
@@ -34,7 +34,7 @@ Part 11 of 27 &mdash;
 <p>Tap your <strong>address bar</strong>, type <strong>Dino God Mode</strong>, and when the bookmark appears in the dropdown suggestions, tap it.</p>
 <p>The script will inject instantly — your dino is now invincible. Cacti and pterodactyls will pass right through it without ending the game.</p>
 <h2 id="how-it-works">How It Works</h2>
-<p>The bookmarklet runs the same JavaScript you’d type into a desktop DevTools console — it just uses a different delivery mechanism. The <code>javascript:</code> URL scheme tells the browser to evaluate the code as a script rather than navigate to a page.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The bookmarklet runs the same JavaScript you’d type into a desktop DevTools console — it just uses a different delivery mechanism. The <code>javascript:</code> URL scheme tells the browser to evaluate the code as a script rather than navigate to a page.</p>
 <p>The code itself does two things in one line:</p>
 <ol>
 <li>Saves the original <code>gameOver</code> function to <code>originalGameOver</code> (so you can restore it later if you want).</li>

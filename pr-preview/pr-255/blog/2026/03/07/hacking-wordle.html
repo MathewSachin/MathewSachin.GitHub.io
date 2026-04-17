@@ -13,7 +13,7 @@ Part 5 of 27 &mdash;
 <p>Play it <a href="https://www.nytimes.com/games/wordle/index.html">here</a>!</p>
 <p>But here’s a little secret: <strong>your browser already knows the answer before you even start typing.</strong> 🤫</p>
 <p>When you open Wordle, the game quietly asks the server, <em>“Hey, what’s today’s word?”</em> The server sends back the answer — and your browser receives it. We’re going to intercept that conversation.</p>
-<h2 id="opening-developer-tools">Opening Developer Tools</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="opening-developer-tools">Opening Developer Tools</h2>
 <p>This is the magic panel that web developers use to peek under the hood of any website. Don’t be intimidated — you’re about to use it like a pro.</p>
 <div class="alert alert-info"><p>📱 <b>On a phone or tablet?</b> Mobile browsers don’t have DevTools — but you can still hack Wordle using a bookmarklet. No computer needed!<br/>
 👉 <a href="/pr-preview/pr-255/blog/2026/03/19/hacking-wordle-mobile-bookmarklet.html">Hacking Wordle Mobile Bookmarklet</a></p></div>
@@ -29,14 +29,14 @@ Part 5 of 27 &mdash;
 <p>This tab shows you every single request your browser makes — every image, script, and piece of data it fetches from the internet.</p>
 <h2 id="refreshing-the-page-to-capture-traffic">Refreshing the Page to Capture Traffic</h2>
 <p>The Network tab only records requests made <em>while it’s open</em>. Since we opened DevTools after the page loaded, we need to reload the page so it captures everything fresh.</p>
-<p>Press <strong><code>Ctrl + R</code></strong> (or <strong><code>Cmd + R</code></strong> on Mac) to refresh the page, or just click the refresh button in your browser.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Press <strong><code>Ctrl + R</code></strong> (or <strong><code>Cmd + R</code></strong> on Mac) to refresh the page, or just click the refresh button in your browser.</p>
 <p>You’ll see the Network tab fill up with a long list of items — all the stuff your browser downloaded to show you the Wordle page. Don’t panic, we’re going to filter this down!</p>
 <h2 id="filtering-by-fetchxhr">Filtering by Fetch/XHR</h2>
 <p>See the filter buttons near the top of the Network tab? They look like: <strong>All, Fetch/XHR, JS, CSS, Img…</strong></p>
 <p>Click <strong>Fetch/XHR</strong>.</p>
 <p>This filters the list to show only the <em>data requests</em> — the bits of information the page fetched from a server. This is where the good stuff hides.</p>
 <h2 id="finding-todays-json-file">Finding Today’s JSON File</h2>
-<p>Now look through the filtered list for a file that includes today’s date in its name. It will look something like:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Now look through the filtered list for a file that includes today’s date in its name. It will look something like:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="plaintext" id="code-block-1"><code><span class="line"><span>2026-03-07.json</span></span></code></pre></div>
 <p>(with today’s date, of course)</p>
 <p>Click on it. You’ve found the answer file! 🎯</p>
@@ -52,7 +52,7 @@ Part 5 of 27 &mdash;
 <span class="line"><span style="color:#66D9EF;font-style:italic">  &quot;solution&quot;</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">&quot;crane&quot;</span><span style="color:#F8F8F2">,</span></span>
 <span class="line"><span style="color:#F44747">  ...</span></span>
 <span class="line"><span style="color:#F8F8F2">}</span></span></code></pre></div>
-<p>There it is. <strong><code>solution</code></strong> — that’s today’s Wordle answer. 🏆</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>There it is. <strong><code>solution</code></strong> — that’s today’s Wordle answer. 🏆</p>
 <p>Go ahead and type it in as your first guess and watch all five tiles go green. You’re basically a hacker now.</p>
 <h2 id="you-did-it">You Did It!</h2>
 <p>You just used <strong>browser developer tools</strong> to intercept live data from a website — the same technique web developers and security researchers use every day.</p>

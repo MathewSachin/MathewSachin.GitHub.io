@@ -14,7 +14,7 @@ Part 15 of 27 &mdash;
 <h2 id="using-it-on-desktop">Using it on Desktop</h2>
 <h3 id="step-1--open-instagram-and-find-your-reel">Step 1 — Open Instagram and find your Reel</h3>
 <p>Go to <a href="https://instagram.com">instagram.com</a> and scroll to the Reel you want to save. Make sure it is <strong>fully visible on screen</strong> — not partially scrolled off the top or bottom.</p>
-<h3 id="step-2--open-the-browser-console">Step 2 — Open the Browser Console</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="step-2--open-the-browser-console">Step 2 — Open the Browser Console</h3>
 <p><strong>Windows / Linux:</strong> Press <code>F12</code> or <code>Ctrl + Shift + I</code>, then click the <strong>Console</strong> tab.<br/>
 Direct shortcut: <code>Ctrl + Shift + J</code> (Chrome) jumps straight to the Console.</p>
 <p><strong>Mac:</strong> Press <code>Cmd + Option + I</code>, then click the <strong>Console</strong> tab.<br/>
@@ -78,7 +78,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <p>The Reel will rewind to the start, play through once, and then your browser will automatically download the file as <code>IG_Targeted_Capture_&lt;timestamp&gt;.webm</code>.</p>
 <hr/>
 <h2 id="using-it-on-mobile-bookmarklet">Using it on Mobile (Bookmarklet)</h2>
-<p>Mobile browsers don’t have a DevTools console, but they support <strong>bookmarklets</strong> — bookmarks whose URL is JavaScript code. Tapping one runs the script on whatever page you’re currently viewing.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Mobile browsers don’t have a DevTools console, but they support <strong>bookmarklets</strong> — bookmarks whose URL is JavaScript code. Tapping one runs the script on whatever page you’re currently viewing.</p>
 <h3 id="step-1--create-a-new-bookmark">Step 1 — Create a New Bookmark</h3>
 <p>In your mobile browser, bookmark any page. The URL doesn’t matter — you’ll replace it in the next step.</p>
 <h3 id="step-2--edit-the-bookmark">Step 2 — Edit the Bookmark</h3>
@@ -94,7 +94,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <li>Open Instagram in your mobile browser and scroll to the Reel you want — make sure it’s fully visible on screen.</li>
 <li>Tap the <strong>address bar</strong>, type <code>IG Reel Sniper</code>, and when the bookmark appears in the dropdown, tap it.</li>
 </ol>
-<p>The script will inject and run. The Reel plays through once and the file downloads automatically.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The script will inject and run. The Reel plays through once and the file downloads automatically.</p>
 <div class="alert alert-info"><p>💡 <b>Tip:</b> Simply tapping the bookmark from the bookmarks menu often won’t execute the JavaScript on mobile. Always trigger it via the address bar dropdown.</p></div>
 <p>Want to write your own bookmarklets? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> turns any JavaScript snippet into a ready-to-use bookmarklet in seconds.</p>
 <hr/>
@@ -116,7 +116,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <span class="line"><span style="color:#F8F8F2">        video </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> v;</span></span>
 <span class="line"><span style="color:#F8F8F2">    }</span></span>
 <span class="line"><span style="color:#F8F8F2">});</span></span></code></pre></div>
-<p><code>getBoundingClientRect()</code> returns the position of an element relative to the current viewport. This loop checks each video’s coordinates against the window’s height to find the one actually on screen — the “lead actor” — ignoring everything waiting in the wings.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p><code>getBoundingClientRect()</code> returns the position of an element relative to the current viewport. This loop checks each video’s coordinates against the window’s height to find the one actually on screen — the “lead actor” — ignoring everything waiting in the wings.</p>
 <h3 id="audio-management">Audio Management</h3>
 <p>Before recording starts, the script pauses every other video on the page:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">js</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js" id="code-block-4"><code><span class="line"><span style="color:#F8F8F2">allVideos.</span><span style="color:#A6E22E">forEach</span><span style="color:#F8F8F2">(</span><span style="color:#FD971F;font-style:italic">v</span><span style="color:#66D9EF;font-style:italic"> =&gt;</span><span style="color:#F8F8F2"> { </span><span style="color:#F92672">if</span><span style="color:#F8F8F2">(v </span><span style="color:#F92672">!==</span><span style="color:#F8F8F2"> video) v.</span><span style="color:#A6E22E">pause</span><span style="color:#F8F8F2">(); });</span></span></code></pre></div>
@@ -126,7 +126,7 @@ Direct shortcut: <code>Cmd + Option + J</code> (Chrome) jumps straight to the Co
 <p>After the script seeks the video back to <code>currentTime = 0</code>, there’s a short intentional delay before recording starts. This gives the browser’s video engine time to flush its cache and prepare a clean stream. Without it, the CPU can spike trying to handle seeking, frame decoding, and recorder initialisation simultaneously — producing a noticeable stutter at the beginning of the saved file.</p>
 <h3 id="capturing-the-stream">Capturing the Stream</h3>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">js</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js" id="code-block-6"><code><span class="line"><span style="color:#66D9EF;font-style:italic">const</span><span style="color:#F8F8F2"> stream </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> video.captureStream </span><span style="color:#F92672">?</span><span style="color:#F8F8F2"> video.</span><span style="color:#A6E22E">captureStream</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">:</span><span style="color:#F8F8F2"> video.</span><span style="color:#A6E22E">mozCaptureStream</span><span style="color:#F8F8F2">();</span></span></code></pre></div>
-<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/captureStream">MediaStream Capture API</a> lets the browser treat a playing <code>&lt;video&gt;</code> element as a live stream source. Chrome and Edge use <code>captureStream()</code>; Firefox uses <code>mozCaptureStream()</code>. The ternary operator picks whichever is available.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/captureStream">MediaStream Capture API</a> lets the browser treat a playing <code>&lt;video&gt;</code> element as a live stream source. Chrome and Edge use <code>captureStream()</code>; Firefox uses <code>mozCaptureStream()</code>. The ternary operator picks whichever is available.</p>
 <h3 id="recording-and-saving">Recording and Saving</h3>
 <p><code>MediaRecorder</code> encodes the stream into VP9 video + Opus audio at 5 Mbps — a reasonable quality ceiling for a Reel. Data arrives in chunks via <code>ondataavailable</code>, accumulated in an array. When the video ends (<code>video.onended</code>), the recorder stops, all chunks are assembled into a <code>Blob</code>, and a temporary <code>&lt;a&gt;</code> element triggers the download.</p>
 <h3 id="the-kill-switch">The Kill Switch</h3>

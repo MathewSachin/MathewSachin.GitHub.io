@@ -14,7 +14,7 @@ Part 24 of 27 &mdash;
 <p>Every web page you visit — every photo that loads, every video that plays, every word you read — has already been downloaded to your machine. The moment your browser renders a WhatsApp Status on screen, that media file is sitting in your computer’s memory. WhatsApp just chose not to put a Save button on it.</p>
 <p>That is where DevTools comes in.</p>
 <p>DevTools (press <code>F12</code> in any Chromium browser or Firefox) is the professional web developer’s Swiss Army knife, shipped free with every browser on the planet. It lets you inspect HTML, intercept network traffic, and manipulate CSS in real time. You do not need to write a single line of code to use the techniques in this guide.</p>
-<p>By the end of this post you will know how to:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>By the end of this post you will know how to:</p>
 <ul>
 <li>Download photo Statuses using the <strong>Elements</strong> panel</li>
 <li>Download video Statuses using the <strong>Network</strong> tab</li>
@@ -30,7 +30,7 @@ Part 24 of 27 &mdash;
 <p>When people hear “downloading from DevTools” they sometimes imagine they are doing something covert. They are not. The browser — Chrome, Edge, Firefox, Safari — has already done the downloading for you. It had to. You cannot render a video frame on screen without first receiving the video bytes from the server.</p>
 <p>What WhatsApp omits is the <em>convenience</em> of a Save button. DevTools simply exposes what the browser already has in memory. Think of it as reading the browser’s own notebook rather than stealing from WhatsApp’s server.</p>
 <hr/>
-<h3 id="photo-statuses--the-inspect-element-trick">Photo Statuses — The Inspect Element Trick</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="photo-statuses--the-inspect-element-trick">Photo Statuses — The Inspect Element Trick</h3>
 <p>Photo Statuses are served as <code>blob:</code> URLs — temporary in-memory addresses that the browser creates for media it has already decoded. Finding them is a matter of knowing where to look in the Elements panel.</p>
 <p><strong>Step 1 — Open WhatsApp Web and navigate to a photo Status</strong></p>
 <p>Go to <a href="https://web.whatsapp.com">web.whatsapp.com</a> and click the Status tab (the circle icons at the top of the left sidebar). Open a photo Status and let it finish loading fully.</p>
@@ -55,7 +55,7 @@ Part 24 of 27 &mdash;
 <div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Platform</th><th>Shortcut</th></tr></thead><tbody><tr><td>Windows / Linux</td><td><code>F12</code> or <code>Ctrl + Shift + I</code></td></tr><tr><td>Mac</td><td><code>Cmd + Option + I</code></td></tr></tbody></table></div>
 <p>Click the <strong>Elements</strong> tab if it is not already selected.</p>
 <p><strong>Step 3 — Inspect the photo</strong></p>
-<p>Right-click anywhere on the Status photo itself (not the UI around it) and choose <strong>Inspect</strong> (or <strong>Inspect Element</strong>). DevTools will highlight the exact DOM node responsible for that image.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Right-click anywhere on the Status photo itself (not the UI around it) and choose <strong>Inspect</strong> (or <strong>Inspect Element</strong>). DevTools will highlight the exact DOM node responsible for that image.</p>
 <p><strong>Step 4 — Find the <code>&lt;img src=&quot;blob:...&quot; /&gt;</code> tag</strong></p>
 <p>You should see something like this highlighted in the Elements panel:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">html</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="html" id="code-block-1"><code><span class="line"><span style="color:#F8F8F2">&lt;</span><span style="color:#F92672">img</span><span style="color:#A6E22E"> src</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">&quot;blob:https://web.whatsapp.com/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&quot;</span></span>
@@ -64,7 +64,7 @@ Part 24 of 27 &mdash;
 <p><strong>Step 5 — Open the blob URL in a new tab</strong></p>
 <p>Right-click the <code>src=&quot;blob:…&quot;</code> value in the Elements panel and choose <strong>Open in new tab</strong> (Chrome/Edge) or <strong>Open Link in New Tab</strong> (Firefox). The full-resolution photo opens in a clean browser tab.</p>
 <p><strong>Step 6 — Save the photo</strong></p>
-<p>Right-click the photo in the new tab and choose <strong>Save image as…</strong> — or press <code>Ctrl + S</code>. Done.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Right-click the photo in the new tab and choose <strong>Save image as…</strong> — or press <code>Ctrl + S</code>. Done.</p>
 <div class="alert alert-info"><p>💡 <b>Blob URL lifetimes:</b> A <code>blob:</code> URL is only valid while the originating tab is open and has not been navigated away from. If you close the WhatsApp tab before opening the blob URL, the link will return a blank page. Do step 5 before closing or refreshing WhatsApp.</p></div>
 <hr/>
 <h3 id="video-statuses--the-network-tab-trick">Video Statuses — The Network Tab Trick</h3>
@@ -73,14 +73,14 @@ Part 24 of 27 &mdash;
 <p>This is critical. The Network tab only records requests that happen <em>while it is open</em>. If you open DevTools after the video has already loaded, the entry will not appear.</p>
 <p>Press <code>F12</code> (or <code>Ctrl + Shift + I</code>) while you are still on the Status list — before you click into a video Status.</p>
 <p><strong>Step 2 — Go to the Network tab and filter by Media</strong></p>
-<p>Click the <strong>Network</strong> tab at the top of DevTools. You will see a row of filter buttons. Click <strong>Media</strong> (in Chrome/Edge) or type <code>media</code> in the filter box (Firefox). This hides all the CSS, JavaScript, and image traffic and shows you only audio and video requests.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Click the <strong>Network</strong> tab at the top of DevTools. You will see a row of filter buttons. Click <strong>Media</strong> (in Chrome/Edge) or type <code>media</code> in the filter box (Firefox). This hides all the CSS, JavaScript, and image traffic and shows you only audio and video requests.</p>
 <p><strong>Step 3 — Play the video Status</strong></p>
 <p>Click the video Status. As it buffers and plays, one or more entries will appear in the Network panel. Look for a file ending in <code>.mp4</code> or <code>.enc</code> — WhatsApp uses its own CDN filenames but the entries are clearly labelled as <code>video/mp4</code> in the Type column.</p>
 <p><strong>Step 4 — Open the video URL in a new tab</strong></p>
 <p>Click the <code>.mp4</code> entry to select it. In the <strong>Headers</strong> sub-tab you will see the full Request URL. Right-click the entry in the list and choose <strong>Open in new tab</strong>.</p>
 <p>Alternatively: with the entry selected, click the <strong>Response</strong> or <strong>Preview</strong> sub-tab, then right-click the video preview and choose <strong>Save video as…</strong>.</p>
 <p><strong>Step 5 — Download</strong></p>
-<p>In the new tab the video plays natively in the browser. Right-click it and choose <strong>Save video as…</strong> to download the <code>.mp4</code> file.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>In the new tab the video plays natively in the browser. Right-click it and choose <strong>Save video as…</strong> to download the <code>.mp4</code> file.</p>
 <div class="alert alert-info"><p>💡 <b>CDN URL expiry:</b> WhatsApp’s media CDN URLs include a signature that expires after a short window (typically a few hours). Download the file immediately — do not bookmark the CDN URL expecting it to work tomorrow.</p></div>
 <hr/>
 <h2 id="part-2-stealing-uncopyable-text-statuses">Part 2: Stealing Uncopyable Text Statuses</h2>
@@ -91,7 +91,7 @@ Part 24 of 27 &mdash;
 <p>This property tells the browser not to allow text selection on an element. It is a legitimate UI design choice — WhatsApp uses it to keep the Status overlay feeling clean and intentional. But it is a <em>visual</em> restriction applied by a stylesheet. The text is still in the DOM, exactly where you would expect it.</p>
 <hr/>
 <h3 id="the-solution-dom-manipulation-in-the-elements-panel">The Solution: DOM Manipulation in the Elements Panel</h3>
-<p>The Elements panel does not care about <code>user-select</code>. It lets you read (and edit) the raw HTML regardless of any CSS rules that would otherwise prevent interaction.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The Elements panel does not care about <code>user-select</code>. It lets you read (and edit) the raw HTML regardless of any CSS rules that would otherwise prevent interaction.</p>
 <p><strong>Step 1 — Right-click the uncopyable text</strong></p>
 <p>Open the text Status on WhatsApp Web. Right-click directly on the text you want to copy and choose <strong>Inspect</strong> (or <strong>Inspect Element</strong>). DevTools opens with the relevant element highlighted.</p>
 <p><strong>Step 2 — Find the raw text in the Elements panel</strong></p>
@@ -102,7 +102,7 @@ Part 24 of 27 &mdash;
 <span class="line"><span style="color:#F8F8F2">&lt;/</span><span style="color:#F92672">span</span><span style="color:#F8F8F2">&gt;</span></span></code></pre></div>
 <p>The actual text — exactly as the person typed it, emoji and all — is right there between the opening and closing tags.</p>
 <p><strong>Step 3 — Copy the text from the Elements panel</strong></p>
-<p>Double-click the text node itself (the visible words inside the tag, not the tag name). The text will become editable in the panel. Press <code>Ctrl + A</code> to select all, then <code>Ctrl + C</code> to copy.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Double-click the text node itself (the visible words inside the tag, not the tag name). The text will become editable in the panel. Press <code>Ctrl + A</code> to select all, then <code>Ctrl + C</code> to copy.</p>
 <p>Alternatively: right-click the highlighted element in the Elements panel and choose <strong>Copy</strong> → <strong>Copy element</strong> (this copies the outer HTML including the text). Then paste it into any text editor and strip the tags — the text is there.</p>
 <p><strong>Step 4 — Paste anywhere</strong></p>
 <p>Open any text editor, note-taking app, or chat window and press <code>Ctrl + V</code>. The text — previously “uncopyable” — is now on your clipboard.</p>
@@ -111,7 +111,7 @@ Part 24 of 27 &mdash;
 <h2 id="why-this-works-css-is-a-suggestion-to-the-browser-not-a-lock">Why This Works: CSS Is a Suggestion to the Browser, Not a Lock</h2>
 <p>It is worth taking a moment to understand <em>why</em> these techniques are not some clever exploit but simply how browsers work.</p>
 <p>When a web page sends CSS like <code>user-select: none</code> or <code>pointer-events: none</code> to your browser, it is giving your browser a <em>hint</em> about how to behave during normal user interaction. Your browser follows those hints to deliver the experience the developer intended.</p>
-<p>But DevTools bypasses the rendering layer entirely. It speaks directly to the browser’s internal DOM engine. CSS rules exist in the <em>presentation</em> layer; DevTools sits in the <em>developer tooling</em> layer, which has higher authority. This is exactly why developers can use DevTools to debug CSS in the first place — if CSS rules blocked DevTools too, no one could ever fix a broken layout.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>But DevTools bypasses the rendering layer entirely. It speaks directly to the browser’s internal DOM engine. CSS rules exist in the <em>presentation</em> layer; DevTools sits in the <em>developer tooling</em> layer, which has higher authority. This is exactly why developers can use DevTools to debug CSS in the first place — if CSS rules blocked DevTools too, no one could ever fix a broken layout.</p>
 <p>The same principle applies to the Network tab: network requests happen at the <em>browser transport</em> layer, which DevTools is specifically designed to observe. WhatsApp cannot hide its network traffic from the browser’s own inspector.</p>
 <hr/>
 <h2 id="conclusion-devtools-unlocks-the-entire-web">Conclusion: DevTools Unlocks the Entire Web</h2>

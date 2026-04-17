@@ -13,7 +13,7 @@ Part 6 of 9 &mdash;
 <p>This sounds appealing. Set it and forget it. Google presumably has more data on ad performance than you do, so why second-guess it?</p>
 <p>Here’s why.</p>
 <h2 id="what-auto-ads-actually-do">What Auto Ads Actually Do</h2>
-<p>In practice, Auto Ads treat your page as a container to fill. Google’s optimisation target is <strong>click-through revenue</strong> — not reader experience. Those two objectives often diverge:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>In practice, Auto Ads treat your page as a container to fill. Google’s optimisation target is <strong>click-through revenue</strong> — not reader experience. Those two objectives often diverge:</p>
 
 
 
@@ -57,7 +57,7 @@ Part 6 of 9 &mdash;
 <li>Tables (<code>&lt;table&gt;</code>)</li>
 <li>Figures and images (<code>&lt;figure&gt;</code>, <code>&lt;picture&gt;</code>)</li>
 </ul>
-<p>After every 7th element, an ad unit is injected. That threshold is controlled by a single value in <code>_config.yml</code>:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>After every 7th element, an ad unit is injected. That threshold is controlled by a single value in <code>_config.yml</code>:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="yaml" id="code-block-1"><code><span class="line"><span style="color:#88846F"># Insert an in-content ad block after every N content elements</span></span>
 <span class="line"><span style="color:#F92672">ad_density</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">7</span></span></code></pre></div>
 <p>The Liquid include is simple:</p>
@@ -77,7 +77,7 @@ Part 6 of 9 &mdash;
 <span class="line"><span style="color:#F8F8F2">&lt;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">&gt;</span></span></code></pre></div>
 <p>On mobile, the ad stretches to full viewport width (using a negative margin trick) so it uses space that would otherwise be dead padding. That’s a separate CSS rule, not something Auto Ads does cleanly.</p>
 <h3 id="unfilled-slots-disappear">Unfilled Slots Disappear</h3>
-<p>One detail worth mentioning: AdSense sometimes returns an unfilled slot — no ad to show because there’s no matching inventory for that visitor. With Auto Ads, that leaves a blank gap. With custom placement, a single CSS rule collapses the space entirely:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>One detail worth mentioning: AdSense sometimes returns an unfilled slot — no ad to show because there’s no matching inventory for that visitor. With Auto Ads, that leaves a blank gap. With custom placement, a single CSS rule collapses the space entirely:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">css</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="css" id="code-block-4"><code><span class="line"><span style="color:#88846F">/* Hide the whole ad block when AdSense reports the slot is unfilled */</span></span>
 <span class="line"><span style="color:#A6E22E">.in-content-ad:has</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">ins</span><span style="color:#F8F8F2">[</span><span style="color:#A6E22E">data-ad-status</span><span style="color:#F92672">=</span><span style="color:#E6DB74">&quot;unfilled&quot;</span><span style="color:#F8F8F2">]) {</span></span>
 <span class="line"><span style="color:#66D9EF;font-style:italic">  display</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">none</span><span style="color:#F8F8F2">;</span></span>
@@ -154,7 +154,7 @@ Part 6 of 9 &mdash;
 <span class="line"><span style="color:#F92672">title</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">&quot;Short post&quot;</span></span>
 <span class="line"><span style="color:#F92672">ads</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">false</span></span>
 <span class="line"><span style="color:#F8F8F2">---</span></span></code></pre></div>
-<p>All posts default to <code>ads: true</code> via <code>_config.yml</code>, so you only need the override when you want to suppress ads. The Liquid templates check <code>{% if page.ads %}</code> before injecting anything — no ads load at all if the key is false, including the AdSense script itself.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>All posts default to <code>ads: true</code> via <code>_config.yml</code>, so you only need the override when you want to suppress ads. The Liquid templates check <code>{% if page.ads %}</code> before injecting anything — no ads load at all if the key is false, including the AdSense script itself.</p>
 <h2 id="the-implementation-all-in-one-place">The Implementation, All In One Place</h2>
 <p>To replicate this on your own Jekyll site:</p>
 <ol>
@@ -193,7 +193,7 @@ Part 6 of 9 &mdash;
 <h2 id="why-not-just-use-a-sidebar-ad">Why Not Just Use a Sidebar Ad?</h2>
 <p>This site does have a sidebar ad unit on desktop. But sidebar ads have well-documented <a href="https://en.wikipedia.org/wiki/Banner_blindness">banner blindness</a> — readers have trained themselves to ignore anything in the right rail. In-content ads, appearing in the natural reading flow, have significantly higher viewability rates.</p>
 <p>The combination — sidebar on desktop, in-content on both desktop and mobile — gives reasonable coverage without stacking multiple ads in the same vertical space.</p>
-<h2 id="the-actual-reader-experience">The Actual Reader Experience</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="the-actual-reader-experience">The Actual Reader Experience</h2>
 <p>The goal of all of this is an ad implementation that feels like it belongs on the page rather than being bolted on top of it. Ads labelled “Advertisement”, appearing after natural pause points in the content, with no overlays or popups — that’s the version of ads I’d be comfortable seeing on a site I was reading.</p>
 <p>Whether it earns less than Auto Ads would have, I genuinely don’t know. But the reading experience is consistent, the pages score well on Core Web Vitals, and nobody’s complained about a floating banner covering the screen mid-scroll.</p>
 <p>That feels like the right trade-off.</p>

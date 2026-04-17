@@ -38,7 +38,7 @@ Part 5 of 9 &mdash;
 <div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Scenario</th><th>The risk</th></tr></thead><tbody><tr><td>New blog post with a pintora diagram</td><td>Might render incorrectly after minification</td></tr><tr><td>Layout change touching CSS</td><td>Could break other pages you didn’t check</td></tr><tr><td>Jekyll plugin upgrade</td><td>Subtle rendering differences you won’t catch locally</td></tr><tr><td>Baseurl-sensitive links</td><td>Works on localhost, breaks on GitHub Pages</td></tr></tbody></table></div>
 <p>The standard fix for this is a <strong>staging environment</strong> — a separate deployment you can inspect before promoting changes to production. But spinning up and maintaining a whole separate server for a static blog feels wildly over-engineered.</p>
 <p>The better answer is <strong>PR previews</strong>: a temporary, isolated deployment of exactly what’s in your pull request, automatically created every time you open or push to a PR.</p>
-<h2 id="how-it-works-on-this-site">How It Works on This Site</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="how-it-works-on-this-site">How It Works on This Site</h2>
 <p>Every PR gets a live preview at:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="plaintext" id="code-block-1"><code><span class="line"><span>https://mathewsachin.github.io/pr-preview/pr-{NUMBER}/</span></span></code></pre></div>
 <p>The preview is:</p>
@@ -91,7 +91,7 @@ partition &quot;deploy.yml&quot; {
 <span class="line"><span style="color:#F92672">        description</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">&#39;Disables Google Analytics and AdSense&#39;</span></span>
 <span class="line"><span style="color:#F92672">        type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">boolean</span></span>
 <span class="line"><span style="color:#F92672">        default</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">false</span></span></code></pre></div>
-<p>It accepts two inputs:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>It accepts two inputs:</p>
 <ul>
 <li><strong><code>baseurl</code></strong> — for previews this is <code>/pr-preview/pr-42</code>; for production it’s empty. This gets appended to <code>_config.yml</code> at build time so every <code>relative_url</code> filter in Jekyll produces the right path.</li>
 <li><strong><code>testing</code></strong> — when <code>true</code>, Google analytics and AdSense includes are disabled. You don’t want preview traffic polluting your analytics and serving ads.</li>
@@ -129,7 +129,7 @@ partition &quot;deploy.yml&quot; {
 <li><strong>Updates</strong> that comment on every subsequent push</li>
 <li><strong>Tears down</strong> the subdirectory and updates the comment to say “preview removed” when the PR is closed</li>
 </ol>
-<h2 id="deployyml-keeping-previews-safe-during-production-deploy">deploy.yml: Keeping Previews Safe During Production Deploy</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="deployyml-keeping-previews-safe-during-production-deploy">deploy.yml: Keeping Previews Safe During Production Deploy</h2>
 <p>The production deploy uses <a href="https://github.com/JamesIves/github-pages-deploy-action">JamesIves/github-pages-deploy-action</a>, which by default wipes the <code>gh-pages</code> branch clean before deploying. That would delete every live preview.</p>
 <p>The fix is one line:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">yaml</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="yaml" id="code-block-6"><code><span class="line"><span style="color:#F8F8F2">- </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Deploy to gh-pages branch</span></span>
@@ -148,7 +148,7 @@ partition &quot;deploy.yml&quot; {
 <li><strong>Pintora diagrams</strong> — the JS-rendered diagrams look fine in dev but can have sizing issues when the layout CSS is minified</li>
 </ul>
 <p>The preview acts as a complete end-to-end test of the deployment pipeline itself, not just the content.</p>
-<h2 id="the-cost-zero">The Cost: Zero</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="the-cost-zero">The Cost: Zero</h2>
 <p>The entire setup runs on GitHub Actions free tier. For a public repository, GitHub Actions minutes are unlimited. The <code>gh-pages</code> branch storage cost is negligible — each PR preview is just a folder of static HTML/CSS/JS, a few hundred KB at most, and it’s deleted when the PR closes.</p>
 <p>No Netlify subscription. No Vercel project. No Cloudflare Pages configuration. Just the same GitHub Pages hosting the production site already uses, with a clever subdirectory trick.</p>
 <h2 id="summary">Summary</h2>

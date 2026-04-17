@@ -40,7 +40,7 @@ The only difference is the URL format:</p>
 
 
 <div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Format</th><th>URL</th></tr></thead><tbody><tr><td>Shorts player</td><td><code>https://www.youtube.com/shorts/dQw4w9WgXcQ</code></td></tr><tr><td>Normal player</td><td><code>https://www.youtube.com/watch?v=dQw4w9WgXcQ</code></td></tr></tbody></table></div>
-<p><strong>The manual fix:</strong></p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p><strong>The manual fix:</strong></p>
 <ol>
 <li>Look at the address bar — note the video ID after <code>/shorts/</code></li>
 <li>Delete <code>/shorts/</code> and replace it with <code>/watch?v=</code></li>
@@ -80,7 +80,7 @@ A <strong>bookmarklet</strong> is a bookmark whose address is a snippet of JavaS
 Click it on any Shorts page and it redirects you to the normal player instantly — no typing required.</p>
 <p><strong>The bookmarklet code:</strong></p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="plaintext" id="code-block-1"><code><span class="line"><span>javascript:(function(){var m=location.pathname.match(/\/shorts\/([A-Za-z0-9_-]+)/);if(m)location.href=&#39;https://www.youtube.com/watch?v=&#39;+m[1];})();</span></span></code></pre></div>
-<h3 id="how-to-install-it">How to install it</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="how-to-install-it">How to install it</h3>
 <p><strong>Desktop (Chrome, Edge, Firefox):</strong></p>
 <ol>
 <li>Show the bookmarks bar if it’s hidden: <code>Ctrl + Shift + B</code> (Windows/Linux) or <code>Cmd + Shift + B</code> (Mac)</li>
@@ -101,7 +101,7 @@ The <code>/shorts/VIDEO_ID</code> path is purely a UI decision — it tells YouT
 Change the path to <code>/watch?v=VIDEO_ID</code> and YouTube renders the standard desktop player instead.
 The video file itself, its CDN URL, its resolution, and all its metadata stay identical.</p>
 <p>This is different from a traditional “download” problem — you’re not bypassing any DRM or accessing anything you weren’t meant to.
-You’re simply telling YouTube which player skin to use to display a video you have full permission to watch.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+You’re simply telling YouTube which player skin to use to display a video you have full permission to watch.</p>
 <p>Give it a try next time YouTube drops you into the Shorts player on a desktop — and take back control of your playback speed. ⚡</p>
 <p>Drop a comment below if you found this useful, or if you know other YouTube URL tricks! 👇</p>
 <hr/>

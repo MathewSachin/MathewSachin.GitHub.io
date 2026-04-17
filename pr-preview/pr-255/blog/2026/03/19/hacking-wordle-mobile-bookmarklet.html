@@ -13,7 +13,7 @@ Part 12 of 27 &mdash;
 <p>A bookmarklet is a regular web bookmark — but instead of a website URL, it contains JavaScript code. When you tap the bookmark, the browser executes that code on whatever page you’re currently viewing.</p>
 <p>It’s a technique that has been around for decades and works in virtually every mobile browser, because tapping a bookmark is just a normal browser action, not a developer feature.</p>
 <p>Want to create your own bookmarklets from any JavaScript snippet? The <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> handles the IIFE wrapping, minification, and URI encoding for you — just paste your code and it’s ready to use.</p>
-<h2 id="setting-it-up">Setting It Up</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="setting-it-up">Setting It Up</h2>
 <h3 id="step-1--create-a-new-bookmark">Step 1 — Create a New Bookmark</h3>
 <p>Open your mobile browser, navigate to <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, and bookmark the page. The URL doesn’t matter; you’ll replace it in the next step.</p>
 <h3 id="step-2--edit-the-bookmark">Step 2 — Edit the Bookmark</h3>
@@ -25,7 +25,7 @@ Part 12 of 27 &mdash;
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">plaintext</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="plaintext" id="code-block-1"><code><span class="line"><span>javascript:(function(){ fetch(&#39;https://www.nytimes.com/svc/wordle/v2/&#39; + new Date().toISOString().split(&#39;T&#39;)[0] + &#39;.json&#39;).then(res =&gt; res.json()).then(data =&gt; alert(&#39;The word is: &#39; + data.solution.toUpperCase())).catch(err =&gt; alert(&#39;Could not fetch the word!&#39;)); })();</span></span></code></pre></div>
 <p>Save the bookmark.</p>
 <h3 id="step-3--open-wordle">Step 3 — Open Wordle</h3>
-<p>Navigate to <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a> in your mobile browser and wait for the game to fully load.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Navigate to <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a> in your mobile browser and wait for the game to fully load.</p>
 <h3 id="step-4--run-the-bookmarklet">Step 4 — Run the Bookmarklet</h3>
 <div class="alert alert-info"><p>⚠️ <b>Crucial step:</b> Simply tapping the bookmark in your bookmarks menu won’t work on mobile — the browser treats it as a navigation rather than executing the code. You need to trigger it through the address bar.</p></div>
 <p>Tap your <strong>address bar</strong>, type <strong>Wordle Answer</strong>, and when the bookmark appears in the dropdown suggestions, tap it.</p>
@@ -33,7 +33,7 @@ Part 12 of 27 &mdash;
 <h2 id="how-it-works">How It Works</h2>
 <p>The bookmarklet fetches today’s answer directly from the same NYT API that the Wordle game itself uses. It builds the URL using today’s date, requests the JSON file, reads the <code>solution</code> field, and pops up an alert with the word.</p>
 <p>The <code>javascript:</code> URL scheme tells the browser to evaluate the code as a script rather than navigate to a page. Because it runs in the context of the current tab, it can make the same fetch requests as the page itself.</p>
-<p>The code breaks down into these steps:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The code breaks down into these steps:</p>
 <ol>
 <li>Build the API URL using today’s date: <code>https://www.nytimes.com/svc/wordle/v2/YYYY-MM-DD.json</code></li>
 <li>Fetch the JSON response from the server.</li>

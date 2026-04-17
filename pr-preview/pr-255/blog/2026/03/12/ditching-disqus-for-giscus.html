@@ -44,7 +44,7 @@ Part 3 of 9 &mdash;
 <p>The blog already runs Google AdSense — that’s deliberate and I’m comfortable with it. But Disqus was bolting its own ad network <em>on top of that</em>, injecting third-party ads directly inside the comment section. So every post ended up with two separate ad systems running simultaneously, both loading tracking scripts, both fighting for space and bandwidth.</p>
 <p>Not great.</p>
 <div class="alert alert-info"><p>🔍 <b>Try it yourself:</b> Open DevTools on any Disqus-powered site and check the Network tab. Filter by <b>Fetch/XHR</b>. Count the requests. It’s a lot.</p></div>
-<h2 id="enter-giscus">Enter giscus</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="enter-giscus">Enter giscus</h2>
 <p><a href="https://giscus.app">giscus</a> is an open-source comment system that stores comments as <strong>GitHub Discussions</strong> on your repository. That’s it. No third-party servers, no ads, no tracking, no cost.</p>
 <p>The idea is beautifully simple:</p>
 <ul>
@@ -58,7 +58,7 @@ Part 3 of 9 &mdash;
 <h2 id="the-setup-it-really-is-this-simple">The Setup (It Really Is This Simple)</h2>
 <h3 id="step-1-enable-github-discussions-on-your-repo">Step 1: Enable GitHub Discussions on your repo</h3>
 <p>Go to your repository on GitHub → <strong>Settings</strong> → <strong>General</strong> → scroll down to the <strong>Features</strong> section → tick <strong>Discussions</strong>.</p>
-<p>That’s it for the repo side.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>That’s it for the repo side.</p>
 <h3 id="step-2-install-the-giscus-github-app">Step 2: Install the giscus GitHub App</h3>
 <p>Head to <a href="https://github.com/apps/giscus">github.com/apps/giscus</a> and install it on your repository. This gives giscus permission to create and read Discussion threads on your behalf.</p>
 <h3 id="step-3-generate-your-config-snippet">Step 3: Generate your config snippet</h3>
@@ -87,7 +87,7 @@ Part 3 of 9 &mdash;
 <span class="line"><span style="color:#A6E22E">        async</span><span style="color:#F8F8F2">&gt;</span></span>
 <span class="line"><span style="color:#F8F8F2">&lt;/</span><span style="color:#F92672">script</span><span style="color:#F8F8F2">&gt;</span></span></code></pre></div>
 <h3 id="step-4-drop-it-into-your-layout">Step 4: Drop it into your layout</h3>
-<p>For this Jekyll site, I saved that script to <code>_includes/giscus.html</code> and added one line to <code>_layouts/post.html</code>:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>For this Jekyll site, I saved that script to <code>_includes/giscus.html</code> and added one line to <code>_layouts/post.html</code>:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">liquid</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-2" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="liquid" id="code-block-2"><code><span class="line"><span style="color:#F8F8F2">&lt;</span><span style="color:#F44747">Giscus</span><span style="color:#F8F8F2"> /&gt;</span></span></code></pre></div>
 <p>Done. Every post now has a fully functional, privacy-respecting comment section. The entire change took about ten minutes.</p>
 <div class="alert alert-info"><p>✅ <b>Bonus:</b> Because comments live in GitHub Discussions, you get email notifications for new comments for free — no extra configuration needed.</p></div>
@@ -147,7 +147,7 @@ Part 3 of 9 &mdash;
 <h2 id="removing-disqus">Removing Disqus</h2>
 <p>Once giscus was live, I removed the <code>disqus</code> settings from <code>_config.yml</code> and trimmed the Disqus script from the layout. Less code, fewer dependencies, cleaner page loads.</p>
 <p>The old Disqus comments? Disqus lets you <a href="https://help.disqus.com/en/articles/1717164-comments-export">export your comment data</a> as an XML file, and giscus has a migration path. Mine was sparse enough that I didn’t bother, but the option is there if you need it.</p>
-<h2 id="the-result">The Result</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="the-result">The Result</h2>
 <p>Every post on this blog now loads faster, respects your privacy, and has a comment section I’m actually happy to stand behind.</p>
 <p>No Disqus ads. No extra trackers. No regrets.</p>
 <p><em>If you’ve been putting off switching away from Disqus — don’t. It genuinely took less time than writing this post.</em></p>

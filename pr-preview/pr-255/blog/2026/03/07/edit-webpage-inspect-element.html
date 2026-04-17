@@ -18,7 +18,7 @@ Part 1 of 27 &mdash;
 <li>❌ Nobody else can see the changes</li>
 </ul>
 <p>The classic use case? <strong>Take a screenshot before refreshing</strong> and share it as a “totally real” screenshot. That’s the prank.</p>
-<h2 id="step-1--open-developer-tools">Step 1 — Open Developer Tools</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="step-1--open-developer-tools">Step 1 — Open Developer Tools</h2>
 <p>Every major browser ships with built-in Developer Tools (DevTools). This is a panel used by web developers to inspect and debug websites — but it’s available to everyone, no installation needed.</p>
 <h3 id="google-chrome--microsoft-edge">Google Chrome / Microsoft Edge</h3>
 <p>Both use identical shortcuts:</p>
@@ -74,7 +74,7 @@ Part 1 of 27 &mdash;
 <li>Click the <strong>Advanced</strong> tab</li>
 <li>Check <strong>“Show features for web developers”</strong> (or “Show Develop menu in menu bar” on older versions)</li>
 </ol>
-<p>Now you can right-click → <strong>Inspect Element</strong> or use <code>Cmd + Option + I</code>.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Now you can right-click → <strong>Inspect Element</strong> or use <code>Cmd + Option + I</code>.</p>
 <div class="alert alert-info"><p>💡 <b>Tip:</b> The fastest way to jump straight to any element is to <b>right-click directly on the text or image you want to change</b>, then select <b>Inspect</b> (or <b>Inspect Element</b>). The DevTools panel will open with that element already highlighted — no hunting required.</p></div>
 <h2 id="what-am-i-looking-at">What am I looking at?</h2>
 <p>When DevTools opens, it can look intimidating. Don’t worry — you only need one tab: the <strong>Elements</strong> tab (called <strong>Inspector</strong> in Firefox).</p>
@@ -96,7 +96,7 @@ Part 1 of 27 &mdash;
 <li>It becomes an editable field — type your replacement text</li>
 <li>Press <strong>Enter</strong> to confirm</li>
 </ol>
-<p>The page updates instantly. 🎉</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The page updates instantly. 🎉</p>
 <h3 id="the-edit-as-html-method-more-control">The “Edit as HTML” Method (More Control)</h3>
 <ol>
 <li>In the Elements panel, <strong>right-click</strong> on the element you want to change</li>
@@ -120,7 +120,7 @@ Part 1 of 27 &mdash;
 <div class="alert alert-info"><p>💡 <b>Finding an image URL:</b> Open any image in a new tab (right-click it → “Open image in new tab”), then copy the URL from the address bar. That’s the direct image URL you can paste in.</p></div>
 <h2 id="bonus-the-one-command-method">Bonus: The One-Command Method</h2>
 <p>The DevTools steps above are great for precise, surgical edits. But there’s a secret shortcut that turns the <strong>entire page</strong> into a giant text editor — no hunting through the HTML panel required.</p>
-<p>Open the <strong>Console</strong> tab in DevTools (it sits right next to the Elements tab) and type:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Open the <strong>Console</strong> tab in DevTools (it sits right next to the Elements tab) and type:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">js</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js" id="code-block-3"><code><span class="line"><span style="color:#F8F8F2">document.designMode </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> &quot;on&quot;</span></span></code></pre></div>
 <p>Hit Enter. Now <strong>click anywhere on the page and start typing</strong>. Every piece of text — headings, paragraphs, captions — becomes editable instantly. It’s like turning a webpage into a Word document.</p>
 <p>To turn it back off:</p>
@@ -145,7 +145,7 @@ btn.className = enabling ? 'btn btn-warning' : 'btn btn-info';
 </ol>
 <h3 id="on-mobile-use-a-bookmarklet">On mobile: use a Bookmarklet</h3>
 <p>Mobile browsers don’t have a DevTools console, but you can run JavaScript via a <strong>bookmarklet</strong> — a bookmark whose URL is JavaScript code instead of a web address.</p>
-<p><strong>Setting it up (one-time):</strong></p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p><strong>Setting it up (one-time):</strong></p>
 <ol>
 <li>Bookmark any page on your phone (tap ⋮ → <strong>Bookmark</strong>, or the share icon → <strong>Add to Bookmarks</strong>)</li>
 <li>Open your bookmarks, find the one you just made, and <strong>edit</strong> it</li>
@@ -203,7 +203,7 @@ btn.className = enabling ? 'btn btn-warning' : 'btn btn-info';
 <div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Target</th><th>What to change</th><th>Effect</th></tr></thead><tbody><tr><td>News headline</td><td>The <code>&lt;h1&gt;</code> or <code>&lt;h2&gt;</code> text</td><td>”Local Man Discovers He is a Golden Retriever”</td></tr><tr><td>Article byline</td><td>Author name text</td><td>Put your friend’s name as the “author”</td></tr><tr><td>Price on a product page</td><td>The price text</td><td>Change ₹50,000 laptop to ₹1</td></tr><tr><td>Sports score</td><td>Score text in a live ticker</td><td>Your team wins, always</td></tr><tr><td>Weather forecast</td><td>Temperature or description</td><td>🌨️ Snowstorm predicted in July</td></tr><tr><td>Social media post</td><td>A friend’s (public) post on your screen</td><td>Make them say something absurd</td></tr></tbody></table></div>
 <p><strong>Golden rule of pranking:</strong> Always take a screenshot before refreshing the page. The edit vanishes the moment you reload!</p>
 <h2 id="how-does-this-actually-work">How Does This Actually Work?</h2>
-<p>When you type a web address and hit Enter, here’s what happens behind the scenes:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>When you type a web address and hit Enter, here’s what happens behind the scenes:</p>
 <ol>
 <li>Your browser sends a request to a <strong>web server</strong> somewhere in the world</li>
 <li>That server sends back a bunch of files — HTML (structure), CSS (styles), JavaScript (behaviour)</li>

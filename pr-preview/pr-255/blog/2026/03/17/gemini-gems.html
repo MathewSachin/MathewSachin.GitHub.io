@@ -11,7 +11,7 @@
 <p>You define the Gem once. From that point on, every conversation you have with it starts from that shared context. No preamble, no recapping, no “please respond in bullet points” at the top of every prompt.</p>
 <p>Google ships a handful of pre-built Gems by default — a brainstorming partner, a coding assistant, a writing editor — but the real power is in the ones you create yourself.</p>
 <h2 id="how-gems-are-different-from-just-prompting">How Gems Are Different from Just Prompting</h2>
-<p>When you open a standard Gemini chat, the model has no memory of what you’ve done before. Each session is a blank slate. Experienced users compensate by writing long system-prompt preambles, pasting in context blocks, or maintaining a personal “prompt library” they copy from.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>When you open a standard Gemini chat, the model has no memory of what you’ve done before. Each session is a blank slate. Experienced users compensate by writing long system-prompt preambles, pasting in context blocks, or maintaining a personal “prompt library” they copy from.</p>
 <p>Gems make that permanent. They act like a saved system instruction that is silently prepended to every message you send, setting the model’s behaviour, tone, domain knowledge, and constraints before you’ve typed a single word.</p>
 
 
@@ -67,14 +67,14 @@
 <span class="line"><span>Assume the codebase targets Python 3.11+.</span></span></code></pre></div>
 <p>That’s it. Every time you start a conversation with this Gem and paste in a function, you get a focused, opinionated review — without having to write that brief every single time.</p>
 <div class="alert alert-info"><p>📁 <b>Tip:</b> You can upload files to give your Gem reference material. Paste in a coding style guide, a brand voice document, or a glossary of terms specific to your domain. The Gem will treat these as ground truth when responding.</p></div>
-<h2 id="what-makes-a-good-gem">What Makes a Good Gem</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="what-makes-a-good-gem">What Makes a Good Gem</h2>
 <p>Not all Gems are equally useful. The quality of the output tracks closely with the quality of the instructions.</p>
 <h3 id="be-specific-about-the-task">Be specific about the task</h3>
 <p>Vague: <em>“Help me write better.”</em></p>
 <p>Specific: <em>“You are an editor for a B2B SaaS blog. When I paste a draft, shorten sentences over 25 words, replace jargon with plain English, and ensure each paragraph has a clear topic sentence. Output the revised text, then list the changes you made.”</em></p>
 <h3 id="constrain-the-format">Constrain the format</h3>
 <p>If you always want bullet points, say so. If you want the response to include a summary at the top, specify it. The more you define the output shape, the less time you spend reformatting responses.</p>
-<h3 id="set-the-persona">Set the persona</h3><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h3 id="set-the-persona">Set the persona</h3>
 <p>Giving the Gem a character — “you are a sceptical product manager”, “you are a patient Python tutor” — shifts not just the tone but the way it frames problems. A sceptical PM will push back on assumptions. A patient tutor will explain before diving into code.</p>
 <h3 id="tell-it-what-not-to-do">Tell it what <em>not</em> to do</h3>
 <p>This is often more powerful than the positive instructions. “Do not suggest tools outside the ones already in use.” “Do not repeat the question back to me.” “Do not use the phrase ‘Certainly!’ or ‘Great question!’” Small exclusions produce noticeably better output.</p>
@@ -116,7 +116,7 @@
 
 <div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Gem name</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Commit message writer</strong></td><td>Turns a git diff or bullet-point summary into a conventional commit message</td></tr><tr><td><strong>Meeting notes summarizer</strong></td><td>Converts messy meeting transcript into decisions, action items, and owners</td></tr><tr><td><strong>Email tone adjuster</strong></td><td>Takes a draft email and rewrites it as formal, neutral, or casual</td></tr><tr><td><strong>Interview prep coach</strong></td><td>Asks behavioural questions based on a job description you paste in</td></tr><tr><td><strong>Budget reviewer</strong></td><td>Reviews monthly spending summaries and flags anomalies or savings opportunities</td></tr><tr><td><strong>Changelog drafter</strong></td><td>Converts a list of merged PRs or tickets into user-facing changelog entries</td></tr></tbody></table></div>
 <p>The best Gems tend to be narrow. A Gem that does one job with precision beats a catch-all assistant every time.</p>
-<h2 id="sharing-a-gem">Sharing a Gem</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="sharing-a-gem">Sharing a Gem</h2>
 <p>If you’re working with a team, Gems can be shared. From the Gem manager, copy the share link and send it to anyone with a Gemini account. They get the same instructions and uploaded files you set up — a ready-made tool, not a blank slate.</p>
 <p>This is useful for teams that want consistent AI output: shared review templates, consistent onboarding materials, standardised customer response tone. One person sets it up; everyone benefits.</p>
 <h2 id="limitations-worth-knowing">Limitations Worth Knowing</h2>
@@ -164,7 +164,7 @@
 
 
 <div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Platform</th><th>Feature</th><th>Key difference</th></tr></thead><tbody><tr><td><strong>ChatGPT</strong></td><td>Custom GPTs</td><td>More powerful, supports actions and API calls; requires ChatGPT Plus</td></tr><tr><td><strong>Claude</strong></td><td>Projects</td><td>Stores conversation history across sessions; tighter context management</td></tr><tr><td><strong>Copilot</strong></td><td>Copilot Pages + custom instructions</td><td>Deep integration with Microsoft 365 apps</td></tr><tr><td><strong>Poe</strong></td><td>Custom bots</td><td>Multi-model; lets you build on top of Claude, GPT, and others</td></tr><tr><td><strong>Open-source (LM Studio, Ollama)</strong></td><td>System prompts</td><td>Full control, runs locally, no subscription required</td></tr></tbody></table></div>
-<p>If you’re already in the Google ecosystem — Workspace, Drive, Meet — Gems integrate naturally. If you spend most of your time in VS Code or GitHub, a Copilot or ChatGPT custom GPT might fit better. If privacy and local control matter most, a local model with a saved system prompt does the same job without sending data anywhere.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>If you’re already in the Google ecosystem — Workspace, Drive, Meet — Gems integrate naturally. If you spend most of your time in VS Code or GitHub, a Copilot or ChatGPT custom GPT might fit better. If privacy and local control matter most, a local model with a saved system prompt does the same job without sending data anywhere.</p>
 <h2 id="the-deeper-principle">The Deeper Principle</h2>
 <p>Gems are really just a UI wrapper around a persistent system prompt. But the wrapper matters, because friction matters.</p>
 <p>The difference between a tool you actually use and one you forget about is often not capability — it’s one or two extra steps. Gems reduce the steps. They make the right context available by default, so you spend your energy on the actual problem, not on re-establishing the setting every time.</p>

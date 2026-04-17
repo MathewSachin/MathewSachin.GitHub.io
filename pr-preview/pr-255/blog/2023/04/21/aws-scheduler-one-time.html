@@ -65,7 +65,7 @@ In this post, we’re going to try out One-Time schedules in Kotlin via AWS Java
 <span class="line"><span style="color:#F8F8F2">    .</span><span style="color:#A6E22E">build</span><span style="color:#F8F8F2">()</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F8F8F2">eventBridgeScheduler.</span><span style="color:#A6E22E">createSchedule</span><span style="color:#F8F8F2">(createScheduleRequest)</span></span></code></pre></div>
-<h2 id="deleting-schedules-important">Deleting schedules [IMPORTANT]</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="deleting-schedules-important">Deleting schedules [IMPORTANT]</h2>
 <p>A one-time schedule still counts against your account quota after it has completed running and invoking it’s target.
 You should delete a one-time schedule after it has completed running.</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">kotlin</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="kotlin" id="code-block-6"><code><span class="line"><span style="color:#F92672">val</span><span style="color:#F8F8F2"> deleteScheduleRequest </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> DeleteScheduleRequest.</span><span style="color:#A6E22E">builder</span><span style="color:#F8F8F2">()</span></span>

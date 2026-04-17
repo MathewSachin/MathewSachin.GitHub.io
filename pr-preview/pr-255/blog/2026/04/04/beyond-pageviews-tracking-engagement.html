@@ -19,7 +19,7 @@ Part 9 of 9 &mdash;
 <p>None of these are answered by pageviews. They require deliberately instrumenting the behaviors you care about. On a static Jekyll site there is no server-side session data, no heatmap SaaS — just JavaScript, the browser’s event APIs, and whatever you choose to record.</p>
 <p>Here is every engagement signal tracked on this blog, how it works, and why it matters.</p>
 <hr/>
-<h2 id="the-tracking-wrapper">The Tracking Wrapper</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="the-tracking-wrapper">The Tracking Wrapper</h2>
 <p>Before any specific event, there is one shared utility function used throughout:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">javascript</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="javascript" id="code-block-1"><code><span class="line"><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#A6E22E"> trackEvent</span><span style="color:#F8F8F2">(</span><span style="color:#FD971F;font-style:italic">name</span><span style="color:#F8F8F2">, </span><span style="color:#FD971F;font-style:italic">params</span><span style="color:#F8F8F2">) {</span></span>
 <span class="line"><span style="color:#F92672">    try</span><span style="color:#F8F8F2"> {</span></span>
@@ -61,7 +61,7 @@ Part 9 of 9 &mdash;
 <span class="line"><span style="color:#F8F8F2">    }, { passive: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2"> });</span></span>
 <span class="line"><span style="color:#F8F8F2">}());</span></span></code></pre></div>
 <p>Three design choices worth unpacking:</p>
-<p><strong><code>{ passive: true }</code> on the scroll listener.</strong> Passive event listeners cannot call <code>preventDefault()</code>, so the browser knows it doesn’t need to wait for the handler to finish before scrolling. Without this flag, even an empty scroll handler can cause jank. Passive listeners are free.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p><strong><code>{ passive: true }</code> on the scroll listener.</strong> Passive event listeners cannot call <code>preventDefault()</code>, so the browser knows it doesn’t need to wait for the handler to finish before scrolling. Without this flag, even an empty scroll handler can cause jank. Passive listeners are free.</p>
 <p><strong><code>milestonesReached</code> is an array, not a boolean flag per milestone.</strong> Each milestone fires exactly once per page load. Storing reached milestones in an array rather than four separate booleans keeps the code compact, but more importantly, it makes the milestone set easy to change — add <code>95</code> to the array and it just works.</p>
 <p><strong>The formula adds <code>window.innerHeight</code> to <code>window.scrollY</code>.</strong> This measures how much of the document the reader has <em>seen</em>, not how far the top of the viewport has scrolled. A reader on a tall monitor who hasn’t scrolled at all has already seen the top portion of the article — using <code>scrollY</code> alone would undercount their engagement. The combined measure is more accurate.</p>
 <p>The result in Google Analytics is four filterable events per page, with <code>percent_scrolled</code> as a custom dimension. Filtering <code>scroll_depth</code> where <code>percent_scrolled = 90</code> across all posts quickly shows which posts hold attention to the end.</p>
@@ -83,7 +83,7 @@ Part 9 of 9 &mdash;
 <span class="line"><span style="color:#A6E22E">    updateProgress</span><span style="color:#F8F8F2">();</span></span>
 <span class="line"><span style="color:#F8F8F2">}</span></span></code></pre></div>
 <p>The <code>resize</code> listener handles the case where the reader resizes the browser window mid-read, which changes <code>scrollHeight</code> and <code>innerHeight</code> and would otherwise leave the bar at a stale percentage. The <code>aria-valuenow</code> attribute keeps screen readers informed — the bar is not just a visual element.</p>
-<p>No <code>trackEvent</code> call here. The progress bar is a reader-facing feature, not an analytics signal. Its data is already captured by scroll depth.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>No <code>trackEvent</code> call here. The progress bar is a reader-facing feature, not an analytics signal. Its data is already captured by scroll depth.</p>
 <hr/>
 <h2 id="viewport-entry-tracking-what-did-they-see">Viewport-Entry Tracking: What Did They See?</h2>
 <p>Scroll depth tells you how far down a reader scrolled. But a post can have code blocks halfway through that a reader skipped over by scrolling fast, or diagrams below the fold that a reader never reached even though they scrolled to 100%.</p>
@@ -115,7 +115,7 @@ Part 9 of 9 &mdash;
 <p>The <code>element_type</code> dimension distinguishes code blocks from images and diagrams in downstream analysis. A post where the code blocks have low <code>element_viewed</code> counts despite high scroll depth is a signal that readers are consuming the prose but not engaging with the technical examples.</p>
 <hr/>
 <h2 id="code-interaction-two-ways-to-engage">Code Interaction: Two Ways to Engage</h2>
-<p>Code blocks are a primary reason readers arrive at a technical blog. There are two meaningful interactions: copying the code, and manually selecting part of it.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Code blocks are a primary reason readers arrive at a technical blog. There are two meaningful interactions: copying the code, and manually selecting part of it.</p>
 <h3 id="copy-button">Copy Button</h3>
 <p>Every code block has a copy button. When clicked:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">javascript</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="javascript" id="code-block-5"><code><span class="line"><span style="color:#A6E22E">addListeners</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;.btn-clip&quot;</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">&quot;click&quot;</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#FD971F;font-style:italic">btn</span><span style="color:#F8F8F2">) {</span></span>
@@ -152,7 +152,7 @@ Part 9 of 9 &mdash;
 <li><strong><code>el.closest(&quot;div.highlight&quot;)</code></strong> — the event only fires if the selection is anchored inside a highlighted code block. Selecting prose text, headings, or anything outside a code block is ignored entirely.</li>
 </ol>
 <hr/>
-<h2 id="navigation-signals-how-readers-move-through-the-site">Navigation Signals: How Readers Move Through the Site</h2><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<h2 id="navigation-signals-how-readers-move-through-the-site">Navigation Signals: How Readers Move Through the Site</h2>
 <h3 id="table-of-contents">Table of Contents</h3>
 <p>The TOC is generated at build time (no DOM-scanning JavaScript), but clicks on TOC links are still tracked:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">javascript</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-7" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="javascript" id="code-block-7"><code><span class="line"><span style="color:#F8F8F2">tocLinks.</span><span style="color:#A6E22E">forEach</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#FD971F;font-style:italic">a</span><span style="color:#F8F8F2">) {</span></span>
@@ -171,7 +171,7 @@ Part 9 of 9 &mdash;
 <span class="line"><span style="color:#F8F8F2">});</span></span></code></pre></div>
 <p>Comparing <code>toc_mobile_toggle</code> rates between mobile and desktop sessions tells you how often mobile readers bother opening the TOC at all — useful for deciding whether it’s worth the real estate.</p>
 <h3 id="series-navigation">Series Navigation</h3>
-<p>Posts in a series have previous/next navigation. Clicks are tracked with a direction dimension:</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Posts in a series have previous/next navigation. Clicks are tracked with a direction dimension:</p>
 <div class="highlight"><div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"><span class="code-lang">javascript</span><button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-9" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button></div><pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="javascript" id="code-block-9"><code><span class="line"><span style="color:#A6E22E">addListeners</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;.series-nav-btn, .series-prev-link&quot;</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">&quot;click&quot;</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#FD971F;font-style:italic">seriesNavLink</span><span style="color:#F8F8F2">) {</span></span>
 <span class="line"><span style="color:#66D9EF;font-style:italic">    const</span><span style="color:#F8F8F2"> direction </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> seriesNavLink.classList.</span><span style="color:#A6E22E">contains</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;next-post&quot;</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">?</span><span style="color:#E6DB74"> &quot;next&quot;</span><span style="color:#F92672"> :</span><span style="color:#E6DB74"> &quot;previous&quot;</span><span style="color:#F8F8F2">;</span></span>
 <span class="line"><span style="color:#66D9EF;font-style:italic">    const</span><span style="color:#F8F8F2"> titleEl </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> seriesNavLink.</span><span style="color:#A6E22E">querySelector</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;.nav-title&quot;</span><span style="color:#F8F8F2">);</span></span>
@@ -199,7 +199,7 @@ Part 9 of 9 &mdash;
 <span class="line"><span style="color:#F8F8F2">    window.</span><span style="color:#A6E22E">scrollTo</span><span style="color:#F8F8F2">({ top: </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, behavior: </span><span style="color:#E6DB74">&quot;smooth&quot;</span><span style="color:#F8F8F2"> });</span></span>
 <span class="line"><span style="color:#A6E22E">    trackEvent</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;back_to_top&quot;</span><span style="color:#F8F8F2">);</span></span>
 <span class="line"><span style="color:#F8F8F2">});</span></span></code></pre></div>
-<p>A <code>back_to_top</code> event means the reader reached a point where clicking the button was worth the effort — they got far enough down the page that they wanted to return to the top. It’s a weak engagement signal on its own, but combined with scroll depth, it separates readers who scrolled to the bottom and then scrolled back up from readers who just tapped it reflexively.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>A <code>back_to_top</code> event means the reader reached a point where clicking the button was worth the effort — they got far enough down the page that they wanted to return to the top. It’s a weak engagement signal on its own, but combined with scroll depth, it separates readers who scrolled to the bottom and then scrolled back up from readers who just tapped it reflexively.</p>
 <hr/>
 <h2 id="social-sharing">Social Sharing</h2>
 <p>Share button clicks cover six methods with a single event and a <code>method</code> dimension:</p>
@@ -220,7 +220,7 @@ Part 9 of 9 &mdash;
 <span class="line"><span style="color:#F8F8F2">        image_alt: img.alt </span><span style="color:#F92672">||</span><span style="color:#F8F8F2"> img.src.</span><span style="color:#A6E22E">split</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">&quot;/&quot;</span><span style="color:#F8F8F2">).</span><span style="color:#A6E22E">pop</span><span style="color:#F8F8F2">()</span></span>
 <span class="line"><span style="color:#F8F8F2">    });</span></span>
 <span class="line"><span style="color:#F8F8F2">});</span></span></code></pre></div>
-<p>The <code>image_alt</code> dimension identifies which specific image was expanded. A post where a particular diagram gets expanded frequently suggests readers found it interesting enough to examine in detail — a signal that the image is earning its space.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>The <code>image_alt</code> dimension identifies which specific image was expanded. A post where a particular diagram gets expanded frequently suggests readers found it interesting enough to examine in detail — a signal that the image is earning its space.</p>
 <hr/>
 <h2 id="search-analytics">Search Analytics</h2>
 <p>The search page tracks two events in <code>scripts/search.js</code>, using the same <code>trackEvent</code> pattern:</p>
@@ -239,7 +239,7 @@ Part 9 of 9 &mdash;
 <hr/>
 <h2 id="what-is-not-tracked">What Is Not Tracked</h2>
 <p>There are deliberate omissions:</p>
-<p><strong>Session duration.</strong> Google Analytics estimates time on page by comparing the timestamp of the current pageview against the timestamp of the next one. For the last page in a session, there is no next pageview — the time on the final page is always zero. The scroll depth signal is more reliable for single-page sessions, which are common on a blog.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p><strong>Session duration.</strong> Google Analytics estimates time on page by comparing the timestamp of the current pageview against the timestamp of the next one. For the last page in a session, there is no next pageview — the time on the final page is always zero. The scroll depth signal is more reliable for single-page sessions, which are common on a blog.</p>
 <p><strong>Mouse movement or cursor position.</strong> This would require a continuous stream of events — not feasible without a dedicated session-recording tool and a separate data pipeline.</p>
 <p><strong>Precise reading speed or word count consumed.</strong> The scroll depth + viewport entry combination is a reasonable proxy without building character-level reading position tracking.</p>
 <p><strong>Any personally identifiable information.</strong> User IDs, IP addresses, and device fingerprints are not collected. The tracking is scoped entirely to anonymous engagement signals.</p>
@@ -329,7 +329,7 @@ Part 9 of 9 &mdash;
 <p>Every event is recorded with the standard GA4 page context (URL, title, referrer). The custom dimensions above are what make the events useful for analysis rather than just counting.</p>
 <hr/>
 <h2 id="putting-it-together">Putting It Together</h2>
-<p>Pageviews are the floor, not the ceiling. A post with 10,000 pageviews and a median scroll depth of 25% is performing worse than a post with 2,000 pageviews and a median scroll depth of 75%. The code-copy rate tells you whether your examples are landing. The series continuation rate tells you whether your writing is compelling enough to pull readers into the next post.</p><div class="in-content-ad-marker" data-ad-slot="in-content"></div>
+<p>Pageviews are the floor, not the ceiling. A post with 10,000 pageviews and a median scroll depth of 25% is performing worse than a post with 2,000 pageviews and a median scroll depth of 75%. The code-copy rate tells you whether your examples are landing. The series continuation rate tells you whether your writing is compelling enough to pull readers into the next post.</p>
 <p>None of this requires a paid analytics product, a backend, or a session-recording service. It requires deciding what you want to know, writing about 200 lines of careful JavaScript, and committing to reading the data.</p>
 <p>The full implementation is in <a href="https://github.com/MathewSachin/MathewSachin.GitHub.io/blob/main/scripts/formatting.js"><code>scripts/formatting.js</code></a> and <a href="https://github.com/MathewSachin/MathewSachin.GitHub.io/blob/main/scripts/search.js"><code>scripts/search.js</code></a>. Every technique described in this post is live on the page you are reading right now.</p>
 <hr/>
