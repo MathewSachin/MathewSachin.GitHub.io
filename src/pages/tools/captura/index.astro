@@ -1,7 +1,10 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import './recorder.css';
-const html = `<div id="pwa-update-bar" class="d-flex align-items-center gap-2" hidden>
+---
+<ToolLayout title="Captura Web Recorder" ads={true} manifest="/tools/captura/manifest.json">
+
+<div id="pwa-update-bar" class="d-flex align-items-center gap-2" hidden>
   <span><i class="fas fa-sync-alt me-1"></i>A new version of Captura is available!</span>
   <button id="pwa-update-btn" class="btn btn-sm btn-light flex-shrink-0">Update Now</button>
   <button id="pwa-dismiss-btn" class="btn btn-sm btn-close flex-shrink-0" aria-label="Dismiss"></button>
@@ -418,8 +421,6 @@ const html = `<div id="pwa-update-bar" class="d-flex align-items-center gap-2" h
   </div>
 </div>
 
-<script type="module" src="./js/app.js"></script>`;
----
-<ToolLayout title="Captura Web Recorder" ads={true} manifest="/tools/captura/manifest.json">
-  <Fragment set:html={html} />
+<script type="module" src="/tools/captura/js/app.js"></script>
+
 </ToolLayout>

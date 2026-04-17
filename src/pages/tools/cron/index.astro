@@ -1,6 +1,10 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-const html = `<div class="card google-anno-skip">
+import { buildCronExpression, ordinal, pad, DOW_NAMES } from './cron.js';
+---
+<ToolLayout title="CRON Expression Generator" ads={true}>
+
+<div class="card google-anno-skip">
 <div class="card-body">
 
 <div class="row g-4">
@@ -285,8 +289,6 @@ document.getElementById('generate-btn').click();
 </p>
 
 </div>
-</div>`;
----
-<ToolLayout title="CRON Expression Generator" ads={true}>
-  <Fragment set:html={html} />
+</div>
+
 </ToolLayout>

@@ -1,6 +1,9 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-const html = `<!-- Hidden element exposing the worker URL to JS (respects Jekyll baseurl for PR previews). -->
+---
+<ToolLayout title="PDF Password Tool" ads={true}>
+
+<!-- Hidden element exposing the worker URL to JS (respects Jekyll baseurl for PR previews). -->
 <span id="pdf-worker-url" data-url="/tools/pdf/pdf.worker.js" class="d-none"></span>
 
 <div class="card google-anno-skip">
@@ -168,8 +171,6 @@ const html = `<!-- Hidden element exposing the worker URL to JS (respects Jekyll
 </div>
 </div>
 
-<script defer src="./pdf.js"></script>`;
----
-<ToolLayout title="PDF Password Tool" ads={true}>
-  <Fragment set:html={html} />
+<script defer src="/tools/pdf/pdf.js"></script>
+
 </ToolLayout>

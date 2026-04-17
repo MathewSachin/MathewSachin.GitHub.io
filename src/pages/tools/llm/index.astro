@@ -1,6 +1,9 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-const html = `<link rel="modulepreload"
+---
+<ToolLayout title="Local LLM Chat" ads={true}>
+
+<link rel="modulepreload"
   href="https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.1/dist/transformers.min.js"
   integrity="sha384-A5IXc7Kyh0SBF8QiT/5S3QR5bDtgbkOX/xRFggycSY94V0sbZzy3Mi13ou8cUvl8"
   crossorigin="anonymous">
@@ -102,7 +105,7 @@ const html = `<link rel="modulepreload"
 </div>
 </div>
 
-<script type="module" src="./llm.js"></script>
+<script type="module" src="/tools/llm/llm.js"></script>
 
 <div class="card mt-4">
 <div class="card-body">
@@ -183,8 +186,6 @@ const html = `<link rel="modulepreload"
 </p>
 
 </div>
-</div>`;
----
-<ToolLayout title="Local LLM Chat" ads={true}>
-  <Fragment set:html={html} />
+</div>
+
 </ToolLayout>

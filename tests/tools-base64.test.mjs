@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { encodeBase64, decodeBase64 } from '../public/tools/base64/base64.js'
+import { encodeBase64, decodeBase64 } from '../src/pages/tools/base64/base64.js'
 
 // ---------------------------------------------------------------------------
 // encodeBase64

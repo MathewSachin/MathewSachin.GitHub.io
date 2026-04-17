@@ -1,6 +1,10 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-const html = `<style>
+import { countWords } from './scratchpad.js';
+---
+<ToolLayout title="Smart Scratchpad" ads={true}>
+
+<style>
 #scratchpad-card:fullscreen {
   border-radius: 0;
   display: flex;
@@ -74,7 +78,7 @@ function updateCount() {
   var words = countWords(text);
   var wordLabel = words + ' word' + (words !== 1 ? 's' : '');
   var charLabel = chars + ' char' + (chars !== 1 ? 's' : '');
-  wordCount.textContent = wordLabel + ' \\u00b7 ' + charLabel;
+  wordCount.textContent = wordLabel + ' \u00b7 ' + charLabel;
 }
 
 function persistContent() {
@@ -184,8 +188,6 @@ updateCount();
 </p>
 
 </div>
-</div>`;
----
-<ToolLayout title="Smart Scratchpad" ads={true}>
-  <Fragment set:html={html} />
+</div>
+
 </ToolLayout>

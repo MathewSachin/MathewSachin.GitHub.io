@@ -1,6 +1,10 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-const html = `<div class="card google-anno-skip">
+import { md5, sha } from './hash.js';
+---
+<ToolLayout title="Hash Generator" ads={true}>
+
+<div class="card google-anno-skip">
 <div class="card-body">
 
 <div class="row g-4">
@@ -169,8 +173,6 @@ document.getElementById('hash-btn').click();
 </p>
 
 </div>
-</div>`;
----
-<ToolLayout title="Hash Generator" ads={true}>
-  <Fragment set:html={html} />
+</div>
+
 </ToolLayout>
