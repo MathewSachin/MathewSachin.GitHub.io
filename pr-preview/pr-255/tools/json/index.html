@@ -1,51 +1,6 @@
 <!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>JSON Formatter &amp; Validator</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-255/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-255/tools/json/"><meta property="og:title" content="JSON Formatter &#38; Validator"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-255/tools/json/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-255/feed.xml"><link rel="stylesheet" href="/pr-preview/pr-255/_astro/BaseLayout.KjeXb0Sa.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-255/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-255/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">(function(){var t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t&&e&&t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())})})();</script>  <div class="bg-dark"> <div id="tool-header" class="py-4 text-white google-anno-skip"> <div class="container"> <h2>JSON Formatter &amp; Validator</h2> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small text-white">Share:</span> <a class="btn btn-sm btn-outline-light" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fjson%2F&#38;text=JSON%20Formatter%20%26%20Validator" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fjson%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fjson%2F&#38;title=JSON%20Formatter%20%26%20Validator" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fjson%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <button id="copy-post-link" class="btn btn-sm btn-outline-light" aria-label="Copy link"> <i class="fa fa-link" aria-hidden="true"></i> </button> </div> </div> </div> <br> <div class="container"> <div class="row"> <div id="tool-main-content" class="col-md-10"> <div class="page-content">  <div class="card google-anno-skip"> <div class="card-body"> <div class="row g-4"> <div class="col-12 col-md-6"> <label class="form-label fw-semibold" for="json-input">Input</label> <textarea id="json-input" class="form-control font-monospace" rows="14" placeholder="{&quot;key&quot;:&quot;value&quot;}"></textarea> <div class="mt-2 d-flex gap-2 flex-wrap"> <button class="btn btn-info text-white" id="json-format-btn">Format</button> <button class="btn btn-outline-secondary" id="json-minify-btn">Minify</button> <button class="btn btn-outline-secondary" id="json-clear-btn">Clear</button> </div> <div id="json-error" class="alert alert-danger mt-2 py-2 d-none" role="alert"></div> <div id="json-ok" class="alert alert-success mt-2 py-2 d-none" role="alert"> <i class="fas fa-check-circle me-1"></i>Valid JSON
 </div> </div> <div class="col-12 col-md-6"> <label class="form-label fw-semibold" for="json-output">Output</label> <textarea id="json-output" class="form-control font-monospace" rows="14" readonly placeholder="Formatted output…"></textarea> <div class="mt-2"> <button class="btn btn-outline-secondary" id="json-copy-btn"> <i class="fas fa-copy me-1"></i>Copy
-</button> </div> </div> </div> <script type="module">
-import { formatJson } from './json-formatter.js';
-
-var jsonInput  = document.getElementById('json-input');
-var jsonOutput = document.getElementById('json-output');
-var jsonError  = document.getElementById('json-error');
-var jsonOk     = document.getElementById('json-ok');
-
-function clearFeedback() {
-  jsonError.textContent = '';
-  jsonError.classList.add('d-none');
-  jsonOk.classList.add('d-none');
-}
-
-function applyFormat(indent) {
-  clearFeedback();
-  var result = formatJson(jsonInput.value, indent);
-  if (result.error) {
-    jsonOutput.value = '';
-    jsonError.textContent = result.error;
-    jsonError.classList.remove('d-none');
-  } else {
-    jsonOutput.value = result.output;
-    if (result.output) jsonOk.classList.remove('d-none');
-  }
-}
-
-document.getElementById('json-format-btn').addEventListener('click', function () { applyFormat(2); });
-document.getElementById('json-minify-btn').addEventListener('click', function () { applyFormat(0); });
-document.getElementById('json-clear-btn').addEventListener('click', function () {
-  jsonInput.value = ''; jsonOutput.value = '';
-  clearFeedback();
-});
-document.getElementById('json-copy-btn').addEventListener('click', function () {
-  var btn = this;
-  navigator.clipboard.writeText(jsonOutput.value).then(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-check text-success me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  }).catch(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-times text-danger me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  });
-});
-</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool parses, validates, and reformats <a href="https://www.json.org/">JSON</a>
+</button> </div> </div> </div> <script type="module">function l(t,e){if(!t.trim())return{output:"",error:null};try{var u=JSON.parse(t);return{output:JSON.stringify(u,null,e),error:null}}catch(i){return{output:"",error:i.message}}}var r=document.getElementById("json-input"),n=document.getElementById("json-output"),o=document.getElementById("json-error"),a=document.getElementById("json-ok");function c(){o.textContent="",o.classList.add("d-none"),a.classList.add("d-none")}function s(t){c();var e=l(r.value,t);e.error?(n.value="",o.textContent=e.error,o.classList.remove("d-none")):(n.value=e.output,e.output&&a.classList.remove("d-none"))}document.getElementById("json-format-btn").addEventListener("click",function(){s(2)});document.getElementById("json-minify-btn").addEventListener("click",function(){s(0)});document.getElementById("json-clear-btn").addEventListener("click",function(){r.value="",n.value="",c()});document.getElementById("json-copy-btn").addEventListener("click",function(){var t=this;navigator.clipboard.writeText(n.value).then(function(){var e=t.querySelector("i");e.className="fas fa-check text-success me-1",setTimeout(function(){e.className="fas fa-copy me-1"},1500)}).catch(function(){var e=t.querySelector("i");e.className="fas fa-times text-danger me-1",setTimeout(function(){e.className="fas fa-copy me-1"},1500)})});</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool parses, validates, and reformats <a href="https://www.json.org/">JSON</a>
 text — entirely inside your browser.
 <strong>No data is ever sent to a server.</strong></p><h5 id="what-is-json">What is JSON?</h5><p>JSON (JavaScript Object Notation) is a lightweight, human-readable data interchange format.
 It supports six value types: <code>string</code>, <code>number</code>, <code>boolean</code>,
