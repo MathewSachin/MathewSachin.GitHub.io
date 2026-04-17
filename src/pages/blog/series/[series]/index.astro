@@ -4,7 +4,7 @@
 import { getCollection } from 'astro:content';
 import SeriesLayout from '@layouts/SeriesLayout.astro';
 import { getSeries } from '@data/index';
-import { postIdFromSlug, postUrlFromSlug, getPostDate, formatDateUS, sortPostsByDate } from '@utils/posts';
+import { postIdFromSlug, postUrlFromSlug, sortPostsByDate } from '@utils/posts';
 
 export async function getStaticPaths() {
   const seriesMap = getSeries();
