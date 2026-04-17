@@ -1,189 +1,43 @@
-<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Local LLM Chat</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-255/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-255/tools/llm/"><meta property="og:title" content="Local LLM Chat"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-255/tools/llm/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-255/feed.xml"><style>.in-content-ad[data-astro-cid-rhiki3z3]{overflow:hidden;max-width:100%}.in-content-ad[data-astro-cid-rhiki3z3] .card[data-astro-cid-rhiki3z3]{box-shadow:none;border-color:#00000020;overflow:hidden}.in-content-ad[data-astro-cid-rhiki3z3] ins[data-astro-cid-rhiki3z3].adsbygoogle{max-width:100%}.in-content-ad[data-astro-cid-rhiki3z3]:has(ins[data-ad-status=unfilled]){display:none}@media(max-width:767.98px){.in-content-ad[data-astro-cid-rhiki3z3]{overflow:visible;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw)}}
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Local LLM Chat</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-255/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-255/tools/llm/"><meta property="og:title" content="Local LLM Chat"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-255/tools/llm/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-255/feed.xml"><style>#chat-history[data-astro-cid-kc3ngmdx]{height:400px;overflow-y:auto;background:#1a1a2e;border-radius:8px}.chat-bubble-user[data-astro-cid-kc3ngmdx]{background:#0dcaf0;color:#fff;border-radius:18px 18px 4px}.chat-bubble-assistant[data-astro-cid-kc3ngmdx]{background:#2d2d2d;color:#e0e0e0;border-radius:18px 18px 18px 4px}.typing-cursor[data-astro-cid-kc3ngmdx]{display:inline-block;animation:blink .7s step-start infinite;margin-left:1px;color:#0dcaf0}@keyframes blink{50%{opacity:0}}
 </style>
-<link rel="stylesheet" href="/pr-preview/pr-255/_astro/BaseLayout.KjeXb0Sa.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-255/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-255/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">(function(){var t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t&&e&&t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())})})();</script>  <div class="bg-dark"> <div id="tool-header" class="py-4 text-white google-anno-skip"> <div class="container"> <h2>Local LLM Chat</h2> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small text-white">Share:</span> <a class="btn btn-sm btn-outline-light" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F&#38;text=Local%20LLM%20Chat" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F&#38;title=Local%20LLM%20Chat" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <button id="copy-post-link" class="btn btn-sm btn-outline-light" aria-label="Copy link"> <i class="fa fa-link" aria-hidden="true"></i> </button> </div> </div> </div> <br> <div class="container"> <div class="row"> <div id="tool-main-content" class="col-md-10"> <div class="page-content">  
-<link rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.1/dist/transformers.min.js"
-  integrity="sha384-A5IXc7Kyh0SBF8QiT/5S3QR5bDtgbkOX/xRFggycSY94V0sbZzy3Mi13ou8cUvl8"
-  crossorigin="anonymous">
-
-<style>
-  #chat-history {
-    height: 400px;
-    overflow-y: auto;
-    background: #1a1a2e;
-    border-radius: 8px;
-  }
-  .chat-bubble-user {
-    background: #0dcaf0;
-    color: #fff;
-    border-radius: 18px 18px 4px 18px;
-  }
-  .chat-bubble-assistant {
-    background: #2d2d2d;
-    color: #e0e0e0;
-    border-radius: 18px 18px 18px 4px;
-  }
-  .typing-cursor {
-    display: inline-block;
-    animation: blink 0.7s step-start infinite;
-    margin-left: 1px;
-    color: #0dcaf0;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-</style>
-
-<div class="card google-anno-skip">
-<div class="card-body">
-
-<!-- Setup -->
-<div id="setup-section">
-  <div class="row g-3 align-items-end mb-3">
-
-    <div class="col-12 col-sm-7 col-md-6">
-      <label class="form-label" for="model-select">Model</label>
-      <select class="form-select" id="model-select">
-        <option value="Xenova/TinyLlama-1.1B-Chat-v1.0" data-chat="true">TinyLlama 1.1B Chat (~640 MB, recommended)</option>
-        <option value="Xenova/gpt2" data-chat="false">GPT-2 (~120 MB, fast — text completion only)</option>
-      </select>
-    </div>
-
-    <div class="col-auto">
-      <button class="btn btn-info text-white" id="load-btn">
-        <i class="fas fa-download me-1"></i>Load Model
-      </button>
-    </div>
-
-  </div>
-
-  <div id="load-progress" class="d-none mb-3">
-    <div class="d-flex align-items-center gap-2 mb-1">
-      <small id="progress-label" class="text-muted">Loading…</small>
-    </div>
-    <div class="progress" style="height: 8px;">
-      <div id="progress-bar" class="progress-bar bg-info progress-bar-striped progress-bar-animated"
-        role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Chat -->
-<div id="chat-section" class="d-none">
-
-  <div id="chat-history" class="p-3 mb-3" role="log" aria-live="polite" aria-label="Chat history">
-    <p class="text-muted text-center small mt-5" id="chat-placeholder">
-      <i class="fas fa-robot me-1"></i>Model loaded — say something!
-    </p>
-  </div>
-
-  <div class="d-flex gap-2 align-items-end">
-    <textarea id="chat-input" class="form-control" rows="2"
-      placeholder="Type a message and press Enter…" aria-label="Chat input"></textarea>
-    <div class="d-flex flex-column gap-2 flex-shrink-0">
-      <button class="btn btn-info text-white" id="send-btn" title="Send (Enter)">
-        <i class="fas fa-paper-plane"></i>
-      </button>
-      <button class="btn btn-outline-secondary" id="clear-btn" title="Clear conversation">
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
-
-  <div class="mt-2">
-    <small class="text-muted">
-      <i class="fas fa-microchip me-1"></i>Runs entirely in your browser via WebAssembly — no data is sent to any server.
+<link rel="stylesheet" href="/pr-preview/pr-255/_astro/BaseLayout.KjeXb0Sa.css">
+<style>.in-content-ad[data-astro-cid-rhiki3z3]{overflow:hidden;max-width:100%}.in-content-ad[data-astro-cid-rhiki3z3] .card[data-astro-cid-rhiki3z3]{box-shadow:none;border-color:#00000020;overflow:hidden}.in-content-ad[data-astro-cid-rhiki3z3] ins[data-astro-cid-rhiki3z3].adsbygoogle{max-width:100%}.in-content-ad[data-astro-cid-rhiki3z3]:has(ins[data-ad-status=unfilled]){display:none}@media(max-width:767.98px){.in-content-ad[data-astro-cid-rhiki3z3]{overflow:visible;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw)}}
+</style></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-255/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-255/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-255/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">(function(){var t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t&&e&&t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())})})();</script>  <div class="bg-dark"> <div id="tool-header" class="py-4 text-white google-anno-skip"> <div class="container"> <h2>Local LLM Chat</h2> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small text-white">Share:</span> <a class="btn btn-sm btn-outline-light" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F&#38;text=Local%20LLM%20Chat" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F&#38;title=Local%20LLM%20Chat" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-255%2Ftools%2Fllm%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <button id="copy-post-link" class="btn btn-sm btn-outline-light" aria-label="Copy link"> <i class="fa fa-link" aria-hidden="true"></i> </button> </div> </div> </div> <br> <div class="container"> <div class="row"> <div id="tool-main-content" class="col-md-10"> <div class="page-content">  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.1/dist/transformers.min.js" integrity="sha384-A5IXc7Kyh0SBF8QiT/5S3QR5bDtgbkOX/xRFggycSY94V0sbZzy3Mi13ou8cUvl8" crossorigin="anonymous">  <div class="card google-anno-skip" data-astro-cid-kc3ngmdx> <div class="card-body" data-astro-cid-kc3ngmdx> <!-- Setup --> <div id="setup-section" data-astro-cid-kc3ngmdx> <div class="row g-3 align-items-end mb-3" data-astro-cid-kc3ngmdx> <div class="col-12 col-sm-7 col-md-6" data-astro-cid-kc3ngmdx> <label class="form-label" for="model-select" data-astro-cid-kc3ngmdx>Model</label> <select class="form-select" id="model-select" data-astro-cid-kc3ngmdx> <option value="Xenova/TinyLlama-1.1B-Chat-v1.0" data-chat="true" data-astro-cid-kc3ngmdx>TinyLlama 1.1B Chat (~640 MB, recommended)</option> <option value="Xenova/gpt2" data-chat="false" data-astro-cid-kc3ngmdx>GPT-2 (~120 MB, fast — text completion only)</option> </select> </div> <div class="col-auto" data-astro-cid-kc3ngmdx> <button class="btn btn-info text-white" id="load-btn" data-astro-cid-kc3ngmdx> <i class="fas fa-download me-1" data-astro-cid-kc3ngmdx></i>Load Model
+</button> </div> </div> <div id="load-progress" class="d-none mb-3" data-astro-cid-kc3ngmdx> <div class="d-flex align-items-center gap-2 mb-1" data-astro-cid-kc3ngmdx> <small id="progress-label" class="text-muted" data-astro-cid-kc3ngmdx>Loading…</small> </div> <div class="progress" style="height: 8px;" data-astro-cid-kc3ngmdx> <div id="progress-bar" class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-astro-cid-kc3ngmdx></div> </div> </div> </div> <!-- Chat --> <div id="chat-section" class="d-none" data-astro-cid-kc3ngmdx> <div id="chat-history" class="p-3 mb-3" role="log" aria-live="polite" aria-label="Chat history" data-astro-cid-kc3ngmdx> <p class="text-muted text-center small mt-5" id="chat-placeholder" data-astro-cid-kc3ngmdx> <i class="fas fa-robot me-1" data-astro-cid-kc3ngmdx></i>Model loaded — say something!
+</p> </div> <div class="d-flex gap-2 align-items-end" data-astro-cid-kc3ngmdx> <textarea id="chat-input" class="form-control" rows="2" placeholder="Type a message and press Enter…" aria-label="Chat input" data-astro-cid-kc3ngmdx></textarea> <div class="d-flex flex-column gap-2 flex-shrink-0" data-astro-cid-kc3ngmdx> <button class="btn btn-info text-white" id="send-btn" title="Send (Enter)" data-astro-cid-kc3ngmdx> <i class="fas fa-paper-plane" data-astro-cid-kc3ngmdx></i> </button> <button class="btn btn-outline-secondary" id="clear-btn" title="Clear conversation" data-astro-cid-kc3ngmdx> <i class="fas fa-trash" data-astro-cid-kc3ngmdx></i> </button> </div> </div> <div class="mt-2" data-astro-cid-kc3ngmdx> <small class="text-muted" data-astro-cid-kc3ngmdx> <i class="fas fa-microchip me-1" data-astro-cid-kc3ngmdx></i>Runs entirely in your browser via WebAssembly — no data is sent to any server.
       Generation speed depends on your device; first load downloads the model (~0.1 – 0.7 GB, cached after).
-    </small>
-  </div>
-
-</div>
-
-<!-- Status -->
-<div id="status-msg" class="mt-3 d-none"></div>
-
-</div>
-</div>
-
-<script type="module" src="/pr-preview/pr-255/tools/llm/llm.js"></script>
-
-<div class="card mt-4">
-<div class="card-body">
-
-<h4>How It Works</h4>
-<p>
-  This tool runs a large language model <strong>entirely inside your browser tab</strong>
-  using <a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a>.
+</small> </div> </div> <!-- Status --> <div id="status-msg" class="mt-3 d-none" data-astro-cid-kc3ngmdx></div> </div> </div> <script type="module" src="/tools/llm/llm.js"></script> <div class="card mt-4" data-astro-cid-kc3ngmdx> <div class="card-body" data-astro-cid-kc3ngmdx> <h4 data-astro-cid-kc3ngmdx>How It Works</h4> <p data-astro-cid-kc3ngmdx>
+This tool runs a large language model <strong data-astro-cid-kc3ngmdx>entirely inside your browser tab</strong>
+using <a href="https://webassembly.org/" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>WebAssembly</a>.
   No text you type is ever sent to a server — inference happens locally on your CPU.
-</p>
-
-<h5 class="mt-4">Powered by Transformers.js</h5>
-<p>
-  <a href="https://huggingface.co/docs/transformers.js" target="_blank" rel="noopener">Transformers.js</a>
-  is the official JavaScript port of Hugging Face Transformers. It uses
-  <a href="https://onnxruntime.ai/" target="_blank" rel="noopener">ONNX Runtime Web</a>
-  to run pre-converted ONNX model files inside the browser's WebAssembly engine — no plugins or
+</p> <h5 class="mt-4" data-astro-cid-kc3ngmdx>Powered by Transformers.js</h5> <p data-astro-cid-kc3ngmdx> <a href="https://huggingface.co/docs/transformers.js" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>Transformers.js</a>
+is the official JavaScript port of Hugging Face Transformers. It uses
+<a href="https://onnxruntime.ai/" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>ONNX Runtime Web</a>
+to run pre-converted ONNX model files inside the browser's WebAssembly engine — no plugins or
   native installs required.
-</p>
-
-<h5 class="mt-4">Available Models</h5>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr><th>Model</th><th>Size (quantized)</th><th>Notes</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href="https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0" target="_blank" rel="noopener">TinyLlama 1.1B Chat</a></td>
-        <td>~640 MB</td>
-        <td>Instruction-tuned chat model; best results for Q&amp;A and conversation.</td>
-      </tr>
-      <tr>
-        <td><a href="https://huggingface.co/openai-community/gpt2" target="_blank" rel="noopener">GPT-2</a></td>
-        <td>~120 MB</td>
-        <td>Lightweight text-completion model. Fast to load; not instruction-tuned.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<h5 class="mt-4">Implementation Details</h5>
-<ol>
-  <li>
-    On first use the browser downloads the selected model's ONNX weights from the
-    <a href="https://huggingface.co/" target="_blank" rel="noopener">Hugging Face Hub</a>
-    CDN and caches them in the browser's
-    <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener">Cache Storage</a>.
+</p> <h5 class="mt-4" data-astro-cid-kc3ngmdx>Available Models</h5> <div class="table-responsive" data-astro-cid-kc3ngmdx> <table class="table table-sm table-bordered" data-astro-cid-kc3ngmdx> <thead class="table-light" data-astro-cid-kc3ngmdx> <tr data-astro-cid-kc3ngmdx><th data-astro-cid-kc3ngmdx>Model</th><th data-astro-cid-kc3ngmdx>Size (quantized)</th><th data-astro-cid-kc3ngmdx>Notes</th></tr> </thead> <tbody data-astro-cid-kc3ngmdx> <tr data-astro-cid-kc3ngmdx> <td data-astro-cid-kc3ngmdx><a href="https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>TinyLlama 1.1B Chat</a></td> <td data-astro-cid-kc3ngmdx>~640 MB</td> <td data-astro-cid-kc3ngmdx>Instruction-tuned chat model; best results for Q&amp;A and conversation.</td> </tr> <tr data-astro-cid-kc3ngmdx> <td data-astro-cid-kc3ngmdx><a href="https://huggingface.co/openai-community/gpt2" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>GPT-2</a></td> <td data-astro-cid-kc3ngmdx>~120 MB</td> <td data-astro-cid-kc3ngmdx>Lightweight text-completion model. Fast to load; not instruction-tuned.</td> </tr> </tbody> </table> </div> <h5 class="mt-4" data-astro-cid-kc3ngmdx>Implementation Details</h5> <ol data-astro-cid-kc3ngmdx> <li data-astro-cid-kc3ngmdx>
+On first use the browser downloads the selected model's ONNX weights from the
+<a href="https://huggingface.co/" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>Hugging Face Hub</a>
+CDN and caches them in the browser's
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>Cache Storage</a>.
     Subsequent visits reuse the cached files with no re-download.
-  </li>
-  <li>
-    Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
+</li> <li data-astro-cid-kc3ngmdx>
+Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
     WASM thread using the model's bundled vocabulary.
-  </li>
-  <li>
-    The <a href="https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer" target="_blank" rel="noopener">TextStreamer</a>
-    API streams generated tokens back to the page one at a time, so you see the response
+</li> <li data-astro-cid-kc3ngmdx>
+The <a href="https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer" target="_blank" rel="noopener" data-astro-cid-kc3ngmdx>TextStreamer</a>
+API streams generated tokens back to the page one at a time, so you see the response
     appear incrementally — just like server-side streaming APIs.
-  </li>
-  <li>
-    For chat models (TinyLlama), the full conversation history is passed on every turn using
+</li> <li data-astro-cid-kc3ngmdx>
+For chat models (TinyLlama), the full conversation history is passed on every turn using
     the model's built-in chat template, keeping the assistant aware of prior context.
-  </li>
-</ol>
-
-<h5 class="mt-4">Performance Expectations</h5>
-<p>
-  WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
-  Typical generation speed on a modern laptop is <strong>1 – 10 tokens/second</strong>
-  depending on the model and CPU. The first generation in a session may be slower
+</li> </ol> <h5 class="mt-4" data-astro-cid-kc3ngmdx>Performance Expectations</h5> <p data-astro-cid-kc3ngmdx>
+WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
+  Typical generation speed on a modern laptop is <strong data-astro-cid-kc3ngmdx>1 – 10 tokens/second</strong>
+depending on the model and CPU. The first generation in a session may be slower
   as the WASM engine JIT-compiles the model graph.
-</p>
-
-<h5 class="mt-4">Privacy</h5>
-<p>
-  All inference runs locally in your browser tab. Your messages, model weights, and any
+</p> <h5 class="mt-4" data-astro-cid-kc3ngmdx>Privacy</h5> <p data-astro-cid-kc3ngmdx>
+All inference runs locally in your browser tab. Your messages, model weights, and any
   generated text never leave your device.
-</p>
-
-</div>
-</div>
-  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</p> </div> </div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>
