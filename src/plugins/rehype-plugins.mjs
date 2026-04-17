@@ -193,9 +193,7 @@ export function rehypeInjectAds(options = { density: 7 }) {
     for (const { index, parent } of insertions.reverse()) {
       const adMarker = {
         type: 'element',
-        tagName: 'div',
-        properties: { className: ['in-content-ad-marker'], 'data-ad-slot': 'in-content' },
-        children: [],
+        tagName: 'in-content-ad-marker',
       };
       parent.children.splice(index, 0, adMarker);
     }
