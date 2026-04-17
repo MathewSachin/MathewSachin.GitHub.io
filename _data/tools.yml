@@ -61,5 +61,5 @@
 
 - id: llm
   name: Local LLM Chat
-  description: Chat with a local language model that runs entirely in your browser — powered by Transformers.js WebAssembly. No data sent to any server.
+  description: Chat with Gemma 4 locally in your browser — powered by Transformers.js with WebGPU acceleration and WebAssembly fallback. No data sent to any server.
   icon: fas fa-robot

@@ -1,13 +1,9 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import Docs from '@content/tool-docs/llm.mdx';
+import llmScriptUrl from '../../../scripts/tools/llm.js?url';
 ---
 <ToolLayout title="Local LLM Chat" ads={true}>
-
-<link rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.1/dist/transformers.min.js"
-  integrity="sha384-A5IXc7Kyh0SBF8QiT/5S3QR5bDtgbkOX/xRFggycSY94V0sbZzy3Mi13ou8cUvl8"
-  crossorigin="anonymous">
 
 <style>
   #chat-history {
@@ -45,8 +41,7 @@ import Docs from '@content/tool-docs/llm.mdx';
     <div class="col-12 col-sm-7 col-md-6">
       <label class="form-label" for="model-select">Model</label>
       <select class="form-select" id="model-select">
-        <option value="Xenova/TinyLlama-1.1B-Chat-v1.0" data-chat="true">TinyLlama 1.1B Chat (~640 MB, recommended)</option>
-        <option value="Xenova/gpt2" data-chat="false">GPT-2 (~120 MB, fast — text completion only)</option>
+        <option value="onnx-community/gemma-4-E2B-it-ONNX" data-chat="true" data-task="text-generation">Gemma 4 E2B Instruct (recommended)</option>
       </select>
     </div>
 
@@ -93,8 +88,8 @@ import Docs from '@content/tool-docs/llm.mdx';
 
   <div class="mt-2">
     <small class="text-muted">
-      <i class="fas fa-microchip me-1"></i>Runs entirely in your browser via WebAssembly — no data is sent to any server.
-      Generation speed depends on your device; first load downloads the model (~0.1 – 0.7 GB, cached after).
+      <i class="fas fa-microchip me-1"></i>Runs entirely in your browser and prefers WebGPU acceleration (falls back to WebAssembly if unavailable).
+      No data is sent to any server; first load downloads the model and caches it locally.
     </small>
   </div>
 
@@ -106,7 +101,7 @@ import Docs from '@content/tool-docs/llm.mdx';
 </div>
 </div>
 
-<script type="module" src="/tools/llm/llm.js"></script>
+<script type="module" src={llmScriptUrl}></script>
 
 <Docs />
 </ToolLayout>

@@ -4,22 +4,22 @@
 #### How It Works
 
 This tool runs a large language model **entirely inside your browser tab**
-using [WebAssembly](https://webassembly.org/).
-No text you type is ever sent to a server — inference happens locally on your CPU.
+with [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) acceleration when available
+(and [WebAssembly](https://webassembly.org/) fallback when it is not).
+No text you type is ever sent to a server — inference happens locally on your device.
 
 ##### Powered by Transformers.js
 
 [Transformers.js](https://huggingface.co/docs/transformers.js) is the official JavaScript
 port of Hugging Face Transformers. It uses [ONNX Runtime Web](https://onnxruntime.ai/)
-to run pre-converted ONNX model files inside the browser's WebAssembly engine — no plugins or
+to run pre-converted ONNX model files directly in the browser with GPU-first execution and no
 native installs required.
 
 ##### Available Models
 
-| Model | Size (quantized) | Notes |
-|-------|-----------------|-------|
-| [TinyLlama 1.1B Chat](https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0) | ~640 MB | Instruction-tuned chat model; best results for Q&A and conversation. |
-| [GPT-2](https://huggingface.co/openai-community/gpt2) | ~120 MB | Lightweight text-completion model. Fast to load; not instruction-tuned. |
+| Model | Notes |
+|-------|-------|
+| [Gemma 4 E2B Instruct ONNX](https://huggingface.co/onnx-community/gemma-4-E2B-it-ONNX) | Default and only available model for now. Optimized for local conversational usage in Transformers.js. |
 
 ##### Implementation Details
 
@@ -27,20 +27,20 @@ native installs required.
    [Hugging Face Hub](https://huggingface.co/) CDN and caches them in the browser's
    [Cache Storage](https://developer.mozilla.org/en-US/docs/Web/API/Cache).
    Subsequent visits reuse the cached files with no re-download.
-2. Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
-   WASM thread using the model's bundled vocabulary.
-3. The [TextStreamer](https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer)
+2. The runtime first attempts the WebGPU backend for faster generation and automatically
+   falls back to WebAssembly if your browser/device does not support WebGPU.
+3. Tokenization (text → token IDs) and de-tokenization (token IDs → text) run locally
+   using the model's bundled vocabulary.
+4. The [TextStreamer](https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer)
    API streams generated tokens back to the page one at a time, so you see the response
    appear incrementally — just like server-side streaming APIs.
-4. For chat models (TinyLlama), the full conversation history is passed on every turn using
-   the model's built-in chat template, keeping the assistant aware of prior context.
+5. For chat models (Gemma 4), the full conversation history is passed on every turn using
+   the model's built-in chat format, keeping the assistant aware of prior context.
 
 ##### Performance Expectations
 
-WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
-Typical generation speed on a modern laptop is **1 – 10 tokens/second**
-depending on the model and CPU. The first generation in a session may be slower
-as the WASM engine JIT-compiles the model graph.
+WebGPU is typically much faster than CPU-only WASM execution.
+If fallback to WASM is required, performance is slower and depends heavily on your CPU.
 
 ##### Privacy
 

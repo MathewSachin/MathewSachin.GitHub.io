@@ -1,13 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-// Fake ES module returned in place of the real @huggingface/transformers CDN bundle.
+// Fake ES module returned in place of the real @huggingface/transformers bundle.
 // This avoids any network download of multi-hundred-MB model weights while still
 // exercising every code path in llm.js.
 //
-// Strategy: rather than intercepting the CDN URL directly (which runs into the
-// SRI integrity check on the <link rel="modulepreload"> tag), we intercept the
-// local llm.js response and swap its CDN import URL for a local test URL that
-// we serve ourselves.  This completely side-steps SRI and cross-origin issues.
+// Strategy: intercept the llm.js response and swap its transformers import URL
+// for a local test URL that we serve ourselves.
 const MOCK_URL = '/test-mock/transformers.js';
 
 const MOCK_TRANSFORMERS_GOOD = `
@@ -46,23 +44,26 @@ export async function pipeline() { throw new Error('Network error'); }
 /**
  * Register the two routes needed for every test:
  * 1. Serve our local mock module at MOCK_URL.
- * 2. Intercept llm.js and replace its CDN import URL with MOCK_URL so that
- *    the SRI integrity attribute on the <link rel="modulepreload"> is never
- *    evaluated against our mock body.
+ * 2. Intercept llm.js and replace its transformers import URL with MOCK_URL.
  */
 async function setupRoutes(page, mockBody = MOCK_TRANSFORMERS_GOOD) {
   await page.route('**/test-mock/transformers.js', route =>
     route.fulfill({ contentType: 'application/javascript; charset=utf-8', body: mockBody })
   );
 
-  await page.route('**/tools/llm/llm.js', async route => {
+  await page.route(/.*(?:\/tools\/llm\/llm\.js|\/src\/scripts\/tools\/llm\.js)(?:\?.*)?$/, async route => {
     const response = await route.fetch();
     const original = await response.text();
-    // Replace the CDN import URL (however it is formatted) with our local URL.
-    const modified = original.replace(
-      /from\s+['"]https:\/\/cdn\.jsdelivr\.net\/[^'"]+['"]/,
-      `from '${MOCK_URL}'`
-    );
+    // Replace the transformers import URL (however it is formatted) with our local URL.
+    const modified = original
+      .replace(
+        /from\s+['"]@huggingface\/transformers['"]/,
+        `from '${MOCK_URL}'`
+      )
+      .replace(
+        /from\s+['"][^'"]*huggingface[^'"]*transformers[^'"]*['"]/,
+        `from '${MOCK_URL}'`
+      );
     await route.fulfill({
       status: 200,
       contentType: 'application/javascript; charset=utf-8',
