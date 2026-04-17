@@ -15,7 +15,6 @@ import { RecorderCore }                        from './recorder-core.js';
 import { PREFS, savePref, loadPref }           from './prefs.js';
 import { showAlert, showToast, showErrorDialog } from './dialogs.js';
 import { setupMediaSession, clearMediaSession }  from './media-session.js';
-import { registerServiceWorker }               from './register-service-worker.js';
 import { RecorderAPI }                         from './recorder-api.js';
 import { RecorderStateMachine, STATE, EVENT }  from './recorder-state-machine.js';
 import { trackEvent }                          from './analytics.js';
@@ -630,7 +629,3 @@ window.addEventListener('beforeunload', (e) => {
     e.returnValue = ''; // Required by some browsers to trigger the dialog
   }
 });
-
-// ── PWA Service Worker Registration ───────────────────────────────────────────
-
-registerServiceWorker();
