@@ -1,11 +1,7 @@
 ---
-layout: tool
-title: PDF Password Tool
-ads: true
----
-
-<!-- Hidden element exposing the worker URL to JS (respects Jekyll baseurl for PR previews). -->
-<span id="pdf-worker-url" data-url="{{ '/tools/pdf/pdf.worker.js' | relative_url }}" class="d-none"></span>
+import ToolLayout from '@layouts/ToolLayout.astro';
+const html = `<!-- Hidden element exposing the worker URL to JS (respects Jekyll baseurl for PR previews). -->
+<span id="pdf-worker-url" data-url="/tools/pdf/pdf.worker.js" class="d-none"></span>
 
 <div class="card google-anno-skip">
 <div class="card-body">
@@ -172,4 +168,8 @@ ads: true
 </div>
 </div>
 
-<script defer src="{{ '/tools/pdf/pdf.js' | relative_url }}"></script>
+<script defer src="./pdf.js"></script>`;
+---
+<ToolLayout title="PDF Password Tool" ads={true}>
+  <Fragment set:html={html} />
+</ToolLayout>

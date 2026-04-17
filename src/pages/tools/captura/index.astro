@@ -1,17 +1,7 @@
 ---
-layout: tool
-title: Captura Web Recorder
-ads: true
-manifest: /tools/captura/manifest.json
-redirect_from:
-  - /Captura/
-  - /captura/
-  - captura
----
-
-<link rel="stylesheet" href="{{ '/tools/captura/recorder.css' | relative_url }}">
-
-<div id="pwa-update-bar" class="d-flex align-items-center gap-2" hidden>
+import ToolLayout from '@layouts/ToolLayout.astro';
+import './recorder.css';
+const html = `<div id="pwa-update-bar" class="d-flex align-items-center gap-2" hidden>
   <span><i class="fas fa-sync-alt me-1"></i>A new version of Captura is available!</span>
   <button id="pwa-update-btn" class="btn btn-sm btn-light flex-shrink-0">Update Now</button>
   <button id="pwa-dismiss-btn" class="btn btn-sm btn-close flex-shrink-0" aria-label="Dismiss"></button>
@@ -187,7 +177,7 @@ redirect_from:
     <h5 class="card-title">About Captura Web Recorder</h5>
     <p class="mb-2">
       A browser-based screen recorder inspired by the original
-      <a href="{{ '/blog/2023/04/09/captura-unmaintained.html' | relative_url }}" target="_blank">Captura (no longer maintained)</a> desktop app.
+      <a href="/blog/2023/04/09/captura-unmaintained.html" target="_blank">Captura (no longer maintained)</a> desktop app.
       Record your screen, mix in webcam and microphone audio, and save the result — all entirely
       inside your browser. <strong>No data is ever sent to any server.</strong>
     </p>
@@ -428,4 +418,8 @@ redirect_from:
   </div>
 </div>
 
-<script type="module" src="{{ '/tools/captura/js/app.js' | relative_url }}"></script>
+<script type="module" src="./js/app.js"></script>`;
+---
+<ToolLayout title="Captura Web Recorder" ads={true} manifest="/tools/captura/manifest.json">
+  <Fragment set:html={html} />
+</ToolLayout>

@@ -1,10 +1,6 @@
 ---
-layout: tool
-title: Base64 Encoder / Decoder
-ads: true
----
-
-<div class="card google-anno-skip">
+import ToolLayout from '@layouts/ToolLayout.astro';
+const html = `<div class="card google-anno-skip">
 <div class="card-body">
 
 <div class="row g-4">
@@ -143,4 +139,8 @@ document.getElementById('copy-btn').addEventListener('click', function () {
 </p>
 
 </div>
-</div>
+</div>`;
+---
+<ToolLayout title="Base64 Encoder / Decoder" ads={true}>
+  <Fragment set:html={html} />
+</ToolLayout>

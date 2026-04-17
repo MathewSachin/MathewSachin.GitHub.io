@@ -1,10 +1,6 @@
 ---
-layout: tool
-title: Bookmarklet Compiler
-ads: true
----
-
-<style>
+import ToolLayout from '@layouts/ToolLayout.astro';
+const html = `<style>
   #raw-input,
   #compiled-output {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
@@ -59,7 +55,7 @@ ads: true
         placeholder="Paste your raw JavaScript here…
 
 // Example — show page word count
-var words = document.body.innerText.match(/\S+/g);
+var words = document.body.innerText.match(/\\S+/g);
 alert('Word count: ' + (words ? words.length : 0));"
         aria-label="Raw JavaScript source"></textarea>
       <div class="mt-2 d-flex gap-2 flex-wrap" id="stats-bar" aria-live="polite" aria-atomic="true">
@@ -150,7 +146,7 @@ alert('Word count: ' + (words ? words.length : 0));"
   <li>
     <strong>URI Encoding</strong> — Characters that would break a URL bar
     (<code>%</code>, <code>"</code>, <code>'</code>, <code>#</code>, <code>&amp;</code>,
-    <code>&lt;</code>, <code>&gt;</code>, <code>`</code>) are percent-encoded so the browser
+    <code>&lt;</code>, <code>&gt;</code>, <code>\`</code>) are percent-encoded so the browser
     doesn't mangle your script before it executes.
   </li>
 </ol>
@@ -164,7 +160,7 @@ alert('Word count: ' + (words ? words.length : 0));"
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/terser@5.46.1/dist/bundle.min.js" integrity="sha384-nzjWtCA/KgLA3wxAwnhUkyVMkUYv5FHRfUInpQG+0QyLpbblos9RKFceXWHQ3AWM" crossorigin="anonymous"></script>
-<script>
+<script is:inline>
 (function () {
   'use strict';
 
@@ -192,7 +188,7 @@ alert('Word count: ' + (words ? words.length : 0));"
       .replace(/&/g,  '%26')
       .replace(/</g,  '%3C')
       .replace(/>/g,  '%3E')
-      .replace(/`/g,  '%60');
+      .replace(/\`/g,  '%60');
   }
 
   function setResult(bookmarklet) {
@@ -274,4 +270,8 @@ alert('Word count: ' + (words ? words.length : 0));"
   });
 
 }());
-</script>
+</script>`;
+---
+<ToolLayout title="Bookmarklet Compiler" ads={true}>
+  <Fragment set:html={html} />
+</ToolLayout>

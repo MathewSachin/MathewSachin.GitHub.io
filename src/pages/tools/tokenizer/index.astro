@@ -1,10 +1,6 @@
 ---
-layout: tool
-title: AI Tokenizer &amp; Cost Calculator
-ads: true
----
-
-<script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.9.0/dist/o200k_base.js"
+import ToolLayout from '@layouts/ToolLayout.astro';
+const html = `<script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.9.0/dist/o200k_base.js"
   integrity="sha384-c++bciYftVqCv4OqISnwDg8w6AAp4byu4pbHKziESSt788G8QD2kccLmT+ixYwNy"
   crossorigin="anonymous"></script>
 
@@ -170,7 +166,7 @@ ads: true
   }
 
   function countWords(text) {
-    return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    return text.trim() === '' ? 0 : text.trim().split(/\\s+/).length;
   }
 
   function formatCost(dollars) {
@@ -191,11 +187,11 @@ ads: true
         ' aria-valuemin="0" aria-valuemax="100"></div>' +
       '</div>' +
       '<small class="text-muted">' +
-        count.toLocaleString() + '\u202f/\u202f' +
+        count.toLocaleString() + '\\u202f/\\u202f' +
         (context >= 1000000
           ? (context / 1000000).toFixed(0) + 'M'
           : (context / 1000).toFixed(0) + 'K') +
-        '\u00a0(' + pct.toFixed(1) + '%)' +
+        '\\u00a0(' + pct.toFixed(1) + '%)' +
       '</small>'
     );
   }
@@ -249,12 +245,12 @@ ads: true
       try {
         tokenStr = decodeIds([tokenIds[i]]);
       } catch (e) {
-        tokenStr = '\uFFFD';
+        tokenStr = '\\uFFFD';
       }
       html += '<span class="' + COLORS[i % 2] + '">' + escapeHtml(tokenStr) + '</span>';
     }
     if (count > VIZ_CAP) {
-      html += '<span class="text-muted"> \u2026 (' + (count - VIZ_CAP).toLocaleString() + ' more tokens)</span>';
+      html += '<span class="text-muted"> \\u2026 (' + (count - VIZ_CAP).toLocaleString() + ' more tokens)</span>';
       vizCapNote.classList.remove('d-none');
     } else {
       vizCapNote.classList.add('d-none');
@@ -275,11 +271,11 @@ ads: true
           tokenNote  = 'actual (claude.json)';
         } else if (claudeState === 'loading') {
           tokenCount = Math.round(baseCount * m.multiplier);
-          tokenNote  = '<span class="spinner-border spinner-border-sm text-secondary me-1" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading tokenizer</span>loading\u2026';
+          tokenNote  = '<span class="spinner-border spinner-border-sm text-secondary me-1" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading tokenizer</span>loading\\u2026';
         } else {
           // failed
           tokenCount = Math.round(baseCount * m.multiplier);
-          tokenNote  = 'est. \u00d71.10 (tokenizer unavailable)';
+          tokenNote  = 'est. \\u00d71.10 (tokenizer unavailable)';
         }
       } else {
         tokenCount = Math.round(baseCount * m.multiplier);
@@ -292,7 +288,7 @@ ads: true
         '<tr>' +
           '<td><strong>' + m.name + '</strong><br>' +
           '<small class="text-muted">$' + m.inputPer1M.toFixed(2) +
-          '\u202f/\u202f$' + m.outputPer1M.toFixed(2) + ' per 1\u202fM tokens in/out</small></td>' +
+          '\\u202f/\\u202f$' + m.outputPer1M.toFixed(2) + ' per 1\\u202fM tokens in/out</small></td>' +
           '<td class="text-end fw-semibold">' +
             tokenCount.toLocaleString() +
             '<br><small class="text-muted fw-normal">' + tokenNote + '</small></td>' +
@@ -314,7 +310,7 @@ ads: true
 
   // ── Seed with example ─────────────────────────────────────────────────────────
   textInput.value =
-    'The quick brown fox jumps over the lazy dog.\n\n' +
+    'The quick brown fox jumps over the lazy dog.\\n\\n' +
     'AI models use "tokenizers" to split text into chunks before processing. ' +
     'Common words like "the" or "is" are typically one token each. ' +
     'Longer or rarer words like "tokenization" or "WebAssembly" may be split into multiple tokens.';
@@ -487,4 +483,8 @@ var VOCAB_SRI = 'sha384-0/W+OO5/jtFlfeZbfhRHiHgEgTWkh9Er967ebA7jUcG4Tmw6DTyCIlNv
 </p>
 
 </div>
-</div>
+</div>`;
+---
+<ToolLayout title="AI Tokenizer & Cost Calculator" ads={true}>
+  <Fragment set:html={html} />
+</ToolLayout>

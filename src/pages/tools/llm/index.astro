@@ -1,10 +1,6 @@
 ---
-layout: tool
-title: Local LLM Chat
-ads: true
----
-
-<link rel="modulepreload"
+import ToolLayout from '@layouts/ToolLayout.astro';
+const html = `<link rel="modulepreload"
   href="https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.1/dist/transformers.min.js"
   integrity="sha384-A5IXc7Kyh0SBF8QiT/5S3QR5bDtgbkOX/xRFggycSY94V0sbZzy3Mi13ou8cUvl8"
   crossorigin="anonymous">
@@ -187,4 +183,8 @@ ads: true
 </p>
 
 </div>
-</div>
+</div>`;
+---
+<ToolLayout title="Local LLM Chat" ads={true}>
+  <Fragment set:html={html} />
+</ToolLayout>

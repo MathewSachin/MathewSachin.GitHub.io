@@ -1,10 +1,6 @@
 ---
-layout: tool
-title: Image Compressor
-ads: true
----
-
-<script src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
+import ToolLayout from '@layouts/ToolLayout.astro';
+const html = `<script src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
   integrity="sha384-M8gIiLd+UKUmTrqlRrO14Veff1ao4UoVqgcMhovIW5DUwxErdsz8K+6D3ZbplaNN"
   crossorigin="anonymous"></script>
 
@@ -269,7 +265,7 @@ ads: true
                      : fmt === 'WEBP' ? 'image/webp'
                      : 'image/png';
             var blob     = new Blob([data], { type: mime });
-            var baseName = originalFile.name.replace(/\.[^.]+$/, '');
+            var baseName = originalFile.name.replace(/\\.[^.]+$/, '');
             compressedFilename = baseName + '-compressed.' + ext;
             compressedBlob     = blob;
 
@@ -395,4 +391,8 @@ ads: true
 </p>
 
 </div>
-</div>
+</div>`;
+---
+<ToolLayout title="Image Compressor" ads={true}>
+  <Fragment set:html={html} />
+</ToolLayout>
