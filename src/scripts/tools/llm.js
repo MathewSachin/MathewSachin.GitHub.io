@@ -78,6 +78,14 @@ function appendBubble(role, text, streaming) {
   return bubble;
 }
 
+/**
+ * Creates a pipeline instance using WebGPU when available and falls back to
+ * WASM when WebGPU is unavailable or initialization fails.
+ * @param {string} task
+ * @param {string} modelId
+ * @param {Record<string, unknown>} options
+ * @returns {Promise<{generator: Function, device: 'webgpu' | 'wasm'}>}
+ */
 async function createGenerator(task, modelId, options) {
   const canUseWebGPU = typeof navigator !== 'undefined' && 'gpu' in navigator;
 
@@ -123,7 +131,7 @@ loadBtn.addEventListener('click', async function () {
           const overall = files.length ? files.reduce((a, b) => a + b, 0) / files.length : 0;
           progressBar.style.width = overall.toFixed(1) + '%';
           progressBar.setAttribute('aria-valuenow', overall.toFixed(1));
-          progressLabel.textContent = (p.name || p.file || 'Downloading') + '  \u2013  ' + overall.toFixed(1) + '%';
+          progressLabel.textContent = (p.name || p.file || 'Downloading') + ' \u2013 ' + overall.toFixed(1) + '%';
         } else if (p.status === 'done') {
           fileProgress[p.file] = 100;
         } else if (p.status === 'ready') {

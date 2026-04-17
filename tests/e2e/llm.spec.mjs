@@ -7,6 +7,8 @@ import { test, expect } from '@playwright/test';
 // Strategy: intercept the llm.js response and swap its transformers import URL
 // for a local test URL that we serve ourselves.
 const MOCK_URL = '/test-mock/transformers.js';
+// Matches both legacy static llm.js path and Astro bundled llm chunk path.
+const LLM_SCRIPT_ROUTE = /.*(?:\/tools\/llm\/llm\.js|\/_astro\/llm\.[^/]+\.js)(?:\?.*)?$/;
 
 const MOCK_TRANSFORMERS_GOOD = `
 export const env = { allowLocalModels: false };
@@ -51,7 +53,7 @@ async function setupRoutes(page, mockBody = MOCK_TRANSFORMERS_GOOD) {
     route.fulfill({ contentType: 'application/javascript; charset=utf-8', body: mockBody })
   );
 
-  await page.route(/.*(?:\/tools\/llm\/llm\.js|\/src\/scripts\/tools\/llm\.js)(?:\?.*)?$/, async route => {
+  await page.route(LLM_SCRIPT_ROUTE, async route => {
     const response = await route.fetch();
     const original = await response.text();
     // Replace the transformers import URL (however it is formatted) with our local URL.
