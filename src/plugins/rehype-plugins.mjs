@@ -163,17 +163,22 @@ export function rehypeBootstrapFormatting() {
 
 // ---------------------------------------------------------------------------
 // 3. rehypeInjectAds
-//    Injects an in-content ad placeholder after every `density` target nodes.
+//    Injects an in-content AdSense unit after every `density` target nodes.
 //    Mirrors content_ad_split_markers.rb.
-//    The ad HTML is rendered at runtime by the PostLayout component; here we
-//    only insert a <div data-ad-slot> marker that the layout turns into a real
-//    ad unit.
+//    In production builds (NODE_ENV=production) the full <ins> + push script
+//    is injected directly into the static HTML; in dev mode nothing is injected
+//    so local previews stay clean.
 // ---------------------------------------------------------------------------
 const AD_TARGET_TAGS = new Set(['p', 'h2', 'h3', 'h4', 'h5', 'h6', 'picture', 'figure', 'table']);
+const ADSENSE_ID = process.env.PUBLIC_ADSENSE_ID || 'ca-pub-4251360406988977';
+const IS_PROD_BUILD = process.env.NODE_ENV === 'production';
 
 export function rehypeInjectAds(options = { density: 7 }) {
   const density = options.density;
   return function (tree) {
+    // In dev mode, skip injection entirely so local previews stay clean.
+    if (!IS_PROD_BUILD) return;
+
     // Collect target nodes at the top level of the document
     let counter = 0;
     const insertions = [];
@@ -191,13 +196,37 @@ export function rehypeInjectAds(options = { density: 7 }) {
 
     // Insert in reverse order to avoid index shifting
     for (const { index, parent } of insertions.reverse()) {
-      const adMarker = {
+      // Inject the full AdSense unit as static HTML nodes so it works in the
+      // Astro static build without needing runtime component rendering.
+      const adNode = {
         type: 'element',
         tagName: 'div',
-        properties: { className: ['in-content-ad-marker'], 'data-ad-slot': 'in-content' },
-        children: [],
+        properties: { className: ['in-content-ad', 'google-anno-skip'] },
+        children: [
+          {
+            type: 'element',
+            tagName: 'ins',
+            properties: {
+              className: ['adsbygoogle'],
+              style: 'display:block',
+              'data-ad-client': ADSENSE_ID,
+              'data-ad-slot': 'auto',
+              'data-ad-format': 'auto',
+              'data-full-width-responsive': 'true',
+            },
+            children: [],
+          },
+          {
+            type: 'element',
+            tagName: 'script',
+            properties: {},
+            children: [
+              { type: 'text', value: '(adsbygoogle = window.adsbygoogle || []).push({});' },
+            ],
+          },
+        ],
       };
-      parent.children.splice(index, 0, adMarker);
+      parent.children.splice(index, 0, adNode);
     }
   };
 }
