@@ -11,6 +11,8 @@ related:
   - /blog/2026/03/21/youtube-shorts-sniper
 ---
 
+import ShortsUrlConverter from '@components/blog/ShortsUrlConverter.astro';
+
 *The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here's how to instantly escape it using nothing but your address bar.*
 
 ## The Problem With the Shorts Player
@@ -53,49 +55,7 @@ That's it. The exact same video now plays in the full YouTube player with every 
 
 Paste any Shorts URL into the box below and the converter will generate the normal-player URL for you:
 
-<div class="card shadow-sm my-4" style="max-width:560px;">
-  <div class="card-header fw-semibold">🔗 Shorts URL Converter</div>
-  <div class="card-body">
-    <div class="mb-3">
-      <label for="shorts-input" class="form-label">Paste a YouTube Shorts URL</label>
-      <input id="shorts-input" type="url" class="form-control font-monospace"
-        placeholder="https://www.youtube.com/shorts/dQw4w9WgXcQ"
-        oninput="convertShortsUrl(this.value)" />
-    </div>
-    <div id="shorts-output-wrap" style="display:none;">
-      <label class="form-label">Normal player URL</label>
-      <div class="input-group">
-        <input id="shorts-output" type="url" class="form-control font-monospace" readonly />
-        <button class="btn btn-outline-secondary" type="button" onclick="copyShortsUrl()">Copy</button>
-      </div>
-      <a id="shorts-open" href="#" target="_blank" rel="noopener" class="btn btn-primary mt-2">▶ Open in Normal Player</a>
-    </div>
-  </div>
-</div>
-
-<script>{`
-function convertShortsUrl(val) {
-  var wrap = document.getElementById('shorts-output-wrap');
-  var match = val.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/);
-  if (match) {
-    var url = 'https://www.youtube.com/watch?v=' + match[1];
-    document.getElementById('shorts-output').value = url;
-    document.getElementById('shorts-open').href = url;
-    wrap.style.display = '';
-  } else {
-    wrap.style.display = 'none';
-  }
-}
-function copyShortsUrl() {
-  var out = document.getElementById('shorts-output');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(out.value);
-  } else {
-    out.select();
-    document.execCommand('copy');
-  }
-}
-`}</script>
+<ShortsUrlConverter />
 
 ## Bookmarklet: One-Click Fix (Works on Any Computer)
 
