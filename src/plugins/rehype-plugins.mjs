@@ -4,7 +4,6 @@
  *   - rehypeCodeBlockHeader  ← _plugins/code_block_header.rb
  *   - rehypeBootstrapFormatting ← _plugins/bootstrap_formatting.rb
  *   - rehypeInjectAds        ← _plugins/content_ad_split_markers.rb
- *   - rehypePintora          ← _plugins/pintora.rb
  */
 
 import { visit, SKIP } from 'unist-util-visit';
@@ -204,67 +203,4 @@ function isContentContainer(node) {
   if (!node) return false;
   const cls = (node.properties?.className || []);
   return cls.some(c => ['page-content', 'card-body', 'post-content'].includes(c));
-}
-
-// ---------------------------------------------------------------------------
-// 4. rehypePintora
-//    Renders pintora diagrams at build time.
-//    Mirrors pintora.rb.
-//    Looks for <pre class="pintora"> and replaces with inline SVG.
-// ---------------------------------------------------------------------------
-const PINTORA_SCRIPT = join(
-  fileURLToPath(new URL('../../scripts/render-pintora.mjs', import.meta.url))
-);
-
-export function rehypePintora() {
-  return function (tree) {
-    const pintoraNodes = [];
-
-    visit(tree, 'element', (node, index, parent) => {
-      if (node.tagName !== 'pre') return;
-      const classes = (node.properties?.className || []);
-      if (!classes.includes('pintora') && !classes.includes('language-pintora')) return;
-      pintoraNodes.push({ node, index, parent });
-    });
-
-    if (pintoraNodes.length === 0) return;
-
-    if (!existsSync(PINTORA_SCRIPT)) {
-      console.warn('[rehypePintora] render-pintora.mjs not found – skipping diagram render');
-      return;
-    }
-
-    for (const { node, index, parent } of pintoraNodes) {
-      // Extract diagram code from the pre node
-      const code = extractTextContent(node);
-      try {
-        const result = spawnSync('node', [PINTORA_SCRIPT], {
-          input: code,
-          encoding: 'utf8',
-          timeout: 30000,
-        });
-        if (result.status !== 0) {
-          console.error('[rehypePintora] Render failed:', result.stderr);
-          continue;
-        }
-        const svg = result.stdout.trim();
-        const wrapper = {
-          type: 'element',
-          tagName: 'div',
-          properties: { className: ['pintora-wrapper'] },
-          // Insert raw SVG as HTML; Astro will pass it through
-          children: [{ type: 'raw', value: svg }],
-        };
-        parent.children.splice(index, 1, wrapper);
-      } catch (err) {
-        console.error('[rehypePintora] Error:', err);
-      }
-    }
-  };
-}
-
-function extractTextContent(node) {
-  if (node.type === 'text') return node.value || '';
-  if (node.children) return node.children.map(extractTextContent).join('');
-  return '';
 }

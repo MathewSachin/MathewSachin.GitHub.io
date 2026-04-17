@@ -11,7 +11,6 @@ import {
   rehypeCodeBlockHeader,
   rehypeBootstrapFormatting,
   rehypeInjectAds,
-  rehypePintora,
 } from './src/plugins/rehype-plugins.mjs';
 
 const SITE = 'https://mathewsachin.github.io';
@@ -63,7 +62,6 @@ export default defineConfig({
       rehypeBootstrapFormatting,
       // Ad injection density (every 7 content elements, mirrors _config.yml ad_density: 7)
       [rehypeInjectAds, { density: 7 }],
-      rehypePintora,
     ],
   },
   build: {
