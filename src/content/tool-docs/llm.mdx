@@ -1,80 +1,51 @@
 <div class="card mt-4">
 <div class="card-body">
 
-<h4>How It Works</h4>
-<p>
-  This tool runs a large language model <strong>entirely inside your browser tab</strong>
-  using <a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a>.
-  No text you type is ever sent to a server — inference happens locally on your CPU.
-</p>
+#### How It Works
 
-<h5 class="mt-4">Powered by Transformers.js</h5>
-<p>
-  <a href="https://huggingface.co/docs/transformers.js" target="_blank" rel="noopener">Transformers.js</a>
-  is the official JavaScript port of Hugging Face Transformers. It uses
-  <a href="https://onnxruntime.ai/" target="_blank" rel="noopener">ONNX Runtime Web</a>
-  to run pre-converted ONNX model files inside the browser's WebAssembly engine — no plugins or
-  native installs required.
-</p>
+This tool runs a large language model **entirely inside your browser tab**
+using [WebAssembly](https://webassembly.org/).
+No text you type is ever sent to a server — inference happens locally on your CPU.
 
-<h5 class="mt-4">Available Models</h5>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr><th>Model</th><th>Size (quantized)</th><th>Notes</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href="https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0" target="_blank" rel="noopener">TinyLlama 1.1B Chat</a></td>
-        <td>~640 MB</td>
-        <td>Instruction-tuned chat model; best results for Q&amp;A and conversation.</td>
-      </tr>
-      <tr>
-        <td><a href="https://huggingface.co/openai-community/gpt2" target="_blank" rel="noopener">GPT-2</a></td>
-        <td>~120 MB</td>
-        <td>Lightweight text-completion model. Fast to load; not instruction-tuned.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+##### Powered by Transformers.js
 
-<h5 class="mt-4">Implementation Details</h5>
-<ol>
-  <li>
-    On first use the browser downloads the selected model's ONNX weights from the
-    <a href="https://huggingface.co/" target="_blank" rel="noopener">Hugging Face Hub</a>
-    CDN and caches them in the browser's
-    <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener">Cache Storage</a>.
-    Subsequent visits reuse the cached files with no re-download.
-  </li>
-  <li>
-    Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
-    WASM thread using the model's bundled vocabulary.
-  </li>
-  <li>
-    The <a href="https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer" target="_blank" rel="noopener">TextStreamer</a>
-    API streams generated tokens back to the page one at a time, so you see the response
-    appear incrementally — just like server-side streaming APIs.
-  </li>
-  <li>
-    For chat models (TinyLlama), the full conversation history is passed on every turn using
-    the model's built-in chat template, keeping the assistant aware of prior context.
-  </li>
-</ol>
+[Transformers.js](https://huggingface.co/docs/transformers.js) is the official JavaScript
+port of Hugging Face Transformers. It uses [ONNX Runtime Web](https://onnxruntime.ai/)
+to run pre-converted ONNX model files inside the browser's WebAssembly engine — no plugins or
+native installs required.
 
-<h5 class="mt-4">Performance Expectations</h5>
-<p>
-  WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
-  Typical generation speed on a modern laptop is <strong>1 – 10 tokens/second</strong>
-  depending on the model and CPU. The first generation in a session may be slower
-  as the WASM engine JIT-compiles the model graph.
-</p>
+##### Available Models
 
-<h5 class="mt-4">Privacy</h5>
-<p>
-  All inference runs locally in your browser tab. Your messages, model weights, and any
-  generated text never leave your device.
-</p>
+| Model | Size (quantized) | Notes |
+|-------|-----------------|-------|
+| [TinyLlama 1.1B Chat](https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0) | ~640 MB | Instruction-tuned chat model; best results for Q&A and conversation. |
+| [GPT-2](https://huggingface.co/openai-community/gpt2) | ~120 MB | Lightweight text-completion model. Fast to load; not instruction-tuned. |
+
+##### Implementation Details
+
+1. On first use the browser downloads the selected model's ONNX weights from the
+   [Hugging Face Hub](https://huggingface.co/) CDN and caches them in the browser's
+   [Cache Storage](https://developer.mozilla.org/en-US/docs/Web/API/Cache).
+   Subsequent visits reuse the cached files with no re-download.
+2. Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
+   WASM thread using the model's bundled vocabulary.
+3. The [TextStreamer](https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer)
+   API streams generated tokens back to the page one at a time, so you see the response
+   appear incrementally — just like server-side streaming APIs.
+4. For chat models (TinyLlama), the full conversation history is passed on every turn using
+   the model's built-in chat template, keeping the assistant aware of prior context.
+
+##### Performance Expectations
+
+WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
+Typical generation speed on a modern laptop is **1 – 10 tokens/second**
+depending on the model and CPU. The first generation in a session may be slower
+as the WASM engine JIT-compiles the model graph.
+
+##### Privacy
+
+All inference runs locally in your browser tab. Your messages, model weights, and any
+generated text never leave your device.
 
 </div>
 </div>

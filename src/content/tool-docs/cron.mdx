@@ -1,77 +1,53 @@
 <div class="card mt-4">
 <div class="card-body">
 
-<h4>How It Works</h4>
-<p>
-  This tool generates
-  <a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">CRON expressions</a>
-  from a simple point-and-click interface — entirely inside your browser.
-  <strong>No data is sent to a server.</strong>
-</p>
+#### How It Works
 
-<h5 class="mt-4">What is a CRON Expression?</h5>
-<p>
-  A CRON expression is a string of five fields separated by spaces that defines a recurring schedule
-  for a job scheduler (cron daemon on Unix, GitHub Actions, AWS EventBridge, etc.).
-  Each field controls one dimension of time:
-</p>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr>
-        <th>Position</th>
-        <th>Field</th>
-        <th>Allowed Values</th>
-        <th>Special Characters</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>1</td><td>Minute</td><td>0–59</td><td><code>{'*'}</code> <code>,</code> <code>-</code> <code>/</code></td></tr>
-      <tr><td>2</td><td>Hour</td><td>0–23</td><td><code>{'*'}</code> <code>,</code> <code>-</code> <code>/</code></td></tr>
-      <tr><td>3</td><td>Day of month</td><td>1–31</td><td><code>{'*'}</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr>
-      <tr><td>4</td><td>Month</td><td>1–12</td><td><code>{'*'}</code> <code>,</code> <code>-</code> <code>/</code></td></tr>
-      <tr><td>5</td><td>Day of week</td><td>0–6 (Sun–Sat)</td><td><code>{'*'}</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr>
-    </tbody>
-  </table>
-</div>
-<p>
-  An asterisk (<code>{'*'}</code>) in a field means "every valid value for that field."
-  For example, <code>0 9 * * 1</code> means "at 09:00 every Monday."
-</p>
+This tool generates [CRON expressions](https://en.wikipedia.org/wiki/Cron)
+from a simple point-and-click interface — entirely inside your browser.
+**No data is sent to a server.**
 
-<h5 class="mt-4">Implementation Details</h5>
-<p>
-  The generator is written in plain JavaScript. When you click <strong>Generate</strong>, the
-  selected frequency and time values are read from the form controls and assembled into a
-  five-field CRON string using simple string concatenation.
-  A human-readable description and a field-by-field reference table are then rendered
-  directly in the page without any page reload.
-</p>
-<p>
-  All scheduling logic runs in the browser — no network requests, no backend, no libraries.
-  Time values (hours) follow <strong>UTC</strong> unless your scheduler interprets them otherwise.
-</p>
+##### What is a CRON Expression?
 
-<h5 class="mt-4">Common Examples</h5>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr><th>Expression</th><th>Meaning</th></tr>
-    </thead>
-    <tbody>
-      <tr><td><code>* * * * *</code></td><td>Every minute</td></tr>
-      <tr><td><code>0 * * * *</code></td><td>Every hour (at :00)</td></tr>
-      <tr><td><code>0 9 * * *</code></td><td>Every day at 09:00 UTC</td></tr>
-      <tr><td><code>0 9 * * 1</code></td><td>Every Monday at 09:00 UTC</td></tr>
-      <tr><td><code>0 9 1 * *</code></td><td>First day of every month at 09:00 UTC</td></tr>
-    </tbody>
-  </table>
-</div>
+A CRON expression is a string of five fields separated by spaces that defines a recurring schedule
+for a job scheduler (cron daemon on Unix, GitHub Actions, AWS EventBridge, etc.).
+Each field controls one dimension of time:
 
-<h5 class="mt-4">Privacy</h5>
-<p>
-  Everything runs locally in your browser. No schedule data is transmitted anywhere.
-</p>
+| Position | Field | Allowed Values | Special Characters |
+|----------|-------|----------------|--------------------|
+| 1 | Minute | 0–59 | `*` `,` `-` `/` |
+| 2 | Hour | 0–23 | `*` `,` `-` `/` |
+| 3 | Day of month | 1–31 | `*` `,` `-` `/` `?` |
+| 4 | Month | 1–12 | `*` `,` `-` `/` |
+| 5 | Day of week | 0–6 (Sun–Sat) | `*` `,` `-` `/` `?` |
+
+An asterisk (`*`) in a field means "every valid value for that field."
+For example, `0 9 * * 1` means "at 09:00 every Monday."
+
+##### Implementation Details
+
+The generator is written in plain JavaScript. When you click **Generate**, the
+selected frequency and time values are read from the form controls and assembled into a
+five-field CRON string using simple string concatenation.
+A human-readable description and a field-by-field reference table are then rendered
+directly in the page without any page reload.
+
+All scheduling logic runs in the browser — no network requests, no backend, no libraries.
+Time values (hours) follow **UTC** unless your scheduler interprets them otherwise.
+
+##### Common Examples
+
+| Expression | Meaning |
+|------------|---------|
+| `* * * * *` | Every minute |
+| `0 * * * *` | Every hour (at :00) |
+| `0 9 * * *` | Every day at 09:00 UTC |
+| `0 9 * * 1` | Every Monday at 09:00 UTC |
+| `0 9 1 * *` | First day of every month at 09:00 UTC |
+
+##### Privacy
+
+Everything runs locally in your browser. No schedule data is transmitted anywhere.
 
 </div>
 </div>

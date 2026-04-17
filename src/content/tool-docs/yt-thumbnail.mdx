@@ -1,58 +1,48 @@
 <div class="card mt-4">
 <div class="card-body">
 
-<h4>How It Works</h4>
-<p>
-  YouTube hosts every video's thumbnail images on publicly accessible, predictable URLs —
-  no API key or login required. This tool constructs those URLs from the video ID so you
-  can view and save the raw thumbnail instantly.
-</p>
+#### How It Works
 
-<h5 class="mt-4">The URL Pattern</h5>
-<p>
-  All YouTube thumbnails follow this exact format:
-</p>
-<pre class="p-3 rounded" style="background:var(--bs-tertiary-bg)"><code>https://img.youtube.com/vi/<strong>&lt;VIDEO_ID&gt;</strong>/<strong>&lt;quality&gt;</strong>.jpg</code></pre>
-<p>
-  The <code>&lt;VIDEO_ID&gt;</code> is the 11-character string after <code>?v=</code> in any
-  YouTube watch URL (e.g. <code>dQw4w9WgXcQ</code>). The <code>&lt;quality&gt;</code>
-  segment controls the resolution:
-</p>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr><th>Quality key</th><th>Dimensions</th><th>Notes</th></tr>
-    </thead>
-    <tbody>
-      <tr><td><code>maxresdefault</code></td><td>1280 &times; 720</td><td>Highest quality; only available when the video was uploaded at 720p or above</td></tr>
-      <tr><td><code>hqdefault</code></td><td>480 &times; 360</td><td>Always available</td></tr>
-      <tr><td><code>mqdefault</code></td><td>320 &times; 180</td><td>Always available</td></tr>
-      <tr><td><code>default</code></td><td>120 &times; 90</td><td>Smallest; always available</td></tr>
-    </tbody>
-  </table>
-</div>
+YouTube hosts every video's thumbnail images on publicly accessible, predictable URLs —
+no API key or login required. This tool constructs those URLs from the video ID so you
+can view and save the raw thumbnail instantly.
 
-<h5 class="mt-4">Finding the Video ID</h5>
-<p>
-  The video ID is the 11-character alphanumeric string that appears after <code>?v=</code> in a
-  standard YouTube URL. It also appears after <code>/shorts/</code> or <code>youtu.be/</code>:
-</p>
-<ul>
-  <li><code>youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong></code></li>
-  <li><code>youtube.com/shorts/<strong>dQw4w9WgXcQ</strong></code></li>
-  <li><code>youtu.be/<strong>dQw4w9WgXcQ</strong></code></li>
-</ul>
-<p>
-  This tool accepts any of those URL formats and extracts the ID automatically. You can also
-  paste the bare 11-character ID directly.
-</p>
+##### The URL Pattern
 
-<h5 class="mt-4">Privacy</h5>
-<p>
-  The ID extraction runs entirely in your browser. The only network request made is directly
-  to <code>img.youtube.com</code> to load the thumbnail image — no data passes through any
-  third-party server.
-</p>
+All YouTube thumbnails follow this exact format:
+
+```
+https://img.youtube.com/vi/<VIDEO_ID>/<quality>.jpg
+```
+
+The `<VIDEO_ID>` is the 11-character string after `?v=` in any
+YouTube watch URL (e.g. `dQw4w9WgXcQ`). The `<quality>`
+segment controls the resolution:
+
+| Quality key | Dimensions | Notes |
+|-------------|-----------|-------|
+| `maxresdefault` | 1280 × 720 | Highest quality; only available when the video was uploaded at 720p or above |
+| `hqdefault` | 480 × 360 | Always available |
+| `mqdefault` | 320 × 180 | Always available |
+| `default` | 120 × 90 | Smallest; always available |
+
+##### Finding the Video ID
+
+The video ID is the 11-character alphanumeric string that appears after `?v=` in a
+standard YouTube URL. It also appears after `/shorts/` or `youtu.be/`:
+
+- `youtube.com/watch?v=dQw4w9WgXcQ`
+- `youtube.com/shorts/dQw4w9WgXcQ`
+- `youtu.be/dQw4w9WgXcQ`
+
+This tool accepts any of those URL formats and extracts the ID automatically. You can also
+paste the bare 11-character ID directly.
+
+##### Privacy
+
+The ID extraction runs entirely in your browser. The only network request made is directly
+to `img.youtube.com` to load the thumbnail image — no data passes through any
+third-party server.
 
 </div>
 </div>

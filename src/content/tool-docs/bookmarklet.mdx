@@ -1,62 +1,53 @@
 <div class="card mt-4">
 <div class="card-body">
 
-<h4>How to Use</h4>
+#### How to Use
+
 <div class="d-none d-md-block">
-  <ol>
-    <li>Paste your raw JavaScript into the left pane.</li>
-    <li>The compiled bookmarklet appears on the right instantly.</li>
-    <li>Drag the <strong>Drag me to Bookmarks</strong> button onto your browser's bookmarks bar, or right-click it and choose <em>Bookmark this link</em>.</li>
-    <li>Navigate to any webpage and click the bookmark to run your script.</li>
-  </ol>
-  <p class="mt-3 mb-1"><strong>On mobile</strong>, dragging to the bookmarks bar is not supported — see the note below the output pane for the manual installation steps.</p>
+
+1. Paste your raw JavaScript into the left pane.
+2. The compiled bookmarklet appears on the right instantly.
+3. Drag the **Drag me to Bookmarks** button onto your browser's bookmarks bar, or right-click it and choose *Bookmark this link*.
+4. Navigate to any webpage and click the bookmark to run your script.
+
+**On mobile**, dragging to the bookmarks bar is not supported — see the note below the output pane for the manual installation steps.
+
 </div>
 <div class="d-md-none">
-  <p class="mb-1"><strong>On mobile</strong>, dragging to the bookmarks bar is not supported. To install a bookmarklet:</p>
-  <ol>
-    <li>Paste your raw JavaScript into the input above.</li>
-    <li>Tap <strong>Copy</strong> to copy the compiled bookmarklet.</li>
-    <li>Create a new bookmark in your browser (bookmark any page first).</li>
-    <li>Edit that bookmark and replace its URL with the copied code.</li>
-  </ol>
+
+**On mobile**, dragging to the bookmarks bar is not supported. To install a bookmarklet:
+
+1. Paste your raw JavaScript into the input above.
+2. Tap **Copy** to copy the compiled bookmarklet.
+3. Create a new bookmark in your browser (bookmark any page first).
+4. Edit that bookmark and replace its URL with the copied code.
+
 </div>
 
-<h5 class="mt-4">What Is a Bookmarklet?</h5>
-<p>
-  A bookmarklet is a browser bookmark whose URL begins with <code>javascript:</code> instead of
-  <code>http://</code>. When clicked, the browser executes the embedded JavaScript on the current
-  page — no browser extension or installation required. Common uses include toggling dark mode,
-  extracting data from tables, tweaking page styles, or automating repetitive tasks.
-</p>
+##### What Is a Bookmarklet?
 
-<h5 class="mt-4">The Compilation Pipeline</h5>
-<p>Your code passes through a strict, sequential pipeline:</p>
-<ol>
-  <li>
-    <strong>IIFE Wrapper</strong> — The code is wrapped in
-    <code>(function(){'{'}&nbsp;&hellip;&nbsp;{'}'})()</code> so local variables don't leak into the
-    target page's global scope.
-  </li>
-  <li>
-    <strong>Minification via Terser</strong> — The industry-standard
-    <a href="https://terser.org" target="_blank" rel="noopener noreferrer">Terser</a>
-    library handles comment stripping, whitespace removal, dead-code
-    elimination, and constant folding. It uses a full JavaScript parser so edge
-    cases like regex literals, template literals, and semicolon-free style are
-    all handled correctly.
-  </li>
-  <li>
-    <strong>URI Encoding</strong> — Characters that would break a URL bar
-    (<code>%</code>, <code>"</code>, <code>'</code>, <code>#</code>, <code>&amp;</code>,
-    <code>&lt;</code>, <code>&gt;</code>, <code>\`</code>) are percent-encoded so the browser
-    doesn't mangle your script before it executes.
-  </li>
-</ol>
+A bookmarklet is a browser bookmark whose URL begins with `javascript:` instead of
+`http://`. When clicked, the browser executes the embedded JavaScript on the current
+page — no browser extension or installation required. Common uses include toggling dark mode,
+extracting data from tables, tweaking page styles, or automating repetitive tasks.
 
-<h5 class="mt-4">Privacy</h5>
-<p>
-  All compilation runs entirely in your browser — your code never leaves your device.
-</p>
+##### The Compilation Pipeline
+
+Your code passes through a strict, sequential pipeline:
+
+1. **IIFE Wrapper** — The code is wrapped in `(function() { … })()` so local variables
+   don't leak into the target page's global scope.
+2. **Minification via Terser** — The industry-standard [Terser](https://terser.org) library
+   handles comment stripping, whitespace removal, dead-code elimination, and constant folding.
+   It uses a full JavaScript parser so edge cases like regex literals, template literals,
+   and semicolon-free style are all handled correctly.
+3. **URI Encoding** — Characters that would break a URL bar
+   (`%`, `"`, `'`, `#`, `&`, `<`, `>`, `` ` ``) are percent-encoded so the browser
+   doesn't mangle your script before it executes.
+
+##### Privacy
+
+All compilation runs entirely in your browser — your code never leaves your device.
 
 </div>
 </div>

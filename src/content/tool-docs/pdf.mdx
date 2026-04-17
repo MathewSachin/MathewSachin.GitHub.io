@@ -1,62 +1,35 @@
 <div class="card mt-4">
 <div class="card-body">
 
-<h4>How It Works</h4>
-<p>
-  This tool adds or removes passwords from PDF files entirely inside your browser using
-  <a href="https://github.com/qpdf/qpdf" target="_blank" rel="noopener">QPDF</a> compiled to
-  <a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a>.
-  <strong>Your PDF is never sent to any server.</strong>
-</p>
+#### How It Works
 
-<h5 class="mt-4">Modes</h5>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr><th>Mode</th><th>What it does</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Remove Password</strong></td>
-        <td>
-          Decrypts an encrypted PDF. You must supply the correct password.
-          The output PDF can be opened without any password.
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Add Password</strong></td>
-        <td>
-          Encrypts an unprotected PDF with 256-bit AES (PDF 1.7+).
-          The <em>User Password</em> is required to open the file.
-          The <em>Owner Password</em> controls printing and editing permissions
-          (defaults to the User Password if left blank).
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+This tool adds or removes passwords from PDF files entirely inside your browser using
+[QPDF](https://github.com/qpdf/qpdf) compiled to
+[WebAssembly](https://webassembly.org/).
+**Your PDF is never sent to any server.**
 
-<h5 class="mt-4">Implementation Details</h5>
-<p>
-  The QPDF WebAssembly binary (~1.3 MB) is fetched from a CDN on first use and instantiated
-  inside a
-  <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank" rel="noopener">Web Worker</a>
-  so that the page stays responsive even for large files.
-</p>
-<ol>
-  <li>The selected PDF is read into an <code>ArrayBuffer</code> in the browser.</li>
-  <li>The bytes are posted to a Web Worker which writes them to the QPDF virtual filesystem
-    (<code>FS.writeFile</code>).</li>
-  <li>QPDF processes the file entirely in WebAssembly memory.</li>
-  <li>The output bytes are read back (<code>FS.readFile</code>) and turned into a
-    <code>Blob URL</code> for download — no disk writes, no network requests.</li>
-</ol>
+##### Modes
 
-<h5 class="mt-4">Privacy</h5>
-<p>
-  All processing runs locally in your browser tab.
-  Your PDF bytes, passwords, and any sensitive content are never transmitted anywhere.
-</p>
+| Mode | What it does |
+|------|-------------|
+| **Remove Password** | Decrypts an encrypted PDF. You must supply the correct password. The output PDF can be opened without any password. |
+| **Add Password** | Encrypts an unprotected PDF with 256-bit AES (PDF 1.7+). The *User Password* is required to open the file. The *Owner Password* controls printing and editing permissions (defaults to the User Password if left blank). |
+
+##### Implementation Details
+
+The QPDF WebAssembly binary (~1.3 MB) is fetched from a CDN on first use and instantiated
+inside a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)
+so that the page stays responsive even for large files.
+
+1. The selected PDF is read into an `ArrayBuffer` in the browser.
+2. The bytes are posted to a Web Worker which writes them to the QPDF virtual filesystem (`FS.writeFile`).
+3. QPDF processes the file entirely in WebAssembly memory.
+4. The output bytes are read back (`FS.readFile`) and turned into a `Blob URL` for download — no disk writes, no network requests.
+
+##### Privacy
+
+All processing runs locally in your browser tab.
+Your PDF bytes, passwords, and any sensitive content are never transmitted anywhere.
 
 </div>
 </div>

@@ -1,122 +1,71 @@
 <div class="card mt-4">
 <div class="card-body">
 
-<h4>How It Works</h4>
-<p>
-  This tool tokenizes your text using the <strong>actual tokenizers</strong> for each model,
-  entirely inside your browser.
-  <strong>Your text is never sent to a server.</strong>
-</p>
-<ul>
-  <li><strong>GPT-4o</strong>: tokenized synchronously using <a href="https://github.com/niieani/gpt-tokenizer" target="_blank" rel="noopener">gpt-tokenizer</a>'s pure-JS o200k_base implementation.</li>
-  <li><strong>Claude 3.5 Sonnet</strong>: tokenized using <a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener">Anthropic's published vocabulary</a> (<code>claude.json</code>) with tiktoken's WASM engine — loaded asynchronously in the background.</li>
-  <li><strong>Gemini 2.0 Flash</strong>: Google has not released their tokenizer as a standalone library; token count is estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads.</li>
-</ul>
+#### How It Works
 
-<h5 class="mt-4">What is a token?</h5>
-<p>
-  Large language models don't process raw characters; they work on <em>tokens</em> — variable-length
-  chunks that the model treats as single units. For English prose, one token is roughly 4 characters
-  or ¾ of a word. Spaces, punctuation, numbers, and code symbols each have their own rules.
-</p>
-<p>
-  The coloured spans in the visualizer above mark individual tokens. Each colour change is a token
-  boundary. You'll see that short common words are usually one token, while longer or less common
-  words are split into two or more.
-</p>
+This tool tokenizes your text using the **actual tokenizers** for each model,
+entirely inside your browser.
+**Your text is never sent to a server.**
 
-<h5 class="mt-4">Why token counts differ across models</h5>
-<p>
-  Every provider ships its own tokenizer with a different vocabulary size and merge rules. The same
-  1,000-word document can cost 20–30% more on one API than another, purely because of how each
-  tokenizer encodes it — especially for code, JSON, and non-English text.
-</p>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr><th>Provider</th><th>Tokenizer</th><th>Notes</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>OpenAI (GPT-4o)</strong></td>
-        <td>tiktoken o200k_base (200K vocab)</td>
-        <td>Industry benchmark. Highly efficient for code, JSON, and non-English text due to its large vocabulary.</td>
-      </tr>
-      <tr>
-        <td><strong>Anthropic (Claude)</strong></td>
-        <td>Proprietary BPE (<a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener">vocabulary published</a>)</td>
-        <td>Run in-browser using Anthropic's published <code>claude.json</code> vocabulary with tiktoken's WASM. Actual counts used — no estimate needed.</td>
-      </tr>
-      <tr>
-        <td><strong>Google (Gemini)</strong></td>
-        <td>SentencePiece variant (not public)</td>
-        <td>No standalone tokenizer library available. Count estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<p class="text-muted small">
-  Claude's actual token counts are computed in-browser using Anthropic's published
-  <a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener"><code>@anthropic-ai/tokenizer</code></a>
-  vocabulary. Gemini's tokenizer is not publicly available — its count remains an estimate.
-  Differences are smallest for plain English prose and largest for heavily indented code or JSON.
-</p>
+- **GPT-4o**: tokenized synchronously using [gpt-tokenizer](https://github.com/niieani/gpt-tokenizer)'s pure-JS o200k_base implementation.
+- **Claude 3.5 Sonnet**: tokenized using [Anthropic's published vocabulary](https://www.npmjs.com/package/@anthropic-ai/tokenizer) (`claude.json`) with tiktoken's WASM engine — loaded asynchronously in the background.
+- **Gemini 2.0 Flash**: Google has not released their tokenizer as a standalone library; token count is estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads.
 
-<h5 class="mt-4">Why token counts matter</h5>
-<ul>
-  <li><strong>Context windows:</strong> Every model has a maximum token limit. Sending more tokens than the limit truncates your input or raises an API error.</li>
-  <li><strong>API costs:</strong> Cloud AI APIs charge per token, so a 10,000-token prompt costs 10× more than a 1,000-token one.</li>
-  <li><strong>Latency:</strong> Inference time scales roughly with token count — fewer tokens means faster, cheaper responses.</li>
-</ul>
+##### What is a token?
 
-<h5 class="mt-4">Model pricing (Q1 2025)</h5>
-<div class="table-responsive">
-  <table class="table table-sm table-bordered">
-    <thead class="table-light">
-      <tr>
-        <th>Model</th>
-        <th>Input (per 1M tokens)</th>
-        <th>Output (per 1M tokens)</th>
-        <th>Context window</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href="https://platform.openai.com/docs/models/gpt-4o" target="_blank" rel="noopener">GPT-4o</a></td>
-        <td>$2.50</td><td>$10.00</td><td>128K</td>
-      </tr>
-      <tr>
-        <td><a href="https://www.anthropic.com/pricing#anthropic-api" target="_blank" rel="noopener">Claude 3.5 Sonnet</a></td>
-        <td>$3.00</td><td>$15.00</td><td>200K</td>
-      </tr>
-      <tr>
-        <td><a href="https://ai.google.dev/pricing" target="_blank" rel="noopener">Gemini 2.0 Flash</a></td>
-        <td>$0.10</td><td>$0.40</td><td>1M</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+Large language models don't process raw characters; they work on *tokens* — variable-length
+chunks that the model treats as single units. For English prose, one token is roughly 4 characters
+or ¾ of a word. Spaces, punctuation, numbers, and code symbols each have their own rules.
 
-<h5 class="mt-4">Implementation</h5>
-<p>
-  <strong>GPT-4o</strong>: tokenized synchronously using
-  <a href="https://github.com/niieani/gpt-tokenizer" target="_blank" rel="noopener">gpt-tokenizer</a>,
-  a pure JavaScript BPE implementation bundling the full o200k_base vocabulary — no WASM, no server round-trip.
-</p>
-<p>
-  <strong>Claude 3.5 Sonnet</strong>: tokenized using
-  <a href="https://www.npmjs.com/package/@anthropic-ai/tokenizer" target="_blank" rel="noopener">Anthropic's published <code>@anthropic-ai/tokenizer</code></a>
-  vocabulary (<code>claude.json</code>, loaded from jsDelivr) with
-  <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">tiktoken</a>'s
-  Rust-compiled WASM engine. Both resources are verified with SRI integrity hashes and loaded
-  asynchronously in the background so they don't delay the initial page render.
-</p>
+The coloured spans in the visualizer above mark individual tokens. Each colour change is a token
+boundary. You'll see that short common words are usually one token, while longer or less common
+words are split into two or more.
 
-<h5 class="mt-4">Privacy</h5>
-<p>
-  All processing runs locally. Sensitive text — API keys, personal data, proprietary code — never
-  leaves your device.
-</p>
+##### Why token counts differ across models
+
+Every provider ships its own tokenizer with a different vocabulary size and merge rules. The same
+1,000-word document can cost 20–30% more on one API than another, purely because of how each
+tokenizer encodes it — especially for code, JSON, and non-English text.
+
+| Provider | Tokenizer | Notes |
+|----------|-----------|-------|
+| **OpenAI (GPT-4o)** | tiktoken o200k_base (200K vocab) | Industry benchmark. Highly efficient for code, JSON, and non-English text due to its large vocabulary. |
+| **Anthropic (Claude)** | Proprietary BPE ([vocabulary published](https://www.npmjs.com/package/@anthropic-ai/tokenizer)) | Run in-browser using Anthropic's published `claude.json` vocabulary with tiktoken's WASM. Actual counts used — no estimate needed. |
+| **Google (Gemini)** | SentencePiece variant (not public) | No standalone tokenizer library available. Count estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads. |
+
+Claude's actual token counts are computed in-browser using Anthropic's published
+[`@anthropic-ai/tokenizer`](https://www.npmjs.com/package/@anthropic-ai/tokenizer)
+vocabulary. Gemini's tokenizer is not publicly available — its count remains an estimate.
+Differences are smallest for plain English prose and largest for heavily indented code or JSON.
+
+##### Why token counts matter
+
+- **Context windows:** Every model has a maximum token limit. Sending more tokens than the limit truncates your input or raises an API error.
+- **API costs:** Cloud AI APIs charge per token, so a 10,000-token prompt costs 10× more than a 1,000-token one.
+- **Latency:** Inference time scales roughly with token count — fewer tokens means faster, cheaper responses.
+
+##### Model pricing (Q1 2025)
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) | Context window |
+|-------|----------------------|------------------------|----------------|
+| [GPT-4o](https://platform.openai.com/docs/models/gpt-4o) | $2.50 | $10.00 | 128K |
+| [Claude 3.5 Sonnet](https://www.anthropic.com/pricing#anthropic-api) | $3.00 | $15.00 | 200K |
+| [Gemini 2.0 Flash](https://ai.google.dev/pricing) | $0.10 | $0.40 | 1M |
+
+##### Implementation
+
+**GPT-4o**: tokenized synchronously using [gpt-tokenizer](https://github.com/niieani/gpt-tokenizer),
+a pure JavaScript BPE implementation bundling the full o200k_base vocabulary — no WASM, no server round-trip.
+
+**Claude 3.5 Sonnet**: tokenized using [Anthropic's published `@anthropic-ai/tokenizer`](https://www.npmjs.com/package/@anthropic-ai/tokenizer)
+vocabulary (`claude.json`, loaded from jsDelivr) with [tiktoken](https://github.com/openai/tiktoken)'s
+Rust-compiled WASM engine. Both resources are verified with SRI integrity hashes and loaded
+asynchronously in the background so they don't delay the initial page render.
+
+##### Privacy
+
+All processing runs locally. Sensitive text — API keys, personal data, proprietary code — never
+leaves your device.
 
 </div>
 </div>
