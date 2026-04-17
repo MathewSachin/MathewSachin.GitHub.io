@@ -1,0 +1,107 @@
+---
+import ToolLayout from '@layouts/ToolLayout.astro';
+import Docs from '@content/tool-docs/hash.mdx';
+---
+<ToolLayout title="Hash Generator" ads={true}>
+
+<div class="card google-anno-skip">
+<div class="card-body">
+
+<div class="row g-4">
+
+  <!-- Input -->
+  <div class="col-12">
+    <label class="form-label fw-semibold" for="hash-input">Input Text</label>
+    <textarea id="hash-input" class="form-control font-monospace" rows="5"
+      placeholder="Enter text to hash…"></textarea>
+    <div class="mt-2">
+      <button class="btn btn-info text-white" id="hash-btn">Generate Hashes</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="col-12" id="hash-results">
+    <h5 class="mb-3">Results</h5>
+
+    <div class="mb-3">
+      <label class="form-label text-muted">MD5</label>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <code id="out-md5" class="text-break flex-grow-1"></code>
+        <button class="btn btn-sm btn-outline-secondary copy-hash-btn" data-target="out-md5"
+          title="Copy MD5">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-muted">SHA-1</label>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <code id="out-sha1" class="text-break flex-grow-1"></code>
+        <button class="btn btn-sm btn-outline-secondary copy-hash-btn" data-target="out-sha1"
+          title="Copy SHA-1">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-muted">SHA-256</label>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <code id="out-sha256" class="text-break flex-grow-1"></code>
+        <button class="btn btn-sm btn-outline-secondary copy-hash-btn" data-target="out-sha256"
+          title="Copy SHA-256">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+import { md5, sha } from '@scripts/tools/hash.js';
+
+// ── UI ────────────────────────────────────────────────────────────────────
+
+document.getElementById('hash-btn').addEventListener('click', function () {
+  var text = document.getElementById('hash-input').value;
+
+  // MD5 (synchronous)
+  document.getElementById('out-md5').textContent = md5(text);
+
+  // SHA-1 and SHA-256 (async)
+  sha('SHA-1', text).then(function (h) {
+    document.getElementById('out-sha1').textContent = h;
+  });
+  sha('SHA-256', text).then(function (h) {
+    document.getElementById('out-sha256').textContent = h;
+  });
+});
+
+// Copy buttons
+document.querySelectorAll('.copy-hash-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var target = document.getElementById(this.dataset.target);
+    var self = this;
+    navigator.clipboard.writeText(target.textContent).then(function () {
+      var icon = self.querySelector('i');
+      icon.className = 'fas fa-check text-success';
+      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+    }).catch(function () {
+      var icon = self.querySelector('i');
+      icon.className = 'fas fa-times text-danger';
+      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
+    });
+  });
+});
+
+// Auto-generate on load with empty string to show format
+document.getElementById('hash-btn').click();
+</script>
+
+</div>
+</div>
+
+<Docs />
+</ToolLayout>

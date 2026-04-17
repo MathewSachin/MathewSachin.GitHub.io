@@ -1,0 +1,94 @@
+---
+import ToolLayout from '@layouts/ToolLayout.astro';
+import Docs from '@content/tool-docs/base64.mdx';
+---
+<ToolLayout title="Base64 Encoder / Decoder" ads={true}>
+
+<div class="card google-anno-skip">
+<div class="card-body">
+
+<div class="row g-4">
+
+  <!-- Plain Text -->
+  <div class="col-12 col-md-6">
+    <h5 class="mb-3">Plain Text</h5>
+    <textarea id="text-input" class="form-control font-monospace" rows="8"
+      placeholder="Enter text to encode…"></textarea>
+    <div class="mt-2 d-flex gap-2 flex-wrap">
+      <button class="btn btn-info text-white" id="encode-btn">Encode &rarr;</button>
+      <button class="btn btn-outline-secondary" id="clear-btn">Clear</button>
+    </div>
+    <div id="text-error" class="text-danger small mt-1 d-none"></div>
+  </div>
+
+  <!-- Base64 -->
+  <div class="col-12 col-md-6">
+    <h5 class="mb-3">Base64</h5>
+    <textarea id="b64-input" class="form-control font-monospace" rows="8"
+      placeholder="Enter Base64 to decode…"></textarea>
+    <div class="mt-2 d-flex gap-2 flex-wrap">
+      <button class="btn btn-info text-white" id="decode-btn">&larr; Decode</button>
+      <button class="btn btn-outline-secondary" id="copy-btn">
+        <i class="fas fa-copy me-1"></i>Copy
+      </button>
+    </div>
+    <div id="b64-error" class="text-danger small mt-1 d-none"></div>
+  </div>
+
+</div>
+
+<script>
+import { encodeBase64, decodeBase64 } from '@scripts/tools/base64.js';
+
+var textInput = document.getElementById('text-input');
+var b64Input  = document.getElementById('b64-input');
+var textError = document.getElementById('text-error');
+var b64Error  = document.getElementById('b64-error');
+
+function clearError(el) { el.textContent = ''; el.classList.add('d-none'); }
+function showError(el, msg) { el.textContent = msg; el.classList.remove('d-none'); }
+
+document.getElementById('encode-btn').addEventListener('click', function () {
+  clearError(textError);
+  try {
+    b64Input.value = encodeBase64(textInput.value);
+  } catch (e) {
+    showError(textError, 'Encoding failed: ' + e.message);
+  }
+});
+
+document.getElementById('decode-btn').addEventListener('click', function () {
+  clearError(b64Error);
+  try {
+    textInput.value = decodeBase64(b64Input.value.trim());
+  } catch (e) {
+    showError(b64Error, 'Invalid Base64 string: ' + e.message);
+  }
+});
+
+document.getElementById('clear-btn').addEventListener('click', function () {
+  textInput.value = '';
+  b64Input.value = '';
+  clearError(textError);
+  clearError(b64Error);
+});
+
+document.getElementById('copy-btn').addEventListener('click', function () {
+  var btn = this;
+  navigator.clipboard.writeText(b64Input.value).then(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-check text-success me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+  }).catch(function () {
+    var icon = btn.querySelector('i');
+    icon.className = 'fas fa-times text-danger me-1';
+    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+  });
+});
+</script>
+
+</div>
+</div>
+
+<Docs />
+</ToolLayout>

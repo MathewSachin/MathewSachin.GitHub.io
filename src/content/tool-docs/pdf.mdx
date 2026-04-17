@@ -1,0 +1,35 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+This tool adds or removes passwords from PDF files entirely inside your browser using
+[QPDF](https://github.com/qpdf/qpdf) compiled to
+[WebAssembly](https://webassembly.org/).
+**Your PDF is never sent to any server.**
+
+##### Modes
+
+| Mode | What it does |
+|------|-------------|
+| **Remove Password** | Decrypts an encrypted PDF. You must supply the correct password. The output PDF can be opened without any password. |
+| **Add Password** | Encrypts an unprotected PDF with 256-bit AES (PDF 1.7+). The *User Password* is required to open the file. The *Owner Password* controls printing and editing permissions (defaults to the User Password if left blank). |
+
+##### Implementation Details
+
+The QPDF WebAssembly binary (~1.3 MB) is fetched from a CDN on first use and instantiated
+inside a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)
+so that the page stays responsive even for large files.
+
+1. The selected PDF is read into an `ArrayBuffer` in the browser.
+2. The bytes are posted to a Web Worker which writes them to the QPDF virtual filesystem (`FS.writeFile`).
+3. QPDF processes the file entirely in WebAssembly memory.
+4. The output bytes are read back (`FS.readFile`) and turned into a `Blob URL` for download — no disk writes, no network requests.
+
+##### Privacy
+
+All processing runs locally in your browser tab.
+Your PDF bytes, passwords, and any sensitive content are never transmitted anywhere.
+
+</div>
+</div>

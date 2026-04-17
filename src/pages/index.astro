@@ -1,0 +1,179 @@
+---
+//
+// Home page: /
+// Replaces index.html
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostItem from '@components/PostItem.astro';
+import SeriesShowcase from '@components/SeriesShowcase.astro';
+import { sortPostsByDate, buildTagsMap } from '@utils/posts';
+import { getTools } from '@data/index';
+import { Image } from 'astro:assets';
+import mePhoto from '@images/Me.jpg';
+import '@styles/blog.css';
+
+const BASE = import.meta.env.BASE_URL;
+const allPosts = sortPostsByDate(await getCollection('blog'));
+const tools = getTools();
+const quickTools = tools.filter(t => t.quick_tool);
+
+// Top 10 tags by post count
+const tagsMap = buildTagsMap(allPosts);
+const topTags = [...tagsMap.entries()].slice(0, 10);
+
+const recentPosts = allPosts.slice(0, 8);
+---
+<BaseLayout title="Mathew Sachin" ads={true}>
+  <div class="pt-3">
+    <div class="container">
+      <div class="row headfont mb-5">
+        <div class="col-12 col-md-auto text-center">
+          <Image
+            src={mePhoto}
+            class="avatar mb-3"
+            alt=""
+            width={150}
+            height={150}
+          />
+        </div>
+        <div class="col">
+          <h1 class="my-2 text-light">Mathew Sachin</h1>
+          <p class="text-white-50 mb-3" style="font-size: 1.05rem; letter-spacing: 0.03em;">
+            Software Developer
+          </p>
+          <div class="mt-3" style="font-size: 2rem;">
+            <div class="bg-white d-inline-block px-4 rounded-pill shadow">
+              <a class="text-dark" href="https://www.github.com/MathewSachin" target="_blank" rel="noopener"><i class="fab fa-github pe-1" aria-hidden="true"></i></a>
+              <a class="text-primary" href="https://www.linkedin.com/in/mathewsachin7" target="_blank" rel="noopener"><i class="fab fa-linkedin pe-1" aria-hidden="true"></i></a>
+              <a class="text-info" href="https://www.twitter.com/MathewSachin7" target="_blank" rel="noopener"><i class="fab fa-twitter pe-1" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container pb-4">
+    <div class="card">
+      <div class="card-body">
+        {/* Project cards */}
+        <div class="home-cards-section pb-4">
+          <div class="row">
+            {[
+              { href: `${BASE}Captura/`, icon: 'fas fa-video', label: 'Captura', text: 'Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.' },
+              { href: `${BASE}FGA/`, icon: 'fas fa-gamepad', label: 'FGA', text: 'Auto-Battle app for F/GO Android.' },
+              { href: `${BASE}blog/`, icon: 'fas fa-pen-to-square', label: 'Blog', text: 'Thoughts, tutorials, and writeups.' },
+              { href: `${BASE}tools/`, icon: 'fas fa-screwdriver-wrench', label: 'Tools', text: 'Handy utilities and converters.' },
+            ].map(card => (
+              <div class="col-md mb-3">
+                <a href={card.href} class="home-card-link" aria-label={card.label}>
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <p class="card-title mb-1"><i class={`${card.icon} text-info me-2`} aria-hidden="true"></i>{card.label}</p>
+                      <p class="card-text">{card.text}</p>
+                    </div>
+                    <div class="card-footer">
+                      <small><i class="fas fa-arrow-right me-1"></i>Learn more</small>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style>
+          /* Home page section dividers (Quick Tools, Browse by Topic) */
+          .home-section-divider {
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 1.25rem;
+          }
+
+          .home-section-divider .btn-outline-secondary {
+            transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+          }
+
+          .home-section-divider .btn-outline-secondary:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+          }
+        </style>
+
+        {/* Quick tools */}
+        <div class="home-section-divider mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-semibold">Quick Tools</h5>
+            <a href={`${BASE}tools/`} class="btn btn-outline-info btn-sm"><i class="fas fa-arrow-right me-1"></i>All tools</a>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            {quickTools.map(tool => (
+              <a
+                href={`${BASE}tools/${tool.id}/`}
+                class="btn btn-outline-secondary btn-sm rounded-pill quick-tool-pill"
+                style={tool.accent_color ? `--quick-tool-accent: ${tool.accent_color}; border-color: ${tool.accent_color}; color: ${tool.accent_color};` : undefined}
+              >
+                <i class={`${tool.icon} me-1`} style="color: inherit;"></i>{tool.name}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <style>
+          /* Quick Tools pill button custom style */
+          .quick-tool-pill {
+            --quick-tool-accent: var(--color-accent);
+            border-color: var(--quick-tool-accent) !important;
+            color: var(--quick-tool-accent) !important;
+            transition: box-shadow var(--transition-base), color var(--transition-base), border-color var(--transition-base), background-color var(--transition-base);
+          }
+          .quick-tool-pill i {
+            color: inherit !important;
+          }
+          .quick-tool-pill:hover, .quick-tool-pill:focus {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+            background-color: inherit !important;
+            color: var(--quick-tool-accent) !important;
+            border-color: var(--quick-tool-accent) !important;
+          }
+        </style>
+
+        {/* Browse by Topic */}
+        <div class="home-section-divider mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-semibold">Browse by Topic</h5>
+            <a href={`${BASE}blog/tags/`} class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>All tags</a>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            {topTags.map(([tag, posts]) => (
+              <a href={`${BASE}blog/tags/#${tag}`} class="btn btn-sm btn-outline-secondary rounded-pill">
+                {tag}<span class="badge bg-secondary ms-1">{posts.length}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Series */}
+        <div class="home-section-divider mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-semibold">Series</h5>
+            <a href={`${BASE}blog/`} class="btn btn-outline-info btn-sm"><i class="fas fa-layer-group me-1"></i>All posts</a>
+          </div>
+          <SeriesShowcase />
+        </div>
+
+        {/* Recent posts */}
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h3 class="mb-0">Latest posts</h3>
+          <a href={`${BASE}blog/`} class="btn btn-outline-info btn-sm"><i class="fas fa-book-open me-1"></i>All posts</a>
+        </div>
+        <div class="posts">
+          {recentPosts.map(post => <PostItem post={post} />)}
+        </div>
+        <div class="mt-3 text-center">
+          <a href={`${BASE}blog/`} class="btn btn-info text-white"><i class="fas fa-arrow-right me-1"></i>Read more posts</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

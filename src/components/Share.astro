@@ -1,0 +1,57 @@
+---
+/**
+ * Share.astro
+ * Replaces _includes/share.html
+ */
+interface Props {
+  title: string;
+  url: string;
+  btnClass?: string;
+  labelClass?: string;
+}
+const { title, url, btnClass = 'btn-outline-secondary', labelClass = '' } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+---
+<div class="share-section d-flex align-items-center flex-wrap gap-2">
+  <span class={`share-label small ${labelClass}`}>Share:</span>
+  <a
+    class={`btn btn-sm ${btnClass}`}
+    href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+    target="_blank" rel="noopener noreferrer"
+    data-share-method="twitter"
+    aria-label="Share on Twitter/X"
+  >
+    <i class="fab fa-twitter" aria-hidden="true"></i>
+  </a>
+  <a
+    class={`btn btn-sm ${btnClass}`}
+    href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+    target="_blank" rel="noopener noreferrer"
+    data-share-method="facebook"
+    aria-label="Share on Facebook"
+  >
+    <i class="fab fa-facebook" aria-hidden="true"></i>
+  </a>
+  <a
+    class={`btn btn-sm ${btnClass}`}
+    href={`https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`}
+    target="_blank" rel="noopener noreferrer"
+    data-share-method="reddit"
+    aria-label="Share on Reddit"
+  >
+    <i class="fab fa-reddit" aria-hidden="true"></i>
+  </a>
+  <a
+    class={`btn btn-sm ${btnClass}`}
+    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+    target="_blank" rel="noopener noreferrer"
+    data-share-method="linkedin"
+    aria-label="Share on LinkedIn"
+  >
+    <i class="fab fa-linkedin" aria-hidden="true"></i>
+  </a>
+  <button id="copy-post-link" class={`btn btn-sm ${btnClass}`} aria-label="Copy link">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </button>
+</div>

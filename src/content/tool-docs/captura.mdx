@@ -1,0 +1,207 @@
+<div id="captura-about" class="card google-anno-skip">
+  <div class="card-body">
+
+##### About Captura Web Recorder
+
+A browser-based screen recorder inspired by the original
+[Captura (no longer maintained)](/blog/2023/04/09/captura-unmaintained.html) desktop app.
+Record your screen, mix in webcam and microphone audio, and save the result — all entirely
+inside your browser. **No data is ever sent to any server.**
+
+###### Limitations vs. native desktop apps
+
+- **No global keystroke/key overlay** — browsers deliberately sandbox each tab
+  and cannot listen to keyboard events outside the browser window. OS-level keyboard hooks
+  (used by the original Captura to show keystrokes on screen) are simply not available to
+  web pages. This is a fundamental security boundary of the web platform, and one of the
+  reasons native desktop apps still shine for certain capture workflows.
+- **Desktop only** — mobile browsers do not expose `getDisplayMedia` because the mobile OS
+  sandbox prevents web pages from capturing other apps' screens. Use Chrome, Edge, or Firefox
+  on a desktop.
+- **WebM or MP4 output** — the recorder can produce either a `.webm` file (VP9 + Opus) or an
+  `.mp4` file (H.264 + AAC) via the [Mediabunny](https://github.com/Vanilagy/mediabunny)
+  library (WebCodecs API). Select the desired format from the *Recording format* dropdown
+  before starting. The choice is saved for future visits.
+- **File System Access API (Chrome/Edge) or OPFS (Firefox)** — Chrome and Edge stream the
+  recording directly to a folder you choose on your hard drive via the File System Access API;
+  the save folder is remembered across visits. Firefox does not support the File System Access
+  API, so the recorder falls back to the browser's **Origin Private File System (OPFS)**: the
+  recording is staged in private browser storage and a download is triggered automatically
+  when you stop recording.
+
+###### Hardware media key & OS media overlay support
+
+Once a recording is started, the browser registers a
+[Media Session](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)
+so you can control it from **hardware media keys** (play/pause/stop buttons on
+keyboards, headsets, and remotes) or from the **OS media overlay** (e.g. the
+Windows taskbar media controls or macOS Now Playing widget) — even when the browser tab is
+not focused. The OS overlay shows the session as *"Captura Web – Recording Session
+Active"* and stays in sync as you pause, resume, or stop the recording.
+
+<div class="alert alert-info mb-0 py-2">
+  <i class="fas fa-shield-alt me-1"></i>
+  <strong>Privacy:</strong> This tool runs 100% in your browser. No video, audio, or metadata
+  is ever uploaded or transmitted anywhere.
+</div>
+
+  </div>
+</div>
+
+<div id="captura-how-it-works" class="card mt-4 google-anno-skip">
+  <div class="card-body">
+
+##### How It Works
+
+*A look under the hood for the technically curious.*
+
+###### Screen & Window Capture
+
+Screen capture uses the browser's `navigator.mediaDevices.getDisplayMedia()` API.
+When you click *Start Recording*, the browser shows its own native picker where you
+choose what to share — an entire screen, a specific window, or a browser tab. The browser
+returns a `MediaStream` containing a video track (and optionally an audio track
+if "Share system audio" is checked in the picker). This is intentional: the browser is
+the gatekeeper, so no web page can silently capture your screen without your explicit
+permission each time.
+
+The system-audio checkbox in the recorder UI just passes `audio: true` as a
+constraint to `getDisplayMedia`. Whether system audio is actually available
+depends on the OS — Windows supports it natively; macOS requires a virtual audio driver.
+
+---
+
+###### Canvas Compositor
+
+Rather than recording the screen stream directly, the recorder draws every frame onto an
+offscreen `<canvas>` element. This intermediate step is what makes the
+webcam picture-in-picture (PiP) overlay possible: each frame, the compositor first draws
+the screen video, then draws the webcam video on top in the chosen corner, and finally
+stamps a live timestamp in the bottom-right.
+
+During recording the compositor runs in an async self-scheduling loop at your chosen frame
+rate (e.g. every ~33 ms for 30 fps). After drawing each frame it calls
+`canvasSource.add(timestamp)` from the Mediabunny library, which reads the
+canvas pixels and submits them to the hardware video encoder. The call is `await`ed
+so that if the encoder or disk I/O falls behind, the loop naturally slows down rather than
+overflowing an unbounded queue (back-pressure). The loop is a plain async function rather
+than `requestAnimationFrame` so that compositing continues reliably even when
+the browser tab is hidden or you switch to another application.
+
+---
+
+###### Audio Mixing
+
+System audio (from the screen capture) and microphone audio are two separate
+`MediaStream`s. To combine them into a single audio track, the recorder uses the
+Web Audio API:
+
+1. An `AudioContext` is created.
+2. Each source stream is wrapped in a `MediaStreamSourceNode`.
+3. Each source node is routed through a `GainNode`, whose gain value is bound
+   to the corresponding slider in the *Audio Mix* panel. Moving a slider while
+   recording instantly changes the mix without any interruption.
+4. Each gain node feeds into an `AnalyserNode` that is read every animation
+   frame to drive the live level meters in the UI. The RMS amplitude of the time-domain
+   samples is computed, scaled, and painted as a green/yellow/red bar — green up to 70%
+   of full scale, yellow from 70–85%, and red above 85% — so you can confirm your mic
+   is live before committing to a long recording.
+5. Both analyser nodes connect to a single `MediaStreamDestinationNode`.
+6. The destination node exposes a mixed `MediaStream` whose audio track is then
+   passed to Mediabunny as a `MediaStreamAudioTrackSource`.
+
+This approach lets the browser's audio engine handle the mixing in real time with no
+additional libraries required. Gain and mixer settings are persisted to
+`localStorage` so your preferred levels are restored on the next visit.
+
+---
+
+###### Streaming to Disk
+
+A naive screen recorder would accumulate the entire recording in memory as a
+`Blob` and only offer a download at the end. For long recordings this easily
+consumes gigabytes of RAM and risks a browser crash. This recorder avoids that problem by
+streaming compressed video data directly to a file as it is produced.
+
+**Chrome / Edge (File System Access API):**
+Before recording starts, the recorder asks for access to a **folder** of your
+choice via `window.showDirectoryPicker()`. The chosen folder handle is stored in
+**IndexedDB** so it persists across page reloads — you only need to pick a
+folder once. A *Choose Folder* button in the settings panel lets you switch to a
+different folder at any time.
+
+When recording starts, the recorder verifies it still has write permission for the stored
+folder using `FileSystemDirectoryHandle.queryPermission()`. If permission has
+lapsed (e.g. after a browser restart), `requestPermission()` is called to prompt
+you to re-grant it.
+
+**Firefox (Origin Private File System fallback):**
+Firefox does not support the File System Access API's directory picker. Instead, the
+recorder uses the **Origin Private File System (OPFS)** — a private,
+origin-scoped storage area exposed via `navigator.storage.getDirectory()`.
+No permission prompt is needed. The recording is staged in OPFS during capture; when you
+stop recording, a file download is triggered automatically so the video lands in your
+downloads folder. The temporary OPFS file is removed immediately after the download is
+initiated.
+
+In both cases, once a writable `FileSystemWritableFileStream` is open, it is passed
+directly to Mediabunny's `StreamTarget`, which writes encoded frames to the file
+incrementally as they are produced by the hardware encoder.
+When recording stops, `output.finalize()` flushes the encoder, rewrites the
+correct video duration into the file header, and closes the stream. Memory usage therefore
+stays near-constant regardless of recording length, and the output file always has a valid
+duration — unlike the truncated headers produced by the native `MediaRecorder` API.
+
+---
+
+###### Media Session API & Hardware Media Keys
+
+When recording starts, the recorder activates the browser's
+[Media Session API](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)
+so that hardware media keys (play, pause, stop buttons on keyboards, headsets, and
+remotes) and OS-level media overlays (e.g. the Windows taskbar or macOS Now Playing
+widget) can control the recording even when the tab is in the background.
+
+Chrome on macOS (and most Chromium-based browsers) only forwards media session
+information to the OS — and only routes hardware key presses to the page — when a
+Core Audio session is open. Chrome opens a Core Audio session only when an
+`<audio>` or `<video>` element is playing with a non-zero `volume`.
+Additionally, `srcObject` live streams have infinite/unknown duration and are not forwarded
+to macOS Now Playing; a file-backed `src` with a finite, loopable duration is required.
+
+To satisfy both constraints without producing audible output, the recorder generates
+a minimal 100 ms silent PCM WAV in memory, exposes it via a Blob URL, and plays it
+on loop at `volume = 0.001` (−60 dBFS — 1/1,000th of full-scale amplitude,
+inaudible in any realistic environment). This opens a Core Audio session,
+registers the page with the macOS Now Playing widget, and activates hardware media
+key forwarding. The Blob URL is revoked and the element removed when the session ends.
+
+The handlers registered are **play** (resume a paused recording),
+**pause** (pause an active recording), and **stop**
+(stop the current recording). The OS media overlay is kept in sync by updating
+`navigator.mediaSession.playbackState` to `'playing'`,
+`'paused'`, or `'none'` whenever the recording state changes.
+The silent audio element and the Media Session metadata are cleaned up when the
+recording session ends.
+
+---
+
+###### Codec & Container (Mediabunny)
+
+The recorder supports two output formats, selectable from the *Recording format* dropdown:
+
+- **WebM — VP9 + Opus:** video encoded with **VP9**, audio with **Opus** at 128 kbps,
+  muxed into a **WebM** container.
+- **MP4 — H.264 + AAC:** video encoded with **H.264 (AVC)**, audio with **AAC** at
+  128 kbps, muxed into an **MP4** container.
+  MP4 files are broadly compatible with most media players, devices, and video editors.
+
+Both formats are handled by the [Mediabunny](https://github.com/Vanilagy/mediabunny)
+library, which drives the browser's hardware `VideoEncoder` and `AudioEncoder`
+(WebCodecs API) directly and writes the muxed output incrementally to the
+`FileSystemWritableFileStream` via its `StreamTarget`. On finalization it rewrites the
+duration metadata at the start of the file — a step that the native `MediaRecorder` API
+skips, making its output unscrubbable in many players.
+
+  </div>
+</div>

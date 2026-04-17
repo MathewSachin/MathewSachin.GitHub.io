@@ -1,0 +1,129 @@
+---
+/**
+ * PostLayout.astro
+ * Replaces _layouts/post.html + _includes/toc-sidebar.html
+ * + _includes/post_content_with_ads.html + _includes/reading_progress.html
+ * + _includes/back_to_top.html
+ */
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BackToTop from '@components/BackToTop.astro';
+import Lightbox from '@components/Lightbox.astro';
+import SeriesNav from '@components/SeriesNav.astro';
+import TableOfContents from '@components/TableOfContents.astro';
+import RelatedPosts from '@components/RelatedPosts.astro';
+import Share from '@components/Share.astro';
+import Giscus from '@components/Giscus.astro';
+import AdUnit from '@components/AdUnit.astro';
+import ReadingProgressBar from '@components/ReadingProgressBar.astro';
+import { formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
+import '@styles/blog.css';
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  allPosts: CollectionEntry<'blog'>[];
+  headings: MarkdownHeading[];
+  /** Override canonical URL path (e.g. /blog/YYYY/MM/DD/slug.html) */
+  canonicalPath?: string;
+}
+
+const { post, allPosts, headings, canonicalPath } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
+
+const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true, scripts = [] } = post.data;
+const date = getPostDate(post);
+const readTime = estimateReadingTime(post.body);
+const pageUrl = Astro.url.href;
+// Canonical URL: use explicit .html path if provided, else fall back to current URL
+const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;
+---
+<BaseLayout title={title} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
+
+  <ReadingProgressBar />
+
+  <div class="bg-dark">
+    <div class="pt-4 pb-5 post-hero text-white">
+      <div class="container">
+        <h2>
+          {icon && <i class={`${icon} me-2`} aria-hidden="true"></i>}
+          {title}
+        </h2>
+        <em>{formatDate(date)}</em> &nbsp;-&nbsp; <em>{readTime} read</em>
+
+        <div class="post-tag my-1">
+          {tags.map(tag => (
+            <a class="badge rounded-pill bg-secondary" href={`${BASE}blog/tags/#${tag}`}>{tag}</a>
+          ))}
+        </div>
+
+        {series ? (
+          <>
+            <hr class="border-light mt-3 mb-0" />
+            <SeriesNav post={post} variant="header" allPosts={allPosts} />
+          </>
+        ) : related.length > 0 ? (
+          <>
+            <hr class="border-light mt-3 mb-3" />
+            <RelatedPosts relatedIds={related} allPosts={allPosts} variant="top-variant" />
+          </>
+        ) : null}
+        <div class="p-5"></div>
+      </div>
+    </div>
+
+    <div class="container post-content-container">
+      <div class="row">
+        <div class="col-md-10">
+          <div id="post" class="card">
+            <div class="card-body">
+              <div class="page-content">
+                <slot />
+              </div>
+
+              <hr />
+
+              <Share title={title} url={pageUrl} />
+
+              <br />
+
+              {series && <SeriesNav post={post} variant="footer" allPosts={allPosts} />}
+
+              {related.length > 0 && (
+                <>
+                  <RelatedPosts relatedIds={related} allPosts={allPosts} variant="bottom-variant" />
+                  <br />
+                </>
+              )}
+
+              <Giscus />
+            </div>
+          </div>
+        </div>
+
+        {/* TOC Sidebar */}
+        {showToc && headings && (
+          <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none">
+            <div class="sticky-md-top" style="top: 10px">
+              <div class="mb-3">
+                <TableOfContents headings={headings} />
+              </div>
+              <div class="d-none d-md-block"><AdUnit /></div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <br />
+  </div>
+
+  <BackToTop />
+  <Lightbox />
+
+  {/* Post-specific external scripts (e.g. interactive widget JS) */}
+  {scripts.map(src => (
+    <script src={`${BASE}${src.replace(/^\//, '')}`} defer></script>
+  ))}
+</BaseLayout>

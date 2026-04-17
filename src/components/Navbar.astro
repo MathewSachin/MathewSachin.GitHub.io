@@ -1,0 +1,58 @@
+---
+const BASE = import.meta.env.BASE_URL;
+---
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+      <a class="navbar-brand" href={`${BASE}`}>Mathew Sachin</a>
+      <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent">
+      <span class="icon-bar bar-t"></span>
+      <span class="icon-bar bar-m"></span>
+      <span class="icon-bar bar-b"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+          <a class="nav-link" href={`${BASE}blog/`}>Blog</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href={`${BASE}tools/`}>Tools</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href={`${BASE}privacy_policy/`}>Privacy Policy</a>
+          </li>
+      </ul>
+      <a class="btn btn-outline-info btn-sm ms-2" href={`${BASE}search/`}><i class="fas fa-search me-1"></i>Search</a>
+      </div>
+  </div>
+</nav>
+<script>
+  (function () {
+    var toggler = document.querySelector(".navbar-toggler");
+    var content = document.getElementById("navbarContent");
+    if (toggler && content) {
+      toggler.addEventListener("click", function () {
+        content.classList.toggle("show");
+        toggler.classList.toggle("collapsed");
+        toggler.setAttribute("aria-expanded", content.classList.contains("show").toString());
+      });
+    }
+  }());
+</script>
+
+<style>
+.icon-bar {
+  width: 25px;
+  height: 3px;
+  background-color: #B6B6B6;
+  display: block;
+  transition: all 0.2s;
+  margin-top: 5px;
+}
+.navbar-toggler .bar-t { margin-top: 0; transform: rotate(45deg); transform-origin: left center; }
+.navbar-toggler .bar-m { opacity: 0; }
+.navbar-toggler .bar-b { transform: rotate(-45deg); transform-origin: left center; }
+.navbar-toggler.collapsed .bar-t { transform: rotate(0); }
+.navbar-toggler.collapsed .bar-m { opacity: 1; }
+.navbar-toggler.collapsed .bar-b { transform: rotate(0); }
+</style>

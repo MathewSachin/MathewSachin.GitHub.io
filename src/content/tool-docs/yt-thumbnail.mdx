@@ -1,0 +1,48 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+YouTube hosts every video's thumbnail images on publicly accessible, predictable URLs —
+no API key or login required. This tool constructs those URLs from the video ID so you
+can view and save the raw thumbnail instantly.
+
+##### The URL Pattern
+
+All YouTube thumbnails follow this exact format:
+
+```
+https://img.youtube.com/vi/<VIDEO_ID>/<quality>.jpg
+```
+
+The `<VIDEO_ID>` is the 11-character string after `?v=` in any
+YouTube watch URL (e.g. `dQw4w9WgXcQ`). The `<quality>`
+segment controls the resolution:
+
+| Quality key | Dimensions | Notes |
+|-------------|-----------|-------|
+| `maxresdefault` | 1280 × 720 | Highest quality; only available when the video was uploaded at 720p or above |
+| `hqdefault` | 480 × 360 | Always available |
+| `mqdefault` | 320 × 180 | Always available |
+| `default` | 120 × 90 | Smallest; always available |
+
+##### Finding the Video ID
+
+The video ID is the 11-character alphanumeric string that appears after `?v=` in a
+standard YouTube URL. It also appears after `/shorts/` or `youtu.be/`:
+
+- `youtube.com/watch?v=dQw4w9WgXcQ`
+- `youtube.com/shorts/dQw4w9WgXcQ`
+- `youtu.be/dQw4w9WgXcQ`
+
+This tool accepts any of those URL formats and extracts the ID automatically. You can also
+paste the bare 11-character ID directly.
+
+##### Privacy
+
+The ID extraction runs entirely in your browser. The only network request made is directly
+to `img.youtube.com` to load the thumbnail image — no data passes through any
+third-party server.
+
+</div>
+</div>

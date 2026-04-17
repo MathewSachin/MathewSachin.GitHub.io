@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { epochToMs, datetimeLocalToMs } from '../tools/timestamp/timestamp.js'
+import { epochToMs, datetimeLocalToMs } from '../src/scripts/tools/timestamp.js'
 
 // ---------------------------------------------------------------------------
 // epochToMs — seconds vs milliseconds heuristic

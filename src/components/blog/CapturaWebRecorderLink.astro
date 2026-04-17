@@ -1,0 +1,40 @@
+---
+const BASE = import.meta.env.BASE_URL;
+---
+
+<div><a href={`${BASE}tools/captura/`} class="inline-tool-card-link">
+  <div class="card inline-tool-card">
+    <div class="card-body d-flex align-items-center gap-3">
+      <i class="fas fa-video fa-2x flex-shrink-0"></i>
+      <div>
+        <div class="fw-bold">Captura Web Recorder</div>
+        <div class="small mt-1">Record your screen in the browser — no installation needed.</div>
+      </div>
+      <i class="fas fa-arrow-right ms-auto flex-shrink-0"></i>
+    </div>
+  </div>
+</a></div>
+
+<style>
+/* Inline tool promo card — used in post bodies to highlight a related tool */
+.inline-tool-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin: 1.5rem 0;
+}
+
+.inline-tool-card {
+  background: white;
+  border: 1px solid color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
+  color: var(--post-accent, var(--color-accent));
+  border-radius: 8px;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--post-accent, var(--color-accent)) 15%, transparent);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.inline-tool-card-link:hover .inline-tool-card {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--post-accent, var(--color-accent)) 30%, transparent);
+}
+</style>

@@ -1,0 +1,146 @@
+---
+// Series index pages: /blog/series/[series]/
+// Replaces blog/series/*/index.md
+import { getCollection } from 'astro:content';
+import SeriesLayout from '@layouts/SeriesLayout.astro';
+import { getSeries } from '@data/index';
+import { postIdFromSlug, postUrlFromSlug, sortPostsByDate } from '@utils/posts';
+
+export async function getStaticPaths() {
+  const seriesMap = getSeries();
+  return Object.keys(seriesMap).map(key => ({
+    params: { series: key },
+    props: { seriesKey: key },
+  }));
+}
+
+const { seriesKey } = Astro.props;
+const BASE = import.meta.env.BASE_URL;
+const seriesMap = getSeries();
+const series = seriesMap[seriesKey];
+const allPosts = sortPostsByDate(await getCollection('blog'));
+
+// Find a post by its Jekyll ID
+function findPost(id) {
+  return allPosts.find(p => postIdFromSlug(p.id) === id) || null;
+}
+---
+<SeriesLayout title={series.name}>
+  <p class="lead mt-2 mb-4" set:html={series.description} />
+
+  {series.levels.map((level, lvlIdx) => {
+    let partCounter = series.levels.slice(0, lvlIdx).reduce((acc, l) => acc + l.posts.length, 0);
+    return (
+      <>
+        <hr />
+        <h2 class="series-level-heading" id={`level-${lvlIdx + 1}`}>
+          <i class={`${level.icon} me-1`} aria-hidden="true"></i>{level.title}
+        </h2>
+        <p>{level.intro}</p>
+
+        {level.posts.map((entry, entryIdx) => {
+          const part = partCounter + entryIdx + 1;
+          const post = findPost(entry.id);
+          if (!post) return null;
+          return (
+            <div class="series-post-item">
+              <span class="series-part-badge">{part}</span>
+              <div>
+                <a
+                  href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                  class="series-post-title"
+                  style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+                >
+                  {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                  {post.data.title}
+                </a>
+                <br />
+                <small class="text-muted">{entry.blurb}</small>
+              </div>
+            </div>
+          );
+        })}
+      </>
+    );
+  })}
+</SeriesLayout>
+
+<style>
+/* Series page: post list items */
+.series-post-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.series-post-item:last-child {
+  border-bottom: none;
+}
+
+.series-post-item:hover .series-part-badge {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.series-part-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #e9ecef;
+  color: #495057;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+  margin-top: 0.1rem;
+}
+
+.series-post-title {
+  font-weight: 600;
+  line-height: 1.3;
+  font-size: 0.95rem;
+}
+
+.series-post-title a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+
+.series-post-title a:hover {
+  color: var(--color-accent);
+}
+
+/* When the <a> itself is the series-post-title (direct link pattern) */
+a.series-post-title {
+  text-decoration: none;
+  color: var(--item-accent, var(--color-accent));
+  transition: color 0.15s ease;
+}
+
+a.series-post-title:hover {
+  filter: brightness(0.85);
+}
+
+.series-level-heading {
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.25rem;
+  margin-top: 1.5rem;
+}
+
+/* Override default page-content h2 rules when heading is a series level title */
+.page-content h2.series-level-heading {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-top: 0;
+}
+</style>

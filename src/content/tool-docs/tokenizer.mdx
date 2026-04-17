@@ -1,0 +1,71 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+This tool tokenizes your text using the **actual tokenizers** for each model,
+entirely inside your browser.
+**Your text is never sent to a server.**
+
+- **GPT-4o**: tokenized synchronously using [gpt-tokenizer](https://github.com/niieani/gpt-tokenizer)'s pure-JS o200k_base implementation.
+- **Claude 3.5 Sonnet**: tokenized using [Anthropic's published vocabulary](https://www.npmjs.com/package/@anthropic-ai/tokenizer) (`claude.json`) with tiktoken's WASM engine — loaded asynchronously in the background.
+- **Gemini 2.0 Flash**: Google has not released their tokenizer as a standalone library; token count is estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads.
+
+##### What is a token?
+
+Large language models don't process raw characters; they work on *tokens* — variable-length
+chunks that the model treats as single units. For English prose, one token is roughly 4 characters
+or ¾ of a word. Spaces, punctuation, numbers, and code symbols each have their own rules.
+
+The coloured spans in the visualizer above mark individual tokens. Each colour change is a token
+boundary. You'll see that short common words are usually one token, while longer or less common
+words are split into two or more.
+
+##### Why token counts differ across models
+
+Every provider ships its own tokenizer with a different vocabulary size and merge rules. The same
+1,000-word document can cost 20–30% more on one API than another, purely because of how each
+tokenizer encodes it — especially for code, JSON, and non-English text.
+
+| Provider | Tokenizer | Notes |
+|----------|-----------|-------|
+| **OpenAI (GPT-4o)** | tiktoken o200k_base (200K vocab) | Industry benchmark. Highly efficient for code, JSON, and non-English text due to its large vocabulary. |
+| **Anthropic (Claude)** | Proprietary BPE ([vocabulary published](https://www.npmjs.com/package/@anthropic-ai/tokenizer)) | Run in-browser using Anthropic's published `claude.json` vocabulary with tiktoken's WASM. Actual counts used — no estimate needed. |
+| **Google (Gemini)** | SentencePiece variant (not public) | No standalone tokenizer library available. Count estimated at ×1.15 from GPT-4o based on benchmarks for code and JSON payloads. |
+
+Claude's actual token counts are computed in-browser using Anthropic's published
+[`@anthropic-ai/tokenizer`](https://www.npmjs.com/package/@anthropic-ai/tokenizer)
+vocabulary. Gemini's tokenizer is not publicly available — its count remains an estimate.
+Differences are smallest for plain English prose and largest for heavily indented code or JSON.
+
+##### Why token counts matter
+
+- **Context windows:** Every model has a maximum token limit. Sending more tokens than the limit truncates your input or raises an API error.
+- **API costs:** Cloud AI APIs charge per token, so a 10,000-token prompt costs 10× more than a 1,000-token one.
+- **Latency:** Inference time scales roughly with token count — fewer tokens means faster, cheaper responses.
+
+##### Model pricing (Q1 2025)
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) | Context window |
+|-------|----------------------|------------------------|----------------|
+| [GPT-4o](https://platform.openai.com/docs/models/gpt-4o) | $2.50 | $10.00 | 128K |
+| [Claude 3.5 Sonnet](https://www.anthropic.com/pricing#anthropic-api) | $3.00 | $15.00 | 200K |
+| [Gemini 2.0 Flash](https://ai.google.dev/pricing) | $0.10 | $0.40 | 1M |
+
+##### Implementation
+
+**GPT-4o**: tokenized synchronously using [gpt-tokenizer](https://github.com/niieani/gpt-tokenizer),
+a pure JavaScript BPE implementation bundling the full o200k_base vocabulary — no WASM, no server round-trip.
+
+**Claude 3.5 Sonnet**: tokenized using [Anthropic's published `@anthropic-ai/tokenizer`](https://www.npmjs.com/package/@anthropic-ai/tokenizer)
+vocabulary (`claude.json`, loaded from jsDelivr) with [tiktoken](https://github.com/openai/tiktoken)'s
+Rust-compiled WASM engine. Both resources are verified with SRI integrity hashes and loaded
+asynchronously in the background so they don't delay the initial page render.
+
+##### Privacy
+
+All processing runs locally. Sensitive text — API keys, personal data, proprietary code — never
+leaves your device.
+
+</div>
+</div>

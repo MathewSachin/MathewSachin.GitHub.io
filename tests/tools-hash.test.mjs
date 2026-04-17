@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { md5, hexFromBuffer, sha } from '../tools/hash/hash.js'
+import { md5, hexFromBuffer, sha } from '../src/scripts/tools/hash.js'
 
 // ---------------------------------------------------------------------------
 // md5

@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { countWords } from '../tools/scratchpad/scratchpad.js'
+import { countWords } from '../src/scripts/tools/scratchpad.js'
 
 // ---------------------------------------------------------------------------
 // countWords

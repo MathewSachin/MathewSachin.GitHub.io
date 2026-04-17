@@ -12,7 +12,7 @@ test.describe('Chrome Dino Hack post', () => {
   test('embedded dino game iframe is present and visible', async ({ page }) => {
     const frame = page.locator('#dino-game-frame');
     await expect(frame).toBeVisible();
-    await expect(frame).toHaveAttribute('src', '/dino/');
+    await expect(frame).toHaveAttribute('src', '/dino/index.html');
   });
 
   test('embedded dino game iframe loads the game', async ({ page }) => {

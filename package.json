@@ -3,22 +3,43 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "astro dev",
+    "build:astro": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
     "build-search-index": "node scripts/build-search-index.mjs",
-    "bundle-orama": "esbuild --bundle --format=esm --minify --outfile=scripts/orama.js node_modules/@orama/orama/dist/browser/index.js",
-    "build": "npm run bundle-orama && npm run build-search-index",
+    "build": "npm run build-search-index && astro build",
     "test": "node --test tests/*.test.mjs",
-    "test:ruby": "bundle exec rspec spec/ --format documentation",
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
     "@orama/orama": "^3.1.18",
+    "bootstrap": "^5.3.8",
     "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "node-addon-api": "^8.7.0",
+    "node-gyp": "^12.2.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
+    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
     "@pintora/standalone": "^0.8.1",
     "@playwright/test": "^1.59.1",
+    "@types/node": "^22.19.17",
+    "astro": "^6.1.6",
+    "astro-link-validator": "github:rodgtr1/astro-link-validator#025a27b2582234084b3676bc725418b5fc429dcd",
     "esbuild": "^0.27.4",
-    "jsdom": "^26.1.0"
+    "hast-util-to-html": "^9.0.5",
+    "hastscript": "^9.0.1",
+    "jsdom": "^26.1.0",
+    "rehype-parse": "^9.0.1",
+    "rehype-stringify": "^10.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
   }
 }

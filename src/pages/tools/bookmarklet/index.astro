@@ -1,0 +1,216 @@
+---
+import ToolLayout from '@layouts/ToolLayout.astro';
+import Docs from '@content/tool-docs/bookmarklet.mdx';
+---
+
+<ToolLayout title="Bookmarklet Compiler" ads={true}>
+<style>
+  #raw-input,
+  #compiled-output {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.85rem;
+    resize: vertical;
+    min-height: 300px;
+  }
+  #drag-btn {
+    display: inline-block;
+    padding: 0.55rem 1.15rem;
+    background: #17a2b8;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: grab;
+    border: 2px solid #17a2b8;
+    transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+    user-select: none;
+  }
+  #drag-btn:hover {
+    background: #138496;
+    border-color: #138496;
+    color: #fff;
+  }
+  #drag-btn.bm-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .stat-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<div class="card google-anno-skip">
+<div class="card-body">
+
+  <div class="row g-4">
+
+    <!-- Left: Raw Input -->
+    <div class="col-12 col-md-6">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <h5 class="mb-0">Raw JavaScript</h5>
+        <button class="btn btn-sm btn-outline-secondary" id="clear-btn">Clear</button>
+      </div>
+      <textarea id="raw-input" class="form-control" rows="14"
+        placeholder="Paste your raw JavaScript here…
+
+// Example — show page word count
+var words = document.body.innerText.match(/\\S+/g);
+alert('Word count: ' + (words ? words.length : 0));"
+        aria-label="Raw JavaScript source"></textarea>
+      <div class="mt-2 d-flex gap-2 flex-wrap" id="stats-bar" aria-live="polite" aria-atomic="true">
+        <span class="stat-badge"><span id="stat-raw">0</span> chars in</span>
+        <span class="stat-badge text-info"><span id="stat-out">0</span> chars out</span>
+        <span class="stat-badge text-success d-none" id="stat-savings-badge"><span id="stat-pct"></span>% smaller</span>
+      </div>
+    </div>
+
+    <!-- Right: Compiled Output -->
+    <div class="col-12 col-md-6">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <h5 class="mb-0">Compiled Bookmarklet</h5>
+        <button class="btn btn-sm btn-outline-secondary" id="copy-btn">
+          <i class="fas fa-copy me-1"></i>Copy
+        </button>
+      </div>
+      <textarea id="compiled-output" class="form-control" rows="14" readonly
+        placeholder="Compiled output will appear here…"
+        aria-label="Compiled bookmarklet output"></textarea>
+      <div class="mt-3">
+        <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
+          <a id="drag-btn" href="#" class="bm-disabled" draggable="true"
+            title="Drag this button onto your bookmarks bar">
+            <i class="fas fa-bookmark me-2"></i>Drag me to Bookmarks
+          </a>
+          <small class="text-muted">or right-click &rarr; Bookmark this link</small>
+        </div>
+        <p class="d-md-none mb-0 text-muted" style="font-size:0.85rem;">
+          <i class="fas fa-info-circle me-1"></i>Dragging to the bookmarks bar is a desktop-only feature.
+          On mobile, tap <strong>Copy</strong> above, then manually create a new bookmark in your browser and paste the compiled code as the URL.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/terser@5.46.1/dist/bundle.min.js" integrity="sha384-nzjWtCA/KgLA3wxAwnhUkyVMkUYv5FHRfUInpQG+0QyLpbblos9RKFceXWHQ3AWM" crossorigin="anonymous"></script>
+<script>
+(function () {
+  'use strict';
+
+  var rawInput       = document.getElementById('raw-input');
+  var compiledOutput = document.getElementById('compiled-output');
+  var dragBtn        = document.getElementById('drag-btn');
+  var copyBtn        = document.getElementById('copy-btn');
+  var clearBtn       = document.getElementById('clear-btn');
+  var statRaw        = document.getElementById('stat-raw');
+  var statOut        = document.getElementById('stat-out');
+  var statPct        = document.getElementById('stat-pct');
+  var statSavings    = document.getElementById('stat-savings-badge');
+
+  var debounceTimer = null;
+  var seq = 0; // incremented per Terser call; ignored results are discarded
+
+  // URI-encode characters that break bookmark URL bars.
+  // % must be first to prevent double-encoding.
+  function uriEncode(code) {
+    return code
+      .replace(/%/g,  '%25')
+      .replace(/"/g,  '%22')
+      .replace(/'/g,  '%27')
+      .replace(/#/g,  '%23')
+      .replace(/&/g,  '%26')
+      .replace(/</g,  '%3C')
+      .replace(/>/g,  '%3E')
+      .replace(/\`/g,  '%60');
+  }
+
+  function setResult(bookmarklet) {
+    compiledOutput.value = bookmarklet;
+    var rawLen = rawInput.value.length;
+    var outLen = bookmarklet.length;
+    statOut.textContent = outLen.toLocaleString();
+    if (rawLen > 0 && outLen > 0 && outLen < rawLen) {
+      statPct.textContent = Math.round((1 - outLen / rawLen) * 100);
+      statSavings.classList.remove('d-none');
+    } else {
+      statSavings.classList.add('d-none');
+    }
+    dragBtn.href = bookmarklet;
+    dragBtn.classList.remove('bm-disabled');
+  }
+
+  function clearResult() {
+    compiledOutput.value = '';
+    statOut.textContent = '0';
+    statSavings.classList.add('d-none');
+    dragBtn.href = '#';
+    dragBtn.classList.add('bm-disabled');
+  }
+
+  function update() {
+    var raw = rawInput.value;
+    statRaw.textContent = raw.length.toLocaleString();
+
+    if (!raw.trim()) {
+      clearResult();
+      return;
+    }
+
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      var mySeq = ++seq;
+      Terser.minify(raw, {
+        compress: true,
+        mangle: false,
+        format: { comments: false }
+      }).then(function (result) {
+        if (mySeq !== seq) return; // superseded by a later call
+        var bookmarklet = 'javascript:(function(){' + uriEncode(result.code) + '})();';
+        setResult(bookmarklet);
+      }).catch(function (err) {
+        if (mySeq !== seq) return;
+        var msg = err.message || String(err);
+        // Terser parse errors include line:col in the message; append if separate props exist
+        if (err.line != null && !msg.includes(err.line)) {
+          msg += ' [line ' + err.line + (err.col != null ? ':' + err.col : '') + ']';
+        }
+        compiledOutput.value = '/* ' + msg + ' */';
+        dragBtn.href = '#';
+        dragBtn.classList.add('bm-disabled');
+        statSavings.classList.add('d-none');
+        statOut.textContent = '0';
+      });
+    }, 250);
+  }
+
+  rawInput.addEventListener('input', update);
+
+  copyBtn.addEventListener('click', function () {
+    if (!compiledOutput.value) return;
+    var icon = copyBtn.querySelector('i');
+    navigator.clipboard.writeText(compiledOutput.value).then(function () {
+      icon.className = 'fas fa-check text-success me-1';
+      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+    }).catch(function () {
+      icon.className = 'fas fa-times text-danger me-1';
+      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
+    });
+  });
+
+  clearBtn.addEventListener('click', function () {
+    rawInput.value = '';
+    update();
+  });
+
+}());
+</script>
+  <Docs />
+</ToolLayout>

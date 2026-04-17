@@ -1,0 +1,59 @@
+---
+//
+// Tags index: /blog/tags/
+// Replaces blog/tags/index.html
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { sortPostsByDate, buildTagsMap, getPostDate, formatDateUS, postUrlFromSlug } from '@utils/posts';
+import '@styles/blog.css';
+
+const BASE = import.meta.env.BASE_URL;
+const allPosts = sortPostsByDate(await getCollection('blog'));
+const tagsMap = buildTagsMap(allPosts);
+---
+<BaseLayout title="Tags" ads={true}>
+  <div class="bg-dark py-3">
+    <div class="container">
+      <h2 class="text-white mb-3">Tags</h2>
+
+      <div class="card">
+        <div class="card-body">
+          {/* Tag cloud */}
+          <div class="tag-cloud mb-4 p-3 bg-light rounded">
+            {[...tagsMap.entries()].map(([tag, posts]) => (
+              <a href={`#${tag}`} class="btn btn-outline-info btn-sm m-1">
+                {tag} <span class="badge bg-info ms-1">{posts.length}</span>
+              </a>
+            ))}
+          </div>
+
+          {/* Per-tag post lists */}
+          {[...tagsMap.entries()].map(([tag, posts]) => (
+            <div class="tag-section mb-4" id={tag}>
+              <h5 class="tag-section-title d-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-info">{tag}</span>
+                <span class="text-muted small">{posts.length} post{posts.length !== 1 ? 's' : ''}</span>
+              </h5>
+              {posts.map(post => (
+                <a
+                  href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                  class="tag-post-link text-decoration-none text-reset"
+                  style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+                >
+                  <div class="tag-post-item d-flex justify-content-between align-items-center py-2">
+                    <span class="tag-post-title">
+                      {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                      {post.data.title}
+                    </span>
+                    <span class="small text-muted text-nowrap ms-3">{formatDateUS(getPostDate(post))}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

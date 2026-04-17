@@ -1,0 +1,42 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+This tool encodes and decodes text using the [Base64](https://en.wikipedia.org/wiki/Base64)
+encoding scheme — entirely inside your browser. **No data is ever sent to a server.**
+
+##### What is Base64?
+
+Base64 is a binary-to-text encoding that represents binary data using 64 printable ASCII
+characters (`A–Z`, `a–z`, `0–9`, `+`, `/`).
+It is commonly used to embed binary content (images, files) in text-based formats such as
+JSON, XML, HTML, and email (MIME).
+Every 3 bytes of input become 4 Base64 characters, so encoded output is roughly 33% larger
+than the original.
+
+##### Implementation Details
+
+The encoder uses JavaScript's built-in `btoa()` function and the decoder uses
+`atob()` — both are available in every modern browser.
+
+Because `btoa()` and `atob()` only handle Latin-1 (single-byte) characters, the tool adds a
+Unicode-safe layer:
+
+- **Encoding:** The input string is first converted to UTF-8 bytes using the browser's
+  [`TextEncoder`](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder) API.
+  The resulting byte array is then mapped to a binary string and passed to `btoa()`.
+- **Decoding:** `atob()` produces a binary string which is then converted back to a
+  `Uint8Array` and decoded as UTF-8 via
+  [`TextDecoder`](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder).
+
+This approach correctly handles any Unicode text, including emoji and non-Latin scripts,
+without relying on any third-party library.
+
+##### Privacy
+
+All encoding and decoding runs locally in your browser tab using standard JavaScript APIs.
+Your input text never leaves your device.
+
+</div>
+</div>

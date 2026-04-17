@@ -1,4 +1,0 @@
-{
-  "postCreateCommand": "gem install bundler && bundle install",
-  "postAttachCommand": "bundle exec jekyll serve"
-}

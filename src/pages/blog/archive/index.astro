@@ -1,0 +1,54 @@
+---
+//
+// Archive: /blog/archive/
+// Replaces blog/archive/index.html
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { sortPostsByDate, groupPostsByYear, getPostDate, postUrlFromSlug } from '@utils/posts';
+import '@styles/blog.css';
+
+const BASE = import.meta.env.BASE_URL;
+const allPosts = sortPostsByDate(await getCollection('blog'));
+const byYear = groupPostsByYear(allPosts);
+
+function fmtMonthDay(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+}
+---
+<BaseLayout title="Archive" ads={true}>
+  <div class="bg-dark py-3">
+    <div class="container">
+      <h2 class="text-white mb-3">Archive</h2>
+
+      <div class="card">
+        <div class="card-body">
+          {allPosts.length === 0 ? (
+            <p class="text-muted">No posts found.</p>
+          ) : (
+            [...byYear.entries()].map(([year, posts]) => (
+              <>
+                <h5 class="archive-year mt-3 mb-2">{year}</h5>
+                {posts.map(post => (
+                  <a
+                    href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                    class="archive-post-link text-decoration-none text-reset"
+                    style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+                  >
+                    <div class="archive-post-item d-flex justify-content-between align-items-center py-2">
+                      <span class="archive-post-title">
+                        {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                        {post.data.title}
+                      </span>
+                      <span class="small text-muted text-nowrap ms-3">{fmtMonthDay(getPostDate(post))}</span>
+                    </div>
+                  </a>
+                ))}
+              </>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

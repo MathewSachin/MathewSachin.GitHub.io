@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { pad, ordinal, buildCronExpression, DOW_NAMES } from '../tools/cron/cron.js'
+import { pad, ordinal, buildCronExpression, DOW_NAMES } from '../src/scripts/tools/cron.js'
 
 // ---------------------------------------------------------------------------
 // pad

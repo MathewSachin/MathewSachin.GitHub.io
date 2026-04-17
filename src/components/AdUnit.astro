@@ -1,0 +1,20 @@
+---
+/**
+ * AdUnit.astro
+ * Replaces _includes/ad-unit.html and _includes/in-content-ad.html
+ */
+const ADSENSE_ID = import.meta.env.PUBLIC_ADSENSE_ID || 'ca-pub-4251360406988977';
+const IS_PROD = import.meta.env.PROD;
+
+---
+{IS_PROD && (
+  <ins
+    class="adsbygoogle"
+    style="display:block"
+    data-ad-client={ADSENSE_ID}
+    data-ad-slot="7875153049"
+    data-ad-format="auto"
+    data-full-width-responsive="true"
+  ></ins>
+  <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+)}

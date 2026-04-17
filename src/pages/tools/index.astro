@@ -1,0 +1,44 @@
+---
+//
+// Tools listing: /tools/
+// Replaces tools/index.html
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getTools } from '@data/index.ts';
+import '@styles/blog.css';
+
+const BASE = import.meta.env.BASE_URL;
+const tools = getTools();
+---
+<BaseLayout title="Tools">
+  <div class="bg-dark py-3">
+    <div class="container">
+      <h2 class="text-white mb-3">Tools</h2>
+
+      <div class="home-cards-section">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+          {tools.map(tool => (
+            <div class="col">
+              <a href={`${BASE}tools/${tool.id}/`} class="home-card-link" aria-label={tool.name}>
+                <div class="card h-100">
+                  <div class="card-body">
+                    <p class="card-title mb-1">
+                      <span style={tool.accent_color ? `color: ${tool.accent_color};` : undefined} class={tool.accent_color ? undefined : 'text-info'}>
+                        <i class={`${tool.icon} me-2`} aria-hidden="true"></i>
+                        <span>{tool.name}</span>
+                      </span>
+                    </p>
+                    <p class="card-text">{tool.description}</p>
+                  </div>
+                  <div class="card-footer">
+                    <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

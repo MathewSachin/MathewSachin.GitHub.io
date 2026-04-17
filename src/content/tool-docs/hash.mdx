@@ -1,0 +1,46 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+This tool computes cryptographic hash digests of any text input — entirely inside your browser.
+**Your input is never sent to a server.**
+
+##### What is a Hash?
+
+A hash function maps an arbitrary-length input to a fixed-length output (the *digest*).
+Good hash functions are deterministic (same input → same output), fast to compute, and
+practically irreversible — you cannot reconstruct the original text from the digest alone.
+They are widely used for data integrity verification, checksums, digital signatures, and
+password storage.
+
+##### Supported Algorithms
+
+| Algorithm | Digest length | Notes |
+|-----------|---------------|-------|
+| MD5 | 128 bits (32 hex chars) | Fast; considered cryptographically broken — use only for checksums, not security. |
+| SHA-1 | 160 bits (40 hex chars) | Deprecated for security use since 2017; still common in legacy systems. |
+| SHA-256 | 256 bits (64 hex chars) | Part of the SHA-2 family; the current standard for most security applications. |
+
+##### Implementation Details
+
+**SHA-1 and SHA-256** are computed using the browser's native
+[Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest)
+(`crypto.subtle.digest()`). The input text is first encoded to UTF-8 bytes via
+`TextEncoder` and the resulting `ArrayBuffer` is converted to a lowercase hexadecimal string.
+
+**MD5** is computed using a compact, self-contained JavaScript implementation
+based on the public-domain algorithm by Paul Johnston. The input string is encoded to UTF-8
+bytes before being processed by the MD5 algorithm to ensure consistent results for non-ASCII
+characters.
+
+All three digests are rendered instantly in the page without any page reload or network
+request.
+
+##### Privacy
+
+All hashing runs locally in your browser tab. Sensitive text you enter — passwords, API
+keys, personal data — never leaves your device.
+
+</div>
+</div>

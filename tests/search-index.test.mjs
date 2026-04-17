@@ -148,8 +148,10 @@ test('postUrlFromFilename: returns null for non-matching filename', () => {
 // Integration test: generated search-index.json
 // ---------------------------------------------------------------------------
 
+const SEARCH_INDEX_PATH = join(REPO_ROOT, 'public', 'search-index.json')
+
 test('search-index.json: file exists and contains valid JSON', async () => {
-  const raw = await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8')
+  const raw = await readFile(SEARCH_INDEX_PATH, 'utf8')
   const parsed = JSON.parse(raw)
   // Orama serialised index always has these top-level keys
   assert.ok('internalDocumentIDStore' in parsed, 'index should have internalDocumentIDStore')
@@ -166,7 +168,7 @@ test('search-index.json: can be loaded and searched with Orama', async () => {
     date: 'string',
     type: 'string',
   }
-  const raw = JSON.parse(await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8'))
+  const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
   const db = await create({ schema })
   load(db, raw)
 
@@ -189,7 +191,7 @@ test('search-index.json: tools are searchable', async () => {
     date: 'string',
     type: 'string',
   }
-  const raw = JSON.parse(await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8'))
+  const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
   const db = await create({ schema })
   load(db, raw)
 
@@ -208,7 +210,7 @@ test('search-index.json: every entry has required fields', async () => {
     date: 'string',
     type: 'string',
   }
-  const raw = JSON.parse(await readFile(join(REPO_ROOT, 'search-index.json'), 'utf8'))
+  const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
   const db = await create({ schema })
   load(db, raw)
 

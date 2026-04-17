@@ -1,0 +1,41 @@
+---
+// Blog post page: /blog/[year]/[month]/[day]/[slug]/
+// Replaces Jekyll's automatic post URL generation.
+// URL pattern mirrors Jekyll: /blog/YYYY/MM/DD/slug/
+
+import { getCollection, render } from 'astro:content';
+import PostLayout from '@layouts/PostLayout.astro';
+import { sortPostsByDate, postUrlFromId } from '@utils/posts';
+import PostLink from '@components/mdx/PostLink.astro';
+import { Picture } from 'astro:assets';
+import AlertInfo from '@components/AlertInfo.astro'
+import InContentAd from '@components/InContentAd.astro';
+import Pintora from '@components/Pintora.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const allPosts = sortPostsByDate(posts);
+
+  return allPosts.map(post => {
+    // In Astro 6 content layer (glob loader), the entry ID is the filename without extension
+    const match = post.id.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
+    if (!match) return null;
+    const [, year, month, day, slug] = match;
+    return {
+      params: {
+        year,
+        month: month.padStart(2, '0'),
+        day: day.padStart(2, '0'),
+        slug,
+      },
+      props: { post, allPosts },
+    };
+  }).filter(Boolean);
+}
+
+const { post, allPosts } = Astro.props;
+const { Content, headings } = await render(post);
+---
+<PostLayout post={post} allPosts={allPosts} headings={headings} canonicalPath={postUrlFromId(post.id)}>
+  <Content components={{ PostLink, AlertInfo, Picture, Pintora, 'in-content-ad-marker': InContentAd }} />
+</PostLayout>

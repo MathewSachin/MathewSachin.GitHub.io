@@ -1,0 +1,131 @@
+---
+import ToolLayout from '@layouts/ToolLayout.astro';
+import Docs from '@content/tool-docs/yt-thumbnail.mdx';
+---
+<ToolLayout title="YouTube Thumbnail Grabber" ads={true}>
+
+<div class="card google-anno-skip">
+<div class="card-body">
+
+  <div class="mb-3">
+    <label for="yt-input" class="form-label fw-semibold">YouTube URL or Video ID</label>
+    <input id="yt-input" type="text" class="form-control font-monospace"
+      placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+    <div class="form-text">Paste any YouTube URL (watch, shorts, youtu.be) or just the 11-character video ID.</div>
+  </div>
+  <button id="grab-btn" class="btn btn-danger text-white">
+    <i class="fab fa-youtube me-1"></i>Grab Thumbnail
+  </button>
+  <div id="yt-error" class="text-danger small mt-2 d-none"></div>
+
+  <div id="yt-result" class="mt-4 d-none">
+    <div class="mb-3">
+      <img id="yt-preview" alt="YouTube thumbnail preview"
+        class="img-fluid rounded border d-block" data-proofer-ignore>
+    </div>
+
+    <div class="mb-3">
+      <label for="yt-res-select" class="form-label">Resolution</label>
+      <select id="yt-res-select" class="form-select" style="max-width:320px;"></select>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <a id="yt-open-btn" href="#" target="_blank" rel="noopener"
+        class="btn btn-outline-secondary">
+        <i class="fas fa-external-link-alt me-1"></i>Open Image
+      </a>
+      <button id="yt-download-btn" type="button"
+        class="btn btn-primary">
+        <i class="fas fa-download me-1"></i>Download
+      </button>
+    </div>
+  </div>
+
+<script>
+import { extractVideoId, thumbnailUrl, getResolutions } from '@scripts/tools/yt-thumbnail.js';
+
+const input    = document.getElementById('yt-input');
+const btn      = document.getElementById('grab-btn');
+const errEl    = document.getElementById('yt-error');
+const result   = document.getElementById('yt-result');
+const preview  = document.getElementById('yt-preview');
+const resSel   = document.getElementById('yt-res-select');
+const openBtn  = document.getElementById('yt-open-btn');
+const dlBtn    = document.getElementById('yt-download-btn');
+
+let currentId = null;
+
+// Populate resolution dropdown once
+getResolutions().forEach(function (r) {
+  const opt = document.createElement('option');
+  opt.value = r.key;
+  opt.textContent = r.label;
+  resSel.appendChild(opt);
+});
+
+function showError(msg) {
+  errEl.textContent = msg;
+  errEl.classList.remove('d-none');
+  result.classList.add('d-none');
+}
+
+function clearError() {
+  errEl.textContent = '';
+  errEl.classList.add('d-none');
+}
+
+function updatePreview() {
+  if (!currentId) return;
+  // thumbnailUrl validates the key against the known-safe list
+  const url = thumbnailUrl(currentId, resSel.value);
+  preview.src = url;
+  openBtn.href = url;
+  dlBtn.dataset.url = url;
+  dlBtn.dataset.filename = 'thumbnail-' + currentId + '-' + resSel.value + '.jpg';
+}
+
+btn.addEventListener('click', function () {
+  clearError();
+  const id = extractVideoId(input.value);
+  if (!id) {
+    showError('Could not find a valid YouTube video ID. Paste a full YouTube URL or the 11-character video ID.');
+    return;
+  }
+  currentId = id;
+  result.classList.remove('d-none');
+  updatePreview();
+});
+
+resSel.addEventListener('change', updatePreview);
+
+input.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') btn.click();
+});
+
+dlBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  const url = dlBtn.dataset.url;
+  const filename = dlBtn.dataset.filename;
+  if (!url) return;
+  fetch(url)
+    .then(r => r.blob())
+    .then(blob => {
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+    })
+    .catch(() => {
+      // Fallback: open in new tab if fetch fails
+      window.open(url, '_blank');
+    });
+});
+</script>
+
+</div>
+</div>
+
+<Docs />
+</ToolLayout>
