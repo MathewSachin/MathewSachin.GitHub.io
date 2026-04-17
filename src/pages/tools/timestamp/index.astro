@@ -1,6 +1,5 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import { epochToMs, datetimeLocalToMs } from './timestamp.js';
 import Docs from '@content/tool-docs/timestamp.mdx';
 ---
 <ToolLayout title="Timestamp Converter" ads={true}>
@@ -89,7 +88,7 @@ import Docs from '@content/tool-docs/timestamp.mdx';
   </div>
 </div>
 
-<script type="module">
+<script>
 import { epochToMs, datetimeLocalToMs } from './timestamp.js';
 
 // Utility: copy text and briefly swap icon to a check mark

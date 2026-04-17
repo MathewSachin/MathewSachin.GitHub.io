@@ -1,6 +1,5 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import { md5, sha } from './hash.js';
 import Docs from '@content/tool-docs/hash.mdx';
 ---
 <ToolLayout title="Hash Generator" ads={true}>
@@ -60,7 +59,7 @@ import Docs from '@content/tool-docs/hash.mdx';
 
 </div>
 
-<script type="module">
+<script>
 import { md5, sha } from './hash.js';
 
 // ── UI ────────────────────────────────────────────────────────────────────

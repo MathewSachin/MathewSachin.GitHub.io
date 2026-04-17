@@ -63,8 +63,3 @@
   name: Local LLM Chat
   description: Chat with a local language model that runs entirely in your browser — powered by Transformers.js WebAssembly. No data sent to any server.
   icon: fas fa-robot
-
-- id: tokenizer
-  name: AI Tokenizer & Cost Calculator
-  description: Visualize how AI models tokenize your text with colour-coded token boundaries, and calculate the real-time API cost across GPT-4o, Claude, and Gemini.
-  icon: fas fa-microchip

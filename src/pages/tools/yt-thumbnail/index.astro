@@ -1,6 +1,5 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import { extractVideoId, thumbnailUrl, getResolutions } from './yt-thumbnail.js';
 import Docs from '@content/tool-docs/yt-thumbnail.mdx';
 ---
 <ToolLayout title="YouTube Thumbnail Grabber" ads={true}>
@@ -42,7 +41,7 @@ import Docs from '@content/tool-docs/yt-thumbnail.mdx';
     </div>
   </div>
 
-<script type="module">
+<script>
 import { extractVideoId, thumbnailUrl, getResolutions } from './yt-thumbnail.js';
 
 const input    = document.getElementById('yt-input');

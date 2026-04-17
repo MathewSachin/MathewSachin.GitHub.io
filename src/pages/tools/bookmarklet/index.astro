@@ -1,7 +1,10 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import Docs from '@content/tool-docs/bookmarklet.mdx';
-const html = `<style>
+---
+
+<ToolLayout title="Bookmarklet Compiler" ads={true}>
+<style>
   #raw-input,
   #compiled-output {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
@@ -98,7 +101,7 @@ alert('Word count: ' + (words ? words.length : 0));"
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/terser@5.46.1/dist/bundle.min.js" integrity="sha384-nzjWtCA/KgLA3wxAwnhUkyVMkUYv5FHRfUInpQG+0QyLpbblos9RKFceXWHQ3AWM" crossorigin="anonymous"></script>
-<script is:inline>
+<script>
 (function () {
   'use strict';
 
@@ -208,9 +211,6 @@ alert('Word count: ' + (words ? words.length : 0));"
   });
 
 }());
-</script>`;
----
-<ToolLayout title="Bookmarklet Compiler" ads={true}>
-  <Fragment set:html={html} />
+</script>
   <Docs />
 </ToolLayout>

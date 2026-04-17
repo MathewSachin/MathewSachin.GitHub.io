@@ -1,6 +1,5 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import { countWords } from './scratchpad.js';
 import Docs from '@content/tool-docs/scratchpad.mdx';
 ---
 <ToolLayout title="Smart Scratchpad" ads={true}>
@@ -51,7 +50,7 @@ import Docs from '@content/tool-docs/scratchpad.mdx';
   spellcheck="true"
   autocomplete="off"></textarea>
 
-<script type="module">
+<script>
 import { countWords } from './scratchpad.js';
 
 var STORAGE_KEY = 'scratchpad-v1';

@@ -1,7 +1,9 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import Docs from '@content/tool-docs/imgcompress.mdx';
-const html = `<script src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
+---
+<ToolLayout title="Image Compressor" ads={true}>
+  <script src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
   integrity="sha384-M8gIiLd+UKUmTrqlRrO14Veff1ao4UoVqgcMhovIW5DUwxErdsz8K+6D3ZbplaNN"
   crossorigin="anonymous"></script>
 
@@ -313,9 +315,5 @@ const html = `<script src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dis
 </div>
 </div>
 
-`;
----
-<ToolLayout title="Image Compressor" ads={true}>
-  <Fragment set:html={html} />
   <Docs />
 </ToolLayout>

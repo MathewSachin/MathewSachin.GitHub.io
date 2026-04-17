@@ -1,6 +1,5 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import { buildCronExpression, ordinal, pad, DOW_NAMES } from './cron.js';
 import Docs from '@content/tool-docs/cron.mdx';
 ---
 <ToolLayout title="CRON Expression Generator" ads={true}>
@@ -97,7 +96,7 @@ import Docs from '@content/tool-docs/cron.mdx';
 
 </div>
 
-<script type="module">
+<script>
 import { buildCronExpression, ordinal, pad, DOW_NAMES } from './cron.js';
 
 // ── Populate selects ─────────────────────────────────────────────────────

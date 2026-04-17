@@ -1,6 +1,5 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import { formatJson } from './json-formatter.js';
 import Docs from '@content/tool-docs/json.mdx';
 ---
 <ToolLayout title="JSON Formatter & Validator" ads={true}>
@@ -35,7 +34,7 @@ import Docs from '@content/tool-docs/json.mdx';
   </div>
 </div>
 
-<script type="module">
+<script>
 import { formatJson } from './json-formatter.js';
 
 var jsonInput  = document.getElementById('json-input');
