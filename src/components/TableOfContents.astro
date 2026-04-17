@@ -1,7 +1,34 @@
 ---
-const { toc } = Astro.props;
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter for h2 and h3 levels
+const tocEntries = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+
+// Only show TOC if there are at least 3 entries
+const shouldShowToc = tocEntries.length >= 3;
+
+// Group the headings to make rendering nested lists easier
+interface GroupedHeading extends MarkdownHeading {
+    subheadings: MarkdownHeading[];
+}
+
+const groupedEntries = tocEntries.reduce((acc, heading) => {
+  if (heading.depth === 2) {
+    acc.push({ ...heading, subheadings: [] });
+  } else if (heading.depth === 3 && acc.length > 0) {
+    acc[acc.length - 1].subheadings.push(heading);
+  }
+  return acc;
+}, [] as GroupedHeading[]);
 ---
 
+{shouldShowToc && (
 <div class="card toc-card">
     <button
     type="button"
@@ -17,10 +44,33 @@ const { toc } = Astro.props;
     </div>
     <div class="collapse d-md-block" id="toc-collapse">
     <div class="card-body p-0">
-        <nav id="toc-nav" aria-label="Table of contents" set:html={toc} />
+        <nav id="toc-nav" aria-label="Table of contents">
+          <ul class="toc-list">
+            {groupedEntries.map((h2) => (
+              <li class="toc-link">
+                <a href={`#${h2.slug}`}>
+                  {h2.text}
+                </a>
+                
+                {h2.subheadings.length > 0 && (
+                  <ul class="toc-sublist">
+                    {h2.subheadings.map((h3) => (
+                      <li class="toc-link toc-h3">
+                        <a href={`#${h3.slug}`}>
+                          {h3.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
     </div>
     </div>
 </div>
+)}
 
 <style>
 /* Moving TOC styles here is breaking the design for whatever reason */

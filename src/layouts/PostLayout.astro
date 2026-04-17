@@ -18,17 +18,17 @@ import AdUnit from '@components/AdUnit.astro';
 import ReadingProgressBar from '@components/ReadingProgressBar.astro';
 import { formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
 import '@styles/blog.css';
+import type { MarkdownHeading } from 'astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
   allPosts: CollectionEntry<'blog'>[];
-  /** The table of contents HTML string (generated at build time). */
-  toc?: string;
+  headings: MarkdownHeading[];
   /** Override canonical URL path (e.g. /blog/YYYY/MM/DD/slug.html) */
   canonicalPath?: string;
 }
 
-const { post, allPosts, toc, canonicalPath } = Astro.props;
+const { post, allPosts, headings, canonicalPath } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
 
@@ -103,11 +103,11 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
         </div>
 
         {/* TOC Sidebar */}
-        {showToc && toc && (
+        {showToc && headings && (
           <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none">
             <div class="sticky-md-top" style="top: 10px">
               <div class="mb-3">
-                <TableOfContents toc={toc} />
+                <TableOfContents headings={headings} />
               </div>
               <div class="d-none d-md-block"><AdUnit /></div>
             </div>

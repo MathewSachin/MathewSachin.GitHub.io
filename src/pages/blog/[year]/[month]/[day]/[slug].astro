@@ -34,36 +34,7 @@ export async function getStaticPaths() {
 
 const { post, allPosts } = Astro.props;
 const { Content, headings } = await render(post);
-
-// Build TOC from headings exposed by Astro's markdown pipeline
-const tocEntries = headings.filter(h => h.depth >= 2 && h.depth <= 3);
-
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-let toc = '';
-if (tocEntries.length >= 3) {
-  let html = '<ul class="toc-list">';
-  let prevDepth = 0;
-  let inSub = false;
-  for (const entry of tocEntries) {
-    if (entry.depth === 2) {
-      if (inSub) { html += '</ul></li>'; inSub = false; }
-      html += `<li><a href="#${entry.slug}" class="toc-link">${escapeHtml(entry.text)}</a>`;
-      prevDepth = 2;
-    } else if (entry.depth === 3) {
-      if (prevDepth === 2) { html += '<ul class="toc-sublist">'; inSub = true; }
-      html += `<li><a href="#${entry.slug}" class="toc-link toc-link-h3">${escapeHtml(entry.text)}</a></li>`;
-      prevDepth = 3;
-    }
-  }
-  if (inSub) html += '</ul>';
-  if (prevDepth >= 2) html += '</li>';
-  html += '</ul>';
-  toc = html;
-}
 ---
-<PostLayout post={post} allPosts={allPosts} toc={toc} canonicalPath={postUrlFromId(post.id)}>
+<PostLayout post={post} allPosts={allPosts} headings={headings} canonicalPath={postUrlFromId(post.id)}>
   <Content components={{ PostLink, AlertInfo, Picture, 'in-content-ad-marker': InContentAd }} />
 </PostLayout>
