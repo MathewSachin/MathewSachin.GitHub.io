@@ -6,23 +6,46 @@
 </button> </div> </div> <div id="load-progress" class="d-none mb-3" data-astro-cid-kc3ngmdx> <div class="d-flex align-items-center gap-2 mb-1" data-astro-cid-kc3ngmdx> <small id="progress-label" class="text-muted" data-astro-cid-kc3ngmdx>Loading…</small> </div> <div class="progress" style="height: 8px;" data-astro-cid-kc3ngmdx> <div id="progress-bar" class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-astro-cid-kc3ngmdx></div> </div> </div> </div> <!-- Chat --> <div id="chat-section" class="d-none" data-astro-cid-kc3ngmdx> <div id="chat-history" class="p-3 mb-3" role="log" aria-live="polite" aria-label="Chat history" data-astro-cid-kc3ngmdx> <p class="text-muted text-center small mt-5" id="chat-placeholder" data-astro-cid-kc3ngmdx> <i class="fas fa-robot me-1" data-astro-cid-kc3ngmdx></i>Model loaded — say something!
 </p> </div> <div class="d-flex gap-2 align-items-end" data-astro-cid-kc3ngmdx> <textarea id="chat-input" class="form-control" rows="2" placeholder="Type a message and press Enter…" aria-label="Chat input" data-astro-cid-kc3ngmdx></textarea> <div class="d-flex flex-column gap-2 flex-shrink-0" data-astro-cid-kc3ngmdx> <button class="btn btn-info text-white" id="send-btn" title="Send (Enter)" data-astro-cid-kc3ngmdx> <i class="fas fa-paper-plane" data-astro-cid-kc3ngmdx></i> </button> <button class="btn btn-outline-secondary" id="clear-btn" title="Clear conversation" data-astro-cid-kc3ngmdx> <i class="fas fa-trash" data-astro-cid-kc3ngmdx></i> </button> </div> </div> <div class="mt-2" data-astro-cid-kc3ngmdx> <small class="text-muted" data-astro-cid-kc3ngmdx> <i class="fas fa-microchip me-1" data-astro-cid-kc3ngmdx></i>Runs entirely in your browser via WebAssembly — no data is sent to any server.
       Generation speed depends on your device; first load downloads the model (~0.1 – 0.7 GB, cached after).
-</small> </div> </div> <!-- Status --> <div id="status-msg" class="mt-3 d-none" data-astro-cid-kc3ngmdx></div> </div> </div> <script type="module" src="/tools/llm/llm.js"></script> <div class="card mt-4"><div class="card-body"><h4>How It Works</h4><p><p>This tool runs a large language model <strong>entirely inside your browser tab</strong>
-using <a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a>.
-No text you type is ever sent to a server — inference happens locally on your CPU.</p></p><h5 class="mt-4">Powered by Transformers.js</h5><p><p><a href="https://huggingface.co/docs/transformers.js" target="_blank" rel="noopener">Transformers.js</a>
-is the official JavaScript port of Hugging Face Transformers. It uses
-<a href="https://onnxruntime.ai/" target="_blank" rel="noopener">ONNX Runtime Web</a>
+</small> </div> </div> <!-- Status --> <div id="status-msg" class="mt-3 d-none" data-astro-cid-kc3ngmdx></div> </div> </div> <script type="module" src="/tools/llm/llm.js"></script> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool runs a large language model <strong>entirely inside your browser tab</strong>
+using <a href="https://webassembly.org/">WebAssembly</a>.
+No text you type is ever sent to a server — inference happens locally on your CPU.</p><h5 id="powered-by-transformersjs">Powered by Transformers.js</h5><p><a href="https://huggingface.co/docs/transformers.js">Transformers.js</a> is the official JavaScript
+port of Hugging Face Transformers. It uses <a href="https://onnxruntime.ai/">ONNX Runtime Web</a>
 to run pre-converted ONNX model files inside the browser’s WebAssembly engine — no plugins or
-native installs required.</p></p><h5 class="mt-4">Available Models</h5><div class="table-responsive"><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Model</th><th>Size (quantized)</th><th>Notes</th></tr></thead><tbody><tr><td><a href="https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0" target="_blank" rel="noopener">TinyLlama 1.1B Chat</a></td><td>~640 MB</td><td>Instruction-tuned chat model; best results for Q&amp;A and conversation.</td></tr><tr><td><a href="https://huggingface.co/openai-community/gpt2" target="_blank" rel="noopener">GPT-2</a></td><td>~120 MB</td><td>Lightweight text-completion model. Fast to load; not instruction-tuned.</td></tr></tbody></table></div><h5 class="mt-4">Implementation Details</h5><ol><li><p>On first use the browser downloads the selected model’s ONNX weights from the
-<a href="https://huggingface.co/" target="_blank" rel="noopener">Hugging Face Hub</a>
-CDN and caches them in the browser’s
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener">Cache Storage</a>.
-Subsequent visits reuse the cached files with no re-download.</p></li><li><p>Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
-WASM thread using the model’s bundled vocabulary.</p></li><li><p>The <a href="https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer" target="_blank" rel="noopener">TextStreamer</a>
+native installs required.</p><h5 id="available-models">Available Models</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Model</th><th>Size (quantized)</th><th>Notes</th></tr></thead><tbody><tr><td><a href="https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0">TinyLlama 1.1B Chat</a></td><td>~640 MB</td><td>Instruction-tuned chat model; best results for Q&amp;A and conversation.</td></tr><tr><td><a href="https://huggingface.co/openai-community/gpt2">GPT-2</a></td><td>~120 MB</td><td>Lightweight text-completion model. Fast to load; not instruction-tuned.</td></tr></tbody></table></div><h5 id="implementation-details">Implementation Details</h5><ol>
+<li>On first use the browser downloads the selected model’s ONNX weights from the
+<a href="https://huggingface.co/">Hugging Face Hub</a> CDN and caches them in the browser’s
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache">Cache Storage</a>.
+Subsequent visits reuse the cached files with no re-download.</li>
+<li>Tokenization (text → token IDs) and de-tokenization (token IDs → text) run in the same
+WASM thread using the model’s bundled vocabulary.</li>
+<li>The <a href="https://huggingface.co/docs/transformers.js/api/utils/generation#utilsgenerationtextstreamer">TextStreamer</a>
 API streams generated tokens back to the page one at a time, so you see the response
-appear incrementally — just like server-side streaming APIs.</p></li><li><p>For chat models (TinyLlama), the full conversation history is passed on every turn using
-the model’s built-in chat template, keeping the assistant aware of prior context.</p></li></ol><h5 class="mt-4">Performance Expectations</h5><p><p>WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
+appear incrementally — just like server-side streaming APIs.</li>
+<li>For chat models (TinyLlama), the full conversation history is passed on every turn using
+the model’s built-in chat template, keeping the assistant aware of prior context.</li>
+</ol><h5 id="performance-expectations">Performance Expectations</h5><p>WASM inference is CPU-bound and noticeably slower than GPU-accelerated APIs.
 Typical generation speed on a modern laptop is <strong>1 – 10 tokens/second</strong>
 depending on the model and CPU. The first generation in a session may be slower
-as the WASM engine JIT-compiles the model graph.</p></p><h5 class="mt-4">Privacy</h5><p><p>All inference runs locally in your browser tab. Your messages, model weights, and any
-generated text never leave your device.</p></p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+as the WASM engine JIT-compiles the model graph.</p><h5 id="privacy">Privacy</h5><p>All inference runs locally in your browser tab. Your messages, model weights, and any
+generated text never leave your device.</p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>

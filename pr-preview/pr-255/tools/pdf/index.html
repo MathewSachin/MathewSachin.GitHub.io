@@ -10,18 +10,33 @@ Owner Password
 <i class="fas fa-info-circle text-muted ms-1" title="Password for full permissions (printing, editing). Defaults to User Password if left blank."></i> </label> <input type="password" id="owner-pass" class="form-control" placeholder="Defaults to User Password" autocomplete="new-password"> </div> </div> <small class="text-muted d-block mt-2">
 Uses 256-bit AES encryption (PDF 1.7+).
 </small> </div> <!-- Status message --> <div id="status-msg" class="mb-3 d-none"></div> <!-- Process button --> <button class="btn btn-primary" id="process-btn" disabled> <i class="fas fa-cog me-1"></i>Process PDF
-</button> <!-- Result / download --> <div id="result-section" class="mt-4 d-none"> <div class="d-flex align-items-center gap-3 flex-wrap p-3 border rounded"> <i class="fas fa-file-pdf fa-2x text-danger"></i> <div> <div class="small text-muted mb-1">Your processed PDF is ready:</div> <a id="download-link" href="#" download class="btn btn-success btn-sm"> <i class="fas fa-download me-1"></i><span>Download</span> </a> </div> </div> </div> </div> </div> <div class="card mt-4"><div class="card-body"><h4>How It Works</h4><p><p>This tool adds or removes passwords from PDF files entirely inside your browser using
-<a href="https://github.com/qpdf/qpdf" target="_blank" rel="noopener">QPDF</a> compiled to
-<a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a>.
-<strong>Your PDF is never sent to any server.</strong></p></p><h5 class="mt-4">Modes</h5><div class="table-responsive"><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Mode</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Remove Password</strong></td><td><p>Decrypts an encrypted PDF. You must supply the correct password.
-The output PDF can be opened without any password.</p></td></tr><tr><td><strong>Add Password</strong></td><td><p>Encrypts an unprotected PDF with 256-bit AES (PDF 1.7+).
-The <em>User Password</em> is required to open the file.
-The <em>Owner Password</em> controls printing and editing permissions
-(defaults to the User Password if left blank).</p></td></tr></tbody></table></div><h5 class="mt-4">Implementation Details</h5><p><p>The QPDF WebAssembly binary (~1.3 MB) is fetched from a CDN on first use and instantiated
-inside a
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank" rel="noopener">Web Worker</a>
-so that the page stays responsive even for large files.</p></p><ol><li>The selected PDF is read into an <code>ArrayBuffer</code> in the browser.</li><li>The bytes are posted to a Web Worker which writes them to the QPDF virtual filesystem
-(<code>FS.writeFile</code>).</li><li>QPDF processes the file entirely in WebAssembly memory.</li><li>The output bytes are read back (<code>FS.readFile</code>) and turned into a
-<code>Blob URL</code> for download — no disk writes, no network requests.</li></ol><h5 class="mt-4">Privacy</h5><p><p>All processing runs locally in your browser tab.
-Your PDF bytes, passwords, and any sensitive content are never transmitted anywhere.</p></p></div></div> <script defer src="/tools/pdf/pdf.js"></script>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</button> <!-- Result / download --> <div id="result-section" class="mt-4 d-none"> <div class="d-flex align-items-center gap-3 flex-wrap p-3 border rounded"> <i class="fas fa-file-pdf fa-2x text-danger"></i> <div> <div class="small text-muted mb-1">Your processed PDF is ready:</div> <a id="download-link" href="#" download class="btn btn-success btn-sm"> <i class="fas fa-download me-1"></i><span>Download</span> </a> </div> </div> </div> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool adds or removes passwords from PDF files entirely inside your browser using
+<a href="https://github.com/qpdf/qpdf">QPDF</a> compiled to
+<a href="https://webassembly.org/">WebAssembly</a>.
+<strong>Your PDF is never sent to any server.</strong></p><h5 id="modes">Modes</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Mode</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Remove Password</strong></td><td>Decrypts an encrypted PDF. You must supply the correct password. The output PDF can be opened without any password.</td></tr><tr><td><strong>Add Password</strong></td><td>Encrypts an unprotected PDF with 256-bit AES (PDF 1.7+). The <em>User Password</em> is required to open the file. The <em>Owner Password</em> controls printing and editing permissions (defaults to the User Password if left blank).</td></tr></tbody></table></div><h5 id="implementation-details">Implementation Details</h5><p>The QPDF WebAssembly binary (~1.3 MB) is fetched from a CDN on first use and instantiated
+inside a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API">Web Worker</a>
+so that the page stays responsive even for large files.</p><ol>
+<li>The selected PDF is read into an <code>ArrayBuffer</code> in the browser.</li>
+<li>The bytes are posted to a Web Worker which writes them to the QPDF virtual filesystem (<code>FS.writeFile</code>).</li>
+<li>QPDF processes the file entirely in WebAssembly memory.</li>
+<li>The output bytes are read back (<code>FS.readFile</code>) and turned into a <code>Blob URL</code> for download — no disk writes, no network requests.</li>
+</ol><h5 id="privacy">Privacy</h5><p>All processing runs locally in your browser tab.
+Your PDF bytes, passwords, and any sensitive content are never transmitted anywhere.</p></div></div> <script defer src="/tools/pdf/pdf.js"></script>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>

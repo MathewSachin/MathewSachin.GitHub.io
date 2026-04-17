@@ -49,20 +49,22 @@ document.getElementById('copy-btn').addEventListener('click', function () {
     setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
   });
 });
-</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4>How It Works</h4><p><p>This tool encodes and decodes text using the
-<a href="https://en.wikipedia.org/wiki/Base64" target="_blank" rel="noopener">Base64</a>
-encoding scheme — entirely inside your browser. <strong>No data is ever sent to a server.</strong></p></p><h5 class="mt-4">What is Base64?</h5><p><p>Base64 is a binary-to-text encoding that represents binary data using 64 printable ASCII
+</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool encodes and decodes text using the <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>
+encoding scheme — entirely inside your browser. <strong>No data is ever sent to a server.</strong></p><h5 id="what-is-base64">What is Base64?</h5><p>Base64 is a binary-to-text encoding that represents binary data using 64 printable ASCII
 characters (<code>A–Z</code>, <code>a–z</code>, <code>0–9</code>, <code>+</code>, <code>/</code>).
 It is commonly used to embed binary content (images, files) in text-based formats such as
 JSON, XML, HTML, and email (MIME).
 Every 3 bytes of input become 4 Base64 characters, so encoded output is roughly 33% larger
-than the original.</p></p><h5 class="mt-4">Implementation Details</h5><p><p>The encoder uses JavaScript’s built-in <code>btoa()</code> function and the decoder uses
-<code>atob()</code> — both are available in every modern browser.</p></p><p><p>Because <code>btoa()</code> and <code>atob()</code> only handle Latin-1 (single-byte)
-characters, the tool adds a Unicode-safe layer:</p></p><ul><li><p><strong>Encoding:</strong> The input string is first converted to UTF-8 bytes using the
-browser’s <a href="https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder" target="_blank" rel="noopener"><code>TextEncoder</code></a>
-API. The resulting byte array is then mapped to a binary string and passed to <code>btoa()</code>.</p></li><li><p><strong>Decoding:</strong> <code>atob()</code> produces a binary string which is then
-converted back to a <code>Uint8Array</code> and decoded as UTF-8 via
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder" target="_blank" rel="noopener"><code>TextDecoder</code></a>.</p></li></ul><p><p>This approach correctly handles any Unicode text, including emoji and non-Latin scripts,
-without relying on any third-party library.</p></p><h5 class="mt-4">Privacy</h5><p><p>All encoding and decoding runs locally in your browser tab using standard JavaScript APIs.
-Your input text never leaves your device.</p></p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+than the original.</p><h5 id="implementation-details">Implementation Details</h5><p>The encoder uses JavaScript’s built-in <code>btoa()</code> function and the decoder uses
+<code>atob()</code> — both are available in every modern browser.</p><p>Because <code>btoa()</code> and <code>atob()</code> only handle Latin-1 (single-byte) characters, the tool adds a
+Unicode-safe layer:</p><ul>
+<li><strong>Encoding:</strong> The input string is first converted to UTF-8 bytes using the browser’s
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder"><code>TextEncoder</code></a> API.
+The resulting byte array is then mapped to a binary string and passed to <code>btoa()</code>.</li>
+<li><strong>Decoding:</strong> <code>atob()</code> produces a binary string which is then converted back to a
+<code>Uint8Array</code> and decoded as UTF-8 via
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder"><code>TextDecoder</code></a>.</li>
+</ul><p>This approach correctly handles any Unicode text, including emoji and non-Latin scripts,
+without relying on any third-party library.</p><h5 id="privacy">Privacy</h5><p>All encoding and decoding runs locally in your browser tab using standard JavaScript APIs.
+Your input text never leaves your device.</p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>

@@ -47,23 +47,23 @@ document.getElementById('json-copy-btn').addEventListener('click', function () {
     setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
   });
 });
-</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4>How It Works</h4><p><p>This tool parses, validates, and reformats
-<a href="https://www.json.org/" target="_blank" rel="noopener">JSON</a>
+</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool parses, validates, and reformats <a href="https://www.json.org/">JSON</a>
 text — entirely inside your browser.
-<strong>No data is ever sent to a server.</strong></p></p><h5 class="mt-4">What is JSON?</h5><p><p>JSON (JavaScript Object Notation) is a lightweight, human-readable data interchange format.
+<strong>No data is ever sent to a server.</strong></p><h5 id="what-is-json">What is JSON?</h5><p>JSON (JavaScript Object Notation) is a lightweight, human-readable data interchange format.
 It supports six value types: <code>string</code>, <code>number</code>, <code>boolean</code>,
 <code>null</code>, <code>array</code>, and <code>object</code>. Because it maps directly to
 JavaScript data structures, it is the most widely used format for REST APIs and
-configuration files.</p></p><h5 class="mt-4">Implementation Details</h5><p><p>The tool uses two standard JavaScript built-ins — no third-party libraries are involved:</p></p><ul><li><p><strong>Parsing &amp; validation:</strong>
-<code>JSON.parse(input)</code> — if the input is not valid JSON, the built-in parser throws
-a <code>SyntaxError</code> whose message is displayed as the error feedback. If parsing
-succeeds the JSON is considered valid.</p></li><li><p><strong>Formatting:</strong>
-<code>JSON.stringify(parsed, null, 2)</code> — re-serialises the parsed value with 2-space
+configuration files.</p><h5 id="implementation-details">Implementation Details</h5><p>The tool uses two standard JavaScript built-ins — no third-party libraries are involved:</p><ul>
+<li><strong>Parsing &amp; validation:</strong> <code>JSON.parse(input)</code> — if the input is not valid JSON, the built-in
+parser throws a <code>SyntaxError</code> whose message is displayed as the error feedback. If parsing
+succeeds the JSON is considered valid.</li>
+<li><strong>Formatting:</strong> <code>JSON.stringify(parsed, null, 2)</code> — re-serialises the parsed value with 2-space
 indentation, producing consistently pretty-printed output regardless of the original
-whitespace or key ordering.</p></li><li><p><strong>Minification:</strong>
-<code>JSON.stringify(parsed, null, 0)</code> — re-serialises with no extra whitespace,
-producing the most compact valid JSON string.</p></li></ul><p><p>Because the round-trip goes through <code>JSON.parse</code> → <code>JSON.stringify</code>,
+whitespace or key ordering.</li>
+<li><strong>Minification:</strong> <code>JSON.stringify(parsed, null, 0)</code> — re-serialises with no extra whitespace,
+producing the most compact valid JSON string.</li>
+</ul><p>Because the round-trip goes through <code>JSON.parse</code> → <code>JSON.stringify</code>,
 the formatter also <em>normalises</em> the data: duplicate keys are deduplicated and
-certain non-standard values (e.g. <code>undefined</code>, functions) are stripped.</p></p><h5 class="mt-4">Privacy</h5><p><p>All processing happens locally in your browser tab. JSON payloads — which may contain
-sensitive business data — never leave your device.</p></p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+certain non-standard values (e.g. <code>undefined</code>, functions) are stripped.</p><h5 id="privacy">Privacy</h5><p>All processing happens locally in your browser tab. JSON payloads — which may contain
+sensitive business data — never leave your device.</p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>

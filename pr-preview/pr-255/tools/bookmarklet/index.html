@@ -207,18 +207,28 @@ alert('Word count: ' + (words ? words.length : 0));"
   });
 
 }());
-</script> <div class="card mt-4"><div class="card-body"><h4>How to Use</h4><div class="d-none d-md-block"><ol><li>Paste your raw JavaScript into the left pane.</li><li>The compiled bookmarklet appears on the right instantly.</li><li>Drag the <strong>Drag me to Bookmarks</strong> button onto your browser’s bookmarks bar, or right-click it and choose <em>Bookmark this link</em>.</li><li>Navigate to any webpage and click the bookmark to run your script.</li></ol><p class="mt-3 mb-1"><strong>On mobile</strong>, dragging to the bookmarks bar is not supported — see the note below the output pane for the manual installation steps.</p></div><div class="d-md-none"><p class="mb-1"><strong>On mobile</strong>, dragging to the bookmarks bar is not supported. To install a bookmarklet:</p><ol><li>Paste your raw JavaScript into the input above.</li><li>Tap <strong>Copy</strong> to copy the compiled bookmarklet.</li><li>Create a new bookmark in your browser (bookmark any page first).</li><li>Edit that bookmark and replace its URL with the copied code.</li></ol></div><h5 class="mt-4">What Is a Bookmarklet?</h5><p><p>A bookmarklet is a browser bookmark whose URL begins with <code>javascript:</code> instead of
+</script> <div class="card mt-4"><div class="card-body"><h4 id="how-to-use">How to Use</h4><div class="d-none d-md-block"><ol>
+<li>Paste your raw JavaScript into the left pane.</li>
+<li>The compiled bookmarklet appears on the right instantly.</li>
+<li>Drag the <strong>Drag me to Bookmarks</strong> button onto your browser’s bookmarks bar, or right-click it and choose <em>Bookmark this link</em>.</li>
+<li>Navigate to any webpage and click the bookmark to run your script.</li>
+</ol><p><strong>On mobile</strong>, dragging to the bookmarks bar is not supported — see the note below the output pane for the manual installation steps.</p></div><div class="d-md-none"><p><strong>On mobile</strong>, dragging to the bookmarks bar is not supported. To install a bookmarklet:</p><ol>
+<li>Paste your raw JavaScript into the input above.</li>
+<li>Tap <strong>Copy</strong> to copy the compiled bookmarklet.</li>
+<li>Create a new bookmark in your browser (bookmark any page first).</li>
+<li>Edit that bookmark and replace its URL with the copied code.</li>
+</ol></div><h5 id="what-is-a-bookmarklet">What Is a Bookmarklet?</h5><p>A bookmarklet is a browser bookmark whose URL begins with <code>javascript:</code> instead of
 <code>http://</code>. When clicked, the browser executes the embedded JavaScript on the current
 page — no browser extension or installation required. Common uses include toggling dark mode,
-extracting data from tables, tweaking page styles, or automating repetitive tasks.</p></p><h5 class="mt-4">The Compilation Pipeline</h5><p>Your code passes through a strict, sequential pipeline:</p><ol><li><p><strong>IIFE Wrapper</strong> — The code is wrapped in
-<code>(function(){ … })()</code> so local variables don’t leak into the
-target page’s global scope.</p></li><li><p><strong>Minification via Terser</strong> — The industry-standard
-<a href="https://terser.org" target="_blank" rel="noopener noreferrer">Terser</a>
-library handles comment stripping, whitespace removal, dead-code
-elimination, and constant folding. It uses a full JavaScript parser so edge
-cases like regex literals, template literals, and semicolon-free style are
-all handled correctly.</p></li><li><p><strong>URI Encoding</strong> — Characters that would break a URL bar
-(<code>%</code>, <code>”</code>, <code>’</code>, <code>#</code>, <code>&amp;</code>,
-<code>&lt;</code>, <code>&gt;</code>, <code>`</code>) are percent-encoded so the browser
-doesn’t mangle your script before it executes.</p></li></ol><h5 class="mt-4">Privacy</h5><p><p>All compilation runs entirely in your browser — your code never leaves your device.</p></p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+extracting data from tables, tweaking page styles, or automating repetitive tasks.</p><h5 id="the-compilation-pipeline">The Compilation Pipeline</h5><p>Your code passes through a strict, sequential pipeline:</p><ol>
+<li><strong>IIFE Wrapper</strong> — The code is wrapped in <code>(function() { … })()</code> so local variables
+don’t leak into the target page’s global scope.</li>
+<li><strong>Minification via Terser</strong> — The industry-standard <a href="https://terser.org">Terser</a> library
+handles comment stripping, whitespace removal, dead-code elimination, and constant folding.
+It uses a full JavaScript parser so edge cases like regex literals, template literals,
+and semicolon-free style are all handled correctly.</li>
+<li><strong>URI Encoding</strong> — Characters that would break a URL bar
+(<code>%</code>, <code>&quot;</code>, <code>&#39;</code>, <code>#</code>, <code>&amp;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>`</code>) are percent-encoded so the browser
+doesn’t mangle your script before it executes.</li>
+</ol><h5 id="privacy">Privacy</h5><p>All compilation runs entirely in your browser — your code never leaves your device.</p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>

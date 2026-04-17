@@ -81,24 +81,50 @@ function tick() {
 }
 tick();
 setInterval(tick, 1000);
-</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4>How It Works</h4><p><p>This tool converts between human-readable date/time values and
-<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Unix timestamps</a>
-— entirely inside your browser. <strong>No data is sent to a server.</strong></p></p><h5 class="mt-4">What is a Unix Timestamp?</h5><p><p>A Unix timestamp (also called an epoch timestamp) is the number of seconds — or milliseconds
+</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool converts between human-readable date/time values and
+<a href="https://en.wikipedia.org/wiki/Unix_time">Unix timestamps</a>
+— entirely inside your browser. <strong>No data is sent to a server.</strong></p><h5 id="what-is-a-unix-timestamp">What is a Unix Timestamp?</h5><p>A Unix timestamp (also called an epoch timestamp) is the number of seconds — or milliseconds
 — that have elapsed since <strong>00:00:00 UTC on 1 January 1970</strong>, known as the
 Unix epoch. It is a timezone-independent, language-agnostic way to represent a point in time
-and is widely used in databases, APIs, log files, and JWT tokens.</p></p><h5 class="mt-4">Implementation Details</h5><p><p>All date arithmetic uses JavaScript’s built-in
-<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" rel="noopener"><code>Date</code></a>
-object — no third-party library is needed.</p></p><ul><li><p><strong>Date/Time → Epoch:</strong>
-The <code>&lt;input type=“datetime-local”&gt;</code> value is parsed with <code>new Date(val)</code>.
+and is widely used in databases, APIs, log files, and JWT tokens.</p><h5 id="implementation-details">Implementation Details</h5><p>All date arithmetic uses JavaScript’s built-in
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date"><code>Date</code></a>
+object — no third-party library is needed.</p><ul>
+<li><strong>Date/Time → Epoch:</strong> The <code>&lt;input type=&quot;datetime-local&quot;&gt;</code> value is parsed with <code>new Date(val)</code>.
 <code>Date.getTime()</code> returns the Unix timestamp in <strong>milliseconds</strong>;
 dividing by 1000 and flooring gives seconds.
-The input is pre-filled with the current local time for convenience.</p></li><li><p><strong>Epoch → Date/Time:</strong>
-The raw number is checked against a threshold of 10<sup>10</sup> (approximately
-November 2286 in seconds). Values above this threshold are treated as
-<strong>milliseconds</strong>; values below are multiplied by 1000 and treated as
-<strong>seconds</strong>. The resulting <code>Date</code> object is then formatted as
-UTC, local, and ISO 8601 strings using the browser’s native formatting methods.</p></li><li><p><strong>Live clock:</strong>
-A <code>setInterval</code> callback fires every second, calling <code>new Date()</code>
-and updating the current seconds, milliseconds, and UTC string in real time.</p></li></ul><h5 class="mt-4">Output Formats</h5><div class="table-responsive"><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Format</th><th>Method</th><th>Example</th></tr></thead><tbody><tr><td>UTC</td><td><code>Date.toUTCString()</code></td><td><code>Sat, 01 Jan 2000 00:00:00 GMT</code></td></tr><tr><td>Local</td><td><code>Date.toLocaleString()</code></td><td>Depends on browser locale</td></tr><tr><td>ISO 8601</td><td><code>Date.toISOString()</code></td><td><code>2000-01-01T00:00:00.000Z</code></td></tr></tbody></table></div><h5 class="mt-4">Privacy</h5><p><p>All conversions run locally in your browser tab. No timestamps or dates are transmitted
-anywhere.</p></p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+The input is pre-filled with the current local time for convenience.</li>
+<li><strong>Epoch → Date/Time:</strong> The raw number is checked against a threshold of 10<sup>10</sup>
+(approximately November 2286 in seconds). Values above this threshold are treated as
+<strong>milliseconds</strong>; values below are multiplied by 1000 and treated as <strong>seconds</strong>.
+The resulting <code>Date</code> object is then formatted as UTC, local, and ISO 8601 strings using
+the browser’s native formatting methods.</li>
+<li><strong>Live clock:</strong> A <code>setInterval</code> callback fires every second, calling <code>new Date()</code>
+and updating the current seconds, milliseconds, and UTC string in real time.</li>
+</ul><h5 id="output-formats">Output Formats</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Format</th><th>Method</th><th>Example</th></tr></thead><tbody><tr><td>UTC</td><td><code>Date.toUTCString()</code></td><td><code>Sat, 01 Jan 2000 00:00:00 GMT</code></td></tr><tr><td>Local</td><td><code>Date.toLocaleString()</code></td><td>Depends on browser locale</td></tr><tr><td>ISO 8601</td><td><code>Date.toISOString()</code></td><td><code>2000-01-01T00:00:00.000Z</code></td></tr></tbody></table></div><h5 id="privacy">Privacy</h5><p>All conversions run locally in your browser tab. No timestamps or dates are transmitted
+anywhere.</p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>

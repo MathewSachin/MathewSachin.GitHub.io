@@ -112,16 +112,85 @@ document.getElementById('copy-cron-btn').addEventListener('click', function () {
 
 // Auto-generate on load with default selection
 document.getElementById('generate-btn').click();
-</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4>How It Works</h4><p><p>This tool generates
-<a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">CRON expressions</a>
+</script> </div> </div> <div class="card mt-4"><div class="card-body"><h4 id="how-it-works">How It Works</h4><p>This tool generates <a href="https://en.wikipedia.org/wiki/Cron">CRON expressions</a>
 from a simple point-and-click interface — entirely inside your browser.
-<strong>No data is sent to a server.</strong></p></p><h5 class="mt-4">What is a CRON Expression?</h5><p><p>A CRON expression is a string of five fields separated by spaces that defines a recurring schedule
+<strong>No data is sent to a server.</strong></p><h5 id="what-is-a-cron-expression">What is a CRON Expression?</h5><p>A CRON expression is a string of five fields separated by spaces that defines a recurring schedule
 for a job scheduler (cron daemon on Unix, GitHub Actions, AWS EventBridge, etc.).
-Each field controls one dimension of time:</p></p><div class="table-responsive"><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Position</th><th>Field</th><th>Allowed Values</th><th>Special Characters</th></tr></thead><tbody><tr><td>1</td><td>Minute</td><td>0–59</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr><tr><td>2</td><td>Hour</td><td>0–23</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr><tr><td>3</td><td>Day of month</td><td>1–31</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr><tr><td>4</td><td>Month</td><td>1–12</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr><tr><td>5</td><td>Day of week</td><td>0–6 (Sun–Sat)</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr></tbody></table></div><p><p>An asterisk (<code>*</code>) in a field means “every valid value for that field.”
-For example, <code>0 9 * * 1</code> means “at 09:00 every Monday.”</p></p><h5 class="mt-4">Implementation Details</h5><p><p>The generator is written in plain JavaScript. When you click <strong>Generate</strong>, the
+Each field controls one dimension of time:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Position</th><th>Field</th><th>Allowed Values</th><th>Special Characters</th></tr></thead><tbody><tr><td>1</td><td>Minute</td><td>0–59</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr><tr><td>2</td><td>Hour</td><td>0–23</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr><tr><td>3</td><td>Day of month</td><td>1–31</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr><tr><td>4</td><td>Month</td><td>1–12</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td></tr><tr><td>5</td><td>Day of week</td><td>0–6 (Sun–Sat)</td><td><code>*</code> <code>,</code> <code>-</code> <code>/</code> <code>?</code></td></tr></tbody></table></div><p>An asterisk (<code>*</code>) in a field means “every valid value for that field.”
+For example, <code>0 9 * * 1</code> means “at 09:00 every Monday.”</p><h5 id="implementation-details">Implementation Details</h5><p>The generator is written in plain JavaScript. When you click <strong>Generate</strong>, the
 selected frequency and time values are read from the form controls and assembled into a
 five-field CRON string using simple string concatenation.
 A human-readable description and a field-by-field reference table are then rendered
-directly in the page without any page reload.</p></p><p><p>All scheduling logic runs in the browser — no network requests, no backend, no libraries.
-Time values (hours) follow <strong>UTC</strong> unless your scheduler interprets them otherwise.</p></p><h5 class="mt-4">Common Examples</h5><div class="table-responsive"><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Expression</th><th>Meaning</th></tr></thead><tbody><tr><td><code>* * * * *</code></td><td>Every minute</td></tr><tr><td><code>0 * * * *</code></td><td>Every hour (at :00)</td></tr><tr><td><code>0 9 * * *</code></td><td>Every day at 09:00 UTC</td></tr><tr><td><code>0 9 * * 1</code></td><td>Every Monday at 09:00 UTC</td></tr><tr><td><code>0 9 1 * *</code></td><td>First day of every month at 09:00 UTC</td></tr></tbody></table></div><h5 class="mt-4">Privacy</h5><p><p>Everything runs locally in your browser. No schedule data is transmitted anywhere.</p></p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+directly in the page without any page reload.</p><p>All scheduling logic runs in the browser — no network requests, no backend, no libraries.
+Time values (hours) follow <strong>UTC</strong> unless your scheduler interprets them otherwise.</p><h5 id="common-examples">Common Examples</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-responsive"><table class="table table-bordered table-striped table-sm"><thead><tr><th>Expression</th><th>Meaning</th></tr></thead><tbody><tr><td><code>* * * * *</code></td><td>Every minute</td></tr><tr><td><code>0 * * * *</code></td><td>Every hour (at :00)</td></tr><tr><td><code>0 9 * * *</code></td><td>Every day at 09:00 UTC</td></tr><tr><td><code>0 9 * * 1</code></td><td>Every Monday at 09:00 UTC</td></tr><tr><td><code>0 9 1 * *</code></td><td>First day of every month at 09:00 UTC</td></tr></tbody></table></div><h5 id="privacy">Privacy</h5><p>Everything runs locally in your browser. No schedule data is transmitted anywhere.</p></div></div>  </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
 </script> </div> </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-255/_astro/BaseLayout.astro_astro_type_script_index_0_lang.Ue4WrqOH.js"></script> </body> </html>
