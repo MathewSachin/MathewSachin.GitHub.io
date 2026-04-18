@@ -163,7 +163,7 @@ function handleFile(file) {
 
 // ── Processing ────────────────────────────────────────────────────────────────
 
-/** Resolve the URL for the worker script, honouring Jekyll's baseurl. */
+/** Resolve the URL for the worker script, honouring baseurl. */
 var workerUrl = document.getElementById('pdf-worker-url').dataset.url;
 
 /**

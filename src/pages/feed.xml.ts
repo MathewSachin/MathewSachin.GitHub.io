@@ -1,6 +1,5 @@
 /**
  * RSS feed: /feed.xml
- * Replaces jekyll-feed output.
  */
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';

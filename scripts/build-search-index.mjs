@@ -1,5 +1,5 @@
 /**
- * Build script: reads all Jekyll blog posts and tools and generates a pre-built
+ * Build script: reads all blog posts and tools and generates a pre-built
  * Orama search index (`search-index.json`) for client-side search.
  *
  * Run via: npm run build-search-index
@@ -14,15 +14,9 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
-// Support both Astro content collections (src/content/blog) and legacy Jekyll path
-const ASTRO_POSTS_DIR = join(REPO_ROOT, 'src', 'content', 'blog')
-const JEKYLL_POSTS_DIR = join(REPO_ROOT, 'blog', '_posts')
-const { existsSync } = await import('node:fs')
-const POSTS_DIR = existsSync(ASTRO_POSTS_DIR) && (await import('node:fs').then(m => m.readdirSync(ASTRO_POSTS_DIR).filter(f => f.endsWith('.md') || f.endsWith('.mdx')).length > 0))
-  ? ASTRO_POSTS_DIR
-  : JEKYLL_POSTS_DIR
+const POSTS_DIR = join(REPO_ROOT, 'src', 'content', 'blog')
 const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
-// Output to public/search-index.json for Astro static output (falls back to repo root for Jekyll)
+// Output to public/search-index.json for Astro static output
 const PUBLIC_DIR = join(REPO_ROOT, 'public')
 const OUTPUT_FILE = join(PUBLIC_DIR, 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
@@ -55,9 +49,9 @@ export function stripMarkdown(text) {
 }
 
 /**
- * Derive the Jekyll URL path from a post filename.
+ * Derive the URL path from a post filename.
  * Filename pattern: YYYY-MM-DD-slug.md  (M and D may be 1 or 2 digits)
- * Jekyll URL:       /blog/YYYY/MM/DD/slug/
+ * URL:       /blog/YYYY/MM/DD/slug/
  */
 export function postUrlFromFilename(filename) {
   const name = basename(filename, '.md').replace(/\.mdx$/, '')

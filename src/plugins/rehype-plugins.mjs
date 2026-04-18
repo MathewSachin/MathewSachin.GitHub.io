@@ -1,7 +1,5 @@
 /**
  * Custom rehype/remark plugins for Astro markdown processing.
- * These replace the Jekyll Ruby plugins:
- *   - rehypeInjectAds        ← _plugins/content_ad_split_markers.rb
  */
 
 import { visit } from 'unist-util-visit';

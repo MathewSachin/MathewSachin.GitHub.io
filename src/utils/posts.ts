@@ -5,9 +5,9 @@
 import type { CollectionEntry } from 'astro:content';
 
 /**
- * Derive the Jekyll-compatible URL path from a content collection entry id.
+ * Derive the URL path from a content collection entry id.
  * ID pattern (from glob loader):  YYYY-MM-DD-post-title
- * Jekyll URL:                      /blog/YYYY/MM/DD/post-title.html
+ * URL:                      /blog/YYYY/MM/DD/post-title.html
  */
 export function postUrlFromId(id: string): string {
   const match = id.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
@@ -17,7 +17,7 @@ export function postUrlFromId(id: string): string {
 }
 
 /**
- * Derive the Jekyll post ID (used in series.yml / related arrays).
+ * Derive the post ID (used in series.yml / related arrays).
  * Format: /blog/YYYY/MM/DD/slug  (no trailing slash, no .html)
  */
 export function postIdFromEntryId(id: string): string {
@@ -60,7 +60,7 @@ export function estimateReadingTime(content: string): string {
 }
 
 /**
- * Format a Date to a human-readable string (mirrors Jekyll's date_to_string).
+ * Format a Date to a human-readable string.
  * Output: "15 Apr 2026"
  */
 export function formatDate(date: Date): string {

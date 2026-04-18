@@ -78,7 +78,7 @@ export function getFlatPostIds(series: Series): string[] {
 }
 
 /**
- * Given a post's Jekyll ID (e.g. /blog/2026/03/07/hacking-wordle),
+ * Given a post's ID (e.g. /blog/2026/03/07/hacking-wordle),
  * return { part, total, prevId, nextId } for its series.
  */
 export function getSeriesPosition(

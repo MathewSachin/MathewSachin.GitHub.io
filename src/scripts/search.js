@@ -1,6 +1,5 @@
 /**
  * search.js — Astro version (no Liquid template variables)
- * Replaces the Jekyll-template-processed scripts/search.js
  *
  * Resolves base path from the current page URL so it works on
  * both the main site and PR preview deployments.

@@ -58,7 +58,6 @@ export default defineConfig({
     format: 'preserve',
   },
   image: {
-    // Use sharp for image processing (replaces jekyll-picture-tag)
     service: { entrypoint: 'astro/assets/services/sharp' },
     responsiveStyles: true
   },

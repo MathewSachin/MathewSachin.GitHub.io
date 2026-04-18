@@ -20,7 +20,7 @@ const seriesMap = getSeries();
 const series = seriesMap[seriesKey];
 const allPosts = sortPostsByDate(await getCollection('blog'));
 
-// Find a post by its Jekyll ID
+// Find a post by its ID
 function findPost(id) {
   return allPosts.find(p => postIdFromSlug(p.id) === id) || null;
 }

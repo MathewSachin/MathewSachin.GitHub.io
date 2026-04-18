@@ -2,11 +2,12 @@
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/pdf.mdx';
 import RenderMDX from '@components/mdx/RenderMDX.astro';
+const BASE = import.meta.env.BASE_URL;
 ---
 <ToolLayout title="PDF Password Tool" ads={true}>
 
-<!-- Hidden element exposing the worker URL to JS (respects Jekyll baseurl for PR previews). -->
-<span id="pdf-worker-url" data-url="/tools/pdf/pdf.worker.js" class="d-none"></span>
+<!-- Hidden element exposing the worker URL to JS (respects baseurl for PR previews). -->
+<span id="pdf-worker-url" data-url={`${BASE}tools/pdf/pdf.worker.js`} class="d-none"></span>
 
 <div class="card google-anno-skip">
 <div class="card-body">
