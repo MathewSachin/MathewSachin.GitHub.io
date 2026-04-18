@@ -277,21 +277,6 @@ figure.highlight pre {
   border-bottom: 1px solid var(--bs-border-color);
 }
 
-/* GitHub-style blockquotes — left accent bar uses the per-post accent colour */
-.page-content blockquote {
-  padding: 0.5em 1em;
-  margin: 0 0 1rem;
-  color: #6c757d;
-  border-left: 0.25em solid var(--post-accent, var(--color-accent));
-  background: transparent;
-  font-style: normal;
-  font-size: 0.9em;
-}
-
-.page-content blockquote > :last-child {
-  margin-bottom: 0;
-}
-
 /* Full-screen-width ads on mobile (below md breakpoint where the TOC sidebar appears) */
 @media (max-width: 767.98px) {
   .post-content-container {

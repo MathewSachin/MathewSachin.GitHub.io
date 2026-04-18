@@ -9,13 +9,12 @@ import { visit } from 'unist-util-visit';
 
 // ---------------------------------------------------------------------------
 // 2. rehypeBootstrapFormatting
-//    Adds Bootstrap classes to <table> and <blockquote> elements.
+//    Adds Bootstrap classes to <table> elements.
 //    Mirrors bootstrap_formatting.rb.
 // ---------------------------------------------------------------------------
 export function rehypeBootstrapFormatting() {
   const TABLE_CLASSES = ['table', 'table-bordered', 'table-striped', 'table-sm'];
-  const BQ_CLASSES = ['blockquote', 'fw-light'];
-
+  
   return function (tree) {
     // Tables inside .page-content (when rendered inside the post layout,
     // the markdown content is always inside .page-content)
@@ -37,13 +36,6 @@ export function rehypeBootstrapFormatting() {
           };
           Object.assign(node, wrapper);
         }
-      }
-
-      if (node.tagName === 'blockquote') {
-        const existing = (node.properties?.className || []);
-        const toAdd = BQ_CLASSES.filter(c => !existing.includes(c));
-        node.properties = node.properties || {};
-        node.properties.className = [...existing, ...toAdd];
       }
     });
   };

@@ -12,6 +12,7 @@ import AlertInfo from '@components/AlertInfo.astro'
 import InContentAd from '@components/InContentAd.astro';
 import Pintora from '@components/Pintora.astro';
 import ContentBlock from '@components/CodeBlock.astro';
+import Blockquote from '@components/mdx/Blockquote.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -38,5 +39,5 @@ const { post, allPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 <PostLayout post={post} allPosts={allPosts} headings={headings} canonicalPath={postUrlFromId(post.id)}>
-  <Content components={{ PostLink, AlertInfo, Picture, Pintora, 'in-content-ad-marker': InContentAd, pre: ContentBlock }} />
+  <Content components={{ PostLink, AlertInfo, Picture, Pintora, blockquote: Blockquote, 'in-content-ad-marker': InContentAd, pre: ContentBlock }} />
 </PostLayout>

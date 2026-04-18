@@ -1,0 +1,22 @@
+---
+---
+<blockquote class="blockquote fw-light" {...Astro.props}>
+  <slot />
+</blockquote>
+
+<style>
+/* GitHub-style blockquotes — left accent bar uses the per-post accent colour */
+blockquote {
+  padding: 0.5em 1em;
+  margin: 0 0 1rem;
+  color: #6c757d;
+  border-left: 0.25em solid var(--post-accent, var(--color-accent));
+  background: transparent;
+  font-style: normal;
+  font-size: 0.9em;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+</style>
