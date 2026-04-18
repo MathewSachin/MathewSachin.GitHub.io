@@ -7,8 +7,6 @@ import rehypeRaw from 'rehype-raw';
 import linkValidator from 'astro-link-validator';
 
 import {
-  remarkDisableIndentedCode,
-  rehypeCodeBlockHeader,
   rehypeBootstrapFormatting,
   rehypeInjectAds,
 } from './src/plugins/rehype-plugins.mjs';
@@ -48,17 +46,11 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: { theme: 'monokai' },
-    remarkPlugins: [
-      // Disable 4-space indented code blocks — Jekyll/Kramdown posts use nested
-      // HTML that would otherwise be misinterpreted as indented code under CommonMark.
-      remarkDisableIndentedCode,
-    ],
     rehypePlugins: [
       // rehype-raw must run first so that raw HTML blocks in .md files (e.g.
       // <pre class="pintora">, inline forms) are parsed into element nodes
       // before our custom plugins traverse the tree.
       rehypeRaw,
-      rehypeCodeBlockHeader,
       rehypeBootstrapFormatting,
       // Ad injection density (every 7 content elements, mirrors _config.yml ad_density: 7)
       [rehypeInjectAds, { density: 7 }],

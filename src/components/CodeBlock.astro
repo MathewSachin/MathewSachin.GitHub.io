@@ -1,0 +1,25 @@
+---
+const props = Astro.props;
+
+const lang = props['data-language'] || "";
+
+// Generate a unique ID for the clipboard target
+const id = `code-block-${Math.floor(Math.random() * 10000)}`;
+---
+
+<div class="highlight">
+  <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
+    <span class={lang ? "code-lang" : ""}>{lang}</span>
+    
+    <button 
+      class="btn btn-sm btn-clip" 
+      title="Copy to clipboard" 
+      data-clipboard-target={`#${id}`}
+      aria-label="Copy code to clipboard"
+    >
+      <i class="fa fa-copy" aria-hidden="true"></i>
+    </button>
+  </div>
+  
+  <pre id={id} {...props}><slot /></pre>
+</div>
