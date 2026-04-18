@@ -24,7 +24,7 @@ import skyDino from '@images/sky_dino.jpg';
 
 *Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
 
-## What is the Chrome Dino Game?
+## What are we hacking?
 When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!
 
 But… what if we could cheat?
@@ -33,7 +33,7 @@ Even if you’re not a programmer, here’s something cool: the Chrome Dino game
 
 Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. All you need is the Chrome Developer Console, and a few clever lines of code.
 
-## How to Play the Chrome Dino Game?
+### How to play it?
 <AlertInfo>
   💡 **Pro Tip:** Can’t get the *“No Internet”* screen to show up?  
   Just open a new tab and go to **chrome://dino** — the game works even when you're online!
@@ -47,11 +47,7 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 
 <Picture src={chromeDino} alt="Chrome Dino" />
 
-## Play It Right Here
-
-<ChromeDinoEmbed />
-
-## Opening Developer Tools / Chrome Console
+## Where to enter the hacks?
 
 The [**Developer Tools** (DevTools)](/blog/2026/03/07/edit-webpage-inspect-element.html) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
 
@@ -76,11 +72,18 @@ A few things to keep in mind:
   👉 <PostLink url="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet" />
 </AlertInfo>
 
-## Immortality (God Mode)
+### Try the hacks right here!
+
+If you want to jump straight into the fun, you can try all the hacks live in the game embedded below.  
+Use the sliders and input box to tweak the game in real-time, or the Console text-box to paste the code snippets for more advanced hacks. The game above will update instantly as you make changes!
+
+<ChromeDinoEmbed />
+
+## 1. Immortality (God Mode)
 
 Want to make your dino un-killable? Let’s activate **God Mode** using a little JavaScript magic.
 
-##### Activate God Mode
+### Activate God Mode
 
 Paste this into the Console to save the original function and disable game over in one go:
 
@@ -91,7 +94,7 @@ Runner.prototype.gameOver = function() {};
 
 Boom — your dino is now immortal. It’ll just run through cacti like a champ.
 
-##### How to Stop It
+### How to Stop It
 
 If you want to restore the game to normal (or get bored of being a god), use this:
 
@@ -101,7 +104,7 @@ Runner.prototype.gameOver = original;
 
 This only works if you ran the block above first. Otherwise, just refresh the page.
 
-##### How does it work?
+### How does it work?
 
 In JavaScript, functions are just objects — and they can be replaced on the fly.
 
@@ -111,7 +114,7 @@ When you're done, you just restore the original function by assigning it back. T
 
 This works only because JavaScript allows us to override methods of objects while the game is still running in the browser.
 
-## Tweaking Speed
+## 2. Tweaking Speed
 
 Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs. With this hack, you can take full control of the pace.
 
@@ -119,13 +122,13 @@ Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fas
 
 <ChromeDinoSpeedWidget />
 
-## Setting the Current Score
+## 3. Setting the Current Score
 
 Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below — **it applies instantly to the game at the top of this page!**
 
 <ChromeDinoScoreWidget />
 
-##### How does it work?
+### How does it work?
 
 Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by `0.025`. By dividing your desired score by that constant, you get the right internal value to set.
 
@@ -133,7 +136,7 @@ Internally, the game tracks how far the dino has run using a property called `di
 
 Experiment with different values to make your dino feel like a seasoned pro right from the start!
 
-## Jumping Height
+## 4. Jumping Height
 
 Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.
 
@@ -143,7 +146,7 @@ The default jump velocity is **10**. Increasing it makes your dino launch higher
 
 Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
 
-## Walk in Air
+## 5. Walk in Air
 
 Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
 
@@ -155,17 +158,17 @@ Use the slider to position the dino anywhere from the sky (`0`) to the normal gr
 
 <ChromeDinoElevationWidget />
 
-## Auto-play
+## 6. Auto-play
 
 Want the dino to play itself? There's a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.
 
 👉 <PostLink url="/blog/2026/03/14/chrome-dino-autoplay" />
 
-## Invisibility
+## 7. Invisibility
 
 Want to make your dino invisible? It’s easy to do by simply disabling its drawing function! This will prevent the dino from being rendered on the screen, making it fully invisible.
 
-##### Make the Dino Invisible
+### Make the Dino Invisible
 
 ```js
 const runner = Runner.instance_ || Runner.getInstance();
@@ -177,7 +180,7 @@ This code replaces the dino's draw function with an empty one, meaning the dino 
 
 **Note:** The dino can still die if it collides with obstacles
 
-##### Restore the Dino
+### Restore the Dino
 To bring the dino back, simply restore the original draw function:
 
 ```js
