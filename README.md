@@ -1,12 +1,15 @@
+
 # MathewSachin.GitHub.io
-My Website including a blog.
+
+Personal website and blog built with [Astro](https://astro.build/).
+
 
 ## Local Development
 
 ### Prerequisites
 
-- [Ruby](https://www.ruby-lang.org/en/documentation/installation/) (version 2.7 or higher recommended)
-- [Bundler](https://bundler.io/) (`gem install bundler`)
+- [Node.js](https://nodejs.org/) 20+
+- npm 10+
 
 ### Setup
 
@@ -20,29 +23,33 @@ My Website including a blog.
 2. Install dependencies (Mac):
 
    ```bash
-   bundle install
    npm ci
-   brew install vips
    ```
 
-### Running Locally
+### Run Locally
 
-Start the Jekyll development server:
-
-```bash
-bundle exec jekyll serve
-```
-
-The site will be available at <http://localhost:4000>.
-
-To include draft posts in the build, use:
+Start the Astro development server:
 
 ```bash
-bundle exec jekyll serve --drafts
+npm run dev
 ```
 
-To make the server accessible on your local network, use:
+The site will be available at <http://localhost:4321> by default.
+
+## Build
+
+Create a production build:
 
 ```bash
-bundle exec jekyll serve --host 0.0.0.0
+npm run build
 ```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Deployment
+
+Deployment is automated with GitHub Actions and publishes the generated site to GitHub Pages.
