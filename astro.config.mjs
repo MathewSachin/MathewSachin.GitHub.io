@@ -50,7 +50,7 @@ export default defineConfig({
   },
   markdown: {
     syntaxHighlight: 'shiki',
-    shikiConfig: { theme: 'monokai' },
+    shikiConfig: { theme: 'github-dark' },
     rehypePlugins: [
       // rehype-raw must run first so that raw HTML blocks in .md files
       // are parsed into element nodes
