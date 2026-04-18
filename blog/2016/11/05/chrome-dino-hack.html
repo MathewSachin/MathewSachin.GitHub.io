@@ -15,14 +15,18 @@ Part 4 of 27 &mdash;
 <a href="/blog/series/browser-hacks/" data-astro-cid-w7ld43o3>Browser Hacks</a> series
 <br data-astro-cid-w7ld43o3><a class="series-prev-link" href="/blog/2026/03/31/youtube-shorts-normal-player.html" data-astro-cid-w7ld43o3><i class="fas fa-arrow-left me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>Previous: Watch YouTube Shorts in the Normal Player (No Extensions Required)</a></div>  <div class="p-5"></div> </div> </div> <div class="container post-content-container"> <div class="row"> <div class="col-md-10"> <div id="post" class="card"> <div class="card-body"> <div class="page-content">  <p><em>All hacks updated as of 8th March 2026 based on game changes.</em></p>
 <hr/>
-<p><em>Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!</em></p>
+<p><em>Tired of just jumping over cacti?
+Let’s take it to the next level with some simple hacks you can try right in your browser!</em></p>
 <h2 id="what-are-we-hacking">What are we hacking?</h2>
-<p>When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!</p>
+<p>When you lose internet connection in Chrome, a hidden endless runner game appears.
+Tap space to start, and our pixelated dino begins a desert adventure!</p>
 <p>But… what if we could cheat?</p>
-<p>Even if you’re not a programmer, here’s something cool: the Chrome Dino game is built using JavaScript, and its internal game code is exposed globally. That means we can actually poke around and change how the game works — right from the browser!</p>
-<p>Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. All you need is the Chrome Developer Console, and a few clever lines of code.</p><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
-<h3 id="how-to-play-it">How to play it?</h3>
+<p>Even if you’re not a programmer, here’s something cool: the Chrome Dino game is built using JavaScript, and its internal game code is exposed globally.
+That means we can actually poke around and change how the game works — right from the browser!</p>
+<p>Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files.
+All you need is the Chrome Developer Console, and a few clever lines of code.</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h3 id="how-to-play-it">How to play it?</h3>
 <div class="alert alert-info"> <p>💡 <strong>Pro Tip:</strong> Can’t get the <em>“No Internet”</em> screen to show up?<br/>
 Just open a new tab and go to <strong>chrome://dino</strong> — the game works even when you’re online!</p> </div>
 <p>If this is your first time discovering the Dino game, welcome! It’s super easy to play:<br/>
@@ -30,32 +34,32 @@ Just open a new tab and go to <strong>chrome://dino</strong> — the game works 
 <strong>Duck:</strong> Press Down Arrow (useful when those sneaky pterodactyls appear after 450 points)<br/>
 <strong>Pause:</strong> Press Alt<br/>
 <strong>Night Mode:</strong> Every 700 points, the background switches to black for 100 points — just to keep you on your toes!</p>
-<picture> <source srcset="/_astro/chromeDino.CBuXWbfq_Z1yVhtR.webp" type="image/webp">  <img src="/_astro/chromeDino.CBuXWbfq_yWIx.gif" alt="Chrome Dino" loading="lazy" decoding="async" width="480" height="360"> </picture>
 <h2 id="where-to-enter-the-hacks">Where to enter the hacks?</h2>
+<h3 id="chrome-developer-tools">Chrome Developer Tools</h3>
 <p>The <a href="/blog/2026/03/07/edit-webpage-inspect-element.html"><strong>Developer Tools</strong> (DevTools)</a> is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.</p>
 <p>To open it and get to the Console:</p>
-<p><strong>On Windows / Linux:</strong></p>
-<ul>
+<div class="row"><div class="col-md-6"><tabs-view data-default="windows"> <div class="card my-4"> <div class="card-body"> <ul class="nav nav-tabs" role="tablist"> <li class="nav-item" role="presentation"> <button class="nav-link active" data-target="windows" type="button" role="tab" aria-selected="true"> Windows </button> </li><li class="nav-item" role="presentation"> <button class="nav-link " data-target="mac" type="button" role="tab" aria-selected="false"> Mac </button> </li><li class="nav-item" role="presentation"> <button class="nav-link " data-target="mobile" type="button" role="tab" aria-selected="false"> Mobile </button> </li><li class="nav-item" role="presentation"> <button class="nav-link " data-target="linux" type="button" role="tab" aria-selected="false"> Linux </button> </li> </ul> <div class="tab-content pt-3"> <div class="tab-pane fade show active" data-pane="windows" role="tabpanel"><div><ul>
 <li>Press <code>F12</code> or <code>Ctrl + Shift + I</code> to open DevTools, then click the <strong>Console</strong> tab.</li>
 <li>Shortcut: <code>Ctrl + Shift + J</code> jumps straight to the Console.</li>
-</ul>
-<p><strong>On Mac:</strong></p><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
-<ul>
+</ul></div></div><div class="tab-pane fade " data-pane="mac" role="tabpanel"><div><ul>
 <li>Press <code>Cmd + Option + I</code> to open DevTools, then click the <strong>Console</strong> tab.</li>
 <li>Shortcut: <code>Cmd + Option + J</code> jumps straight to the Console.</li>
-</ul>
-<p>You’ll see a blinking cursor where you can type JavaScript commands directly. After typing each command, press <strong>Enter</strong> to run it.</p>
+</ul></div></div><div class="tab-pane fade " data-pane="mobile" role="tabpanel"><div><div class="alert alert-info"> <p>📱 <strong>On a phone or tablet?</strong> Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!<br/>
+👉 <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet.html">Chrome Dino Hack Mobile Bookmarklet</a></p> </div></div></div><div class="tab-pane fade " data-pane="linux" role="tabpanel"><div><ul>
+<li>Press <code>F12</code> or <code>Ctrl + Shift + I</code> to open DevTools, then click the <strong>Console</strong> tab.</li>
+<li>Shortcut: <code>Ctrl + Shift + J</code> jumps straight to the Console.</li>
+</ul></div></div> </div> </div> </div> </tabs-view> <script type="module">class n extends HTMLElement{connectedCallback(){const s=this.querySelectorAll("button[data-target]"),i=this.querySelectorAll("div[data-pane]"),l=t=>{s.forEach(e=>{e.classList.remove("active"),e.setAttribute("aria-selected","false")}),i.forEach(e=>e.classList.remove("show","active"));const a=this.querySelector(`button[data-target="${t}"]`),c=this.querySelector(`div[data-pane="${t}"]`);a&&c&&(a.classList.add("active"),a.setAttribute("aria-selected","true"),c.classList.add("show","active"))};s.forEach(t=>{t.addEventListener("click",()=>{l(t.dataset.target)})})}}customElements.get("tabs-view")||customElements.define("tabs-view",n);</script></div><div class="col-md-6"><picture> <source srcset="/_astro/chromeDino.CBuXWbfq_Z1yVhtR.webp" type="image/webp">  <img src="/_astro/chromeDino.CBuXWbfq_yWIx.gif" alt="Chrome Dino" loading="lazy" decoding="async" width="480" height="360"> </picture></div></div>
+<p>You’ll see a blinking cursor where you can type JavaScript commands directly.
+After typing each command, press <strong>Enter</strong> to run it.</p>
 <p>A few things to keep in mind:</p>
 <ul>
 <li>The commands are <strong>case-sensitive</strong> — type them exactly as shown.</li>
 <li>Seeing <code>undefined</code> after a command? That’s completely normal. It just means the expression didn’t return a value, which is expected for most of these hacks.</li>
 </ul>
-<div class="alert alert-info"> <p>📱 <strong>On a phone or tablet?</strong> Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!<br/>
-👉 <a href="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet.html">Chrome Dino Hack Mobile Bookmarklet</a></p> </div>
-<h3 id="try-the-hacks-right-here">Try the hacks right here!</h3>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h3 id="try-the-hacks-right-here">Try the hacks right here!</h3>
 <p>If you want to jump straight into the fun, you can try all the hacks live in the game embedded below.<br/>
-Use the sliders and input box to tweak the game in real-time, or the Console text-box to paste the code snippets for more advanced hacks. The game above will update instantly as you make changes!</p>
+Use the Console text-box to paste the code snippets.</p>
 <div class="dino-embed-wrapper"> <iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/index.html" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe> <small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small> </div> <div class="my-3"> <label class="form-label fw-semibold" for="fake-console">Console</label> <input type="text" id="fake-console" class="form-control" placeholder="Type in the commands and press enter"> </div> <script type="module">document.getElementById("fake-console").addEventListener("keydown",function(n){if(n.key==="Enter"){const e=this.value.trim();e&&(document.getElementById("dino-game-frame").contentWindow.eval(e),this.value="")}});</script> <style>
 .dino-embed-wrapper {
   margin: 1rem 0 1.5rem;
@@ -90,25 +94,33 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
 </style>
 <h2 id="1-immortality-god-mode">1. Immortality (God Mode)</h2>
 <p>Want to make your dino un-killable? Let’s activate <strong>God Mode</strong> using a little JavaScript magic.</p>
-<h3 id="activate-god-mode">Activate God Mode</h3><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h3 id="activate-god-mode">Activate God Mode</h3>
 <p>Paste this into the Console to save the original function and disable game over in one go:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5395" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> </button> </div> <pre id="code-block-5395" class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#66D9EF;font-style:italic">var</span><span style="color:#F8F8F2"> original </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> Runner</span><span style="color:#F8F8F2">.prototype.gameOver;</span></span>
-<span class="line"><span style="color:#66D9EF;font-style:italic">Runner</span><span style="color:#F8F8F2">.prototype.</span><span style="color:#A6E22E">gameOver</span><span style="color:#F92672"> =</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#F8F8F2">() {};</span></span></code></pre> </div>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1046" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-1046" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F97583">var</span><span style="color:#E1E4E8"> original </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Runner</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">prototype</span><span style="color:#E1E4E8">.gameOver;</span></span>
+<span class="line"><span style="color:#79B8FF">Runner</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">prototype</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">gameOver</span><span style="color:#F97583"> =</span><span style="color:#F97583"> function</span><span style="color:#E1E4E8">() {};</span></span></code></pre> </div>
 <p>Boom — your dino is now immortal. It’ll just run through cacti like a champ.</p>
 <h3 id="how-to-stop-it">How to Stop It</h3>
 <p>If you want to restore the game to normal (or get bored of being a god), use this:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-9831" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> </button> </div> <pre id="code-block-9831" class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Runner</span><span style="color:#F8F8F2">.prototype.gameOver </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> original;</span></span></code></pre> </div>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8649" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-8649" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#79B8FF">Runner</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">prototype</span><span style="color:#E1E4E8">.gameOver </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> original;</span></span></code></pre> </div>
 <p>This only works if you ran the block above first. Otherwise, just refresh the page.</p>
-<h3 id="how-does-it-work">How does it work?</h3>
-<p>In JavaScript, functions are just objects — and they can be replaced on the fly.</p><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
-<p>The <code>gameOver</code> function is normally triggered when the dino crashes. By saving it first (<code>var original = ...</code>) and then replacing it with an empty function (<code>function() {}</code>), we stop the game from ending.</p>
-<p>When you’re done, you just restore the original function by assigning it back. Think of it like temporarily muting the crash handler!</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h3 id="how-does-it-work">How does it work?</h3>
+<p>In JavaScript, functions are just objects — and they can be replaced on the fly.</p>
+<p>The <code>gameOver</code> function is normally triggered when the dino crashes.
+By saving it first (<code>var original = ...</code>) and then replacing it with an empty function (<code>function() {}</code>), we stop the game from ending.</p>
+<p>When you’re done, you just restore the original function by assigning it back.
+Think of it like temporarily muting the crash handler!</p>
 <p>This works only because JavaScript allows us to override methods of objects while the game is still running in the browser.</p>
 <h2 id="2-tweaking-speed">2. Tweaking Speed</h2>
-<p>Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around <strong>6</strong> and gradually increases as your score climbs. With this hack, you can take full control of the pace.</p>
-<p>Use the slider below to pick any speed — <code>1000</code> for pure chaos, <code>50</code> for a fast but still-playable pace, or <code>1</code> for dramatic slow motion. The default starting speed is <code>6</code>. <strong>Move the slider and the game above updates instantly!</strong></p>
+<p>Want to put the pedal to the metal? Or maybe slow things down for a relaxing run?
+The game normally starts at a speed of around <strong>6</strong> and gradually increases as your score climbs.
+With this hack, you can take full control of the pace.</p>
+<p>Use the text box below to input any speed — <code>1000</code> for pure chaos, <code>50</code> for a fast but still-playable pace, or <code>1</code> for dramatic slow motion.
+The default starting speed is <code>6</code>.<br/>
+Copy the code snippet using the button and paste it into the Console to set the speed.</p>
 <style>.dino-hack-widget {
   border-radius: 0.5rem;
   overflow: hidden;
@@ -127,7 +139,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   accent-color: var(--color-accent);
 }
 
-.dino-hack-controls .dino-hack-num {
+.dino-hack-num {
   width: 80px;
   background: rgba(255, 255, 255, 0.08);
   color: #e0e0e0;
@@ -135,14 +147,14 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.8rem;
 }
 
-.dino-hack-controls .dino-hack-num:focus {
+.dino-hack-num:focus {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-.dino-hack-controls .dino-hack-num:focus-visible {
+.dino-hack-num:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 0;
 }
@@ -153,7 +165,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   border: none;
 }
 
-.btn-dino-reset {
+.btn-dino-reset, .btn-dino {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
   border: none;
@@ -164,18 +176,32 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.72rem;
 }
 
-.btn-dino-reset:hover {
+.btn-dino-reset:hover, .btn-dino:hover {
   color: var(--color-accent);
   background: transparent;
 }
 
-.btn-dino-reset:focus-visible {
+.btn-dino-reset:focus-visible, .btn-dino:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label> <input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider"> <input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value"> <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button> </div> <div id="speed-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div> </div> <script type="module" src="/_astro/ChromeDinoSpeedWidget.astro_astro_type_script_index_0_lang.DwgCFI3u.js"></script>
-<h2 id="3-setting-the-current-score">3. Setting the Current Score</h2><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
-<p>Want to jump right into the action with a specific score? You can set the score to any value up to <strong>99999</strong> (but no higher!). Enter your target score below — <strong>it applies instantly to the game at the top of this page!</strong></p>
+}
+
+.code-symbol {
+  color: #F97583;
+}
+
+.code-function {
+  color: #B392F0;
+}
+
+.code-number {
+  color: #79B8FF;
+}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <button class="btn btn-sm btn-dino-reset" id="speed-reset" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-dino" id="btn-speed-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button> </div> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75"> <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).<span class="code-function">setSpeed</span>(</span> <input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="0" max="1000" value="50" aria-label="Speed value"> <span>)</span> </div> </div> <script type="module" src="/_astro/ChromeDinoSpeedWidget.astro_astro_type_script_index_0_lang.CLUPB8Vb.js"></script> <script type="module" src="/_astro/ChromeDinoSpeedWidget.astro_astro_type_script_index_1_lang.BUtcg0ye.js"></script>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h2 id="3-setting-the-current-score">3. Setting the Current Score</h2>
+<p>Want to jump right into the action with a specific score?
+You can set the score to any value up to <strong>99999</strong> (but no higher!).
+Enter your target score below and then Copy the code snippet using the button. Paste it into the Console to set the score.</p>
 <style>.dino-hack-widget {
   border-radius: 0.5rem;
   overflow: hidden;
@@ -194,7 +220,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   accent-color: var(--color-accent);
 }
 
-.dino-hack-controls .dino-hack-num {
+.dino-hack-num {
   width: 80px;
   background: rgba(255, 255, 255, 0.08);
   color: #e0e0e0;
@@ -202,14 +228,14 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.8rem;
 }
 
-.dino-hack-controls .dino-hack-num:focus {
+.dino-hack-num:focus {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-.dino-hack-controls .dino-hack-num:focus-visible {
+.dino-hack-num:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 0;
 }
@@ -220,7 +246,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   border: none;
 }
 
-.btn-dino-reset {
+.btn-dino-reset, .btn-dino {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
   border: none;
@@ -231,23 +257,39 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.72rem;
 }
 
-.btn-dino-reset:hover {
+.btn-dino-reset:hover, .btn-dino:hover {
   color: var(--color-accent);
   background: transparent;
 }
 
-.btn-dino-reset:focus-visible {
+.btn-dino-reset:focus-visible, .btn-dino:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <label class="text-white-50 small mb-0 me-1" for="score-input">Score:</label> <input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px"> <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button> </div> <div id="score-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025</code></div> </div> <script type="module" src="/_astro/ChromeDinoScoreWidget.astro_astro_type_script_index_0_lang.Cn8lVDN_.js"></script>
+}
+
+.code-symbol {
+  color: #F97583;
+}
+
+.code-function {
+  color: #B392F0;
+}
+
+.code-number {
+  color: #79B8FF;
+}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <button class="btn btn-sm btn-dino-reset" id="score-reset" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-dino" id="btn-score-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button> </div> <div class="dino-hack-controls d-flex  align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75"> <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).distanceRan <span class="code-symbol">=</span> </span> <input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px"> <span> <span class="code-symbol">/</span> <span class="code-number">0.025</span></span> </div> </div> <script type="module" src="/_astro/ChromeDinoScoreWidget.astro_astro_type_script_index_0_lang.DbVebb0Z.js"></script> <script type="module" src="/_astro/ChromeDinoScoreWidget.astro_astro_type_script_index_1_lang.DJ5Jd-6j.js"></script>
 <h3 id="how-does-it-work-1">How does it work?</h3>
-<p>Internally, the game tracks how far the dino has run using a property called <code>distanceRan</code>. The visible score on screen is calculated by multiplying <code>distanceRan</code> by <code>0.025</code>. By dividing your desired score by that constant, you get the right internal value to set.</p>
+<p>Internally, the game tracks how far the dino has run using a property called <code>distanceRan</code>.
+The visible score on screen is calculated by multiplying <code>distanceRan</code> by <code>0.025</code>.
+By dividing your desired score by that constant, you get the right internal value to set.</p>
 <p>⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!</p>
 <p>Experiment with different values to make your dino feel like a seasoned pro right from the start!</p>
-<h2 id="4-jumping-height">4. Jumping Height</h2>
-<p>Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.</p><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
-<p>The default jump velocity is <strong>10</strong>. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. <strong>Drag the slider and watch the change take effect live in the game above!</strong></p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h2 id="4-jumping-height">4. Jumping Height</h2>
+<p>Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled?
+You can tune the jump velocity to your liking.</p>
+<p>The default jump velocity is <strong>10</strong>.
+Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops.</p>
 <style>.dino-hack-widget {
   border-radius: 0.5rem;
   overflow: hidden;
@@ -266,7 +308,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   accent-color: var(--color-accent);
 }
 
-.dino-hack-controls .dino-hack-num {
+.dino-hack-num {
   width: 80px;
   background: rgba(255, 255, 255, 0.08);
   color: #e0e0e0;
@@ -274,14 +316,14 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.8rem;
 }
 
-.dino-hack-controls .dino-hack-num:focus {
+.dino-hack-num:focus {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-.dino-hack-controls .dino-hack-num:focus-visible {
+.dino-hack-num:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 0;
 }
@@ -292,7 +334,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   border: none;
 }
 
-.btn-dino-reset {
+.btn-dino-reset, .btn-dino {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
   border: none;
@@ -303,21 +345,38 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.72rem;
 }
 
-.btn-dino-reset:hover {
+.btn-dino-reset:hover, .btn-dino:hover {
   color: var(--color-accent);
   background: transparent;
 }
 
-.btn-dino-reset:focus-visible {
+.btn-dino-reset:focus-visible, .btn-dino:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <label class="text-white-50 small mb-0 me-1" for="jump-slider">Jump Velocity:</label> <input type="range" class="form-range flex-grow-1" id="jump-slider" min="1" max="50" value="10" style="min-width:120px" aria-label="Jump velocity slider"> <input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="1" max="50" value="10" aria-label="Jump velocity value"> <button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button> </div> <div id="jump-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10)</code></div> </div> <script type="module" src="/_astro/ChromeDinoJumpWidget.astro_astro_type_script_index_0_lang.Cn8lVDN_.js"></script>
-<p>Try <code>20</code> for floaty, sky-high jumps that easily clear everything on screen, or drop it to <code>5</code> for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!</p>
+}
+
+.code-symbol {
+  color: #F97583;
+}
+
+.code-function {
+  color: #B392F0;
+}
+
+.code-number {
+  color: #79B8FF;
+}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <button class="btn btn-sm btn-dino-reset" id="jump-reset" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-dino" id="btn-jump-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button> </div> <div class="dino-hack-controls d-flex  align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75"> <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).tRex.<span class="code-function">setJumpVelocity</span>(</span> <input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="0" max="50" value="10" aria-label="Jump velocity value"> <span>)</span> </div> <div id="jump-pre" class="dino-hack-pre"><code></code></div> </div> <script type="module" src="/_astro/ChromeDinoJumpWidget.astro_astro_type_script_index_0_lang.DbVebb0Z.js"></script> <script type="module" src="/_astro/ChromeDinoJumpWidget.astro_astro_type_script_index_1_lang.ChdqVl0Y.js"></script>
+<p>Try <code>20</code> for floaty, sky-high jumps that easily clear everything on screen, or drop it to <code>5</code> for a low, fast hop that’s great for clearing small cacti quickly.
+Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!</p>
 <h2 id="5-walk-in-air">5. Walk in Air</h2>
-<p>Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!</p>
-<picture> <source srcset="/_astro/sky_dino.yOxyq6Pn_2jEdct.webp" type="image/webp">  <img src="/_astro/sky_dino.yOxyq6Pn_Zvleeg.jpg" alt="Chrome Dino walking in air" loading="lazy" decoding="async" width="1320" height="694"> </picture>
-<p>The <code>groundYPos</code> property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is <strong>93</strong>. Setting it to <code>0</code> moves the dino’s resting position to the very top of the screen.</p>
-<p>Use the slider to position the dino anywhere from the sky (<code>0</code>) to the normal ground level (<code>93</code>). Intermediate values like <code>40</code> or <code>60</code> let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode! <strong>Try it live — the game above updates as you drag.</strong></p>
+<p>Ever wondered what it’s like for the dino to defy gravity?
+You can make it walk through the sky with this fun trick!</p>
+<p>The <code>groundYPos</code> property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas.
+The normal ground level is <strong>93</strong>.
+Setting it to <code>0</code> moves the dino’s resting position to the very top of the screen.</p>
+<p>Use the slider to position the dino anywhere from the sky (<code>0</code>) to the normal ground level (<code>93</code>).
+Intermediate values like <code>40</code> or <code>60</code> let you glide over ground-level cacti without getting hit.
+Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode!</p>
 <style>.dino-hack-widget {
   border-radius: 0.5rem;
   overflow: hidden;
@@ -336,7 +395,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   accent-color: var(--color-accent);
 }
 
-.dino-hack-controls .dino-hack-num {
+.dino-hack-num {
   width: 80px;
   background: rgba(255, 255, 255, 0.08);
   color: #e0e0e0;
@@ -344,14 +403,14 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.8rem;
 }
 
-.dino-hack-controls .dino-hack-num:focus {
+.dino-hack-num:focus {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-.dino-hack-controls .dino-hack-num:focus-visible {
+.dino-hack-num:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 0;
 }
@@ -362,7 +421,7 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   border: none;
 }
 
-.btn-dino-reset {
+.btn-dino-reset, .btn-dino {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
   border: none;
@@ -373,32 +432,46 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
   font-size: 0.72rem;
 }
 
-.btn-dino-reset:hover {
+.btn-dino-reset:hover, .btn-dino:hover {
   color: var(--color-accent);
   background: transparent;
 }
 
-.btn-dino-reset:focus-visible {
+.btn-dino-reset:focus-visible, .btn-dino:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Position:</label> <input type="range" class="form-range flex-grow-1" id="ground-slider" min="0" max="130" value="93" style="min-width:120px" aria-label="Ground Y position slider"> <input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="0" max="130" value="93" aria-label="Ground Y position value"> <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button> </div> <div id="ground-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93</code></div> </div> <script type="module" src="/_astro/ChromeDinoElevationWidget.astro_astro_type_script_index_0_lang.Cn8lVDN_.js"></script>
-<h2 id="6-auto-play">6. Auto-play</h2><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
+}
+
+.code-symbol {
+  color: #F97583;
+}
+
+.code-function {
+  color: #B392F0;
+}
+
+.code-number {
+  color: #79B8FF;
+}</style><div class="dino-hack-widget"> <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2"> <label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Position:</label> <input type="range" class="form-range flex-grow-1" id="ground-slider" min="0" max="130" value="93" style="min-width:120px" aria-label="Ground Y position slider"> <input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="0" max="130" value="93" aria-label="Ground Y position value"> <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button> <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button> </div> <div id="ground-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93</code></div> </div> <script type="module" src="/_astro/ChromeDinoElevationWidget.astro_astro_type_script_index_0_lang.DbVebb0Z.js"></script>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h2 id="6-auto-play">6. Auto-play</h2>
 <p>Want the dino to play itself? There’s a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.</p>
 <p>👉 <a href="/blog/2026/03/14/chrome-dino-autoplay.html">Chrome Dino Autoplay</a></p>
 <h2 id="7-invisibility">7. Invisibility</h2>
 <p>Want to make your dino invisible? It’s easy to do by simply disabling its drawing function! This will prevent the dino from being rendered on the screen, making it fully invisible.</p>
-<h3 id="make-the-dino-invisible">Make the Dino Invisible</h3>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-2853" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> </button> </div> <pre id="code-block-2853" class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#66D9EF;font-style:italic">const</span><span style="color:#F8F8F2"> runner </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> Runner.instance_ </span><span style="color:#F92672">||</span><span style="color:#F8F8F2"> Runner.</span><span style="color:#A6E22E">getInstance</span><span style="color:#F8F8F2">();</span></span>
-<span class="line"><span style="color:#66D9EF;font-style:italic">const</span><span style="color:#F8F8F2"> originalDraw </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> runner.tRex.draw;</span></span>
-<span class="line"><span style="color:#F8F8F2">runner.tRex.</span><span style="color:#A6E22E">draw</span><span style="color:#F92672"> =</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#F8F8F2">() {};</span></span></code></pre> </div>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h3 id="make-the-dino-invisible">Make the Dino Invisible</h3>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3029" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-3029" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> runner</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Runner.instance_ </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> Runner.</span><span style="color:#B392F0">getInstance</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> originalDraw</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> runner.tRex.draw;</span></span>
+<span class="line"><span style="color:#E1E4E8">runner.tRex.</span><span style="color:#B392F0">draw</span><span style="color:#F97583"> =</span><span style="color:#F97583"> function</span><span style="color:#E1E4E8">() {};</span></span></code></pre> </div>
 <p>This code replaces the dino’s draw function with an empty one, meaning the dino won’t be drawn on the canvas.</p>
-<p><strong>Note:</strong> The dino can still die if it collides with obstacles</p><div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div>
+<p><strong>Note:</strong> The dino can still die if it collides with obstacles</p>
 <h3 id="restore-the-dino">Restore the Dino</h3>
 <p>To bring the dino back, simply restore the original draw function:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8112" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> </button> </div> <pre id="code-block-8112" class="astro-code monokai" style="background-color:#272822;color:#F8F8F2;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#66D9EF;font-style:italic">const</span><span style="color:#F8F8F2"> runner </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> Runner.instance_ </span><span style="color:#F92672">||</span><span style="color:#F8F8F2"> Runner.</span><span style="color:#A6E22E">getInstance</span><span style="color:#F8F8F2">();</span></span>
-<span class="line"><span style="color:#F8F8F2">runner.tRex.draw </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> originalDraw;</span></span></code></pre> </div>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1322" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-1322" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> runner</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Runner.instance_ </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> Runner.</span><span style="color:#B392F0">getInstance</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">runner.tRex.draw </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> originalDraw;</span></span></code></pre> </div>
 <p>Now the dino is visible again, and the game continues as usual!</p>
 <hr/>
 <p>Keep having fun and may your dino run forever!</p>
@@ -406,5 +479,5 @@ Use the sliders and input box to tweak the game in real-time, or the Console tex
 <hr/>
 <p>Time to try some other great hacks — <a href="/blog/2026/03/07/hacking-wordle.html">Wordle</a>, <a href="/blog/2026/03/20/hacking-minesweeper-online.html">Minesweeper</a>, <a href="/blog/2026/03/20/hacking-typeracer.html">TypeRacer</a>.</p>  </div> <hr> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small ">Share:</span> <a class="btn btn-sm btn-outline-secondary" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fblog%2F2016%2F11%2F05%2Fchrome-dino-hack%2F&#38;text=Hacking%20the%20Chrome%20Dino%20Game" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fblog%2F2016%2F11%2F05%2Fchrome-dino-hack%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fblog%2F2016%2F11%2F05%2Fchrome-dino-hack%2F&#38;title=Hacking%20the%20Chrome%20Dino%20Game" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fblog%2F2016%2F11%2F05%2Fchrome-dino-hack%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <button id="copy-post-link" class="btn btn-sm btn-outline-secondary" aria-label="Copy link"> <i class="fa fa-link" aria-hidden="true"></i> </button> </div> <br> <div class="series-post-nav" role="navigation" aria-label="Series navigation" data-astro-cid-w7ld43o3><a href="/blog/2026/03/31/youtube-shorts-normal-player.html" class="series-nav-btn prev-post" data-astro-cid-w7ld43o3><i class="fas fa-arrow-left nav-icon" aria-hidden="true" data-astro-cid-w7ld43o3></i><div data-astro-cid-w7ld43o3><span class="nav-label" data-astro-cid-w7ld43o3>Previous in series</span><span class="nav-title" data-astro-cid-w7ld43o3><i class="fab fa-youtube post-icon me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>Watch YouTube Shorts in the Normal Player (No Extensions Required)</span></div></a><a href="/blog/2026/03/07/hacking-wordle.html" class="series-nav-btn next-post" data-astro-cid-w7ld43o3><i class="fas fa-arrow-right nav-icon" aria-hidden="true" data-astro-cid-w7ld43o3></i><div data-astro-cid-w7ld43o3><span class="nav-label" data-astro-cid-w7ld43o3>Next in series</span><span class="nav-title" data-astro-cid-w7ld43o3><i class="fas fa-puzzle-piece post-icon me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>Hacking Wordle: Solve It in One Try Using Browser DevTools</span></div></a></div>  <div class="related-posts-section bottom-variant" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
 </h5><div class="row" data-astro-cid-dpgbfi7r><div class="col-sm-6 col-md-4 mb-3" data-astro-cid-dpgbfi7r><a href="/blog/2026/03/07/hacking-wordle.html" class="related-post-link" style="--card-accent: #538D4E" aria-label="Read Hacking Wordle: Solve It in One Try Using Browser DevTools" data-astro-cid-dpgbfi7r><div class="card h-100" data-astro-cid-dpgbfi7r><div class="card-body" data-astro-cid-dpgbfi7r><p class="card-title mb-1" data-astro-cid-dpgbfi7r><i class="fas fa-puzzle-piece post-icon me-1" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking Wordle: Solve It in One Try Using Browser DevTools</p><small class="related-post-date" data-astro-cid-dpgbfi7r>Mar 7, 2026</small></div><div class="card-footer" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-arrow-right me-1" data-astro-cid-dpgbfi7r></i>Read more</small></div></div></a></div><div class="col-sm-6 col-md-4 mb-3" data-astro-cid-dpgbfi7r><a href="/blog/2026/03/20/hacking-minesweeper-online.html" class="related-post-link" aria-label="Read Hacking Minesweeper Online: Rigging the RNG" data-astro-cid-dpgbfi7r><div class="card h-100" data-astro-cid-dpgbfi7r><div class="card-body" data-astro-cid-dpgbfi7r><p class="card-title mb-1" data-astro-cid-dpgbfi7r><i class="fas fa-bomb post-icon me-1" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking Minesweeper Online: Rigging the RNG</p><small class="related-post-date" data-astro-cid-dpgbfi7r>Mar 20, 2026</small></div><div class="card-footer" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-arrow-right me-1" data-astro-cid-dpgbfi7r></i>Read more</small></div></div></a></div><div class="col-sm-6 col-md-4 mb-3" data-astro-cid-dpgbfi7r><a href="/blog/2026/03/20/hacking-typeracer.html" class="related-post-link" aria-label="Read Hacking TypeRacer: The Human-Mimic Bot" data-astro-cid-dpgbfi7r><div class="card h-100" data-astro-cid-dpgbfi7r><div class="card-body" data-astro-cid-dpgbfi7r><p class="card-title mb-1" data-astro-cid-dpgbfi7r><i class="fas fa-keyboard post-icon me-1" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking TypeRacer: The Human-Mimic Bot</p><small class="related-post-date" data-astro-cid-dpgbfi7r>Mar 20, 2026</small></div><div class="card-footer" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-arrow-right me-1" data-astro-cid-dpgbfi7r></i>Read more</small></div></div></a></div><div class="col-sm-6 col-md-4 mb-3" data-astro-cid-dpgbfi7r><a href="/blog/2026/03/21/instagram-reel-sniper.html" class="related-post-link" style="--card-accent: #C13584" aria-label="Read Instagram Reel Sniper: Download Any Reel Directly from Your Browser" data-astro-cid-dpgbfi7r><div class="card h-100" data-astro-cid-dpgbfi7r><div class="card-body" data-astro-cid-dpgbfi7r><p class="card-title mb-1" data-astro-cid-dpgbfi7r><i class="fab fa-instagram post-icon me-1" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Instagram Reel Sniper: Download Any Reel Directly from Your Browser</p><small class="related-post-date" data-astro-cid-dpgbfi7r>Mar 21, 2026</small></div><div class="card-footer" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-arrow-right me-1" data-astro-cid-dpgbfi7r></i>Read more</small></div></div></a></div><div class="col-sm-6 col-md-4 mb-3" data-astro-cid-dpgbfi7r><a href="/blog/2019/12/07/unhide-password-box.html" class="related-post-link" aria-label="Read Reveal a Saved Password Hidden Behind Dots" data-astro-cid-dpgbfi7r><div class="card h-100" data-astro-cid-dpgbfi7r><div class="card-body" data-astro-cid-dpgbfi7r><p class="card-title mb-1" data-astro-cid-dpgbfi7r><i class="fas fa-eye post-icon me-1" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Reveal a Saved Password Hidden Behind Dots</p><small class="related-post-date" data-astro-cid-dpgbfi7r>Dec 7, 2019</small></div><div class="card-footer" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-arrow-right me-1" data-astro-cid-dpgbfi7r></i>Read more</small></div></div></a></div></div></div> <br>  <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
-</script> </div> </div> </div>  <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none"> <div class="sticky-md-top" style="top: 10px"> <div class="mb-3"> <div class="card toc-card" data-astro-cid-xvrfupwn><button type="button" class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none" aria-expanded="false" aria-controls="toc-collapse" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small><i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true" data-astro-cid-xvrfupwn></i></button><div class="card-header toc-header d-none d-md-block" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small></div><div class="collapse d-md-block" id="toc-collapse" data-astro-cid-xvrfupwn><div class="card-body p-0" data-astro-cid-xvrfupwn><nav id="toc-nav" aria-label="Table of contents" data-astro-cid-xvrfupwn><ul class="toc-list" data-astro-cid-xvrfupwn><li class="toc-link" data-astro-cid-xvrfupwn><a href="#what-are-we-hacking" data-astro-cid-xvrfupwn>What are we hacking?</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-to-play-it" data-astro-cid-xvrfupwn>How to play it?</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#where-to-enter-the-hacks" data-astro-cid-xvrfupwn>Where to enter the hacks?</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#try-the-hacks-right-here" data-astro-cid-xvrfupwn>Try the hacks right here!</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#1-immortality-god-mode" data-astro-cid-xvrfupwn>1. Immortality (God Mode)</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#activate-god-mode" data-astro-cid-xvrfupwn>Activate God Mode</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-to-stop-it" data-astro-cid-xvrfupwn>How to Stop It</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-does-it-work" data-astro-cid-xvrfupwn>How does it work?</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#2-tweaking-speed" data-astro-cid-xvrfupwn>2. Tweaking Speed</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#3-setting-the-current-score" data-astro-cid-xvrfupwn>3. Setting the Current Score</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-does-it-work-1" data-astro-cid-xvrfupwn>How does it work?</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#4-jumping-height" data-astro-cid-xvrfupwn>4. Jumping Height</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#5-walk-in-air" data-astro-cid-xvrfupwn>5. Walk in Air</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#6-auto-play" data-astro-cid-xvrfupwn>6. Auto-play</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#7-invisibility" data-astro-cid-xvrfupwn>7. Invisibility</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#make-the-dino-invisible" data-astro-cid-xvrfupwn>Make the Dino Invisible</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#restore-the-dino" data-astro-cid-xvrfupwn>Restore the Dino</a></li></ul></li></ul></nav></div></div></div><script type="module" src="/_astro/TableOfContents.astro_astro_type_script_index_0_lang.LEnQWnPU.js"></script> </div> <div class="d-none d-md-block"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div> </div> </div> </div> </div> <br> </div> <button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top" data-astro-cid-wlspcwf4> <i class="fas fa-arrow-up" aria-hidden="true" data-astro-cid-wlspcwf4></i> </button>  <script type="module" src="/_astro/BackToTop.astro_astro_type_script_index_0_lang.DUV9dgxF.js"></script> <dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore data-astro-cid-gixpweiw> <div class="lightbox-content" data-astro-cid-gixpweiw> <button type="button" class="lightbox-close" aria-label="Close" data-astro-cid-gixpweiw>&times;</button> <img src="" alt="Expanded image" data-astro-cid-gixpweiw> </div> </dialog> <script type="module" src="/_astro/Lightbox.astro_astro_type_script_index_0_lang.p2qvmSq7.js"></script>  <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DCVw2oiH.js"></script> </body> </html>
+</script> </div> </div> </div>  <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none"> <div class="sticky-md-top" style="top: 10px"> <div class="mb-3"> <div class="card toc-card" data-astro-cid-xvrfupwn><button type="button" class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none" aria-expanded="false" aria-controls="toc-collapse" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small><i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true" data-astro-cid-xvrfupwn></i></button><div class="card-header toc-header d-none d-md-block" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small></div><div class="collapse d-md-block" id="toc-collapse" data-astro-cid-xvrfupwn><div class="card-body p-0" data-astro-cid-xvrfupwn><nav id="toc-nav" aria-label="Table of contents" data-astro-cid-xvrfupwn><ul class="toc-list" data-astro-cid-xvrfupwn><li class="toc-link" data-astro-cid-xvrfupwn><a href="#what-are-we-hacking" data-astro-cid-xvrfupwn>What are we hacking?</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-to-play-it" data-astro-cid-xvrfupwn>How to play it?</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#where-to-enter-the-hacks" data-astro-cid-xvrfupwn>Where to enter the hacks?</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#chrome-developer-tools" data-astro-cid-xvrfupwn>Chrome Developer Tools</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#try-the-hacks-right-here" data-astro-cid-xvrfupwn>Try the hacks right here!</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#1-immortality-god-mode" data-astro-cid-xvrfupwn>1. Immortality (God Mode)</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#activate-god-mode" data-astro-cid-xvrfupwn>Activate God Mode</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-to-stop-it" data-astro-cid-xvrfupwn>How to Stop It</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-does-it-work" data-astro-cid-xvrfupwn>How does it work?</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#2-tweaking-speed" data-astro-cid-xvrfupwn>2. Tweaking Speed</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#3-setting-the-current-score" data-astro-cid-xvrfupwn>3. Setting the Current Score</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#how-does-it-work-1" data-astro-cid-xvrfupwn>How does it work?</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#4-jumping-height" data-astro-cid-xvrfupwn>4. Jumping Height</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#5-walk-in-air" data-astro-cid-xvrfupwn>5. Walk in Air</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#6-auto-play" data-astro-cid-xvrfupwn>6. Auto-play</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#7-invisibility" data-astro-cid-xvrfupwn>7. Invisibility</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#make-the-dino-invisible" data-astro-cid-xvrfupwn>Make the Dino Invisible</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#restore-the-dino" data-astro-cid-xvrfupwn>Restore the Dino</a></li></ul></li></ul></nav></div></div></div><script type="module" src="/_astro/TableOfContents.astro_astro_type_script_index_0_lang.uBCRthqo.js"></script> </div> <div class="d-none d-md-block"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div> </div> </div> </div> </div> <br> </div> <button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top" data-astro-cid-wlspcwf4> <i class="fas fa-arrow-up" aria-hidden="true" data-astro-cid-wlspcwf4></i> </button>  <script type="module" src="/_astro/BackToTop.astro_astro_type_script_index_0_lang.CMJkOPE8.js"></script> <dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore data-astro-cid-gixpweiw> <div class="lightbox-content" data-astro-cid-gixpweiw> <button type="button" class="lightbox-close" aria-label="Close" data-astro-cid-gixpweiw>&times;</button> <img src="" alt="Expanded image" data-astro-cid-gixpweiw> </div> </dialog> <script type="module" src="/_astro/Lightbox.astro_astro_type_script_index_0_lang.DReKit3t.js"></script>  <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_0_lang.B6LE6sPR.js"></script> </body> </html>
