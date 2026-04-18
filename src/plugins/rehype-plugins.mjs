@@ -1,44 +1,49 @@
-/**
- * Custom rehype plugin for Astro markdown processing.
- * Injects ads specifically before heading elements.
- */
-
 import { visit } from 'unist-util-visit';
 
-// Define only heading tags as targets
 const HEADING_TAGS = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
-const MINIMUM_HEADINGS = 2; // Only inject if the heading is at least this deep in the content
+const MINIMUM_HEADINGS = 2;
 
 export function rehypeInjectAds(options = { density: 2 }) {
-  const density = options.density; // Inject before every Nth heading
-  
+  const density = options.density;
+
   return function (tree) {
     let headingCounter = 0;
+    let hasContentSinceLastHeading = true; // Initialize true to allow the first heading
     const insertions = [];
 
     visit(tree, 'element', (node, index, parent) => {
-      // 1. Check if the node is a heading we care about
-      if (!HEADING_TAGS.has(node.tagName)) return;
-      
-      // 2. Ensure it's a top-level node in the content area
-      if (parent?.type !== 'root' && !isContentContainer(parent)) return;
-      headingCounter++;
+      // 1. If it's NOT a heading, check if it's "content"
+      if (!HEADING_TAGS.has(node.tagName)) {
+        // If we find a non-heading element with children or text, we have content
+        if (node.children && node.children.length > 0) {
+          hasContentSinceLastHeading = true;
+        }
+        return;
+      }
 
-      // 3. Logic: Insert before the heading if it meets density requirements
-      // We also check to avoid putting an ad at the absolute top of the post
+      // 2. It IS a heading. Ensure it's in a valid container.
+      if (parent?.type !== 'root' && !isContentContainer(parent)) return;
+
+      // 3. ADJACENCY CHECK: Skip if no content appeared since the last heading
+      if (!hasContentSinceLastHeading) return;
+
+      // Valid heading found, increment counter
+      headingCounter++;
+      
+      // Reset the flag: we now need new content before the NEXT heading counts
+      hasContentSinceLastHeading = false;
+
+      // 4. Density Logic
       if (headingCounter % density === 0 && headingCounter >= MINIMUM_HEADINGS && index !== null && index > 0) {
         insertions.push({ index: index, parent });
       }
     });
 
-    // Insert in reverse order to keep indices stable
     for (const { index, parent } of insertions.reverse()) {
       const adMarker = {
         type: 'element',
         tagName: 'in-content-ad-marker',
       };
-      
-      // We use 'index' instead of 'index + 1' to place it BEFORE the heading node
       parent.children.splice(index, 0, adMarker);
     }
   };
