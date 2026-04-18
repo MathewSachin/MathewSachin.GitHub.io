@@ -9,13 +9,14 @@ related:
   - /blog/2026/03/20/hacking-typeracer
   - /blog/2026/03/21/instagram-reel-sniper
   - /blog/2019/12/07/unhide-password-box
-scripts:
-  - /blog/chrome-dino-hack.js
 ---
 import ChromeDinoEmbed from '@components/blog/ChromeDinoEmbed.astro';
+import ChromeDinoSpeedWidget from '@components/blog/ChromeDinoSpeedWidget.astro';
+import ChromeDinoScoreWidget from '@components/blog/ChromeDinoScoreWidget.astro';
+import ChromeDinoJumpWidget from '@components/blog/ChromeDinoJumpWidget.astro';
+import ChromeDinoElevationWidget from '@components/blog/ChromeDinoElevationWidget.astro';
 import chromeDino from '@images/chromeDino.gif';
 import skyDino from '@images/sky_dino.jpg';
-
 
 *All hacks updated as of 8th March 2026 based on game changes.*
 
@@ -116,32 +117,13 @@ Want to put the pedal to the metal? Or maybe slow things down for a relaxing run
 
 Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion. The default starting speed is `6`. **Move the slider and the game above updates instantly!**
 
-<div class="dino-hack-widget">
-<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-<label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label>
-<input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider" />
-<input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value" />
-<button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-<button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
-</div>
-<div id="speed-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div>
-</div>
-
+<ChromeDinoSpeedWidget />
 
 ## Setting the Current Score
 
 Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below — **it applies instantly to the game at the top of this page!**
 
-<div class="dino-hack-widget">
-<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-<label class="text-white-50 small mb-0 me-1" for="score-input">Score:</label>
-<input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px" />
-<button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-<button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
-</div>
-<div id="score-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025</code></div>
-</div>
-
+<ChromeDinoScoreWidget />
 
 ##### How does it work?
 
@@ -157,17 +139,7 @@ Want your dino to leap over obstacles in a single bound, or keep jumps tight and
 
 The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. **Drag the slider and watch the change take effect live in the game above!**
 
-<div class="dino-hack-widget">
-<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-<label class="text-white-50 small mb-0 me-1" for="jump-slider">Jump Velocity:</label>
-<input type="range" class="form-range flex-grow-1" id="jump-slider" min="1" max="50" value="10" style="min-width:120px" aria-label="Jump velocity slider" />
-<input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="1" max="50" value="10" aria-label="Jump velocity value" />
-<button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-<button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
-</div>
-<div id="jump-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10)</code></div>
-</div>
-
+<ChromeDinoJumpWidget />
 
 Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
 
@@ -181,16 +153,7 @@ The `groundYPos` property controls the vertical position where the dino “rests
 
 Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`). Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode! **Try it live — the game above updates as you drag.**
 
-<div class="dino-hack-widget">
-<div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-<label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Position:</label>
-<input type="range" class="form-range flex-grow-1" id="ground-slider" min="0" max="130" value="93" style="min-width:120px" aria-label="Ground Y position slider" />
-<input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="0" max="130" value="93" aria-label="Ground Y position value" />
-<button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y position to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-<button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
-</div>
-<div id="ground-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93</code></div>
-</div>
+<ChromeDinoElevationWidget />
 
 ## Auto-play
 
@@ -233,70 +196,3 @@ Share this page around and comment down if you have tricks of your own!
 ---
 
 Time to try some other great hacks — <PostLink url="/blog/2026/03/07/hacking-wordle" text="Wordle" />, <PostLink url="/blog/2026/03/20/hacking-minesweeper-online" text="Minesweeper" />, <PostLink url="/blog/2026/03/20/hacking-typeracer" text="TypeRacer" />.
-
-<style>{`
-.dino-hack-widget {
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.dino-hack-controls {
-  background: var(--color-code-bg);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  min-height: 2.5rem;
-}
-
-.dino-hack-controls .form-range {
-  accent-color: var(--color-accent);
-}
-
-.dino-hack-controls .dino-hack-num {
-  width: 80px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #e0e0e0;
-  border-color: rgba(255, 255, 255, 0.2);
-  font-size: 0.8rem;
-}
-
-.dino-hack-controls .dino-hack-num:focus {
-  background: rgba(255, 255, 255, 0.12);
-  color: white;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
-.dino-hack-controls .dino-hack-num:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 0;
-}
-
-.dino-hack-pre {
-  margin: 0;
-  border-radius: 0;
-  border: none;
-}
-
-.btn-dino-reset {
-  color: rgba(255, 255, 255, 0.45);
-  background: transparent;
-  border: none;
-  padding: 0.15rem 0.4rem;
-  transition: color var(--transition-base);
-  line-height: 1;
-  white-space: nowrap;
-  font-size: 0.72rem;
-}
-
-.btn-dino-reset:hover {
-  color: var(--color-accent);
-  background: transparent;
-}
-
-.btn-dino-reset:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-`}</style>

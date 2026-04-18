@@ -1,0 +1,16 @@
+---
+import '@styles/chrome-dino-hack.css';
+---
+
+<div class="dino-hack-widget">
+    <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+        <label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label>
+        <input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider" />
+        <input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value" />
+        <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+        <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+    </div>
+    <div id="speed-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div>
+</div>
+
+<script src="@scripts/chrome-dino-hack.js"></script>

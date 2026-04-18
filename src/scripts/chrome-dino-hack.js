@@ -1,3 +1,5 @@
+import { trackEvent } from './utils';
+
 // Helper: run a function against the embedded dino game's runner instance
 function dinoApply(fn) {
   var frame = document.getElementById('dino-game-frame');

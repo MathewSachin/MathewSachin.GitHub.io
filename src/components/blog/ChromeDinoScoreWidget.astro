@@ -1,0 +1,15 @@
+---
+import '@styles/chrome-dino-hack.css';
+---
+
+<div class="dino-hack-widget">
+    <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
+        <label class="text-white-50 small mb-0 me-1" for="score-input">Score:</label>
+        <input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px" />
+        <button class="btn btn-sm btn-dino-reset" id="score-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset score to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+        <button class="btn btn-sm btn-clip" data-clipboard-target="#score-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+    </div>
+    <div id="score-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).distanceRan = 12345 / 0.025</code></div>
+</div>
+
+<script src="@scripts/chrome-dino-hack.js"></script>

@@ -32,7 +32,7 @@ const { post, allPosts, headings, canonicalPath } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
 
-const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true, scripts = [] } = post.data;
+const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true } = post.data;
 const date = getPostDate(post);
 const readTime = estimateReadingTime(post.body);
 const pageUrl = Astro.url.href;
@@ -121,9 +121,4 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
 
   <BackToTop />
   <Lightbox />
-
-  {/* Post-specific external scripts (e.g. interactive widget JS) */}
-  {scripts.map(src => (
-    <script src={`${BASE}${src.replace(/^\//, '')}`} defer></script>
-  ))}
 </BaseLayout>
