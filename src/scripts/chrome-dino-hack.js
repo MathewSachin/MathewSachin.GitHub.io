@@ -87,8 +87,8 @@ function debounce(fn, wait) {
 // Ground Y position hack widget (now an offset: groundYPos = 93 - X)
 (function() {
   var DEFAULT = 0;
-  var MIN = -60;
-  var MAX = 60;
+  var MIN = -40;
+  var MAX = 130;
   var slider = document.getElementById('ground-slider');
   var input = document.getElementById('ground-input');
   var code = document.querySelector('#ground-pre code');
