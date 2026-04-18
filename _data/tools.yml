@@ -58,8 +58,3 @@
   name: Smart Scratchpad
   description: Distraction-free notepad that auto-saves every keystroke. Instantly strips formatting from pasted text.
   icon: fas fa-pencil
-
-- id: llm
-  name: Local LLM Chat
-  description: Chat with a local language model that runs entirely in your browser — powered by Transformers.js WebAssembly. No data sent to any server.
-  icon: fas fa-robot
