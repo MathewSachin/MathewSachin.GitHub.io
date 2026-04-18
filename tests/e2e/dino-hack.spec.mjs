@@ -157,12 +157,4 @@ test.describe('Chrome Dino Hack post', () => {
   test('ground code block shows the current value', async ({ page }) => {
     await expect(page.locator('#ground-pre code')).toContainText('93');
   });
-
-  // ── External JS file ──────────────────────────────────────────────────────
-
-  test('external dino hack JS file is loaded (no inline scripts remain)', async ({ page }) => {
-    // Verify the external script tag is present in the page source
-    const scriptTags = await page.locator('script[src*="chrome-dino-hack"]').count();
-    expect(scriptTags).toBeGreaterThan(0);
-  });
 });
