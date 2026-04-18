@@ -196,15 +196,22 @@ Combined with God Mode, a high jump velocity lets you sail through the entire ga
 Ever wondered what it’s like for the dino to defy gravity?
 You can make it walk through the sky with this fun trick!
 
-The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas.
-The normal ground level is **93**.
-Setting it to `0` moves the dino’s resting position to the very top of the screen.
-
-Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`).
-Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit.
-Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode!
+This widget configures an offset `X`:
+- **Positive `X`**: moves the dino up.  
+- **Negative `X`**: moves the dino down.
 
 <ChromeDinoElevationWidget />
+
+### How it works?
+
+The game exposes a property called `groundYPos` which controls the vertical position where the dino rests (pixels from the top of the canvas).
+The original baseline ground level used by the game is **93**.
+The game canvas uses a top-left origin where Y values increase downward.
+The hard-coded resting Y position for the dino is `93` (the baseline).
+By applying a subtraction `93 - X`, the widget lets you think in terms of an offset from that baseline rather than an absolute coordinate.
+
+This abstraction keeps the baseline intact (93) and lets the offset you pick move the dino relative to that known ground level.
+Obstacles continue to be rendered at their fixed Y coordinates, so changing `groundYPos` can let your dino appear to walk above or below the normal ground line — handy for experimentation, demos, or just goofy runs!
 
 ## 6. Auto-play
 
