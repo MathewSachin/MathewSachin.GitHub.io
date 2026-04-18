@@ -22,16 +22,20 @@ import chromeDino from '@images/chromeDino.gif';
 
 ---
 
-*Tired of just jumping over cacti? Let’s take it to the next level with some simple hacks you can try right in your browser!*
+*Tired of just jumping over cacti? 
+Let’s take it to the next level with some simple hacks you can try right in your browser!*
 
 ## What are we hacking?
-When you lose internet connection in Chrome, a hidden endless runner game appears. Tap space to start, and our pixelated dino begins a desert adventure!
+When you lose internet connection in Chrome, a hidden endless runner game appears. 
+Tap space to start, and our pixelated dino begins a desert adventure!
 
 But… what if we could cheat?
 
-Even if you’re not a programmer, here’s something cool: the Chrome Dino game is built using JavaScript, and its internal game code is exposed globally. That means we can actually poke around and change how the game works — right from the browser!
+Even if you’re not a programmer, here’s something cool: the Chrome Dino game is built using JavaScript, and its internal game code is exposed globally. 
+That means we can actually poke around and change how the game works — right from the browser!
 
-Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. All you need is the Chrome Developer Console, and a few clever lines of code.
+Thanks to JavaScript’s flexible (and kinda wild) nature, we can override built-in functions and tweak the game’s behavior without needing to dig into the source files. 
+All you need is the Chrome Developer Console, and a few clever lines of code.
 
 ### How to play it?
 <AlertInfo>
@@ -93,7 +97,8 @@ To open it and get to the Console:
   </div>
 </div>
 
-You’ll see a blinking cursor where you can type JavaScript commands directly. After typing each command, press **Enter** to run it.
+You’ll see a blinking cursor where you can type JavaScript commands directly.
+After typing each command, press **Enter** to run it.
 
 A few things to keep in mind:
 - The commands are **case-sensitive** — type them exactly as shown.
@@ -102,7 +107,7 @@ A few things to keep in mind:
 ### Try the hacks right here!
 
 If you want to jump straight into the fun, you can try all the hacks live in the game embedded below.  
-Use the sliders and input box to tweak the game in real-time, or the Console text-box to paste the code snippets for more advanced hacks. The game above will update instantly as you make changes!
+Use the Console text-box to paste the code snippets.
 
 <ChromeDinoEmbed />
 
@@ -135,33 +140,39 @@ This only works if you ran the block above first. Otherwise, just refresh the pa
 
 In JavaScript, functions are just objects — and they can be replaced on the fly.
 
-The `gameOver` function is normally triggered when the dino crashes. By saving it first (`var original = ...`) and then replacing it with an empty function (`function() {}`), we stop the game from ending.
+The `gameOver` function is normally triggered when the dino crashes.
+By saving it first (`var original = ...`) and then replacing it with an empty function (`function() {}`), we stop the game from ending.
 
-When you're done, you just restore the original function by assigning it back. Think of it like temporarily muting the crash handler!
+When you're done, you just restore the original function by assigning it back.
+Think of it like temporarily muting the crash handler!
 
 This works only because JavaScript allows us to override methods of objects while the game is still running in the browser.
 
 ## 2. Tweaking Speed
 
-Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs.
+Want to put the pedal to the metal? Or maybe slow things down for a relaxing run?
+The game normally starts at a speed of around **6** and gradually increases as your score climbs.
 With this hack, you can take full control of the pace.
 
 Use the text box below to input any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion.
 The default starting speed is `6`.  
+Copy the code snippet using the button and paste it into the Console to set the speed.
 
 <ChromeDinoSpeedWidget />
 
-Copy the code snippet using the button and paste it into the Console to set the speed.
-
 ## 3. Setting the Current Score
 
-Want to jump right into the action with a specific score? You can set the score to any value up to **99999** (but no higher!). Enter your target score below — **it applies instantly to the game at the top of this page!**
+Want to jump right into the action with a specific score?
+You can set the score to any value up to **99999** (but no higher!).
+Enter your target score below and then Copy the code snippet using the button. Paste it into the Console to set the score.
 
 <ChromeDinoScoreWidget />
 
 ### How does it work?
 
-Internally, the game tracks how far the dino has run using a property called `distanceRan`. The visible score on screen is calculated by multiplying `distanceRan` by `0.025`. By dividing your desired score by that constant, you get the right internal value to set.
+Internally, the game tracks how far the dino has run using a property called `distanceRan`.
+The visible score on screen is calculated by multiplying `distanceRan` by `0.025`.
+By dividing your desired score by that constant, you get the right internal value to set.
 
 ⚠️ Note: The score resets when the game ends, so don’t forget to re-enter the command if you want to keep the score high!
 
@@ -169,21 +180,29 @@ Experiment with different values to make your dino feel like a seasoned pro righ
 
 ## 4. Jumping Height
 
-Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled? You can tune the jump velocity to your liking.
+Want your dino to leap over obstacles in a single bound, or keep jumps tight and controlled?
+You can tune the jump velocity to your liking.
 
-The default jump velocity is **10**. Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops. **Drag the slider and watch the change take effect live in the game above!**
+The default jump velocity is **10**.
+Increasing it makes your dino launch higher into the air, while decreasing it results in shorter, snappier hops.
 
 <ChromeDinoJumpWidget />
 
-Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly. Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
+Try `20` for floaty, sky-high jumps that easily clear everything on screen, or drop it to `5` for a low, fast hop that’s great for clearing small cacti quickly.
+Combined with God Mode, a high jump velocity lets you sail through the entire game without a care in the world!
 
 ## 5. Walk in Air
 
-Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
+Ever wondered what it’s like for the dino to defy gravity?
+You can make it walk through the sky with this fun trick!
 
-The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
+The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas.
+The normal ground level is **93**.
+Setting it to `0` moves the dino’s resting position to the very top of the screen.
 
-Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`). Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit. Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode! **Try it live — the game above updates as you drag.**
+Use the slider to position the dino anywhere from the sky (`0`) to the normal ground level (`93`).
+Intermediate values like `40` or `60` let you glide over ground-level cacti without getting hit.
+Obstacles still scroll past at fixed heights, so this is a sneaky alternative to God Mode!
 
 <ChromeDinoElevationWidget />
 
