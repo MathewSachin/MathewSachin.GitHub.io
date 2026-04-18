@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/yt-thumbnail.mdx';
+import { Content } from '@content/tool-docs/yt-thumbnail.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="YouTube Thumbnail Grabber" ads={true}>
 
@@ -127,5 +128,5 @@ dlBtn.addEventListener('click', function (e) {
 </div>
 </div>
 
-<Docs />
+<RenderMDX Content={Content} />
 </ToolLayout>

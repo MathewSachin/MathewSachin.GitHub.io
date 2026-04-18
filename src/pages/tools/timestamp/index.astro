@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/timestamp.mdx';
+import { Content } from '@content/tool-docs/timestamp.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="Timestamp Converter" ads={true}>
 
@@ -174,5 +175,5 @@ setInterval(tick, 1000);
 </div>
 </div>
 
-<Docs />
+<RenderMDX Content={Content} />
 </ToolLayout>

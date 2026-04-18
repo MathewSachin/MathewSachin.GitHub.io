@@ -1,0 +1,31 @@
+---
+import PostLink from '@components/mdx/PostLink.astro';
+import { Picture } from 'astro:assets';
+import AlertInfo from '@components/AlertInfo.astro'
+import InContentAd from '@components/InContentAd.astro';
+import Pintora from '@components/Pintora.astro';
+import ContentBlock from '@components/CodeBlock.astro';
+import Blockquote from '@components/mdx/Blockquote.astro';
+import Table from '@components/mdx/Table.astro';
+
+const { Content, components: customComponents = {} } = Astro.props;
+
+const components = { 
+  PostLink,
+  AlertInfo,
+  Picture,
+  Pintora,
+  table: Table,
+  blockquote: Blockquote,
+  'in-content-ad-marker': InContentAd,
+  pre: ContentBlock
+};
+
+// Merge our global defaults with any overrides passed via props
+const mergedComponents = {
+  ...components,
+  ...customComponents, 
+};
+---
+
+<Content components={mergedComponents} />

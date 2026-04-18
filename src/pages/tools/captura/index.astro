@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/captura.mdx';
+import { Content } from '@content/tool-docs/captura.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 import '@styles/recorder.css';
 ---
 <ToolLayout title="Captura Web Recorder" ads={true}>
@@ -170,6 +171,6 @@ import '@styles/recorder.css';
 </div><!-- /.card -->
 
 <!-- ── About ─────────────────────────────────────────────────────────────── -->
-<Docs />
+<RenderMDX Content={Content} />
 <script src="@scripts/tools/captura/app.js"></script>
 </ToolLayout>

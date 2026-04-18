@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/cron.mdx';
+import { Content } from '@content/tool-docs/cron.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="CRON Expression Generator" ads={true}>
 
@@ -213,5 +214,5 @@ document.getElementById('generate-btn').click();
 </div>
 </div>
 
-<Docs />
+<RenderMDX Content={Content} />
 </ToolLayout>

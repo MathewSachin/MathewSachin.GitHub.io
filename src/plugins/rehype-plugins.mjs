@@ -1,48 +1,13 @@
 /**
  * Custom rehype/remark plugins for Astro markdown processing.
  * These replace the Jekyll Ruby plugins:
- *   - rehypeBootstrapFormatting ← _plugins/bootstrap_formatting.rb
  *   - rehypeInjectAds        ← _plugins/content_ad_split_markers.rb
  */
 
 import { visit } from 'unist-util-visit';
 
 // ---------------------------------------------------------------------------
-// 2. rehypeBootstrapFormatting
-//    Adds Bootstrap classes to <table> elements.
-//    Mirrors bootstrap_formatting.rb.
-// ---------------------------------------------------------------------------
-export function rehypeBootstrapFormatting() {
-  const TABLE_CLASSES = ['table', 'table-bordered', 'table-striped', 'table-sm'];
-  
-  return function (tree) {
-    // Tables inside .page-content (when rendered inside the post layout,
-    // the markdown content is always inside .page-content)
-    visit(tree, 'element', (node, index, parent) => {
-      if (node.tagName === 'table') {
-        const existing = (node.properties?.className || []);
-        const toAdd = TABLE_CLASSES.filter(c => !existing.includes(c));
-        node.properties = node.properties || {};
-        node.properties.className = [...existing, ...toAdd];
-
-        // Wrap in .table-responsive if not already
-        const parentClasses = (parent?.properties?.className || []);
-        if (!parentClasses.includes('table-responsive')) {
-          const wrapper = {
-            type: 'element',
-            tagName: 'div',
-            properties: { className: ['table-responsive'] },
-            children: [{ ...node }],
-          };
-          Object.assign(node, wrapper);
-        }
-      }
-    });
-  };
-}
-
-// ---------------------------------------------------------------------------
-// 3. rehypeInjectAds
+// rehypeInjectAds
 //    Injects an in-content ad placeholder after every `density` target nodes.
 //    Mirrors content_ad_split_markers.rb.
 //    The ad HTML is rendered at runtime by the PostLayout component; here we

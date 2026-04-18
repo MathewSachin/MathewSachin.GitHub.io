@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/scratchpad.mdx';
+import { Content } from '@content/tool-docs/scratchpad.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="Smart Scratchpad" ads={true}>
 
@@ -151,5 +152,5 @@ updateCount();
 </div>
 </div>
 
-<Docs />
+<RenderMDX Content={Content} />
 </ToolLayout>

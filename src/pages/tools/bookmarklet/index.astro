@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/bookmarklet.mdx';
+import { Content } from '@content/tool-docs/bookmarklet.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 
 <ToolLayout title="Bookmarklet Compiler" ads={true}>
@@ -212,5 +213,5 @@ alert('Word count: ' + (words ? words.length : 0));"
 
 }());
 </script>
-  <Docs />
+<RenderMDX Content={Content} />
 </ToolLayout>

@@ -7,7 +7,6 @@ import rehypeRaw from 'rehype-raw';
 import linkValidator from 'astro-link-validator';
 
 import {
-  rehypeBootstrapFormatting,
   rehypeInjectAds,
 } from './src/plugins/rehype-plugins.mjs';
 
@@ -47,11 +46,10 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
     shikiConfig: { theme: 'monokai' },
     rehypePlugins: [
-      // rehype-raw must run first so that raw HTML blocks in .md files (e.g.
-      // <pre class="pintora">, inline forms) are parsed into element nodes
+      // rehype-raw must run first so that raw HTML blocks in .md files
+      // are parsed into element nodes
       // before our custom plugins traverse the tree.
       rehypeRaw,
-      rehypeBootstrapFormatting,
       // Ad injection density (every 7 content elements, mirrors _config.yml ad_density: 7)
       [rehypeInjectAds, { density: 7 }],
     ],

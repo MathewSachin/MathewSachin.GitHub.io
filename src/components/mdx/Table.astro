@@ -1,0 +1,10 @@
+---
+---
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. -->
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-sm" {...Astro.props}>
+    <slot />
+  </table>
+</div>

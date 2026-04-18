@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Docs from '@content/tool-docs/base64.mdx';
+import { Content } from '@content/tool-docs/base64.mdx';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="Base64 Encoder / Decoder" ads={true}>
 
@@ -90,5 +91,5 @@ document.getElementById('copy-btn').addEventListener('click', function () {
 </div>
 </div>
 
-<Docs />
+<RenderMDX Content={Content} />
 </ToolLayout>
