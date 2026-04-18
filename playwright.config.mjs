@@ -5,7 +5,7 @@ export default defineConfig({
   testMatch: ['**/*.spec.mjs', '**/*.spec.js'],
   use: {
     baseURL: 'http://localhost:4000',
-    permissions: ['camera', 'microphone'],
+    permissions: ['camera', 'microphone', 'clipboard-read', 'clipboard-write'],
   },
   projects: [
     {

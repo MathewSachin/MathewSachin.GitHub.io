@@ -25,50 +25,27 @@ test.describe('Chrome Dino Hack post', () => {
   });
 
   // ── Speed widget ───────────────────────────────────────────────────────────
-
-  test('speed slider has correct default value', async ({ page }) => {
-    await expect(page.locator('#speed-slider')).toHaveValue('6');
-    await expect(page.locator('#speed-input')).toHaveValue('6');
-  });
-
-  test('speed slider updates the number input', async ({ page }) => {
-    await page.locator('#speed-slider').fill('50');
-    await expect(page.locator('#speed-input')).toHaveValue('50');
-  });
-
-  test('speed number input updates the slider', async ({ page }) => {
-    await page.locator('#speed-input').fill('100');
-    await page.locator('#speed-input').dispatchEvent('input');
-    await expect(page.locator('#speed-slider')).toHaveValue('100');
-  });
-
   test('speed reset button restores default value', async ({ page }) => {
-    await page.locator('#speed-slider').fill('500');
+    await page.locator('#speed-input').fill('500');
     await page.locator('#speed-reset').click();
-    await expect(page.locator('#speed-slider')).toHaveValue('6');
     await expect(page.locator('#speed-input')).toHaveValue('6');
   });
 
-  test('speed copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('[data-clipboard-target="#speed-pre"]');
-    await expect(copyBtn).toBeVisible();
-    await expect(copyBtn).toBeEnabled();
-  });
+  test('speed copy button copies correctly', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-  test('speed code block shows the current value', async ({ page }) => {
-    await expect(page.locator('#speed-pre code')).toContainText('6');
+    await page.locator('#speed-input').fill('50');
+    await page.locator('#btn-speed-clip').click();
+
+    // Verify the clipboard contains the expected code snippet
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardText).toBe('(Runner.instance_ || Runner.getInstance()).setSpeed(50)');
   });
 
   // ── Score widget ───────────────────────────────────────────────────────────
 
   test('score input has correct default value', async ({ page }) => {
     await expect(page.locator('#score-input')).toHaveValue('12345');
-  });
-
-  test('score input accepts a new value', async ({ page }) => {
-    await page.locator('#score-input').fill('99999');
-    await page.locator('#score-input').dispatchEvent('input');
-    await expect(page.locator('#score-input')).toHaveValue('99999');
   });
 
   test('score reset button restores default value', async ({ page }) => {
@@ -78,49 +55,34 @@ test.describe('Chrome Dino Hack post', () => {
     await expect(page.locator('#score-input')).toHaveValue('12345');
   });
 
-  test('score copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('[data-clipboard-target="#score-pre"]');
-    await expect(copyBtn).toBeVisible();
-    await expect(copyBtn).toBeEnabled();
-  });
+  test('score copy button copies correctly', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-  test('score code block shows the current value', async ({ page }) => {
-    await expect(page.locator('#score-pre code')).toContainText('12345');
+    await page.locator('#score-input').fill('356');
+    await page.locator('#btn-score-clip').click();
+
+    // Verify the clipboard contains the expected code snippet
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardText).toBe('(Runner.instance_ || Runner.getInstance()).distanceRan = 356 / 0.025');
   });
 
   // ── Jump velocity widget ───────────────────────────────────────────────────
 
-  test('jump slider has correct default value', async ({ page }) => {
-    await expect(page.locator('#jump-slider')).toHaveValue('10');
-    await expect(page.locator('#jump-input')).toHaveValue('10');
-  });
-
-  test('jump slider updates the number input', async ({ page }) => {
-    await page.locator('#jump-slider').fill('25');
-    await expect(page.locator('#jump-input')).toHaveValue('25');
-  });
-
-  test('jump number input updates the slider', async ({ page }) => {
-    await page.locator('#jump-input').fill('20');
-    await page.locator('#jump-input').dispatchEvent('input');
-    await expect(page.locator('#jump-slider')).toHaveValue('20');
-  });
-
   test('jump reset button restores default value', async ({ page }) => {
-    await page.locator('#jump-slider').fill('40');
+    await page.locator('#jump-input').fill('40');
     await page.locator('#jump-reset').click();
-    await expect(page.locator('#jump-slider')).toHaveValue('10');
     await expect(page.locator('#jump-input')).toHaveValue('10');
   });
 
-  test('jump copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('[data-clipboard-target="#jump-pre"]');
-    await expect(copyBtn).toBeVisible();
-    await expect(copyBtn).toBeEnabled();
-  });
+  test('jump copy button copies correctly', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-  test('jump code block shows the current value', async ({ page }) => {
-    await expect(page.locator('#jump-pre code')).toContainText('10');
+    await page.locator('#jump-input').fill('25');
+    await page.locator('#btn-jump-clip').click();
+
+    // Verify the clipboard contains the expected code snippet
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardText).toBe('(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(25)');
   });
 
   // ── Ground Y position widget ───────────────────────────────────────────────
