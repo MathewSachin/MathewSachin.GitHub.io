@@ -1,3 +1,5 @@
+const COPY_RESET_DELAY = 2000;         // ms before copy icon reverts to link icon
+
 /** Escape special HTML characters to prevent XSS in template literals. */
 export function escapeHtml(str) {
   return String(str)
@@ -25,4 +27,41 @@ export function trackEvent(name, params) {
     } catch (_) {
         console.warn("Failed to track event:", name, params);
     }
+}
+
+export function registerCopyToClipboard(button, textFetcher, icon, onCopy) {
+    const originalIconClass = icon ? icon.className : null;
+    button.addEventListener("click", async function () {
+        const text = textFetcher();
+
+        const copied = await copyToClipboard(text);
+        if (icon && copied) {
+            icon.className = "fa fa-check";
+            setTimeout(function () { icon.className = originalIconClass }, COPY_RESET_DELAY);
+        }
+
+        if (copied && onCopy) {
+            onCopy();
+        }
+    });
+}
+
+export async function copyToClipboard(text) {
+    let copied = false;
+    try {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+    } catch (_) {
+        // Fallback: create a temporary textarea for manual copy
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try { copied = !!document.execCommand("copy"); } catch (_) {}
+        document.body.removeChild(textarea);
+    }
+
+    return copied;
 }

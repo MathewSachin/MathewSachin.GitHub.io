@@ -1,4 +1,4 @@
-import { addListeners, trackEvent } from './utils.js';
+import { addListeners, trackEvent, registerCopyToClipboard } from './utils.js';
 
 (function () {
     // Named constants — avoid magic numbers scattered through the file
@@ -7,12 +7,17 @@ import { addListeners, trackEvent } from './utils.js';
     const SCROLL_MILESTONES     = [25, 50, 75, 90]; // percent-scroll milestones to report
 
     // Copy code button
-    addListeners(".btn-clip", "click", function (btn) {
+    document.querySelectorAll(".btn-clip").forEach(function (btn) {
         const selector = btn.getAttribute("data-clipboard-target");
         const target = selector ? document.querySelector(selector) : null;
         if (!target) return;
-        navigator.clipboard.writeText(target.textContent).catch(function () {});
-        trackEvent("code_copy");
+
+        registerCopyToClipboard(
+            btn,
+            () => target.textContent,
+            btn.querySelector("i"),
+            () => trackEvent("copy_code"),
+        );
     });
 
     // Series prev/next navigation clicks
@@ -41,30 +46,12 @@ import { addListeners, trackEvent } from './utils.js';
     // Copy post link button
     const copyPostLink = document.getElementById("copy-post-link");
     if (copyPostLink) {
-        copyPostLink.addEventListener("click", async function () {
-            const url = window.location.href;
-            const icon = copyPostLink.querySelector("i");
-            let copied = false;
-            try {
-                await navigator.clipboard.writeText(url);
-                copied = true;
-            } catch (_) {
-                // Fallback: create a temporary textarea for manual copy
-                const textarea = document.createElement("textarea");
-                textarea.value = url;
-                textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0";
-                document.body.appendChild(textarea);
-                textarea.focus();
-                textarea.select();
-                try { copied = !!document.execCommand("copy"); } catch (_) {}
-                document.body.removeChild(textarea);
-            }
-            if (copied) {
-                if (icon) { icon.className = "fa fa-check"; }
-                setTimeout(function () { if (icon) { icon.className = "fa fa-link"; } }, COPY_RESET_DELAY);
-                trackEvent("post_share", { method: "copy_link" });
-            }
-        });
+        registerCopyToClipboard(
+            copyPostLink,
+            () => window.location.href,
+            copyPostLink.querySelector("i"),
+            () => trackEvent("post_share", { method: "copy_link" })
+        );
     }
 
     // Manual code highlight tracker: debounced so it fires at most once per DEBOUNCE_DELAY ms
