@@ -11,7 +11,7 @@ const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
 ---
 
 <tabs-view data-default={defaultTab}>
-  <div class="card">
+  <div class="card my-4">
     <div class="card-body">
       <ul class="nav nav-tabs" role="tablist">
         {tabs.map((tab) => (
