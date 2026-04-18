@@ -10,9 +10,9 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
         <button class="btn btn-sm btn-dino" id="btn-score-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
     </div>
     <div class="dino-hack-controls d-flex  align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75">
-        <span>(Runner.instance_ || Runner.getInstance()).distanceRan = </span>
+        <span>(Runner.instance_ <span style="color:#F92672">||</span> Runner.<span style="color:#A6E22E">getInstance</span>()).distanceRan <span style="color:#F92672">=</span> </span>
         <input type="number" class="form-control form-control-sm dino-hack-num" id="score-input" min="0" max="99999" value="12345" aria-label="Score value" style="width:110px" />
-        <span> / 0.025</span>
+        <span> <span style="color:#F92672">/</span> <span style="color:#AE81FF">0.025</span></span>
     </div>
 </div>
 
