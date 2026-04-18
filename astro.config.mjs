@@ -23,6 +23,12 @@ const integrations = [
 
 export default defineConfig({
   site: SITE,
+  // Static redirects (replaces redirect-only pages)
+  redirects: {
+    // Emit directory-style index.html so trailing-slash links resolve
+    '/Captura/index': '/tools/captura/',
+    '/Fate-Grand-Automata/index': '/FGA/',
+  },
   // base is injected at build time via ASTRO_BASE env variable (used for PR previews)
   base: process.env.ASTRO_BASE || '/',
   trailingSlash: 'always',
