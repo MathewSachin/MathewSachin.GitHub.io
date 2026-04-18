@@ -16,7 +16,7 @@
   accent-color: var(--color-accent);
 }
 
-.dino-hack-controls .dino-hack-num {
+.dino-hack-num {
   width: 80px;
   background: rgba(255, 255, 255, 0.08);
   color: #e0e0e0;
@@ -24,14 +24,14 @@
   font-size: 0.8rem;
 }
 
-.dino-hack-controls .dino-hack-num:focus {
+.dino-hack-num:focus {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.15rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-.dino-hack-controls .dino-hack-num:focus-visible {
+.dino-hack-num:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 0;
 }
@@ -42,7 +42,7 @@
   border: none;
 }
 
-.btn-dino-reset {
+.btn-dino-reset, .btn-dino {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
   border: none;
@@ -53,12 +53,12 @@
   font-size: 0.72rem;
 }
 
-.btn-dino-reset:hover {
+.btn-dino-reset:hover, .btn-dino:hover {
   color: var(--color-accent);
   background: transparent;
 }
 
-.btn-dino-reset:focus-visible {
+.btn-dino-reset:focus-visible, .btn-dino:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }

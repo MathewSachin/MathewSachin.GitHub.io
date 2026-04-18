@@ -6,13 +6,27 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 
 <div class="dino-hack-widget">
     <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-        <label class="text-white-50 small mb-0 me-1" for="speed-slider">Speed:</label>
-        <input type="range" class="form-range flex-grow-1" id="speed-slider" min="1" max="1000" value="6" style="min-width:120px" aria-label="Speed slider" />
-        <input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="1" max="1000" value="6" aria-label="Speed value" />
-        <button class="btn btn-sm btn-dino-reset" id="speed-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-        <button class="btn btn-sm btn-clip" data-clipboard-target="#speed-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+        <button class="btn btn-sm btn-dino-reset" id="speed-reset" title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+        <button class="btn btn-sm btn-dino" id="btn-speed-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
     </div>
-    <div id="speed-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).setSpeed(6)</code></div>
+    <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75">
+        <span>(Runner.instance_ || Runner.getInstance()).setSpeed(</span>
+        <input type="number" class="form-control form-control-sm dino-hack-num" id="speed-input" min="0" max="1000" value="50" aria-label="Speed value" />
+        <span>)</span>
+    </div>
 </div>
 
 <script src="@scripts/chrome-dino-hack.js"></script>
+<script>
+    import { registerCopyToClipboard } from '@scripts/utils.js';
+
+    const clipButton = document.getElementById('btn-speed-clip');
+    const speedInput = document.getElementById('speed-input');
+    if (clipButton && speedInput) {
+        registerCopyToClipboard(
+            clipButton, 
+            () => `(Runner.instance_ || Runner.getInstance()).setSpeed(${speedInput.value})`,
+            clipButton.querySelector("i")
+        );
+    }
+</script>

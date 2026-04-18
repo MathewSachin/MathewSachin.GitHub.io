@@ -16,7 +16,6 @@ import ChromeDinoScoreWidget from '@components/blog/ChromeDinoScoreWidget.astro'
 import ChromeDinoJumpWidget from '@components/blog/ChromeDinoJumpWidget.astro';
 import ChromeDinoElevationWidget from '@components/blog/ChromeDinoElevationWidget.astro';
 import chromeDino from '@images/chromeDino.gif';
-import skyDino from '@images/sky_dino.jpg';
 
 *All hacks updated as of 8th March 2026 based on game changes.*
 
@@ -116,11 +115,15 @@ This works only because JavaScript allows us to override methods of objects whil
 
 ## 2. Tweaking Speed
 
-Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs. With this hack, you can take full control of the pace.
+Want to put the pedal to the metal? Or maybe slow things down for a relaxing run? The game normally starts at a speed of around **6** and gradually increases as your score climbs.
+With this hack, you can take full control of the pace.
 
-Use the slider below to pick any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion. The default starting speed is `6`. **Move the slider and the game above updates instantly!**
+Use the text box below to input any speed — `1000` for pure chaos, `50` for a fast but still-playable pace, or `1` for dramatic slow motion.
+The default starting speed is `6`.  
 
 <ChromeDinoSpeedWidget />
+
+Copy the code snippet using the button and paste it into the Console to set the speed.
 
 ## 3. Setting the Current Score
 
@@ -149,8 +152,6 @@ Try `20` for floaty, sky-high jumps that easily clear everything on screen, or d
 ## 5. Walk in Air
 
 Ever wondered what it’s like for the dino to defy gravity? You can make it walk through the sky with this fun trick!
-
-<Picture src={skyDino} alt="Chrome Dino walking in air" />
 
 The `groundYPos` property controls the vertical position where the dino “rests” when not jumping — measured in pixels from the top of the canvas. The normal ground level is **93**. Setting it to `0` moves the dino’s resting position to the very top of the screen.
 

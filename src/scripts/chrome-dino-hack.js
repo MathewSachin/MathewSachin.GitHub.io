@@ -48,24 +48,15 @@ function debounce(fn, wait) {
 // Speed hack widget
 (function() {
   var DEFAULT = 6;
-  var slider = document.getElementById('speed-slider');
   var input = document.getElementById('speed-input');
-  var code = document.querySelector('#speed-pre code');
   var trackSpeed = debounce(function(val) {
     trackEvent('dino_speed_change', { event_category: 'dino_hack', value: val });
   }, 500);
   function update(v) {
-    var val = Math.max(1, Math.min(1000, parseInt(v, 10) || DEFAULT));
-    slider.value = val;
+    var val = Math.max(0, Math.min(1000, parseInt(v, 10) || 0));
     input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).setSpeed(' + val + ')'; }
     dinoApply(function(w, runner) { runner.setSpeed(val); });
   }
-  slider.addEventListener('input', function() {
-    update(this.value);
-    trackSpeed(parseInt(this.value, 10));
-  });
   input.addEventListener('input', function() {
     update(this.value);
     trackSpeed(parseInt(this.value, 10));
