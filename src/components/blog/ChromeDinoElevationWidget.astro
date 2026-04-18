@@ -7,7 +7,7 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 <div class="dino-hack-widget">
     <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
         <button class="btn btn-sm btn-dino-reset" id="ground-reset" title="Reset to default" aria-label="Reset Y offset to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-        <button class="btn btn-sm btn-dino btn-ground-clip" data-clipboard-target="#ground-pre" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
+        <button class="btn btn-sm btn-dino" id="btn-ground-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
     </div>
     <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75">
         <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).tRex.groundYPos <span class="code-symbol">=</span> <span class="code-number">93</span>  <span class="code-symbol">-</span> </span>
@@ -19,7 +19,7 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 <script>
     import { registerCopyToClipboard } from '@scripts/utils.js';
 
-    const clipButton = document.querySelector('.btn-ground-clip');
+    const clipButton = document.getElementById('btn-ground-clip');
     const groundInput = document.getElementById('ground-input');
     if (clipButton && groundInput) {
         registerCopyToClipboard(

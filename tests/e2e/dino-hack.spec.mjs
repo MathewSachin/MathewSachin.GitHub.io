@@ -86,37 +86,21 @@ test.describe('Chrome Dino Hack post', () => {
   });
 
   // ── Ground Y position widget ───────────────────────────────────────────────
-
-  test('ground slider has correct default value', async ({ page }) => {
-    await expect(page.locator('#ground-slider')).toHaveValue('93');
-    await expect(page.locator('#ground-input')).toHaveValue('93');
-  });
-
-  test('ground slider updates the number input', async ({ page }) => {
-    await page.locator('#ground-slider').fill('40');
-    await expect(page.locator('#ground-input')).toHaveValue('40');
-  });
-
-  test('ground number input updates the slider', async ({ page }) => {
-    await page.locator('#ground-input').fill('60');
-    await page.locator('#ground-input').dispatchEvent('input');
-    await expect(page.locator('#ground-slider')).toHaveValue('60');
-  });
-
+  
   test('ground reset button restores default value', async ({ page }) => {
-    await page.locator('#ground-slider').fill('0');
+    await page.locator('#ground-input').fill('100');
     await page.locator('#ground-reset').click();
-    await expect(page.locator('#ground-slider')).toHaveValue('93');
-    await expect(page.locator('#ground-input')).toHaveValue('93');
+    await expect(page.locator('#ground-input')).toHaveValue('0');
   });
 
-  test('ground copy button is present and enabled', async ({ page }) => {
-    const copyBtn = page.locator('[data-clipboard-target="#ground-pre"]');
-    await expect(copyBtn).toBeVisible();
-    await expect(copyBtn).toBeEnabled();
-  });
+  test('ground copy button copies correctly', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-  test('ground code block shows the current value', async ({ page }) => {
-    await expect(page.locator('#ground-pre code')).toContainText('93');
+    await page.locator('#ground-input').fill('65');
+    await page.locator('#btn-ground-clip').click();
+
+    // Verify the clipboard contains the expected code snippet
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardText).toBe('(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - 65');
   });
 });
