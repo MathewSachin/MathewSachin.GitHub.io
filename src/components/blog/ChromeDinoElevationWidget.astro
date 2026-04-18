@@ -6,13 +6,25 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 
 <div class="dino-hack-widget">
     <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-        <label class="text-white-50 small mb-0 me-1" for="ground-slider">Y Offset:</label>
-        <input type="range" class="form-range flex-grow-1" id="ground-slider" min="-40" max="130" value="0" style="min-width:120px" aria-label="Ground Y offset slider" />
-        <input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="-40" max="130" value="0" aria-label="Ground Y offset value" />
-        <button class="btn btn-sm btn-dino-reset" id="ground-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset Y offset to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-        <button class="btn btn-sm btn-clip" data-clipboard-target="#ground-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
+        <button class="btn btn-sm btn-dino-reset" id="ground-reset" title="Reset to default" aria-label="Reset Y offset to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+        <button class="btn btn-sm btn-dino btn-ground-clip" data-clipboard-target="#ground-pre" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
     </div>
-    <div id="ground-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - <span class="mi">0</span></code></div>
+    <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75">
+        <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).tRex.groundYPos <span class="code-symbol">=</span> <span class="code-number">93</span>  <span class="code-symbol">-</span> </span>
+        <input type="number" class="form-control form-control-sm dino-hack-num" id="ground-input" min="-40" max="130" value="0" aria-label="Ground Y offset value" />
+    </div>
 </div>
 
 <script src="@scripts/chrome-dino-hack.js"></script>
+<script>
+    import { registerCopyToClipboard } from '@scripts/utils.js';
+
+    const clipButton = document.querySelector('.btn-ground-clip');
+    const groundInput = document.getElementById('ground-input');
+    if (clipButton && groundInput) {
+        registerCopyToClipboard(
+            clipButton, 
+            () => `(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - ${groundInput.value}`,
+            clipButton.querySelector("i")
+        );
+    }

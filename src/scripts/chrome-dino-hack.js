@@ -89,22 +89,14 @@ function debounce(fn, wait) {
   var DEFAULT = 0;
   var MIN = -40;
   var MAX = 130;
-  var slider = document.getElementById('ground-slider');
   var input = document.getElementById('ground-input');
-  var code = document.querySelector('#ground-pre code');
   function update(v) {
     var val = parseInt(v, 10);
     if (isNaN(val)) val = DEFAULT;
     if (val < MIN) val = MIN;
     if (val > MAX) val = MAX;
-    slider.value = val;
     input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - (' + val + ')'; }
   }
-  slider.addEventListener('input', function() {
-    update(this.value);
-  });
   input.addEventListener('input', function() {
     update(this.value);
   });
