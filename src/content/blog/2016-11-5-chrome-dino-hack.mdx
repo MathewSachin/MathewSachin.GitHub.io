@@ -15,6 +15,7 @@ import ChromeDinoSpeedWidget from '@components/blog/ChromeDinoSpeedWidget.astro'
 import ChromeDinoScoreWidget from '@components/blog/ChromeDinoScoreWidget.astro';
 import ChromeDinoJumpWidget from '@components/blog/ChromeDinoJumpWidget.astro';
 import ChromeDinoElevationWidget from '@components/blog/ChromeDinoElevationWidget.astro';
+import Tabs from '@components/Tabs.astro';
 import chromeDino from '@images/chromeDino.gif';
 
 *All hacks updated as of 8th March 2026 based on game changes.*
@@ -44,32 +45,54 @@ If this is your first time discovering the Dino game, welcome! It's super easy t
 **Pause:** Press Alt  
 **Night Mode:** Every 700 points, the background switches to black for 100 points — just to keep you on your toes!
 
-<Picture src={chromeDino} alt="Chrome Dino" />
-
 ## Where to enter the hacks?
+
+### Chrome Developer Tools
 
 The [**Developer Tools** (DevTools)](/blog/2026/03/07/edit-webpage-inspect-element.html) is a panel built right into Chrome that lets you inspect and interact with any web page — including its JavaScript code. Think of it as a secret control room for the browser.
 
 To open it and get to the Console:
 
-**On Windows / Linux:**
-- Press `F12` or `Ctrl + Shift + I` to open DevTools, then click the **Console** tab.
-- Shortcut: `Ctrl + Shift + J` jumps straight to the Console.
+<Tabs 
+  tabs={[
+    { id: 'windows', label: 'Windows' },
+    { id: 'mac', label: 'Mac' },
+    { id: 'mobile', label: 'Mobile' },
+    { id: 'linux', label: 'Linux' }
+  ]}
+  defaultTab="windows"
+>
+  <div slot="windows">
+    - Press `F12` or `Ctrl + Shift + I` to open DevTools, then click the **Console** tab.
+    - Shortcut: `Ctrl + Shift + J` jumps straight to the Console.
+  </div>
 
-**On Mac:**
-- Press `Cmd + Option + I` to open DevTools, then click the **Console** tab.
-- Shortcut: `Cmd + Option + J` jumps straight to the Console.
+  <div slot="mac">
+    - Press `Cmd + Option + I` to open DevTools, then click the **Console** tab.
+    - Shortcut: `Cmd + Option + J` jumps straight to the Console.
+  </div>
+
+  <div slot="mobile">
+    <AlertInfo>
+      📱 **On a phone or tablet?** Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!  
+      👉 <PostLink url="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet" />
+    </AlertInfo>
+  </div>
+  
+  <div slot="linux">
+    - Press `F12` or `Ctrl + Shift + I` to open DevTools, then click the **Console** tab.
+    - Shortcut: `Ctrl + Shift + J` jumps straight to the Console.
+  </div>
+
+</Tabs>
+
+<Picture src={chromeDino} alt="Chrome Dino" />
 
 You’ll see a blinking cursor where you can type JavaScript commands directly. After typing each command, press **Enter** to run it.
 
 A few things to keep in mind:
 - The commands are **case-sensitive** — type them exactly as shown.
 - Seeing `undefined` after a command? That’s completely normal. It just means the expression didn’t return a value, which is expected for most of these hacks.
-
-<AlertInfo>
-  📱 **On a phone or tablet?** Mobile browsers don’t have DevTools — but you can still hack the Dino using a bookmarklet. No computer needed!  
-  👉 <PostLink url="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet" />
-</AlertInfo>
 
 ### Try the hacks right here!
 

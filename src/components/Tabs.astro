@@ -1,0 +1,85 @@
+---
+export interface Props {
+  tabs: {
+    id: string;
+    label: string;
+  }[];
+  defaultTab?: string;
+}
+
+const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
+---
+
+<tabs-view data-default={defaultTab}>
+  <div class="card">
+    <div class="card-body">
+      <ul class="nav nav-tabs" role="tablist">
+        {tabs.map((tab) => (
+          <li class="nav-item" role="presentation">
+            <button
+              class={`nav-link ${tab.id === defaultTab ? 'active' : ''}`}
+              data-target={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={tab.id === defaultTab ? 'true' : 'false'}
+            >
+              {tab.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+      
+      <div class="tab-content pt-3">
+        {tabs.map(async (tab) => (
+          <div
+            class={`tab-pane fade ${tab.id === defaultTab ? 'show active' : ''}`}
+            data-pane={tab.id}
+            role="tabpanel"
+            set:html={await Astro.slots.render(tab.id)}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</tabs-view>
+
+<script>
+  class Tabs extends HTMLElement {
+    connectedCallback() {
+      // Scoped query selectors ensure multiple <Tabs> on one page don't conflict
+      const buttons = this.querySelectorAll('button[data-target]');
+      const panes = this.querySelectorAll('div[data-pane]');
+
+      const switchTab = (target) => {
+        // Reset all
+        buttons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        panes.forEach(p => p.classList.remove('show', 'active'));
+
+        // Activate target
+        const activeBtn = this.querySelector(`button[data-target="${target}"]`);
+        const activePane = this.querySelector(`div[data-pane="${target}"]`);
+        
+        if (activeBtn && activePane) {
+          activeBtn.classList.add('active');
+          activeBtn.setAttribute('aria-selected', 'true');
+          activePane.classList.add('show', 'active');
+        }
+      };
+
+      // Attach click listeners
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          switchTab(button.dataset.target);
+        });
+      });
+    }
+  }
+
+  // Prevent Astro from trying to register the element twice if the component is used multiple times
+  if (!customElements.get('tabs-view')) {
+    customElements.define('tabs-view', Tabs);
+  }
+</script>
