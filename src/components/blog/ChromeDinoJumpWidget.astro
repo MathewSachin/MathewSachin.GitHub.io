@@ -6,13 +6,29 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 
 <div class="dino-hack-widget">
     <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-        <label class="text-white-50 small mb-0 me-1" for="jump-slider">Jump Velocity:</label>
-        <input type="range" class="form-range flex-grow-1" id="jump-slider" min="1" max="50" value="10" style="min-width:120px" aria-label="Jump velocity slider" />
-        <input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="1" max="50" value="10" aria-label="Jump velocity value" />
-        <button class="btn btn-sm btn-dino-reset" id="jump-reset" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-        <button class="btn btn-sm btn-clip" data-clipboard-target="#jump-pre" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i></button>
+        <button class="btn btn-sm btn-dino-reset" id="jump-reset" title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+        <button class="btn btn-sm btn-dino" id="btn-jump-clip" title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
     </div>
-    <div id="jump-pre" class="dino-hack-pre"><code>(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(10)</code></div>
+    
+    <div class="dino-hack-controls d-flex  align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75">
+        <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).tRex.<span class="code-function">setJumpVelocity</span>(</span>
+        <input type="number" class="form-control form-control-sm dino-hack-num" id="jump-input" min="0" max="50" value="10" aria-label="Jump velocity value" />
+        <span>)</span>
+    </div>
+    <div id="jump-pre" class="dino-hack-pre"><code></code></div>
 </div>
 
 <script src="@scripts/chrome-dino-hack.js"></script>
+<script>
+    import { registerCopyToClipboard } from '@scripts/utils.js';
+
+    const clipButton = document.getElementById('btn-jump-clip');
+    const jumpInput = document.getElementById('jump-input');
+    if (clipButton && jumpInput) {
+        registerCopyToClipboard(
+            clipButton, 
+            () => `(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(${jumpInput.value})`,
+            clipButton.querySelector("i")
+        );
+    }
+</script>

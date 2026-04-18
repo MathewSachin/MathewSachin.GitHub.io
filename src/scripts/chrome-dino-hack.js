@@ -71,19 +71,11 @@ function debounce(fn, wait) {
 // Jump velocity hack widget
 (function() {
   var DEFAULT = 10;
-  var slider = document.getElementById('jump-slider');
   var input = document.getElementById('jump-input');
-  var code = document.querySelector('#jump-pre code');
   function update(v) {
-    var val = Math.max(1, Math.min(50, parseInt(v, 10) || DEFAULT));
-    slider.value = val;
+    var val = Math.max(0, Math.min(50, parseInt(v, 10) || 0));
     input.value = val;
-    var numSpan = code.querySelector('.mi');
-    if (numSpan) { numSpan.textContent = val; } else { code.textContent = '(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(' + val + ')'; }
   }
-  slider.addEventListener('input', function() {
-    update(this.value);
-  });
   input.addEventListener('input', function() {
     update(this.value);
   });
