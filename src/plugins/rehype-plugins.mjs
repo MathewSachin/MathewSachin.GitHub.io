@@ -1,43 +1,44 @@
 /**
- * Custom rehype/remark plugins for Astro markdown processing.
+ * Custom rehype plugin for Astro markdown processing.
+ * Injects ads specifically before heading elements.
  */
 
 import { visit } from 'unist-util-visit';
 
-// ---------------------------------------------------------------------------
-// rehypeInjectAds
-//    Injects an in-content ad placeholder after every `density` target nodes.
-//    Mirrors content_ad_split_markers.rb.
-//    The ad HTML is rendered at runtime by the PostLayout component; here we
-//    only insert a <div data-ad-slot> marker that the layout turns into a real
-//    ad unit.
-// ---------------------------------------------------------------------------
-const AD_TARGET_TAGS = new Set(['p', 'h2', 'h3', 'h4', 'h5', 'h6', 'picture', 'figure', 'table']);
+// Define only heading tags as targets
+const HEADING_TAGS = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
+const MINIMUM_HEADINGS = 2; // Only inject if the heading is at least this deep in the content
 
-export function rehypeInjectAds(options = { density: 7 }) {
-  const density = options.density;
+export function rehypeInjectAds(options = { density: 2 }) {
+  const density = options.density; // Inject before every Nth heading
+  
   return function (tree) {
-    // Collect target nodes at the top level of the document
-    let counter = 0;
+    let headingCounter = 0;
     const insertions = [];
 
     visit(tree, 'element', (node, index, parent) => {
-      // Only top-level content nodes (direct children of root-level containers)
-      if (!AD_TARGET_TAGS.has(node.tagName)) return;
+      // 1. Check if the node is a heading we care about
+      if (!HEADING_TAGS.has(node.tagName)) return;
+      
+      // 2. Ensure it's a top-level node in the content area
       if (parent?.type !== 'root' && !isContentContainer(parent)) return;
+      headingCounter++;
 
-      counter++;
-      if (counter % density === 0 && index !== null) {
-        insertions.push({ index: index + 1, parent });
+      // 3. Logic: Insert before the heading if it meets density requirements
+      // We also check to avoid putting an ad at the absolute top of the post
+      if (headingCounter % density === 0 && headingCounter >= MINIMUM_HEADINGS && index !== null && index > 0) {
+        insertions.push({ index: index, parent });
       }
     });
 
-    // Insert in reverse order to avoid index shifting
+    // Insert in reverse order to keep indices stable
     for (const { index, parent } of insertions.reverse()) {
       const adMarker = {
         type: 'element',
         tagName: 'in-content-ad-marker',
       };
+      
+      // We use 'index' instead of 'index + 1' to place it BEFORE the heading node
       parent.children.splice(index, 0, adMarker);
     }
   };
@@ -46,5 +47,8 @@ export function rehypeInjectAds(options = { density: 7 }) {
 function isContentContainer(node) {
   if (!node) return false;
   const cls = (node.properties?.className || []);
-  return cls.some(c => ['page-content', 'card-body', 'post-content'].includes(c));
+  const containerClasses = ['page-content', 'card-body', 'post-content'];
+  return Array.isArray(cls) 
+    ? cls.some(c => containerClasses.includes(c))
+    : containerClasses.includes(cls);
 }

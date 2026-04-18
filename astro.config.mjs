@@ -56,8 +56,7 @@ export default defineConfig({
       // are parsed into element nodes
       // before our custom plugins traverse the tree.
       rehypeRaw,
-      // Ad injection density (every 7 content elements, mirrors _config.yml ad_density: 7)
-      [rehypeInjectAds, { density: 7 }],
+      [rehypeInjectAds, { density: 2 }],
     ],
   },
   build: {
