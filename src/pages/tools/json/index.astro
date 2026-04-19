@@ -68,18 +68,11 @@ document.getElementById('json-clear-btn').addEventListener('click', function () 
   jsonInput.value = ''; jsonOutput.value = '';
   clearFeedback();
 });
-document.getElementById('json-copy-btn').addEventListener('click', function () {
-  var btn = this;
-  navigator.clipboard.writeText(jsonOutput.value).then(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-check text-success me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  }).catch(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-times text-danger me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  });
-});
+
+import { registerCopyToClipboard } from '@scripts/utils.js';
+const jsonCopyBtn = document.getElementById('json-copy-btn');
+const jsonCopyIcon = jsonCopyBtn.querySelector('i');
+registerCopyToClipboard(jsonCopyBtn, () => jsonOutput.value, jsonCopyIcon);
 </script>
 
 </div>
