@@ -24,6 +24,10 @@ import AdUnit from "@components/AdUnit.astro"
   overflow: hidden;
 }
 
+.in-content-ad .card-body {
+  min-height: 200px; /* Ensure a minimum height for the ad to avoid CLS */
+}
+
 .in-content-ad ins.adsbygoogle {
   max-width: 100%;
 }
