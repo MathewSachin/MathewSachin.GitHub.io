@@ -16,7 +16,6 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     <textarea id="hash-input" class="form-control font-monospace" rows="5"
       placeholder="Enter text to hash…"></textarea>
     <div class="mt-2">
-      <button class="btn btn-info text-white" id="hash-btn">Generate Hashes</button>
     </div>
   </div>
 
@@ -65,8 +64,8 @@ import { md5, sha } from '@scripts/tools/hash.js';
 
 // ── UI ────────────────────────────────────────────────────────────────────
 
-document.getElementById('hash-btn').addEventListener('click', function () {
-  var text = document.getElementById('hash-input').value;
+function updateHashes() {
+  var text = document.getElementById('hash-input').value || '';
 
   // MD5 (synchronous)
   document.getElementById('out-md5').textContent = md5(text);
@@ -78,7 +77,14 @@ document.getElementById('hash-btn').addEventListener('click', function () {
   sha('SHA-256', text).then(function (h) {
     document.getElementById('out-sha256').textContent = h;
   });
-});
+}
+
+var hashInput = document.getElementById('hash-input');
+hashInput.addEventListener('input', updateHashes);
+hashInput.addEventListener('change', updateHashes);
+
+// populate on load to show format
+updateHashes();
 
 // Copy buttons
 document.querySelectorAll('.copy-hash-btn').forEach(function (btn) {
@@ -96,9 +102,6 @@ document.querySelectorAll('.copy-hash-btn').forEach(function (btn) {
     });
   });
 });
-
-// Auto-generate on load with empty string to show format
-document.getElementById('hash-btn').click();
 </script>
 
 </div>
