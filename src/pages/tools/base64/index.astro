@@ -74,18 +74,14 @@ document.getElementById('clear-btn').addEventListener('click', function () {
   clearError(b64Error);
 });
 
-document.getElementById('copy-btn').addEventListener('click', function () {
-  var btn = this;
-  navigator.clipboard.writeText(b64Input.value).then(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-check text-success me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  }).catch(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-times text-danger me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  });
-});
+import { registerCopyToClipboard } from '@scripts/utils.js';
+
+const copyBtn = document.getElementById('copy-btn');
+registerCopyToClipboard(
+  copyBtn,
+  () => b64Input.value,
+  copyBtn.querySelector('i')
+);
 </script>
 
 </div>
