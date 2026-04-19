@@ -77,6 +77,12 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
 
   {accentColor && <style define:vars={{ accentColor }}>{`:root { --post-accent: ${accentColor}; }`}</style>}
 
+  <style>
+    @view-transition {
+      navigation: auto;
+    }
+  </style>
+  
   <slot name="head" />
 </head>
 <body class="bg-dark">
@@ -86,4 +92,3 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
   <script src='@scripts/formatting.js'></script>
 </body>
 </html>
-
