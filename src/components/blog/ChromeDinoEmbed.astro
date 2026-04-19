@@ -23,11 +23,15 @@
       <span class="">distanceRan:</span> <span id="dbg-distance">—</span>
     </span>
 
-    <div class="my-3 console-wrap">
+    <div class="my-3" data-bs-theme="dark">
       <label class="form-label fw-semibold" for="fake-console">Console</label>
-      <input type="text" id="fake-console" class="form-control"
-        placeholder="Type in the commands and press enter">
+      <div class="input-group">  
+        <textarea id="fake-console" class="form-control" rows="5"
+          placeholder="Type in the commands here and click SEND"></textarea>
+        <button class="btn btn-primary" type="button" id="button-dino-send"><i class="fas fa-paper-plane"></i> SEND</button>
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -35,17 +39,16 @@
 (function(){
   const input = document.getElementById('fake-console');
   const iframe = document.getElementById('dino-game-frame');
-  input.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      const command = this.value.trim();
-      if (command) {
-        try {
-          iframe.contentWindow.eval(command);
-        } catch (e) {
-          console.warn('Eval failed in iframe:', e);
-        }
-        this.value = '';
+  const sendButton = document.getElementById('button-dino-send');
+  sendButton.addEventListener('click', function() {
+    const command = input.value.trim();
+    if (command) {
+      try {
+        iframe.contentWindow.eval(command);
+      } catch (e) {
+        console.warn('Eval failed in iframe:', e);
       }
+      input.value = '';
     }
   });
 
