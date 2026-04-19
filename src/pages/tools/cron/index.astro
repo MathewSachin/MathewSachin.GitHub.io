@@ -56,8 +56,6 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
       <label class="form-label" for="sel-dom">On day of month</label>
       <select class="form-select" id="sel-dom"></select>
     </div>
-
-    <button class="btn btn-info text-white" id="generate-btn">Generate</button>
   </div>
 
   <!-- Result -->
@@ -105,6 +103,7 @@ import { buildCronExpression, ordinal, pad, DOW_NAMES } from '@scripts/tools/cro
 var selMinute = document.getElementById('sel-minute');
 var selHour   = document.getElementById('sel-hour');
 var selDom    = document.getElementById('sel-dom');
+var selDow    = document.getElementById('sel-dow');
 
 for (var m = 0; m < 60; m++) {
   var opt = document.createElement('option');
@@ -140,16 +139,16 @@ function updateVisibility() {
   rowDom.classList.toggle('d-none',    freq !== 'month');
 }
 
-freqSelect.addEventListener('change', updateVisibility);
+freqSelect.addEventListener('change', function () { updateVisibility(); update(); });
 updateVisibility();
 
 // ── Generate ──────────────────────────────────────────────────────────────
 
-document.getElementById('generate-btn').addEventListener('click', function () {
+function update() {
   var freq = freqSelect.value;
   var min  = selMinute.value;
   var hr   = selHour.value;
-  var dow  = document.getElementById('sel-dow').value;
+  var dow  = selDow.value;
   var dom  = selDom.value;
 
   var result = buildCronExpression(freq, min, hr, dow, dom);
@@ -191,7 +190,13 @@ document.getElementById('generate-btn').addEventListener('click', function () {
   });
 
   document.getElementById('result-area').classList.remove('d-none');
-});
+}
+
+// run update when any control changes
+selMinute.addEventListener('change', update);
+selHour.addEventListener('change', update);
+selDow.addEventListener('change', update);
+selDom.addEventListener('change', update);
 
 document.getElementById('copy-cron-btn').addEventListener('click', function () {
   var btn = this;
@@ -207,8 +212,7 @@ document.getElementById('copy-cron-btn').addEventListener('click', function () {
   });
 });
 
-// Auto-generate on load with default selection
-document.getElementById('generate-btn').click();
+update(); // initial generation
 </script>
 
 </div>
