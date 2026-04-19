@@ -102,18 +102,8 @@ pad.addEventListener('input', function () {
 });
 
 // ── Copy All ──────────────────────────────────────────────────────────────
-copyBtn.addEventListener('click', function () {
-  var btn = this;
-  navigator.clipboard.writeText(pad.value).then(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-check text-success me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  }).catch(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-times text-danger me-1';
-    setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-  });
-});
+import { registerCopyToClipboard } from '@scripts/utils.js';
+registerCopyToClipboard(copyBtn, () => pad.value, copyBtn.querySelector('i'));
 
 // ── Clear ─────────────────────────────────────────────────────────────────
 clearBtn.addEventListener('click', function () {
