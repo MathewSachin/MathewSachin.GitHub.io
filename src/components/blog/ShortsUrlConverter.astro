@@ -9,42 +9,44 @@
       <input id="shorts-input" type="url" class="form-control font-monospace"
         placeholder="https://www.youtube.com/shorts/dQw4w9WgXcQ" />
     </div>
-    <div id="shorts-output-wrap" style="display:none;">
+    <div id="shorts-output-wrap" class="d-none">
       <label class="form-label">Normal player URL</label>
       <div class="input-group">
         <input id="shorts-output" type="url" class="form-control font-monospace" readonly />
-        <button class="btn btn-outline-secondary" type="button" id="btn-copy-shorts-url">Copy</button>
+        <button class="btn btn-outline-secondary" type="button" id="btn-copy-shorts-url"><i class="fas fa-copy"></i>Copy</button>
       </div>
-      <a id="shorts-open" href="#" target="_blank" rel="noopener" class="btn btn-primary mt-2">▶ Open in Normal Player</a>
+      <a id="shorts-open" target="_blank" rel="noopener" class="btn btn-outline-primary mt-2">▶ Open in Normal Player</a>
     </div>
   </div>
 </div>
 
 <script>
-document.getElementById('btn-copy-shorts-url').addEventListener('click', copyShortsUrl);
-document.getElementById('shorts-input').addEventListener('input', function() {
+import { registerCopyToClipboard } from '@scripts/utils.js';
+
+const input = document.getElementById('shorts-input');
+const btnCopy = document.getElementById('btn-copy-shorts-url');
+const output = document.getElementById('shorts-output');
+const btnOpen = document.getElementById('shorts-open');
+const outputWrap = document.getElementById('shorts-output-wrap');
+
+registerCopyToClipboard(
+  btnCopy,
+  () => output.value,
+  btnCopy.querySelector('i')
+);
+input.addEventListener('input', function() {
   convertShortsUrl(this.value);
 });
 
 function convertShortsUrl(val) {
-  var wrap = document.getElementById('shorts-output-wrap');
   var match = val.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/);
   if (match) {
     var url = 'https://www.youtube.com/watch?v=' + match[1];
-    document.getElementById('shorts-output').value = url;
-    document.getElementById('shorts-open').href = url;
-    wrap.style.display = '';
+    output.value = url;
+    btnOpen.href = url;
+    outputWrap.classList.remove('d-none');
   } else {
-    wrap.style.display = 'none';
-  }
-}
-function copyShortsUrl() {
-  var out = document.getElementById('shorts-output');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(out.value);
-  } else {
-    out.select();
-    document.execCommand('copy');
+    outputWrap.classList.add('d-none');
   }
 }
 </script>
