@@ -8,15 +8,20 @@
 
 <div class="card">
   <div class="card-header align-text-bottom">
-    <button id="debug-toggle" class="btn btn-sm text-info"><i class="fas fa-pause"></i></button>
     <strong>Live Debugger</strong>
   </div>
   <div class="card-body">
-    <table class="table table-bordered">
-      <tr><td><code>distanceRan</code></td><td><span id="dbg-distance">—</span></td></tr>
-      <tr><td><code>currentSpeed</code></td><td><span id="dbg-speed">—</span></td></tr>
-      <tr><td><code>tRex.yPos</code></td><td><span id="dbg-ypos">—</span></td></tr>
-    </table>
+    <button id="debug-toggle" class="btn btn-sm text-info"><i class="fas fa-pause"></i></button>
+
+    <span class="badge rounded-pill bg-primary">
+      currentSpeed: <span id="dbg-speed">—</span>
+    </span>
+    <span class="badge rounded-pill bg-primary">
+      tRex.yPos: <span id="dbg-ypos">—</span>
+    </span>
+    <span class="badge rounded-pill bg-primary">
+      <span class="">distanceRan:</span> <span id="dbg-distance">—</span>
+    </span>
 
     <div class="my-3 console-wrap">
       <label class="form-label fw-semibold" for="fake-console">Console</label>
