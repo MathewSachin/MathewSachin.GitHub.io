@@ -1,1 +1,0 @@
-import{r as n}from"./utils.CiR7B2xV.js";const e=document.getElementById("btn-jump-clip"),t=document.getElementById("jump-input");e&&t&&n(e,()=>`(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(${t.value})`,e.querySelector("i"));

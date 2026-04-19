@@ -1,1 +1,0 @@
-import{t as l}from"./utils.CiR7B2xV.js";const s=300,t=document.getElementById("back-to-top");if(t){let c=window.scrollY;window.addEventListener("scroll",function(){const o=window.scrollY,n=o<c;c=o,t.classList.toggle("visible",n&&o>s)}),t.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"}),l("back_to_top")})}

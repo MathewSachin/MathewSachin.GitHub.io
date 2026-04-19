@@ -1,1 +1,0 @@
-import{r as n}from"./utils.CiR7B2xV.js";const e=document.getElementById("btn-speed-clip"),t=document.getElementById("speed-input");e&&t&&n(e,()=>`(Runner.instance_ || Runner.getInstance()).setSpeed(${t.value})`,e.querySelector("i"));
