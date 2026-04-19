@@ -101,8 +101,8 @@ alert('Word count: ' + (words ? words.length : 0));"
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/terser@5.46.1/dist/bundle.min.js" integrity="sha384-nzjWtCA/KgLA3wxAwnhUkyVMkUYv5FHRfUInpQG+0QyLpbblos9RKFceXWHQ3AWM" crossorigin="anonymous"></script>
 <script>
+import { minify } from 'terser';
 import { registerCopyToClipboard } from '@scripts/utils.js';
 
 (function () {
@@ -170,7 +170,7 @@ import { registerCopyToClipboard } from '@scripts/utils.js';
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(function () {
       var mySeq = ++seq;
-      Terser.minify(raw, {
+      minify(raw, {
         compress: true,
         mangle: false,
         format: { comments: false }
