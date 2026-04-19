@@ -18,7 +18,7 @@ import ChromeDinoElevationWidget from '@components/blog/ChromeDinoElevationWidge
 import Tabs from '@components/Tabs.astro';
 import chromeDino from '@images/chromeDino.gif';
 
-*All hacks updated as of 8th March 2026 based on game changes.*
+*All hacks updated as of 19<sup>th</sup> April 2026 based on game changes.*
 
 ---
 
@@ -246,6 +246,18 @@ runner.tRex.draw = originalDraw;
 ```
 
 Now the dino is visible again, and the game continues as usual!
+
+## 8. Moon Gravity
+
+Want to experience what it’s like to run on the moon? You can reduce the gravity in the game to make your dino floaty and slow down its descent after jumping.
+The default gravity is around **0.6**. Setting it to a lower value will give you that lunar bounce!
+
+```js
+const gravity = 0.2;
+Object.assign((Runner.instance_ || Runner.getInstance()).tRex.config, { GRAVITY: gravity, gravity: gravity });
+```
+
+This code snippet handles both the original `GRAVITY` and the new `gravity` so the same snippet works across different game versions.
 
 ---
 
