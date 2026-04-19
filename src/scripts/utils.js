@@ -35,9 +35,20 @@ export function registerCopyToClipboard(button, textFetcher, icon, onCopy) {
         const text = textFetcher();
 
         const copied = await copyToClipboard(text);
-        if (icon && copied) {
-            icon.className = "fa fa-check";
-            setTimeout(function () { icon.className = originalIconClass }, COPY_RESET_DELAY);
+        if (icon) {
+            var parts = originalIconClass ? originalIconClass.split(' ') : [];
+            var faIdx = parts.findIndex((p) => p && p.indexOf('fa-') === 0);
+            var successParts = parts.slice();
+            var failParts = parts.slice();
+            if (faIdx !== -1) {
+                successParts[faIdx] = 'fa-check';
+                failParts[faIdx] = 'fa-times';
+            } else {
+                successParts.push('fa-check');
+                failParts.push('fa-times');
+            }
+            icon.className = copied ? successParts.join(' ') : failParts.join(' ');
+            setTimeout(function () { icon.className = originalIconClass; }, COPY_RESET_DELAY);
         }
 
         if (copied && onCopy) {
