@@ -97,6 +97,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 import { buildCronExpression, ordinal, pad, DOW_NAMES } from '@scripts/tools/cron.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
 // ── Populate selects ─────────────────────────────────────────────────────
 
@@ -198,19 +199,13 @@ selHour.addEventListener('change', update);
 selDow.addEventListener('change', update);
 selDom.addEventListener('change', update);
 
-document.getElementById('copy-cron-btn').addEventListener('click', function () {
-  var btn = this;
-  var text = document.getElementById('cron-expr').textContent;
-  navigator.clipboard.writeText(text).then(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-check text-success';
-    setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-  }).catch(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-times text-danger';
-    setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-  });
-});
+const copyCronBtn = document.getElementById('copy-cron-btn');
+const cronElem = document.getElementById('cron-expr');
+registerCopyToClipboard(
+  copyCronBtn, 
+  () => cronElem.textContent,
+  copyCronBtn.querySelector('i')
+);
 
 update(); // initial generation
 </script>
