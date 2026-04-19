@@ -12,8 +12,8 @@ const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
 
 <tabs-view data-default={defaultTab}>
   <div class="card my-4">
-    <div class="card-body">
-      <ul class="nav nav-tabs" role="tablist">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" role="tablist">
         {tabs.map((tab) => (
           <li class="nav-item" role="presentation">
             <button
@@ -28,8 +28,9 @@ const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
           </li>
         ))}
       </ul>
-      
-      <div class="tab-content pt-3">
+    </div>
+    <div class="card-body">
+      <div class="tab-content">
         {tabs.map(async (tab) => (
           <div
             class={`tab-pane fade ${tab.id === defaultTab ? 'show active' : ''}`}
