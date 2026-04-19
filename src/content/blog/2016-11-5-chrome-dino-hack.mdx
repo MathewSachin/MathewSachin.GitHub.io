@@ -259,6 +259,58 @@ Object.assign((Runner.instance_ || Runner.getInstance()).tRex.config, { GRAVITY:
 
 This code snippet handles both the original `GRAVITY` and the new `gravity` so the same snippet works across different game versions.
 
+## 9. Manual Controls (Mario-Style)
+
+What if we stop the automatic "treadmill" that the Dino runs on, and instead map the movement directly to your keyboard like *Super Mario*? 
+
+Because the Chrome Dino engine was fundamentally designed to only ever go forward automatically, forcing it to allow left/right manual control breaks the game engine in some absolutely hilarious ways.
+
+By injecting the script below, we accomplish two things:
+1. We lock the game's internal speed and map it to your **Left and Right Arrow keys**.
+2. We force a **negative speed** into the engine when you run left.
+
+```javascript
+(function() {
+  const MAX_SPEED = 6;
+  const ARROW_LEFT = 'ArrowLeft';
+  const ARROW_RIGHT = 'ArrowRight';
+  let lockedSpeed = 0;
+
+  /* Hijack the speed property */
+  Object.defineProperty(Runner.instance_ || Runner.getInstance(), 'currentSpeed', {
+      get: function() { return lockedSpeed; },
+      set: function(value) { /* Block the game's internal acceleration loop */ }
+  });
+
+  document.addEventListener('keydown', function(e) {
+      if (e.code === ARROW_RIGHT) {
+          lockedSpeed = MAX_SPEED;
+      } else if (e.code === ARROW_LEFT) { 
+          lockedSpeed = -MAX_SPEED; 
+      }
+  });
+
+  /* Slam on the brakes the moment the key is released */
+  document.addEventListener('keyup', function(e) {
+      if (e.code === ARROW_RIGHT || e.code === ARROW_LEFT) {
+          lockedSpeed = 0; 
+      }
+  });
+})();
+```
+
+### What happens when you run this?
+Once you paste the code and press Space to start, the game will sit completely still until you press an arrow key.
+Pressing Right moves you forward normally, but the real fun starts when you press Left:
+1. **The Moonwalk:** Because the game only has one sprite sheet, the T-Rex does not have a "running left" animation.
+  When you hold ArrowLeft, the ground will scroll to the right, but the Dino will just continue his running animation facing forward.
+  He will moonwalk backward through the desert!
+2. **Time Travel:** The game calculates your score based on distance ran.
+  Because you are feeding a negative speed into the engine by running left, your score will actually start counting backwards!
+3. **The Empty Void:** To save memory, the game engine deletes cacti as soon as they pass behind the Dino.
+  If you turn around and run left, those cacti are gone forever.
+  Keep running left, and you'll eventually enter an infinite, empty white void!
+
 ---
 
 Keep having fun and may your dino run forever!
