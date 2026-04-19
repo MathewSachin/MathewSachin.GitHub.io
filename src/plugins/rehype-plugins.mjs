@@ -1,6 +1,6 @@
 import { visit } from 'unist-util-visit';
 
-const HEADING_TAGS = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
+const HEADING_TAGS = new Set(['h2']);
 const MINIMUM_HEADINGS = 2;
 
 export function rehypeInjectAds(options = { density: 2 }) {

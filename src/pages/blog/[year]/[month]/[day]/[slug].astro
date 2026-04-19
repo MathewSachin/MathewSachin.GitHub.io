@@ -5,6 +5,7 @@ import { getCollection, render } from 'astro:content';
 import PostLayout from '@layouts/PostLayout.astro';
 import { sortPostsByDate, postUrlFromId } from '@utils/posts';
 import RenderMDX from '@components/mdx/RenderMDX.astro';
+import InContentAd from '@components/InContentAd.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -33,4 +34,5 @@ const { Content, headings } = await render(post);
 ---
 <PostLayout post={post} allPosts={allPosts} headings={headings} canonicalPath={postUrlFromId(post.id)}>
   <RenderMDX Content={Content} />
+  <InContentAd />
 </PostLayout>
