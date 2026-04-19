@@ -103,6 +103,8 @@ alert('Word count: ' + (words ? words.length : 0));"
 
 <script src="https://cdn.jsdelivr.net/npm/terser@5.46.1/dist/bundle.min.js" integrity="sha384-nzjWtCA/KgLA3wxAwnhUkyVMkUYv5FHRfUInpQG+0QyLpbblos9RKFceXWHQ3AWM" crossorigin="anonymous"></script>
 <script>
+import { registerCopyToClipboard } from '@scripts/utils.js';
+
 (function () {
   'use strict';
 
@@ -194,18 +196,12 @@ alert('Word count: ' + (words ? words.length : 0));"
 
   rawInput.addEventListener('input', update);
 
-  copyBtn.addEventListener('click', function () {
-    if (!compiledOutput.value) return;
-    var icon = copyBtn.querySelector('i');
-    navigator.clipboard.writeText(compiledOutput.value).then(function () {
-      icon.className = 'fas fa-check text-success me-1';
-      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-    }).catch(function () {
-      icon.className = 'fas fa-times text-danger me-1';
-      setTimeout(function () { icon.className = 'fas fa-copy me-1'; }, 1500);
-    });
-  });
-
+  registerCopyToClipboard(
+    copyBtn,
+    () => compiledOutput.value,
+    copyBtn.querySelector('i')
+  );
+  
   clearBtn.addEventListener('click', function () {
     rawInput.value = '';
     update();
