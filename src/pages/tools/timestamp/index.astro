@@ -89,19 +89,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 import { epochToMs, datetimeLocalToMs } from '@scripts/tools/timestamp.js';
-
-// Utility: copy text and briefly swap icon to a check mark
-function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-check text-success';
-    setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-  }).catch(function () {
-    var icon = btn.querySelector('i');
-    icon.className = 'fas fa-times text-danger';
-    setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-  });
-}
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
 // --- DateTime → Epoch ---
 var dtInput = document.getElementById('dt-input');
@@ -129,12 +117,10 @@ dtInput.addEventListener('input', updateDt);
 dtInput.addEventListener('change', updateDt);
 updateDt(); // initial conversion on page load
 
-document.getElementById('dt-copy-seconds').addEventListener('click', function () {
-  copyText(dtSeconds.textContent, this);
-});
-document.getElementById('dt-copy-millis').addEventListener('click', function () {
-  copyText(dtMillis.textContent, this);
-});
+const copySecondsBtn = document.getElementById('dt-copy-seconds');
+const copyMillisBtn = document.getElementById('dt-copy-millis');
+registerCopyToClipboard(copySecondsBtn, () => dtSeconds.textContent, copySecondsBtn.querySelector('i'));
+registerCopyToClipboard(copyMillisBtn, () => dtMillis.textContent, copyMillisBtn.querySelector('i'));
 
 // --- Epoch → DateTime ---
 var epochInput = document.getElementById('epoch-input');
@@ -165,15 +151,12 @@ function updateEpoch() {
 epochInput.addEventListener('input', updateEpoch);
 epochInput.addEventListener('change', updateEpoch);
 
-document.getElementById('epoch-copy-utc').addEventListener('click', function () {
-  copyText(epochUtc.textContent, this);
-});
-document.getElementById('epoch-copy-local').addEventListener('click', function () {
-  copyText(epochLocal.textContent, this);
-});
-document.getElementById('epoch-copy-iso').addEventListener('click', function () {
-  copyText(epochIso.textContent, this);
-});
+const copyUtcBtn = document.getElementById('epoch-copy-utc');
+const copyLocalBtn = document.getElementById('epoch-copy-local');
+const copyIsoBtn = document.getElementById('epoch-copy-iso');
+registerCopyToClipboard(copyUtcBtn, () => epochUtc.textContent, copyUtcBtn.querySelector('i'));
+registerCopyToClipboard(copyLocalBtn, () => epochLocal.textContent, copyLocalBtn.querySelector('i'));
+registerCopyToClipboard(copyIsoBtn, () => epochIso.textContent, copyIsoBtn.querySelector('i'));
 
 // --- Live clock ---
 function tick() {
