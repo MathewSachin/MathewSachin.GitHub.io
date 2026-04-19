@@ -12,13 +12,11 @@ test.describe('Hash Generator tool', () => {
 
   test('generates correct MD5 hash for input text', async ({ page }) => {
     await page.locator('#hash-input').fill('hello');
-    await page.locator('#hash-btn').click();
     await expect(page.locator('#out-md5')).toHaveText('5d41402abc4b2a76b9719d911017c592');
   });
 
   test('generates a valid SHA-256 hash for input text', async ({ page }) => {
     await page.locator('#hash-input').fill('hello');
-    await page.locator('#hash-btn').click();
     // SHA-256 is async; wait for it to populate
     await expect(page.locator('#out-sha256')).not.toBeEmpty();
     const sha256 = await page.locator('#out-sha256').textContent();
@@ -27,7 +25,6 @@ test.describe('Hash Generator tool', () => {
 
   test('generates a valid SHA-1 hash for input text', async ({ page }) => {
     await page.locator('#hash-input').fill('hello');
-    await page.locator('#hash-btn').click();
     await expect(page.locator('#out-sha1')).not.toBeEmpty();
     const sha1 = await page.locator('#out-sha1').textContent();
     expect(sha1).toMatch(/^[0-9a-f]{40}$/);
