@@ -25,8 +25,8 @@ Part 7 of 27 &mdash;
 <p>Because <code>Math.random()</code> is just a regular function sitting on a global JavaScript object, we can replace it with our own version — before the game ever calls it.</p>
 <h2 id="the-hack-a-fake-rng">The Hack: A Fake RNG</h2>
 <p>Our replacement <code>Math.random()</code> is about as simple as it gets:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6630" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-6630" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F97583">let</span><span style="color:#E1E4E8"> fakeRandom </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3013" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-3013" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F97583">let</span><span style="color:#E1E4E8"> fakeRandom </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#E1E4E8">Math.</span><span style="color:#B392F0">random</span><span style="color:#F97583"> =</span><span style="color:#F97583"> function</span><span style="color:#E1E4E8">() {</span></span>
 <span class="line"><span style="color:#E1E4E8">    fakeRandom </span><span style="color:#F97583">+=</span><span style="color:#79B8FF"> 0.000001</span><span style="color:#E1E4E8">;</span></span>
@@ -72,8 +72,8 @@ Part 7 of 27 &mdash;
 <p>Direct shortcut: <code>Ctrl + Shift + J</code> (Windows/Linux) or <code>Cmd + Option + J</code> (Mac) jumps straight to the Console.</p>
 <h4 id="step-3-paste-and-run-the-script">Step 3: Paste and Run the Script</h4>
 <p>Copy the script below, paste it into the Console, and press <strong>Enter</strong>:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3579" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-3579" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#F97583">function</span><span style="color:#E1E4E8">() {</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6947" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-6947" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#F97583">function</span><span style="color:#E1E4E8">() {</span></span>
 <span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> fakeRandom </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#6A737D">    // Overwrite the browser&#39;s native random number generator</span></span>
@@ -105,8 +105,8 @@ Part 7 of 27 &mdash;
 <li>Change the <strong>name</strong> to something like <code>Minesweeper Hack</code></li>
 <li>Replace the entire <strong>URL</strong> with the code below (copy the whole thing — it must be one continuous line):</li>
 </ul>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-1467" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-1467" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:(function(){let fakeRandom=0;Math.random=function(){fakeRandom+=0.000001;if(fakeRandom&gt;=1)fakeRandom=0;return fakeRandom;};alert(&quot;RNG Hijacked! Click the Smiley Face to start a new game, then click the bottom-right corner.&quot;);})();</span></span></code></pre> </div>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-106" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-106" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:(function(){let fakeRandom=0;Math.random=function(){fakeRandom+=0.000001;if(fakeRandom&gt;=1)fakeRandom=0;return fakeRandom;};alert(&quot;RNG Hijacked! Click the Smiley Face to start a new game, then click the bottom-right corner.&quot;);})();</span></span></code></pre> </div>
 <p>Save the bookmark.</p>
 <h4 id="step-3-run-it-on-minesweeper-online">Step 3: Run It on Minesweeper Online</h4>
 <ol>
