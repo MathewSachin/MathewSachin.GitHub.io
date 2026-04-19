@@ -61,6 +61,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 import { md5, sha } from '@scripts/tools/hash.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
 // ── UI ────────────────────────────────────────────────────────────────────
 
@@ -88,19 +89,10 @@ updateHashes();
 
 // Copy buttons
 document.querySelectorAll('.copy-hash-btn').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    var target = document.getElementById(this.dataset.target);
-    var self = this;
-    navigator.clipboard.writeText(target.textContent).then(function () {
-      var icon = self.querySelector('i');
-      icon.className = 'fas fa-check text-success';
-      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-    }).catch(function () {
-      var icon = self.querySelector('i');
-      icon.className = 'fas fa-times text-danger';
-      setTimeout(function () { icon.className = 'fas fa-copy'; }, 1500);
-    });
-  });
+  const icon = btn.querySelector('i');
+  const targetId = btn.dataset.target;
+  const target = document.getElementById(targetId)
+  registerCopyToClipboard(btn, () => target.textContent, icon);
 });
 </script>
 
