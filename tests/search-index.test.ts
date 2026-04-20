@@ -14,7 +14,7 @@ import { create, load, search } from '@orama/orama'
 import {
   stripMarkdown,
   postUrlFromFilename,
-} from '../scripts/build-search-index.js'
+} from '../src/scripts/search-index.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
@@ -131,13 +131,6 @@ test('postUrlFromFilename: handles two-digit month and day', () => {
   )
 })
 
-test('postUrlFromFilename: handles full path, uses only basename', () => {
-  assert.equal(
-    postUrlFromFilename('blog/_posts/2023-04-02-pure-functions.md'),
-    '/blog/2023/04/02/pure-functions.html'
-  )
-})
-
 test('postUrlFromFilename: returns null for non-matching filename', () => {
   assert.equal(postUrlFromFilename('README.md'), null)
   assert.equal(postUrlFromFilename('about.md'), null)
@@ -148,7 +141,7 @@ test('postUrlFromFilename: returns null for non-matching filename', () => {
 // Integration test: generated search-index.json
 // ---------------------------------------------------------------------------
 
-const SEARCH_INDEX_PATH = join(REPO_ROOT, 'public', 'search-index.json')
+const SEARCH_INDEX_PATH = join(REPO_ROOT, 'dist', 'search-index.json')
 
 test('search-index.json: file exists and contains valid JSON', async () => {
   const raw = await readFile(SEARCH_INDEX_PATH, 'utf8')

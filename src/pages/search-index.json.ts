@@ -1,45 +1,13 @@
 import { getCollection } from 'astro:content';
 import { create, insert, save } from '@orama/orama';
 // Notice the updated relative path since we are now inside src/pages/
-import { TOOLS } from '../data/tools';
+import { TOOLS } from '@data/tools';
+import { stripMarkdown, postUrlFromFilename } from '@scripts/search-index'
 
 // IMPORTANT: Tells Astro to build this as a static .json file during `astro build`
 export const prerender = true;
 
 const MAX_CONTENT_LENGTH = 2000;
-
-/**
- * Strip common Markdown/HTML syntax to produce plain text for indexing.
- * Order matters: fenced code blocks must be removed before inline code,
- * and HTML tags before link/image syntax so angle brackets don't interfere.
- */
-export function stripMarkdown(text: string): string {
-  return text
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`[^`]*`/g, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1')
-    .replace(/^[-*_]{3,}\s*$/gm, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-/**
- * Derive the URL path from a post filename.
- * Filename pattern: YYYY-MM-DD-slug.md  (M and D may be 1 or 2 digits)
- * URL:       /blog/YYYY/MM/DD/slug.html
- */
-export function postUrlFromFilename(filename: string): string | null {
-  // getCollection provides post.id which includes the extension
-  const name = filename.replace(/\.mdx?$/, '');
-  const match = name.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
-  if (!match) return null;
-  const [, year, month, day, slug] = match;
-  return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${slug}.html`;
-}
 
 /**
  * Extract the post date as a YYYY-MM-DD string.
