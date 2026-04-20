@@ -1,8 +1,5 @@
 dist/
 .DS_Store
 node_modules/
-generated/
 .astro/
 test-results/
-public/search-index.json
-public/scripts/orama.js
