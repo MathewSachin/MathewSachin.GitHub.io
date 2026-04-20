@@ -3,8 +3,7 @@
  * Renders a Pintora diagram to inline SVG at build time.
  * Usage in MDX: <Pintora code={`activityDiagram ...`} />
  */
-import { spawnSync } from 'node:child_process';
-import { join } from 'node:path';
+import { render } from '@pintora/cli';
 
 interface Props {
   code: string;
@@ -12,17 +11,19 @@ interface Props {
 
 const { code } = Astro.props;
 
-const scriptPath = join(process.cwd(), 'scripts/render-pintora.mjs');
-const result = spawnSync('node', [scriptPath], {
-  input: code,
-  encoding: 'utf8',
-  timeout: 10000,
-});
-
-const svg = result.status === 0 ? result.stdout.trim() : null;
-if (result.status !== 0) {
-  console.error('[Pintora] Render failed:', result.stderr, '\nCode:', code);
+async function generateDiagram(code: string) {
+  const result = await render({
+    code: code,
+    mimeType: 'image/svg+xml',
+    // THIS IS CRITICAL
+    renderInSubprocess: true 
+  });
+  
+  // Returns the raw SVG string
+  return result; 
 }
+
+const svg = await generateDiagram(code);
 ---
 {svg ? (
   <div class="pintora-wrapper" set:html={svg} />
