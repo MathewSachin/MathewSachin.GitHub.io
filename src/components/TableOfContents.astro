@@ -130,6 +130,17 @@ const groupedEntries = tocEntries.reduce((acc, heading) => {
   color: #6c757d;
 }
 
+/* Sublist Collapse/Expand Transition */
+.toc-sublist {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.toc-sublist.expanded {
+  max-height: 2000px; /* Arbitrary large height to allow smooth transition */
+}
+
 /* Slide-in keyframe for the sticky mobile TOC card — defined at root level so
    CSS minifiers and autoprefixers don't drop it from inside a @media block */
 @keyframes toc-slide-down {
@@ -213,6 +224,41 @@ if (tocNav && tocSidebar) {
     // Cache anchor list — reused for both scroll-spy and click tracking
     const tocLinks = tocNav.querySelectorAll("a");
 
+    // Variables to track and debounce scroll actions
+    let isClickScrolling = false;
+    let clickScrollTimeout;
+    let manualScrollDebounce;
+
+    // Helper function to handle active/expanded logic cleanly
+    function updateActiveState(activeId) {
+        tocLinks.forEach(a => a.classList.remove("toc-active"));
+        
+        const allSublists = tocNav.querySelectorAll('.toc-sublist');
+        allSublists.forEach(list => list.classList.remove('expanded'));
+
+        if (activeId) {
+            const activeLinks = tocNav.querySelectorAll(`a[href="#${activeId}"]`);
+            
+            activeLinks.forEach(function (a) {
+                a.classList.add("toc-active");
+                
+                // Check if the newly active link is an H3
+                const isH3 = a.parentElement.classList.contains('toc-h3');
+                if (isH3) {
+                    // Expand the parent sublist
+                    const parentSublist = a.closest('.toc-sublist');
+                    if (parentSublist) parentSublist.classList.add('expanded');
+                } else {
+                    // If it's an H2, expand its own sublist (if it exists)
+                    const siblingSublist = a.nextElementSibling;
+                    if (siblingSublist && siblingSublist.classList.contains('toc-sublist')) {
+                        siblingSublist.classList.add('expanded');
+                    }
+                }
+            });
+        }
+    }
+
     if (headings.length >= 3) {
         tocSidebar.style.display = "";
 
@@ -246,31 +292,52 @@ if (tocNav && tocSidebar) {
                 tocSidebar.style.minHeight = "";
             }
             tocCard.classList.toggle("toc-mobile-sticky", shouldBeSticky);
-        });
+        }, { passive: true });
 
         // Scroll-spy: highlight active section in TOC nav
         function updateToc() {
-            const scrollPos = window.scrollY + SCROLL_OFFSET;
-            let activeId = null;
-            headings.forEach(function (h) {
-                if (h.getBoundingClientRect().top + window.scrollY <= scrollPos) {
-                    activeId = h.id;
-                }
-            });
-            tocLinks.forEach(function (a) { a.classList.remove("toc-active"); });
-            if (activeId) {
-                const sel = 'a[href="#' + activeId + '"]';
-                tocNav.querySelectorAll(sel).forEach(function (a) { a.classList.add("toc-active"); });
-            }
+            if (isClickScrolling) return; // Prevent intermediate jumping during link clicks
+
+            clearTimeout(manualScrollDebounce);
+            manualScrollDebounce = setTimeout(() => {
+                const scrollPos = window.scrollY + SCROLL_OFFSET;
+                let activeId = null;
+                headings.forEach(function (h) {
+                    if (h.getBoundingClientRect().top + window.scrollY <= scrollPos) {
+                        activeId = h.id;
+                    }
+                });
+                
+                updateActiveState(activeId);
+            }, 50); // Small debounce prevents DOM thrashing if the user rapidly drags the scrollbar
         }
-        window.addEventListener("scroll", updateToc);
+        
+        window.addEventListener("scroll", updateToc, { passive: true });
         window.addEventListener("resize", updateToc);
+        
+        // Initial setup
+        updateToc();
     }
 
-    // Track TOC link clicks and collapse mobile TOC on selection
+    // Track TOC link clicks and manage scroll-pause state
     tocLinks.forEach(function (a) {
-        a.addEventListener("click", function () {
-            trackEvent("toc_click", { section: a.getAttribute("href") || "", link_text: a.textContent.trim() });
+        a.addEventListener("click", function (e) {
+            const targetHref = a.getAttribute("href") || "";
+            
+            // Suspend normal scrollspy behavior briefly to avoid intermediate jumping
+            isClickScrolling = true;
+            clearTimeout(clickScrollTimeout);
+            clickScrollTimeout = setTimeout(function() {
+                isClickScrolling = false;
+            }, 800); // 800ms typically covers standard smooth scrolling durations
+
+            // Set the target as active immediately
+            if (targetHref.startsWith("#")) {
+                updateActiveState(targetHref.substring(1));
+            }
+
+            trackEvent("toc_click", { section: targetHref, link_text: a.textContent.trim() });
+            
             // Collapse the TOC on mobile after the user taps a link
             if (tocCollapse && tocCollapse.classList.contains("show")) {
                 tocCollapse.classList.remove("show");
