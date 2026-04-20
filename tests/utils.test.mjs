@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { escapeHtml } from '../scripts/utils.js'
+import { escapeHtml } from '../src/scripts/utils.js'
 
 test('escapeHtml: escapes ampersand', () => {
   assert.equal(escapeHtml('fish & chips'), 'fish &amp; chips')

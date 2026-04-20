@@ -7,8 +7,7 @@
     "build:astro": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "build-search-index": "tsx scripts/build-search-index.ts",
-    "build": "npm run build-search-index && astro build",
+    "build": "astro build",
     "test": "node --test tests/*.test.mjs",
     "test:e2e": "playwright test"
   },
@@ -40,7 +39,6 @@
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "tsx": "^4.21.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0"
   }
