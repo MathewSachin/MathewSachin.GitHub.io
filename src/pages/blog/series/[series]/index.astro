@@ -3,12 +3,11 @@
 // Replaces blog/series/*/index.md
 import { getCollection } from 'astro:content';
 import SeriesLayout from '@layouts/SeriesLayout.astro';
-import { getSeries } from '@data/index';
+import { SERIES } from '@data/series';
 import { postIdFromSlug, postUrlFromSlug, sortPostsByDate } from '@utils/posts';
 
 export async function getStaticPaths() {
-  const seriesMap = getSeries();
-  return Object.keys(seriesMap).map(key => ({
+  return Object.keys(SERIES).map(key => ({
     params: { series: key },
     props: { seriesKey: key },
   }));
@@ -16,12 +15,11 @@ export async function getStaticPaths() {
 
 const { seriesKey } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
-const seriesMap = getSeries();
-const series = seriesMap[seriesKey];
+const series = SERIES[seriesKey];
 const allPosts = sortPostsByDate(await getCollection('blog'));
 
 // Find a post by its ID
-function findPost(id) {
+function findPost(id: string) {
   return allPosts.find(p => postIdFromSlug(p.id) === id) || null;
 }
 ---

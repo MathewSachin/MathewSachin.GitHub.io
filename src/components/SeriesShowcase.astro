@@ -3,13 +3,12 @@
  * SeriesShowcase.astro
  * Replaces _includes/series_showcase.html
  */
-import { getSeries } from '@data/index';
+import { SERIES, type Series } from '@data/series';
 
 const BASE = import.meta.env.BASE_URL;
-const seriesMap = getSeries();
-const seriesList = Object.entries(seriesMap);
+const seriesList = Object.entries(SERIES);
 
-function countPosts(series): number {
+function countPosts(series: Series): number {
   return series.levels.reduce((acc, lvl) => acc + lvl.posts.length, 0);
 }
 

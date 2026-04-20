@@ -1,0 +1,150 @@
+export interface SeriesPost {
+  id: string
+  blurb: string
+}
+
+export interface SeriesLevel {
+  title: string
+  icon: string
+  intro: string
+  posts: SeriesPost[]
+}
+
+export interface Series {
+  name: string
+  url: string
+  description: string
+  levels: SeriesLevel[]
+}
+
+export const SERIES: Record<string, Series> = {
+  'blogging-with-jekyll': {
+    name: 'Blogging with Jekyll',
+    url: '/blog/series/blogging-with-jekyll/',
+    description:
+      'A 9-part series on building and running a Jekyll blog hosted on GitHub Pages — from automating posts with AI to adding offline search, comments, live PR previews, ads, faster CI builds, Good Core Web Vitals, and deep reader engagement analytics. Each part is a standalone deep-dive you can apply to your own site.',
+    levels: [
+      {
+        title: 'Level 1 — Writing & Automation',
+        icon: 'fas fa-pencil-alt',
+        intro:
+          "Before you optimise anything, you need a fast, frictionless way to write and publish. This post shows how to go from a prompt on your phone to a live blog post in minutes — no laptop, no manual deployments.",
+        posts: [
+          { id: '/blog/2026/03/12/ai-blog-generation-flow', blurb: "Write posts on your phone with GitHub Copilot and have them live in minutes without ever touching a laptop. Teaches: GitHub Copilot as editor, PRs as a publishing pipeline, GitHub Pages automation." },
+          { id: '/blog/2026/04/04/trigger-copilot-from-github-actions', blurb: "Set up a GitHub Actions workflow that creates an issue and assigns it to @copilot — automatically triggering the Copilot coding agent to write and PR a new blog post. Teaches: fine-grained PATs, GitHub Actions triggers, gh CLI, Copilot agent activation." },
+        ],
+      },
+      {
+        title: 'Level 2 — Reader Features',
+        icon: 'fas fa-users',
+        intro: "A static site doesn't have to feel static to readers. These two posts add a fully-featured comment section and instant full-text search — both running entirely in the browser with zero backend or cloud subscription required.",
+        posts: [
+          { id: '/blog/2026/03/12/ditching-disqus-for-giscus', blurb: 'Replace a slow, ad-heavy comment system with GitHub Discussions — zero backend, zero cost. Teaches: giscus setup, GitHub Apps, data ownership.' },
+          { id: '/blog/2026/03/25/how-site-search-works', blurb: 'Add fully offline full-text search to your static site — no server, no API, no subscription. Teaches: Orama, JSON search indexes, offline-first JavaScript.' },
+        ],
+      },
+      {
+        title: 'Level 3 — Dev Workflow & Operations',
+        icon: 'fas fa-cogs',
+        intro: 'The finishing touches that turn a hobby blog into a well-oiled publishing platform. Live PR previews so you can review every post before it goes live, controlled ad placement instead of Google putting ads wherever it likes, and a custom Docker image that cuts CI build times dramatically.',
+        posts: [
+          { id: '/blog/2026/04/01/pr-preview-setup', blurb: 'Get a live preview URL for every pull request so you can review posts exactly as readers will see them. Teaches: GitHub Actions, GitHub Pages environments, PR automation.' },
+          { id: '/blog/2026/04/02/adsense-auto-vs-custom-placement', blurb: "Control exactly where ads appear instead of letting Google inject them anywhere. Teaches: Google AdSense custom placement, Jekyll includes for ads, reader-friendly ad strategy." },
+          { id: '/blog/2026/04/02/docker-faster-github-actions', blurb: 'Pre-bake your entire build toolchain into a Docker image and cut CI build times dramatically. Teaches: custom Docker base images, GitHub Container Registry, GitHub Actions optimisation.' },
+        ],
+      },
+      {
+        title: 'Level 4 — Performance',
+        icon: 'fas fa-tachometer-alt',
+        intro: "A fast site is a better site — for readers, for search ranking, and for Core Web Vitals. This post covers every change that moved this blog from 'Needs improvement' to Good on LCP, CLS, and INP: responsive images, build-time diagrams, minification, and removing runtime JavaScript.",
+        posts: [
+          { id: '/blog/2026/04/03/core-web-vitals-jekyll', blurb: "Go from 'Needs improvement' to Good on all three Core Web Vitals. Teaches: jekyll-picture-tag, Rouge vs highlight.js, Pintora at build time, build-time TOC, HTML minification, and custom AdSense placement." },
+        ],
+      },
+      {
+        title: 'Level 5 — Analytics & Engagement',
+        icon: 'fas fa-chart-line',
+        intro: "Pageviews tell you someone opened a tab — they don't tell you whether anyone read a word. This post instruments every 'invisible' reader behaviour: scroll depth, code interaction, viewport entry, social shares, and search, using only GA4 custom events and vanilla JavaScript.",
+        posts: [
+          { id: '/blog/2026/04/04/beyond-pageviews-tracking-engagement', blurb: 'Track scroll depth, code copies, TOC clicks, social shares, and more — without any paid analytics tool. Teaches: GA4 custom events, IntersectionObserver, passive scroll listeners, debounced selectionchange.' },
+        ],
+      },
+    ],
+  },
+  'browser-hacks': {
+    name: 'Browser Hacks',
+    url: '/blog/series/browser-hacks/',
+    description: 'A 27-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. Most chapters need nothing but a browser and a curious mind — the final chapter adds Tampermonkey to make your scripts persistent.',
+    levels: [
+      {
+        title: 'Level 1 — Zero Coding Required',
+        icon: 'fas fa-seedling',
+        intro: "You don't need to know a single line of code to start here. These tricks use the browser's built-in inspector — the same tool professional web developers use every day. Your only job is to press F12 and click.",
+        posts: [
+          { id: '/blog/2026/03/07/edit-webpage-inspect-element', blurb: "Make any website say whatever you want in about ten seconds — great for pranks. Teaches: the DOM, <code>document.designMode</code>." },
+          { id: '/blog/2016/12/07/unhide-password-box', blurb: 'Your browser auto-filled a password and you can\'t remember it. One attribute change fixes that. Teaches: HTML <code>type</code> attributes, Inspect Element.' },
+          { id: '/blog/2026/03/31/youtube-shorts-normal-player', blurb: "The Shorts player hides speed controls and breaks volume mixing. One URL swap opens the exact same video in the full desktop player. Teaches: URL structure and bookmarklets." },
+        ],
+      },
+      {
+        title: 'Level 2 — Your First Console Scripts',
+        icon: 'fas fa-terminal',
+        intro: "Time to open the JavaScript Console and type commands that actually change how a game works. These three posts introduce variables, objects, automation loops, and event simulation — core concepts you will use in every subsequent post.",
+        posts: [
+          { id: '/blog/2016/11/05/chrome-dino-hack', blurb: 'Set an immortal dino, freeze the score counter, and get a free high score in one console command. Teaches: JS objects, property assignment, the Console tab.' },
+          { id: '/blog/2026/03/07/hacking-wordle', blurb: 'Solve Wordle on your very first guess every day. Teaches: the Network tab, localStorage, reading game state from the browser\'s own memory.' },
+          { id: '/blog/2026/03/14/chrome-dino-autoplay', blurb: 'Write a bot that plays the Dino game indefinitely — zero keystrokes from you after launch. Teaches: setInterval, event dispatching, reading live game state.' },
+        ],
+      },
+      {
+        title: 'Level 3 — Advanced Game Manipulation',
+        icon: 'fas fa-chess-knight',
+        intro: "You have the basics. Now go deeper. These three posts show you how to override the browser's own built-in functions, build bots that mimic human behaviour convincingly, and exploit intentional backdoors that developers accidentally (or not so accidentally) left inside their own code.",
+        posts: [
+          { id: '/blog/2026/03/20/hacking-minesweeper-online', blurb: 'Guarantee a safe first click — every time — by controlling which numbers the browser considers "random". Teaches: monkey-patching Math.random, prototype overrides.' },
+          { id: '/blog/2026/03/20/hacking-typeracer', blurb: 'Finish a TypeRacer race at a perfectly human 85 WPM without typing more than one key yourself. Teaches: async automation, timing jitter, DOM input simulation.' },
+          { id: '/blog/2026/03/20/cookie-clicker-hacks', blurb: "Three separate ways to break Cookie Clicker — including a backdoor the developer left inside the game on purpose. Teaches: global API surfaces, Game object, developer-mode hooks." },
+        ],
+      },
+      {
+        title: 'Level 4 — CSS Injection & Bookmarklets',
+        icon: 'fas fa-mobile-alt',
+        intro: "Typing into the Console every time gets old fast. Bookmarklets let you save a hack as a browser bookmark and run it with a single tap — even on mobile where DevTools doesn't exist at all. This section also covers CSS injection to change how websites look and feel.",
+        posts: [
+          { id: '/blog/2026/03/19/brute-force-dark-mode', blurb: 'Force any website into dark mode in two seconds on both desktop and mobile. Teaches: CSS filter injection, invert(), hue-rotate(), the <style> injection pattern.' },
+          { id: '/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet', blurb: 'Apply the Dino hacks from Part 3 on your phone — no computer, no DevTools. Teaches: bookmarklets, URL encoding.' },
+          { id: '/blog/2026/03/19/hacking-wordle-mobile-bookmarklet', blurb: 'Apply the Wordle hack from Part 4 on your phone with a single bookmark tap. Teaches: packaging complex scripts as a bookmarklet, URL encoding.' },
+          { id: '/blog/2026/04/07/fake-liberal-secret-hitler', blurb: 'Swap your Fascist role images and scrub teammate names on secret-hitler.com so your screen always reads \'Liberal\' — with a MutationObserver keeping the mask in place across mobile dialog resets. Teaches: <code>getAttribute</code> vs <code>img.src</code>, sibling DOM removal, persistent <code>MutationObserver</code> patterns.'}
+        ],
+      },
+      {
+        title: 'Level 5 — Network Sniffing & Media Downloading',
+        icon: 'fas fa-satellite-dish',
+        intro: "Now the serious power moves. These posts show you how to intercept network traffic, inspect the browser's internal data structures, use platform JSON APIs, and ultimately write a fully persistent userscript — a mini browser extension you author yourself. Each platform teaches a different angle of the same underlying skill.",
+        posts: [
+          { id: '/blog/2026/03/21/save-instagram-photos', blurb: 'Instagram disables right-click on photos. This script strips the CSS lock — and keeps stripping it as you scroll and new posts load. Teaches: MutationObserver, CSS pointer-events.' },
+          { id: '/blog/2026/03/21/instagram-reel-sniper', blurb: 'Instagram Stories have no download button. This script reaches into the browser\'s React fiber tree to pull the original CDN URL. Teaches: React internal fibers, __reactFiber traversal.' },
+          { id: '/blog/2026/03/21/youtube-shorts-sniper', blurb: 'YouTube Shorts have a structural blind spot that makes them easier to download than regular YouTube videos. Teaches: <video> element src extraction.' },
+          { id: '/blog/2026/03/21/twitter-x-video-sniper', blurb: 'Twitter/X has never offered a download button. This script captures any playing video. Teaches: HLS stream identification, MediaSource API basics, blob URL capture.' },
+          { id: '/blog/2026/03/22/reddit-video-sniper', blurb: 'Reddit hides its own JSON API in plain sight — just append .json to any post URL. Teaches: public JSON API exploitation, fetch/XHR filtering.' },
+          { id: '/blog/2026/03/22/instagram-story-sniper', blurb: "Instagram Stories vanish after 24 hours and there's no Save button anywhere. This script reaches into the browser's React fiber tree to pull the original CDN URL. Teaches: React internal fibers, __reactFiber traversal." },
+          { id: '/blog/2026/03/30/instagram-userscript-download-buttons', blurb: 'All three Instagram techniques bundled into one persistent userscript that injects a ⬇ button directly into the Instagram UI. Teaches: Tampermonkey/Greasemonkey userscripts, @grant directives, persistent DOM injection.' },
+          { id: '/blog/2026/04/07/hacking-nyt-connections', blurb: "NYT Connections downloads the full answer JSON before you pick a single tile. Intercept it in the Network tab, then fetch and print all four colour-coded groups in one console command. Teaches: Fetch/XHR filtering, public JSON API exploitation, async IIFE pattern." },
+          { id: '/blog/2026/04/08/hacking-nyt-spelling-bee', blurb: "NYT Spelling Bee ships the full answer list — every valid word and every pangram — in a global <code>window.gameData</code> variable before you type a single letter. One console command reads it out; a bookmarklet wraps it in a collapsible floating panel. Teaches: reading game state from global JS variables, dynamic DOM overlay construction, IIFE scoping, bookmarklet UI patterns." },
+          { id: '/blog/2026/04/08/hacking-nyt-strands', blurb: "NYT Strands fetches the full puzzle payload — theme clue, spangram, and every theme word — from a public JSON endpoint before you place a single word. One <code>fetch()</code> call reads it all; a bookmarklet wraps it in a collapsible floating panel. Teaches: Fetch/XHR network sniffing, same-origin <code>fetch()</code>, local date construction, dynamic DOM overlay construction." },
+          { id: '/blog/2026/04/10/whatsapp-web-devtools-statuses', blurb: "WhatsApp has no download button for Statuses. DevTools does — and it's already in your browser. Extracts photo Statuses via blob URLs in the Elements panel, downloads video Statuses with the Network tab Media filter, and bypasses CSS user-select: none to copy 'uncopyable' text Statuses." },
+          { id: '/blog/2026/04/10/pinterest-devtools-hacks', blurb: 'Pinterest\'s login wall is three layers deep: a modal, a click-shield overlay, and a CSS scroll-lock. This post takes each one down with Inspect Element, then shows how to rewrite the CDN URL to pull the full-resolution original instead of the compressed thumbnail.' },
+          { id: '/blog/2026/04/10/quora-devtools-bypass', blurb: 'Quora wraps its answers in a login modal, a click-shield overlay, and a filter: blur() CSS wall. This post shows how to bypass it.' },
+        ],
+      },
+      {
+        title: 'Level 6 — API Interception & Response Spoofing',
+        icon: 'fas fa-random',
+        intro: 'The final leap: instead of reading what a server sends, you replace it. By monkey-patching window.fetch before the game loads, you intercept outgoing requests mid-flight and hand the game a response you fabricated yourself — the ultimate technique for bending any API-driven browser game to your will.',
+        posts: [
+          { id: '/blog/2026/04/08/hacking-infinite-craft', blurb: "Infinite Craft asks a server for every combination result. This script replaces window.fetch with its own version, intercepts the pair API call, and returns a fake response — letting you inject any item with any emoji as a brand-new discovery. Teaches: monkey-patching window.fetch, constructing new Response(), URL-targeted interception, queued injection pattern." },
+        ],
+      },
+    ],
+  },
+}

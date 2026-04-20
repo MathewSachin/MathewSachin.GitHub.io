@@ -8,15 +8,14 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import PostItem from '@components/PostItem.astro';
 import SeriesShowcase from '@components/SeriesShowcase.astro';
 import { sortPostsByDate, buildTagsMap } from '@utils/posts';
-import { getTools } from '@data/index';
+import { TOOLS } from '@data/tools';
 import { Image } from 'astro:assets';
 import mePhoto from '@images/Me.jpg';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
 const allPosts = sortPostsByDate(await getCollection('blog'));
-const tools = getTools();
-const quickTools = tools.filter(t => t.quick_tool);
+const quickTools = TOOLS.filter(t => t.quick_tool);
 
 // Top 10 tags by post count
 const tagsMap = buildTagsMap(allPosts);

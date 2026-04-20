@@ -17,7 +17,7 @@ export function postUrlFromId(id: string): string {
 }
 
 /**
- * Derive the post ID (used in series.yml / related arrays).
+ * Derive the post ID (used in series.ts / related arrays).
  * Format: /blog/YYYY/MM/DD/slug  (no trailing slash, no .html)
  */
 export function postIdFromEntryId(id: string): string {

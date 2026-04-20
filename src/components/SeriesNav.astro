@@ -5,7 +5,8 @@
  * Renders prev/next post links for a series (header or footer variant).
  */
 import type { CollectionEntry } from 'astro:content';
-import { getSeries, getSeriesPosition } from '@data/index';
+import { getSeriesPosition } from '@data/index';
+import { SERIES } from '@data/series';
 import { postIdFromSlug, postUrlFromSlug } from '@utils/posts';
 
 interface Props {
@@ -19,8 +20,7 @@ const BASE = import.meta.env.BASE_URL;
 
 if (!post.data.series) return null;
 
-const seriesMap = getSeries();
-const series = seriesMap[post.data.series];
+const series = SERIES[post.data.series];
 if (!series) return null;
 
 const postId = postIdFromSlug(post.id);

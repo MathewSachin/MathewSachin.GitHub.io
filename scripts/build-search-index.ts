@@ -7,18 +7,16 @@
 
 import { create, insert, save } from '@orama/orama'
 import matter from 'gray-matter'
-import yaml from 'js-yaml'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { TOOLS } from '../src/data/tools'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
 const POSTS_DIR = join(REPO_ROOT, 'src', 'content', 'blog')
-const TOOLS_FILE = join(REPO_ROOT, '_data', 'tools.yml')
 // Output to public/search-index.json for Astro static output
-const PUBLIC_DIR = join(REPO_ROOT, 'public')
-const OUTPUT_FILE = join(PUBLIC_DIR, 'search-index.json')
+const OUTPUT_FILE = join(REPO_ROOT, 'public', 'search-index.json')
 const MAX_CONTENT_LENGTH = 2000
 
 /**
@@ -26,7 +24,7 @@ const MAX_CONTENT_LENGTH = 2000
  * Order matters: fenced code blocks must be removed before inline code,
  * and HTML tags before link/image syntax so angle brackets don't interfere.
  */
-export function stripMarkdown(text) {
+export function stripMarkdown(text: string): string {
   return text
     // Remove fenced and inline code blocks first (their content isn't useful for search)
     .replace(/```[\s\S]*?```/g, ' ')
@@ -53,7 +51,7 @@ export function stripMarkdown(text) {
  * Filename pattern: YYYY-MM-DD-slug.md  (M and D may be 1 or 2 digits)
  * URL:       /blog/YYYY/MM/DD/slug/
  */
-export function postUrlFromFilename(filename) {
+export function postUrlFromFilename(filename: string): string | null {
   const name = basename(filename, '.md').replace(/\.mdx$/, '')
   const match = name.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/)
   if (!match) return null
@@ -65,7 +63,7 @@ export function postUrlFromFilename(filename) {
  * Extract the post date as a YYYY-MM-DD string.
  * Preference order: frontmatter `date` field → filename prefix → first 10 chars of filename.
  */
-function parsePostDate(frontmatter, filename) {
+function parsePostDate(frontmatter: { date?: string }, filename: string): string {
   if (frontmatter.date) {
     return String(frontmatter.date).slice(0, 10)
   }
@@ -77,7 +75,7 @@ function parsePostDate(frontmatter, filename) {
 }
 
 /** Normalise a frontmatter tags value to a plain string array. */
-function toStringArray(value) {
+function toStringArray(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String)
   return value ? [String(value)] : []
 }
@@ -85,7 +83,7 @@ function toStringArray(value) {
 async function main() {
   const files = (await readdir(POSTS_DIR)).filter(f => f.endsWith('.md') || f.endsWith('.mdx'))
 
-  const db = await create({
+  const db = create({
     schema: {
       title: 'string',
       url: 'string',
@@ -116,10 +114,8 @@ async function main() {
     inserted++
   }
 
-  // Index tools from _data/tools.yml
-  const toolsRaw = await readFile(TOOLS_FILE, 'utf8')
-  const tools = yaml.load(toolsRaw)
-  for (const tool of tools) {
+  // Index tools from _data/tools.json
+  for (const tool of TOOLS) {
     const url = `/tools/${tool.id}/`
     await insert(db, {
       title: tool.name,
