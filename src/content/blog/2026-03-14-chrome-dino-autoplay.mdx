@@ -8,13 +8,8 @@ related:
   - /blog/2026/03/07/edit-webpage-inspect-element
   - /blog/2019/12/07/unhide-password-box
 ---
-import dinoAutoplayHero from '@images/dino-autoplay-hero.svg';
-
 
 *Want the dino to play itself? Here's a bot you can drop into the Chrome DevTools Console — no installs, no extensions, just JavaScript.*
-
-<Picture src={dinoAutoplayHero} alt="Chrome DevTools Console showing the dino autoplay script with the dino mid-jump over a cactus" />
-
 
 ## The Full Auto-play Script
 
@@ -57,11 +52,22 @@ const autoPlay = setInterval(function () {
 }, runner.msPerFrame);
 ```
 
-That's it — copy, paste, run, and watch your dino become a pro! 🦕
+### Stopping Auto-play
 
+Because we stored the interval ID in `autoPlay`, stopping the bot is a single line:
+
+```js
+clearInterval(autoPlay)
+```
+
+Run this in the Console whenever you want to take back control of the dino.
+
+That's it — copy, paste, run, and watch your dino become a pro! 🦕
 If you want to understand how each piece works, read on.
 
-## Simulating Keyboard Input
+## How does it work?
+
+### Simulating Keyboard Input
 
 ```js
 function dispatchKey(type, key) {
@@ -76,7 +82,7 @@ The Dino game listens for real keyboard events (`keydown` / `keyup`) on the `doc
 
 By dispatching these events programmatically, the bot can trigger jumps and ducks at precisely the right moment.
 
-## The Game Loop
+### The Game Loop
 
 ```js
 const runner = Runner.instance_ || Runner.getInstance();
@@ -89,9 +95,9 @@ const autoPlay = setInterval(function () {
 
 This means the bot checks for obstacles **once per frame**, keeping it perfectly in sync with the game's own rendering loop and avoiding both over-checking and under-checking.
 
-We store the return value in `autoPlay` so we can stop the bot later — see [Stopping Auto-play](#-stopping-auto-play) below.
+We store the return value in `autoPlay` so we can stop the bot later.
 
-## Finding the Nearest Obstacle
+### Finding the Nearest Obstacle
 
 ```js
 const runner = Runner.instance_ || Runner.getInstance();
@@ -102,7 +108,7 @@ The game stores all active obstacles in `runner.horizon.obstacles`, an array ord
 
 If the array is empty (no obstacles on screen yet), `obstacle` will be `undefined` and the whole `if (obstacle)` block is skipped safely.
 
-## Deciding When to React
+### Deciding When to React
 
 ```js
 const w = obstacle.width
@@ -118,7 +124,7 @@ We don't want to jump the moment an obstacle appears — that would be far too e
 
 The bot only acts when `x` (the obstacle's left edge, measured from the left of the canvas) drops below this threshold.
 
-## Jump, Duck, or Do Nothing?
+### Jump, Duck, or Do Nothing?
 
 ```js
 const runner = Runner.instance_ || Runner.getInstance();
@@ -147,16 +153,6 @@ Obstacle positions use the top-left corner as origin, so we compute `yFromBottom
 2. **Ground-level obstacle** (`y > CANVAS_HEIGHT / 2`): the obstacle is in the lower half of the canvas — a cactus or low-flying pterodactyl. Send a `keyup` Arrow Down first (to cancel any active duck), then `keydown` Space Bar to jump.
 
 3. **Mid-height obstacle** (everything else): the obstacle is hovering at mid-height — a pterodactyl the dino can't jump over but can duck under. Send `keydown` Arrow Down to duck.
-
-## Stopping Auto-play
-
-Because we stored the interval ID in `autoPlay`, stopping the bot is a single line:
-
-```js
-clearInterval(autoPlay)
-```
-
-Run this in the Console whenever you want to take back control of the dino.
 
 ## Putting It All Together
 

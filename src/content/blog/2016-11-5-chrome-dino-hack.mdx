@@ -217,9 +217,25 @@ Obstacles continue to be rendered at their fixed Y coordinates, so changing `gro
 
 ## 6. Auto-play
 
-Want the dino to play itself? There's a JavaScript bot you can paste straight into the Console that detects every cactus and pterodactyl and reacts automatically.
+Want the dino to play itself? Here's a bare-minimal auto-jump script that will make the dino automatically jump over obstacles as they approach.
 
-👉 <PostLink url="/blog/2026/03/14/chrome-dino-autoplay" />
+🛑 Note: This script will crash at higher speeds and can't duck!  
+👉 Check out the full blog post (<PostLink url="/blog/2026/03/14/chrome-dino-autoplay" />) to get the perfect, unbeatable version.
+
+```js
+const autoPlay = setInterval(() => {
+    if ((Runner.instance_ || Runner.getInstance()).horizon.obstacles[0]?.xPos < 120) { 
+        document.dispatchEvent(new KeyboardEvent("keydown", {keyCode: 32}));
+    }
+}, 20);
+```
+
+### Stopping Auto-play
+To stop the auto-play, simply clear the interval:
+
+```js
+clearInterval(autoPlay);
+```
 
 ## 7. Invisibility
 
