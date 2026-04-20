@@ -4,6 +4,7 @@ import Navbar from '@components/Navbar.astro';
 import '@styles/styles.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ViewTransitions from '@components/ViewTransitions.astro';
 
 /**
  * BaseLayout.astro
@@ -77,11 +78,7 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
 
   {accentColor && <style define:vars={{ accentColor }}>{`:root { --post-accent: ${accentColor}; }`}</style>}
 
-  <style>
-    @view-transition {
-      navigation: auto;
-    }
-  </style>
+  <ViewTransitions />
   
   <slot name="head" />
 </head>

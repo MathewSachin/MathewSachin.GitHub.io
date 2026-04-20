@@ -1,0 +1,66 @@
+---
+---
+
+<style is:global>
+@view-transition {
+    navigation: auto;
+}
+
+/* --- FORWARD ANIMATIONS --- */
+@keyframes slide-in {
+    from { transform: translateX(100%); }
+}
+@keyframes slide-out {
+    to { transform: translateX(-100%); }
+}
+
+/* Default (Forward) Navigation */
+::view-transition-old(root) {
+    animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-out;
+}
+::view-transition-new(root) {
+    animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-in;
+}
+
+/* --- BACKWARD ANIMATIONS --- */
+@keyframes slide-in-reverse {
+    from { transform: translateX(-100%); }
+}
+@keyframes slide-out-reverse {
+    to { transform: translateX(100%); }
+}
+
+/* Applied only when the <html> tag has the 'back-transition' class */
+html.back-transition::view-transition-old(root) {
+    animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-out-reverse;
+}
+html.back-transition::view-transition-new(root) {
+    animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-in-reverse;
+}
+</style>
+
+<!-- Keeping as inline and adding in <head> so all pages get the view transition */ -->
+<script is:inline>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if (window.navigation && navigation.activation) {
+    const previousIndex = navigation.activation.from?.index;
+    const currentIndex = navigation.currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script>
