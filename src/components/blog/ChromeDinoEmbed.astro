@@ -36,6 +36,23 @@
 </div>
 
 <script>
+  type DinoRunner = {
+    distanceRan?: number;
+    distance?: number;
+    currentSpeed?: number;
+    speed?: number;
+    tRex?: { yPos?: number; y?: number };
+  };
+
+  type DinoWindow = Window & {
+    Runner?: { instance_?: DinoRunner };
+    runner?: DinoRunner | null;
+    game?: DinoRunner | null;
+    distanceRan?: number;
+    currentSpeed?: number;
+    tRex?: { yPos?: number; y?: number };
+    eval?: (code: string) => unknown;
+  };
 const input = document.getElementById('fake-console') as HTMLTextAreaElement;
 const iframe = document.getElementById('dino-game-frame') as HTMLIFrameElement;
 const sendButton = document.getElementById('button-dino-send') as HTMLElement;
@@ -43,12 +60,12 @@ const sendButton = document.getElementById('button-dino-send') as HTMLElement;
 sendButton.addEventListener('click', function() {
   const command = (input.value || '').trim();
   if (command) {
-    try {
-      const win = iframe.contentWindow;
-      if (win && typeof (win as any).eval === 'function') {
-        (win as any).eval(command);
-      }
-    } catch (e) {
+      try {
+        const win = iframe.contentWindow as (Window & Partial<DinoWindow>) | null;
+        if (win && typeof win.eval === 'function') {
+          win.eval!(command);
+        }
+      } catch (e) {
       console.warn('Eval failed in iframe:', e);
     }
     input.value = '';
@@ -65,11 +82,12 @@ let running = true;
 let intervalId: number | null = null;
 
 function readVars() {
-  const win = iframe.contentWindow;
+  const win = iframe.contentWindow as (Window & Partial<DinoWindow>) | null;
   if (!win) return {distance: '—', speed: '—', y: '—'};
 
   // Common Runner instance (flexible fallbacks)
-  const runner = (win as any).Runner && (win as any).Runner.instance_ ? (win as any).Runner.instance_ : ((win as any).runner || (win as any).game || null);
+  type RunnerType = DinoRunner | null;
+  const runner: RunnerType = (win && win.Runner && win.Runner.instance_) ? (win.Runner.instance_ as RunnerType) : ((win && (win.runner ?? win.game)) as RunnerType);
 
   let distance: number | string = '—';
   let speed: number | string = '—';
@@ -77,23 +95,23 @@ function readVars() {
 
   try {
     if (runner) {
-      distance = (typeof (runner as any).distanceRan !== 'undefined') ? (runner as any).distanceRan : (typeof (runner as any).distance === 'number' ? (runner as any).distance : distance);
-      speed = (typeof (runner as any).currentSpeed !== 'undefined') ? (runner as any).currentSpeed : (typeof (runner as any).speed === 'number' ? (runner as any).speed : speed);
-      if ((runner as any).tRex) {
-        y = (typeof (runner as any).tRex.yPos !== 'undefined') ? (runner as any).tRex.yPos : (typeof (runner as any).tRex.y === 'number' ? (runner as any).tRex.y : y);
+      distance = (typeof runner.distanceRan !== 'undefined') ? runner.distanceRan as number : (typeof runner.distance === 'number' ? runner.distance : distance);
+      speed = (typeof runner.currentSpeed !== 'undefined') ? runner.currentSpeed as number : (typeof runner.speed === 'number' ? runner.speed : speed);
+      if (runner.tRex) {
+        y = (typeof runner.tRex.yPos !== 'undefined') ? runner.tRex.yPos as number : (typeof runner.tRex.y === 'number' ? runner.tRex.y : y);
       }
     }
 
     // Some builds expose globals directly
-    if (distance === '—' && typeof (win as any).distanceRan !== 'undefined') distance = (win as any).distanceRan;
-    if (speed === '—' && typeof (win as any).currentSpeed !== 'undefined') speed = (win as any).currentSpeed;
-    if (y === '—' && typeof (win as any).tRex !== 'undefined' && typeof (win as any).tRex.yPos !== 'undefined') y = (win as any).tRex.yPos;
+    if (distance === '—' && typeof win?.distanceRan !== 'undefined') distance = (win as DinoWindow).distanceRan as number;
+    if (speed === '—' && typeof win?.currentSpeed !== 'undefined') speed = (win as DinoWindow).currentSpeed as number;
+    if (y === '—' && typeof win?.tRex !== 'undefined' && typeof (win as DinoWindow).tRex?.yPos !== 'undefined') y = (win as DinoWindow).tRex!.yPos as number;
   } catch (e) {
     // swallow
   }
 
   // Normalize numbers to short fixed format
-  const fmt = (v: any) => (typeof v === 'number' ? (v % 1 === 0 ? v : v.toFixed(2)) : v);
+  const fmt = (v: unknown) => (typeof v === 'number' ? (v % 1 === 0 ? v : (v as number).toFixed(2)) : v);
   return {distance: fmt(distance), speed: fmt(speed), y: fmt(y)};
 }
 

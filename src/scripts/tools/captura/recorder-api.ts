@@ -5,13 +5,13 @@ const DEFAULT_WIDTH  = 1280;
 const DEFAULT_HEIGHT = 720;
 const FORMAT_MP4     = 'mp4-h264-aac';
 
-const RESOLUTION_CONSTRAINTS = {
+const RESOLUTION_CONSTRAINTS: Record<string, MediaTrackConstraints> = {
   '480':  { width: { ideal: 854  }, height: { ideal: 480  } },
   '720':  { width: { ideal: 1280 }, height: { ideal: 720  } },
   '1080': { width: { ideal: 1920 }, height: { ideal: 1080 } },
 };
 
-const VIDEO_BITRATES = { '480': 2_000_000, '720': 4_000_000, '1080': 8_000_000 };
+const VIDEO_BITRATES: Record<string, number> = { '480': 2_000_000, '720': 4_000_000, '1080': 8_000_000 };
 
 export class RecorderAPI {
   #compositor: any;
@@ -39,7 +39,7 @@ export class RecorderAPI {
 
   get micSelected() { return this.#micSelected; }
 
-  onStreamEnded: (() => void) | null = null;
+  onStreamEnded?: () => void;
 
   constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }: any) {
     this.#compositor = compositor;
@@ -71,11 +71,11 @@ export class RecorderAPI {
         video: {
           displaySurface: 'monitor',
           frameRate: { ideal: parseInt(fps, 10) },
-          ...( (RESOLUTION_CONSTRAINTS as any)[quality] ?? {} ),
+          ...( RESOLUTION_CONSTRAINTS[quality] ?? {} ),
         },
         audio: { /* systemAudio intentionally omitted for TS */ } as unknown as MediaTrackConstraints,
         surfaceSwitching: 'include',
-      } as any));
+        } as unknown as MediaStreamConstraints));
       this.#masterStream.getVideoTracks()[0]?.addEventListener(
         'ended',
         () => { this.#masterStream = null; this.onStreamEnded?.(); },
@@ -120,7 +120,8 @@ export class RecorderAPI {
         'Click "End Session" and try again, or uncheck "Capture system audio" to record without it.'
       );
       err.name  = 'SysAudioNotCaptured';
-      (err as any).title = 'System Audio Not Captured';
+      const e = err as { title?: string } & Error;
+      e.title = 'System Audio Not Captured';
       throw err;
     }
 
@@ -154,7 +155,7 @@ export class RecorderAPI {
       mixedAudioTrack,
       writableStream: this.#writableStream,
       isMp4:          format === FORMAT_MP4,
-      videoBitrate:   (VIDEO_BITRATES as any)[quality] ?? 4_000_000,
+      videoBitrate:   VIDEO_BITRATES[quality] ?? 4_000_000,
     });
     await this.#recorderCore.start();
   }

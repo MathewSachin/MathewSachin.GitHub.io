@@ -8,21 +8,22 @@ export function escapeHtml(str: unknown): string {
     .replace(/"/g, '&quot;');
 }
 
-export function addListeners(selector: string, event: string, handler: (el: any) => void) {
+export function addListeners<T extends Element = Element>(selector: string, event: string, handler: (el: T) => void) {
   document.querySelectorAll(selector).forEach(function (el) {
-    el.addEventListener(event, function () { handler(el); });
+    el.addEventListener(event, function () { handler(el as unknown as T); });
   });
 }
 
 export function trackEvent(name: string, params?: Record<string, unknown>) {
   try {
-    if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('event', name, params || {});
+    const win = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (typeof win.gtag === 'function') {
+      win.gtag!('event', name, params || {});
     } else {
       console.debug('Google Analytics is not initialized. Event not tracked:', name, params);
     }
-  } catch (_) {
-    console.warn('Failed to track event:', name, params);
+  } catch (e) {
+    console.warn('Failed to track event:', name, params, e);
   }
 }
 

@@ -37,7 +37,7 @@ export const postIdFromSlug = postIdFromEntryId;
 export function getPostDate(entry: CollectionEntry<'blog'>): Date {
   if (entry.data.date) return entry.data.date;
   // Astro 6 uses .id from the glob loader
-  const entryId = (entry as any).id ?? '';
+  const entryId = (entry as unknown as { id?: string }).id ?? '';
   const match = entryId.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-/);
   if (match) {
     return new Date(`${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}T00:00:00Z`);

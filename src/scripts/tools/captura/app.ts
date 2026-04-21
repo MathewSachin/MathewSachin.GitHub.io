@@ -53,7 +53,7 @@ const countdownOverlay    = document.getElementById('countdown-overlay') as HTML
 const countdownNumberEl   = document.getElementById('countdown-number') as HTMLElement;
 
 const hasGetDisplayMedia = !!(navigator.mediaDevices?.getDisplayMedia);
-const hasFSA = typeof (window as any).showDirectoryPicker === 'function';
+const hasFSA = typeof window.showDirectoryPicker === 'function';
 
 const compositor = new Compositor(canvas, {
   onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
@@ -187,17 +187,30 @@ function render(state: string): void {
     :                            'badge bg-secondary';
 }
 
+type MachinePayload = {
+  fps?: number;
+  quality?: string;
+  format?: string;
+  webcamSelected?: boolean;
+  micSelected?: boolean;
+  wantSysAudio?: boolean;
+  name?: string;
+  message?: string;
+  title?: string;
+};
+
 machine.onStateChange((state, event, payload) => {
+  const p = payload as MachinePayload;
   render(state);
   if (state === STATE.RECORDING) {
     if (event === EVENT.COUNTDOWN_DONE) {
       trackEvent('captura_recording_start', {
-        fps:        payload?.fps,
-        quality:    payload?.quality,
-        format:     payload?.format,
-        has_webcam: payload?.webcamSelected,
-        has_mic:    payload?.micSelected,
-        sys_audio:  payload?.wantSysAudio,
+        fps:        p?.fps,
+        quality:    p?.quality,
+        format:     p?.format,
+        has_webcam: p?.webcamSelected,
+        has_mic:    p?.micSelected,
+        sys_audio:  p?.wantSysAudio,
       });
     } else if (event === EVENT.USER_RESUME) {
       trackEvent('captura_recording_resume', { elapsed_secs: elapsedSecs });
@@ -210,10 +223,10 @@ machine.onStateChange((state, event, payload) => {
     trackEvent('captura_session_end');
   }
 
-  if (event === EVENT.STREAMS_FAILED) {
-    trackEvent('captura_stream_failed', { error_name: payload?.name ?? 'unknown' });
+    if (event === EVENT.STREAMS_FAILED) {
+    trackEvent('captura_stream_failed', { error_name: p?.name ?? 'unknown' });
   } else if (state === STATE.ERROR) {
-    trackEvent('captura_error', { error_message: payload?.message ?? String(payload ?? '') });
+    trackEvent('captura_error', { error_message: p?.message ?? String(payload ?? '') });
   }
 
   if (event === EVENT.FINALIZE_DONE && payload) {
@@ -254,13 +267,13 @@ machine.onStateChange((state, event, payload) => {
   }
 
   if (event === EVENT.FINALIZE_DONE && payload) {
-    showSaveSuccessToast(payload);
+    showSaveSuccessToast(payload as any);
   }
 
   if (state === STATE.ERROR) {
     showErrorDialog(
-      payload?.title   || 'Recording Error',
-      payload?.message || String(payload ?? 'An unknown error occurred.')
+      p?.title   || 'Recording Error',
+      p?.message || String(payload ?? 'An unknown error occurred.')
     );
   }
 
@@ -372,7 +385,8 @@ async function enumerateDevices(): Promise<void> {
       api.restartPreviews();
     }
   } catch (err) {
-    showErrorDialog('Device Error', 'Could not enumerate devices: ' + ((err as any)?.message ?? String(err)));
+      const e = err as { message?: string } | undefined;
+      showErrorDialog('Device Error', 'Could not enumerate devices: ' + (e?.message ?? String(err)));
   }
 }
 
@@ -509,7 +523,7 @@ webcamSel.addEventListener('change', () => {
   const s = machine.state;
   if (s === STATE.RECORDING || s === STATE.PAUSED) {
       api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
-        .catch(err => showToast('Failed to switch webcam: ' + ((err as any)?.message ?? String(err)), 'danger'));
+        .catch(err => { const e = err as { message?: string } | undefined; showToast('Failed to switch webcam: ' + (e?.message ?? String(err)), 'danger'); });
   } else if (s !== STATE.STOPPING) {
     syncDevicesToApi();
     api.restartPreviews();

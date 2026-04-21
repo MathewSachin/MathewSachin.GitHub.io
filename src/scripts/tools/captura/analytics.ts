@@ -4,8 +4,9 @@
 
 export function trackEvent(name: string, params?: Record<string, unknown>): void {
   try {
-    if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('event', name, params || {});
+    const w = window as Window & { gtag?: (...args: any[]) => void };
+    if (typeof w.gtag === 'function') {
+      w.gtag('event', name, params || {});
     }
   } catch (_) {}
 }

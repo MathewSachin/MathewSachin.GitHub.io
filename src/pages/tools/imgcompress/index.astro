@@ -218,7 +218,12 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     if (initializing) return;
     initializing = true;
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Loading ImageMagick — this may take a moment on first use…');
-    const M: any = (window as any)['magick-wasm'];
+    const M = (window as Window & { 'magick-wasm'?: { initializeImageMagick: (buf: Uint8Array) => Promise<void>; ImageMagick?: any; MagickFormat?: any } })['magick-wasm'];
+    if (!M || typeof M.initializeImageMagick !== 'function') {
+      initializing = false;
+      showStatus('ImageMagick failed to initialize.', 'danger');
+      return;
+    }
     // Pre-fetch the WASM binary ourselves so the browser's fetch() follows CDN
     // redirects correctly; passing a raw Uint8Array avoids Emscripten's internal
     // fetch path that can return an empty buffer on some CDN configurations.
@@ -231,14 +236,15 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
         hideStatus();
         cb();
       })
-      .catch(function (err: any) {
+      .catch(function (err: unknown) {
         initializing = false;
         showStatus('Failed to load ImageMagick: ' + (err instanceof Error ? err.message : String(err)), 'danger');
       });
   }
 
   function compress(inputData: Uint8Array) {
-    const M: any = (window as any)['magick-wasm'];
+    const M = (window as Window & { 'magick-wasm'?: { initializeImageMagick: (buf: Uint8Array) => Promise<void>; ImageMagick?: any; MagickFormat?: any } })['magick-wasm'];
+    if (!M) { showStatus('ImageMagick not available.', 'danger'); compressBtn.disabled = false; return; }
     const fmt = outputFormat.value;
     const quality = parseInt(qualitySlider.value, 10);
     const doResize = resizeCheck.checked;
@@ -306,7 +312,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
             compressBtn.disabled = false;
           });
         });
-      } catch (err: any) {
+      } catch (err: unknown) {
         showStatus('Compression failed: ' + (err instanceof Error ? err.message : String(err)), 'danger');
         compressBtn.disabled = false;
       }

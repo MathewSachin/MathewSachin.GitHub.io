@@ -15,7 +15,7 @@ const RESULTS_LIMIT = 20;
 const TYPO_TOLERANCE = 1;
 
 const BASE_PATH = (() => {
-  if (typeof window !== 'undefined' && (window as any).SEARCH_BASE) return (window as any).SEARCH_BASE.replace(/\/$/, '');
+  if (typeof window !== 'undefined' && (window as Window & { SEARCH_BASE?: string }).SEARCH_BASE) return ((window as Window & { SEARCH_BASE?: string }).SEARCH_BASE || '').replace(/\/$/, '');
   const base = document.querySelector('base[href]');
   if (base) return (base.getAttribute('href') || '').replace(/\/$/, '');
   const parts = location.pathname.split('/').filter(Boolean);
@@ -28,7 +28,18 @@ const statusEl = document.getElementById('search-status') as HTMLElement | null;
 const inputEl = document.getElementById('search-input') as HTMLInputElement | null;
 const resultsEl = document.getElementById('search-results') as HTMLElement | null;
 
-let db: any = null;
+let db: ReturnType<typeof create> | null = null;
+
+type SearchDoc = {
+  title: string;
+  url: string;
+  content?: string;
+  tags?: string[];
+  date?: string;
+  type?: string;
+};
+
+type Hit = { document: SearchDoc };
 
 async function initIndex() {
   if (!statusEl || !inputEl || !resultsEl) return;
@@ -53,7 +64,7 @@ function formatDate(iso: string | undefined) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 }
 
-function renderResult(result: any) {
+function renderResult(result: Hit) {
   const doc = result.document;
   const safeUrl = /^\/[^"<>]*$/.test(doc.url) ? BASE_PATH + doc.url : '#';
   const isTool = doc.type === 'tool';
@@ -75,12 +86,12 @@ function renderResult(result: any) {
     </a>`;
 }
 
-function renderResults(hits: any[]) {
+function renderResults(hits: Hit[]) {
   if (!hits.length) {
     if (resultsEl) resultsEl.innerHTML = '<p class="text-muted">No results matched your search.</p>';
     return;
   }
-  if (resultsEl) resultsEl.innerHTML = hits.map(renderResult).join('');
+  if (resultsEl) resultsEl.innerHTML = hits.map((h: any) => renderResult(h as Hit)).join('');
 }
 
 let debounceTimer: number | undefined;
@@ -91,13 +102,14 @@ if (inputEl) {
       const term = (inputEl as HTMLInputElement).value.trim();
       if (!term) { if (resultsEl) resultsEl.innerHTML = ''; return; }
       if (!db) return;
-      const results = await search(db, {
+      const results = await search(db as any, {
         term,
         properties: ['title', 'content', 'tags'],
         tolerance: TYPO_TOLERANCE,
         limit: RESULTS_LIMIT,
       });
-      renderResults(results.hits);
+      const hits = (results as any).hits ?? [];
+      renderResults(hits as Hit[]);
       trackEvent('search', { search_term: term, result_count: results.hits.length });
     }, DEBOUNCE_DELAY) as unknown as number;
   });

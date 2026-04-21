@@ -171,15 +171,15 @@ function update() {
       compress: true,
       mangle: false,
       format: { comments: false }
-    }).then(function (result) {
+    }).then(function (result: { code?: string }) {
         if (mySeq !== seq) return; // superseded by a later call
-        const code = (result && (result as any).code) || '';
+        const code = (result as unknown as { code?: string })?.code ?? '';
         const bookmarklet = 'javascript:(function(){' + uriEncode(code) + '})();';
         setResult(bookmarklet);
     }).catch(function (err) {
         if (mySeq !== seq) return;
-        const e: any = err;
-        let msg = e?.message || String(e);
+        const e = err as { message?: string; line?: number; col?: number } | undefined;
+        let msg = e?.message || String(err);
         // Terser parse errors include line:col in the message; append if separate props exist
         if (e && e.line != null && !msg.includes(String(e.line))) {
           msg += ' [line ' + e.line + (e.col != null ? ':' + e.col : '') + ']';
