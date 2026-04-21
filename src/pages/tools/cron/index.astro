@@ -101,43 +101,44 @@ import { registerCopyToClipboard } from '@scripts/utils.js';
 
 // ── Populate selects ─────────────────────────────────────────────────────
 
-var selMinute = document.getElementById('sel-minute');
-var selHour   = document.getElementById('sel-hour');
-var selDom    = document.getElementById('sel-dom');
-var selDow    = document.getElementById('sel-dow');
+const selMinute = document.getElementById('sel-minute') as HTMLSelectElement;
+const selHour = document.getElementById('sel-hour') as HTMLSelectElement;
+const selDom = document.getElementById('sel-dom') as HTMLSelectElement;
+const selDow = document.getElementById('sel-dow') as HTMLSelectElement;
 
-for (var m = 0; m < 60; m++) {
-  var opt = document.createElement('option');
-  opt.value = m; opt.textContent = m < 10 ? '0' + m : m;
+
+for (let m = 0; m < 60; m++) {
+  const opt = document.createElement('option');
+  opt.value = String(m); opt.textContent = m < 10 ? '0' + m : String(m);
   selMinute.appendChild(opt);
 }
 
-for (var h = 0; h < 24; h++) {
-  var opt = document.createElement('option');
-  opt.value = h; opt.textContent = h < 10 ? '0' + h : h;
+for (let h = 0; h < 24; h++) {
+  const opt = document.createElement('option');
+  opt.value = String(h); opt.textContent = h < 10 ? '0' + h : String(h);
   selHour.appendChild(opt);
 }
 
-for (var d = 1; d <= 31; d++) {
-  var opt = document.createElement('option');
-  opt.value = d; opt.textContent = d;
+for (let d = 1; d <= 31; d++) {
+  const opt = document.createElement('option');
+  opt.value = String(d); opt.textContent = String(d);
   selDom.appendChild(opt);
 }
 
 // ── Show / hide rows based on frequency ──────────────────────────────────
 
-var freqSelect = document.getElementById('freq-select');
-var rowMinute  = document.getElementById('row-minute');
-var rowHour    = document.getElementById('row-hour');
-var rowDow     = document.getElementById('row-dow');
-var rowDom     = document.getElementById('row-dom');
+const freqSelect = document.getElementById('freq-select') as HTMLSelectElement;
+const rowMinute = document.getElementById('row-minute') as HTMLElement;
+const rowHour = document.getElementById('row-hour') as HTMLElement;
+const rowDow = document.getElementById('row-dow') as HTMLElement;
+const rowDom = document.getElementById('row-dom') as HTMLElement;
 
 function updateVisibility() {
-  var freq = freqSelect.value;
+  const freq = freqSelect.value;
   rowMinute.classList.toggle('d-none', freq === 'minute');
-  rowHour.classList.toggle('d-none',   freq === 'minute' || freq === 'hour');
-  rowDow.classList.toggle('d-none',    freq !== 'week');
-  rowDom.classList.toggle('d-none',    freq !== 'month');
+  rowHour.classList.toggle('d-none', freq === 'minute' || freq === 'hour');
+  rowDow.classList.toggle('d-none', freq !== 'week');
+  rowDom.classList.toggle('d-none', freq !== 'month');
 }
 
 freqSelect.addEventListener('change', function () { updateVisibility(); update(); });
@@ -146,17 +147,17 @@ updateVisibility();
 // ── Generate ──────────────────────────────────────────────────────────────
 
 function update() {
-  var freq = freqSelect.value;
-  var min  = selMinute.value;
-  var hr   = selHour.value;
-  var dow  = selDow.value;
-  var dom  = selDom.value;
+  const freq = freqSelect.value;
+  const min = selMinute.value;
+  const hr = selHour.value;
+  const dow = selDow.value;
+  const dom = selDom.value;
 
-  var result = buildCronExpression(freq, min, hr, dow, dom);
-  var expr = result.expr;
-  var desc = result.desc;
+  const result = buildCronExpression(freq, min, hr, dow, dom);
+  const expr = result.expr;
+  const desc = result.desc;
 
-  var fields;
+  let fields: Array<[string,string,string]>;
   if (freq === 'minute') {
     fields = [['Minute','*','Every minute'],['Hour','*','Every hour'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
   } else if (freq === 'hour') {
@@ -164,25 +165,27 @@ function update() {
   } else if (freq === 'day') {
     fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)','*','Every day']];
   } else if (freq === 'week') {
-    fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)', dow, 'On ' + DOW_NAMES[dow]]];
+    fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)','*','Every day'],['Month','*','Every month'],['Day (week)', dow, 'On ' + DOW_NAMES[Number(dow)]]];
   } else { // month
     fields = [['Minute', min, 'At minute ' + min],['Hour', hr, 'At ' + pad(hr) + ':00 UTC'],['Day (month)', dom, 'On the ' + ordinal(+dom)],['Month','*','Every month'],['Day (week)','*','Every day']];
   }
 
-  document.getElementById('cron-expr').textContent = expr;
-  document.getElementById('cron-desc').textContent  = desc;
+  const cronExprEl = document.getElementById('cron-expr') as HTMLElement;
+  const cronDescEl = document.getElementById('cron-desc') as HTMLElement;
+  cronExprEl.textContent = expr;
+  cronDescEl.textContent  = desc;
 
-  var tbody = document.getElementById('cron-table');
+  const tbody = document.getElementById('cron-table') as HTMLElement;
   tbody.innerHTML = '';
   fields.forEach(function (f) {
-    var tr = document.createElement('tr');
-    var tdField = document.createElement('td');
+    const tr = document.createElement('tr');
+    const tdField = document.createElement('td');
     tdField.textContent = f[0];
-    var tdVal = document.createElement('td');
-    var code = document.createElement('code');
+    const tdVal = document.createElement('td');
+    const code = document.createElement('code');
     code.textContent = f[1];
     tdVal.appendChild(code);
-    var tdDesc = document.createElement('td');
+    const tdDesc = document.createElement('td');
     tdDesc.textContent = f[2];
     tr.appendChild(tdField);
     tr.appendChild(tdVal);
@@ -190,7 +193,8 @@ function update() {
     tbody.appendChild(tr);
   });
 
-  document.getElementById('result-area').classList.remove('d-none');
+  const resultArea = document.getElementById('result-area') as HTMLElement;
+  resultArea.classList.remove('d-none');
 }
 
 // run update when any control changes
@@ -199,12 +203,13 @@ selHour.addEventListener('change', update);
 selDow.addEventListener('change', update);
 selDom.addEventListener('change', update);
 
-const copyCronBtn = document.getElementById('copy-cron-btn');
-const cronElem = document.getElementById('cron-expr');
+const copyCronBtn = document.getElementById('copy-cron-btn') as HTMLButtonElement;
+const cronElem = document.getElementById('cron-expr') as HTMLElement;
+const icon = copyCronBtn.querySelector('i') as HTMLElement;
 registerCopyToClipboard(
   copyCronBtn, 
-  () => cronElem.textContent,
-  copyCronBtn.querySelector('i')
+  () => cronElem.textContent || '',
+  icon
 );
 
 update(); // initial generation

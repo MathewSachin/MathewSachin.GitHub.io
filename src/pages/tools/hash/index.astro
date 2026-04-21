@@ -65,34 +65,40 @@ import { registerCopyToClipboard } from '@scripts/utils.js';
 
 // ── UI ────────────────────────────────────────────────────────────────────
 
+const hashInputEl = document.getElementById('hash-input') as HTMLTextAreaElement;
+const outMd5 = document.getElementById('out-md5') as HTMLElement;
+const outSha1 = document.getElementById('out-sha1') as HTMLElement;
+const outSha256 = document.getElementById('out-sha256') as HTMLElement;
+
 function updateHashes() {
-  var text = document.getElementById('hash-input').value || '';
+  const text = hashInputEl.value || '';
 
   // MD5 (synchronous)
-  document.getElementById('out-md5').textContent = md5(text);
+  outMd5.textContent = md5(text);
 
   // SHA-1 and SHA-256 (async)
-  sha('SHA-1', text).then(function (h) {
-    document.getElementById('out-sha1').textContent = h;
+  sha('SHA-1', text).then((h: string) => {
+    outSha1.textContent = h;
   });
-  sha('SHA-256', text).then(function (h) {
-    document.getElementById('out-sha256').textContent = h;
+  sha('SHA-256', text).then((h: string) => {
+    outSha256.textContent = h;
   });
 }
 
-var hashInput = document.getElementById('hash-input');
-hashInput.addEventListener('input', updateHashes);
-hashInput.addEventListener('change', updateHashes);
+
+hashInputEl.addEventListener('input', updateHashes);
+hashInputEl.addEventListener('change', updateHashes);
 
 // populate on load to show format
 updateHashes();
 
 // Copy buttons
-document.querySelectorAll('.copy-hash-btn').forEach(function (btn) {
-  const icon = btn.querySelector('i');
-  const targetId = btn.dataset.target;
-  const target = document.getElementById(targetId)
-  registerCopyToClipboard(btn, () => target.textContent, icon);
+const copyBtns = document.querySelectorAll('.copy-hash-btn') as NodeListOf<HTMLButtonElement>;
+copyBtns.forEach(function (btn: HTMLButtonElement) {
+  const icon = btn.querySelector('i') as HTMLElement;
+  const targetId = btn.dataset.target as string;
+  const target = document.getElementById(targetId) as HTMLElement;
+  registerCopyToClipboard(btn, () => target.textContent || '', icon);
 });
 </script>
 

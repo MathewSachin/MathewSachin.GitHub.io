@@ -37,11 +37,12 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 import { formatJson } from '@scripts/tools/json-formatter.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
-var jsonInput  = document.getElementById('json-input');
-var jsonOutput = document.getElementById('json-output');
-var jsonError  = document.getElementById('json-error');
-var jsonOk     = document.getElementById('json-ok');
+const jsonInput = document.getElementById('json-input') as HTMLTextAreaElement;
+const jsonOutput = document.getElementById('json-output') as HTMLTextAreaElement;
+const jsonError = document.getElementById('json-error') as HTMLElement;
+const jsonOk = document.getElementById('json-ok') as HTMLElement;
 
 function clearFeedback() {
   jsonError.textContent = '';
@@ -49,9 +50,9 @@ function clearFeedback() {
   jsonOk.classList.add('d-none');
 }
 
-function applyFormat(indent) {
+function applyFormat(indent: number) {
   clearFeedback();
-  var result = formatJson(jsonInput.value, indent);
+  const result = formatJson(jsonInput.value, indent);
   if (result.error) {
     jsonOutput.value = '';
     jsonError.textContent = result.error;
@@ -62,16 +63,18 @@ function applyFormat(indent) {
   }
 }
 
-document.getElementById('json-format-btn').addEventListener('click', function () { applyFormat(2); });
-document.getElementById('json-minify-btn').addEventListener('click', function () { applyFormat(0); });
-document.getElementById('json-clear-btn').addEventListener('click', function () {
+const fmtBtn = document.getElementById('json-format-btn') as HTMLButtonElement;
+const minBtn = document.getElementById('json-minify-btn') as HTMLButtonElement;
+const clrBtn = document.getElementById('json-clear-btn') as HTMLButtonElement;
+fmtBtn.addEventListener('click', function () { applyFormat(2); });
+minBtn.addEventListener('click', function () { applyFormat(0); });
+clrBtn.addEventListener('click', function () {
   jsonInput.value = ''; jsonOutput.value = '';
   clearFeedback();
 });
 
-import { registerCopyToClipboard } from '@scripts/utils.js';
-const jsonCopyBtn = document.getElementById('json-copy-btn');
-const jsonCopyIcon = jsonCopyBtn.querySelector('i');
+const jsonCopyBtn = document.getElementById('json-copy-btn') as HTMLElement;
+const jsonCopyIcon = jsonCopyBtn.querySelector('i') as HTMLElement;
 registerCopyToClipboard(jsonCopyBtn, () => jsonOutput.value, jsonCopyIcon);
 </script>
 

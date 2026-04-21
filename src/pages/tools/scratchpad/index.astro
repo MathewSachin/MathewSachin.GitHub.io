@@ -53,32 +53,33 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 import { countWords } from '@scripts/tools/scratchpad.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
-var STORAGE_KEY = 'scratchpad-v1';
-var pad         = document.getElementById('scratchpad');
-var saveStatus  = document.getElementById('save-status');
-var wordCount   = document.getElementById('word-count');
-var copyBtn     = document.getElementById('copy-btn');
-var clearBtn    = document.getElementById('clear-btn');
-var fsBtn       = document.getElementById('fullscreen-btn');
-var fsLabel     = document.getElementById('fullscreen-label');
-var saveTimer;
+const STORAGE_KEY: string = 'scratchpad-v1';
+const pad = document.getElementById('scratchpad') as HTMLTextAreaElement;
+const saveStatus = document.getElementById('save-status') as HTMLElement;
+const wordCount = document.getElementById('word-count') as HTMLElement;
+const copyBtn = document.getElementById('copy-btn') as HTMLElement;
+const clearBtn = document.getElementById('clear-btn') as HTMLElement;
+const fsBtn = document.getElementById('fullscreen-btn') as HTMLElement;
+const fsLabel = document.getElementById('fullscreen-label') as HTMLElement;
+let saveTimer: number | null = null;
 
 // ── Restore saved content ─────────────────────────────────────────────────
 try {
-  var saved = localStorage.getItem(STORAGE_KEY);
-  if (saved !== null) {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved !== null && pad) {
     pad.value = saved;
   }
 } catch (e) { /* private browsing / storage disabled */ }
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function updateCount() {
-  var text  = pad.value;
-  var chars = text.length;
-  var words = countWords(text);
-  var wordLabel = words + ' word' + (words !== 1 ? 's' : '');
-  var charLabel = chars + ' char' + (chars !== 1 ? 's' : '');
+  const text = pad ? pad.value : '';
+  const chars = text.length;
+  const words = countWords(text);
+  const wordLabel = words + ' word' + (words !== 1 ? 's' : '');
+  const charLabel = chars + ' char' + (chars !== 1 ? 's' : '');
   wordCount.textContent = wordLabel + ' \u00b7 ' + charLabel;
 }
 
@@ -87,8 +88,8 @@ function persistContent() {
     localStorage.setItem(STORAGE_KEY, pad.value);
     saveStatus.textContent = 'Saved';
     saveStatus.style.color = '';
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () { saveStatus.textContent = ''; }, 2000);
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(function () { saveStatus.textContent = ''; }, 2000);
   } catch (e) {
     saveStatus.textContent = 'Could not save';
     saveStatus.style.color = 'var(--bs-danger, #dc3545)';
@@ -102,7 +103,6 @@ pad.addEventListener('input', function () {
 });
 
 // ── Copy All ──────────────────────────────────────────────────────────────
-import { registerCopyToClipboard } from '@scripts/utils.js';
 registerCopyToClipboard(copyBtn, () => pad.value, copyBtn.querySelector('i'));
 
 // ── Clear ─────────────────────────────────────────────────────────────────
@@ -116,7 +116,7 @@ clearBtn.addEventListener('click', function () {
 
 // ── Full-screen ───────────────────────────────────────────────────────────
 fsBtn.addEventListener('click', function () {
-  var card = document.getElementById('scratchpad-card');
+  var card = document.getElementById('scratchpad-card') as HTMLElement;
   if (!document.fullscreenElement) {
     if (card.requestFullscreen) { card.requestFullscreen(); }
   } else {
@@ -125,7 +125,7 @@ fsBtn.addEventListener('click', function () {
 });
 
 document.addEventListener('fullscreenchange', function () {
-  var icon = fsBtn.querySelector('i');
+  var icon = fsBtn.querySelector('i') as HTMLElement;
   if (document.fullscreenElement) {
     icon.className = 'fas fa-compress me-1';
     fsLabel.textContent = 'Exit Full Screen';

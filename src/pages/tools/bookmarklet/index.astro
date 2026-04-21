@@ -105,109 +105,107 @@ alert('Word count: ' + (words ? words.length : 0));"
 import { minify } from 'terser';
 import { registerCopyToClipboard } from '@scripts/utils.js';
 
-(function () {
-  'use strict';
+const rawInput = document.getElementById('raw-input') as HTMLTextAreaElement;
+const compiledOutput = document.getElementById('compiled-output') as HTMLTextAreaElement;
+const dragBtn = document.getElementById('drag-btn') as HTMLAnchorElement;
+const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+const statRaw = document.getElementById('stat-raw') as HTMLElement;
+const statOut = document.getElementById('stat-out') as HTMLElement;
+const statPct = document.getElementById('stat-pct') as HTMLElement;
+const statSavings = document.getElementById('stat-savings-badge') as HTMLElement;
 
-  var rawInput       = document.getElementById('raw-input');
-  var compiledOutput = document.getElementById('compiled-output');
-  var dragBtn        = document.getElementById('drag-btn');
-  var copyBtn        = document.getElementById('copy-btn');
-  var clearBtn       = document.getElementById('clear-btn');
-  var statRaw        = document.getElementById('stat-raw');
-  var statOut        = document.getElementById('stat-out');
-  var statPct        = document.getElementById('stat-pct');
-  var statSavings    = document.getElementById('stat-savings-badge');
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+let seq = 0; // incremented per Terser call; ignored results are discarded
 
-  var debounceTimer = null;
-  var seq = 0; // incremented per Terser call; ignored results are discarded
+// URI-encode characters that break bookmark URL bars.
+// % must be first to prevent double-encoding.
+function uriEncode(code: string) {
+  return code
+    .replace(/%/g,  '%25')
+    .replace(/"/g,  '%22')
+    .replace(/'/g,  '%27')
+    .replace(/#/g,  '%23')
+    .replace(/&/g,  '%26')
+    .replace(/</g,  '%3C')
+    .replace(/>/g,  '%3E')
+    .replace(/\`/g,  '%60');
+}
 
-  // URI-encode characters that break bookmark URL bars.
-  // % must be first to prevent double-encoding.
-  function uriEncode(code) {
-    return code
-      .replace(/%/g,  '%25')
-      .replace(/"/g,  '%22')
-      .replace(/'/g,  '%27')
-      .replace(/#/g,  '%23')
-      .replace(/&/g,  '%26')
-      .replace(/</g,  '%3C')
-      .replace(/>/g,  '%3E')
-      .replace(/\`/g,  '%60');
-  }
-
-  function setResult(bookmarklet) {
-    compiledOutput.value = bookmarklet;
-    var rawLen = rawInput.value.length;
-    var outLen = bookmarklet.length;
-    statOut.textContent = outLen.toLocaleString();
-    if (rawLen > 0 && outLen > 0 && outLen < rawLen) {
-      statPct.textContent = Math.round((1 - outLen / rawLen) * 100);
-      statSavings.classList.remove('d-none');
-    } else {
-      statSavings.classList.add('d-none');
-    }
-    dragBtn.href = bookmarklet;
-    dragBtn.classList.remove('bm-disabled');
-  }
-
-  function clearResult() {
-    compiledOutput.value = '';
-    statOut.textContent = '0';
+function setResult(bookmarklet: string) {
+  compiledOutput.value = bookmarklet;
+  const rawLen = rawInput.value.length;
+  const outLen = bookmarklet.length;
+  statOut.textContent = outLen.toLocaleString();
+  if (rawLen > 0 && outLen > 0 && outLen < rawLen) {
+    statPct.textContent = String(Math.round((1 - outLen / rawLen) * 100));
+    statSavings.classList.remove('d-none');
+  } else {
     statSavings.classList.add('d-none');
-    dragBtn.href = '#';
-    dragBtn.classList.add('bm-disabled');
+  }
+  dragBtn.href = bookmarklet;
+  dragBtn.classList.remove('bm-disabled');
+}
+
+function clearResult() {
+  compiledOutput.value = '';
+  statOut.textContent = '0';
+  statSavings.classList.add('d-none');
+  dragBtn.href = '#';
+  dragBtn.classList.add('bm-disabled');
+}
+
+function update() {
+  const raw = rawInput.value;
+  statRaw.textContent = raw.length.toLocaleString();
+
+  if (!raw.trim()) {
+    clearResult();
+    return;
   }
 
-  function update() {
-    var raw = rawInput.value;
-    statRaw.textContent = raw.length.toLocaleString();
-
-    if (!raw.trim()) {
-      clearResult();
-      return;
-    }
-
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function () {
-      var mySeq = ++seq;
-      minify(raw, {
-        compress: true,
-        mangle: false,
-        format: { comments: false }
-      }).then(function (result) {
+  if (debounceTimer) { clearTimeout(debounceTimer); }
+  debounceTimer = setTimeout(function () {
+    const mySeq = ++seq;
+    minify(raw, {
+      compress: true,
+      mangle: false,
+      format: { comments: false }
+    }).then(function (result) {
         if (mySeq !== seq) return; // superseded by a later call
-        var bookmarklet = 'javascript:(function(){' + uriEncode(result.code) + '})();';
+        const code = (result && (result as any).code) || '';
+        const bookmarklet = 'javascript:(function(){' + uriEncode(code) + '})();';
         setResult(bookmarklet);
-      }).catch(function (err) {
+    }).catch(function (err) {
         if (mySeq !== seq) return;
-        var msg = err.message || String(err);
+        const e: any = err;
+        let msg = e?.message || String(e);
         // Terser parse errors include line:col in the message; append if separate props exist
-        if (err.line != null && !msg.includes(err.line)) {
-          msg += ' [line ' + err.line + (err.col != null ? ':' + err.col : '') + ']';
+        if (e && e.line != null && !msg.includes(String(e.line))) {
+          msg += ' [line ' + e.line + (e.col != null ? ':' + e.col : '') + ']';
         }
         compiledOutput.value = '/* ' + msg + ' */';
         dragBtn.href = '#';
         dragBtn.classList.add('bm-disabled');
         statSavings.classList.add('d-none');
         statOut.textContent = '0';
-      });
-    }, 250);
-  }
+    });
+  }, 250);
+}
 
-  rawInput.addEventListener('input', update);
+rawInput.addEventListener('input', update);
 
-  registerCopyToClipboard(
-    copyBtn,
-    () => compiledOutput.value,
-    copyBtn.querySelector('i')
-  );
-  
-  clearBtn.addEventListener('click', function () {
-    rawInput.value = '';
-    update();
-  });
+const icon = copyBtn.querySelector('i') as HTMLElement;
+registerCopyToClipboard(
+  copyBtn,
+  () => compiledOutput.value,
+  icon
+);
 
-}());
+clearBtn.addEventListener('click', function () {
+  rawInput.value = '';
+  update();
+});
 </script>
 <RenderMDX Content={Content} />
 </ToolLayout>

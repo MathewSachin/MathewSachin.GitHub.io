@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import {
   opfsMockScript,
   runRecordingPipeline,
@@ -83,7 +83,7 @@ test.describe('Captura Web Recorder', () => {
 
     await page.click('#pause-btn');
     await expect(page.locator('#status-badge')).toHaveText('⏸ Paused');
-    const timerAtPause = await page.locator('#timer-text').textContent();
+    const timerAtPause = await page.locator('#timer-text').textContent() as string;
 
     // Timer must not advance while paused
     await page.waitForTimeout(1500);
@@ -179,7 +179,7 @@ test.describe('Captura Web Recorder', () => {
 
   test('mic gain slider updates its label', async ({ page }) => {
     await page.evaluate(() => {
-      const slider = document.getElementById('mic-gain-slider');
+      const slider = document.getElementById('mic-gain-slider') as HTMLInputElement;
       slider.value = '0.5';
       slider.dispatchEvent(new Event('input', { bubbles: true }));
     });
@@ -188,7 +188,7 @@ test.describe('Captura Web Recorder', () => {
 
   test('system gain slider updates its label', async ({ page }) => {
     await page.evaluate(() => {
-      const slider = document.getElementById('sys-gain-slider');
+      const slider = document.getElementById('sys-gain-slider') as HTMLInputElement;
       slider.value = '1.5';
       slider.dispatchEvent(new Event('input', { bubbles: true }));
     });
@@ -200,7 +200,7 @@ test.describe('Captura Web Recorder', () => {
   // always fires regardless of the element's prior value (which can persist
   // across test runs when multiple spec files share the same origin).
 
-  async function expectLocalStorage(page, key, value) {
+  async function expectLocalStorage(page: Page, key: string, value: unknown) {
     await expect.poll(async () => {
       return await page.evaluate((k) => localStorage.getItem(k), key);
     }, {

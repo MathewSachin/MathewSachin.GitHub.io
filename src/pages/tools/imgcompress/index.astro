@@ -4,7 +4,7 @@ import { Content } from '@content/tool-docs/imgcompress.mdx';
 import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="Image Compressor" ads={true}>
-  <script src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
+  <script is:inline src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
   integrity="sha384-M8gIiLd+UKUmTrqlRrO14Veff1ao4UoVqgcMhovIW5DUwxErdsz8K+6D3ZbplaNN"
   crossorigin="anonymous"></script>
 
@@ -92,38 +92,38 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 (function () {
-  var initialized = false;
-  var initializing = false;
-  var originalFile = null;
-  var compressedBlob = null;
-  var compressedFilename = '';
+  let initialized: boolean = false;
+  let initializing: boolean = false;
+  let originalFile: File | null = null;
+  let compressedBlob: Blob | null = null;
+  let compressedFilename: string = '';
 
-  var dropZone       = document.getElementById('drop-zone');
-  var fileInput      = document.getElementById('file-input');
-  var optionsSection = document.getElementById('options-section');
-  var outputFormat   = document.getElementById('output-format');
-  var qualitySlider  = document.getElementById('quality-slider');
-  var qualityValue   = document.getElementById('quality-value');
-  var qualitySection = document.getElementById('quality-section');
-  var resizeCheck    = document.getElementById('resize-check');
-  var maxWidthInput  = document.getElementById('max-width');
-  var compressBtn    = document.getElementById('compress-btn');
-  var statusMsg      = document.getElementById('status-msg');
-  var resultsSection = document.getElementById('results-section');
-  var previewOrig    = document.getElementById('preview-original');
-  var previewComp    = document.getElementById('preview-compressed');
-  var infoOrig       = document.getElementById('info-original');
-  var infoComp       = document.getElementById('info-compressed');
-  var downloadBtn    = document.getElementById('download-btn');
-  var savingsLabel   = document.getElementById('savings-label');
+  const dropZone = document.getElementById('drop-zone') as HTMLElement;
+  const fileInput = document.getElementById('file-input') as HTMLInputElement;
+  const optionsSection = document.getElementById('options-section') as HTMLElement;
+  const outputFormat = document.getElementById('output-format') as HTMLSelectElement;
+  const qualitySlider = document.getElementById('quality-slider') as HTMLInputElement;
+  const qualityValue = document.getElementById('quality-value') as HTMLElement;
+  const qualitySection = document.getElementById('quality-section') as HTMLElement;
+  const resizeCheck = document.getElementById('resize-check') as HTMLInputElement;
+  const maxWidthInput = document.getElementById('max-width') as HTMLInputElement;
+  const compressBtn = document.getElementById('compress-btn') as HTMLButtonElement;
+  const statusMsg = document.getElementById('status-msg') as HTMLElement;
+  const resultsSection = document.getElementById('results-section') as HTMLElement;
+  const previewOrig = document.getElementById('preview-original') as HTMLImageElement;
+  const previewComp = document.getElementById('preview-compressed') as HTMLImageElement;
+  const infoOrig = document.getElementById('info-original') as HTMLElement;
+  const infoComp = document.getElementById('info-compressed') as HTMLElement;
+  const downloadBtn = document.getElementById('download-btn') as HTMLButtonElement;
+  const savingsLabel = document.getElementById('savings-label') as HTMLElement;
 
-  function formatBytes(b) {
+  function formatBytes(b: number) {
     if (b < 1024) return b + ' B';
     if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
     return (b / 1048576).toFixed(2) + ' MB';
   }
 
-  function showStatus(html, type) {
+  function showStatus(html: string, type?: string) {
     statusMsg.innerHTML = '<div class="alert alert-' + (type || 'info') + ' py-2 mb-0">' + html + '</div>';
     statusMsg.classList.remove('d-none');
   }
@@ -150,7 +150,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
   // Drop zone interaction
   dropZone.addEventListener('click', function () { fileInput.click(); });
 
-  dropZone.addEventListener('dragover', function (e) {
+  dropZone.addEventListener('dragover', function (e: DragEvent) {
     e.preventDefault();
     dropZone.classList.add('border-info');
   });
@@ -159,18 +159,18 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     dropZone.classList.remove('border-info');
   });
 
-  dropZone.addEventListener('drop', function (e) {
+  dropZone.addEventListener('drop', function (e: DragEvent) {
     e.preventDefault();
     dropZone.classList.remove('border-info');
-    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    if (e.dataTransfer?.files[0]) handleFile(e.dataTransfer.files[0]);
   });
 
   fileInput.addEventListener('change', function () {
-    if (this.files[0]) handleFile(this.files[0]);
+    if (this.files?.[0]) handleFile(this.files[0]);
   });
 
-  function handleFile(file) {
-    if (!file.type.startsWith('image/')) {
+  function handleFile(file: File) {
+    if (!file.type || !file.type.startsWith('image/')) {
       showStatus('Please select an image file.', 'danger');
       return;
     }
@@ -179,7 +179,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     resultsSection.classList.add('d-none');
     hideStatus();
 
-    var url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(file);
     previewOrig.src = url;
     previewOrig.onload = function () {
       infoOrig.textContent =
@@ -203,20 +203,22 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
   compressBtn.addEventListener('click', function () {
     if (!originalFile) return;
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      var data = new Uint8Array(e.target.result);
+    const reader = new FileReader();
+    reader.onload = function (e: ProgressEvent<FileReader>) {
+      const arr = e.target?.result ? e.target.result as ArrayBuffer : null;
+      if (!arr) { showStatus('Failed to read file.', 'danger'); return; }
+      const data = new Uint8Array(arr);
       ensureInitialized(function () { compress(data); });
     };
     reader.readAsArrayBuffer(originalFile);
   });
 
-  function ensureInitialized(cb) {
+  function ensureInitialized(cb: () => void) {
     if (initialized) { cb(); return; }
     if (initializing) return;
     initializing = true;
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Loading ImageMagick — this may take a moment on first use…');
-    var M = window['magick-wasm'];
+    const M: any = (window as any)['magick-wasm'];
     // Pre-fetch the WASM binary ourselves so the browser's fetch() follows CDN
     // redirects correctly; passing a raw Uint8Array avoids Emscripten's internal
     // fetch path that can return an empty buffer on some CDN configurations.
@@ -229,18 +231,18 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
         hideStatus();
         cb();
       })
-      .catch(function (err) {
+      .catch(function (err: any) {
         initializing = false;
-        showStatus('Failed to load ImageMagick: ' + err.message, 'danger');
+        showStatus('Failed to load ImageMagick: ' + (err instanceof Error ? err.message : String(err)), 'danger');
       });
   }
 
-  function compress(inputData) {
-    var M        = window['magick-wasm'];
-    var fmt      = outputFormat.value;
-    var quality  = parseInt(qualitySlider.value, 10);
-    var doResize = resizeCheck.checked;
-    var mxw      = Math.max(1, parseInt(maxWidthInput.value, 10) || 1920);
+  function compress(inputData: Uint8Array) {
+    const M: any = (window as any)['magick-wasm'];
+    const fmt = outputFormat.value;
+    const quality = parseInt(qualitySlider.value, 10);
+    const doResize = resizeCheck.checked;
+    const mxw = Math.max(1, parseInt(maxWidthInput.value || '1920', 10) || 1920);
 
     compressBtn.disabled = true;
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Compressing…');
@@ -248,28 +250,35 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     // Defer to next tick so the browser can render the spinner
     setTimeout(function () {
       try {
-        M.ImageMagick.read(inputData, function (image) {
+        const orig = originalFile;
+        if (!orig) {
+          showStatus('No source file available.', 'danger');
+          compressBtn.disabled = false;
+          return;
+        }
+
+        M.ImageMagick.read(inputData, function (image: any) {
           if (fmt !== 'PNG') {
             image.quality = quality;
           }
 
           if (doResize && image.width > mxw) {
-            var ratio     = mxw / image.width;
-            var newHeight = Math.round(image.height * ratio);
+            const ratio     = mxw / image.width;
+            const newHeight = Math.round(image.height * ratio);
             image.resize(mxw, newHeight);
           }
 
-          var magickFmt = fmt === 'JPEG' ? M.MagickFormat.Jpeg
+          const magickFmt = fmt === 'JPEG' ? M.MagickFormat.Jpeg
                         : fmt === 'WEBP' ? M.MagickFormat.WebP
                         : M.MagickFormat.Png;
 
-          image.write(magickFmt, function (data) {
-            var ext  = fmt === 'JPEG' ? 'jpg' : fmt.toLowerCase();
-            var mime = fmt === 'JPEG' ? 'image/jpeg'
+          image.write(magickFmt, function (data: any) {
+            const ext  = fmt === 'JPEG' ? 'jpg' : fmt.toLowerCase();
+            const mime = fmt === 'JPEG' ? 'image/jpeg'
                      : fmt === 'WEBP' ? 'image/webp'
                      : 'image/png';
-            var blob     = new Blob([data], { type: mime });
-            var baseName = originalFile.name.replace(/\\.[^.]+$/, '');
+            const blob     = new Blob([data], { type: mime });
+            const baseName = orig.name.replace(/\.[^.]+$/, '');
             compressedFilename = baseName + '-compressed.' + ext;
             compressedBlob     = blob;
 
@@ -281,14 +290,15 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
                 previewComp.naturalWidth + ' × ' + previewComp.naturalHeight + ' px';
             };
 
-            var diff = originalFile.size - blob.size;
-            var pct  = ((diff / originalFile.size) * 100).toFixed(1);
+            const diff = orig.size - blob.size;
+            const pct = ((diff / orig.size) * 100).toFixed(1); // string
             if (diff > 0) {
               savingsLabel.textContent = pct + '% smaller (' + formatBytes(diff) + ' saved)';
-              savingsLabel.className   = 'fw-semibold text-success';
+              savingsLabel.className = 'fw-semibold text-success';
             } else {
-              savingsLabel.textContent = Math.abs(pct) + '% larger than original';
-              savingsLabel.className   = 'fw-semibold text-warning';
+              const pctNum = Math.abs(parseFloat(pct) || 0).toFixed(1);
+              savingsLabel.textContent = pctNum + '% larger than original';
+              savingsLabel.className = 'fw-semibold text-warning';
             }
 
             resultsSection.classList.remove('d-none');
@@ -296,8 +306,8 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
             compressBtn.disabled = false;
           });
         });
-      } catch (err) {
-        showStatus('Compression failed: ' + err.message, 'danger');
+      } catch (err: any) {
+        showStatus('Compression failed: ' + (err instanceof Error ? err.message : String(err)), 'danger');
         compressBtn.disabled = false;
       }
     }, 50);
@@ -305,8 +315,8 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
   downloadBtn.addEventListener('click', function () {
     if (!compressedBlob) return;
-    var a      = document.createElement('a');
-    a.href     = URL.createObjectURL(compressedBlob);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(compressedBlob);
     a.download = compressedFilename;
     a.click();
   });
