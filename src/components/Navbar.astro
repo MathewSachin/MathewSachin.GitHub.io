@@ -27,17 +27,14 @@ const BASE = import.meta.env.BASE_URL;
   </div>
 </nav>
 <script>
-  (function () {
-    var toggler = document.querySelector(".navbar-toggler");
-    var content = document.getElementById("navbarContent");
-    if (toggler && content) {
-      toggler.addEventListener("click", function () {
-        content.classList.toggle("show");
-        toggler.classList.toggle("collapsed");
-        toggler.setAttribute("aria-expanded", content.classList.contains("show").toString());
-      });
-    }
-  }());
+  const toggler = document.querySelector(".navbar-toggler") as HTMLElement;
+  const content = document.getElementById("navbarContent") as HTMLElement;
+  
+  toggler.addEventListener("click", function () {
+    content.classList.toggle("show");
+    toggler.classList.toggle("collapsed");
+    toggler.setAttribute("aria-expanded", content.classList.contains("show").toString());
+  });
 </script>
 
 <style>
