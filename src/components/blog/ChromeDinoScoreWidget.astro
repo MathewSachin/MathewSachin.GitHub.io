@@ -18,15 +18,14 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 
 <script src="@scripts/chrome-dino-hack.js"></script>
 <script>
-    import { registerCopyToClipboard } from '@scripts/utils.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
-    const clipButton = document.getElementById('btn-score-clip');
-    const scoreInput = document.getElementById('score-input');
-    if (clipButton && scoreInput) {
-        registerCopyToClipboard(
-            clipButton, 
-            () => `(Runner.instance_ || Runner.getInstance()).distanceRan = ${scoreInput.value} / 0.025`,
-            clipButton.querySelector("i")
-        );
-    }
+const clipButton = document.getElementById('btn-score-clip') as HTMLButtonElement;
+const scoreInput = document.getElementById('score-input') as HTMLInputElement;
+
+registerCopyToClipboard(
+    clipButton, 
+    () => `(Runner.instance_ || Runner.getInstance()).distanceRan = ${scoreInput.value} / 0.025`,
+    clipButton.querySelector("i")
+);
 </script>

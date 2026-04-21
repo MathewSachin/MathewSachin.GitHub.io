@@ -110,12 +110,12 @@ dlBtn.addEventListener('click', function (e) {
   e.preventDefault();
   const url = dlBtn.dataset.url;
   const filename = dlBtn.dataset.filename;
-  if (!url) return;
+  if (!url || !filename) return;
   fetch(url)
     .then(r => r.blob())
     .then(blob => {
       const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement('a') as HTMLAnchorElement;
       a.href = blobUrl;
       a.download = filename;
       a.click();

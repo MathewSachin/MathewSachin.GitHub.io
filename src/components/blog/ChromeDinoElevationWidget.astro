@@ -17,14 +17,12 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 
 <script src="@scripts/chrome-dino-hack.js"></script>
 <script>
-    import { registerCopyToClipboard } from '@scripts/utils.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
-    const clipButton = document.getElementById('btn-ground-clip');
-    const groundInput = document.getElementById('ground-input');
-    if (clipButton && groundInput) {
-        registerCopyToClipboard(
-            clipButton, 
-            () => `(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - ${groundInput.value}`,
-            clipButton.querySelector("i")
-        );
-    }
+const clipButton = document.getElementById('btn-ground-clip') as HTMLButtonElement;
+const groundInput = document.getElementById('ground-input') as HTMLInputElement;
+registerCopyToClipboard(
+    clipButton, 
+    () => `(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - ${groundInput.value}`,
+    clipButton.querySelector("i")
+);
