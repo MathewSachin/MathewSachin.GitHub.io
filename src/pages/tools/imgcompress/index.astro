@@ -4,9 +4,6 @@ import { Content } from '@content/tool-docs/imgcompress.mdx';
 import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
 <ToolLayout title="Image Compressor" ads={true}>
-  <script is:inline src="https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/index.umd.cjs"
-  integrity="sha384-M8gIiLd+UKUmTrqlRrO14Veff1ao4UoVqgcMhovIW5DUwxErdsz8K+6D3ZbplaNN"
-  crossorigin="anonymous"></script>
 
 <div class="card google-anno-skip">
 <div class="card-body">
@@ -91,6 +88,9 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 </div>
 
 <script>
+import wasmUrl from '@imagemagick/magick-wasm/magick.wasm?url';
+import * as IM from '@imagemagick/magick-wasm';
+
 (function () {
   let initialized: boolean = false;
   let initializing: boolean = false;
@@ -234,32 +234,28 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     if (initializing) return;
     initializing = true;
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Loading ImageMagick — this may take a moment on first use…');
-    const M = (window as unknown as Window & { 'magick-wasm'?: Magick })['magick-wasm'];
+    const M = IM as unknown as Magick;
     if (!M || typeof M.initializeImageMagick !== 'function') {
       initializing = false;
       showStatus('ImageMagick failed to initialize.', 'danger');
       return;
     }
-    // Pre-fetch the WASM binary ourselves so the browser's fetch() follows CDN
-    // redirects correctly; passing a raw Uint8Array avoids Emscripten's internal
-    // fetch path that can return an empty buffer on some CDN configurations.
-    fetch('https://unpkg.com/@imagemagick/magick-wasm@0.0.39/dist/magick.wasm')
-      .then(function (r) { return r.arrayBuffer(); })
-      .then(function (buf) { return M.initializeImageMagick(new Uint8Array(buf)); })
-      .then(function () {
+    (async function () {
+      try {
+        await IM.initializeImageMagick(new URL(wasmUrl, window.location.href));
         initialized = true;
         initializing = false;
         hideStatus();
         cb();
-      })
-      .catch(function (err: unknown) {
+      } catch (err: unknown) {
         initializing = false;
         showStatus('Failed to load ImageMagick: ' + (err instanceof Error ? err.message : String(err)), 'danger');
-      });
+      }
+    })();
   }
 
   function compress(inputData: Uint8Array) {
-    const M = (window as unknown as Window & { 'magick-wasm'?: Magick })['magick-wasm'];
+    const M = IM as unknown as Magick;
     if (!M) { showStatus('ImageMagick not available.', 'danger'); compressBtn.disabled = false; return; }
     const fmt = outputFormat.value;
     const quality = parseInt(qualitySlider.value, 10);
@@ -279,7 +275,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
           return;
         }
 
-        M.ImageMagick!.read(inputData, function (image: MagickImage) {
+        IM.ImageMagick!.read(inputData, function (image: MagickImage) {
           if (fmt !== 'PNG') {
             image.quality = quality;
           }
@@ -290,9 +286,9 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
             image.resize(mxw, newHeight);
           }
 
-          const magickFmt = fmt === 'JPEG' ? M.ImageMagick!.MagickFormat.Jpeg
-                        : fmt === 'WEBP' ? M.ImageMagick!.MagickFormat.WebP
-                        : M.ImageMagick!.MagickFormat.Png;
+          const magickFmt = fmt === 'JPEG' ? IM.MagickFormat.Jpeg
+                        : fmt === 'WEBP' ? IM.MagickFormat.WebP
+                        : IM.MagickFormat.Png;
 
           image.write(magickFmt, function (data: Uint8Array) {
             const ext  = fmt === 'JPEG' ? 'jpg' : fmt.toLowerCase();
