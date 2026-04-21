@@ -2,7 +2,6 @@ import { addListeners, trackEvent, registerCopyToClipboard } from './utils.js';
 
 (function () {
     // Named constants — avoid magic numbers scattered through the file
-    const COPY_RESET_DELAY      = 2000;         // ms before copy icon reverts to link icon
     const DEBOUNCE_DELAY        = 500;          // ms of inactivity before selection is tracked
     const SCROLL_MILESTONES     = [25, 50, 75, 90]; // percent-scroll milestones to report
 

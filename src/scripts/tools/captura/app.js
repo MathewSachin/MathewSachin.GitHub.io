@@ -161,7 +161,6 @@ function stopCountdownOverlay() {
 // Single source of truth for every button, badge, and control state.
 // Called on every state machine transition.
 function render(state) {
-  const isIdle       = state === STATE.IDLE;
   const isSession    = state === STATE.SESSION;
   const isReq        = state === STATE.REQUESTING;
   const isCountdown  = state === STATE.COUNTDOWN;
@@ -626,6 +625,5 @@ window.addEventListener('beforeunload', (e) => {
   if (s === STATE.RECORDING || s === STATE.PAUSED ||
       s === STATE.STOPPING  || s === STATE.COUNTDOWN) {
     e.preventDefault();
-    e.returnValue = ''; // Required by some browsers to trigger the dialog
   }
 });

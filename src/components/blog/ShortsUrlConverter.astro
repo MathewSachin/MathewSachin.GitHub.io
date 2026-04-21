@@ -23,25 +23,27 @@
 <script>
 import { registerCopyToClipboard } from '@scripts/utils.js';
 
-const input = document.getElementById('shorts-input');
-const btnCopy = document.getElementById('btn-copy-shorts-url');
-const output = document.getElementById('shorts-output');
-const btnOpen = document.getElementById('shorts-open');
-const outputWrap = document.getElementById('shorts-output-wrap');
+const input = document.getElementById('shorts-input') as HTMLInputElement;
+const btnCopy = document.getElementById('btn-copy-shorts-url') as HTMLElement;
+const output = document.getElementById('shorts-output') as HTMLInputElement;
+const btnOpen = document.getElementById('shorts-open') as HTMLAnchorElement;
+const outputWrap = document.getElementById('shorts-output-wrap') as HTMLElement;
 
 registerCopyToClipboard(
   btnCopy,
-  () => output.value,
-  btnCopy.querySelector('i')
+  () => output.value || '',
+  btnCopy.querySelector('i') as HTMLElement
 );
-input.addEventListener('input', function() {
-  convertShortsUrl(this.value);
+
+input.addEventListener('input', function (ev) {
+  const val = (ev.target as HTMLInputElement).value || '';
+  convertShortsUrl(val);
 });
 
-function convertShortsUrl(val) {
-  var match = val.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/);
+function convertShortsUrl(val: string) {
+  const match = val.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/);
   if (match) {
-    var url = 'https://www.youtube.com/watch?v=' + match[1];
+    const url = 'https://www.youtube.com/watch?v=' + match[1];
     output.value = url;
     btnOpen.href = url;
     outputWrap.classList.remove('d-none');

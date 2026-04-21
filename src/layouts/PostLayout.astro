@@ -34,7 +34,7 @@ const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
 
 const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true } = post.data;
 const date = getPostDate(post);
-const readTime = estimateReadingTime(post.body);
+const readTime = estimateReadingTime(post.body ?? '');
 const pageUrl = Astro.url.href;
 // Canonical URL: use explicit .html path if provided, else fall back to current URL
 const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;

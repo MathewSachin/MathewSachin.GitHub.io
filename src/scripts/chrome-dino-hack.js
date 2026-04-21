@@ -9,16 +9,6 @@ document.addEventListener('keydown', function(e) {
   }
 }, { passive: false });
 
-// Returns a debounced version of fn that delays invocation by `wait` ms
-function debounce(fn, wait) {
-  var timer;
-  return function() {
-    var ctx = this, args = arguments;
-    clearTimeout(timer);
-    timer = setTimeout(function() { fn.apply(ctx, args); }, wait);
-  };
-}
-
 // Track when the user clicks into the dino game iframe
 (function() {
   var frame = document.getElementById('dino-game-frame');

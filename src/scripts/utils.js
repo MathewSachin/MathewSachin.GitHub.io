@@ -63,15 +63,6 @@ export async function copyToClipboard(text) {
         await navigator.clipboard.writeText(text);
         copied = true;
     } catch (_) {
-        // Fallback: create a temporary textarea for manual copy
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0";
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        try { copied = !!document.execCommand("copy"); } catch (_) {}
-        document.body.removeChild(textarea);
     }
 
     return copied;

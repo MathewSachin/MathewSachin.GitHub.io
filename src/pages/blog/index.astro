@@ -15,7 +15,7 @@ const BASE = import.meta.env.BASE_URL;
 
 const allPosts = sortPostsByDate(await getCollection('blog'));
 const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-const currentPage = 1;
+const currentPage: number = 1;
 const posts = allPosts.slice(0, POSTS_PER_PAGE);
 
 const hasPrev = currentPage > 1;

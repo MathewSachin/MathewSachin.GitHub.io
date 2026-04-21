@@ -45,8 +45,8 @@ async function initIndex() {
     const resp = await fetch(`${BASE_PATH}/search-index.json`);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const rawIndex = await resp.json();
-    db = await create({ schema: SCHEMA });
-    await load(db, rawIndex);
+    db = create({ schema: SCHEMA });
+    load(db, rawIndex);
     statusEl.textContent = '';
     inputEl.disabled = false;
     inputEl.focus();
