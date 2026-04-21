@@ -3,15 +3,15 @@ import { visit } from 'unist-util-visit';
 const HEADING_TAGS = new Set(['h2']);
 const MINIMUM_HEADINGS = 2;
 
-export function rehypeInjectAds(options = { density: 2 }) {
-  const density = options.density;
+export function rehypeInjectAds(options: { density?: number } = { density: 2 }) {
+  const density = options.density ?? 2;
 
-  return function (tree) {
+  return function (tree: any) {
     let headingCounter = 0;
     let hasContentSinceLastHeading = true; // Initialize true to allow the first heading
-    const insertions = [];
+    const insertions: Array<{ index: number; parent: any }> = [];
 
-    visit(tree, 'element', (node, index, parent) => {
+    visit(tree, 'element', (node: any, index: number | undefined, parent: any) => {
       // 1. If it's NOT a heading, check if it's "content"
       if (!HEADING_TAGS.has(node.tagName)) {
         // If we find a non-heading element with children or text, we have content
@@ -34,8 +34,8 @@ export function rehypeInjectAds(options = { density: 2 }) {
       hasContentSinceLastHeading = false;
 
       // 4. Density Logic
-      if (headingCounter % density === 0 && headingCounter >= MINIMUM_HEADINGS && index !== null && index > 0) {
-        insertions.push({ index: index, parent });
+      if (headingCounter % density === 0 && headingCounter >= MINIMUM_HEADINGS && index !== undefined && index > 0) {
+        insertions.push({ index: index as number, parent });
       }
     });
 
@@ -49,11 +49,11 @@ export function rehypeInjectAds(options = { density: 2 }) {
   };
 }
 
-function isContentContainer(node) {
+function isContentContainer(node: any) {
   if (!node) return false;
   const cls = (node.properties?.className || []);
   const containerClasses = ['page-content', 'card-body', 'post-content'];
   return Array.isArray(cls) 
-    ? cls.some(c => containerClasses.includes(c))
+    ? cls.some((c: string) => containerClasses.includes(c))
     : containerClasses.includes(cls);
 }

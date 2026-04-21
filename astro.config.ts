@@ -6,9 +6,7 @@ import { fileURLToPath } from 'node:url';
 import rehypeRaw from 'rehype-raw';
 import linkValidator from 'astro-link-validator';
 
-import {
-  rehypeInjectAds,
-} from './src/plugins/rehype-plugins.mjs';
+import { rehypeInjectAds } from './src/plugins/rehype-plugins';
 
 const SITE = 'https://mathewsachin.github.io';
 
