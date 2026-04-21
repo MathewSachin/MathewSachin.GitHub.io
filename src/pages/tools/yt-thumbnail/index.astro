@@ -45,26 +45,27 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 <script>
 import { extractVideoId, thumbnailUrl, getResolutions } from '@scripts/tools/yt-thumbnail.js';
 
-const input    = document.getElementById('yt-input');
-const btn      = document.getElementById('grab-btn');
-const errEl    = document.getElementById('yt-error');
-const result   = document.getElementById('yt-result');
-const preview  = document.getElementById('yt-preview');
-const resSel   = document.getElementById('yt-res-select');
-const openBtn  = document.getElementById('yt-open-btn');
-const dlBtn    = document.getElementById('yt-download-btn');
 
-let currentId = null;
+const input = document.getElementById('yt-input') as HTMLInputElement;
+const btn = document.getElementById('grab-btn') as HTMLButtonElement;
+const errEl = document.getElementById('yt-error') as HTMLElement;
+const result = document.getElementById('yt-result') as HTMLElement;
+const preview = document.getElementById('yt-preview') as HTMLImageElement;
+const resSel = document.getElementById('yt-res-select') as HTMLSelectElement;
+const openBtn = document.getElementById('yt-open-btn') as HTMLAnchorElement;
+const dlBtn = document.getElementById('yt-download-btn') as HTMLButtonElement;
+
+let currentId: string | null = null;
 
 // Populate resolution dropdown once
 getResolutions().forEach(function (r) {
   const opt = document.createElement('option');
-  opt.value = r.key;
+  opt.value = String(r.key);
   opt.textContent = r.label;
   resSel.appendChild(opt);
 });
 
-function showError(msg) {
+function showError(msg: string) {
   errEl.textContent = msg;
   errEl.classList.remove('d-none');
   result.classList.add('d-none');
@@ -79,10 +80,12 @@ function updatePreview() {
   if (!currentId) return;
   // thumbnailUrl validates the key against the known-safe list
   const url = thumbnailUrl(currentId, resSel.value);
-  preview.src = url;
-  openBtn.href = url;
-  dlBtn.dataset.url = url;
-  dlBtn.dataset.filename = 'thumbnail-' + currentId + '-' + resSel.value + '.jpg';
+  if (preview) preview.src = url;
+  if (openBtn) openBtn.href = url;
+  if (dlBtn) {
+    dlBtn.dataset.url = url;
+    dlBtn.dataset.filename = 'thumbnail-' + currentId + '-' + resSel.value + '.jpg';
+  }
 }
 
 btn.addEventListener('click', function () {

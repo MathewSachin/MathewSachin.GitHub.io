@@ -13,7 +13,8 @@ export function hexFromBuffer(buf) {
     .join('');
 }
 
-export function sha(algo, text) {
+export async function sha(algo, text) {
   var enc = new TextEncoder().encode(text);
-  return crypto.subtle.digest(algo, enc).then(hexFromBuffer);
+  const buf = await crypto.subtle.digest(algo, enc);
+  return hexFromBuffer(buf);
 }

@@ -92,14 +92,14 @@ import { epochToMs, datetimeLocalToMs } from '@scripts/tools/timestamp.js';
 import { registerCopyToClipboard } from '@scripts/utils.js';
 
 // --- DateTime → Epoch ---
-var dtInput = document.getElementById('dt-input');
-var dtResult = document.getElementById('dt-result');
-var dtSeconds = document.getElementById('dt-seconds');
-var dtMillis = document.getElementById('dt-millis');
+var dtInput = document.getElementById('dt-input') as HTMLInputElement;
+var dtResult = document.getElementById('dt-result') as HTMLElement;
+var dtSeconds = document.getElementById('dt-seconds') as HTMLElement;
+var dtMillis = document.getElementById('dt-millis') as HTMLElement;
 
 // Pre-fill with the current local time
 var now = new Date();
-dtInput.value = new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+if (dtInput) dtInput.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
 function updateDt() {
   var val = dtInput.value;
@@ -108,29 +108,31 @@ function updateDt() {
     return;
   }
   var ms = datetimeLocalToMs(val);
-  dtSeconds.textContent = Math.floor(ms / 1000);
-  dtMillis.textContent = ms;
+  dtSeconds.textContent = Math.floor(ms / 1000).toString();
+  dtMillis.textContent = ms.toString();
   dtResult.classList.remove('d-none');
 }
 
-dtInput.addEventListener('input', updateDt);
-dtInput.addEventListener('change', updateDt);
+if (dtInput) {
+  dtInput.addEventListener('input', updateDt);
+  dtInput.addEventListener('change', updateDt);
+}
 updateDt(); // initial conversion on page load
 
-const copySecondsBtn = document.getElementById('dt-copy-seconds');
-const copyMillisBtn = document.getElementById('dt-copy-millis');
-registerCopyToClipboard(copySecondsBtn, () => dtSeconds.textContent, copySecondsBtn.querySelector('i'));
-registerCopyToClipboard(copyMillisBtn, () => dtMillis.textContent, copyMillisBtn.querySelector('i'));
+const copySecondsBtn = document.getElementById('dt-copy-seconds') as HTMLElement;
+const copyMillisBtn = document.getElementById('dt-copy-millis') as HTMLElement;
+if (copySecondsBtn) registerCopyToClipboard(copySecondsBtn, () => dtSeconds.textContent, copySecondsBtn.querySelector('i'));
+if (copyMillisBtn) registerCopyToClipboard(copyMillisBtn, () => dtMillis.textContent, copyMillisBtn.querySelector('i'));
 
 // --- Epoch → DateTime ---
-var epochInput = document.getElementById('epoch-input');
-var epochResult = document.getElementById('epoch-result');
-var epochUtc = document.getElementById('epoch-utc');
-var epochLocal = document.getElementById('epoch-local');
-var epochIso = document.getElementById('epoch-iso');
+var epochInput = document.getElementById('epoch-input') as HTMLInputElement;
+var epochResult = document.getElementById('epoch-result') as HTMLElement;
+var epochUtc = document.getElementById('epoch-utc') as HTMLElement;
+var epochLocal = document.getElementById('epoch-local') as HTMLElement;
+var epochIso = document.getElementById('epoch-iso') as HTMLElement;
 
 function updateEpoch() {
-  var raw = epochInput.value.trim();
+  var raw = epochInput ? epochInput.value.trim() : '';
   if (!raw) {
     epochResult.classList.add('d-none');
     return;
@@ -148,23 +150,28 @@ function updateEpoch() {
   epochResult.classList.remove('d-none');
 }
 
-epochInput.addEventListener('input', updateEpoch);
-epochInput.addEventListener('change', updateEpoch);
+if (epochInput) {
+  epochInput.addEventListener('input', updateEpoch);
+  epochInput.addEventListener('change', updateEpoch);
+}
 
-const copyUtcBtn = document.getElementById('epoch-copy-utc');
-const copyLocalBtn = document.getElementById('epoch-copy-local');
-const copyIsoBtn = document.getElementById('epoch-copy-iso');
-registerCopyToClipboard(copyUtcBtn, () => epochUtc.textContent, copyUtcBtn.querySelector('i'));
-registerCopyToClipboard(copyLocalBtn, () => epochLocal.textContent, copyLocalBtn.querySelector('i'));
-registerCopyToClipboard(copyIsoBtn, () => epochIso.textContent, copyIsoBtn.querySelector('i'));
+const copyUtcBtn = document.getElementById('epoch-copy-utc') as HTMLElement;
+const copyLocalBtn = document.getElementById('epoch-copy-local') as HTMLElement;
+const copyIsoBtn = document.getElementById('epoch-copy-iso') as HTMLElement;
+if (copyUtcBtn) registerCopyToClipboard(copyUtcBtn, () => epochUtc.textContent, copyUtcBtn.querySelector('i'));
+if (copyLocalBtn) registerCopyToClipboard(copyLocalBtn, () => epochLocal.textContent, copyLocalBtn.querySelector('i'));
+if (copyIsoBtn) registerCopyToClipboard(copyIsoBtn, () => epochIso.textContent, copyIsoBtn.querySelector('i'));
 
 // --- Live clock ---
 function tick() {
   var t = new Date();
   var ms = t.getTime();
-  document.getElementById('now-seconds').textContent = Math.floor(ms / 1000);
-  document.getElementById('now-millis').textContent = ms;
-  document.getElementById('now-utc').textContent = t.toUTCString();
+  var nowSeconds = document.getElementById('now-seconds') as HTMLElement;
+  var nowMillis = document.getElementById('now-millis') as HTMLElement;
+  var nowUtc = document.getElementById('now-utc') as HTMLElement;
+  if (nowSeconds) nowSeconds.textContent = Math.floor(ms / 1000).toString();
+  if (nowMillis) nowMillis.textContent = ms.toString();
+  if (nowUtc) nowUtc.textContent = t.toUTCString();
 }
 tick();
 setInterval(tick, 1000);

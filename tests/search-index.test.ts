@@ -162,11 +162,11 @@ test('search-index.json: can be loaded and searched with Orama', async () => {
     type: 'string',
   }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = await create({ schema })
-  load(db, raw)
+  const db = create({ schema: schema as any })
+  load(db as any, raw)
 
   // Known post: Chrome Dino Hack
-  const results = await search(db, { term: 'chrome dino', properties: ['title', 'content'] })
+  const results = await search(db as any, { term: 'chrome dino', properties: ['title', 'content'] })
   assert.ok(results.hits.length > 0, 'search should return results for "chrome dino"')
   const urls = results.hits.map(h => h.document.url)
   assert.ok(
@@ -185,10 +185,10 @@ test('search-index.json: tools are searchable', async () => {
     type: 'string',
   }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = await create({ schema })
-  load(db, raw)
+  const db = create({ schema: schema as any })
+  load(db as any, raw)
 
-  const results = await search(db, { term: 'Base64', properties: ['title'] })
+  const results = await search(db as any, { term: 'Base64', properties: ['title'] })
   assert.ok(results.hits.length > 0, 'search should return results for "Base64"')
   const toolHit = results.hits.find(h => h.document.type === 'tool' && h.document.url.includes('/tools/base64'))
   assert.ok(toolHit, 'expected base64 tool in results')
@@ -204,11 +204,11 @@ test('search-index.json: every entry has required fields', async () => {
     type: 'string',
   }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = await create({ schema })
-  load(db, raw)
+  const db = create({ schema: schema as any })
+  load(db as any, raw)
 
   // Retrieve all documents via a broad search
-  const results = await search(db, { term: '', limit: 200 })
+  const results = await search(db as any, { term: '', limit: 200 })
   assert.ok(results.hits.length > 0, 'index should contain at least one entry')
 
   for (const hit of results.hits) {

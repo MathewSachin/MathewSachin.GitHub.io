@@ -46,6 +46,11 @@ export class RecorderAPI {
   #micDeviceId    = '';
   #micSelected    = false;
 
+  // Expose a read accessor so the private field is considered used by tooling
+  get micSelected() {
+    return this.#micSelected;
+  }
+
   // Called when the screen-share track ends via the native "Stop Sharing" button.
   onStreamEnded = null;
 
