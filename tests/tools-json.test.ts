@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { formatJson } from '../src/scripts/tools/json-formatter.js'
+import { formatJson } from '../src/scripts/tools/json-formatter.ts'
 
 // ---------------------------------------------------------------------------
 // formatJson — formatting (indent = 2)

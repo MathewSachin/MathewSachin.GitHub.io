@@ -5,35 +5,30 @@
 
 // ── DOM references ────────────────────────────────────────────────────────────
 
-const dropZone        = document.getElementById('drop-zone');
-const fileInput       = document.getElementById('file-input');
-const fileName        = document.getElementById('file-name');
-const modeRemove      = document.getElementById('mode-remove');
-const modeAdd         = document.getElementById('mode-add');
-const removeSection   = document.getElementById('remove-section');
-const addSection      = document.getElementById('add-section');
-const decryptPass     = document.getElementById('decrypt-pass');
-const userPass        = document.getElementById('user-pass');
-const ownerPass       = document.getElementById('owner-pass');
-const processBtn      = document.getElementById('process-btn');
-const statusMsg       = document.getElementById('status-msg');
-const resultSection   = document.getElementById('result-section');
-const downloadLink    = document.getElementById('download-link');
-const privacyBytes    = document.getElementById('privacy-bytes');
+const dropZone = document.getElementById('drop-zone') as HTMLElement;
+const fileInput = document.getElementById('file-input') as HTMLInputElement;
+const fileName = document.getElementById('file-name') as HTMLElement;
+const modeRemove = document.getElementById('mode-remove') as HTMLInputElement;
+const modeAdd = document.getElementById('mode-add') as HTMLInputElement;
+const removeSection = document.getElementById('remove-section') as HTMLElement;
+const addSection = document.getElementById('add-section') as HTMLElement;
+const decryptPass = document.getElementById('decrypt-pass') as HTMLInputElement;
+const userPass = document.getElementById('user-pass') as HTMLInputElement;
+const ownerPass = document.getElementById('owner-pass') as HTMLInputElement;
+const processBtn = document.getElementById('process-btn') as HTMLButtonElement;
+const statusMsg = document.getElementById('status-msg') as HTMLElement;
+const resultSection = document.getElementById('result-section') as HTMLElement;
+const downloadLink = document.getElementById('download-link') as HTMLAnchorElement;
+const privacyBytes = document.getElementById('privacy-bytes') as HTMLElement;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
-let selectedFile = null;
-let previousObjectUrl = null;
+let selectedFile: File | null = null;
+let previousObjectUrl: string | null = null;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-/**
- * Show a status message with the given Bootstrap alert type.
- * @param {string} html   - Inner HTML for the message.
- * @param {'info'|'danger'|'success'|'warning'} type
- */
-function showStatus(html, type) {
+function showStatus(html: string, type: 'info' | 'danger' | 'success' | 'warning') {
   statusMsg.innerHTML = '<div class="alert alert-' + type + ' py-2 mb-0">' + html + '</div>';
   statusMsg.classList.remove('d-none');
 }
@@ -42,33 +37,18 @@ function hideStatus() {
   statusMsg.classList.add('d-none');
 }
 
-/**
- * Detect whether a PDF byte array is encrypted by scanning for an
- * `/Encrypt` object reference in the trailer dictionary.
- * The trailer is near the end of the file, so only the last 4 KB is searched.
- * The pattern `/Encrypt N N R` matches an indirect object reference as
- * required by the PDF spec, avoiding false positives from embedded text.
- * @param {Uint8Array} bytes
- * @returns {boolean}
- */
-function isPdfEncrypted(bytes) {
-  var tail = bytes.length > 4096 ? bytes.slice(bytes.length - 4096) : bytes;
-  var text = new TextDecoder('latin1').decode(tail);
+function isPdfEncrypted(bytes: Uint8Array): boolean {
+  const tail = bytes.length > 4096 ? bytes.slice(bytes.length - 4096) : bytes;
+  const text = new TextDecoder('latin1').decode(tail);
   return /\/Encrypt\s+\d+\s+\d+\s+R/.test(text);
 }
 
-/**
- * Validate that the first bytes match the PDF magic bytes (`%PDF-`).
- * @param {Uint8Array} bytes
- * @returns {boolean}
- */
-function isValidPdf(bytes) {
+function isValidPdf(bytes: Uint8Array): boolean {
   if (bytes.length < 5) return false;
-  var pdfSignature = new TextDecoder('latin1').decode(bytes.slice(0, 5));
+  const pdfSignature = new TextDecoder('latin1').decode(bytes.slice(0, 5));
   return pdfSignature.startsWith('%PDF-');
 }
 
-/** Revoke any previously created object URL to prevent memory leaks. */
 function revokePreviousUrl() {
   if (previousObjectUrl) {
     URL.revokeObjectURL(previousObjectUrl);
@@ -78,7 +58,7 @@ function revokePreviousUrl() {
 
 // ── Mode switching ────────────────────────────────────────────────────────────
 
-function setMode(mode) {
+function setMode(mode: 'remove' | 'add') {
   if (mode === 'remove') {
     removeSection.classList.remove('d-none');
     addSection.classList.add('d-none');
@@ -91,7 +71,7 @@ function setMode(mode) {
 }
 
 modeRemove.addEventListener('change', function () { if (this.checked) setMode('remove'); });
-modeAdd.addEventListener('change',    function () { if (this.checked) setMode('add'); });
+modeAdd.addEventListener('change', function () { if (this.checked) setMode('add'); });
 
 // ── Drag-and-drop / file picker ───────────────────────────────────────────────
 
@@ -106,23 +86,19 @@ dropZone.addEventListener('dragleave', function () {
   dropZone.classList.remove('border-primary');
 });
 
-dropZone.addEventListener('drop', function (e) {
+dropZone.addEventListener('drop', function (e: DragEvent) {
   e.preventDefault();
   dropZone.classList.remove('border-primary');
-  var f = e.dataTransfer.files[0];
+  const f = (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) || null;
   if (f) handleFile(f);
 });
 
 fileInput.addEventListener('change', function () {
-  if (this.files[0]) handleFile(this.files[0]);
+  const fi = this as HTMLInputElement;
+  if (fi.files && fi.files[0]) handleFile(fi.files[0]);
 });
 
-/**
- * Handle a file selected by the user (via drop or picker).
- * Reads the file, validates it, detects encryption, and updates the UI.
- * @param {File} file
- */
-function handleFile(file) {
+function handleFile(file: File) {
   if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
     showStatus('<i class="fas fa-exclamation-circle me-2"></i>Please select a PDF file.', 'danger');
     return;
@@ -136,9 +112,11 @@ function handleFile(file) {
   fileName.textContent = file.name;
   fileName.classList.remove('d-none');
 
-  var reader = new FileReader();
-  reader.onload = function (e) {
-    var bytes = new Uint8Array(e.target.result);
+  const reader = new FileReader();
+  reader.onload = function (e: ProgressEvent<FileReader>) {
+    const buf = (e.target && e.target.result) as ArrayBuffer | null;
+    if (!buf) return;
+    const bytes = new Uint8Array(buf);
 
     if (!isValidPdf(bytes)) {
       showStatus('<i class="fas fa-exclamation-circle me-2"></i>The selected file does not appear to be a valid PDF.', 'danger');
@@ -147,7 +125,6 @@ function handleFile(file) {
       return;
     }
 
-    // Auto-select mode based on encryption status.
     if (isPdfEncrypted(bytes)) {
       setMode('remove');
       showStatus('<i class="fas fa-lock me-2"></i>Encrypted PDF detected — enter the current password to remove it.', 'info');
@@ -161,57 +138,54 @@ function handleFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
-// ── Processing ────────────────────────────────────────────────────────────────
+// ── Processing ───────────────────────────────────────────────────────────────
 
-/** Resolve the URL for the worker script, honouring baseurl. */
-var workerUrl = document.getElementById('pdf-worker-url').dataset.url;
+const workerUrl = String((document.getElementById('pdf-worker-url') as HTMLElement).dataset.url);
 
-/**
- * Process the selected PDF via the Web Worker.
- */
 processBtn.addEventListener('click', function () {
   if (!selectedFile) return;
 
-  var mode = modeRemove.checked ? 'remove' : 'add';
+  const mode = modeRemove.checked ? 'remove' : 'add';
 
   if (mode === 'add') {
-    var up = userPass.value;
-    var op = ownerPass.value;
+    let up = userPass.value;
+    let op = ownerPass.value;
     if (!up && !op) {
       showStatus('<i class="fas fa-exclamation-circle me-2"></i>Please enter at least a User Password or Owner Password.', 'danger');
       return;
     }
-    if (!op) op = up; // default owner password to user password
+    if (!op) op = up;
   }
 
   processBtn.disabled = true;
   showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Loading qpdf — this may take a moment on first use…', 'info');
 
-  var reader = new FileReader();
-  reader.onload = function (e) {
-    var fileData = new Uint8Array(e.target.result);
-    var worker = new Worker(workerUrl);
+  const reader = new FileReader();
+  reader.onload = function (e: ProgressEvent<FileReader>) {
+    const buf = (e.target && e.target.result) as ArrayBuffer | null;
+    if (!buf) return;
+    const fileData = new Uint8Array(buf);
+    const worker = new Worker(workerUrl);
 
-    worker.onmessage = function (ev) {
+    worker.onmessage = function (ev: MessageEvent) {
       worker.terminate();
       processBtn.disabled = false;
 
       if (!ev.data.success) {
-        var msg = ev.data.error || 'An unknown error occurred.';
+        const msg = ev.data.error || 'An unknown error occurred.';
         showStatus('<i class="fas fa-times-circle me-2"></i>' + msg, 'danger');
         return;
       }
 
-      // Build a download link without memory leaks.
       revokePreviousUrl();
-      var blob = new Blob([ev.data.data], { type: 'application/pdf' });
-      var url  = URL.createObjectURL(blob);
+      const blob = new Blob([ev.data.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
       previousObjectUrl = url;
 
-      var baseName = selectedFile.name.replace(/\.pdf$/i, '');
-      var outName  = baseName + (mode === 'remove' ? '-decrypted.pdf' : '-protected.pdf');
+      const baseName = selectedFile!.name.replace(/\.pdf$/i, '');
+      const outName = baseName + (mode === 'remove' ? '-decrypted.pdf' : '-protected.pdf');
 
-      downloadLink.href     = url;
+      downloadLink.href = url;
       downloadLink.download = outName;
       downloadLink.textContent = outName;
 
@@ -219,23 +193,22 @@ processBtn.addEventListener('click', function () {
       showStatus('<i class="fas fa-check-circle me-2"></i>Done! Your file is ready to download.', 'success');
     };
 
-    worker.onerror = function (err) {
+    worker.onerror = function (err: ErrorEvent) {
       worker.terminate();
       processBtn.disabled = false;
       showStatus('<i class="fas fa-times-circle me-2"></i>Worker error: ' + (err.message || 'unknown'), 'danger');
     };
 
-    var msg = { file: fileData };
+    const msg: any = { file: fileData };
     if (mode === 'remove') {
-      msg.type     = 'decrypt';
+      msg.type = 'decrypt';
       msg.password = decryptPass.value;
     } else {
-      msg.type      = 'encrypt';
-      msg.userPass  = userPass.value;
+      msg.type = 'encrypt';
+      msg.userPass = userPass.value;
       msg.ownerPass = ownerPass.value || userPass.value;
     }
 
-    // Show progress once the file is being processed
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Processing…', 'info');
     worker.postMessage(msg);
   };
@@ -243,8 +216,4 @@ processBtn.addEventListener('click', function () {
   reader.readAsArrayBuffer(selectedFile);
 });
 
-// ── Privacy badge ─────────────────────────────────────────────────────────────
-
-// The privacy indicator is always "0 KB uploaded to server" because all
-// processing is done in-browser. Update the badge to confirm.
 privacyBytes.textContent = '0 KB';

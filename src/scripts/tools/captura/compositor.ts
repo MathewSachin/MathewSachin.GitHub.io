@@ -1,24 +1,13 @@
-// ── compositor.js ─────────────────────────────────────────────────────────────
-// The Visual Engine: <canvas> compositing and PiP drag.
-// Responsibilities:
-//   • Draw screen capture, webcam PiP overlay, and timestamp onto the canvas.
-//   • Handle Picture-in-Picture drag-to-reposition via mouse events on the
-//     canvas, calling back onPipMoved so the owner can persist the position.
-//   • Expose screenVid / webcamVid <video> elements for the owner to wire up
-//     MediaStream sources.
-
+// @ts-nocheck
+// ── compositor.ts ─────────────────────────────────────────────────────────────
 const VIDEO_READY_TIMEOUT_MS = 3000;
 
 export class Compositor {
-  // ── State owned externally (set by app.js) ──────────────────────────────────
-
-  webcamStream        = null;  // live webcam stream during recording
-  previewWebcamStream = null;  // webcam stream during preview / between recordings
+  webcamStream        = null;
+  previewWebcamStream = null;
   isRecording         = false;
-  pipX = -1;  // fractional position (0–1); -1 = default (bottom-left corner)
+  pipX = -1;
   pipY = -1;
-
-  // ── Private fields ──────────────────────────────────────────────────────────
 
   #canvas;
   #ctx;
@@ -29,16 +18,11 @@ export class Compositor {
   #pipDragOffY = 0;
   #onPipMoved;
 
-  // ── Constructor ─────────────────────────────────────────────────────────────
-
-  // onPipMoved(x, y) is called when the user finishes dragging the PiP
-  // so the owner can persist the fractional position in preferences.
   constructor(canvas, { onPipMoved } = {}) {
     this.#canvas     = canvas;
     this.#ctx        = canvas.getContext('2d');
     this.#onPipMoved = onPipMoved;
 
-    // Off-screen video elements used by the compositor to read decoded frames.
     this.#screenVid = Object.assign(document.createElement('video'),
       { muted: true, autoplay: true, playsInline: true });
     this.#webcamVid = Object.assign(document.createElement('video'),
@@ -47,13 +31,9 @@ export class Compositor {
     this.#setupPipDrag();
   }
 
-  // ── Public getters ──────────────────────────────────────────────────────────
-
   get canvas()    { return this.#canvas; }
   get screenVid() { return this.#screenVid; }
   get webcamVid() { return this.#webcamVid; }
-
-  // ── Frame drawing ────────────────────────────────────────────────────────────
 
   drawFrame() {
     const W   = this.#canvas.width;
@@ -63,11 +43,9 @@ export class Compositor {
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, W, H);
 
-    // Screen layer — shown whenever a live stream is available
     if (this.#screenVid.srcObject && this.#screenVid.readyState >= 2) {
       ctx.drawImage(this.#screenVid, 0, 0, W, H);
     } else {
-      // Placeholder before any stream is active
       ctx.fillStyle    = 'rgba(255,255,255,0.15)';
       ctx.font         = `${Math.round(W / 40)}px sans-serif`;
       ctx.textAlign    = 'center';
@@ -77,7 +55,6 @@ export class Compositor {
       ctx.textBaseline = 'alphabetic';
     }
 
-    // Webcam PiP — rendered in both preview and recording modes
     if ((this.webcamStream || this.previewWebcamStream) && this.#webcamVid.readyState >= 2) {
       const pipW = Math.round(W / 4);
       const pipH = Math.round(H / 4);
@@ -96,7 +73,6 @@ export class Compositor {
       this.#roundRect(px, py, pipW, pipH, 8);
       ctx.stroke();
 
-      // Drag hint shown only in preview / pre-recording state
       if (!this.isRecording) {
         ctx.fillStyle    = 'rgba(0,0,0,0.45)';
         ctx.font         = `${Math.round(W / 80)}px sans-serif`;
@@ -108,7 +84,6 @@ export class Compositor {
       }
     }
 
-    // Timestamp overlay — recording mode only
     if (this.isRecording) {
       const ts  = new Date().toLocaleTimeString();
       const pad = 6, fw = 120, fh = 20;
@@ -124,10 +99,6 @@ export class Compositor {
     }
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────────────
-
-  // Returns the current PiP bounding box in canvas pixels, or null when webcam
-  // is disabled.
   getPipRect() {
     if (!this.webcamStream && !this.previewWebcamStream) return null;
     const W = this.#canvas.width, H = this.#canvas.height;
@@ -138,8 +109,6 @@ export class Compositor {
     return { px, py, pipW, pipH };
   }
 
-  // Resolves once a video element has at least one decoded frame, or after a
-  // timeout (handles sources that never fire 'loadeddata', e.g. virtual cams).
   waitForVideoReady(vid) {
     return new Promise(resolve => {
       if (vid.readyState >= 2) { resolve(); return; }
@@ -147,8 +116,6 @@ export class Compositor {
       setTimeout(resolve, VIDEO_READY_TIMEOUT_MS);
     });
   }
-
-  // ── PiP drag ─────────────────────────────────────────────────────────────────
 
   #canvasPos(e) {
     const rect = this.#canvas.getBoundingClientRect();

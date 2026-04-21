@@ -5,7 +5,7 @@ import {
   verifyWebmFile,
   verifyFileByExtension,
   countFilesWithExtension,
-} from './captura-helpers.js';
+} from './captura-helpers.ts';
 
 test.describe('Captura Web Recorder', () => {
   test.beforeEach(async ({ page }) => {

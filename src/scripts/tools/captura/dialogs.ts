@@ -1,20 +1,19 @@
-// ── dialogs.js ────────────────────────────────────────────────────────────────
-// Alert banner, toast notifications, and modal error dialog.
-
-const alertBox    = document.getElementById('alert-box');
-const errorDialog = document.getElementById('captura-error-dialog');
+// ── dialogs.ts ───────────────────────────────────────────────────────────────
+const alertBox = document.getElementById('alert-box') as HTMLElement | null;
+const errorDialog = document.getElementById('captura-error-dialog') as HTMLDialogElement | null;
 
 const TOAST_FADE_MS = 150;
 
-export function showAlert(msgOrNode, type) {
+export function showAlert(msgOrNode: string | Node, type: string) {
+  if (!alertBox) return;
   alertBox.className = 'alert alert-' + type + ' mb-3';
-  alertBox.hidden    = false;
+  alertBox.hidden = false;
   if (typeof msgOrNode === 'string') alertBox.textContent = msgOrNode;
   else alertBox.replaceChildren(msgOrNode);
 }
 
-export function showToast(msgOrNode, type, autohide = true) {
-  const container = document.getElementById('toast-container');
+export function showToast(msgOrNode: string | Node, type: string, autohide = true) {
+  const container = document.getElementById('toast-container') as HTMLElement | null;
   if (!container) return;
 
   const toast = document.createElement('div');
@@ -31,14 +30,14 @@ export function showToast(msgOrNode, type, autohide = true) {
   else body.appendChild(msgOrNode);
 
   const closeBtn = document.createElement('button');
-  closeBtn.type      = 'button';
+  closeBtn.type = 'button';
   closeBtn.className = type === 'warning'
     ? 'btn-close me-2 m-auto flex-shrink-0'
     : 'btn-close btn-close-white me-2 m-auto flex-shrink-0';
   closeBtn.setAttribute('aria-label', 'Close');
   closeBtn.addEventListener('click', () => {
     toast.classList.remove('show');
-    setTimeout(() => toast.parentNode?.removeChild(toast), TOAST_FADE_MS);
+    setTimeout(() => toast.remove(), TOAST_FADE_MS);
   });
 
   inner.append(body, closeBtn);
@@ -48,15 +47,17 @@ export function showToast(msgOrNode, type, autohide = true) {
   if (autohide) {
     setTimeout(() => {
       toast.classList.remove('show');
-      setTimeout(() => toast.parentNode?.removeChild(toast), TOAST_FADE_MS);
+      setTimeout(() => toast.remove(), TOAST_FADE_MS);
     }, 8000);
   }
 }
 
-export function showErrorDialog(title, message) {
+export function showErrorDialog(title: string, message: string) {
   if (!errorDialog) { showAlert(message, 'danger'); return; }
-  document.getElementById('captura-error-title').textContent = title;
-  document.getElementById('captura-error-body').textContent  = message;
+  const titleEl = document.getElementById('captura-error-title');
+  const bodyEl  = document.getElementById('captura-error-body');
+  if (titleEl) titleEl.textContent = title;
+  if (bodyEl)  bodyEl.textContent  = message;
   errorDialog.showModal();
 }
 
