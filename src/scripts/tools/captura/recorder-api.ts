@@ -1,5 +1,4 @@
 // ── recorder-api.ts ─────────────────────────────────────────────────────────
-// @ts-nocheck
 import { dateStamp } from './storage.js';
 
 const DEFAULT_WIDTH  = 1280;
@@ -15,40 +14,40 @@ const RESOLUTION_CONSTRAINTS = {
 const VIDEO_BITRATES = { '480': 2_000_000, '720': 4_000_000, '1080': 8_000_000 };
 
 export class RecorderAPI {
-  #compositor;
-  #audioMixer;
-  #metronome;
-  #recorderCore;
-  #storage;
-  #canvas;
+  #compositor: any;
+  #audioMixer: any;
+  #metronome: any;
+  #recorderCore: any;
+  #storage: any;
+  #canvas: HTMLCanvasElement;
 
-  #masterStream        = null;
-  #webcamStream        = null;
-  #micStream           = null;
-  #previewWebcamStream = null;
-  #writableStream      = null;
-  #savedFileHandle     = null;
+  #masterStream: MediaStream | null = null;
+  #webcamStream: MediaStream | null = null;
+  #micStream: MediaStream | null = null;
+  #previewWebcamStream: MediaStream | null = null;
+  #writableStream: FileSystemWritableFileStream | null = null;
+  #savedFileHandle: any = null;
 
   #recordingStartTime = 0;
-  #totalPausedMs      = 0;
-  #pauseStartTime     = 0;
+  #totalPausedMs = 0;
+  #pauseStartTime = 0;
 
   #webcamDeviceId = '';
   #webcamSelected = false;
-  #micDeviceId    = '';
-  #micSelected    = false;
+  #micDeviceId = '';
+  #micSelected = false;
 
   get micSelected() { return this.#micSelected; }
 
-  onStreamEnded = null;
+  onStreamEnded: (() => void) | null = null;
 
-  constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }) {
-    this.#compositor   = compositor;
-    this.#audioMixer   = audioMixer;
-    this.#metronome    = metronome;
+  constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }: any) {
+    this.#compositor = compositor;
+    this.#audioMixer = audioMixer;
+    this.#metronome = metronome;
     this.#recorderCore = recorderCore;
-    this.#storage      = storage;
-    this.#canvas       = canvas;
+    this.#storage = storage;
+    this.#canvas = canvas;
   }
 
   get hasSession() {
@@ -56,7 +55,7 @@ export class RecorderAPI {
               this.#masterStream.getVideoTracks()[0]?.readyState === 'live');
   }
 
-  setDevices({ webcamDeviceId, webcamSelected, micDeviceId, micSelected }) {
+  setDevices({ webcamDeviceId, webcamSelected, micDeviceId, micSelected }: { webcamDeviceId: string; webcamSelected: boolean; micDeviceId: string; micSelected: boolean; }) {
     this.#webcamDeviceId = webcamDeviceId;
     this.#webcamSelected = webcamSelected;
     this.#micDeviceId    = micDeviceId;
@@ -66,17 +65,17 @@ export class RecorderAPI {
   async acquireAndInit({ fps, quality, format, wantSysAudio,
                          webcamSelected, webcamDeviceId,
                          micSelected, micDeviceId,
-                         micGain, sysGain }) {
+                         micGain, sysGain }: { fps: string; quality: string; format: string; wantSysAudio: boolean; webcamSelected: boolean; webcamDeviceId?: string; micSelected: boolean; micDeviceId?: string; micGain: number; sysGain: number; }) {
     if (!this.hasSession) {
-      this.#masterStream = await navigator.mediaDevices.getDisplayMedia({
+      this.#masterStream = await navigator.mediaDevices.getDisplayMedia(({
         video: {
           displaySurface: 'monitor',
           frameRate: { ideal: parseInt(fps, 10) },
-          ...(RESOLUTION_CONSTRAINTS[quality] ?? {}),
+          ...( (RESOLUTION_CONSTRAINTS as any)[quality] ?? {} ),
         },
-        audio: { systemAudio: 'include' },
+        audio: { /* systemAudio intentionally omitted for TS */ } as unknown as MediaTrackConstraints,
         surfaceSwitching: 'include',
-      });
+      } as any));
       this.#masterStream.getVideoTracks()[0]?.addEventListener(
         'ended',
         () => { this.#masterStream = null; this.onStreamEnded?.(); },
@@ -87,7 +86,7 @@ export class RecorderAPI {
     this.#compositor.screenVid.srcObject = this.#masterStream;
     await this.#compositor.screenVid.play().catch(() => {});
 
-    const settings      = this.#masterStream.getVideoTracks()[0]?.getSettings() ?? {};
+    const settings      = this.#masterStream?.getVideoTracks()[0]?.getSettings() ?? {};
     this.#canvas.width  = settings.width  || DEFAULT_WIDTH;
     this.#canvas.height = settings.height || DEFAULT_HEIGHT;
 
@@ -112,7 +111,7 @@ export class RecorderAPI {
       );
     }
 
-    const sysAudioTracks = this.#masterStream.getAudioTracks();
+    const sysAudioTracks = this.#masterStream?.getAudioTracks() ?? [];
     if (wantSysAudio && sysAudioTracks.length === 0) {
       this.#releaseNonScreenStreams();
       const err = new Error(
@@ -121,7 +120,7 @@ export class RecorderAPI {
         'Click "End Session" and try again, or uncheck "Capture system audio" to record without it.'
       );
       err.name  = 'SysAudioNotCaptured';
-      err.title = 'System Audio Not Captured';
+      (err as any).title = 'System Audio Not Captured';
       throw err;
     }
 
@@ -155,12 +154,12 @@ export class RecorderAPI {
       mixedAudioTrack,
       writableStream: this.#writableStream,
       isMp4:          format === FORMAT_MP4,
-      videoBitrate:   VIDEO_BITRATES[quality] ?? 4_000_000,
+      videoBitrate:   (VIDEO_BITRATES as any)[quality] ?? 4_000_000,
     });
     await this.#recorderCore.start();
   }
 
-  startEncoding(fps) {
+  startEncoding(fps: number) {
     this.#compositor.isRecording = true;
     this.#recordingStartTime     = performance.now();
     this.#totalPausedMs          = 0;
@@ -175,7 +174,7 @@ export class RecorderAPI {
     this.#audioMixer.pauseSilentAudio();
   }
 
-  resumeEncoding(fps) {
+  resumeEncoding(fps: number) {
     this.#totalPausedMs += performance.now() - this.#pauseStartTime;
     this.#recorderCore.resume();
     this.#audioMixer.resumeSilentAudio();
@@ -197,7 +196,7 @@ export class RecorderAPI {
     return handle;
   }
 
-  async changeWebcam(webcamDeviceId, webcamSelected) {
+  async changeWebcam(webcamDeviceId: string | undefined, webcamSelected: boolean) {
     this.#webcamStream?.getTracks().forEach(t => t.stop());
     this.#webcamStream           = null;
     this.#compositor.webcamStream = null;
@@ -238,10 +237,10 @@ export class RecorderAPI {
     }
   }
 
-  #startLoop(fps) {
+  #startLoop(fps: number) {
     const startTime = this.#recordingStartTime;
     const paused    = () => this.#totalPausedMs;
-    this.#metronome.start(fps, async frameStart => {
+    this.#metronome.start(fps, async (frameStart: number) => {
       this.#compositor.drawFrame();
       await this.#recorderCore.addFrame((frameStart - startTime - paused()) / 1000);
     });

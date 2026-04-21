@@ -1,26 +1,25 @@
-// @ts-nocheck
 // ── compositor.ts ─────────────────────────────────────────────────────────────
 const VIDEO_READY_TIMEOUT_MS = 3000;
 
 export class Compositor {
-  webcamStream        = null;
-  previewWebcamStream = null;
-  isRecording         = false;
-  pipX = -1;
-  pipY = -1;
+  webcamStream: MediaStream | null = null;
+  previewWebcamStream: MediaStream | null = null;
+  isRecording = false;
+  pipX: number = -1;
+  pipY: number = -1;
 
-  #canvas;
-  #ctx;
-  #screenVid;
-  #webcamVid;
+  #canvas: HTMLCanvasElement;
+  #ctx: CanvasRenderingContext2D;
+  #screenVid: HTMLVideoElement;
+  #webcamVid: HTMLVideoElement;
   #pipDragging = false;
   #pipDragOffX = 0;
   #pipDragOffY = 0;
-  #onPipMoved;
+  #onPipMoved?: (x: number, y: number) => void;
 
-  constructor(canvas, { onPipMoved } = {}) {
+  constructor(canvas: HTMLCanvasElement, { onPipMoved }: { onPipMoved?: (x: number, y: number) => void } = {}) {
     this.#canvas     = canvas;
-    this.#ctx        = canvas.getContext('2d');
+    this.#ctx        = canvas.getContext('2d')!;
     this.#onPipMoved = onPipMoved;
 
     this.#screenVid = Object.assign(document.createElement('video'),
@@ -99,7 +98,7 @@ export class Compositor {
     }
   }
 
-  getPipRect() {
+  getPipRect(): { px: number; py: number; pipW: number; pipH: number } | null {
     if (!this.webcamStream && !this.previewWebcamStream) return null;
     const W = this.#canvas.width, H = this.#canvas.height;
     const pipW = Math.round(W / 4), pipH = Math.round(H / 4);
@@ -109,15 +108,15 @@ export class Compositor {
     return { px, py, pipW, pipH };
   }
 
-  waitForVideoReady(vid) {
-    return new Promise(resolve => {
+  waitForVideoReady(vid: HTMLVideoElement): Promise<void> {
+    return new Promise<void>(resolve => {
       if (vid.readyState >= 2) { resolve(); return; }
-      vid.addEventListener('loadeddata', resolve, { once: true });
+      vid.addEventListener('loadeddata', () => resolve(), { once: true });
       setTimeout(resolve, VIDEO_READY_TIMEOUT_MS);
     });
   }
 
-  #canvasPos(e) {
+  #canvasPos(e: MouseEvent): { x: number; y: number } {
     const rect = this.#canvas.getBoundingClientRect();
     return {
       x: (e.clientX - rect.left) * (this.#canvas.width  / rect.width),
@@ -126,7 +125,7 @@ export class Compositor {
   }
 
   #setupPipDrag() {
-    this.#canvas.addEventListener('mousedown', e => {
+    this.#canvas.addEventListener('mousedown', (e: MouseEvent) => {
       const r = this.getPipRect();
       if (!r) return;
       const { x, y } = this.#canvasPos(e);
@@ -139,7 +138,7 @@ export class Compositor {
       }
     });
 
-    this.#canvas.addEventListener('mousemove', e => {
+    this.#canvas.addEventListener('mousemove', (e: MouseEvent) => {
       const r = this.getPipRect();
       if (r) {
         const { x, y } = this.#canvasPos(e);
@@ -164,7 +163,7 @@ export class Compositor {
     this.#canvas.addEventListener('mouseleave', stopDrag);
   }
 
-  #roundRect(x, y, w, h, r) {
+  #roundRect(x: number, y: number, w: number, h: number, r: number) {
     const ctx = this.#ctx;
     ctx.beginPath();
     ctx.moveTo(x + r, y);

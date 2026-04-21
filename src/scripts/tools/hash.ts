@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: No types for spark-md5 available in this project
 import SparkMD5 from 'spark-md5';
 
 export function md5(str: string): string {

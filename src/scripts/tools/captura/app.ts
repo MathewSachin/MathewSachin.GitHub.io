@@ -1,4 +1,4 @@
-// @ts-nocheck
+// Top-level DOM nodes are explicitly typed to satisfy TypeScript checks.
 // ── app.ts ────────────────────────────────────────────────────────────────────
 // The UI layer.
 // Responsibilities:
@@ -22,41 +22,41 @@ import { trackEvent }                          from './analytics.js';
 
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
-const gainPct = v => Math.round(parseFloat(v) * 100) + '%';
-const fmtTime = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+const gainPct = (v: string | number) => Math.round(parseFloat(String(v)) * 100) + '%';
+const fmtTime = (s: number) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
-const canvas              = document.getElementById('recorder-canvas');
-const webcamSel           = document.getElementById('webcam-select');
-const micSel              = document.getElementById('mic-select');
-const fpsSel              = document.getElementById('fps-select');
-const qualitySel          = document.getElementById('quality-select');
-const formatSel           = document.getElementById('format-select');
-const countdownSel        = document.getElementById('countdown-select');
-const sysAudioChk         = document.getElementById('sys-audio-chk');
-const startBtn            = document.getElementById('start-btn');
-const pauseBtn            = document.getElementById('pause-btn');
-const stopBtn             = document.getElementById('stop-btn');
-const cancelCountdownBtn  = document.getElementById('cancel-countdown-btn');
-const endSessionBtn       = document.getElementById('end-session-btn');
-const pickDirBtn          = document.getElementById('pick-dir-btn');
-const dirNameEl           = document.getElementById('dir-name');
-const statusBadge         = document.getElementById('status-badge');
-const timerEl             = document.getElementById('timer-text');
-const micGainSlider       = document.getElementById('mic-gain-slider');
-const sysGainSlider       = document.getElementById('sys-gain-slider');
-const micGainLabel        = document.getElementById('mic-gain-label');
-const sysGainLabel        = document.getElementById('sys-gain-label');
-const micLevelCanvas      = document.getElementById('mic-level-canvas');
-const sysLevelCanvas      = document.getElementById('sys-level-canvas');
-const errorDialog         = document.getElementById('captura-error-dialog');
-const countdownOverlay    = document.getElementById('countdown-overlay');
-const countdownNumberEl   = document.getElementById('countdown-number');
+const canvas              = document.getElementById('recorder-canvas') as HTMLCanvasElement;
+const webcamSel           = document.getElementById('webcam-select') as HTMLSelectElement;
+const micSel              = document.getElementById('mic-select') as HTMLSelectElement;
+const fpsSel              = document.getElementById('fps-select') as HTMLSelectElement;
+const qualitySel          = document.getElementById('quality-select') as HTMLSelectElement;
+const formatSel           = document.getElementById('format-select') as HTMLSelectElement;
+const countdownSel        = document.getElementById('countdown-select') as HTMLSelectElement;
+const sysAudioChk         = document.getElementById('sys-audio-chk') as HTMLInputElement;
+const startBtn            = document.getElementById('start-btn') as HTMLButtonElement;
+const pauseBtn            = document.getElementById('pause-btn') as HTMLButtonElement;
+const stopBtn             = document.getElementById('stop-btn') as HTMLButtonElement;
+const cancelCountdownBtn  = document.getElementById('cancel-countdown-btn') as HTMLButtonElement;
+const endSessionBtn       = document.getElementById('end-session-btn') as HTMLButtonElement;
+const pickDirBtn          = document.getElementById('pick-dir-btn') as HTMLButtonElement;
+const dirNameEl           = document.getElementById('dir-name') as HTMLElement;
+const statusBadge         = document.getElementById('status-badge') as HTMLElement;
+const timerEl             = document.getElementById('timer-text') as HTMLElement;
+const micGainSlider       = document.getElementById('mic-gain-slider') as HTMLInputElement;
+const sysGainSlider       = document.getElementById('sys-gain-slider') as HTMLInputElement;
+const micGainLabel        = document.getElementById('mic-gain-label') as HTMLElement;
+const sysGainLabel        = document.getElementById('sys-gain-label') as HTMLElement;
+const micLevelCanvas      = document.getElementById('mic-level-canvas') as HTMLCanvasElement;
+const sysLevelCanvas      = document.getElementById('sys-level-canvas') as HTMLCanvasElement;
+const errorDialog         = document.getElementById('captura-error-dialog') as HTMLDialogElement;
+const countdownOverlay    = document.getElementById('countdown-overlay') as HTMLElement;
+const countdownNumberEl   = document.getElementById('countdown-number') as HTMLElement;
 
 const hasGetDisplayMedia = !!(navigator.mediaDevices?.getDisplayMedia);
-const hasFSA = typeof window.showDirectoryPicker === 'function';
+const hasFSA = typeof (window as any).showDirectoryPicker === 'function';
 
 const compositor = new Compositor(canvas, {
-  onPipMoved: (x, y) => { savePref(PREFS.pipX, x); savePref(PREFS.pipY, y); },
+  onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
 });
 
 const metronome    = new Metronome();
@@ -71,42 +71,42 @@ const api = new RecorderAPI({
 const machine = new RecorderStateMachine(api);
 
 let elapsedSecs     = 0;
-let timerIntervalId = null;
+let timerIntervalId: ReturnType<typeof setInterval> | null = null;
 
 function startTimer() {
-  clearInterval(timerIntervalId);
+  if (timerIntervalId !== null) clearInterval(timerIntervalId);
   elapsedSecs = 0;
   timerEl.textContent = '00:00';
   timerIntervalId = setInterval(() => { timerEl.textContent = fmtTime(++elapsedSecs); }, 1000);
 }
 
 function pauseTimer() {
-  clearInterval(timerIntervalId);
+  if (timerIntervalId !== null) clearInterval(timerIntervalId);
   timerIntervalId = null;
 }
 
 function resumeTimer() {
-  if (!timerIntervalId) {
+  if (timerIntervalId === null) {
     timerIntervalId = setInterval(() => { timerEl.textContent = fmtTime(++elapsedSecs); }, 1000);
   }
 }
 
 function resetTimer() {
-  clearInterval(timerIntervalId);
+  if (timerIntervalId !== null) clearInterval(timerIntervalId);
   timerIntervalId = null;
   elapsedSecs = 0;
   timerEl.textContent = '00:00';
 }
 
-let countdownIntervalId = null;
+let countdownIntervalId: ReturnType<typeof setInterval> | null = null;
 
-function startCountdownOverlay(secs, onDone) {
+function startCountdownOverlay(secs: number, onDone: () => void) {
   stopCountdownOverlay();
   if (secs <= 0) {
     onDone();
     return;
   }
-  countdownNumberEl.textContent = secs;
+  countdownNumberEl.textContent = String(secs);
   countdownOverlay.hidden = false;
   let remaining = secs;
   countdownIntervalId = setInterval(() => {
@@ -115,7 +115,7 @@ function startCountdownOverlay(secs, onDone) {
       stopCountdownOverlay();
       onDone();
     } else {
-      countdownNumberEl.textContent = remaining;
+      countdownNumberEl.textContent = String(remaining);
       countdownNumberEl.style.animation = 'none';
       void countdownNumberEl.offsetWidth;
       countdownNumberEl.style.animation = '';
@@ -123,14 +123,14 @@ function startCountdownOverlay(secs, onDone) {
   }, 1000);
 }
 
-function stopCountdownOverlay() {
-  clearInterval(countdownIntervalId);
+function stopCountdownOverlay(): void {
+  if (countdownIntervalId !== null) clearInterval(countdownIntervalId);
   countdownIntervalId = null;
   countdownOverlay.hidden = true;
   countdownNumberEl.textContent = '';
 }
 
-function render(state) {
+function render(state: string): void {
   const isSession    = state === STATE.SESSION;
   const isReq        = state === STATE.REQUESTING;
   const isCountdown  = state === STATE.COUNTDOWN;
@@ -269,7 +269,7 @@ machine.onStateChange((state, event, payload) => {
   }
 });
 
-function syncDevicesToApi() {
+function syncDevicesToApi(): void {
   api.setDevices({
     webcamDeviceId: webcamSel.value,
     webcamSelected: webcamSel.selectedIndex > 0,
@@ -278,7 +278,18 @@ function syncDevicesToApi() {
   });
 }
 
-function buildStartPayload() {
+function buildStartPayload(): {
+    fps: string;
+    quality: string;
+    format: string;
+    wantSysAudio: boolean;
+    webcamSelected: boolean;
+    webcamDeviceId: string;
+    micSelected: boolean;
+    micDeviceId: string;
+    micGain: number;
+    sysGain: number;
+  } {
   syncDevicesToApi();
   return {
     fps:           fpsSel.value,
@@ -294,7 +305,7 @@ function buildStartPayload() {
   };
 }
 
-async function showSaveSuccessToast(fileHandle) {
+async function showSaveSuccessToast(fileHandle: any): Promise<void> {
   const msg = document.createDocumentFragment();
 
   if (storage.isOPFS) {
@@ -341,7 +352,7 @@ async function showSaveSuccessToast(fileHandle) {
   }
 }
 
-async function enumerateDevices() {
+async function enumerateDevices(): Promise<void> {
   try {
     const devices   = await navigator.mediaDevices.enumerateDevices();
     const videoDevs = devices.filter(d => d.kind === 'videoinput');
@@ -361,11 +372,11 @@ async function enumerateDevices() {
       api.restartPreviews();
     }
   } catch (err) {
-    showErrorDialog('Device Error', 'Could not enumerate devices: ' + err.message);
+    showErrorDialog('Device Error', 'Could not enumerate devices: ' + ((err as any)?.message ?? String(err)));
   }
 }
 
-function restoreSimplePrefs() {
+function restoreSimplePrefs(): void {
   const fps = loadPref(PREFS.fps);
   if (fps) fpsSel.value = fps;
 
@@ -403,7 +414,7 @@ function restoreSimplePrefs() {
   }
 }
 
-function restoreDevicePrefs() {
+function restoreDevicePrefs(): void {
   const webcamId = loadPref(PREFS.webcam);
   if (webcamId && webcamSel.querySelector(`option[value="${CSS.escape(webcamId)}"]`)) {
     webcamSel.value = webcamId;
@@ -422,7 +433,8 @@ if (!hasGetDisplayMedia) {
     'Please open this page on a desktop browser (Chrome, Edge, or Firefox) to use the recorder.',
     'warning'
   );
-  document.getElementById('recorder-ui').hidden = true;
+  const recUi = document.getElementById('recorder-ui');
+  if (recUi) recUi.hidden = true;
 }
 
 restoreSimplePrefs();
@@ -481,8 +493,8 @@ errorDialog?.addEventListener('close', () => {
   }
 });
 
-function saveAndTrackPref(key, value, analyticsKey) {
-  savePref(key, value);
+function saveAndTrackPref(key: string, value: string | number | boolean, analyticsKey?: string): void {
+  savePref(key, String(value));
   trackEvent('captura_pref_change', { pref: analyticsKey, value: String(value) });
 }
 
@@ -496,8 +508,8 @@ webcamSel.addEventListener('change', () => {
   savePref(PREFS.webcam, webcamSel.value);
   const s = machine.state;
   if (s === STATE.RECORDING || s === STATE.PAUSED) {
-    api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
-      .catch(err => showToast('Failed to switch webcam: ' + err.message, 'danger'));
+      api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
+        .catch(err => showToast('Failed to switch webcam: ' + ((err as any)?.message ?? String(err)), 'danger'));
   } else if (s !== STATE.STOPPING) {
     syncDevicesToApi();
     api.restartPreviews();
@@ -517,14 +529,14 @@ micGainSlider.addEventListener('input', () => {
   const v = parseFloat(micGainSlider.value);
   micGainLabel.textContent = gainPct(v);
   audioMixer.setMicGain(v);
-  savePref(PREFS.micGain, v);
+  savePref(PREFS.micGain, String(v));
 });
 
 sysGainSlider.addEventListener('input', () => {
   const v = parseFloat(sysGainSlider.value);
   sysGainLabel.textContent = gainPct(v);
   audioMixer.setSysGain(v);
-  savePref(PREFS.sysGain, v);
+  savePref(PREFS.sysGain, String(v));
 });
 
 window.addEventListener('beforeunload', (e) => {

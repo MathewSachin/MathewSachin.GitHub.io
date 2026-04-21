@@ -1,4 +1,3 @@
-// @ts-nocheck
 // ── audio-mixer.ts ────────────────────────────────────────────────────────────
 // The Audio Engine: everything related to the AudioContext.
 // Responsibilities:
@@ -10,26 +9,26 @@
 //     of an active recording.
 
 export class AudioMixer {
-  #audioCtx      = null;
-  #audioDestNode = null;
-  #micGainNode   = null;
-  #sysGainNode   = null;
-  #micAnalyser   = null;
-  #sysAnalyser   = null;
+  #audioCtx: AudioContext | null = null;
+  #audioDestNode: MediaStreamAudioDestinationNode | null = null;
+  #micGainNode: GainNode | null = null;
+  #sysGainNode: GainNode | null = null;
+  #micAnalyser: AnalyserNode | null = null;
+  #sysAnalyser: AnalyserNode | null = null;
 
-  #silentAudioEl  = null;
-  #silentAudioUrl = null;
+  #silentAudioEl: HTMLAudioElement | null = null;
+  #silentAudioUrl: string | null = null;
 
-  #previewAudioCtx    = null;
-  #previewMicAnalyser = null;
-  #previewSysAnalyser = null;
-  #previewMicStream   = null;
+  #previewAudioCtx: AudioContext | null = null;
+  #previewMicAnalyser: AnalyserNode | null = null;
+  #previewSysAnalyser: AnalyserNode | null = null;
+  #previewMicStream: MediaStream | null = null;
 
-  #meterRafId     = null;
-  #micLevelCanvas = null;
-  #sysLevelCanvas = null;
+  #meterRafId: number | null = null;
+  #micLevelCanvas: HTMLCanvasElement | null = null;
+  #sysLevelCanvas: HTMLCanvasElement | null = null;
 
-  constructor(micLevelCanvas, sysLevelCanvas) {
+  constructor(micLevelCanvas: HTMLCanvasElement, sysLevelCanvas: HTMLCanvasElement) {
     this.#micLevelCanvas = micLevelCanvas;
     this.#sysLevelCanvas = sysLevelCanvas;
   }
@@ -37,7 +36,7 @@ export class AudioMixer {
   get micAnalyser() { return this.#micAnalyser; }
   get sysAnalyser() { return this.#sysAnalyser; }
 
-  buildMix(sysAudioTracks, micStream, micGainValue, sysGainValue) {
+  buildMix(sysAudioTracks: MediaStreamTrack[] = [], micStream: MediaStream | null | undefined, micGainValue: number, sysGainValue: number) {
     this.#audioCtx      = new AudioContext();
     this.#audioDestNode = this.#audioCtx.createMediaStreamDestination();
 
@@ -69,8 +68,8 @@ export class AudioMixer {
     return this.#audioDestNode.stream;
   }
 
-  setMicGain(value) { if (this.#micGainNode) this.#micGainNode.gain.value = value; }
-  setSysGain(value) { if (this.#sysGainNode) this.#sysGainNode.gain.value = value; }
+  setMicGain(value: number) { if (this.#micGainNode) this.#micGainNode.gain.value = value; }
+  setSysGain(value: number) { if (this.#sysGainNode) this.#sysGainNode.gain.value = value; }
 
   teardownMix() {
     if (this.#audioCtx) { this.#audioCtx.close(); this.#audioCtx = null; }
@@ -82,7 +81,7 @@ export class AudioMixer {
     const rate = 8000, numSamples = rate / 10; // 100 ms @ 8 kHz
     const buf  = new ArrayBuffer(44 + numSamples);
     const d    = new DataView(buf);
-    const str  = (off, s) => { for (let i = 0; i < s.length; i++) d.setUint8(off + i, s.charCodeAt(i)); };
+    const str  = (off: number, s: string) => { for (let i = 0; i < s.length; i++) d.setUint8(off + i, s.charCodeAt(i)); };
     str(0, 'RIFF'); d.setUint32(4, 36 + numSamples, true);
     str(8, 'WAVE'); str(12, 'fmt '); d.setUint32(16, 16, true);
     d.setUint16(20, 1, true);
@@ -114,8 +113,10 @@ export class AudioMixer {
     if (this.#silentAudioUrl) { URL.revokeObjectURL(this.#silentAudioUrl); this.#silentAudioUrl = null; }
   }
 
-  #drawMeter(analyser, mCanvas) {
+  #drawMeter(analyser: AnalyserNode | null | undefined, mCanvas: HTMLCanvasElement | null | undefined) {
+    if (!mCanvas) return;
     const mCtx = mCanvas.getContext('2d');
+    if (!mCtx) return;
     const W = mCanvas.width, H = mCanvas.height;
     mCtx.fillStyle = '#1e1e1e';
     mCtx.fillRect(0, 0, W, H);
@@ -141,11 +142,13 @@ export class AudioMixer {
       const micAn = this.#micAnalyser || this.#previewMicAnalyser;
       const sysAn = this.#sysAnalyser || this.#previewSysAnalyser;
       if (!micAn && !sysAn) {
-        [this.#micLevelCanvas, this.#sysLevelCanvas].forEach(c => {
-          const mCtx = c.getContext('2d');
-          mCtx.fillStyle = '#1e1e1e';
-          mCtx.fillRect(0, 0, c.width, c.height);
-        });
+            [this.#micLevelCanvas, this.#sysLevelCanvas].forEach(c => {
+              if (!c) return;
+              const mCtx = c.getContext('2d');
+              if (!mCtx) return;
+              mCtx.fillStyle = '#1e1e1e';
+              mCtx.fillRect(0, 0, c.width, c.height);
+            });
         return;
       }
       this.#drawMeter(micAn, this.#micLevelCanvas);
@@ -159,7 +162,7 @@ export class AudioMixer {
     if (this.#meterRafId) { cancelAnimationFrame(this.#meterRafId); this.#meterRafId = null; }
   }
 
-  async startMicPreview(micDeviceId, isActive) {
+  async startMicPreview(micDeviceId: string | null | undefined, isActive: boolean) {
     this.#stopPreviewMicStream();
     this.#previewMicAnalyser = null;
     if (isActive || !micDeviceId) return;
@@ -191,9 +194,9 @@ export class AudioMixer {
     }
   }
 
-  startSysPreview(tracks) {
+  startSysPreview(tracks: MediaStreamTrack[] | undefined) {
     this.#previewSysAnalyser = null;
-    if (!tracks?.length) return;
+    if (!tracks || tracks.length === 0) return;
 
     if (!this.#previewAudioCtx || this.#previewAudioCtx.state === 'closed') {
       this.#previewAudioCtx = new AudioContext();
