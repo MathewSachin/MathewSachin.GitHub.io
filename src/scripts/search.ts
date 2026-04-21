@@ -91,7 +91,7 @@ function renderResults(hits: Hit[]) {
     if (resultsEl) resultsEl.innerHTML = '<p class="text-muted">No results matched your search.</p>';
     return;
   }
-  if (resultsEl) resultsEl.innerHTML = hits.map((h: any) => renderResult(h as Hit)).join('');
+  if (resultsEl) resultsEl.innerHTML = hits.map(h => renderResult(h as Hit)).join('');
 }
 
 let debounceTimer: number | undefined;

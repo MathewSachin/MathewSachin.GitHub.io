@@ -87,7 +87,7 @@ export class StorageManager {
       this.#dirHandle = await window.showDirectoryPicker!({ mode: 'readwrite' });
       this.#updateDirUI();
       await this.#persistHandle();
-    } catch (err: any) {
+    } catch (err: unknown) {
       const e = err as { name?: string; message?: string } | undefined;
       if (e?.name !== 'AbortError') {
         this.#onError('Folder Error', 'Could not select folder: ' + (e?.message ?? String(err)));
@@ -109,7 +109,7 @@ export class StorageManager {
         this.#dirHandle = await window.showDirectoryPicker!({ mode: 'readwrite' });
         this.#updateDirUI();
         await this.#persistHandle();
-      } catch (err: any) {
+      } catch (err: unknown) {
         const e = err as { name?: string; message?: string } | undefined;
         if (e?.name !== 'AbortError') {
           this.#onError('Folder Error', 'Could not select a save folder: ' + (e?.message ?? String(err)));

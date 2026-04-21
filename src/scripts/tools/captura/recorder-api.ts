@@ -1,5 +1,10 @@
 // ── recorder-api.ts ─────────────────────────────────────────────────────────
 import { dateStamp } from './storage.js';
+import type { Compositor } from './compositor.js';
+import type { AudioMixer } from './audio-mixer.js';
+import type { Metronome } from './metronome.js';
+import type { RecorderCore } from './recorder-core.js';
+import type { StorageManager } from './storage.js';
 
 const DEFAULT_WIDTH  = 1280;
 const DEFAULT_HEIGHT = 720;
@@ -14,11 +19,11 @@ const RESOLUTION_CONSTRAINTS: Record<string, MediaTrackConstraints> = {
 const VIDEO_BITRATES: Record<string, number> = { '480': 2_000_000, '720': 4_000_000, '1080': 8_000_000 };
 
 export class RecorderAPI {
-  #compositor: any;
-  #audioMixer: any;
-  #metronome: any;
-  #recorderCore: any;
-  #storage: any;
+  #compositor: Compositor;
+  #audioMixer: AudioMixer;
+  #metronome: Metronome;
+  #recorderCore: RecorderCore;
+  #storage: StorageManager;
   #canvas: HTMLCanvasElement;
 
   #masterStream: MediaStream | null = null;
@@ -26,7 +31,7 @@ export class RecorderAPI {
   #micStream: MediaStream | null = null;
   #previewWebcamStream: MediaStream | null = null;
   #writableStream: FileSystemWritableFileStream | null = null;
-  #savedFileHandle: any = null;
+  #savedFileHandle: FileSystemFileHandle | null = null;
 
   #recordingStartTime = 0;
   #totalPausedMs = 0;
@@ -41,7 +46,14 @@ export class RecorderAPI {
 
   onStreamEnded?: () => void;
 
-  constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }: any) {
+  constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }: {
+    compositor: Compositor;
+    audioMixer: AudioMixer;
+    metronome: Metronome;
+    recorderCore: RecorderCore;
+    storage: StorageManager;
+    canvas: HTMLCanvasElement;
+  }) {
     this.#compositor = compositor;
     this.#audioMixer = audioMixer;
     this.#metronome = metronome;
@@ -153,7 +165,7 @@ export class RecorderAPI {
     await this.#recorderCore.init({
       canvas:         this.#canvas,
       mixedAudioTrack,
-      writableStream: this.#writableStream,
+      writableStream: this.#writableStream!,
       isMp4:          format === FORMAT_MP4,
       videoBitrate:   VIDEO_BITRATES[quality] ?? 4_000_000,
     });

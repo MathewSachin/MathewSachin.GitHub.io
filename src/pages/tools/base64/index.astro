@@ -55,8 +55,9 @@ encodeBtn.addEventListener('click', function () {
   clearError(textError);
   try {
     if (b64Input && textInput) b64Input.value = encodeBase64(textInput.value);
-  } catch (e: any) {
-    showError(textError, 'Encoding failed: ' + (e?.message || String(e)));
+  } catch (e: unknown) {
+    const err = e as Error | undefined;
+    showError(textError, 'Encoding failed: ' + (err?.message ?? String(e)));
   }
 });
 
@@ -65,8 +66,9 @@ decodeBtn.addEventListener('click', function () {
   clearError(b64Error);
   try {
     if (textInput && b64Input) textInput.value = decodeBase64(b64Input.value.trim());
-  } catch (e: any) {
-    showError(b64Error, 'Invalid Base64 string: ' + (e?.message || String(e)));
+  } catch (e: unknown) {
+    const err = e as Error | undefined;
+    showError(b64Error, 'Invalid Base64 string: ' + (err?.message ?? String(e)));
   }
 });
 

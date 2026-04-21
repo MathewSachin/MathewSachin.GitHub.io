@@ -95,8 +95,9 @@ async function effectAcquireAndInit(machine: RecorderStateMachine, api: Recorder
   try {
     await api.acquireAndInit(payload);
     machine.transition(EVENT.ENCODER_READY as Event, payload);
-  } catch (err: any) {
-    if (err.name === 'AbortError' || err.name === 'NotAllowedError') {
+  } catch (err: unknown) {
+    const e = err as { name?: string } | undefined;
+    if (e?.name === 'AbortError' || e?.name === 'NotAllowedError') {
       machine.transition(EVENT.STREAMS_FAILED as Event, err);
     } else {
       machine.transition(EVENT.ENCODER_ERROR as Event, err);

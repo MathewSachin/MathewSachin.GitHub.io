@@ -318,7 +318,7 @@ function buildStartPayload(): {
   };
 }
 
-async function showSaveSuccessToast(fileHandle: any): Promise<void> {
+async function showSaveSuccessToast(fileHandle: { getFile: () => Promise<File> } | null): Promise<void> {
   const msg = document.createDocumentFragment();
 
   if (storage.isOPFS) {

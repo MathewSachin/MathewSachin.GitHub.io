@@ -98,6 +98,22 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
   let compressedBlob: Blob | null = null;
   let compressedFilename: string = '';
 
+  type MagickImage = {
+    width: number;
+    height: number;
+    quality?: number;
+    resize: (w: number, h: number) => void;
+    write: (fmt: unknown, cb: (data: Uint8Array) => void) => void;
+  };
+
+  type Magick = {
+    initializeImageMagick: (buf: Uint8Array) => Promise<void>;
+    ImageMagick?: {
+      read: (input: Uint8Array, cb: (image: MagickImage) => void) => void;
+      MagickFormat: { Jpeg: unknown; WebP: unknown; Png: unknown };
+    };
+  };
+
   const dropZone = document.getElementById('drop-zone') as HTMLElement;
   const fileInput = document.getElementById('file-input') as HTMLInputElement;
   const optionsSection = document.getElementById('options-section') as HTMLElement;
@@ -218,7 +234,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
     if (initializing) return;
     initializing = true;
     showStatus('<i class="fas fa-spinner fa-spin me-2"></i>Loading ImageMagick — this may take a moment on first use…');
-    const M = (window as Window & { 'magick-wasm'?: { initializeImageMagick: (buf: Uint8Array) => Promise<void>; ImageMagick?: any; MagickFormat?: any } })['magick-wasm'];
+    const M = (window as unknown as Window & { 'magick-wasm'?: Magick })['magick-wasm'];
     if (!M || typeof M.initializeImageMagick !== 'function') {
       initializing = false;
       showStatus('ImageMagick failed to initialize.', 'danger');
@@ -243,7 +259,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
   }
 
   function compress(inputData: Uint8Array) {
-    const M = (window as Window & { 'magick-wasm'?: { initializeImageMagick: (buf: Uint8Array) => Promise<void>; ImageMagick?: any; MagickFormat?: any } })['magick-wasm'];
+    const M = (window as unknown as Window & { 'magick-wasm'?: Magick })['magick-wasm'];
     if (!M) { showStatus('ImageMagick not available.', 'danger'); compressBtn.disabled = false; return; }
     const fmt = outputFormat.value;
     const quality = parseInt(qualitySlider.value, 10);
@@ -263,7 +279,7 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
           return;
         }
 
-        M.ImageMagick.read(inputData, function (image: any) {
+        M.ImageMagick!.read(inputData, function (image: MagickImage) {
           if (fmt !== 'PNG') {
             image.quality = quality;
           }
@@ -274,16 +290,16 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
             image.resize(mxw, newHeight);
           }
 
-          const magickFmt = fmt === 'JPEG' ? M.MagickFormat.Jpeg
-                        : fmt === 'WEBP' ? M.MagickFormat.WebP
-                        : M.MagickFormat.Png;
+          const magickFmt = fmt === 'JPEG' ? M.ImageMagick!.MagickFormat.Jpeg
+                        : fmt === 'WEBP' ? M.ImageMagick!.MagickFormat.WebP
+                        : M.ImageMagick!.MagickFormat.Png;
 
-          image.write(magickFmt, function (data: any) {
+          image.write(magickFmt, function (data: Uint8Array) {
             const ext  = fmt === 'JPEG' ? 'jpg' : fmt.toLowerCase();
             const mime = fmt === 'JPEG' ? 'image/jpeg'
                      : fmt === 'WEBP' ? 'image/webp'
                      : 'image/png';
-            const blob     = new Blob([data], { type: mime });
+            const blob     = new Blob([new Uint8Array(data)], { type: mime });
             const baseName = orig.name.replace(/\.[^.]+$/, '');
             compressedFilename = baseName + '-compressed.' + ext;
             compressedBlob     = blob;

@@ -1,7 +1,7 @@
 declare module 'spark-md5' {
   const SparkMD5: {
     hash(input: string): string;
-    (input?: string): any;
+    (input?: string): string;
     ArrayBuffer: {
       hash(buffer: ArrayBuffer): string;
     };

@@ -199,12 +199,18 @@ processBtn.addEventListener('click', function () {
       showStatus('<i class="fas fa-times-circle me-2"></i>Worker error: ' + (err.message || 'unknown'), 'danger');
     };
 
-    const msg: any = { file: fileData };
+    type PdfWorkerMessage = {
+      file: Uint8Array;
+      type: 'decrypt' | 'encrypt';
+      password?: string;
+      userPass?: string;
+      ownerPass?: string;
+    };
+
+    const msg: PdfWorkerMessage = { file: fileData, type: mode === 'remove' ? 'decrypt' : 'encrypt' };
     if (mode === 'remove') {
-      msg.type = 'decrypt';
       msg.password = decryptPass.value;
     } else {
-      msg.type = 'encrypt';
       msg.userPass = userPass.value;
       msg.ownerPass = ownerPass.value || userPass.value;
     }
