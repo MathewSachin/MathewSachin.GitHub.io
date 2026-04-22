@@ -18,7 +18,7 @@ test.describe('Chrome Dino Hack post', () => {
   test('embedded dino game iframe loads the game', async ({ page }) => {
     const frameElement = page.locator('#dino-game-frame');
     await expect(frameElement).toBeVisible();
-    const frameHandle = await frameElement.contentFrame();
+    const frameHandle = frameElement.contentFrame();
     expect(frameHandle).not.toBeNull();
     // The dino page should contain a canvas element
     await expect(frameHandle.locator('canvas').first()).toBeVisible({ timeout: 10000 });

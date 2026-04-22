@@ -3,8 +3,8 @@ import { expect } from '@playwright/test';
 // Inject before any page script runs: overrides showDirectoryPicker to return
 // the OPFS root, augmented with permission stubs that always grant access.
 export const opfsMockScript = () => {
-  window.showDirectoryPicker = async () => {
-    const root = await navigator.storage.getDirectory();
+  (window as any).showDirectoryPicker = async () => {
+    const root: any = await navigator.storage.getDirectory();
     root.queryPermission    = async () => 'granted';
     root.requestPermission  = async () => 'granted';
     return root;
@@ -14,7 +14,7 @@ export const opfsMockScript = () => {
 // Starts recording, waits 3 s, stops, and asserts badge state.
 // With fake media devices the screen-share track stays alive after stopping,
 // so the machine settles in SESSION ('◉ Session Active') rather than IDLE.
-export async function runRecordingPipeline(page) {
+export async function runRecordingPipeline(page: any) {
   await page.click('#start-btn');
   await expect(page.locator('#status-badge')).toContainText('Recording');
   await page.waitForTimeout(3000);
@@ -23,18 +23,20 @@ export async function runRecordingPipeline(page) {
 }
 
 // Reads the OPFS root and asserts that a .webm file > 1 kB exists.
-export async function verifyWebmFile(page) {
+export async function verifyWebmFile(page: any) {
   await verifyFileByExtension(page, '.webm');
 }
 
 // Reads the OPFS root and asserts that a file with the given extension > 1 kB exists.
-export async function verifyFileByExtension(page, ext) {
-  const fileSize = await page.evaluate(async (extension) => {
-    const opfsRoot = await navigator.storage.getDirectory();
+export async function verifyFileByExtension(page: any, ext: string) {
+  const fileSize = await page.evaluate(async (extension: string) => {
+    const opfsRoot: any = await navigator.storage.getDirectory();
     for await (const [name, handle] of opfsRoot.entries()) {
       if (name.endsWith(extension)) {
-        const file = await handle.getFile();
-        return file.size;
+        if ('getFile' in handle) {
+          const file = await (handle as any).getFile();
+          return file.size;
+        }
       }
     }
     return 0;
@@ -43,9 +45,9 @@ export async function verifyFileByExtension(page, ext) {
 }
 
 // Returns the number of files in OPFS that end with the given extension.
-export async function countFilesWithExtension(page, ext) {
-  return page.evaluate(async (extension) => {
-    const opfsRoot = await navigator.storage.getDirectory();
+export async function countFilesWithExtension(page: any, ext: string) {
+  return page.evaluate(async (extension: string) => {
+    const opfsRoot: any = await navigator.storage.getDirectory();
     let count = 0;
     for await (const [name] of opfsRoot.entries()) {
       if (name.endsWith(extension)) count++;

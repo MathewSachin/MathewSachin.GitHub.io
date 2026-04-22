@@ -9,7 +9,6 @@ import PostItem from '@components/PostItem.astro';
 import '@styles/blog.css';
 import { sortPostsByDate } from '@utils/posts';
 
-const POSTS_PER_PAGE = 10;
 const BASE = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {

@@ -1,4 +1,5 @@
-// ── app.js ────────────────────────────────────────────────────────────────────
+// Top-level DOM nodes are explicitly typed to satisfy TypeScript checks.
+// ── app.ts ────────────────────────────────────────────────────────────────────
 // The UI layer.
 // Responsibilities:
 //   • Create engine instances and wire them into RecorderAPI + RecorderStateMachine.
@@ -19,56 +20,43 @@ import { RecorderAPI }                         from './recorder-api.js';
 import { RecorderStateMachine, STATE, EVENT }  from './recorder-state-machine.js';
 import { trackEvent }                          from './analytics.js';
 
-// ── Constants ──────────────────────────────────────────────────────────────────
-
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
-// ── Formatters ─────────────────────────────────────────────────────────────────
+const gainPct = (v: string | number) => Math.round(parseFloat(String(v)) * 100) + '%';
+const fmtTime = (s: number) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
-// Format a gain multiplier (0–2) as a percentage string, e.g. 1.0 → '100%', 0.5 → '50%'.
-const gainPct = v => Math.round(parseFloat(v) * 100) + '%';
-
-// Format elapsed seconds as MM:SS, e.g. 65 → '01:05'.
-const fmtTime = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-
-// ── DOM refs ───────────────────────────────────────────────────────────────────
-
-const canvas              = document.getElementById('recorder-canvas');
-const webcamSel           = document.getElementById('webcam-select');
-const micSel              = document.getElementById('mic-select');
-const fpsSel              = document.getElementById('fps-select');
-const qualitySel          = document.getElementById('quality-select');
-const formatSel           = document.getElementById('format-select');
-const countdownSel        = document.getElementById('countdown-select');
-const sysAudioChk         = document.getElementById('sys-audio-chk');
-const startBtn            = document.getElementById('start-btn');
-const pauseBtn            = document.getElementById('pause-btn');
-const stopBtn             = document.getElementById('stop-btn');
-const cancelCountdownBtn  = document.getElementById('cancel-countdown-btn');
-const endSessionBtn       = document.getElementById('end-session-btn');
-const pickDirBtn          = document.getElementById('pick-dir-btn');
-const dirNameEl           = document.getElementById('dir-name');
-const statusBadge         = document.getElementById('status-badge');
-const timerEl             = document.getElementById('timer-text');
-const micGainSlider       = document.getElementById('mic-gain-slider');
-const sysGainSlider       = document.getElementById('sys-gain-slider');
-const micGainLabel        = document.getElementById('mic-gain-label');
-const sysGainLabel        = document.getElementById('sys-gain-label');
-const micLevelCanvas      = document.getElementById('mic-level-canvas');
-const sysLevelCanvas      = document.getElementById('sys-level-canvas');
-const errorDialog         = document.getElementById('captura-error-dialog');
-const countdownOverlay    = document.getElementById('countdown-overlay');
-const countdownNumberEl   = document.getElementById('countdown-number');
-
-// ── Capability checks ──────────────────────────────────────────────────────────
+const canvas              = document.getElementById('recorder-canvas') as HTMLCanvasElement;
+const webcamSel           = document.getElementById('webcam-select') as HTMLSelectElement;
+const micSel              = document.getElementById('mic-select') as HTMLSelectElement;
+const fpsSel              = document.getElementById('fps-select') as HTMLSelectElement;
+const qualitySel          = document.getElementById('quality-select') as HTMLSelectElement;
+const formatSel           = document.getElementById('format-select') as HTMLSelectElement;
+const countdownSel        = document.getElementById('countdown-select') as HTMLSelectElement;
+const sysAudioChk         = document.getElementById('sys-audio-chk') as HTMLInputElement;
+const startBtn            = document.getElementById('start-btn') as HTMLButtonElement;
+const pauseBtn            = document.getElementById('pause-btn') as HTMLButtonElement;
+const stopBtn             = document.getElementById('stop-btn') as HTMLButtonElement;
+const cancelCountdownBtn  = document.getElementById('cancel-countdown-btn') as HTMLButtonElement;
+const endSessionBtn       = document.getElementById('end-session-btn') as HTMLButtonElement;
+const pickDirBtn          = document.getElementById('pick-dir-btn') as HTMLButtonElement;
+const dirNameEl           = document.getElementById('dir-name') as HTMLElement;
+const statusBadge         = document.getElementById('status-badge') as HTMLElement;
+const timerEl             = document.getElementById('timer-text') as HTMLElement;
+const micGainSlider       = document.getElementById('mic-gain-slider') as HTMLInputElement;
+const sysGainSlider       = document.getElementById('sys-gain-slider') as HTMLInputElement;
+const micGainLabel        = document.getElementById('mic-gain-label') as HTMLElement;
+const sysGainLabel        = document.getElementById('sys-gain-label') as HTMLElement;
+const micLevelCanvas      = document.getElementById('mic-level-canvas') as HTMLCanvasElement;
+const sysLevelCanvas      = document.getElementById('sys-level-canvas') as HTMLCanvasElement;
+const errorDialog         = document.getElementById('captura-error-dialog') as HTMLDialogElement;
+const countdownOverlay    = document.getElementById('countdown-overlay') as HTMLElement;
+const countdownNumberEl   = document.getElementById('countdown-number') as HTMLElement;
 
 const hasGetDisplayMedia = !!(navigator.mediaDevices?.getDisplayMedia);
 const hasFSA = typeof window.showDirectoryPicker === 'function';
 
-// ── Engine instances ───────────────────────────────────────────────────────────
-
 const compositor = new Compositor(canvas, {
-  onPipMoved: (x, y) => { savePref(PREFS.pipX, x); savePref(PREFS.pipY, y); },
+  onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
 });
 
 const metronome    = new Metronome();
@@ -76,63 +64,50 @@ const audioMixer   = new AudioMixer(micLevelCanvas, sysLevelCanvas);
 const storage      = new StorageManager(dirNameEl, showErrorDialog);
 const recorderCore = new RecorderCore();
 
-// ── API + state machine ────────────────────────────────────────────────────────
-
 const api = new RecorderAPI({
   compositor, audioMixer, metronome, recorderCore, storage, canvas,
 });
 
 const machine = new RecorderStateMachine(api);
 
-// ── Timer state ────────────────────────────────────────────────────────────────
-
 let elapsedSecs     = 0;
-let timerIntervalId = null;
+let timerIntervalId: ReturnType<typeof setInterval> | null = null;
 
 function startTimer() {
-  clearInterval(timerIntervalId);
+  if (timerIntervalId !== null) clearInterval(timerIntervalId);
   elapsedSecs = 0;
   timerEl.textContent = '00:00';
   timerIntervalId = setInterval(() => { timerEl.textContent = fmtTime(++elapsedSecs); }, 1000);
 }
 
 function pauseTimer() {
-  clearInterval(timerIntervalId);
+  if (timerIntervalId !== null) clearInterval(timerIntervalId);
   timerIntervalId = null;
 }
 
 function resumeTimer() {
-  if (!timerIntervalId) {
+  if (timerIntervalId === null) {
     timerIntervalId = setInterval(() => { timerEl.textContent = fmtTime(++elapsedSecs); }, 1000);
   }
 }
 
 function resetTimer() {
-  clearInterval(timerIntervalId);
+  if (timerIntervalId !== null) clearInterval(timerIntervalId);
   timerIntervalId = null;
   elapsedSecs = 0;
   timerEl.textContent = '00:00';
 }
 
-// ── Countdown overlay state ────────────────────────────────────────────────────
+let countdownIntervalId: ReturnType<typeof setInterval> | null = null;
 
-let countdownIntervalId = null;
-
-// Shows the overlay, ticks every second, and fires onDone() when it reaches 0.
-// If secs === 0 the overlay is never shown and onDone() fires synchronously.
-function startCountdownOverlay(secs, onDone) {
+function startCountdownOverlay(secs: number, onDone: () => void) {
   stopCountdownOverlay();
-
   if (secs <= 0) {
     onDone();
     return;
   }
-
-  countdownNumberEl.textContent = secs;
-  // Force a re-trigger of the CSS pop animation on each tick by removing and
-  // re-adding the element's text node (which causes a reflow / re-paint).
+  countdownNumberEl.textContent = String(secs);
   countdownOverlay.hidden = false;
-
   let remaining = secs;
   countdownIntervalId = setInterval(() => {
     remaining--;
@@ -140,28 +115,22 @@ function startCountdownOverlay(secs, onDone) {
       stopCountdownOverlay();
       onDone();
     } else {
-      // Re-trigger the pop animation by forcing a reflow between style changes.
-      countdownNumberEl.textContent = remaining;
+      countdownNumberEl.textContent = String(remaining);
       countdownNumberEl.style.animation = 'none';
-      void countdownNumberEl.offsetWidth; // trigger reflow
+      void countdownNumberEl.offsetWidth;
       countdownNumberEl.style.animation = '';
     }
   }, 1000);
 }
 
-function stopCountdownOverlay() {
-  clearInterval(countdownIntervalId);
+function stopCountdownOverlay(): void {
+  if (countdownIntervalId !== null) clearInterval(countdownIntervalId);
   countdownIntervalId = null;
   countdownOverlay.hidden = true;
   countdownNumberEl.textContent = '';
 }
 
-// ── UI rendering ───────────────────────────────────────────────────────────────
-
-// Single source of truth for every button, badge, and control state.
-// Called on every state machine transition.
-function render(state) {
-  const isIdle       = state === STATE.IDLE;
+function render(state: string): void {
   const isSession    = state === STATE.SESSION;
   const isReq        = state === STATE.REQUESTING;
   const isCountdown  = state === STATE.COUNTDOWN;
@@ -169,16 +138,12 @@ function render(state) {
   const isPaused     = state === STATE.PAUSED;
   const isStopping   = state === STATE.STOPPING;
   const isError      = state === STATE.ERROR;
-  const active       = isRec || isPaused;                       // recording or paused
-  const hasSession   = isSession || active || isStopping || isCountdown; // screen shared
+  const active       = isRec || isPaused;
+  const hasSession   = isSession || active || isStopping || isCountdown;
 
-  // ── Recording control buttons ──────────────────────────────────────────────
-
-  // Start: shown when not actively recording/paused/stopping/countdown
   startBtn.hidden   = active || isStopping || isCountdown;
   startBtn.disabled = isReq;
 
-  // Pause/Resume: shown only while active
   pauseBtn.hidden    = !active;
   pauseBtn.disabled  = false;
   pauseBtn.innerHTML = isPaused
@@ -186,33 +151,23 @@ function render(state) {
     : '<i class="fas fa-pause me-1"></i>Pause';
   pauseBtn.className = isPaused ? 'btn btn-success' : 'btn btn-warning text-dark';
 
-  // Stop: shown only while active
   stopBtn.hidden   = !active;
   stopBtn.disabled = false;
 
-  // Cancel Countdown: shown only during countdown
   cancelCountdownBtn.hidden = !isCountdown;
 
-  // End Session: shown whenever a screen-share session is alive
   endSessionBtn.hidden   = !hasSession || isCountdown;
   endSessionBtn.disabled = isStopping || isReq;
 
-  // ── Folder / settings controls ─────────────────────────────────────────────
-
-  // Locked while recording is active, being saved, acquiring, or in countdown
   const lockControls = active || isStopping || isReq || isCountdown;
   pickDirBtn.hidden    = storage.isOPFS;
   pickDirBtn.disabled  = lockControls;
-  // Webcam and mic can be changed mid-recording; only lock them when acquiring,
-  // saving, or during countdown — not while actively recording or paused.
   webcamSel.disabled     = isStopping || isReq || isCountdown;
   micSel.disabled        = lockControls;
   sysAudioChk.disabled   = lockControls;
   fpsSel.disabled        = lockControls;
   qualitySel.disabled    = lockControls;
   countdownSel.disabled  = lockControls;
-
-  // ── Status badge ───────────────────────────────────────────────────────────
 
   statusBadge.textContent =
       isRec       ? '⏺ Recording'
@@ -232,22 +187,30 @@ function render(state) {
     :                            'badge bg-secondary';
 }
 
-// ── State-change handler ───────────────────────────────────────────────────────
+type MachinePayload = {
+  fps?: number;
+  quality?: string;
+  format?: string;
+  webcamSelected?: boolean;
+  micSelected?: boolean;
+  wantSysAudio?: boolean;
+  name?: string;
+  message?: string;
+  title?: string;
+};
 
 machine.onStateChange((state, event, payload) => {
+  const p = payload as MachinePayload;
   render(state);
-
-  // ── Analytics ─────────────────────────────────────────────────────────────
-  // Capture elapsedSecs before resetTimer() zeroes it below.
   if (state === STATE.RECORDING) {
     if (event === EVENT.COUNTDOWN_DONE) {
       trackEvent('captura_recording_start', {
-        fps:        payload?.fps,
-        quality:    payload?.quality,
-        format:     payload?.format,
-        has_webcam: payload?.webcamSelected,
-        has_mic:    payload?.micSelected,
-        sys_audio:  payload?.wantSysAudio,
+        fps:        p?.fps,
+        quality:    p?.quality,
+        format:     p?.format,
+        has_webcam: p?.webcamSelected,
+        has_mic:    p?.micSelected,
+        sys_audio:  p?.wantSysAudio,
       });
     } else if (event === EVENT.USER_RESUME) {
       trackEvent('captura_recording_resume', { elapsed_secs: elapsedSecs });
@@ -260,43 +223,35 @@ machine.onStateChange((state, event, payload) => {
     trackEvent('captura_session_end');
   }
 
-  if (event === EVENT.STREAMS_FAILED) {
-    trackEvent('captura_stream_failed', { error_name: payload?.name ?? 'unknown' });
+    if (event === EVENT.STREAMS_FAILED) {
+    trackEvent('captura_stream_failed', { error_name: p?.name ?? 'unknown' });
   } else if (state === STATE.ERROR) {
-    trackEvent('captura_error', { error_message: payload?.message ?? String(payload ?? '') });
+    trackEvent('captura_error', { error_message: p?.message ?? String(payload ?? '') });
   }
 
   if (event === EVENT.FINALIZE_DONE && payload) {
     trackEvent('captura_recording_saved', { format: formatSel.value });
   }
 
-  // ── Countdown overlay ──────────────────────────────────────────────────────
   if (state === STATE.COUNTDOWN) {
-    // payload carries the full start config (fps, quality, etc.) forwarded from
-    // ENCODER_READY — pass it through so COUNTDOWN_DONE has it for startEncoding.
     const savedPayload = payload;
     startCountdownOverlay(
       parseInt(countdownSel.value, 10),
       () => machine.transition(EVENT.COUNTDOWN_DONE, savedPayload)
     );
   } else {
-    // Entering any other state (RECORDING, SESSION, IDLE, ERROR…) clears overlay.
     stopCountdownOverlay();
   }
 
-  // ── Timer ──────────────────────────────────────────────────────────────────
   if (state === STATE.RECORDING) {
-    // USER_RESUME continues the existing elapsed count; everything else resets.
     if (event === EVENT.USER_RESUME) resumeTimer();
     else startTimer();
   } else if (state === STATE.PAUSED) {
     pauseTimer();
   } else {
-    // STOPPING, IDLE, SESSION, COUNTDOWN, ERROR — reset the display
     resetTimer();
   }
 
-  // ── OS Media Session ───────────────────────────────────────────────────────
   if (state === STATE.RECORDING) {
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
     setupMediaSession(
@@ -311,28 +266,23 @@ machine.onStateChange((state, event, payload) => {
     clearMediaSession();
   }
 
-  // ── Success toast after a recording is saved ───────────────────────────────
   if (event === EVENT.FINALIZE_DONE && payload) {
-    showSaveSuccessToast(payload);
+    showSaveSuccessToast(payload as any);
   }
 
-  // ── Error dialog ───────────────────────────────────────────────────────────
   if (state === STATE.ERROR) {
     showErrorDialog(
-      payload?.title   || 'Recording Error',
-      payload?.message || String(payload ?? 'An unknown error occurred.')
+      p?.title   || 'Recording Error',
+      p?.message || String(payload ?? 'An unknown error occurred.')
     );
   }
 
-  // ── Keep stored device IDs in sync after non-recording state changes ───────
   if (state === STATE.IDLE || state === STATE.SESSION) {
     syncDevicesToApi();
   }
 });
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-function syncDevicesToApi() {
+function syncDevicesToApi(): void {
   api.setDevices({
     webcamDeviceId: webcamSel.value,
     webcamSelected: webcamSel.selectedIndex > 0,
@@ -341,8 +291,18 @@ function syncDevicesToApi() {
   });
 }
 
-// Build the config payload for USER_START, reading current UI values.
-function buildStartPayload() {
+function buildStartPayload(): {
+    fps: string;
+    quality: string;
+    format: string;
+    wantSysAudio: boolean;
+    webcamSelected: boolean;
+    webcamDeviceId: string;
+    micSelected: boolean;
+    micDeviceId: string;
+    micGain: number;
+    sysGain: number;
+  } {
   syncDevicesToApi();
   return {
     fps:           fpsSel.value,
@@ -358,14 +318,10 @@ function buildStartPayload() {
   };
 }
 
-async function showSaveSuccessToast(fileHandle) {
+async function showSaveSuccessToast(fileHandle: { getFile: () => Promise<File> } | null): Promise<void> {
   const msg = document.createDocumentFragment();
 
   if (storage.isOPFS) {
-    // OPFS mode: the recording was staged in browser storage.
-    // Show a "Download recording" link and keep the toast open until the user
-    // dismisses it — Firefox requires a real user click to trigger a file download,
-    // so we cannot auto-fire the download programmatically.
     msg.append('Recording complete. ');
     if (fileHandle) {
       try {
@@ -379,11 +335,6 @@ async function showSaveSuccessToast(fileHandle) {
         });
         msg.append(link);
 
-        // Revoke the blob URL and clean up the OPFS temp file together after the
-        // timeout so the file remains accessible for the entire duration.
-        // Do NOT call removeEntry() before this — Firefox's blob URL keeps a live
-        // reference to the OPFS-backed File and becomes invalid if the entry is
-        // removed while the URL is still alive.
         const cleanup = () => {
           URL.revokeObjectURL(url);
           storage.dirHandle?.removeEntry(name).catch(() => {});
@@ -391,13 +342,10 @@ async function showSaveSuccessToast(fileHandle) {
         setTimeout(cleanup, BLOB_URL_REVOKE_TIMEOUT_MS);
         window.addEventListener('beforeunload', cleanup, { once: true });
       } catch (_) {
-        // getFile() may fail if something went wrong; skip the download link.
       }
     }
-    // Disable auto-hide so the download link stays visible until the user acts.
     showToast(msg, 'success', false);
   } else {
-    // FSA mode: file already saved to the user's chosen folder on disk.
     msg.append('Recording saved to disk. ');
     if (fileHandle) {
       try {
@@ -411,16 +359,13 @@ async function showSaveSuccessToast(fileHandle) {
         setTimeout(() => URL.revokeObjectURL(url), BLOB_URL_REVOKE_TIMEOUT_MS);
         window.addEventListener('beforeunload', () => URL.revokeObjectURL(url), { once: true });
       } catch (_) {
-        // getFile() may fail if the user moved/deleted the file; skip the link.
       }
     }
     showToast(msg, 'success');
   }
 }
 
-// ── Device enumeration ────────────────────────────────────────────────────────
-
-async function enumerateDevices() {
+async function enumerateDevices(): Promise<void> {
   try {
     const devices   = await navigator.mediaDevices.enumerateDevices();
     const videoDevs = devices.filter(d => d.kind === 'videoinput');
@@ -434,20 +379,18 @@ async function enumerateDevices() {
 
     restoreDevicePrefs();
 
-    // Restart previews only when not actively recording
     const s = machine.state;
     if (s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
       syncDevicesToApi();
       api.restartPreviews();
     }
   } catch (err) {
-    showErrorDialog('Device Error', 'Could not enumerate devices: ' + err.message);
+      const e = err as { message?: string } | undefined;
+      showErrorDialog('Device Error', 'Could not enumerate devices: ' + (e?.message ?? String(err)));
   }
 }
 
-// ── Preferences ────────────────────────────────────────────────────────────────
-
-function restoreSimplePrefs() {
+function restoreSimplePrefs(): void {
   const fps = loadPref(PREFS.fps);
   if (fps) fpsSel.value = fps;
 
@@ -485,7 +428,7 @@ function restoreSimplePrefs() {
   }
 }
 
-function restoreDevicePrefs() {
+function restoreDevicePrefs(): void {
   const webcamId = loadPref(PREFS.webcam);
   if (webcamId && webcamSel.querySelector(`option[value="${CSS.escape(webcamId)}"]`)) {
     webcamSel.value = webcamId;
@@ -496,8 +439,6 @@ function restoreDevicePrefs() {
   }
 }
 
-// ── Bootstrap ──────────────────────────────────────────────────────────────────
-
 if (!hasGetDisplayMedia) {
   showAlert(
     'Screen recording is not supported on this device. ' +
@@ -506,7 +447,8 @@ if (!hasGetDisplayMedia) {
     'Please open this page on a desktop browser (Chrome, Edge, or Firefox) to use the recorder.',
     'warning'
   );
-  document.getElementById('recorder-ui').hidden = true;
+  const recUi = document.getElementById('recorder-ui');
+  if (recUi) recUi.hidden = true;
 }
 
 restoreSimplePrefs();
@@ -521,18 +463,12 @@ if (hasGetDisplayMedia) {
   enumerateDevices();
 }
 
-// Start the canvas preview loop immediately (devices/webcam start after enumeration)
 api.restartPreviews();
 
 storage.init();
 
-// isOPFS is determined synchronously at construction time; apply initial UI state now
-// rather than waiting for init() to resolve so render() stays the single source of truth.
 pickDirBtn.hidden = storage.isOPFS;
 
-// ── Event listeners ────────────────────────────────────────────────────────────
-
-// Recording controls → dispatch state machine events only; no logic inline.
 startBtn.addEventListener('click', () => {
   if (!hasGetDisplayMedia) {
     showErrorDialog(
@@ -565,16 +501,14 @@ pickDirBtn.addEventListener('click', () => {
   storage.pickDirectory();
 });
 
-// Error dialog close → return the machine to idle / session
 errorDialog?.addEventListener('close', () => {
   if (machine.state === STATE.ERROR) {
     machine.transition(EVENT.ERROR_DISMISSED);
   }
 });
 
-// Persist configuration changes to localStorage
-function saveAndTrackPref(key, value, analyticsKey) {
-  savePref(key, value);
+function saveAndTrackPref(key: string, value: string | number | boolean, analyticsKey?: string): void {
+  savePref(key, String(value));
   trackEvent('captura_pref_change', { pref: analyticsKey, value: String(value) });
 }
 
@@ -588,8 +522,8 @@ webcamSel.addEventListener('change', () => {
   savePref(PREFS.webcam, webcamSel.value);
   const s = machine.state;
   if (s === STATE.RECORDING || s === STATE.PAUSED) {
-    api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
-      .catch(err => showToast('Failed to switch webcam: ' + err.message, 'danger'));
+      api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
+        .catch(err => { const e = err as { message?: string } | undefined; showToast('Failed to switch webcam: ' + (e?.message ?? String(err)), 'danger'); });
   } else if (s !== STATE.STOPPING) {
     syncDevicesToApi();
     api.restartPreviews();
@@ -609,23 +543,20 @@ micGainSlider.addEventListener('input', () => {
   const v = parseFloat(micGainSlider.value);
   micGainLabel.textContent = gainPct(v);
   audioMixer.setMicGain(v);
-  savePref(PREFS.micGain, v);
+  savePref(PREFS.micGain, String(v));
 });
 
 sysGainSlider.addEventListener('input', () => {
   const v = parseFloat(sysGainSlider.value);
   sysGainLabel.textContent = gainPct(v);
   audioMixer.setSysGain(v);
-  savePref(PREFS.sysGain, v);
+  savePref(PREFS.sysGain, String(v));
 });
-
-// ── Prevent navigation / tab-close during an active recording ─────────────────
 
 window.addEventListener('beforeunload', (e) => {
   const s = machine.state;
   if (s === STATE.RECORDING || s === STATE.PAUSED ||
       s === STATE.STOPPING  || s === STATE.COUNTDOWN) {
     e.preventDefault();
-    e.returnValue = ''; // Required by some browsers to trigger the dialog
   }
 });

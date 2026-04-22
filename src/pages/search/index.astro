@@ -44,6 +44,6 @@ const BASE = import.meta.env.BASE_URL;
   </div>
 
   {/* Inject base URL for use by search.js */}
-  <script set:html={`window.SEARCH_BASE = ${JSON.stringify(BASE)};`}></script>
+  <script is:inline set:html={`window.SEARCH_BASE = ${JSON.stringify(BASE)};`}></script>
   <script src='@scripts/search.js'></script>
 </BaseLayout>

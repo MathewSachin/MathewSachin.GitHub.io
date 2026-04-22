@@ -48,10 +48,10 @@ const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
   class Tabs extends HTMLElement {
     connectedCallback() {
       // Scoped query selectors ensure multiple <Tabs> on one page don't conflict
-      const buttons = this.querySelectorAll('button[data-target]');
-      const panes = this.querySelectorAll('div[data-pane]');
+      const buttons = this.querySelectorAll('button[data-target]') as NodeListOf<HTMLButtonElement>;
+      const panes = this.querySelectorAll('div[data-pane]') as NodeListOf<HTMLElement>;
 
-      const switchTab = (target) => {
+      const switchTab = (target: string) => {
         // Reset all
         buttons.forEach(b => {
           b.classList.remove('active');
@@ -60,8 +60,8 @@ const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
         panes.forEach(p => p.classList.remove('show', 'active'));
 
         // Activate target
-        const activeBtn = this.querySelector(`button[data-target="${target}"]`);
-        const activePane = this.querySelector(`div[data-pane="${target}"]`);
+        const activeBtn = this.querySelector(`button[data-target="${target}"]`) as HTMLButtonElement | null;
+        const activePane = this.querySelector(`div[data-pane="${target}"]`) as HTMLElement | null;
         
         if (activeBtn && activePane) {
           activeBtn.classList.add('active');
@@ -73,7 +73,7 @@ const { tabs, defaultTab = tabs[0]?.id } = Astro.props;
       // Attach click listeners
       buttons.forEach(button => {
         button.addEventListener('click', () => {
-          switchTab(button.dataset.target);
+          switchTab(button.dataset.target as string);
         });
       });
     }

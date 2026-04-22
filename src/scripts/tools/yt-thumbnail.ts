@@ -7,11 +7,10 @@ const RESOLUTIONS = [
 
 const VALID_KEYS = new Set(RESOLUTIONS.map(r => r.key));
 
-export function extractVideoId(input) {
+export function extractVideoId(input: string | null | undefined): string | null {
   if (!input) return null;
   const raw = input.trim();
 
-  // Full URL: youtube.com/watch?v=ID or youtu.be/ID or /shorts/ID
   const patterns = [
     /[?&]v=([A-Za-z0-9_-]{11})/,
     /youtu\.be\/([A-Za-z0-9_-]{11})/,
@@ -23,14 +22,13 @@ export function extractVideoId(input) {
     if (m) return m[1];
   }
 
-  // Bare 11-character ID
   if (/^[A-Za-z0-9_-]{11}$/.test(raw)) return raw;
 
   return null;
 }
 
-export function thumbnailUrl(videoId, key) {
-  const safeKey = VALID_KEYS.has(key) ? key : 'maxresdefault';
+export function thumbnailUrl(videoId: string, key?: string): string {
+  const safeKey = VALID_KEYS.has(key || '') ? key! : 'maxresdefault';
   return 'https://img.youtube.com/vi/' + videoId + '/' + safeKey + '.jpg';
 }
 

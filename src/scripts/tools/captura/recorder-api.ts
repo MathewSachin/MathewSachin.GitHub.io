@@ -1,100 +1,93 @@
-// ── recorder-api.js ───────────────────────────────────────────────────────────
-// The Media / Encoder API layer.
-// All media acquisition, encoder lifecycle, and stream management live here.
-// No DOM references — receives engine instances at construction time and all
-// configuration values via method parameters.
-
+// ── recorder-api.ts ─────────────────────────────────────────────────────────
 import { dateStamp } from './storage.js';
+import type { Compositor } from './compositor.js';
+import type { AudioMixer } from './audio-mixer.js';
+import type { Metronome } from './metronome.js';
+import type { RecorderCore } from './recorder-core.js';
+import type { StorageManager } from './storage.js';
 
 const DEFAULT_WIDTH  = 1280;
 const DEFAULT_HEIGHT = 720;
 const FORMAT_MP4     = 'mp4-h264-aac';
 
-const RESOLUTION_CONSTRAINTS = {
+const RESOLUTION_CONSTRAINTS: Record<string, MediaTrackConstraints> = {
   '480':  { width: { ideal: 854  }, height: { ideal: 480  } },
   '720':  { width: { ideal: 1280 }, height: { ideal: 720  } },
   '1080': { width: { ideal: 1920 }, height: { ideal: 1080 } },
 };
 
-const VIDEO_BITRATES = { '480': 2_000_000, '720': 4_000_000, '1080': 8_000_000 };
+const VIDEO_BITRATES: Record<string, number> = { '480': 2_000_000, '720': 4_000_000, '1080': 8_000_000 };
 
 export class RecorderAPI {
-  // Engine instances (injected at construction time)
-  #compositor;
-  #audioMixer;
-  #metronome;
-  #recorderCore;
-  #storage;
-  #canvas;
+  #compositor: Compositor;
+  #audioMixer: AudioMixer;
+  #metronome: Metronome;
+  #recorderCore: RecorderCore;
+  #storage: StorageManager;
+  #canvas: HTMLCanvasElement;
 
-  // Active streams / file handles
-  #masterStream        = null;
-  #webcamStream        = null;
-  #micStream           = null;
-  #previewWebcamStream = null;
-  #writableStream      = null;
-  #savedFileHandle     = null;
+  #masterStream: MediaStream | null = null;
+  #webcamStream: MediaStream | null = null;
+  #micStream: MediaStream | null = null;
+  #previewWebcamStream: MediaStream | null = null;
+  #writableStream: FileSystemWritableFileStream | null = null;
+  #savedFileHandle: FileSystemFileHandle | null = null;
 
-  // Recording timing
   #recordingStartTime = 0;
-  #totalPausedMs      = 0;
-  #pauseStartTime     = 0;
+  #totalPausedMs = 0;
+  #pauseStartTime = 0;
 
-  // Stored device selection for preview restarts (updated via setDevices)
   #webcamDeviceId = '';
   #webcamSelected = false;
-  #micDeviceId    = '';
-  #micSelected    = false;
+  #micDeviceId = '';
+  #micSelected = false;
 
-  // Called when the screen-share track ends via the native "Stop Sharing" button.
-  onStreamEnded = null;
+  get micSelected() { return this.#micSelected; }
 
-  constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }) {
-    this.#compositor   = compositor;
-    this.#audioMixer   = audioMixer;
-    this.#metronome    = metronome;
+  onStreamEnded?: () => void;
+
+  constructor({ compositor, audioMixer, metronome, recorderCore, storage, canvas }: {
+    compositor: Compositor;
+    audioMixer: AudioMixer;
+    metronome: Metronome;
+    recorderCore: RecorderCore;
+    storage: StorageManager;
+    canvas: HTMLCanvasElement;
+  }) {
+    this.#compositor = compositor;
+    this.#audioMixer = audioMixer;
+    this.#metronome = metronome;
     this.#recorderCore = recorderCore;
-    this.#storage      = storage;
-    this.#canvas       = canvas;
+    this.#storage = storage;
+    this.#canvas = canvas;
   }
 
-  // ── Public getters ────────────────────────────────────────────────────────
-
-  // True when a screen-share session is currently alive.
   get hasSession() {
     return !!(this.#masterStream?.active &&
               this.#masterStream.getVideoTracks()[0]?.readyState === 'live');
   }
 
-  // ── Device configuration ──────────────────────────────────────────────────
-
-  // Update stored device IDs so restartPreviews() uses the latest selection.
-  setDevices({ webcamDeviceId, webcamSelected, micDeviceId, micSelected }) {
+  setDevices({ webcamDeviceId, webcamSelected, micDeviceId, micSelected }: { webcamDeviceId: string; webcamSelected: boolean; micDeviceId: string; micSelected: boolean; }) {
     this.#webcamDeviceId = webcamDeviceId;
     this.#webcamSelected = webcamSelected;
     this.#micDeviceId    = micDeviceId;
     this.#micSelected    = micSelected;
   }
 
-  // ── Main recording setup ──────────────────────────────────────────────────
-
-  // Acquires all streams and initialises the encoder pipeline in one shot.
-  // Throws on failure; err.name distinguishes user-cancel from other errors.
   async acquireAndInit({ fps, quality, format, wantSysAudio,
                          webcamSelected, webcamDeviceId,
                          micSelected, micDeviceId,
-                         micGain, sysGain }) {
-    // 1 — Screen stream (reused when still live from a previous recording)
+                         micGain, sysGain }: { fps: string; quality: string; format: string; wantSysAudio: boolean; webcamSelected: boolean; webcamDeviceId?: string; micSelected: boolean; micDeviceId?: string; micGain: number; sysGain: number; }) {
     if (!this.hasSession) {
-      this.#masterStream = await navigator.mediaDevices.getDisplayMedia({
+      this.#masterStream = await navigator.mediaDevices.getDisplayMedia(({
         video: {
           displaySurface: 'monitor',
           frameRate: { ideal: parseInt(fps, 10) },
-          ...(RESOLUTION_CONSTRAINTS[quality] ?? {}),
+          ...( RESOLUTION_CONSTRAINTS[quality] ?? {} ),
         },
-        audio: { systemAudio: 'include' },
+        audio: { /* systemAudio intentionally omitted for TS */ } as unknown as MediaTrackConstraints,
         surfaceSwitching: 'include',
-      });
+        } as unknown as MediaStreamConstraints));
       this.#masterStream.getVideoTracks()[0]?.addEventListener(
         'ended',
         () => { this.#masterStream = null; this.onStreamEnded?.(); },
@@ -105,11 +98,10 @@ export class RecorderAPI {
     this.#compositor.screenVid.srcObject = this.#masterStream;
     await this.#compositor.screenVid.play().catch(() => {});
 
-    const settings      = this.#masterStream.getVideoTracks()[0]?.getSettings() ?? {};
+    const settings      = this.#masterStream?.getVideoTracks()[0]?.getSettings() ?? {};
     this.#canvas.width  = settings.width  || DEFAULT_WIDTH;
     this.#canvas.height = settings.height || DEFAULT_HEIGHT;
 
-    // 2 — Webcam (stop any existing preview first to release the camera)
     this.#stopWebcamPreview();
     if (webcamSelected) {
       const constraint = webcamDeviceId ? { deviceId: { exact: webcamDeviceId } } : true;
@@ -122,7 +114,6 @@ export class RecorderAPI {
       await this.#compositor.waitForVideoReady(this.#compositor.webcamVid);
     }
 
-    // 3 — Microphone
     if (micSelected) {
       const constraint = micDeviceId
         ? { deviceId: { exact: micDeviceId }, echoCancellation: true }
@@ -132,8 +123,7 @@ export class RecorderAPI {
       );
     }
 
-    // 4 — Validate system audio availability
-    const sysAudioTracks = this.#masterStream.getAudioTracks();
+    const sysAudioTracks = this.#masterStream?.getAudioTracks() ?? [];
     if (wantSysAudio && sysAudioTracks.length === 0) {
       this.#releaseNonScreenStreams();
       const err = new Error(
@@ -142,11 +132,11 @@ export class RecorderAPI {
         'Click "End Session" and try again, or uncheck "Capture system audio" to record without it.'
       );
       err.name  = 'SysAudioNotCaptured';
-      err.title = 'System Audio Not Captured';
+      const e = err as { title?: string } & Error;
+      e.title = 'System Audio Not Captured';
       throw err;
     }
 
-    // 5 — Audio mix
     this.#audioMixer.stopMicPreview();
     this.#audioMixer.stopSysPreview();
     const hasMic    = !!(this.#micStream?.getAudioTracks().length);
@@ -157,7 +147,6 @@ export class RecorderAPI {
       mixedAudioTrack = mixed.getAudioTracks()[0] ?? null;
     }
 
-    // 6 — Output file
     const dirOk = await this.#storage.ensureAccess();
     if (!dirOk) {
       this.#releaseNonScreenStreams();
@@ -173,20 +162,17 @@ export class RecorderAPI {
     this.#writableStream  = await fileHandle.createWritable();
     this.#savedFileHandle = fileHandle;
 
-    // 7 — Encoder pipeline
     await this.#recorderCore.init({
       canvas:         this.#canvas,
       mixedAudioTrack,
-      writableStream: this.#writableStream,
+      writableStream: this.#writableStream!,
       isMp4:          format === FORMAT_MP4,
       videoBitrate:   VIDEO_BITRATES[quality] ?? 4_000_000,
     });
     await this.#recorderCore.start();
   }
 
-  // ── Encoding controls ─────────────────────────────────────────────────────
-
-  startEncoding(fps) {
+  startEncoding(fps: number) {
     this.#compositor.isRecording = true;
     this.#recordingStartTime     = performance.now();
     this.#totalPausedMs          = 0;
@@ -201,15 +187,13 @@ export class RecorderAPI {
     this.#audioMixer.pauseSilentAudio();
   }
 
-  resumeEncoding(fps) {
+  resumeEncoding(fps: number) {
     this.#totalPausedMs += performance.now() - this.#pauseStartTime;
     this.#recorderCore.resume();
     this.#audioMixer.resumeSilentAudio();
     this.#startLoop(fps);
   }
 
-  // Stops the recording loop, flushes the encoder, closes the output file.
-  // Returns the saved FileSystemFileHandle so the caller can show a toast link.
   async finalizeEncoding() {
     this.#compositor.isRecording = false;
     this.#metronome.stop();
@@ -225,11 +209,7 @@ export class RecorderAPI {
     return handle;
   }
 
-  // ── Mid-recording device switching ───────────────────────────────────────
-
-  // Swaps the webcam to a different device while a recording is in progress.
-  // webcamSelected=false stops the current webcam without opening a new one.
-  async changeWebcam(webcamDeviceId, webcamSelected) {
+  async changeWebcam(webcamDeviceId: string | undefined, webcamSelected: boolean) {
     this.#webcamStream?.getTracks().forEach(t => t.stop());
     this.#webcamStream           = null;
     this.#compositor.webcamStream = null;
@@ -246,18 +226,12 @@ export class RecorderAPI {
     }
   }
 
-  // ── Session / cleanup ─────────────────────────────────────────────────────
-
-  // Stops the screen-share stream and clears the compositor video source.
-  // Does NOT restart previews — callers handle that separately.
   endSession() {
     this.#masterStream?.getTracks().forEach(t => t.stop());
     this.#masterStream = null;
     this.#compositor.screenVid.srcObject = null;
   }
 
-  // Releases all resources (streams, encoder, audio) on error paths.
-  // Leaves the screen-share session alive so hasSession reflects its state.
   cleanupAll() {
     this.#compositor.isRecording = false;
     this.#metronome.stop();
@@ -267,8 +241,6 @@ export class RecorderAPI {
     this.#releaseNonScreenStreams();
   }
 
-  // Restarts the canvas preview loop and audio / webcam previews using the
-  // device IDs most recently set via setDevices().
   restartPreviews() {
     this.#metronome.start(0, () => this.#compositor.drawFrame());
     this.#startWebcamPreview();
@@ -278,19 +250,15 @@ export class RecorderAPI {
     }
   }
 
-  // ── Private helpers ───────────────────────────────────────────────────────
-
-  #startLoop(fps) {
+  #startLoop(fps: number) {
     const startTime = this.#recordingStartTime;
     const paused    = () => this.#totalPausedMs;
-    this.#metronome.start(fps, async frameStart => {
+    this.#metronome.start(fps, async (frameStart: number) => {
       this.#compositor.drawFrame();
       await this.#recorderCore.addFrame((frameStart - startTime - paused()) / 1000);
     });
   }
 
-  // Releases webcam + mic recording streams and tears down the audio graph.
-  // Does not touch masterStream or preview webcam state.
   #releaseNonScreenStreams() {
     this.#stopWebcamPreview();
     [this.#webcamStream, this.#micStream].forEach(s => s?.getTracks().forEach(t => t.stop()));

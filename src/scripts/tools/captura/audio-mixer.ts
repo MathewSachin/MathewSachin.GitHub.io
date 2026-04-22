@@ -1,4 +1,4 @@
-// ── audio-mixer.js ────────────────────────────────────────────────────────────
+// ── audio-mixer.ts ────────────────────────────────────────────────────────────
 // The Audio Engine: everything related to the AudioContext.
 // Responsibilities:
 //   • Mix system audio + microphone through GainNodes and AnalyserNodes.
@@ -9,48 +9,34 @@
 //     of an active recording.
 
 export class AudioMixer {
-  // ── Private fields ──────────────────────────────────────────────────────────
+  #audioCtx: AudioContext | null = null;
+  #audioDestNode: MediaStreamAudioDestinationNode | null = null;
+  #micGainNode: GainNode | null = null;
+  #sysGainNode: GainNode | null = null;
+  #micAnalyser: AnalyserNode | null = null;
+  #sysAnalyser: AnalyserNode | null = null;
 
-  // Recording audio graph
-  #audioCtx      = null;
-  #audioDestNode = null;
-  #micGainNode   = null;
-  #sysGainNode   = null;
-  #micAnalyser   = null;
-  #sysAnalyser   = null;
+  #silentAudioEl: HTMLAudioElement | null = null;
+  #silentAudioUrl: string | null = null;
 
-  // macOS Core Audio / Media Session workaround
-  #silentAudioEl  = null;
-  #silentAudioUrl = null;
+  #previewAudioCtx: AudioContext | null = null;
+  #previewMicAnalyser: AnalyserNode | null = null;
+  #previewSysAnalyser: AnalyserNode | null = null;
+  #previewMicStream: MediaStream | null = null;
 
-  // Preview audio (mic/sys metering before/between recordings)
-  #previewAudioCtx    = null;
-  #previewMicAnalyser = null;
-  #previewSysAnalyser = null;
-  #previewMicStream   = null;
+  #meterRafId: number | null = null;
+  #micLevelCanvas: HTMLCanvasElement | null = null;
+  #sysLevelCanvas: HTMLCanvasElement | null = null;
 
-  // Level-meter animation
-  #meterRafId     = null;
-  #micLevelCanvas = null;
-  #sysLevelCanvas = null;
-
-  // ── Constructor ─────────────────────────────────────────────────────────────
-
-  constructor(micLevelCanvas, sysLevelCanvas) {
+  constructor(micLevelCanvas: HTMLCanvasElement, sysLevelCanvas: HTMLCanvasElement) {
     this.#micLevelCanvas = micLevelCanvas;
     this.#sysLevelCanvas = sysLevelCanvas;
   }
 
-  // ── Public getters ──────────────────────────────────────────────────────────
-
   get micAnalyser() { return this.#micAnalyser; }
   get sysAnalyser() { return this.#sysAnalyser; }
 
-  // ── Audio mixing ─────────────────────────────────────────────────────────────
-
-  // Builds the recording audio graph from the provided tracks and returns the
-  // final mixed MediaStream. Starts the level-meter animation automatically.
-  buildMix(sysAudioTracks, micStream, micGainValue, sysGainValue) {
+  buildMix(sysAudioTracks: MediaStreamTrack[] = [], micStream: MediaStream | null | undefined, micGainValue: number, sysGainValue: number) {
     this.#audioCtx      = new AudioContext();
     this.#audioDestNode = this.#audioCtx.createMediaStreamDestination();
 
@@ -82,40 +68,30 @@ export class AudioMixer {
     return this.#audioDestNode.stream;
   }
 
-  // Live gain control — callable while a recording is active.
-  setMicGain(value) { if (this.#micGainNode) this.#micGainNode.gain.value = value; }
-  setSysGain(value) { if (this.#sysGainNode) this.#sysGainNode.gain.value = value; }
+  setMicGain(value: number) { if (this.#micGainNode) this.#micGainNode.gain.value = value; }
+  setSysGain(value: number) { if (this.#sysGainNode) this.#sysGainNode.gain.value = value; }
 
-  // Tears down the recording audio graph (called after recording stops).
-  // Preview state is intentionally left intact.
   teardownMix() {
     if (this.#audioCtx) { this.#audioCtx.close(); this.#audioCtx = null; }
     this.#micGainNode = this.#sysGainNode = null;
     this.#micAnalyser = this.#sysAnalyser = null;
   }
 
-  // ── macOS Core Audio / Media Session workaround ──────────────────────────────
-
-  // Chrome opens a Core Audio session only when a finite, looping audio file
-  // plays with volume > 0. A MediaStream srcObject (live/infinite) does not
-  // trigger the OS audio session or the Media Session UI. We build a minimal
-  // 100 ms silent PCM WAV in memory and play it looped at −60 dBFS (inaudible)
-  // to satisfy that requirement. Must be called inside a user-gesture chain.
   startSilentAudio() {
     const rate = 8000, numSamples = rate / 10; // 100 ms @ 8 kHz
     const buf  = new ArrayBuffer(44 + numSamples);
     const d    = new DataView(buf);
-    const str  = (off, s) => { for (let i = 0; i < s.length; i++) d.setUint8(off + i, s.charCodeAt(i)); };
+    const str  = (off: number, s: string) => { for (let i = 0; i < s.length; i++) d.setUint8(off + i, s.charCodeAt(i)); };
     str(0, 'RIFF'); d.setUint32(4, 36 + numSamples, true);
     str(8, 'WAVE'); str(12, 'fmt '); d.setUint32(16, 16, true);
-    d.setUint16(20, 1, true);          // PCM
-    d.setUint16(22, 1, true);          // mono
-    d.setUint32(24, rate, true);       // sample rate
-    d.setUint32(28, rate, true);       // byte rate
-    d.setUint16(32, 1, true);          // block align
-    d.setUint16(34, 8, true);          // 8-bit
+    d.setUint16(20, 1, true);
+    d.setUint16(22, 1, true);
+    d.setUint32(24, rate, true);
+    d.setUint32(28, rate, true);
+    d.setUint16(32, 1, true);
+    d.setUint16(34, 8, true);
     str(36, 'data'); d.setUint32(40, numSamples, true);
-    for (let i = 0; i < numSamples; i++) d.setUint8(44 + i, 128); // 128 = silence (unsigned midpoint)
+    for (let i = 0; i < numSamples; i++) d.setUint8(44 + i, 128);
 
     this.#silentAudioUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
     this.#silentAudioEl  = Object.assign(new Audio(), {
@@ -137,11 +113,10 @@ export class AudioMixer {
     if (this.#silentAudioUrl) { URL.revokeObjectURL(this.#silentAudioUrl); this.#silentAudioUrl = null; }
   }
 
-  // ── Level meters ─────────────────────────────────────────────────────────────
-
-  // Draws a green/yellow/red RMS bar on a canvas for one audio channel.
-  #drawMeter(analyser, mCanvas) {
+  #drawMeter(analyser: AnalyserNode | null | undefined, mCanvas: HTMLCanvasElement | null | undefined) {
+    if (!mCanvas) return;
     const mCtx = mCanvas.getContext('2d');
+    if (!mCtx) return;
     const W = mCanvas.width, H = mCanvas.height;
     mCtx.fillStyle = '#1e1e1e';
     mCtx.fillRect(0, 0, W, H);
@@ -150,10 +125,9 @@ export class AudioMixer {
     const buf = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(buf);
 
-    // Compute RMS; samples are unsigned 8-bit where 128 = silence
     let sum = 0;
     for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; sum += v * v; }
-    const level  = Math.min(1, Math.sqrt(sum / buf.length) * 8); // scale so speech is visible
+    const level  = Math.min(1, Math.sqrt(sum / buf.length) * 8);
     const filled = level * W;
     const greenEnd = W * 0.70, yellowEnd = W * 0.85;
 
@@ -162,19 +136,20 @@ export class AudioMixer {
     if (filled > yellowEnd) { mCtx.fillStyle = '#ef4444'; mCtx.fillRect(yellowEnd, 0, filled - yellowEnd,                                H); }
   }
 
-  // Prefer recording analysers; fall back to preview analysers.
   startMeterAnimation() {
     this.stopMeterAnimation();
     const tick = () => {
       const micAn = this.#micAnalyser || this.#previewMicAnalyser;
       const sysAn = this.#sysAnalyser || this.#previewSysAnalyser;
       if (!micAn && !sysAn) {
-        [this.#micLevelCanvas, this.#sysLevelCanvas].forEach(c => {
-          const mCtx = c.getContext('2d');
-          mCtx.fillStyle = '#1e1e1e';
-          mCtx.fillRect(0, 0, c.width, c.height);
-        });
-        return; // stop animation loop — nothing to visualise
+            [this.#micLevelCanvas, this.#sysLevelCanvas].forEach(c => {
+              if (!c) return;
+              const mCtx = c.getContext('2d');
+              if (!mCtx) return;
+              mCtx.fillStyle = '#1e1e1e';
+              mCtx.fillRect(0, 0, c.width, c.height);
+            });
+        return;
       }
       this.#drawMeter(micAn, this.#micLevelCanvas);
       this.#drawMeter(sysAn, this.#sysLevelCanvas);
@@ -187,13 +162,7 @@ export class AudioMixer {
     if (this.#meterRafId) { cancelAnimationFrame(this.#meterRafId); this.#meterRafId = null; }
   }
 
-  // ── Preview audio metering ───────────────────────────────────────────────────
-
-  // Shows the mic level meter before/between recordings so the user can verify
-  // input levels without starting a capture session.
-  // isActive = (isRecording || isPaused) — preview is skipped when a recording
-  // is live because the recording audio graph already drives the meters.
-  async startMicPreview(micDeviceId, isActive) {
+  async startMicPreview(micDeviceId: string | null | undefined, isActive: boolean) {
     this.#stopPreviewMicStream();
     this.#previewMicAnalyser = null;
     if (isActive || !micDeviceId) return;
@@ -212,7 +181,6 @@ export class AudioMixer {
       src.connect(this.#previewMicAnalyser);
       this.startMeterAnimation();
     } catch (_) {
-      // Preview metering is optional — silently ignore permission errors, etc.
       this.#previewMicStream = this.#previewMicAnalyser = null;
     }
   }
@@ -226,9 +194,9 @@ export class AudioMixer {
     }
   }
 
-  startSysPreview(tracks) {
+  startSysPreview(tracks: MediaStreamTrack[] | undefined) {
     this.#previewSysAnalyser = null;
-    if (!tracks?.length) return;
+    if (!tracks || tracks.length === 0) return;
 
     if (!this.#previewAudioCtx || this.#previewAudioCtx.state === 'closed') {
       this.#previewAudioCtx = new AudioContext();
@@ -248,8 +216,6 @@ export class AudioMixer {
       this.#previewAudioCtx = null;
     }
   }
-
-  // ── Private helpers ──────────────────────────────────────────────────────────
 
   #stopPreviewMicStream() {
     if (this.#previewMicStream) {

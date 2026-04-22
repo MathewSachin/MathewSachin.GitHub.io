@@ -4,12 +4,12 @@
 <div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 
 <script>
-const progressBar = document.getElementById("reading-progress-bar");
+const progressBar = document.getElementById("reading-progress-bar") as HTMLElement;
 function updateProgress() {
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
-    progressBar.style.width = progress + "%";
-    progressBar.setAttribute("aria-valuenow", Math.round(progress));
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
+  progressBar.style.width = progress + "%";
+  progressBar.setAttribute("aria-valuenow", String(Math.round(progress)));
 }
 window.addEventListener("scroll", updateProgress);
 window.addEventListener("resize", updateProgress);

@@ -40,47 +40,52 @@ import RenderMDX from '@components/mdx/RenderMDX.astro';
 
 <script>
 import { encodeBase64, decodeBase64 } from '@scripts/tools/base64.js';
-
-var textInput = document.getElementById('text-input');
-var b64Input  = document.getElementById('b64-input');
-var textError = document.getElementById('text-error');
-var b64Error  = document.getElementById('b64-error');
-
-function clearError(el) { el.textContent = ''; el.classList.add('d-none'); }
-function showError(el, msg) { el.textContent = msg; el.classList.remove('d-none'); }
-
-document.getElementById('encode-btn').addEventListener('click', function () {
-  clearError(textError);
-  try {
-    b64Input.value = encodeBase64(textInput.value);
-  } catch (e) {
-    showError(textError, 'Encoding failed: ' + e.message);
-  }
-});
-
-document.getElementById('decode-btn').addEventListener('click', function () {
-  clearError(b64Error);
-  try {
-    textInput.value = decodeBase64(b64Input.value.trim());
-  } catch (e) {
-    showError(b64Error, 'Invalid Base64 string: ' + e.message);
-  }
-});
-
-document.getElementById('clear-btn').addEventListener('click', function () {
-  textInput.value = '';
-  b64Input.value = '';
-  clearError(textError);
-  clearError(b64Error);
-});
-
 import { registerCopyToClipboard } from '@scripts/utils.js';
 
-const copyBtn = document.getElementById('copy-btn');
+const textInput = document.getElementById('text-input') as HTMLTextAreaElement;
+const b64Input  = document.getElementById('b64-input') as HTMLTextAreaElement;
+const textError = document.getElementById('text-error') as HTMLElement;
+const b64Error  = document.getElementById('b64-error') as HTMLElement;
+
+function clearError(el: HTMLElement) { el.textContent = ''; el.classList.add('d-none'); }
+function showError(el: HTMLElement, msg: string) { el.textContent = msg; el.classList.remove('d-none'); }
+
+const encodeBtn = document.getElementById('encode-btn') as HTMLButtonElement;
+encodeBtn.addEventListener('click', function () {
+  clearError(textError);
+  try {
+    if (b64Input && textInput) b64Input.value = encodeBase64(textInput.value);
+  } catch (e: unknown) {
+    const err = e as Error | undefined;
+    showError(textError, 'Encoding failed: ' + (err?.message ?? String(e)));
+  }
+});
+
+const decodeBtn = document.getElementById('decode-btn') as HTMLButtonElement;
+decodeBtn.addEventListener('click', function () {
+  clearError(b64Error);
+  try {
+    if (textInput && b64Input) textInput.value = decodeBase64(b64Input.value.trim());
+  } catch (e: unknown) {
+    const err = e as Error | undefined;
+    showError(b64Error, 'Invalid Base64 string: ' + (err?.message ?? String(e)));
+  }
+});
+
+const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+clearBtn.addEventListener('click', function () {
+  if (textInput) textInput.value = '';
+  if (b64Input) b64Input.value = '';
+  clearError(textError);
+  clearError(b64Error);
+});
+
+const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+const icon = copyBtn.querySelector('i') as HTMLElement;
 registerCopyToClipboard(
   copyBtn,
   () => b64Input.value,
-  copyBtn.querySelector('i')
+  icon
 );
 </script>
 

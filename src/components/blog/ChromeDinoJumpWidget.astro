@@ -20,15 +20,14 @@ import chromDinoRawStyles from '@styles/chrome-dino-hack.css?raw';
 
 <script src="@scripts/chrome-dino-hack.js"></script>
 <script>
-    import { registerCopyToClipboard } from '@scripts/utils.js';
+import { registerCopyToClipboard } from '@scripts/utils.js';
 
-    const clipButton = document.getElementById('btn-jump-clip');
-    const jumpInput = document.getElementById('jump-input');
-    if (clipButton && jumpInput) {
-        registerCopyToClipboard(
-            clipButton, 
-            () => `(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(${jumpInput.value})`,
-            clipButton.querySelector("i")
-        );
-    }
+const clipButton = document.getElementById('btn-jump-clip') as HTMLButtonElement;
+const jumpInput = document.getElementById('jump-input') as HTMLInputElement;
+
+registerCopyToClipboard(
+    clipButton, 
+    () => `(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(${jumpInput.value})`,
+    clipButton.querySelector("i")
+);
 </script>

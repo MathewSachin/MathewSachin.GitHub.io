@@ -12,7 +12,6 @@ interface Props {
   ads?: boolean;
 }
 const { title, ads = false } = Astro.props;
-const BASE = import.meta.env.BASE_URL;
 ---
 <BaseLayout title={title} ads={ads}>
   <div class="bg-dark">

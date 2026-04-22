@@ -14,7 +14,7 @@ const { post } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 const url = `${BASE}${postUrlFromSlug(post.id).slice(1)}`;
 const date = getPostDate(post);
-const readTime = estimateReadingTime(post.body);
+const readTime = estimateReadingTime(post.body ?? '');
 ---
 <a
   href={url}

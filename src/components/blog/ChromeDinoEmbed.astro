@@ -2,7 +2,7 @@
 ---
 
 <div class="dino-embed-wrapper">
-<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/index.html" title="Chrome Dino Game — press Space or tap to start" scrolling="no" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+<iframe id="dino-game-frame" class="dino-embed-frame" src="/dino/index.html" title="Chrome Dino Game — press Space or tap to start" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
 <small class="dino-embed-caption">Chrome Dino game &copy; <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/neterror/resources/" target="_blank" rel="noopener">The Chromium Authors</a>, open-sourced under the <a href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/LICENSE" target="_blank" rel="noopener">BSD 3-Clause License</a>. Extracted by <a href="https://github.com/wayou/t-rex-runner" target="_blank" rel="noopener">@liuwayong</a>.</small>
 </div>
 
@@ -36,109 +36,121 @@
 </div>
 
 <script>
-(function(){
-  const input = document.getElementById('fake-console');
-  const iframe = document.getElementById('dino-game-frame');
-  const sendButton = document.getElementById('button-dino-send');
-  sendButton.addEventListener('click', function() {
-    const command = input.value.trim();
-    if (command) {
+  type DinoRunner = {
+    distanceRan?: number;
+    distance?: number;
+    currentSpeed?: number;
+    speed?: number;
+    tRex?: { yPos?: number; y?: number };
+  };
+
+  type DinoWindow = Window & {
+    Runner?: { instance_?: DinoRunner };
+    runner?: DinoRunner | null;
+    game?: DinoRunner | null;
+    distanceRan?: number;
+    currentSpeed?: number;
+    tRex?: { yPos?: number; y?: number };
+    eval?: (code: string) => unknown;
+  };
+const input = document.getElementById('fake-console') as HTMLTextAreaElement;
+const iframe = document.getElementById('dino-game-frame') as HTMLIFrameElement;
+const sendButton = document.getElementById('button-dino-send') as HTMLElement;
+
+sendButton.addEventListener('click', function() {
+  const command = (input.value || '').trim();
+  if (command) {
       try {
-        iframe.contentWindow.eval(command);
-      } catch (e) {
-        console.warn('Eval failed in iframe:', e);
-      }
-      input.value = '';
-    }
-  });
-
-  const elDistance = document.getElementById('dbg-distance');
-  const elSpeed = document.getElementById('dbg-speed');
-  const elY = document.getElementById('dbg-ypos');
-  const toggleBtn = document.getElementById('debug-toggle');
-  const toggleIcon = toggleBtn.querySelector('i');
-
-  let running = true;
-  let intervalId = null;
-
-  function safeAccessWin() {
-    try {
-      return iframe && iframe.contentWindow ? iframe.contentWindow : null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function readVars() {
-    const win = safeAccessWin();
-    if (!win) return {distance: '—', speed: '—', y: '—'};
-
-    // Common Runner instance (flexible fallbacks)
-    const runner = win.Runner && win.Runner.instance_ ? win.Runner.instance_ : (win.runner || win.game || null);
-
-    let distance = '—';
-    let speed = '—';
-    let y = '—';
-
-    try {
-      if (runner) {
-        distance = (typeof runner.distanceRan !== 'undefined') ? runner.distanceRan : (typeof runner.distance === 'number' ? runner.distance : distance);
-        speed = (typeof runner.currentSpeed !== 'undefined') ? runner.currentSpeed : (typeof runner.speed === 'number' ? runner.speed : speed);
-        if (runner.tRex) {
-          y = (typeof runner.tRex.yPos !== 'undefined') ? runner.tRex.yPos : (typeof runner.tRex.y === 'number' ? runner.tRex.y : y);
+        const win = iframe.contentWindow as (Window & Partial<DinoWindow>) | null;
+        if (win && typeof win.eval === 'function') {
+          win.eval!(command);
         }
-      }
+      } catch (e) {
+      console.warn('Eval failed in iframe:', e);
+    }
+    input.value = '';
+  }
+});
 
-      // Some builds expose globals directly
-      if (distance === '—' && typeof win.distanceRan !== 'undefined') distance = win.distanceRan;
-      if (speed === '—' && typeof win.currentSpeed !== 'undefined') speed = win.currentSpeed;
-      if (y === '—' && typeof win.tRex !== 'undefined' && typeof win.tRex.yPos !== 'undefined') y = win.tRex.yPos;
-    } catch (e) {
-      // swallow
+const elDistance = document.getElementById('dbg-distance') as HTMLElement;
+const elSpeed = document.getElementById('dbg-speed') as HTMLElement;
+const elY = document.getElementById('dbg-ypos') as HTMLElement;
+const toggleBtn = document.getElementById('debug-toggle') as HTMLElement;
+const toggleIcon = toggleBtn.querySelector('i') as HTMLElement;
+
+let running = true;
+let intervalId: number | null = null;
+
+function readVars() {
+  const win = iframe.contentWindow as (Window & Partial<DinoWindow>) | null;
+  if (!win) return {distance: '—', speed: '—', y: '—'};
+
+  // Common Runner instance (flexible fallbacks)
+  type RunnerType = DinoRunner | null;
+  const runner: RunnerType = (win && win.Runner && win.Runner.instance_) ? (win.Runner.instance_ as RunnerType) : ((win && (win.runner ?? win.game)) as RunnerType);
+
+  let distance: number | string = '—';
+  let speed: number | string = '—';
+  let y: number | string = '—';
+
+  try {
+    if (runner) {
+      distance = (typeof runner.distanceRan !== 'undefined') ? runner.distanceRan as number : (typeof runner.distance === 'number' ? runner.distance : distance);
+      speed = (typeof runner.currentSpeed !== 'undefined') ? runner.currentSpeed as number : (typeof runner.speed === 'number' ? runner.speed : speed);
+      if (runner.tRex) {
+        y = (typeof runner.tRex.yPos !== 'undefined') ? runner.tRex.yPos as number : (typeof runner.tRex.y === 'number' ? runner.tRex.y : y);
+      }
     }
 
-    // Normalize numbers to short fixed format
-    const fmt = v => (typeof v === 'number' ? (v % 1 === 0 ? v : v.toFixed(2)) : v);
-    return {distance: fmt(distance), speed: fmt(speed), y: fmt(y)};
+    // Some builds expose globals directly
+    if (distance === '—' && typeof win?.distanceRan !== 'undefined') distance = (win as DinoWindow).distanceRan as number;
+    if (speed === '—' && typeof win?.currentSpeed !== 'undefined') speed = (win as DinoWindow).currentSpeed as number;
+    if (y === '—' && typeof win?.tRex !== 'undefined' && typeof (win as DinoWindow).tRex?.yPos !== 'undefined') y = (win as DinoWindow).tRex!.yPos as number;
+  } catch (e) {
+    // swallow
   }
 
-  function update() {
-    const vars = readVars();
-    elDistance.textContent = vars.distance;
-    elSpeed.textContent = vars.speed;
-    elY.textContent = vars.y;
-  }
+  // Normalize numbers to short fixed format
+  const fmt = (v: unknown) => (typeof v === 'number' ? (v % 1 === 0 ? v : (v as number).toFixed(2)) : v);
+  return {distance: fmt(distance), speed: fmt(speed), y: fmt(y)};
+}
 
-  function start() {
-    if (intervalId) return;
-    intervalId = setInterval(update, 200);
-    running = true;
-    toggleIcon.classList = "fa fa-pause";
-  }
+function update() {
+  const vars = readVars();
+  elDistance.textContent = String(vars.distance);
+  elSpeed.textContent = String(vars.speed);
+  elY.textContent = String(vars.y);
+}
 
-  function stop() {
-    if (intervalId) clearInterval(intervalId);
-    intervalId = null;
-    running = false;
-    toggleIcon.classList = "fa fa-play";
-  }
+function start() {
+  if (intervalId !== null) return;
+  intervalId = window.setInterval(update, 200);
+  running = true;
+  toggleIcon.className = "fa fa-pause";
+}
 
-  toggleBtn.addEventListener('click', function(){
-    if (running) stop(); else start();
-  });
+function stop() {
+  if (intervalId !== null) window.clearInterval(intervalId);
+  intervalId = null;
+  running = false;
+  toggleIcon.className = "fa fa-play";
+}
 
-  // Start polling once iframe has loaded (best-effort)
-  iframe.addEventListener('load', function(){
-    // give the game a small moment to initialize
-    setTimeout(() => { update(); start(); }, 300);
-  });
+toggleBtn.addEventListener('click', function(){
+  if (running) stop(); else start();
+});
 
-  // Start immediately in case iframe already loaded
-  setTimeout(() => { update(); start(); }, 500);
+// Start polling once iframe has loaded (best-effort)
+iframe.addEventListener('load', function(){
+  // give the game a small moment to initialize
+  setTimeout(() => { update(); start(); }, 300);
+});
 
-  // Cleanup on page unload
-  window.addEventListener('beforeunload', function(){ stop(); });
-})();
+// Start immediately in case iframe already loaded
+setTimeout(() => { update(); start(); }, 500);
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', function(){ stop(); });
 </script>
 
 <style is:inline>

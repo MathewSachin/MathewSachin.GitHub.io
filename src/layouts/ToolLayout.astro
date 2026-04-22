@@ -16,7 +16,6 @@ interface Props {
 }
 
 const { title, accentColor, ads = true, manifest } = Astro.props;
-const BASE = import.meta.env.BASE_URL;
 const pageUrl = Astro.url.href;
 ---
 <BaseLayout title={title} accentColor={accentColor} ads={ads} manifest={manifest}>
