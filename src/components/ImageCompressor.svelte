@@ -20,7 +20,6 @@ let statusType: 'info' | 'danger' | 'warning' = 'info';
 
 let previewOrigUrl: string | null = null;
 let previewCompUrl: string | null = null;
-// TODO: These arent getting updated
 let originalWidth: number = 0;
 let originalHeight: number = 0;
 let compressedWidth: number = 0;
@@ -81,6 +80,9 @@ async function compress() {
     const inputData = new Uint8Array(arr);
 
     IM.ImageMagick!.read(inputData, (image: any) => {
+      originalWidth = image.width;
+      originalHeight = image.height;
+
       if (outputFormat !== 'PNG') image.quality = quality;
       if (doResize && image.width > Math.max(1, maxWidth)) {
         const mxw = Math.max(1, maxWidth);
@@ -88,6 +90,9 @@ async function compress() {
         const newHeight = Math.round(image.height * ratio);
         image.resize(mxw, newHeight);
       }
+
+      compressedWidth = image.width;
+      compressedHeight = image.height;
 
       const magickFmt = outputFormat === 'JPEG' ? IM.MagickFormat.Jpeg
         : outputFormat === 'WEBP' ? IM.MagickFormat.WebP
