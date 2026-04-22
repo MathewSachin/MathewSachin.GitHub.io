@@ -2,95 +2,11 @@
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/base64.mdx';
 import RenderMDX from '@components/mdx/RenderMDX.astro';
+import Base64Tool from '@components/Base64Tool.svelte';
 ---
 <ToolLayout title="Base64 Encoder / Decoder" ads={true}>
 
-<div class="card google-anno-skip">
-<div class="card-body">
-
-<div class="row g-4">
-
-  <!-- Plain Text -->
-  <div class="col-12 col-md-6">
-    <h5 class="mb-3">Plain Text</h5>
-    <textarea id="text-input" class="form-control font-monospace" rows="8"
-      placeholder="Enter text to encode…"></textarea>
-    <div class="mt-2 d-flex gap-2 flex-wrap">
-      <button class="btn btn-info text-white" id="encode-btn">Encode &rarr;</button>
-      <button class="btn btn-outline-secondary" id="clear-btn">Clear</button>
-    </div>
-    <div id="text-error" class="text-danger small mt-1 d-none"></div>
-  </div>
-
-  <!-- Base64 -->
-  <div class="col-12 col-md-6">
-    <h5 class="mb-3">Base64</h5>
-    <textarea id="b64-input" class="form-control font-monospace" rows="8"
-      placeholder="Enter Base64 to decode…"></textarea>
-    <div class="mt-2 d-flex gap-2 flex-wrap">
-      <button class="btn btn-info text-white" id="decode-btn">&larr; Decode</button>
-      <button class="btn btn-outline-secondary" id="copy-btn">
-        <i class="fas fa-copy me-1"></i>Copy
-      </button>
-    </div>
-    <div id="b64-error" class="text-danger small mt-1 d-none"></div>
-  </div>
-
-</div>
-
-<script>
-import { encodeBase64, decodeBase64 } from '@scripts/tools/base64.js';
-import { registerCopyToClipboard } from '@scripts/utils.js';
-
-const textInput = document.getElementById('text-input') as HTMLTextAreaElement;
-const b64Input  = document.getElementById('b64-input') as HTMLTextAreaElement;
-const textError = document.getElementById('text-error') as HTMLElement;
-const b64Error  = document.getElementById('b64-error') as HTMLElement;
-
-function clearError(el: HTMLElement) { el.textContent = ''; el.classList.add('d-none'); }
-function showError(el: HTMLElement, msg: string) { el.textContent = msg; el.classList.remove('d-none'); }
-
-const encodeBtn = document.getElementById('encode-btn') as HTMLButtonElement;
-encodeBtn.addEventListener('click', function () {
-  clearError(textError);
-  try {
-    if (b64Input && textInput) b64Input.value = encodeBase64(textInput.value);
-  } catch (e: unknown) {
-    const err = e as Error | undefined;
-    showError(textError, 'Encoding failed: ' + (err?.message ?? String(e)));
-  }
-});
-
-const decodeBtn = document.getElementById('decode-btn') as HTMLButtonElement;
-decodeBtn.addEventListener('click', function () {
-  clearError(b64Error);
-  try {
-    if (textInput && b64Input) textInput.value = decodeBase64(b64Input.value.trim());
-  } catch (e: unknown) {
-    const err = e as Error | undefined;
-    showError(b64Error, 'Invalid Base64 string: ' + (err?.message ?? String(e)));
-  }
-});
-
-const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
-clearBtn.addEventListener('click', function () {
-  if (textInput) textInput.value = '';
-  if (b64Input) b64Input.value = '';
-  clearError(textError);
-  clearError(b64Error);
-});
-
-const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
-const icon = copyBtn.querySelector('i') as HTMLElement;
-registerCopyToClipboard(
-  copyBtn,
-  () => b64Input.value,
-  icon
-);
-</script>
-
-</div>
-</div>
+<Base64Tool client:load />
 
 <RenderMDX Content={Content} />
 </ToolLayout>
