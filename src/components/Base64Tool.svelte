@@ -55,8 +55,8 @@
         <h5 class="mb-3">Plain Text</h5>
         <textarea class="form-control font-monospace" id="text-input" rows="8" placeholder="Enter text to encode…" bind:value={text}></textarea>
         <div class="mt-2 d-flex gap-2 flex-wrap">
-          <button class="btn btn-info text-white" on:click={doEncode}>Encode &rarr;</button>
-          <button class="btn btn-outline-secondary" on:click={doClear}>Clear</button>
+          <button class="btn btn-info text-white" id="encode-btn" on:click={doEncode}>Encode &rarr;</button>
+          <button class="btn btn-outline-secondary" id="clear-btn" on:click={doClear}>Clear</button>
         </div>
         <div class={`text-danger small mt-1 ${textError ? '' : 'd-none'}`}>{textError}</div>
       </div>
@@ -64,14 +64,14 @@
       <!-- Base64 -->
       <div class="col-12 col-md-6">
         <h5 class="mb-3">Base64</h5>
-        <textarea class="form-control font-monospace" rows="8" placeholder="Enter Base64 to decode…" bind:value={b64}></textarea>
+        <textarea class="form-control font-monospace" id="b64-input" rows="8" placeholder="Enter Base64 to decode…" bind:value={b64}></textarea>
         <div class="mt-2 d-flex gap-2 flex-wrap">
-          <button class="btn btn-info text-white" on:click={doDecode}>&larr; Decode</button>
+          <button class="btn btn-info text-white" id="decode-btn" on:click={doDecode}>&larr; Decode</button>
           <button class="btn btn-outline-secondary" bind:this={copyBtn}>
             <i class="fas fa-copy me-1" bind:this={iconEl}></i>Copy
           </button>
         </div>
-        <div class={`text-danger small mt-1 ${b64Error ? '' : 'd-none'}`}>{b64Error}</div>
+        <div id="b64-error" class={`text-danger small mt-1 ${b64Error ? '' : 'd-none'}`}>{b64Error}</div>
       </div>
 
     </div>
