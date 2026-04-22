@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import svelte from '@astrojs/svelte';
 import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'node:url';
 import rehypeRaw from 'rehype-raw';
@@ -14,6 +15,7 @@ const SITE = 'https://mathewsachin.github.io';
 // custom base URL, since the validator can't resolve base-prefixed links against dist/).
 const isPreviewBuild = Boolean(process.env.ASTRO_BASE);
 const integrations = [
+  svelte(),
   mdx(),
   sitemap(),
   ...(isPreviewBuild ? [] : [linkValidator({ failOnBrokenLinks: true })]),
