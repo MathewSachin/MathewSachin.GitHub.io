@@ -1,13 +1,8 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/imgcompress.mdx';
-import RenderMDX from '@components/mdx/RenderMDX.astro';
 import ImageCompressor from '@components/ImageCompressor.svelte';
 ---
-<ToolLayout title="Image Compressor" ads={true}>
-
-
-<ImageCompressor client:load />
-
-<RenderMDX Content={Content} />
+<ToolLayout title="Image Compressor" DescriptiveContent={Content}>
+    <ImageCompressor client:load />
 </ToolLayout>

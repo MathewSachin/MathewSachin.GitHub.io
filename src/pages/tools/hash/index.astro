@@ -1,9 +1,8 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/hash.mdx';
-import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
-<ToolLayout title="Hash Generator" ads={true}>
+<ToolLayout title="Hash Generator" DescriptiveContent={Content}>
 
 <div class="card google-anno-skip">
 <div class="card-body">
@@ -104,6 +103,4 @@ copyBtns.forEach(function (btn: HTMLButtonElement) {
 
 </div>
 </div>
-
-<RenderMDX Content={Content} />
 </ToolLayout>

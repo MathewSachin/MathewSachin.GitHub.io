@@ -1,9 +1,8 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/cron.mdx';
-import RenderMDX from '@components/mdx/RenderMDX.astro';
 ---
-<ToolLayout title="CRON Expression Generator" ads={true}>
+<ToolLayout title="CRON Expression Generator" DescriptiveContent={Content}>
 
 <div class="card google-anno-skip">
 <div class="card-body">
@@ -217,6 +216,4 @@ update(); // initial generation
 
 </div>
 </div>
-
-<RenderMDX Content={Content} />
 </ToolLayout>

@@ -1,10 +1,9 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/pdf.mdx';
-import RenderMDX from '@components/mdx/RenderMDX.astro';
 const BASE = import.meta.env.BASE_URL;
 ---
-<ToolLayout title="PDF Password Tool" ads={true}>
+<ToolLayout title="PDF Password Tool" DescriptiveContent={Content}>
 
 <!-- Hidden element exposing the worker URL to JS (respects baseurl for PR previews). -->
 <span id="pdf-worker-url" data-url={`${BASE}tools/pdf/pdf.worker.js`} class="d-none"></span>
@@ -111,6 +110,5 @@ const BASE = import.meta.env.BASE_URL;
 </div>
 </div>
 
-<RenderMDX Content={Content} />
 <script src="@scripts/tools/pdf.js"></script>
 </ToolLayout>

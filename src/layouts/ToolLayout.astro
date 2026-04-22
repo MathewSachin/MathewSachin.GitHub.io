@@ -7,15 +7,18 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Share from '@components/Share.astro';
 import AdUnit from '@components/AdUnit.astro';
 import Giscus from '@components/Giscus.astro';
+import RenderMDX from '@components/mdx/RenderMDX.astro';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 
 interface Props {
   title: string;
   accentColor?: string;
   ads?: boolean;
   manifest?: string;
+  DescriptiveContent?: AstroComponentFactory;
 }
 
-const { title, accentColor, ads = true, manifest } = Astro.props;
+const { title, accentColor, ads = true, manifest, DescriptiveContent } = Astro.props;
 const pageUrl = Astro.url.href;
 ---
 <BaseLayout title={title} accentColor={accentColor} ads={ads} manifest={manifest}>
@@ -38,6 +41,8 @@ const pageUrl = Astro.url.href;
         <div id="tool-main-content" class="col-md-10">
           <div class="page-content">
             <slot />
+
+            {DescriptiveContent && <RenderMDX Content={DescriptiveContent} />}
           </div>
         </div>
         <div id="tool-sidebar" class="col-md-2">

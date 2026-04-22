@@ -1,11 +1,9 @@
 ---
 import ToolLayout from '@layouts/ToolLayout.astro';
 import { Content } from '@content/tool-docs/bookmarklet.mdx';
-import RenderMDX from '@components/mdx/RenderMDX.astro';
 import Bookmarklet from '@components/tools/Bookmarklet.svelte';
 ---
 
-<ToolLayout title="Bookmarklet Compiler" ads={true}>
+<ToolLayout title="Bookmarklet Compiler" DescriptiveContent={Content}>
   <Bookmarklet client:load />
-  <RenderMDX Content={Content} />
 </ToolLayout>
