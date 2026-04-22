@@ -1,0 +1,1 @@
+import{r as e}from"./utils.Duy6Lzti.js";const n=document.getElementById("btn-ground-clip"),t=document.getElementById("ground-input");e(n,()=>`(Runner.instance_ || Runner.getInstance()).tRex.groundYPos = 93 - ${t.value}`,n.querySelector("i"));
