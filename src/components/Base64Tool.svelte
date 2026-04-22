@@ -53,7 +53,7 @@
       <!-- Plain Text -->
       <div class="col-12 col-md-6">
         <h5 class="mb-3">Plain Text</h5>
-        <textarea class="form-control font-monospace" rows="8" placeholder="Enter text to encode…" bind:value={text}></textarea>
+        <textarea class="form-control font-monospace" id="text-input" rows="8" placeholder="Enter text to encode…" bind:value={text}></textarea>
         <div class="mt-2 d-flex gap-2 flex-wrap">
           <button class="btn btn-info text-white" on:click={doEncode}>Encode &rarr;</button>
           <button class="btn btn-outline-secondary" on:click={doClear}>Clear</button>
