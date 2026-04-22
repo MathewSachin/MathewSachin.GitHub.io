@@ -1,1 +1,0 @@
-import{r as n}from"./utils.Duy6Lzti.js";const e=document.getElementById("btn-score-clip"),t=document.getElementById("score-input");n(e,()=>`(Runner.instance_ || Runner.getInstance()).distanceRan = ${t.value} / 0.025`,e.querySelector("i"));
