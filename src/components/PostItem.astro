@@ -6,6 +6,7 @@
  */
 import type { CollectionEntry } from 'astro:content';
 import { postUrlFromSlug, formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
+import { getTagColor } from '@utils/posts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -31,11 +32,14 @@ const readTime = estimateReadingTime(post.body ?? '');
     </div>
     <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
       <span class="small text-muted">{readTime} read</span>
-      <div class="post-tag">
-        {post.data.tags.map(tag => (
-          <span class="badge rounded-pill bg-secondary">{tag}</span>
-        ))}
-      </div>
+      {post.data.tags?.map(tag => {
+        const bg = getTagColor(tag);
+        return (
+          <span class="badge rounded-pill text-dark" style={`background-color: ${bg};`}>
+            {tag}
+          </span>
+        );
+      })}
     </div>
   </div>
 </a>

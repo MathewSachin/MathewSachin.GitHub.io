@@ -145,3 +145,25 @@ export function tagSlug(tag: string): string {
 export function tagUrl(tag: string): string {
   return `/blog/tags/${tagSlug(tag)}/`;
 }
+
+const TAG_COLORS: string[] = [
+  '#FFEBEE',
+  '#F3E5F5',
+  '#E3F2FD',
+  '#B2EBF2',
+  '#B2DFDB',
+  '#F0F4C3',
+  '#FFE0B2',
+  '#FFCCBC',
+  '#D7CCC8',
+  '#FCE4EC'
+];
+
+export function getTagColor(tag: string) {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
+    hash = ((hash << 5) - hash) + tag.charCodeAt(i);
+    hash |= 0;
+  }
+  return TAG_COLORS[Math.abs(hash) % TAG_COLORS.length];
+}
