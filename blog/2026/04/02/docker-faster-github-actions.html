@@ -79,8 +79,8 @@ Part 7 of 9 &mdash;
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> </div> </div> </div><h2 id="the-fix-pre-bake-a-custom-docker-image">The Fix: Pre-Bake a Custom Docker Image</h2>
 <p>Instead of installing the toolchain at build time, install it once into a Docker image, push it to a registry, and tell GitHub Actions to run your job inside that container.</p>
 <p>The workflow job definition changes from this:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4370" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-4370" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">jobs</span><span style="color:#E1E4E8">:</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-3538" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-3538" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">jobs</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  build</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    runs-on</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ubuntu-latest</span></span>
 <span class="line"><span style="color:#85E89D">    steps</span><span style="color:#E1E4E8">:</span></span>
@@ -90,8 +90,8 @@ Part 7 of 9 &mdash;
 <span class="line"><span style="color:#85E89D">        run</span><span style="color:#E1E4E8">: </span><span style="color:#6A737D"># ... compile from source via ruby-build</span></span>
 <span class="line"><span style="color:#6A737D">      # ... etc</span></span></code></pre> </div>
 <p>To this:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4722" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-4722" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">jobs</span><span style="color:#E1E4E8">:</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4082" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-4082" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">jobs</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  build</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    runs-on</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ubuntu-latest</span></span>
 <span class="line"><span style="color:#85E89D">    container</span><span style="color:#E1E4E8">:</span></span>
@@ -105,8 +105,8 @@ Part 7 of 9 &mdash;
 <p>There are two pieces: the Dockerfile that defines what goes in the image, and the workflow that builds and pushes the image to GitHub Container Registry (GHCR).</p>
 <h3 id="the-dockerfile">The Dockerfile</h3>
 <p>The CI image lives at <code>ci/Dockerfile</code> in the repository:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">dockerfile</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4155" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-4155" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="dockerfile"><code><span class="line"><span style="color:#F97583">FROM</span><span style="color:#E1E4E8"> ubuntu:24.04</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">dockerfile</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8714" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-8714" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="dockerfile"><code><span class="line"><span style="color:#F97583">FROM</span><span style="color:#E1E4E8"> ubuntu:24.04</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">ENV</span><span style="color:#E1E4E8"> DEBIAN_FRONTEND=noninteractive</span></span>
 <span class="line"></span>
@@ -145,8 +145,8 @@ Part 7 of 9 &mdash;
 <p>The split — bake in slow, stable tools; install fast, frequently-changing packages at build time — keeps the image small and long-lived.</p>
 <h3 id="the-image-build-workflow">The Image Build Workflow</h3>
 <p>A separate workflow (<code>build-ci-image.yml</code>) builds and pushes the image whenever the Dockerfile changes:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-2768" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-2768" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#79B8FF">on</span><span style="color:#E1E4E8">:</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-7817" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-7817" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#79B8FF">on</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  push</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    branches</span><span style="color:#E1E4E8">: [ </span><span style="color:#9ECBFF">master</span><span style="color:#E1E4E8"> ]</span></span>
 <span class="line"><span style="color:#85E89D">    paths</span><span style="color:#E1E4E8">:</span></span>
@@ -155,8 +155,8 @@ Part 7 of 9 &mdash;
 <span class="line"><span style="color:#85E89D">  workflow_dispatch</span><span style="color:#E1E4E8">:</span></span></code></pre> </div>
 <p>It only runs when <code>ci/Dockerfile</code> or the workflow file itself changes — not on every push. The slow libvips installation and the Ruby compilation happen here, once, and the result is cached as a container image.</p>
 <p>The image is pushed to <a href="https://ghcr.io">GitHub Container Registry</a> using the built-in <code>GITHUB_TOKEN</code> for authentication:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-271" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-271" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">uses</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">docker/login-action@v3</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-2122" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-2122" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">uses</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">docker/login-action@v3</span></span>
 <span class="line"><span style="color:#85E89D">  with</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    registry</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ghcr.io</span></span>
 <span class="line"><span style="color:#85E89D">    username</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">${{ github.actor }}</span></span>
@@ -164,8 +164,8 @@ Part 7 of 9 &mdash;
 <p>No separate secrets or registry accounts needed — GHCR is integrated directly with GitHub.</p>
 <h4 id="tagging-strategy">Tagging Strategy</h4>
 <p>The image gets two tags:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5691" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-5691" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Generate image tags</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8244" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-8244" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Generate image tags</span></span>
 <span class="line"><span style="color:#85E89D">  id</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">tags</span></span>
 <span class="line"><span style="color:#85E89D">  run</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">|</span></span>
 <span class="line"><span style="color:#9ECBFF">    DOCKERFILE_HASH=$(sha256sum ci/Dockerfile | cut -c1-12)</span></span>
@@ -176,8 +176,8 @@ Part 7 of 9 &mdash;
 </ul>
 <h3 id="the-build-workflow">The Build Workflow</h3>
 <p>The site build job (<code>build-site.yml</code>) uses the image with a single <code>container:</code> block:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8133" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-8133" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">jobs</span><span style="color:#E1E4E8">:</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-8040" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-8040" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">jobs</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  build</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    runs-on</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ubuntu-latest</span></span>
 <span class="line"><span style="color:#85E89D">    container</span><span style="color:#E1E4E8">:</span></span>
@@ -193,8 +193,8 @@ Part 7 of 9 &mdash;
 <li><code>npm ci</code> fetches from the npm registry against a lockfile. GitHub Actions has its own transparent CDN for npm, and the packages for this site are small.</li>
 <li><code>bundle install</code> is further accelerated by an explicit gem cache in <code>build-site.yml</code>:</li>
 </ul>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5982" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-5982" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Cache Ruby gems</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6290" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-6290" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Cache Ruby gems</span></span>
 <span class="line"><span style="color:#85E89D">  uses</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">actions/cache@v4</span></span>
 <span class="line"><span style="color:#85E89D">  with</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vendor/bundle</span></span>

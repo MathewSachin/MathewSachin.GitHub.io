@@ -1,2 +1,2 @@
-import{k as c}from"./template.DpfIAdPb.js";const a=[...` 	
+import{k as c}from"./template.CsPyAIqY.js";const a=[...` 	
 \r\f \v\uFEFF`];function e(r,g,u){var f=r==null?"":""+r;if(g&&(f=f?f+" "+g:g),u){for(var t of Object.keys(u))if(u[t])f=f?f+" "+t:t;else if(f.length)for(var l=t.length,i=0;(i=f.indexOf(t,i))>=0;){var n=i+l;(i===0||a.includes(f[i-1]))&&(n===f.length||a.includes(f[n]))?f=(i===0?"":f.substring(0,i))+f.substring(n+1):i=n}}return f===""?null:f}function b(r,g,u,f,t,l){var i=r.__className;if(c||i!==u||i===void 0){var n=e(u,f,l);(!c||n!==r.getAttribute("class"))&&(n==null?r.removeAttribute("class"):r.className=n),r.__className=u}else if(l&&t!==l)for(var o in l){var s=!!l[o];(t==null||s!==!!t[o])&&r.classList.toggle(o,s)}return l}export{b as s};
