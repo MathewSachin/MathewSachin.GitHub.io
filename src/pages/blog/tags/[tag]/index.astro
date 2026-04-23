@@ -1,0 +1,59 @@
+---
+// Per-tag page: /blog/tags/[tag]/
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { sortPostsByDate, getPostDate, formatDateUS, postUrlFromSlug, tagSlug } from '@utils/posts';
+import '@styles/blog.css';
+
+const BASE = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const tags = new Set(allPosts.flatMap(p => p.data.tags ?? []));
+  return Array.from(tags).map(t => ({ params: { tag: tagSlug(t) } }));
+}
+
+const { tag } = Astro.params;
+
+const allPosts = sortPostsByDate(await getCollection('blog'));
+const normalizedTag = String(tag);
+
+// Find the human-friendly tag name (preserve original casing if possible)
+const allTags = Array.from(new Set(allPosts.flatMap(p => p.data.tags)));
+const displayTag = allTags.find(t => tagSlug(t) === normalizedTag) ?? decodeURIComponent(normalizedTag);
+
+const posts = allPosts.filter(p => p.data.tags.some(t => tagSlug(t) === normalizedTag));
+---
+
+<BaseLayout title={`Tag: ${displayTag}`} ads={true}>
+  <div class="bg-dark py-3">
+    <div class="container">
+      <h2 class="text-white mb-3">Tag: {displayTag}</h2>
+
+      <div class="card">
+        <div class="card-body">
+          {posts.length === 0 ? (
+            <p class="text-muted">No posts found for this tag.</p>
+          ) : (
+            posts.map(post => (
+              <a
+                href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                class="tag-post-link text-decoration-none text-reset"
+                style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+              >
+                <div class="tag-post-item d-flex justify-content-between align-items-center py-2">
+                  <span class="tag-post-title">
+                    {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                    {post.data.title}
+                  </span>
+                  <span class="small text-muted text-nowrap ms-3">{formatDateUS(getPostDate(post))}</span>
+                </div>
+              </a>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

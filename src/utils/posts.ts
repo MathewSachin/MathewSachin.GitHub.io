@@ -123,3 +123,25 @@ export function groupPostsByYear(
   }
   return new Map([...map.entries()].sort((a, b) => b[0] - a[0]));
 }
+
+/**
+ * Convert a tag name to a URL-friendly slug.
+ */
+export function tagSlug(tag: string): string {
+  return tag
+    .toString()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+/**
+ * Derive the tag page URL for a tag name.
+ */
+export function tagUrl(tag: string): string {
+  return `/blog/tags/${tagSlug(tag)}/`;
+}

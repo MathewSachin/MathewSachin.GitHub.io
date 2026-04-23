@@ -16,7 +16,7 @@ import Share from '@components/Share.astro';
 import Giscus from '@components/Giscus.astro';
 import AdUnit from '@components/AdUnit.astro';
 import ReadingProgressBar from '@components/ReadingProgressBar.astro';
-import { formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
+import { formatDate, getPostDate, estimateReadingTime, tagSlug } from '@utils/posts';
 import '@styles/blog.css';
 import type { MarkdownHeading } from 'astro';
 
@@ -54,7 +54,7 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
 
         <div class="post-tag my-1">
           {tags.map(tag => (
-            <a class="badge rounded-pill bg-secondary" href={`${BASE}blog/tags/#${tag}`}>{tag}</a>
+            <a class="badge rounded-pill bg-secondary" href={`${BASE}blog/tags/${tagSlug(tag)}/`}>{tag}</a>
           ))}
         </div>
 
