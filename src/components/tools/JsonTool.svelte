@@ -1,0 +1,84 @@
+<script>
+  import { formatJson } from '@scripts/tools/json-formatter.js';
+
+  let input = '';
+  let output = '';
+  let error = '';
+  let ok = false;
+  let copied = false;
+
+  function clearFeedback() {
+    error = '';
+    ok = false;
+  }
+
+  function applyFormat(indent) {
+    clearFeedback();
+    const result = formatJson(input, indent);
+    if (result.error) {
+      output = '';
+      error = result.error;
+      ok = false;
+    } else {
+      output = result.output;
+      if (result.output) ok = true;
+    }
+  }
+
+  function format() { applyFormat(2); }
+  function minify() { applyFormat(0); }
+  function clearAll() { input = ''; output = ''; clearFeedback(); }
+
+  async function copyOutput() {
+    if (!output) return;
+    try {
+      await navigator.clipboard.writeText(output);
+      copied = true;
+      setTimeout(() => copied = false, 1200);
+    } catch (e) {
+      // ignore
+    }
+  }
+</script>
+
+<div class="card google-anno-skip">
+  <div class="card-body">
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <label class="form-label fw-semibold" for="json-input">Input</label>
+        <textarea id="json-input" class="form-control font-monospace" rows="14" bind:value={input}
+          placeholder={`{"key":"value"}`}></textarea>
+        <div class="mt-2 d-flex gap-2 flex-wrap">
+          <button class="btn btn-info text-white" on:click={format}>Format</button>
+          <button class="btn btn-outline-secondary" on:click={minify}>Minify</button>
+          <button class="btn btn-outline-secondary" on:click={clearAll}>Clear</button>
+        </div>
+        {#if error}
+          <div id="json-error" class="alert alert-danger mt-2 py-2" role="alert">{error}</div>
+        {/if}
+        {#if ok}
+          <div id="json-ok" class="alert alert-success mt-2 py-2" role="alert">
+            <i class="fas fa-check-circle me-1"></i>Valid JSON
+          </div>
+        {/if}
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label fw-semibold" for="json-output">Output</label>
+        <textarea id="json-output" class="form-control font-monospace" rows="14" readonly bind:value={output}
+          placeholder="Formatted output…"></textarea>
+        <div class="mt-2">
+          <button class="btn btn-outline-secondary" on:click={copyOutput}>
+            {#if copied}
+              <i class="fas fa-check me-1"></i>Copied
+            {:else}
+              <i class="fas fa-copy me-1"></i>Copy
+            {/if}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
