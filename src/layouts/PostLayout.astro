@@ -19,6 +19,7 @@ import ReadingProgressBar from '@components/ReadingProgressBar.astro';
 import { formatDate, getPostDate, estimateReadingTime, tagSlug } from '@utils/posts';
 import '@styles/blog.css';
 import type { MarkdownHeading } from 'astro';
+import { getTagColor } from '@utils/posts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -52,11 +53,25 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
         </h2>
         <em>{formatDate(date)}</em> &nbsp;-&nbsp; <em>{readTime} read</em>
 
-        <div class="post-tag my-1">
-          {tags.map(tag => (
-            <a class="badge rounded-pill bg-secondary" href={`${BASE}blog/tags/${tagSlug(tag)}/`}>{tag}</a>
-          ))}
+        <div class="post-tag my-1 d-flex flex-wrap align-items-center gap-2">
+          {tags.map(tag => {
+            const bg = getTagColor(tag);
+            return (
+              <a class="badge rounded-pill text-dark" style={`background-color: ${bg};`} href={`${BASE}blog/tags/${tagSlug(tag)}/`}>{tag}</a>
+            );
+          })}
         </div>
+
+        <style>
+          .post-tag a {
+            text-decoration: none;
+          }
+
+          .post-tag a:hover, .post-tag a:focus {
+            text-decoration: underline;
+            filter: brightness(90%);
+          }
+        </style>
 
         {series ? (
           <>
