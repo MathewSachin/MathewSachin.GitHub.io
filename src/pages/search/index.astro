@@ -1,10 +1,7 @@
 ---
-//
-// Search page: /search/
-// Replaces search/index.html
-
 import BaseLayout from '@layouts/BaseLayout.astro';
 import '@styles/blog.css';
+import Search from '@components/Search.svelte';
 const BASE = import.meta.env.BASE_URL;
 ---
 <BaseLayout title="Search">
@@ -14,25 +11,7 @@ const BASE = import.meta.env.BASE_URL;
 
       <div class="card">
         <div class="card-body">
-          <div id="search-status" class="text-muted small mb-3">
-            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            Loading search index&hellip;
-          </div>
-
-          <div class="input-group mb-4">
-            <span class="input-group-text bg-info text-white border-info"><i class="fas fa-search"></i></span>
-            <input
-              id="search-input"
-              type="search"
-              class="form-control form-control-lg"
-              placeholder="Search posts and tools&hellip;"
-              aria-label="Search posts and tools"
-              disabled
-              autocomplete="off"
-            />
-          </div>
-
-          <div id="search-results"></div>
+          <Search client:load base={BASE} />
 
           <p class="text-muted small mt-4">
             Curious how this search works?
@@ -42,8 +21,4 @@ const BASE = import.meta.env.BASE_URL;
       </div>
     </div>
   </div>
-
-  {/* Inject base URL for use by search.js */}
-  <script is:inline set:html={`window.SEARCH_BASE = ${JSON.stringify(BASE)};`}></script>
-  <script src='@scripts/search.js'></script>
 </BaseLayout>
