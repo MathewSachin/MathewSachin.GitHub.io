@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Not Found</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-262/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-262/404/"><meta property="og:title" content="Not Found"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-262/404/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-262/feed.xml"><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if (window.navigation && navigation.activation) {
+    const previousIndex = navigation.activation.from?.index;
+    const currentIndex = navigation.currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><style>blockquote[data-astro-cid-trienahh]{padding:.5em 1em;margin:0 0 1rem;color:#6c757d;border-left:.25em solid var(--post-accent, var(--color-accent));background:transparent;font-style:normal;font-size:.9em}blockquote[data-astro-cid-trienahh]>[data-astro-cid-trienahh]:last-child{margin-bottom:0}
+</style>
+<link rel="stylesheet" href="/pr-preview/pr-262/_astro/blog.hb0y8IcR.css">
+<link rel="stylesheet" href="/pr-preview/pr-262/_astro/BaseLayout.C0zxFfPJ.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-262/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-262/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-262/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-262/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="btn btn-outline-info btn-sm ms-2" href="/pr-preview/pr-262/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div class="bg-dark"> <div class="py-4 text-white"> <div class="container"> <h2>Not Found</h2> </div> </div> <br> <div class="container"> <div class="card"> <div class="card-body"> <div class="page-content">  <p>Sorry, but the page you were trying to view does not exist.</p> <blockquote class="blockquote fw-light" data-astro-cid-trienahh> Some old blog posts, which may have become irrelevant now have been removed. </blockquote> <p>If you are looking for a blog post, the <a href="/blog/archive">Archive</a> or <a href="/search">Search</a> might help.</p>  </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-262/_astro/BaseLayout.astro_astro_type_script_index_0_lang.mvgmCC0q.js"></script> </body> </html>
