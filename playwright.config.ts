@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['**/*.spec.mjs', '**/*.spec.js'],
+  testMatch: ['**/*.spec.ts'],
   use: {
     baseURL: 'http://localhost:4000',
     permissions: ['camera', 'microphone', 'clipboard-read', 'clipboard-write'],

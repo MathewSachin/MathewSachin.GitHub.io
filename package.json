@@ -12,6 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.8",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "@imagemagick/magick-wasm": "^0.0.39",
     "@orama/orama": "^3.1.18",
