@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import { buildCronExpression, ordinal, pad, DOW_NAMES } from '@scripts/tools/cron.js';
 
   let freq = 'day';
@@ -17,7 +16,8 @@
   let fields = [];
   let copied = false;
 
-  function update() {
+  // derive expression, description and fields reactively from inputs
+  $: {
     const result = buildCronExpression(freq, String(minute), String(hour), String(dow), String(dom));
     expr = result.expr;
     desc = result.desc;
@@ -44,10 +44,6 @@
       // ignore
     });
   }
-
-  onMount(() => {
-    update();
-  });
 </script>
 
 <div class="card google-anno-skip">
@@ -61,7 +57,7 @@
 
         <div class="mb-3">
           <label class="form-label" for="freq-select">Frequency</label>
-          <select class="form-select" id="freq-select" bind:value={freq} on:change={update}>
+          <select class="form-select" id="freq-select" bind:value={freq}>
             <option value="minute">Every Minute</option>
             <option value="hour">Hourly</option>
             <option value="day">Daily</option>
@@ -70,41 +66,49 @@
           </select>
         </div>
 
-        <div class="mb-3" id="row-minute" class:d-none={freq === 'minute'}>
+        {#if freq !== 'minute'}
+        <div class="mb-3" id="row-minute">
           <label class="form-label" for="sel-minute">At minute</label>
-          <select class="form-select" id="sel-minute" bind:value={minute} on:change={update}>
+          <select class="form-select" id="sel-minute" bind:value={minute}>
             {#each minutes as m}
               <option value={m}>{m < 10 ? '0' + m : m}</option>
             {/each}
           </select>
         </div>
+        {/if}
 
-        <div class="mb-3" id="row-hour" class:d-none={freq === 'minute' || freq === 'hour'}>
+        {#if freq !== 'minute' && freq !== 'hour'}
+        <div class="mb-3" id="row-hour">
           <label class="form-label" for="sel-hour">At hour (0–23, UTC)</label>
-          <select class="form-select" id="sel-hour" bind:value={hour} on:change={update}>
+          <select class="form-select" id="sel-hour" bind:value={hour}>
             {#each hours as h}
               <option value={h}>{h < 10 ? '0' + h : h}</option>
             {/each}
           </select>
         </div>
+        {/if}
 
-        <div class="mb-3" id="row-dow" class:d-none={freq !== 'week'}>
+        {#if freq === 'week'}
+        <div class="mb-3" id="row-dow">
           <label class="form-label" for="sel-dow">On day of week</label>
-          <select class="form-select" id="sel-dow" bind:value={dow} on:change={update}>
+          <select class="form-select" id="sel-dow" bind:value={dow}>
             {#each DOW_NAMES as name, idx}
               <option value={idx}>{name}</option>
             {/each}
           </select>
         </div>
+        {/if}
 
-        <div class="mb-3" id="row-dom" class:d-none={freq !== 'month'}>
+        {#if freq === 'month'}
+        <div class="mb-3" id="row-dom">
           <label class="form-label" for="sel-dom">On day of month</label>
-          <select class="form-select" id="sel-dom" bind:value={dom} on:change={update}>
+          <select class="form-select" id="sel-dom" bind:value={dom}>
             {#each doms as d}
               <option value={d}>{d}</option>
             {/each}
           </select>
         </div>
+        {/if}
       </div>
 
       <!-- Result -->
