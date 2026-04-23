@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import { md5, sha } from '@scripts/tools/hash.js';
 
   let text = '';
@@ -26,15 +25,6 @@
       setTimeout(() => copied[valueKey] = false, 1200);
     }).catch(() => {});
   }
-
-  onMount(() => {
-    // initialize outputs
-    outMd5 = md5(text || '');
-    if (text !== undefined) {
-      sha('SHA-1', text || '').then(h => outSha1 = h).catch(() => {});
-      sha('SHA-256', text || '').then(h => outSha256 = h).catch(() => {});
-    }
-  });
 </script>
 
 <div class="card google-anno-skip">
