@@ -7,7 +7,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostItem from '@components/PostItem.astro';
 import SeriesShowcase from '@components/SeriesShowcase.astro';
-import { sortPostsByDate, buildTagsMap, tagSlug } from '@utils/posts';
+import { sortPostsByDate, buildTagsMap, tagSlug, getTagColor } from '@utils/posts';
 import { TOOLS } from '@data/tools';
 import { Image } from 'astro:assets';
 import mePhoto from '@images/Me.jpg';
@@ -144,11 +144,14 @@ const recentPosts = allPosts.slice(0, 8);
             <a href={`${BASE}blog/tags/`} class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>All tags</a>
           </div>
           <div class="d-flex flex-wrap gap-2">
-            {topTags.map(([tag, posts]) => (
-              <a href={`${BASE}blog/tags/${tagSlug(tag)}/`} class="btn btn-sm btn-outline-secondary rounded-pill">
-                {tag}<span class="badge bg-secondary ms-1">{posts.length}</span>
-              </a>
-            ))}
+            {topTags.map(([tag, posts]) => {
+              const tagColor = getTagColor(tag);
+              return (
+                <a href={`${BASE}blog/tags/${tagSlug(tag)}/`} class="btn btn-sm btn-outline-secondary rounded-pill">
+                  {tag}<span class="badge ms-1 text-dark" style={`background-color: ${tagColor};`}>{posts.length}</span>
+                </a>
+              );
+            })}
           </div>
         </div>
 
