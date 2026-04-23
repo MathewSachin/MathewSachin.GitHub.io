@@ -120,8 +120,8 @@
       <button class="btn btn-outline-secondary btn-sm" id="fullscreen-btn" on:click={toggleFullscreen} title="Toggle full screen">
         <i class={isFullscreen ? 'fas fa-compress me-1' : 'fas fa-expand me-1'}></i><span id="fullscreen-label">{fsLabel}</span>
       </button>
-      <span class="ms-auto text-muted small">{saveStatus}</span>
-      <span class="text-muted small">{words} word{words !== 1 ? 's' : ''}  {chars} char{chars !== 1 ? 's' : ''}</span>
+      <span class="ms-auto text-muted small" id="save-status">{saveStatus}</span>
+      <span class="text-muted small" id="word-count">{words} word{words !== 1 ? 's' : ''}  {chars} char{chars !== 1 ? 's' : ''}</span>
     </div>
 
     <textarea id="scratchpad" class="form-control font-monospace"

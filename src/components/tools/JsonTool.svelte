@@ -50,9 +50,9 @@
         <textarea id="json-input" class="form-control font-monospace" rows="14" bind:value={input}
           placeholder={`{"key":"value"}`}></textarea>
         <div class="mt-2 d-flex gap-2 flex-wrap">
-          <button class="btn btn-info text-white" on:click={format}>Format</button>
-          <button class="btn btn-outline-secondary" on:click={minify}>Minify</button>
-          <button class="btn btn-outline-secondary" on:click={clearAll}>Clear</button>
+          <button class="btn btn-info text-white" id="json-format-btn" on:click={format}>Format</button>
+          <button class="btn btn-outline-secondary" id="json-minify-btn" on:click={minify}>Minify</button>
+          <button class="btn btn-outline-secondary" id="json-clear-btn" on:click={clearAll}>Clear</button>
         </div>
         {#if error}
           <div id="json-error" class="alert alert-danger mt-2 py-2" role="alert">{error}</div>
