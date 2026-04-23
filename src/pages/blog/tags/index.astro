@@ -1,11 +1,7 @@
 ---
-//
-// Tags index: /blog/tags/
-// Replaces blog/tags/index.html
-
 import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { sortPostsByDate, buildTagsMap, tagSlug } from '@utils/posts';
+import { sortPostsByDate, buildTagsMap, tagSlug, getTagColor } from '@utils/posts';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
@@ -19,16 +15,19 @@ const tagsMap = buildTagsMap(allPosts);
 
       <div class="card">
         <div class="card-body">
-          {[...tagsMap.entries()].map(([tag, posts]) => (
-            <div>
-            <a href={`${BASE}blog/tags/${tagSlug(tag)}/`} class="tag-post-link text-decoration-none text-reset">
-              <div class="tag-post-item d-flex justify-content-between align-items-center">
-                <div class="p-2 flex-grow-1">{tag}</div>
-                <div class="p-2"><span class="badge bg-info ms-1">{posts.length}</span></div>
+          {[...tagsMap.entries()].map(([tag, posts]) => {
+            const tagColor = getTagColor(tag)
+            return (
+              <div>
+              <a href={`${BASE}blog/tags/${tagSlug(tag)}/`} class="tag-post-link text-decoration-none text-reset">
+                <div class="tag-post-item d-flex justify-content-between align-items-center">
+                  <div class="p-2 flex-grow-1" style={`text-decoration: underline 3px ${tagColor};`}>{tag}</div>
+                  <div class="p-2"><span class="badge text-dark" style={`background-color: ${tagColor};`} class="ms-1">{posts.length}</span></div>
+                </div>
+              </a>
               </div>
-            </a>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
