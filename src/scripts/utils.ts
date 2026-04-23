@@ -16,9 +16,8 @@ export function addListeners<T extends Element = Element>(selector: string, even
 
 export function trackEvent(name: string, params?: Record<string, unknown>) {
   try {
-    const win = window as unknown as { gtag?: (...args: unknown[]) => void };
-    if (typeof win.gtag === 'function') {
-      win.gtag!('event', name, params || {});
+    if ('gtag' in window && typeof window.gtag === 'function') {
+      window.gtag('event', name, params || {});
     } else {
       console.debug('Google Analytics is not initialized. Event not tracked:', name, params);
     }
