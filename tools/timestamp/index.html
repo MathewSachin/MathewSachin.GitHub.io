@@ -10,9 +10,9 @@ window.addEventListener("pagereveal", (event) => {
     if (!event.viewTransition) return;
 
     // 2. Ensure the modern Navigation API is supported
-    if (window.navigation && navigation.activation) {
-    const previousIndex = navigation.activation.from?.index;
-    const currentIndex = navigation.currentEntry?.index;
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
 
     // 3. If the current index is smaller, the user navigated backward
     if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {

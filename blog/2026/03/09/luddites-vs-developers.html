@@ -10,9 +10,9 @@ window.addEventListener("pagereveal", (event) => {
     if (!event.viewTransition) return;
 
     // 2. Ensure the modern Navigation API is supported
-    if (window.navigation && navigation.activation) {
-    const previousIndex = navigation.activation.from?.index;
-    const currentIndex = navigation.currentEntry?.index;
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
 
     // 3. If the current index is smaller, the user navigated backward
     if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
@@ -99,8 +99,8 @@ blockquote[data-astro-cid-trienahh]{padding:.5em 1em;margin:0 0 1rem;color:#6c75
 <li><strong>Extensions marketplace</strong> — add exactly what you need, nothing more.</li>
 <li><strong>Works well with any language</strong> — Python, JS, Go, Rust, Markdown, YAML, whatever.</li>
 </ul>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-9288" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-9288" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>Startup time comparison (rough, informal):</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-9044" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-9044" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>Startup time comparison (rough, informal):</span></span>
 <span class="line"><span>  Vim:          ~0.1 seconds</span></span>
 <span class="line"><span>  VS Code:      ~1-2 seconds</span></span>
 <span class="line"><span>  IntelliJ:     ~10-20 seconds (depends on project)</span></span></code></pre> </div>

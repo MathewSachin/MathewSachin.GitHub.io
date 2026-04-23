@@ -10,9 +10,9 @@ window.addEventListener("pagereveal", (event) => {
     if (!event.viewTransition) return;
 
     // 2. Ensure the modern Navigation API is supported
-    if (window.navigation && navigation.activation) {
-    const previousIndex = navigation.activation.from?.index;
-    const currentIndex = navigation.currentEntry?.index;
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
 
     // 3. If the current index is smaller, the user navigated backward
     if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
@@ -56,8 +56,8 @@ Part 11 of 27 &mdash;
 <li>Change the <strong>name</strong> to: <code>Dino God Mode</code></li>
 <li>Delete the <strong>URL</strong> completely and paste this exact code in its place:</li>
 </ul>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5419" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-5419" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:var originalGameOver=Runner.prototype.gameOver;Runner.prototype.gameOver=function(){};</span></span></code></pre> </div>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-6865" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-6865" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:var originalGameOver=Runner.prototype.gameOver;Runner.prototype.gameOver=function(){};</span></span></code></pre> </div>
 <p>Save the bookmark.</p>
 <h3 id="step-3--go-to-the-hosted-game">Step 3 — Go to the Hosted Game</h3>
 <p>Navigate to <a href="https://chromedino.com">chromedino.com</a> (or another hosted mirror). Start a game so the dino is running.</p>
@@ -76,8 +76,8 @@ Part 11 of 27 &mdash;
 <p>Because the game’s code is exposed globally on the page, any JavaScript running in that tab — whether from the console or a bookmarklet — can reach in and override it.</p>
 <h2 id="restoring-normal-play">Restoring Normal Play</h2>
 <p>If you want the game to end normally again, create a second bookmarklet with this code:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-9220" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-9220" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:Runner.prototype.gameOver=originalGameOver;</span></span></code></pre> </div>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-7518" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-7518" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:Runner.prototype.gameOver=originalGameOver;</span></span></code></pre> </div>
 <p>Or simply refresh the page to start fresh.</p>
 <hr/>
 <p>Want to go further? Check out the full <a href="/blog/2016/11/05/chrome-dino-hack.html">Chrome Dino Hack guide</a> for speed control, score manipulation, auto-play, and more tricks you can use on desktop!</p> <div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4251360406988977" data-ad-slot="7875153049" data-ad-format="auto" data-full-width-responsive="true"></ins>
