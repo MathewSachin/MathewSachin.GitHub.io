@@ -5,7 +5,7 @@ test.describe('Search page', () => {
     await page.goto('/search/');
     await expect(page.locator('#search-input')).toBeEnabled({ timeout: 15000 });
     // Loading status should disappear after the index is ready
-    await expect(page.locator('#search-status')).not.toContainText('Loading', { timeout: 15000 });
+    await expect(page.locator('#search-status')).not.toBeAttached({ timeout: 15000 });
   });
 
   test('shows results when a query matches blog posts', async ({ page }) => {
