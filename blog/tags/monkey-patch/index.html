@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en-us"> <head><script async src="https://www.googletagmanager.com/gtag/js?id=UA-70778035-4"></script><script>(function(){const GA_ID = "UA-70778035-4";
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+    })();</script><meta charset="UTF-8"><title>Tag: monkey-patch</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/blog/tags/monkey-patch/"><meta property="og:title" content="Tag: monkey-patch"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/blog/tags/monkey-patch/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/feed.xml"><script data-ad-client="ca-pub-4251360406988977" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><link rel="stylesheet" href="/_astro/blog.hb0y8IcR.css">
+<link rel="stylesheet" href="/_astro/BaseLayout.FWR2hnF0.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="btn btn-outline-info btn-sm ms-2" href="/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div class="bg-dark py-3"> <div class="container"> <h2 class="text-white mb-3">Tag: monkey-patch</h2> <div class="card"> <div class="card-body"> <a href="/blog/2026/04/08/hacking-infinite-craft.html" class="tag-post-link text-decoration-none text-reset" style="--item-accent: #f38ba8"> <div class="tag-post-item d-flex justify-content-between align-items-center py-2"> <span class="tag-post-title"> <i class="fas fa-flask post-icon me-1" aria-hidden="true"></i> Hacking Infinite Craft: Inject Any Item by Spoofing the API Response </span> <span class="small text-muted text-nowrap ms-3">Apr 8, 2026</span> </div> </a> </div> </div> </div> </div>  <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DWjqNvfK.js"></script> </body> </html>
