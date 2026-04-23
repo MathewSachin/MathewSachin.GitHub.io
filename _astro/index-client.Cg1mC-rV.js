@@ -1,0 +1,1 @@
+import{a9 as t,aa as o,ab as a,ac as c}from"./template.DpfIAdPb.js";function l(e){throw new Error("https://svelte.dev/e/lifecycle_outside_component")}function r(e){t===null&&l(),o&&t.l!==null?u(t).m.push(e):a(()=>{const n=c(e);if(typeof n=="function")return n})}function u(e){var n=e.l;return n.u??={a:[],b:[],m:[]}}export{r as o};
