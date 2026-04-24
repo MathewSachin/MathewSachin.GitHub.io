@@ -1,11 +1,11 @@
 <script>
+  import CopyButton from './CopyButton.svelte';
   import { formatJson } from '@scripts/tools/json-formatter.js';
 
   let input = '';
   let output = '';
   let error = '';
   let ok = false;
-  let copied = false;
 
   function clearFeedback() {
     error = '';
@@ -28,17 +28,6 @@
   function format() { applyFormat(2); }
   function minify() { applyFormat(0); }
   function clearAll() { input = ''; output = ''; clearFeedback(); }
-
-  async function copyOutput() {
-    if (!output) return;
-    try {
-      await navigator.clipboard.writeText(output);
-      copied = true;
-      setTimeout(() => copied = false, 1200);
-    } catch (e) {
-      // ignore
-    }
-  }
 </script>
 
 <div class="card google-anno-skip">
@@ -69,13 +58,7 @@
         <textarea id="json-output" class="form-control font-monospace" rows="14" readonly bind:value={output}
           placeholder="Formatted output…"></textarea>
         <div class="mt-2">
-          <button class="btn btn-outline-secondary" on:click={copyOutput}>
-            {#if copied}
-              <i class="fas fa-check me-1"></i>Copied
-            {:else}
-              <i class="fas fa-copy me-1"></i>Copy
-            {/if}
-          </button>
+          <CopyButton value={output} title="Copy output" iconClass="fas fa-copy me-1" copiedIconClass="fas fa-check me-1">Copy</CopyButton>
         </div>
       </div>
     </div>

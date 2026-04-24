@@ -1,5 +1,6 @@
 <script>
   import { buildCronExpression, ordinal, pad, DOW_NAMES } from '@scripts/tools/cron.js';
+  import CopyButton from './CopyButton.svelte';
 
   let freq = 'day';
   let minute = 0;
@@ -14,7 +15,6 @@
   let expr = '';
   let desc = '';
   let fields = [];
-  let copied = false;
 
   // derive expression, description and fields reactively from inputs
   $: {
@@ -33,16 +33,6 @@
     } else { // month
       fields = [['Minute', String(minute), 'At minute ' + minute],['Hour', String(hour), 'At ' + pad(String(hour)) + ':00 UTC'],['Day (month)', String(dom), 'On the ' + ordinal(+dom)],['Month','*','Every month'],['Day (week)','*','Every day']];
     }
-  }
-
-  function copyExpr() {
-    if (!expr) return;
-    navigator.clipboard.writeText(expr).then(() => {
-      copied = true;
-      setTimeout(() => copied = false, 1200);
-    }).catch(() => {
-      // ignore
-    });
   }
 </script>
 
@@ -120,13 +110,7 @@
             <p class="form-label fw-semibold">CRON Expression</p>
             <div class="d-flex align-items-center gap-2 flex-wrap">
               <code id="cron-expr" class="fs-5">{expr}</code>
-              <button class="btn btn-sm btn-outline-secondary" id="copy-cron-btn" title="Copy expression" on:click={copyExpr}>
-                {#if copied}
-                  <i class="fas fa-check"></i>
-                {:else}
-                  <i class="fas fa-copy"></i>
-                {/if}
-              </button>
+              <CopyButton value={expr} title="Copy expression" />
             </div>
           </div>
 

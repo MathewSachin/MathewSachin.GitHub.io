@@ -1,6 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { countWords } from '@scripts/tools/scratchpad.js';
+  import CopyButton from './CopyButton.svelte';
 
   const STORAGE_KEY = 'scratchpad-v1';
 
@@ -8,7 +9,6 @@
   let saveStatus = '';
   let words = 0;
   let chars = 0;
-  let copied = false;
   let fsLabel = 'Full Screen';
   let isFullscreen = false;
 
@@ -34,16 +34,6 @@
   function onInput() {
     updateCount();
     persistContent();
-  }
-
-  async function copyAll() {
-    try {
-      await navigator.clipboard.writeText(pad || '');
-      copied = true;
-      setTimeout(() => copied = false, 1200);
-    } catch (e) {
-      // ignore
-    }
   }
 
   function clearAll() {
@@ -111,9 +101,7 @@
   <div class="card-body">
 
     <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
-      <button class="btn btn-outline-secondary btn-sm" id="copy-btn" on:click={copyAll}>
-        <i class="fas fa-copy me-1"></i>{#if copied} Copied{:else} Copy All{/if}
-      </button>
+      <CopyButton value={pad} title="Copy All" iconClass="fas fa-copy me-1" copiedIconClass="fas fa-check me-1">Copy All</CopyButton>
       <button class="btn btn-outline-secondary btn-sm" id="clear-btn" on:click={clearAll}>
         <i class="fas fa-trash me-1"></i>Clear
       </button>
