@@ -27,7 +27,7 @@ async function handleCopy() {
 }
 </script>
 
-<button class={className} {title} on:click={handleCopy}>
+<button {...$$restProps} class={className} {title} on:click={handleCopy}>
   <i class={copied ? copiedIconClass : iconClass}></i>
   <slot />
 </button>
