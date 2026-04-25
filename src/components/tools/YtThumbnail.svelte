@@ -68,11 +68,9 @@ function downloadThumbnail() {
     <button id="grab-btn" class="btn btn-danger text-white" onclick={grabThumbnail}>
       <i class="fab fa-youtube me-1"></i>Grab Thumbnail
     </button>
-    {#if error}
-      <div id="yt-error" class="text-danger small mt-2">{error}</div>
-    {/if}
-    {#if showResult}
-      <div id="yt-result" class="mt-4">
+    <div id="yt-error" class:text-danger={!!error} class:small={!!error} class:mt-2={!!error} class:d-none={!error}>{error}</div>
+    <div id="yt-result" class:mt-4={showResult} class:d-none={!showResult}>
+      {#if showResult}
         <div class="mb-3">
           <img id="yt-preview" alt="YouTube thumbnail preview"
             class="img-fluid rounded border d-block" src={previewUrl} data-proofer-ignore>
@@ -91,11 +89,12 @@ function downloadThumbnail() {
             <i class="fas fa-external-link-alt me-1"></i>Open Image
           </a>
           <button id="yt-download-btn" type="button"
-            class="btn btn-primary" onclick={downloadThumbnail}>
+            class="btn btn-primary" onclick={downloadThumbnail}
+            data-filename={downloadFilename}>
             <i class="fas fa-download me-1"></i>Download
           </button>
         </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 </div>

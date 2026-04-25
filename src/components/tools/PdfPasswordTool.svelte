@@ -149,7 +149,7 @@ async function processPdf() {
   <i class="fas fa-shield-alt text-success"></i>
   <span class="small">
     <strong class="text-success">Privacy Check:</strong>
-    0KB uploaded to server — all processing happens in your browser.
+    <span id="privacy-bytes">0 KB</span> uploaded to server — all processing happens in your browser.
   </span>
 </div>
 
@@ -166,7 +166,7 @@ async function processPdf() {
 
 <!-- Selected file name -->
 {#if fileName}
-<p class="text-muted small mb-3">
+<p id="file-name" class="text-muted small mb-3">
   <i class="fas fa-file-pdf me-1"></i>{fileName}
 </p>
 {/if}
@@ -192,7 +192,7 @@ async function processPdf() {
 
 <!-- Remove-password section (shown when PDF is encrypted) -->
 {#if mode === 'remove'}
-<div class="mb-4">
+<div id="remove-section" class="mb-4">
   <label class="form-label fw-semibold" for="decrypt-pass">Current Password</label>
   <input type="password" id="decrypt-pass" class="form-control"
     placeholder="Enter the existing PDF password" autocomplete="current-password" bind:value={decryptPass}>
@@ -201,7 +201,7 @@ async function processPdf() {
 
 <!-- Add-password section -->
 {#if mode === 'add'}
-<div class="mb-4">
+<div id="add-section" class="mb-4">
   <div class="row g-3">
     <div class="col-12 col-sm-6">
       <label class="form-label fw-semibold" for="user-pass">
@@ -228,7 +228,7 @@ async function processPdf() {
 
 <!-- Status message -->
 {#if statusVisible}
-<div class="mb-3">
+<div id="status-msg" class="mb-3">
   <div class={`alert alert-${statusType} py-2 mb-0`}>
     {#if statusIcon}
       <i class={`fas ${statusIcon} me-2`}></i>
@@ -239,7 +239,7 @@ async function processPdf() {
 {/if}
 
 <!-- Process button -->
-<button class="btn btn-primary" on:click={processPdf} disabled={processDisabled}>
+<button id="process-btn" class="btn btn-primary" on:click={processPdf} disabled={processDisabled}>
   <i class="fas fa-cog me-1"></i>Process PDF
 </button>
 
