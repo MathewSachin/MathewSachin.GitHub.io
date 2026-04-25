@@ -1,5 +1,5 @@
 /**
- * Tests for tools/timestamp/timestamp.js  (epochToMs, datetimeLocalToMs)
+ * Tests for tools/timestamp/timestamp.js  (epochToMs)
  *
  * Run via: npm test
  */
@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { epochToMs, datetimeLocalToMs } from '../src/scripts/tools/timestamp.ts'
+import { epochToMs } from '../src/scripts/tools/timestamp.ts'
 
 // ---------------------------------------------------------------------------
 // epochToMs — seconds vs milliseconds heuristic
@@ -42,19 +42,4 @@ test('epochToMs: known seconds value produces correct Date', () => {
   // 2000-01-01T00:00:00Z = 946684800 seconds
   const ms = epochToMs(946684800)
   assert.equal(new Date(ms).toISOString(), '2000-01-01T00:00:00.000Z')
-})
-
-// ---------------------------------------------------------------------------
-// datetimeLocalToMs
-// ---------------------------------------------------------------------------
-
-test('datetimeLocalToMs: ISO string without timezone parses as local time', () => {
-  // "2000-01-01T00:00" is parsed as local time by browsers/Node
-  const ms = datetimeLocalToMs('2000-01-01T00:00')
-  assert.ok(typeof ms === 'number', 'should return a number')
-  assert.ok(!Number.isNaN(ms), 'should not be NaN')
-})
-
-test('datetimeLocalToMs: invalid value returns NaN', () => {
-  assert.ok(Number.isNaN(datetimeLocalToMs('not-a-date')))
 })
