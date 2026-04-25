@@ -1,36 +1,15 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-import { registerCopyToClipboard } from '@scripts/utils';
+import ChromeDinoWidget from "@components/blog/ChromeDinoWidget.svelte";
 
-let jump = '10';
+let jump = 10;
 const DEFAULT = 10;
-let copyBtn: HTMLButtonElement | null = null;
-
-function update(v: unknown) {
-  const val = Math.max(0, Math.min(50, parseInt(String(v), 10) || 0));
-  jump = String(val);
-}
-
-onMount(() => {
-  if (copyBtn) {
-    registerCopyToClipboard(copyBtn, () => `(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(${jump})`, copyBtn.querySelector('i'));
-  }
-});
 </script>
 
-<div class="dino-hack-widget">
-  <div class="dino-hack-controls d-flex align-items-center gap-2 flex-wrap px-3 py-2">
-    <button class="btn btn-sm btn-dino-reset" id="jump-reset" on:click={() => update(DEFAULT)} title="Reset to default" aria-label="Reset jump velocity to default"><i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
-    <button class="btn btn-sm btn-dino" id="btn-jump-clip" bind:this={copyBtn} title="Copy to clipboard" aria-label="Copy code to clipboard"><i class="fa fa-copy" aria-hidden="true"></i> COPY</button>
-  </div>
-  
-  <div class="dino-hack-controls d-flex  align-items-center gap-2 flex-wrap px-3 py-2 small text-white text-opacity-75">
-    <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).tRex.<span class="code-function">setJumpVelocity</span>(</span>
-    <input type="number" id="jump-input"class="form-control form-control-sm dino-hack-num" bind:value={jump} min="0" max="50" aria-label="Jump velocity value" on:input={(e) => update((e.target as HTMLInputElement).value)} />
-    <span>)</span>
-  </div>
-</div>
-
-<style>
-@import '@styles/chrome-dino-hack.css';
-</style>
+<ChromeDinoWidget 
+  resetFunction={() => jump = DEFAULT}
+  contentToCopy={`(Runner.instance_ || Runner.getInstance()).tRex.setJumpVelocity(${jump})`}
+>
+  <span>(Runner.instance_ <span class="code-symbol">||</span> Runner.<span class="code-function">getInstance</span>()).tRex.<span class="code-function">setJumpVelocity</span>(</span>
+  <input type="number" id="jump-input"class="form-control form-control-sm w-auto" bind:value={jump} min="0" max="50" aria-label="Jump velocity value" />
+  <span>)</span>
+</ChromeDinoWidget>

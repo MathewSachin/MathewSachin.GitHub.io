@@ -50,7 +50,7 @@ figure.highlight {
   text-transform: uppercase;
 }
 
-.btn-clip {
+.btn-code {
   color: rgba(255, 255, 255, 0.45);
   background: transparent;
   border: none;
@@ -59,14 +59,14 @@ figure.highlight {
   line-height: 1;
 }
 
-.btn-clip:hover,
-.btn-clip:focus {
+.btn-code:hover,
+.btn-code:focus {
   color: var(--color-accent);
   background: transparent;
   box-shadow: none;
 }
 
-.btn-clip:focus-visible {
+.btn-code:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
@@ -282,4 +282,16 @@ figure.highlight pre {
   .post-content-container {
     overflow-x: hidden;
   }
+}
+
+.code-symbol {
+  color: #F97583;
+}
+
+.code-function {
+  color: #B392F0;
+}
+
+.code-number {
+  color: #79B8FF;
 }

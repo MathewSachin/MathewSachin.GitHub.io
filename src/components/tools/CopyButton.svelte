@@ -7,6 +7,7 @@ export let title: string = "Copy";
 export let iconClass: string = "fas fa-copy";
 export let copiedIconClass: string = "fas fa-check";
 export let resetDelay: number = 2000;
+export let className: string = "btn btn-sm btn-outline-secondary";
 
 let copied = false;
 const dispatch = createEventDispatcher();
@@ -26,7 +27,7 @@ async function handleCopy() {
 }
 </script>
 
-<button class="btn btn-sm btn-outline-secondary" {title} on:click={handleCopy}>
+<button class={className} {title} on:click={handleCopy}>
   <i class={copied ? copiedIconClass : iconClass}></i>
   <slot />
 </button>
