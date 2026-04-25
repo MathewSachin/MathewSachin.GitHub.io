@@ -73,17 +73,18 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
           }
         </style>
 
-        {series ? (
+        {series && (
           <>
             <hr class="border-light mt-3 mb-0" />
             <SeriesNav post={post} variant="header" allPosts={allPosts} />
           </>
-        ) : related.length > 0 ? (
+        )}
+        {related.length > 0 && (
           <>
             <hr class="border-light mt-3 mb-3" />
             <RelatedPosts relatedIds={related} allPosts={allPosts} />
           </>
-        ) : null}
+        )}
         <div class="p-5"></div>
       </div>
     </div>
