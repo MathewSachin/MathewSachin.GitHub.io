@@ -30,45 +30,45 @@ const groupedEntries = tocEntries.reduce((acc, heading) => {
 
 {shouldShowToc && (
 <div class="card toc-card">
-    <button
-      type="button"
-      class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none"
-      aria-expanded="false"
-      aria-controls="toc-collapse"
-      >
-      <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
-      <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
-    </button>
-    <div class="card-header toc-header d-none d-md-block">
-      <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+  <button
+    type="button"
+    class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none"
+    aria-expanded="false"
+    aria-controls="toc-collapse"
+    >
+    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+    <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+  </button>
+  <div class="card-header toc-header d-none d-md-block">
+    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+  </div>
+  <div class="collapse d-md-block" id="toc-collapse">
+    <div class="card-body p-0">
+        <nav id="toc-nav" aria-label="Table of contents">
+          <ul class="toc-list">
+            {groupedEntries.map((h2) => (
+              <li class="toc-link">
+                <a href={`#${h2.slug}`}>
+                  {h2.text}
+                </a>
+                
+                {h2.subheadings.length > 0 && (
+                  <ul class="toc-sublist">
+                    {h2.subheadings.map((h3) => (
+                      <li class="toc-link toc-h3">
+                        <a href={`#${h3.slug}`}>
+                          {h3.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
     </div>
-    <div class="collapse d-md-block" id="toc-collapse">
-      <div class="card-body p-0">
-          <nav id="toc-nav" aria-label="Table of contents">
-            <ul class="toc-list">
-              {groupedEntries.map((h2) => (
-                <li class="toc-link">
-                  <a href={`#${h2.slug}`}>
-                    {h2.text}
-                  </a>
-                  
-                  {h2.subheadings.length > 0 && (
-                    <ul class="toc-sublist">
-                      {h2.subheadings.map((h3) => (
-                        <li class="toc-link toc-h3">
-                          <a href={`#${h3.slug}`}>
-                            {h3.text}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
-      </div>
-    </div>
+  </div>
 </div>
 )}
 
@@ -130,36 +130,21 @@ const groupedEntries = tocEntries.reduce((acc, heading) => {
   color: #6c757d;
 }
 
-/* Sublist Collapse/Expand Transition */
-.toc-sublist {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-}
-
-.toc-sublist.expanded {
-  max-height: 2000px; /* Arbitrary large height to allow smooth transition */
-}
-
-/* Slide-in keyframe for the sticky mobile TOC card — defined at root level so
-   CSS minifiers and autoprefixers don't drop it from inside a @media block */
-@keyframes toc-slide-down {
-  from { transform: translateY(calc(-100% - 0.75rem)); }
-  to   { transform: translateY(0); }
-}
-
-/* Mobile: float only the TOC card at the top of the viewport when scrolling up */
-@media (max-width: 767.98px) {
-  .toc-card.toc-mobile-sticky {
-    position: fixed;
-    top: 0.75rem;
-    left: 1rem;
-    right: 1rem;
-    z-index: 1030;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    animation: toc-slide-down 0.35s ease;
+/* Sublist stays always expanded on mobile */
+@media (min-width: 767.99px) {
+  /* Sublist Collapse/Expand Transition */
+  .toc-sublist {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
   }
 
+  .toc-sublist.expanded {
+    max-height: 2000px; /* Arbitrary large height to allow smooth transition */
+  } 
+}
+
+@media (max-width: 767.98px) {
   /* Smooth expand/collapse animation for mobile TOC — use max-height instead
      of Bootstrap's display toggle so we can transition between the two states */
   #toc-collapse.collapse {
@@ -260,38 +245,6 @@ function updateActiveState(activeId: string | null) {
 
 if (headings.length >= 3) {
     tocSidebar.style.display = "";
-
-    // Mobile: float only the TOC card at the top of the viewport when scrolling up,
-    //         but only after the TOC has scrolled completely off-screen.
-    const mobileBreakpoint = window.matchMedia("(max-width: 767.98px)");
-    // Select the specific TOC card that contains the collapse — not the affiliate sidebar
-    // card which also carries the .toc-card class and is hidden on mobile.
-    const tocCard = document.getElementById("toc-collapse")?.closest(".toc-card") as HTMLElement | null;
-    // Capture the stable scroll threshold once before any stickiness changes layout
-    const tocOffscreenAt = tocSidebar.getBoundingClientRect().bottom + window.scrollY;
-    let tocLastScrollY: number = window.scrollY;
-    let tocStickyActive: boolean = false;
-    window.addEventListener("scroll", function () {
-        if (!mobileBreakpoint.matches || !tocCard) { return; }
-        const currentScrollY = window.scrollY;
-        const scrollingUp = currentScrollY < tocLastScrollY;
-        tocLastScrollY = currentScrollY;
-        // Only make sticky once we've scrolled past the TOC's original bottom position
-        const shouldBeSticky = scrollingUp && currentScrollY > tocOffscreenAt;
-        if (shouldBeSticky === tocStickyActive) { return; }
-        tocStickyActive = shouldBeSticky;
-        if (shouldBeSticky) {
-            // Measure offsetHeight BEFORE applying position:fixed (line below) so the
-            // sidebar retains the same occupied space and the page doesn't jump.
-            if (tocCard) tocSidebar.style.minHeight = tocCard.offsetHeight + "px";
-            // Collapse the TOC contents every time it becomes sticky so it stays compact.
-            if (tocCollapse) { tocCollapse.classList.remove("show"); }
-            if (tocToggle) { tocToggle.setAttribute("aria-expanded", "false"); }
-        } else {
-            tocSidebar.style.minHeight = "";
-        }
-        tocCard.classList.toggle("toc-mobile-sticky", shouldBeSticky);
-    }, { passive: true });
 
     // Scroll-spy: highlight active section in TOC nav
     function updateToc() {
