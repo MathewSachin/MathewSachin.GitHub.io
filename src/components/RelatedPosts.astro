@@ -1,18 +1,13 @@
 ---
-/**
- * RelatedPosts.astro
- * Replaces _includes/related_posts.html
- */
 import type { CollectionEntry } from 'astro:content';
 import { postIdFromSlug, postUrlFromSlug, formatDateUS, getPostDate } from '@utils/posts';
 
 interface Props {
   relatedIds: string[];
   allPosts: CollectionEntry<'blog'>[];
-  variant?: string;
 }
 
-const { relatedIds, allPosts, variant = '' } = Astro.props;
+const { relatedIds, allPosts } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 
 const relatedPosts = relatedIds
@@ -20,26 +15,25 @@ const relatedPosts = relatedIds
   .filter(Boolean) as CollectionEntry<'blog'>[];
 ---
 {relatedPosts.length > 0 && (
-  <div class={`related-posts-section ${variant}`}>
-    <h5 class="related-posts-heading">
+  <div class="related-posts-section">
+    <h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;">
       <i class="fas fa-bookmark me-2"></i>You might also like
     </h5>
-    <div class="related-posts-scroll">
+    <div class="d-flex flex-row overflow-auto gap-3 pb-2">
       {relatedPosts.map(post => (
-        <div class="related-post-item">
+        <div class="flex-shrink-0" style="width:260px; max-width:90vw;">
           <a
             href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
-            class="related-post-link"
+            class="d-block text-decoration-none text-reset h-100"
             style={post.data.accent_color ? `--card-accent: ${post.data.accent_color}` : undefined}
             aria-label={`Read ${post.data.title}`}
           >
-            <div class="card h-100">
-              <div class="card-body">
-                <p class="card-title mb-1">
-                  {post.data.icon && <i class={`${post.data.icon} post-icon me-1 text-white`} aria-hidden="true"></i>}
+            <div class="card h-100 d-flex flex-column">
+              <div class="card-body flex-grow-1">
+                <small class="card-title fw-semibold">
+                  {post.data.icon && <i class={`${post.data.icon} me-1 text-white`} aria-hidden="true"></i>}
                   {post.data.title}
-                </p>
-                <small class="text-light text-opacity-50">{formatDateUS(getPostDate(post))}</small>
+                </small>
               </div>
             </div>
           </a>
@@ -50,92 +44,17 @@ const relatedPosts = relatedIds
 )}
 
 <style>
-.related-posts-section .related-post-link {
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-
-.related-posts-section .card {
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-  border-radius: 8px;
-}
-
-/* Shared heading styles for both top and bottom related-posts variants */
-.related-posts-section.top-variant .related-posts-heading,
-.related-posts-section.bottom-variant .related-posts-heading {
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-}
-
-/* Top variant: inside the hero section (blue/info background) */
-.related-posts-section.top-variant .related-posts-heading {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.related-posts-section.top-variant .card {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: white;
-}
-
-.related-posts-section.top-variant .card:hover {
-  background: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* Bottom variant: inside the post card body (white background) */
-.related-posts-section.bottom-variant .related-posts-heading {
+/* Minimal custom CSS for accent backgrounds and icon color */
+.related-posts-section .related-posts-heading {
   color: var(--post-accent, var(--color-accent));
 }
-
-.related-posts-section.bottom-variant .card {
+.related-posts-section .card {
   background: var(--card-accent, var(--post-accent, var(--color-accent)));
   border: none;
   color: white;
 }
-
-.related-posts-section.bottom-variant .card:hover {
+.related-posts-section .card:hover {
   filter: brightness(0.85);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.related-posts-section .card-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-/* Horizontally scrollable row for related posts */
-.related-posts-scroll {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  gap: 1rem;
-  padding-bottom: 0.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-accent, #888) #f0f0f0;
-  -webkit-overflow-scrolling: touch;
-}
-
-.related-post-item {
-  flex: 0 0 auto;
-  width: 260px;
-  max-width: 90vw;
-  margin-bottom: 0.5rem;
-}
-
-/* Optional: style the scrollbar for webkit browsers */
-.related-posts-scroll::-webkit-scrollbar {
-  height: 8px;
-}
-.related-posts-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-accent, #888);
-  border-radius: 4px;
-}
-.related-posts-scroll::-webkit-scrollbar-track {
-  background: #f0f0f0;
 }
 </style>
