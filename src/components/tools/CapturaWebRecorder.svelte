@@ -6,7 +6,6 @@ import { StorageManager }                      from '../../scripts/tools/captura
 import { RecorderCore }                        from '../../scripts/tools/captura/recorder-core';
 import { PREFS, savePref, loadPref }           from '../../scripts/tools/captura/prefs';
 import { showAlert, showToast, showErrorDialog, initDialogs } from '../../scripts/tools/captura/dialogs';
-import { setupMediaSession, clearMediaSession }  from '../../scripts/tools/captura/media-session';
 import { RecorderAPI }                         from '../../scripts/tools/captura/recorder-api';
 import { RecorderStateMachine, STATE, EVENT, type State, type Event }  from '../../scripts/tools/captura/recorder-state-machine';
 import { onMount } from 'svelte';
@@ -228,20 +227,6 @@ function onStateChanged(state: State, event: Event, payload: MachinePayload): vo
     pauseTimer();
   } else {
     resetTimer();
-  }
-
-  if (state === STATE.RECORDING) {
-    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
-    setupMediaSession(
-      () => machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsValue, 10) }),
-      () => machine.transition(EVENT.USER_PAUSE),
-      () => machine.transition(EVENT.USER_STOP),
-    );
-  } else if (state === STATE.PAUSED) {
-    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
-  } else {
-    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'none';
-    clearMediaSession();
   }
 
   if (event === EVENT.FINALIZE_DONE && payload) {
