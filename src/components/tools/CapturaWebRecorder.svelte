@@ -5,11 +5,28 @@ import { Metronome }                           from '../../scripts/tools/captura
 import { StorageManager }                      from '../../scripts/tools/captura/storage';
 import { RecorderCore }                        from '../../scripts/tools/captura/recorder-core';
 import { PREFS, savePref, loadPref }           from '../../scripts/tools/captura/prefs';
-import { showAlert, showToast, showErrorDialog } from '../../scripts/tools/captura/dialogs';
+import { showAlert, showToast, showErrorDialog, initDialogs } from '../../scripts/tools/captura/dialogs';
 import { setupMediaSession, clearMediaSession }  from '../../scripts/tools/captura/media-session';
 import { RecorderAPI }                         from '../../scripts/tools/captura/recorder-api';
 import { RecorderStateMachine, STATE, EVENT, type State, type Event }  from '../../scripts/tools/captura/recorder-state-machine';
 import { onMount } from 'svelte';
+
+
+
+// Svelte-bound state variables for form controls
+let webcamValue = '';
+let micValue = '';
+let fpsValue = '30';
+let qualityValue = '720';
+let formatValue = 'webm-vp9-opus';
+let countdownValue = '3';
+let sysAudioChecked = false;
+let micGainValue = '1';
+let sysGainValue = '1';
+
+// Device options for selects
+let webcamOptions = [{ label: 'None', value: '' }];
+let micOptions = [{ label: 'None', value: '' }];
 
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -193,11 +210,11 @@ type MachinePayload = {
 
 function onStateChanged(state: State, event: Event, payload: MachinePayload): void {
   render(state);
-  
+
   if (state === STATE.COUNTDOWN) {
     const savedPayload = payload;
     startCountdownOverlay(
-      parseInt(countdownSel.value, 10),
+      parseInt(countdownValue, 10),
       () => machine.transition(EVENT.COUNTDOWN_DONE, savedPayload)
     );
   } else {
@@ -216,7 +233,7 @@ function onStateChanged(state: State, event: Event, payload: MachinePayload): vo
   if (state === STATE.RECORDING) {
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
     setupMediaSession(
-      () => machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsSel.value, 10) }),
+      () => machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsValue, 10) }),
       () => machine.transition(EVENT.USER_PAUSE),
       () => machine.transition(EVENT.USER_STOP),
     );
@@ -245,10 +262,10 @@ function onStateChanged(state: State, event: Event, payload: MachinePayload): vo
 
 function syncDevicesToApi(): void {
   api.setDevices({
-    webcamDeviceId: webcamSel.value,
-    webcamSelected: webcamSel.selectedIndex > 0,
-    micDeviceId:    micSel.value,
-    micSelected:    micSel.selectedIndex > 0,
+    webcamDeviceId: webcamValue,
+    webcamSelected: webcamValue !== '',
+    micDeviceId:    micValue,
+    micSelected:    micValue !== '',
   });
 }
 
@@ -266,16 +283,16 @@ function buildStartPayload(): {
   } {
   syncDevicesToApi();
   return {
-    fps:           fpsSel.value,
-    quality:       qualitySel.value,
-    format:        formatSel.value,
-    wantSysAudio:  sysAudioChk.checked,
-    webcamSelected: webcamSel.selectedIndex > 0,
-    webcamDeviceId: webcamSel.value,
-    micSelected:   micSel.selectedIndex > 0,
-    micDeviceId:   micSel.value,
-    micGain:       parseFloat(micGainSlider.value),
-    sysGain:       parseFloat(sysGainSlider.value),
+    fps:           fpsValue,
+    quality:       qualityValue,
+    format:        formatValue,
+    wantSysAudio:  sysAudioChecked,
+    webcamSelected: webcamValue !== '',
+    webcamDeviceId: webcamValue,
+    micSelected:   micValue !== '',
+    micDeviceId:   micValue,
+    micGain:       parseFloat(micGainValue),
+    sysGain:       parseFloat(sysGainValue),
   };
 }
 
@@ -332,11 +349,8 @@ async function enumerateDevices(): Promise<void> {
     const videoDevs = devices.filter(d => d.kind === 'videoinput');
     const audioDevs = devices.filter(d => d.kind === 'audioinput');
 
-    webcamSel.innerHTML = '<option value="">None</option>';
-    videoDevs.forEach((d, i) => webcamSel.add(new Option(d.label || `Camera ${i + 1}`, d.deviceId)));
-
-    micSel.innerHTML = '<option value="">None</option>';
-    audioDevs.forEach((d, i) => micSel.add(new Option(d.label || `Microphone ${i + 1}`, d.deviceId)));
+    webcamOptions = [{ label: 'None', value: '' }, ...videoDevs.map((d, i) => ({ label: d.label || `Camera ${i + 1}`, value: d.deviceId }))];
+    micOptions = [{ label: 'None', value: '' }, ...audioDevs.map((d, i) => ({ label: d.label || `Microphone ${i + 1}`, value: d.deviceId }))];
 
     restoreDevicePrefs();
 
@@ -353,16 +367,16 @@ async function enumerateDevices(): Promise<void> {
 
 function restoreSimplePrefs(): void {
   const fps = loadPref(PREFS.fps);
-  if (fps) fpsSel.value = fps;
+  if (fps) fpsValue = fps;
 
   const quality = loadPref(PREFS.quality);
-  if (quality) qualitySel.value = quality;
+  if (quality) qualityValue = quality;
 
   const format = loadPref(PREFS.format);
-  if (format) formatSel.value = format;
+  if (format) formatValue = format;
 
   const sysAudio = loadPref(PREFS.sysAudio);
-  if (sysAudio !== null) sysAudioChk.checked = sysAudio === 'true';
+  if (sysAudio !== null) sysAudioChecked = sysAudio === 'true';
 
   const storedPipX = loadPref(PREFS.pipX);
   const storedPipY = loadPref(PREFS.pipY);
@@ -373,49 +387,49 @@ function restoreSimplePrefs(): void {
 
   const micGain = loadPref(PREFS.micGain);
   if (micGain !== null) {
-    micGainSlider.value      = micGain;
-    micGainLabel.textContent = gainPct(micGain);
+    micGainValue = micGain;
+    micGainLabel && (micGainLabel.textContent = gainPct(micGain));
   }
 
   const sysGain = loadPref(PREFS.sysGain);
   if (sysGain !== null) {
-    sysGainSlider.value      = sysGain;
-    sysGainLabel.textContent = gainPct(sysGain);
+    sysGainValue = sysGain;
+    sysGainLabel && (sysGainLabel.textContent = gainPct(sysGain));
   }
 
   const countdown = loadPref(PREFS.countdown);
-  if (countdown !== null && countdownSel.querySelector(`option[value="${CSS.escape(countdown)}"]`)) {
-    countdownSel.value = countdown;
+  if (countdown !== null) {
+    countdownValue = countdown;
   }
 }
 
 function restoreDevicePrefs(): void {
   const webcamId = loadPref(PREFS.webcam);
-  if (webcamId && webcamSel.querySelector(`option[value="${CSS.escape(webcamId)}"]`)) {
-    webcamSel.value = webcamId;
+  if (webcamId) {
+    webcamValue = webcamId;
   }
   const micId = loadPref(PREFS.mic);
-  if (micId && micSel.querySelector(`option[value="${CSS.escape(micId)}"]`)) {
-    micSel.value = micId;
+  if (micId) {
+    micValue = micId;
   }
 }
 
 function startRecording() {
   if (!hasGetDisplayMedia()) {
-      showErrorDialog(
-        'Not Supported',
-        'Screen recording is not supported on this device. ' +
-        'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
-        'Please use a desktop browser with screen-recording support (Chrome, Edge, or Firefox) to use the recorder.'
-      );
-      return;
-    }
-    machine.transition(EVENT.USER_START, buildStartPayload());
+    showErrorDialog(
+      'Not Supported',
+      'Screen recording is not supported on this device. ' +
+      'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
+      'Please use a desktop browser with screen-recording support (Chrome, Edge, or Firefox) to use the recorder.'
+    );
+    return;
+  }
+  machine.transition(EVENT.USER_START, buildStartPayload());
 }
 
 function handlePauseResume() {
   if (machine.state === STATE.PAUSED) {
-    machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsSel.value, 10) });
+    machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsValue, 10) });
   } else {
     machine.transition(EVENT.USER_PAUSE);
   }
@@ -433,6 +447,7 @@ onMount(() => {
 
   machine = new RecorderStateMachine(api);
   machine.onStateChange(onStateChanged);
+  initDialogs();
 
   if (!hasGetDisplayMedia()) {
     showAlert(
@@ -600,7 +615,7 @@ onMount(() => {
               </label>
               <span id="mic-gain-label" class="text-muted small font-monospace" bind:this={micGainLabel}>100%</span>
             </div>
-            <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" value="1" bind:this={micGainSlider}>
+            <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" bind:this={micGainSlider} bind:value={micGainValue}>
             <canvas id="mic-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={micLevelCanvas}></canvas>
           </div>
 
@@ -611,7 +626,7 @@ onMount(() => {
               </label>
               <span id="sys-gain-label" class="text-muted small font-monospace" bind:this={sysGainLabel}>100%</span>
             </div>
-            <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" value="1" bind:this={sysGainSlider}>
+            <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" bind:this={sysGainSlider} bind:value={sysGainValue}>
             <canvas id="sys-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={sysLevelCanvas}></canvas>
           </div>
         </div>
@@ -628,8 +643,10 @@ onMount(() => {
           <label class="form-label text-muted small mb-1" for="webcam-select">
             <i class="fas fa-video me-1"></i>Webcam overlay
           </label>
-          <select id="webcam-select" class="form-select form-select-sm" bind:this={webcamSel}>
-            <option value="">None</option>
+          <select id="webcam-select" class="form-select form-select-sm" bind:this={webcamSel} bind:value={webcamValue}>
+            {#each webcamOptions as opt}
+              <option value={opt.value}>{opt.label}</option>
+            {/each}
           </select>
         </div>
 
@@ -637,13 +654,15 @@ onMount(() => {
           <label class="form-label text-muted small mb-1" for="mic-select">
             <i class="fas fa-microphone me-1"></i>Microphone
           </label>
-          <select id="mic-select" class="form-select form-select-sm" bind:this={micSel}>
-            <option value="">None</option>
+          <select id="mic-select" class="form-select form-select-sm" bind:this={micSel} bind:value={micValue}>
+            {#each micOptions as opt}
+              <option value={opt.value}>{opt.label}</option>
+            {/each}
           </select>
         </div>
 
         <div class="mb-3 form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="sys-audio-chk" bind:this={sysAudioChk}>
+          <input class="form-check-input" type="checkbox" id="sys-audio-chk" bind:this={sysAudioChk} bind:checked={sysAudioChecked}>
           <label class="form-check-label small" for="sys-audio-chk">Capture system audio</label>
         </div>
 
@@ -654,35 +673,35 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="fps-select">Frame rate</label>
-          <select id="fps-select" class="form-select form-select-sm" bind:this={fpsSel}>
+          <select id="fps-select" class="form-select form-select-sm" bind:this={fpsSel} bind:value={fpsValue}>
             <option value="15">15 fps</option>
-            <option value="30" selected>30 fps</option>
+            <option value="30">30 fps</option>
             <option value="60">60 fps</option>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="quality-select">Quality preset</label>
-          <select id="quality-select" class="form-select form-select-sm" bind:this={qualitySel}>
+          <select id="quality-select" class="form-select form-select-sm" bind:this={qualitySel} bind:value={qualityValue}>
             <option value="480">480p — ~2 Mbps</option>
-            <option value="720" selected>720p — ~4 Mbps</option>
+            <option value="720">720p — ~4 Mbps</option>
             <option value="1080">1080p — ~8 Mbps</option>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="format-select">Recording format</label>
-          <select id="format-select" class="form-select form-select-sm" bind:this={formatSel}>
-            <option value="webm-vp9-opus" selected>WebM — VP9 + Opus</option>
+          <select id="format-select" class="form-select form-select-sm" bind:this={formatSel} bind:value={formatValue}>
+            <option value="webm-vp9-opus">WebM — VP9 + Opus</option>
             <option value="mp4-h264-aac">MP4 — H.264 + AAC</option>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="countdown-select">Countdown timer</label>
-          <select id="countdown-select" class="form-select form-select-sm" bind:this={countdownSel}>
+          <select id="countdown-select" class="form-select form-select-sm" bind:this={countdownSel} bind:value={countdownValue}>
             <option value="0">Off</option>
-            <option value="3" selected>3 seconds</option>
+            <option value="3">3 seconds</option>
             <option value="5">5 seconds</option>
             <option value="10">10 seconds</option>
           </select>

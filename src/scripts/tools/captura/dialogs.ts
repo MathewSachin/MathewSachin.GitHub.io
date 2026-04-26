@@ -1,6 +1,15 @@
 // ── dialogs.ts ───────────────────────────────────────────────────────────────
-const alertBox = document.getElementById('alert-box') as HTMLElement | null;
-const errorDialog = document.getElementById('captura-error-dialog') as HTMLDialogElement | null;
+let alertBox: HTMLElement;
+let errorDialog: HTMLDialogElement;
+
+export function initDialogs() {
+  alertBox = document.getElementById('alert-box') as HTMLElement;
+  errorDialog = document.getElementById('captura-error-dialog') as HTMLDialogElement;
+
+  const closeDialog = () => errorDialog.close();
+  document.getElementById('captura-error-close')?.addEventListener('click', closeDialog);
+  errorDialog.addEventListener('click', e => { if (e.target === errorDialog) closeDialog(); });
+}
 
 const TOAST_FADE_MS = 150;
 
@@ -59,11 +68,4 @@ export function showErrorDialog(title: string, message: string) {
   if (titleEl) titleEl.textContent = title;
   if (bodyEl)  bodyEl.textContent  = message;
   errorDialog.showModal();
-}
-
-// Wire up error-dialog close handlers once on module load.
-if (errorDialog) {
-  const closeDialog = () => errorDialog.close();
-  document.getElementById('captura-error-close')?.addEventListener('click', closeDialog);
-  errorDialog.addEventListener('click', e => { if (e.target === errorDialog) closeDialog(); });
 }
