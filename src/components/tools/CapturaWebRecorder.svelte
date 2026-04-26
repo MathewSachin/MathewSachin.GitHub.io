@@ -66,9 +66,6 @@ let machine: RecorderStateMachine;
 function hasGetDisplayMedia() {
   return !!(navigator.mediaDevices?.getDisplayMedia);
 }
-function hasFSA() {
-  return typeof window.showDirectoryPicker === 'function';
-}
 
 function startTimer() {
   if (timerIntervalId !== null) clearInterval(timerIntervalId);
@@ -403,10 +400,6 @@ function restoreDevicePrefs(): void {
   }
 }
 
-function saveAndTrackPref(key: string, value: string | number | boolean, analyticsKey?: string): void {
-  savePref(key, String(value));
-}
-
 function startRecording() {
   if (!hasGetDisplayMedia()) {
       showErrorDialog(
@@ -476,11 +469,11 @@ onMount(() => {
     }
   });
 
-  fpsSel      .addEventListener('change', () => saveAndTrackPref(PREFS.fps,       fpsSel.value,          'fps'));
-  qualitySel  .addEventListener('change', () => saveAndTrackPref(PREFS.quality,   qualitySel.value,      'quality'));
-  formatSel   .addEventListener('change', () => saveAndTrackPref(PREFS.format,    formatSel.value,       'format'));
-  sysAudioChk .addEventListener('change', () => saveAndTrackPref(PREFS.sysAudio,  sysAudioChk.checked,   'sys_audio'));
-  countdownSel.addEventListener('change', () => saveAndTrackPref(PREFS.countdown, countdownSel.value,    'countdown'));
+  fpsSel      .addEventListener('change', () => savePref(PREFS.fps, fpsSel.value));
+  qualitySel  .addEventListener('change', () => savePref(PREFS.quality, qualitySel.value));
+  formatSel   .addEventListener('change', () => savePref(PREFS.format, formatSel.value));
+  sysAudioChk .addEventListener('change', () => savePref(PREFS.sysAudio, String(sysAudioChk.checked)));
+  countdownSel.addEventListener('change', () => savePref(PREFS.countdown, countdownSel.value));
 
   webcamSel.addEventListener('change', () => {
     savePref(PREFS.webcam, webcamSel.value);
