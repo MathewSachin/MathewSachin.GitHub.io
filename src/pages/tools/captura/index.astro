@@ -5,6 +5,5 @@ import CapturaWebRecorder from '@components/tools/CapturaWebRecorder.svelte';
 import '@styles/recorder.css';
 ---
 <ToolLayout title="Captura Web Recorder" DescriptiveContent={Content}>
-  <CapturaWebRecorder />
-<script src="@scripts/tools/captura/app.js"></script>
+  <CapturaWebRecorder client:load client:only />
 </ToolLayout>
