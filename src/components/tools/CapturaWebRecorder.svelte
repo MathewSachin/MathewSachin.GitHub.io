@@ -32,8 +32,8 @@ let cancelCountdownBtn: HTMLButtonElement;
 let endSessionBtn: HTMLButtonElement;
 let pickDirBtn: HTMLButtonElement;
 let dirNameEl: HTMLElement;
-let statusBadge: HTMLElement;
-let timerEl: HTMLElement;
+let statusText = 'Idle';
+let statusClass = 'badge bg-secondary';
 let micGainSlider: HTMLInputElement;
 let sysGainSlider: HTMLInputElement;
 let micGainLabel: HTMLElement;
@@ -158,7 +158,7 @@ function render(state: string): void {
   qualitySel.disabled    = lockControls;
   countdownSel.disabled  = lockControls;
 
-  statusBadge.textContent =
+  statusText =
       isRec       ? '⏺ Recording'
     : isPaused    ? '⏸ Paused'
     : isReq       ? '⏳ Acquiring…'
@@ -168,7 +168,7 @@ function render(state: string): void {
     : isError     ? '⚠ Error'
     :               'Idle';
 
-  statusBadge.className =
+  statusClass =
       isRec                    ? 'badge bg-danger'
     : isPaused || isStopping   ? 'badge bg-warning text-dark'
     : isSession || isCountdown ? 'badge bg-warning text-dark'
@@ -588,8 +588,8 @@ onMount(() => {
         <div class="mb-2 d-flex align-items-center justify-content-between">
           <span class="fw-semibold">Preview</span>
           <span class="d-flex align-items-center gap-2">
-            <span id="status-badge" class="badge bg-secondary" bind:this={statusBadge}>Idle</span>
-            <span id="timer-text" class="font-monospace text-muted small" bind:this={timerEl}>{timerText}</span>
+            <span id="status-badge" class={statusClass}>{statusText}</span>
+            <span id="timer-text" class="font-monospace text-muted small">{timerText}</span>
           </span>
         </div>
         <div class="canvas-wrap">
