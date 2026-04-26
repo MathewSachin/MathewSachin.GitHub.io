@@ -9,7 +9,6 @@ import { showAlert, showToast, showErrorDialog } from '../../scripts/tools/captu
 import { setupMediaSession, clearMediaSession }  from '../../scripts/tools/captura/media-session';
 import { RecorderAPI }                         from '../../scripts/tools/captura/recorder-api';
 import { RecorderStateMachine, STATE, EVENT, type State, type Event }  from '../../scripts/tools/captura/recorder-state-machine';
-import { trackEvent }                          from '../../scripts/tools/captura/analytics';
 import { onMount } from 'svelte';
 
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -195,40 +194,9 @@ type MachinePayload = {
   title?: string;
 };
 
-function onStateChanged(state: State, event: Event, payload: unknown): void {
-  const p = payload as MachinePayload;
+function onStateChanged(state: State, event: Event, payload: MachinePayload): void {
   render(state);
-  if (state === STATE.RECORDING) {
-    if (event === EVENT.COUNTDOWN_DONE) {
-      trackEvent('captura_recording_start', {
-        fps:        p?.fps,
-        quality:    p?.quality,
-        format:     p?.format,
-        has_webcam: p?.webcamSelected,
-        has_mic:    p?.micSelected,
-        sys_audio:  p?.wantSysAudio,
-      });
-    } else if (event === EVENT.USER_RESUME) {
-      trackEvent('captura_recording_resume', { elapsed_secs: elapsedSecs });
-    }
-  } else if (state === STATE.PAUSED) {
-    trackEvent('captura_recording_pause', { elapsed_secs: elapsedSecs });
-  } else if (state === STATE.STOPPING) {
-    trackEvent('captura_recording_stop', { elapsed_secs: elapsedSecs, format: formatSel.value });
-  } else if (state === STATE.IDLE && event === EVENT.END_SESSION) {
-    trackEvent('captura_session_end');
-  }
-
-    if (event === EVENT.STREAMS_FAILED) {
-    trackEvent('captura_stream_failed', { error_name: p?.name ?? 'unknown' });
-  } else if (state === STATE.ERROR) {
-    trackEvent('captura_error', { error_message: p?.message ?? String(payload ?? '') });
-  }
-
-  if (event === EVENT.FINALIZE_DONE && payload) {
-    trackEvent('captura_recording_saved', { format: formatSel.value });
-  }
-
+  
   if (state === STATE.COUNTDOWN) {
     const savedPayload = payload;
     startCountdownOverlay(
@@ -268,8 +236,8 @@ function onStateChanged(state: State, event: Event, payload: unknown): void {
 
   if (state === STATE.ERROR) {
     showErrorDialog(
-      p?.title   || 'Recording Error',
-      p?.message || String(payload ?? 'An unknown error occurred.')
+      payload?.title   || 'Recording Error',
+      payload?.message || String(payload ?? 'An unknown error occurred.')
     );
   }
 
@@ -437,7 +405,6 @@ function restoreDevicePrefs(): void {
 
 function saveAndTrackPref(key: string, value: string | number | boolean, analyticsKey?: string): void {
   savePref(key, String(value));
-  trackEvent('captura_pref_change', { pref: analyticsKey, value: String(value) });
 }
 
 function startRecording() {
@@ -488,11 +455,6 @@ onMount(() => {
 
   restoreSimplePrefs();
 
-  trackEvent('captura_page_view', {
-    has_screen_capture:  hasGetDisplayMedia(),
-    has_file_system_api: hasFSA(),
-  });
-
   if (hasGetDisplayMedia()) {
     navigator.mediaDevices.addEventListener('devicechange', enumerateDevices);
     enumerateDevices();
@@ -505,7 +467,6 @@ onMount(() => {
   pickDirBtn.hidden = storage.isOPFS;
 
   pickDirBtn.addEventListener('click', () => {
-    trackEvent('captura_folder_pick');
     storage.pickDirectory();
   });
 
