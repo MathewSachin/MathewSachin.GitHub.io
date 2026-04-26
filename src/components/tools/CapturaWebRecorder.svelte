@@ -8,24 +8,27 @@ import { PREFS, savePref, loadPref }           from '../../scripts/tools/captura
 import { showAlert, showToast, showErrorDialog, initDialogs } from '../../scripts/tools/captura/dialogs';
 import { RecorderAPI }                         from '../../scripts/tools/captura/recorder-api';
 import { RecorderStateMachine, STATE, EVENT, type State, type Event }  from '../../scripts/tools/captura/recorder-state-machine';
-import { onMount } from 'svelte';
+import { onMount, untrack } from 'svelte';
 
+// TODO: MIC RECORDING BROKEN
 
+let elapsedSecs = $state(0);
+let recorderState: State = $state(STATE.IDLE);
 
 // Svelte-bound state variables for form controls
-let webcamValue = '';
-let micValue = '';
-let fpsValue = '30';
-let qualityValue = '720';
-let formatValue = 'webm-vp9-opus';
-let countdownValue = '3';
-let sysAudioChecked = false;
-let micGainValue = '1';
-let sysGainValue = '1';
+let webcamValue = $state('');
+let micValue = $state('');
+let fpsValue = $state('30');
+let qualityValue = $state('720');
+let formatValue = $state('webm-vp9-opus');
+let countdownValue = $state('3');
+let sysAudioChecked = $state(false);
+let micGainValue = $state('1');
+let sysGainValue = $state('1');
 
 // Device options for selects
-let webcamOptions = [{ label: 'None', value: '' }];
-let micOptions = [{ label: 'None', value: '' }];
+let webcamOptions = $state([{ label: 'None', value: '' }]);
+let micOptions = $state([{ label: 'None', value: '' }]);
 
 const BLOB_URL_REVOKE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -33,29 +36,8 @@ const gainPct = (v: string | number) => Math.round(parseFloat(String(v)) * 100) 
 const fmtTime = (s: number) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
 let canvas: HTMLCanvasElement;
-let webcamSel: HTMLSelectElement;
-let micSel: HTMLSelectElement;
-let fpsSel: HTMLSelectElement;
-let qualitySel: HTMLSelectElement;
-let formatSel: HTMLSelectElement;
-let countdownSel: HTMLSelectElement;
-let sysAudioChk: HTMLInputElement;
-let showStartBtn = true;
-let startBtnDisabled = false;
-let showPauseBtn = false;
-let pauseBtnDisabled = false;
-let pauseBtnClass = 'btn btn-warning text-dark';
-let pauseBtnIcon = 'fa-pause';
-let pauseBtnText = 'Pause';
-let showStopBtn = false;
-let stopBtnDisabled = false;
-let showCancelCountdownBtn = false;
-let showEndSessionBtn = false;
-let endSessionBtnDisabled = false;
 let pickDirBtn: HTMLButtonElement;
 let dirNameEl: HTMLElement;
-let statusText = 'Idle';
-let statusClass = 'badge bg-secondary';
 let micGainSlider: HTMLInputElement;
 let sysGainSlider: HTMLInputElement;
 let micGainLabel: HTMLElement;
@@ -66,9 +48,7 @@ let errorDialog: HTMLDialogElement;
 let countdownOverlay: HTMLElement;
 let countdownNumberEl: HTMLElement;
 
-let elapsedSecs = 0;
 let timerIntervalId: ReturnType<typeof setInterval> | null = null;
-let timerText = '00:00';
 let countdownIntervalId: ReturnType<typeof setInterval> | null = null;
 
 let compositor: Compositor;
@@ -86,8 +66,7 @@ function hasGetDisplayMedia() {
 function startTimer() {
   if (timerIntervalId !== null) clearInterval(timerIntervalId);
   elapsedSecs = 0;
-  timerText = '00:00';
-  timerIntervalId = setInterval(() => { timerText = fmtTime(++elapsedSecs); }, 1000);
+  timerIntervalId = setInterval(() => { elapsedSecs++; }, 1000);
 }
 
 function pauseTimer() {
@@ -97,7 +76,7 @@ function pauseTimer() {
 
 function resumeTimer() {
   if (timerIntervalId === null) {
-    timerIntervalId = setInterval(() => { timerText = fmtTime(++elapsedSecs); }, 1000);
+    timerIntervalId = setInterval(() => { elapsedSecs++; }, 1000);
   }
 }
 
@@ -105,7 +84,6 @@ function resetTimer() {
   if (timerIntervalId !== null) clearInterval(timerIntervalId);
   timerIntervalId = null;
   elapsedSecs = 0;
-  timerText = '00:00';
 }
 
 function startCountdownOverlay(secs: number, onDone: () => void) {
@@ -138,46 +116,33 @@ function stopCountdownOverlay(): void {
   countdownNumberEl.textContent = '';
 }
 
-function render(state: string): void {
-  const isSession    = state === STATE.SESSION;
-  const isReq        = state === STATE.REQUESTING;
-  const isCountdown  = state === STATE.COUNTDOWN;
-  const isRec        = state === STATE.RECORDING;
-  const isPaused     = state === STATE.PAUSED;
-  const isStopping   = state === STATE.STOPPING;
-  const isError      = state === STATE.ERROR;
-  const active       = isRec || isPaused;
-  const hasSession   = isSession || active || isStopping || isCountdown;
+const timerText = $derived(fmtTime(elapsedSecs));
 
+const isSession = $derived(recorderState === STATE.SESSION as State);
+const isReq = $derived(recorderState === STATE.REQUESTING as State);
+const isCountdown = $derived(recorderState === STATE.COUNTDOWN as State);
+const isRec = $derived(recorderState === STATE.RECORDING as State);
+const isPaused = $derived(recorderState === STATE.PAUSED as State);
+const isStopping = $derived(recorderState === STATE.STOPPING as State);
+const isError = $derived(recorderState === STATE.ERROR as State);
+const active = $derived(isRec || isPaused);
+const hasSession = $derived(isSession || active || isStopping || isCountdown);
 
-  showStartBtn = !(active || isStopping || isCountdown);
-  startBtnDisabled = isReq;
+const showStartBtn = $derived(!(active || isStopping || isCountdown));
+const startBtnDisabled = $derived(isReq);
 
-  showPauseBtn = active;
-  pauseBtnDisabled = false;
-  pauseBtnIcon = isPaused ? 'fa-play' : 'fa-pause';
-  pauseBtnText = isPaused ? 'Resume' : 'Pause';
-  pauseBtnClass = isPaused ? 'btn btn-success' : 'btn btn-warning text-dark';
+const showPauseBtn = $derived(active);
+const pauseBtnDisabled = $derived(false);
+const pauseBtnIcon = $derived(isPaused ? 'fa-play' : 'fa-pause');
+const pauseBtnText = $derived(isPaused ? 'Resume' : 'Pause');
+const pauseBtnClass = $derived(isPaused ? 'btn btn-success' : 'btn btn-warning text-dark');
+const showStopBtn = $derived(active);
+const stopBtnDisabled = $derived(false);
+const showCancelCountdownBtn = $derived(isCountdown);
+const showEndSessionBtn = $derived(hasSession && !isCountdown);
+const endSessionBtnDisabled = $derived(isStopping || isReq);
 
-  showStopBtn = active;
-  stopBtnDisabled = false;
-
-  showCancelCountdownBtn = isCountdown;
-
-  showEndSessionBtn = hasSession && !isCountdown;
-  endSessionBtnDisabled = isStopping || isReq;
-
-  const lockControls = active || isStopping || isReq || isCountdown;
-  pickDirBtn.hidden    = storage.isOPFS;
-  pickDirBtn.disabled  = lockControls;
-  webcamSel.disabled     = isStopping || isReq || isCountdown;
-  micSel.disabled        = lockControls;
-  sysAudioChk.disabled   = lockControls;
-  fpsSel.disabled        = lockControls;
-  qualitySel.disabled    = lockControls;
-  countdownSel.disabled  = lockControls;
-
-  statusText =
+const statusText = $derived(
       isRec       ? '⏺ Recording'
     : isPaused    ? '⏸ Paused'
     : isReq       ? '⏳ Acquiring…'
@@ -185,14 +150,72 @@ function render(state: string): void {
     : isStopping  ? '⏳ Saving…'
     : isSession   ? '◉ Session Active'
     : isError     ? '⚠ Error'
-    :               'Idle';
+    :               'Idle');
 
-  statusClass =
+const statusClass = $derived(
       isRec                    ? 'badge bg-danger'
     : isPaused || isStopping   ? 'badge bg-warning text-dark'
     : isSession || isCountdown ? 'badge bg-warning text-dark'
     : isError                  ? 'badge bg-danger'
-    :                            'badge bg-secondary';
+    :                            'badge bg-secondary');
+
+const lockControls = $derived(active || isStopping || isReq || isCountdown);
+const webcamDisabled = $derived(isStopping || isReq || isCountdown);
+const micDisabled = $derived(lockControls);
+const sysAudioDisabled = $derived(lockControls);
+const fpsDisabled = $derived(lockControls);
+const qualityDisabled = $derived(lockControls);
+const countdownDisabled = $derived(lockControls);
+
+$effect(() => savePref(PREFS.fps, fpsValue));
+$effect(() => savePref(PREFS.quality, qualityValue));
+$effect(() => savePref(PREFS.format, formatValue));
+$effect(() => savePref(PREFS.sysAudio, String(sysAudioChecked)));
+$effect(() => savePref(PREFS.countdown, countdownValue));
+
+$effect(() => {
+  const currentWebcam = webcamValue;
+
+  untrack(() => {
+    savePref(PREFS.webcam, currentWebcam);
+    const s = machine?.state;
+    
+    if (s) {
+      if (s === STATE.RECORDING || s === STATE.PAUSED) {
+        const hasWebcamSelected = currentWebcam !== '' && currentWebcam !== 'none';
+        
+        api.changeWebcam(currentWebcam, hasWebcamSelected)
+          .catch(err => { 
+            const e = err; 
+            showToast('Failed to switch webcam: ' + (e?.message ?? String(err)), 'danger'); 
+          });
+      } else if (s !== STATE.STOPPING) {
+        syncDevicesToApi();
+        api.restartPreviews();
+      }
+    }
+  });
+});
+
+$effect(() => {
+  const currentMic = micValue;
+
+  untrack(() => {
+    savePref(PREFS.mic, currentMic);
+    const s = machine?.state;
+    
+    if (s && s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
+      syncDevicesToApi();
+      api.restartPreviews();
+    }
+  });
+});
+
+function render(state: State): void {
+  recorderState = state;
+
+  pickDirBtn.hidden    = storage.isOPFS;
+  pickDirBtn.disabled  = lockControls;
 }
 
 type MachinePayload = {
@@ -469,33 +492,6 @@ onMount(() => {
     }
   });
 
-  fpsSel      .addEventListener('change', () => savePref(PREFS.fps, fpsSel.value));
-  qualitySel  .addEventListener('change', () => savePref(PREFS.quality, qualitySel.value));
-  formatSel   .addEventListener('change', () => savePref(PREFS.format, formatSel.value));
-  sysAudioChk .addEventListener('change', () => savePref(PREFS.sysAudio, String(sysAudioChk.checked)));
-  countdownSel.addEventListener('change', () => savePref(PREFS.countdown, countdownSel.value));
-
-  webcamSel.addEventListener('change', () => {
-    savePref(PREFS.webcam, webcamSel.value);
-    const s = machine.state;
-    if (s === STATE.RECORDING || s === STATE.PAUSED) {
-        api.changeWebcam(webcamSel.value, webcamSel.selectedIndex > 0)
-          .catch(err => { const e = err as { message?: string } | undefined; showToast('Failed to switch webcam: ' + (e?.message ?? String(err)), 'danger'); });
-    } else if (s !== STATE.STOPPING) {
-      syncDevicesToApi();
-      api.restartPreviews();
-    }
-  });
-
-  micSel.addEventListener('change', () => {
-    savePref(PREFS.mic, micSel.value);
-    const s = machine.state;
-    if (s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
-      syncDevicesToApi();
-      api.restartPreviews();
-    }
-  });
-
   micGainSlider.addEventListener('input', () => {
     const v = parseFloat(micGainSlider.value);
     micGainLabel.textContent = gainPct(v);
@@ -555,27 +551,27 @@ onMount(() => {
         </div>
         <div class="mt-3 d-flex gap-2 flex-wrap">
           {#if showStartBtn}
-            <button id="start-btn" class="btn btn-info text-white" disabled={startBtnDisabled} on:click={startRecording}>
+            <button id="start-btn" class="btn btn-info text-white" disabled={startBtnDisabled} onclick={startRecording}>
               <i class="fas fa-circle me-1"></i>Start Recording
             </button>
           {/if}
           {#if showPauseBtn}
-            <button id="pause-btn" class={pauseBtnClass} disabled={pauseBtnDisabled} on:click={handlePauseResume}>
+            <button id="pause-btn" class={pauseBtnClass} disabled={pauseBtnDisabled} onclick={handlePauseResume}>
               <i class="fas {pauseBtnIcon} me-1"></i>{pauseBtnText}
             </button>
           {/if}
           {#if showStopBtn}
-            <button id="stop-btn" class="btn btn-danger" disabled={stopBtnDisabled} on:click={() => machine.transition(EVENT.USER_STOP)}>
+            <button id="stop-btn" class="btn btn-danger" disabled={stopBtnDisabled} onclick={() => machine.transition(EVENT.USER_STOP)}>
               <i class="fas fa-stop me-1"></i>Stop
             </button>
           {/if}
           {#if showCancelCountdownBtn}
-            <button id="cancel-countdown-btn" class="btn btn-secondary" on:click={() => machine.transition(EVENT.COUNTDOWN_CANCEL)}>
+            <button id="cancel-countdown-btn" class="btn btn-secondary" onclick={() => machine.transition(EVENT.COUNTDOWN_CANCEL)}>
               <i class="fas fa-times me-1"></i>Cancel
             </button>
           {/if}
           {#if showEndSessionBtn}
-            <button id="end-session-btn" class="btn btn-outline-warning" disabled={endSessionBtnDisabled} on:click={() => machine.transition(EVENT.END_SESSION)}>
+            <button id="end-session-btn" class="btn btn-outline-warning" disabled={endSessionBtnDisabled} onclick={() => machine.transition(EVENT.END_SESSION)}>
               <i class="fas fa-times-circle me-1"></i>End Session
             </button>
           {/if}
@@ -628,7 +624,7 @@ onMount(() => {
           <label class="form-label text-muted small mb-1" for="webcam-select">
             <i class="fas fa-video me-1"></i>Webcam overlay
           </label>
-          <select id="webcam-select" class="form-select form-select-sm" bind:this={webcamSel} bind:value={webcamValue}>
+          <select id="webcam-select" class="form-select form-select-sm" bind:value={webcamValue} disabled={webcamDisabled}>
             {#each webcamOptions as opt}
               <option value={opt.value}>{opt.label}</option>
             {/each}
@@ -639,7 +635,7 @@ onMount(() => {
           <label class="form-label text-muted small mb-1" for="mic-select">
             <i class="fas fa-microphone me-1"></i>Microphone
           </label>
-          <select id="mic-select" class="form-select form-select-sm" bind:this={micSel} bind:value={micValue}>
+          <select id="mic-select" class="form-select form-select-sm" bind:value={micValue} disabled={micDisabled}>
             {#each micOptions as opt}
               <option value={opt.value}>{opt.label}</option>
             {/each}
@@ -647,7 +643,7 @@ onMount(() => {
         </div>
 
         <div class="mb-3 form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="sys-audio-chk" bind:this={sysAudioChk} bind:checked={sysAudioChecked}>
+          <input class="form-check-input" type="checkbox" id="sys-audio-chk" bind:checked={sysAudioChecked} disabled={sysAudioDisabled}>
           <label class="form-check-label small" for="sys-audio-chk">Capture system audio</label>
         </div>
 
@@ -658,7 +654,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="fps-select">Frame rate</label>
-          <select id="fps-select" class="form-select form-select-sm" bind:this={fpsSel} bind:value={fpsValue}>
+          <select id="fps-select" class="form-select form-select-sm" bind:value={fpsValue} disabled={fpsDisabled}>
             <option value="15">15 fps</option>
             <option value="30">30 fps</option>
             <option value="60">60 fps</option>
@@ -667,7 +663,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="quality-select">Quality preset</label>
-          <select id="quality-select" class="form-select form-select-sm" bind:this={qualitySel} bind:value={qualityValue}>
+          <select id="quality-select" class="form-select form-select-sm" bind:value={qualityValue} disabled={qualityDisabled}>
             <option value="480">480p — ~2 Mbps</option>
             <option value="720">720p — ~4 Mbps</option>
             <option value="1080">1080p — ~8 Mbps</option>
@@ -676,7 +672,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="format-select">Recording format</label>
-          <select id="format-select" class="form-select form-select-sm" bind:this={formatSel} bind:value={formatValue}>
+          <select id="format-select" class="form-select form-select-sm" bind:value={formatValue}>
             <option value="webm-vp9-opus">WebM — VP9 + Opus</option>
             <option value="mp4-h264-aac">MP4 — H.264 + AAC</option>
           </select>
@@ -684,7 +680,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="countdown-select">Countdown timer</label>
-          <select id="countdown-select" class="form-select form-select-sm" bind:this={countdownSel} bind:value={countdownValue}>
+          <select id="countdown-select" class="form-select form-select-sm" bind:value={countdownValue} disabled={countdownDisabled}>
             <option value="0">Off</option>
             <option value="3">3 seconds</option>
             <option value="5">5 seconds</option>
