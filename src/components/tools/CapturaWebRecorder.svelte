@@ -25,11 +25,18 @@ let qualitySel: HTMLSelectElement;
 let formatSel: HTMLSelectElement;
 let countdownSel: HTMLSelectElement;
 let sysAudioChk: HTMLInputElement;
-let startBtn: HTMLButtonElement;
-let pauseBtn: HTMLButtonElement;
-let stopBtn: HTMLButtonElement;
-let cancelCountdownBtn: HTMLButtonElement;
-let endSessionBtn: HTMLButtonElement;
+let showStartBtn = true;
+let startBtnDisabled = false;
+let showPauseBtn = false;
+let pauseBtnDisabled = false;
+let pauseBtnClass = 'btn btn-warning text-dark';
+let pauseBtnIcon = 'fa-pause';
+let pauseBtnText = 'Pause';
+let showStopBtn = false;
+let stopBtnDisabled = false;
+let showCancelCountdownBtn = false;
+let showEndSessionBtn = false;
+let endSessionBtnDisabled = false;
 let pickDirBtn: HTMLButtonElement;
 let dirNameEl: HTMLElement;
 let statusText = 'Idle';
@@ -130,23 +137,23 @@ function render(state: string): void {
   const active       = isRec || isPaused;
   const hasSession   = isSession || active || isStopping || isCountdown;
 
-  startBtn.hidden   = active || isStopping || isCountdown;
-  startBtn.disabled = isReq;
 
-  pauseBtn.hidden    = !active;
-  pauseBtn.disabled  = false;
-  pauseBtn.innerHTML = isPaused
-    ? '<i class="fas fa-play me-1"></i>Resume'
-    : '<i class="fas fa-pause me-1"></i>Pause';
-  pauseBtn.className = isPaused ? 'btn btn-success' : 'btn btn-warning text-dark';
+  showStartBtn = !(active || isStopping || isCountdown);
+  startBtnDisabled = isReq;
 
-  stopBtn.hidden   = !active;
-  stopBtn.disabled = false;
+  showPauseBtn = active;
+  pauseBtnDisabled = false;
+  pauseBtnIcon = isPaused ? 'fa-play' : 'fa-pause';
+  pauseBtnText = isPaused ? 'Resume' : 'Pause';
+  pauseBtnClass = isPaused ? 'btn btn-success' : 'btn btn-warning text-dark';
 
-  cancelCountdownBtn.hidden = !isCountdown;
+  showStopBtn = active;
+  stopBtnDisabled = false;
 
-  endSessionBtn.hidden   = !hasSession || isCountdown;
-  endSessionBtn.disabled = isStopping || isReq;
+  showCancelCountdownBtn = isCountdown;
+
+  showEndSessionBtn = hasSession && !isCountdown;
+  endSessionBtnDisabled = isStopping || isReq;
 
   const lockControls = active || isStopping || isReq || isCountdown;
   pickDirBtn.hidden    = storage.isOPFS;
@@ -433,6 +440,27 @@ function saveAndTrackPref(key: string, value: string | number | boolean, analyti
   trackEvent('captura_pref_change', { pref: analyticsKey, value: String(value) });
 }
 
+function startRecording() {
+  if (!hasGetDisplayMedia()) {
+      showErrorDialog(
+        'Not Supported',
+        'Screen recording is not supported on this device. ' +
+        'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
+        'Please use a desktop browser with screen-recording support (Chrome, Edge, or Firefox) to use the recorder.'
+      );
+      return;
+    }
+    machine.transition(EVENT.USER_START, buildStartPayload());
+}
+
+function handlePauseResume() {
+  if (machine.state === STATE.PAUSED) {
+    machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsSel.value, 10) });
+  } else {
+    machine.transition(EVENT.USER_PAUSE);
+  }
+}
+
 onMount(() => {
   compositor = new Compositor(canvas, {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
@@ -475,33 +503,6 @@ onMount(() => {
   storage.init();
 
   pickDirBtn.hidden = storage.isOPFS;
-
-  startBtn.addEventListener('click', () => {
-    if (!hasGetDisplayMedia()) {
-      showErrorDialog(
-        'Not Supported',
-        'Screen recording is not supported on this device. ' +
-        'Mobile browsers cannot access the device screen due to security sandbox restrictions. ' +
-        'Please use a desktop browser with screen-recording support (Chrome, Edge, or Firefox) to use the recorder.'
-      );
-      return;
-    }
-    machine.transition(EVENT.USER_START, buildStartPayload());
-  });
-
-  pauseBtn.addEventListener('click', () => {
-    if (machine.state === STATE.PAUSED) {
-      machine.transition(EVENT.USER_RESUME, { fps: parseInt(fpsSel.value, 10) });
-    } else {
-      machine.transition(EVENT.USER_PAUSE);
-    }
-  });
-
-  stopBtn.addEventListener('click', () => machine.transition(EVENT.USER_STOP));
-
-  cancelCountdownBtn.addEventListener('click', () => machine.transition(EVENT.COUNTDOWN_CANCEL));
-
-  endSessionBtn.addEventListener('click', () => machine.transition(EVENT.END_SESSION));
 
   pickDirBtn.addEventListener('click', () => {
     trackEvent('captura_folder_pick');
@@ -599,21 +600,31 @@ onMount(() => {
           </div>
         </div>
         <div class="mt-3 d-flex gap-2 flex-wrap">
-          <button id="start-btn" class="btn btn-info text-white" bind:this={startBtn}>
-            <i class="fas fa-circle me-1"></i>Start Recording
-          </button>
-          <button id="pause-btn" class="btn btn-warning text-dark" hidden bind:this={pauseBtn}>
-            <i class="fas fa-pause me-1"></i>Pause
-          </button>
-          <button id="stop-btn" class="btn btn-danger" hidden bind:this={stopBtn}>
-            <i class="fas fa-stop me-1"></i>Stop
-          </button>
-          <button id="cancel-countdown-btn" class="btn btn-secondary" hidden bind:this={cancelCountdownBtn}>
-            <i class="fas fa-times me-1"></i>Cancel
-          </button>
-          <button id="end-session-btn" class="btn btn-outline-warning" hidden bind:this={endSessionBtn}>
-            <i class="fas fa-times-circle me-1"></i>End Session
-          </button>
+          {#if showStartBtn}
+            <button id="start-btn" class="btn btn-info text-white" disabled={startBtnDisabled} on:click={startRecording}>
+              <i class="fas fa-circle me-1"></i>Start Recording
+            </button>
+          {/if}
+          {#if showPauseBtn}
+            <button id="pause-btn" class={pauseBtnClass} disabled={pauseBtnDisabled} on:click={handlePauseResume}>
+              <i class="fas {pauseBtnIcon} me-1"></i>{pauseBtnText}
+            </button>
+          {/if}
+          {#if showStopBtn}
+            <button id="stop-btn" class="btn btn-danger" disabled={stopBtnDisabled} on:click={() => machine.transition(EVENT.USER_STOP)}>
+              <i class="fas fa-stop me-1"></i>Stop
+            </button>
+          {/if}
+          {#if showCancelCountdownBtn}
+            <button id="cancel-countdown-btn" class="btn btn-secondary" on:click={() => machine.transition(EVENT.COUNTDOWN_CANCEL)}>
+              <i class="fas fa-times me-1"></i>Cancel
+            </button>
+          {/if}
+          {#if showEndSessionBtn}
+            <button id="end-session-btn" class="btn btn-outline-warning" disabled={endSessionBtnDisabled} on:click={() => machine.transition(EVENT.END_SESSION)}>
+              <i class="fas fa-times-circle me-1"></i>End Session
+            </button>
+          {/if}
         </div>
 
         <!-- Save location -->
