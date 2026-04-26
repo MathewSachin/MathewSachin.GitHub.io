@@ -184,8 +184,6 @@ const groupedEntries = tocEntries.reduce((acc, heading) => {
 </style>
 
 <script>
-import { trackEvent } from '@scripts/utils';
-
 // Mobile TOC collapse toggle
 const tocToggle = document.querySelector(".toc-mobile-toggle") as HTMLElement;
 const tocCollapse = document.getElementById("toc-collapse") as HTMLElement;
@@ -193,7 +191,6 @@ tocToggle.addEventListener("click", function () {
   const expanded = tocToggle.getAttribute("aria-expanded") === "true";
   tocToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
   tocCollapse.classList.toggle("show");
-  trackEvent("toc_mobile_toggle", { action: expanded ? "collapse" : "expand" });
 });
 
 // Table of contents: scroll-spy for statically generated TOC
@@ -288,8 +285,6 @@ tocLinks.forEach(function (a: HTMLAnchorElement) {
     if (targetHref.startsWith("#")) {
       updateActiveState(targetHref.substring(1));
     }
-
-    trackEvent("toc_click", { section: targetHref, link_text: (a.textContent || '').trim() });
         
     // Collapse the TOC on mobile after the user taps a link
     if (tocCollapse && tocCollapse.classList.contains("show")) {

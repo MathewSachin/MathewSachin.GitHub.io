@@ -9,7 +9,7 @@
 </dialog>
 
 <script>
-import { addListeners, trackEvent } from '@scripts/utils';
+import { addListeners } from '@scripts/utils';
 
 // Lightbox: click on blog post images to expand
 const lightbox = document.getElementById("img-lightbox") as HTMLDialogElement;
@@ -19,7 +19,6 @@ addListeners(".page-content img", "click", function (img: HTMLElement) {
   lightboxImg.src = clicked.src || '';
   lightboxImg.alt = clicked.alt || "";
   lightbox.showModal();
-  trackEvent("image_expand", { image_alt: clicked.alt || (clicked.src || '').split("/").pop() });
 });
 
 const closeBtn = lightbox.querySelector(".lightbox-close") as HTMLElement;
