@@ -1,0 +1,82 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "label": "🚀 Astro: Start Dev Server",
+      "detail": "Starts the local development server",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "label": "🏗️ Astro: Build for Development",
+      "detail": "Builds your Astro site with NODE_ENV set to development",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "env": {
+          "NODE_ENV": "development"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "preview",
+      "label": "👀 Astro: Preview",
+      "detail": "Starts the Astro preview server",
+      "dependsOn": "🏗️ Astro: Build for Development",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "check",
+      "label": "✅ Astro: Run Diagnostics (Check)",
+      "detail": "Runs Astro's type checking and diagnostics",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "label": "✅ Run unit tests",
+      "detail": "Runs unit tests",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test:e2e",
+      "label": "✅ Run end-to-end tests",
+      "detail": "Runs end-to-end tests",
+      "dependsOn": "🏗️ Astro: Build for Development",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+  ]
+}
