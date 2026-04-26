@@ -44,8 +44,9 @@ let errorDialog: HTMLDialogElement;
 let countdownOverlay: HTMLElement;
 let countdownNumberEl: HTMLElement;
 
-let elapsedSecs     = 0;
+let elapsedSecs = 0;
 let timerIntervalId: ReturnType<typeof setInterval> | null = null;
+let timerText = '00:00';
 let countdownIntervalId: ReturnType<typeof setInterval> | null = null;
 
 let compositor: Compositor;
@@ -66,8 +67,8 @@ function hasFSA() {
 function startTimer() {
   if (timerIntervalId !== null) clearInterval(timerIntervalId);
   elapsedSecs = 0;
-  timerEl.textContent = '00:00';
-  timerIntervalId = setInterval(() => { timerEl.textContent = fmtTime(++elapsedSecs); }, 1000);
+  timerText = '00:00';
+  timerIntervalId = setInterval(() => { timerText = fmtTime(++elapsedSecs); }, 1000);
 }
 
 function pauseTimer() {
@@ -77,7 +78,7 @@ function pauseTimer() {
 
 function resumeTimer() {
   if (timerIntervalId === null) {
-    timerIntervalId = setInterval(() => { timerEl.textContent = fmtTime(++elapsedSecs); }, 1000);
+    timerIntervalId = setInterval(() => { timerText = fmtTime(++elapsedSecs); }, 1000);
   }
 }
 
@@ -85,7 +86,7 @@ function resetTimer() {
   if (timerIntervalId !== null) clearInterval(timerIntervalId);
   timerIntervalId = null;
   elapsedSecs = 0;
-  timerEl.textContent = '00:00';
+  timerText = '00:00';
 }
 
 function startCountdownOverlay(secs: number, onDone: () => void) {
@@ -588,7 +589,7 @@ onMount(() => {
           <span class="fw-semibold">Preview</span>
           <span class="d-flex align-items-center gap-2">
             <span id="status-badge" class="badge bg-secondary" bind:this={statusBadge}>Idle</span>
-            <span id="timer-text" class="font-monospace text-muted small" bind:this={timerEl}>00:00</span>
+            <span id="timer-text" class="font-monospace text-muted small" bind:this={timerEl}>{timerText}</span>
           </span>
         </div>
         <div class="canvas-wrap">
