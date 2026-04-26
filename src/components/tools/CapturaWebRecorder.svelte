@@ -433,33 +433,6 @@ function saveAndTrackPref(key: string, value: string | number | boolean, analyti
 }
 
 onMount(() => {
-  canvas              = document.getElementById('recorder-canvas') as HTMLCanvasElement;
-  webcamSel           = document.getElementById('webcam-select') as HTMLSelectElement;
-  micSel              = document.getElementById('mic-select') as HTMLSelectElement;
-  fpsSel              = document.getElementById('fps-select') as HTMLSelectElement;
-  qualitySel          = document.getElementById('quality-select') as HTMLSelectElement;
-  formatSel           = document.getElementById('format-select') as HTMLSelectElement;
-  countdownSel        = document.getElementById('countdown-select') as HTMLSelectElement;
-  sysAudioChk         = document.getElementById('sys-audio-chk') as HTMLInputElement;
-  startBtn            = document.getElementById('start-btn') as HTMLButtonElement;
-  pauseBtn            = document.getElementById('pause-btn') as HTMLButtonElement;
-  stopBtn             = document.getElementById('stop-btn') as HTMLButtonElement;
-  cancelCountdownBtn  = document.getElementById('cancel-countdown-btn') as HTMLButtonElement;
-  endSessionBtn       = document.getElementById('end-session-btn') as HTMLButtonElement;
-  pickDirBtn          = document.getElementById('pick-dir-btn') as HTMLButtonElement;
-  dirNameEl           = document.getElementById('dir-name') as HTMLElement;
-  statusBadge         = document.getElementById('status-badge') as HTMLElement;
-  timerEl             = document.getElementById('timer-text') as HTMLElement;
-  micGainSlider       = document.getElementById('mic-gain-slider') as HTMLInputElement;
-  sysGainSlider       = document.getElementById('sys-gain-slider') as HTMLInputElement;
-  micGainLabel        = document.getElementById('mic-gain-label') as HTMLElement;
-  sysGainLabel        = document.getElementById('sys-gain-label') as HTMLElement;
-  micLevelCanvas      = document.getElementById('mic-level-canvas') as HTMLCanvasElement;
-  sysLevelCanvas      = document.getElementById('sys-level-canvas') as HTMLCanvasElement;
-  errorDialog         = document.getElementById('captura-error-dialog') as HTMLDialogElement;
-  countdownOverlay    = document.getElementById('countdown-overlay') as HTMLElement;
-  countdownNumberEl   = document.getElementById('countdown-number') as HTMLElement;
-
   compositor = new Compositor(canvas, {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
   });
@@ -595,7 +568,7 @@ onMount(() => {
 
 <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
-<dialog id="captura-error-dialog" aria-labelledby="captura-error-title">
+<dialog id="captura-error-dialog" aria-labelledby="captura-error-title" bind:this={errorDialog}>
   <div class="captura-dialog-content">
     <button type="button" class="captura-dialog-close" id="captura-error-close" aria-label="Close">&times;</button>
     <h5 id="captura-error-title" class="captura-dialog-title"></h5>
@@ -614,38 +587,38 @@ onMount(() => {
         <div class="mb-2 d-flex align-items-center justify-content-between">
           <span class="fw-semibold">Preview</span>
           <span class="d-flex align-items-center gap-2">
-            <span id="status-badge" class="badge bg-secondary">Idle</span>
-            <span id="timer-text" class="font-monospace text-muted small">00:00</span>
+            <span id="status-badge" class="badge bg-secondary" bind:this={statusBadge}>Idle</span>
+            <span id="timer-text" class="font-monospace text-muted small" bind:this={timerEl}>00:00</span>
           </span>
         </div>
         <div class="canvas-wrap">
-          <canvas id="recorder-canvas" width="1280" height="720"></canvas>
-          <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true">
-            <span id="countdown-number"></span>
+          <canvas id="recorder-canvas" width="1280" height="720" bind:this={canvas}></canvas>
+          <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true" bind:this={countdownOverlay}>
+            <span id="countdown-number" bind:this={countdownNumberEl}></span>
           </div>
         </div>
         <div class="mt-3 d-flex gap-2 flex-wrap">
-          <button id="start-btn" class="btn btn-info text-white">
+          <button id="start-btn" class="btn btn-info text-white" bind:this={startBtn}>
             <i class="fas fa-circle me-1"></i>Start Recording
           </button>
-          <button id="pause-btn" class="btn btn-warning text-dark" hidden>
+          <button id="pause-btn" class="btn btn-warning text-dark" hidden bind:this={pauseBtn}>
             <i class="fas fa-pause me-1"></i>Pause
           </button>
-          <button id="stop-btn" class="btn btn-danger" hidden>
+          <button id="stop-btn" class="btn btn-danger" hidden bind:this={stopBtn}>
             <i class="fas fa-stop me-1"></i>Stop
           </button>
-          <button id="cancel-countdown-btn" class="btn btn-secondary" hidden>
+          <button id="cancel-countdown-btn" class="btn btn-secondary" hidden bind:this={cancelCountdownBtn}>
             <i class="fas fa-times me-1"></i>Cancel
           </button>
-          <button id="end-session-btn" class="btn btn-outline-warning" hidden>
+          <button id="end-session-btn" class="btn btn-outline-warning" hidden bind:this={endSessionBtn}>
             <i class="fas fa-times-circle me-1"></i>End Session
           </button>
         </div>
 
         <!-- Save location -->
         <div class="mt-3 d-flex align-items-center gap-2">
-          <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">(no folder selected)</span>
-          <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0">
+          <span id="dir-name" class="text-muted small flex-grow-1 text-truncate" bind:this={dirNameEl}>(no folder selected)</span>
+          <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" bind:this={pickDirBtn}>
             <i class="fas fa-folder-open me-1"></i>Choose Folder
           </button>
         </div>
@@ -659,10 +632,10 @@ onMount(() => {
               <label class="form-label text-muted small mb-0" for="mic-gain-slider">
                 <i class="fas fa-microphone me-1"></i>Mic level
               </label>
-              <span id="mic-gain-label" class="text-muted small font-monospace">100%</span>
+              <span id="mic-gain-label" class="text-muted small font-monospace" bind:this={micGainLabel}>100%</span>
             </div>
-            <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" value="1">
-            <canvas id="mic-level-canvas" class="audio-meter mt-1" width="200" height="10"></canvas>
+            <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" value="1" bind:this={micGainSlider}>
+            <canvas id="mic-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={micLevelCanvas}></canvas>
           </div>
 
           <div class="mb-2">
@@ -670,10 +643,10 @@ onMount(() => {
               <label class="form-label text-muted small mb-0" for="sys-gain-slider">
                 <i class="fas fa-desktop me-1"></i>System level
               </label>
-              <span id="sys-gain-label" class="text-muted small font-monospace">100%</span>
+              <span id="sys-gain-label" class="text-muted small font-monospace" bind:this={sysGainLabel}>100%</span>
             </div>
-            <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" value="1">
-            <canvas id="sys-level-canvas" class="audio-meter mt-1" width="200" height="10"></canvas>
+            <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" value="1" bind:this={sysGainSlider}>
+            <canvas id="sys-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={sysLevelCanvas}></canvas>
           </div>
         </div>
 
@@ -689,7 +662,7 @@ onMount(() => {
           <label class="form-label text-muted small mb-1" for="webcam-select">
             <i class="fas fa-video me-1"></i>Webcam overlay
           </label>
-          <select id="webcam-select" class="form-select form-select-sm">
+          <select id="webcam-select" class="form-select form-select-sm" bind:this={webcamSel}>
             <option value="">None</option>
           </select>
         </div>
@@ -698,13 +671,13 @@ onMount(() => {
           <label class="form-label text-muted small mb-1" for="mic-select">
             <i class="fas fa-microphone me-1"></i>Microphone
           </label>
-          <select id="mic-select" class="form-select form-select-sm">
+          <select id="mic-select" class="form-select form-select-sm" bind:this={micSel}>
             <option value="">None</option>
           </select>
         </div>
 
         <div class="mb-3 form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="sys-audio-chk">
+          <input class="form-check-input" type="checkbox" id="sys-audio-chk" bind:this={sysAudioChk}>
           <label class="form-check-label small" for="sys-audio-chk">Capture system audio</label>
         </div>
 
@@ -715,7 +688,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="fps-select">Frame rate</label>
-          <select id="fps-select" class="form-select form-select-sm">
+          <select id="fps-select" class="form-select form-select-sm" bind:this={fpsSel}>
             <option value="15">15 fps</option>
             <option value="30" selected>30 fps</option>
             <option value="60">60 fps</option>
@@ -724,7 +697,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="quality-select">Quality preset</label>
-          <select id="quality-select" class="form-select form-select-sm">
+          <select id="quality-select" class="form-select form-select-sm" bind:this={qualitySel}>
             <option value="480">480p — ~2 Mbps</option>
             <option value="720" selected>720p — ~4 Mbps</option>
             <option value="1080">1080p — ~8 Mbps</option>
@@ -733,7 +706,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="format-select">Recording format</label>
-          <select id="format-select" class="form-select form-select-sm">
+          <select id="format-select" class="form-select form-select-sm" bind:this={formatSel}>
             <option value="webm-vp9-opus" selected>WebM — VP9 + Opus</option>
             <option value="mp4-h264-aac">MP4 — H.264 + AAC</option>
           </select>
@@ -741,7 +714,7 @@ onMount(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="countdown-select">Countdown timer</label>
-          <select id="countdown-select" class="form-select form-select-sm">
+          <select id="countdown-select" class="form-select form-select-sm" bind:this={countdownSel}>
             <option value="0">Off</option>
             <option value="3" selected>3 seconds</option>
             <option value="5">5 seconds</option>
