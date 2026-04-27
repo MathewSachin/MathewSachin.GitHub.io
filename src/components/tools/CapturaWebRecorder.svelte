@@ -351,9 +351,12 @@ async function showSaveSuccessToast(fileHandle: { getFile: () => Promise<File> }
 
 async function enumerateDevices(): Promise<void> {
   try {
+    // Get permission and close any active streams just to ensure we get labels and can select specific devices
+    await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      .then(stream => { try {stream.getTracks().forEach(track => track.stop());} catch (_) {} })
     const devices   = await navigator.mediaDevices.enumerateDevices();
-    const videoDevs = devices.filter(d => d.kind === 'videoinput');
-    const audioDevs = devices.filter(d => d.kind === 'audioinput');
+    const videoDevs = devices.filter(d => d.kind === 'videoinput' && d.deviceId);
+    const audioDevs = devices.filter(d => d.kind === 'audioinput' && d.deviceId);
 
     webcamOptions = [{ label: 'None', value: '' }, ...videoDevs.map((d, i) => ({ label: d.label || `Camera ${i + 1}`, value: d.deviceId }))];
     micOptions = [{ label: 'None', value: '' }, ...audioDevs.map((d, i) => ({ label: d.label || `Microphone ${i + 1}`, value: d.deviceId }))];
@@ -616,7 +619,12 @@ onMount(() => {
       <div class="col-lg-4">
 
         <!-- Audio / Video sources -->
-        <h6 class="mb-3">Sources</h6>
+        <h6 class="mb-3">
+          Sources
+          {#if !micDisabled}
+            <button title="Refresh" class="btn" onclick={enumerateDevices}><i class="fas fa-refresh"></i></button>
+          {/if}
+        </h6>
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="webcam-select">
