@@ -10,8 +10,6 @@ import { RecorderAPI }                         from '../../scripts/tools/captura
 import { RecorderStateMachine, STATE, EVENT, type State, type Event }  from '../../scripts/tools/captura/recorder-state-machine';
 import { onMount, untrack } from 'svelte';
 
-// TODO: MIC RECORDING BROKEN
-
 let elapsedSecs = $state(0);
 let recorderState: State = $state(STATE.IDLE);
 
