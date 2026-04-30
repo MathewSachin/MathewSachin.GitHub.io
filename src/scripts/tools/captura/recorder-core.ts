@@ -1,5 +1,11 @@
-// ── recorder-core.ts ─────────────────────────────────────────────────────────
-const MEDIABUNNY_CDN = 'https://cdn.jsdelivr.net/npm/mediabunny@1.40.1/+esm';
+import {
+  Output,
+  WebMOutputFormat,
+  Mp4OutputFormat,
+  StreamTarget,
+  CanvasSource,
+  MediaStreamAudioTrackSource,
+} from 'mediabunny';
 
 export class RecorderCore {
   #output: any = null;
@@ -8,22 +14,14 @@ export class RecorderCore {
 
   get audioSource(): any { return this.#audioSource; }
 
-  static async #importMediabunny(): Promise<any> {
-    const mod = await import(MEDIABUNNY_CDN);
-    return mod as any;
-  }
 
   async init({ canvas, mixedAudioTrack, writableStream, isMp4, videoBitrate } : {
     canvas: HTMLCanvasElement,
-    mixedAudioTrack: MediaStreamTrack | null,
+    mixedAudioTrack: MediaStreamAudioTrack | null,
     writableStream: FileSystemWritableFileStream,
     isMp4: boolean,
     videoBitrate: number,
   }) {
-    const {
-      Output, WebMOutputFormat, Mp4OutputFormat,
-      StreamTarget, CanvasSource, MediaStreamAudioTrackSource,
-    } = await RecorderCore.#importMediabunny();
 
     this.#output = new Output({
       format: isMp4 ? new Mp4OutputFormat() : new WebMOutputFormat(),

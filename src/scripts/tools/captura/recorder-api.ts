@@ -141,7 +141,7 @@ export class RecorderAPI {
     this.#audioMixer.stopSysPreview();
     const hasMic    = !!(this.#micStream?.getAudioTracks().length);
     const hasAudio  = sysAudioTracks.length > 0 || hasMic;
-    let mixedAudioTrack = null;
+    let mixedAudioTrack: MediaStreamAudioTrack | null = null;
     if (hasAudio) {
       const mixed     = this.#audioMixer.buildMix(sysAudioTracks, this.#micStream, micGain, sysGain);
       mixedAudioTrack = mixed.getAudioTracks()[0] ?? null;
