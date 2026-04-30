@@ -53,13 +53,13 @@ export function dateStamp() {
 export class StorageManager {
   #dirHandle: any = null;
   #idbDb: IDBDatabase | null = null;
-  #dirNameEl: HTMLElement;
+  #onDirNameChange: (name: string) => void = () => {};
   #onError: (title: string, message: string) => void;
   #isOPFS = typeof window.showDirectoryPicker !== 'function' &&
             typeof navigator.storage?.getDirectory === 'function';
 
-  constructor(dirNameEl: HTMLElement, onError: (title: string, message: string) => void) {
-    this.#dirNameEl = dirNameEl;
+  constructor(onDirNameChange: (name: string) => void, onError: (title: string, message: string) => void) {
+    this.#onDirNameChange = onDirNameChange;
     this.#onError   = onError;
   }
 
@@ -131,9 +131,9 @@ export class StorageManager {
 
   #updateDirUI() {
     if (this.#isOPFS) {
-      this.#dirNameEl.textContent = '(saving to browser storage — Click the Download Recording toast after recording)';
+      this.#onDirNameChange('(saving to browser storage — Click the Download Recording toast after recording)');
     } else {
-      this.#dirNameEl.textContent = this.#dirHandle ? (this.#dirHandle as any).name : '(no folder selected)';
+      this.#onDirNameChange(this.#dirHandle?.name ?? '(no folder selected)');
     }
   }
 

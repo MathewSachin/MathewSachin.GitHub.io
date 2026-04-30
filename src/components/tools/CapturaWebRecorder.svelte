@@ -34,12 +34,9 @@ const gainPct = (v: string | number) => Math.round(parseFloat(String(v)) * 100) 
 const fmtTime = (s: number) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
 let canvas: HTMLCanvasElement;
-let pickDirBtn: HTMLButtonElement;
-let dirNameEl: HTMLElement;
-let micGainSlider: HTMLInputElement;
-let sysGainSlider: HTMLInputElement;
-let micGainLabel: HTMLElement;
-let sysGainLabel: HTMLElement;
+let dirName = $state('(no folder selected)');
+let micGainLabelValue = $derived(gainPct(micGainValue));
+let sysGainLabelValue = $derived(gainPct(sysGainValue));
 let micLevelCanvas: HTMLCanvasElement;
 let sysLevelCanvas: HTMLCanvasElement;
 let errorDialog: HTMLDialogElement;
@@ -211,9 +208,6 @@ $effect(() => {
 
 function render(state: State): void {
   recorderState = state;
-
-  pickDirBtn.hidden    = storage.isOPFS;
-  pickDirBtn.disabled  = lockControls;
 }
 
 type MachinePayload = {
@@ -397,13 +391,11 @@ function restoreSimplePrefs(): void {
   const micGain = loadPref(PREFS.micGain);
   if (micGain !== null) {
     micGainValue = micGain;
-    micGainLabel && (micGainLabel.textContent = gainPct(micGain));
   }
 
   const sysGain = loadPref(PREFS.sysGain);
   if (sysGain !== null) {
     sysGainValue = sysGain;
-    sysGainLabel && (sysGainLabel.textContent = gainPct(sysGain));
   }
 
   const countdown = loadPref(PREFS.countdown);
@@ -449,7 +441,7 @@ onMount(() => {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
   });
   audioMixer   = new AudioMixer(micLevelCanvas, sysLevelCanvas);
-  storage      = new StorageManager(dirNameEl, showErrorDialog);
+  storage      = new StorageManager((name: string) => dirName = name, showErrorDialog);
   api = new RecorderAPI({
     compositor, audioMixer, metronome, recorderCore, storage, canvas,
   });
@@ -481,30 +473,10 @@ onMount(() => {
 
   storage.init();
 
-  pickDirBtn.hidden = storage.isOPFS;
-
-  pickDirBtn.addEventListener('click', () => {
-    storage.pickDirectory();
-  });
-
   errorDialog?.addEventListener('close', () => {
     if (machine.state === STATE.ERROR) {
       machine.transition(EVENT.ERROR_DISMISSED);
     }
-  });
-
-  micGainSlider.addEventListener('input', () => {
-    const v = parseFloat(micGainSlider.value);
-    micGainLabel.textContent = gainPct(v);
-    audioMixer.setMicGain(v);
-    savePref(PREFS.micGain, String(v));
-  });
-
-  sysGainSlider.addEventListener('input', () => {
-    const v = parseFloat(sysGainSlider.value);
-    sysGainLabel.textContent = gainPct(v);
-    audioMixer.setSysGain(v);
-    savePref(PREFS.sysGain, String(v));
   });
 
   window.addEventListener('beforeunload', (e) => {
@@ -514,6 +486,19 @@ onMount(() => {
       e.preventDefault();
     }
   });
+});
+
+$effect(() => {
+  const micGain = parseFloat(micGainValue);
+  const sysGain = parseFloat(sysGainValue);
+
+  savePref(PREFS.micGain, micGainValue);
+  savePref(PREFS.sysGain, sysGainValue);
+
+  if (audioMixer) {
+    audioMixer.setMicGain(micGain);
+    audioMixer.setSysGain(sysGain);
+  }
 });
 </script>
 
@@ -544,12 +529,12 @@ onMount(() => {
             <span id="timer-text" class="font-monospace text-muted small">{timerText}</span>
           </span>
         </div>
-        <div class="canvas-wrap">
-          <canvas id="recorder-canvas" width="1280" height="720" bind:this={canvas}></canvas>
+          <div class="canvas-wrap">
+            <canvas id="recorder-canvas" width="1280" height="720" bind:this={canvas}></canvas>
           <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true" bind:this={countdownOverlay}>
             <span id="countdown-number" bind:this={countdownNumberEl}></span>
+            </div>
           </div>
-        </div>
         <div class="mt-3 d-flex gap-2 flex-wrap">
           {#if showStartBtn}
             <button id="start-btn" class="btn btn-info text-white" disabled={startBtnDisabled} onclick={startRecording}>
@@ -580,8 +565,8 @@ onMount(() => {
 
         <!-- Save location -->
         <div class="mt-3 d-flex align-items-center gap-2">
-          <span id="dir-name" class="text-muted small flex-grow-1 text-truncate" bind:this={dirNameEl}>(no folder selected)</span>
-          <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" bind:this={pickDirBtn}>
+          <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">{dirName}</span>
+          <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" onclick={() => { storage.pickDirectory(); }} hidden={storage?.isOPFS} disabled={lockControls}>
             <i class="fas fa-folder-open me-1"></i>Choose Folder
           </button>
         </div>
@@ -595,9 +580,9 @@ onMount(() => {
               <label class="form-label text-muted small mb-0" for="mic-gain-slider">
                 <i class="fas fa-microphone me-1"></i>Mic level
               </label>
-              <span id="mic-gain-label" class="text-muted small font-monospace" bind:this={micGainLabel}>100%</span>
+              <span id="mic-gain-label" class="text-muted small font-monospace">{micGainLabelValue}</span>
             </div>
-            <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" bind:this={micGainSlider} bind:value={micGainValue}>
+            <input type="range" class="form-range" id="mic-gain-slider" min="0" max="2" step="0.01" bind:value={micGainValue}>
             <canvas id="mic-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={micLevelCanvas}></canvas>
           </div>
 
@@ -606,9 +591,9 @@ onMount(() => {
               <label class="form-label text-muted small mb-0" for="sys-gain-slider">
                 <i class="fas fa-desktop me-1"></i>System level
               </label>
-              <span id="sys-gain-label" class="text-muted small font-monospace" bind:this={sysGainLabel}>100%</span>
+              <span id="sys-gain-label" class="text-muted small font-monospace">{sysGainLabelValue}</span>
             </div>
-            <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" bind:this={sysGainSlider} bind:value={sysGainValue}>
+            <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" bind:value={sysGainValue}>
             <canvas id="sys-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={sysLevelCanvas}></canvas>
           </div>
         </div>
