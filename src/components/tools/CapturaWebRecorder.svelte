@@ -14,8 +14,8 @@ let elapsedSecs = $state(0);
 let recorderState: State = $state(STATE.IDLE);
 
 // Svelte-bound state variables for form controls
-let webcamValue = $state('');
-let micValue = $state('');
+let webcamValue = $state(loadPref(PREFS.webcam) ?? '');
+let micValue = $state(loadPref(PREFS.mic) ?? '');
 let fpsValue = $state(loadPref(PREFS.fps) ?? '30');
 let qualityValue = $state(loadPref(PREFS.quality) ?? '720');
 let formatValue = $state(loadPref(PREFS.format) ?? 'webm-vp9-opus');
@@ -355,8 +355,6 @@ async function enumerateDevices(): Promise<void> {
     webcamOptions = [{ label: 'None', value: '' }, ...videoDevs.map((d, i) => ({ label: d.label || `Camera ${i + 1}`, value: d.deviceId }))];
     micOptions = [{ label: 'None', value: '' }, ...audioDevs.map((d, i) => ({ label: d.label || `Microphone ${i + 1}`, value: d.deviceId }))];
 
-    restoreDevicePrefs();
-
     const s = machine.state;
     if (s !== STATE.RECORDING && s !== STATE.PAUSED && s !== STATE.STOPPING) {
       syncDevicesToApi();
@@ -374,32 +372,6 @@ function restoreSimplePrefs(): void {
   if (storedPipX !== null && storedPipY !== null) {
     compositor.pipX = parseFloat(storedPipX);
     compositor.pipY = parseFloat(storedPipY);
-  }
-
-  const micGain = loadPref(PREFS.micGain);
-  if (micGain !== null) {
-    micGainValue = micGain;
-  }
-
-  const sysGain = loadPref(PREFS.sysGain);
-  if (sysGain !== null) {
-    sysGainValue = sysGain;
-  }
-
-  const countdown = loadPref(PREFS.countdown);
-  if (countdown !== null) {
-    countdownValue = countdown;
-  }
-}
-
-function restoreDevicePrefs(): void {
-  const webcamId = loadPref(PREFS.webcam);
-  if (webcamId) {
-    webcamValue = webcamId;
-  }
-  const micId = loadPref(PREFS.mic);
-  if (micId) {
-    micValue = micId;
   }
 }
 
