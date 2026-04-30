@@ -169,7 +169,6 @@ export class RecorderAPI {
       isMp4:          format === FORMAT_MP4,
       videoBitrate:   VIDEO_BITRATES[quality] ?? 4_000_000,
     });
-    await this.#recorderCore.start();
   }
 
   startEncoding(fps: number) {
@@ -177,6 +176,7 @@ export class RecorderAPI {
     this.#recordingStartTime     = performance.now();
     this.#totalPausedMs          = 0;
     this.#audioMixer.startSilentAudio();
+    this.#recorderCore.start();
     this.#startLoop(fps);
   }
 
