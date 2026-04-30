@@ -14,18 +14,6 @@ export function addListeners<T extends Element = Element>(selector: string, even
   });
 }
 
-export function trackEvent(name: string, params?: Record<string, unknown>) {
-  try {
-    if ('gtag' in window && typeof window.gtag === 'function') {
-      window.gtag('event', name, params || {});
-    } else {
-      console.debug('Google Analytics is not initialized. Event not tracked:', name, params);
-    }
-  } catch (e) {
-    console.warn('Failed to track event:', name, params, e);
-  }
-}
-
 export function registerCopyToClipboard(
   button: Element,
   textFetcher: () => string | null | undefined,

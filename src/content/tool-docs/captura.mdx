@@ -154,38 +154,6 @@ duration — unlike the truncated headers produced by the native `MediaRecorder`
 
 ---
 
-###### Media Session API & Hardware Media Keys
-
-When recording starts, the recorder activates the browser's
-[Media Session API](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)
-so that hardware media keys (play, pause, stop buttons on keyboards, headsets, and
-remotes) and OS-level media overlays (e.g. the Windows taskbar or macOS Now Playing
-widget) can control the recording even when the tab is in the background.
-
-Chrome on macOS (and most Chromium-based browsers) only forwards media session
-information to the OS — and only routes hardware key presses to the page — when a
-Core Audio session is open. Chrome opens a Core Audio session only when an
-`<audio>` or `<video>` element is playing with a non-zero `volume`.
-Additionally, `srcObject` live streams have infinite/unknown duration and are not forwarded
-to macOS Now Playing; a file-backed `src` with a finite, loopable duration is required.
-
-To satisfy both constraints without producing audible output, the recorder generates
-a minimal 100 ms silent PCM WAV in memory, exposes it via a Blob URL, and plays it
-on loop at `volume = 0.001` (−60 dBFS — 1/1,000th of full-scale amplitude,
-inaudible in any realistic environment). This opens a Core Audio session,
-registers the page with the macOS Now Playing widget, and activates hardware media
-key forwarding. The Blob URL is revoked and the element removed when the session ends.
-
-The handlers registered are **play** (resume a paused recording),
-**pause** (pause an active recording), and **stop**
-(stop the current recording). The OS media overlay is kept in sync by updating
-`navigator.mediaSession.playbackState` to `'playing'`,
-`'paused'`, or `'none'` whenever the recording state changes.
-The silent audio element and the Media Session metadata are cleaned up when the
-recording session ends.
-
----
-
 ###### Codec & Container (Mediabunny)
 
 The recorder supports two output formats, selectable from the *Recording format* dropdown:

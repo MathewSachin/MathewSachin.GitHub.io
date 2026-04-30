@@ -25,8 +25,8 @@ export const EVENT = Object.freeze({
   COUNTDOWN_CANCEL:  'COUNTDOWN_CANCEL',
 } as const);
 
-type State = (typeof STATE)[keyof typeof STATE];
-type Event = (typeof EVENT)[keyof typeof EVENT];
+export type State = (typeof STATE)[keyof typeof STATE];
+export type Event = (typeof EVENT)[keyof typeof EVENT];
 
 interface RecorderApi {
   onStreamEnded?: () => void;

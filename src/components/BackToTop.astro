@@ -35,8 +35,6 @@
 </style>
 
 <script>
-import { trackEvent } from '@scripts/utils';
-
 const BACK_TO_TOP_THRESHOLD = 300;          // px of scroll before button appears
 
 // Back to top button — only visible when scrolling up past the threshold
@@ -51,7 +49,6 @@ if (backToTop) {
     });
     backToTop.addEventListener("click", function () {
         window.scrollTo({ top: 0, behavior: "smooth" });
-        trackEvent("back_to_top");
     });
 }
 </script>
