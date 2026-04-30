@@ -16,13 +16,13 @@ let recorderState: State = $state(STATE.IDLE);
 // Svelte-bound state variables for form controls
 let webcamValue = $state('');
 let micValue = $state('');
-let fpsValue = $state('30');
-let qualityValue = $state('720');
-let formatValue = $state('webm-vp9-opus');
-let countdownValue = $state('3');
-let sysAudioChecked = $state(false);
-let micGainValue = $state('1');
-let sysGainValue = $state('1');
+let fpsValue = $state(loadPref(PREFS.fps) ?? '30');
+let qualityValue = $state(loadPref(PREFS.quality) ?? '720');
+let formatValue = $state(loadPref(PREFS.format) ?? 'webm-vp9-opus');
+let countdownValue = $state(loadPref(PREFS.countdown) ?? '3');
+let sysAudioChecked = $state(loadPref(PREFS.sysAudio) === 'true');
+let micGainValue = $state(loadPref(PREFS.micGain) ?? '1');
+let sysGainValue = $state(loadPref(PREFS.sysGain) ?? '1');
 
 // Device options for selects
 let webcamOptions = $state([{ label: 'None', value: '' }]);
@@ -369,18 +369,6 @@ async function enumerateDevices(): Promise<void> {
 }
 
 function restoreSimplePrefs(): void {
-  const fps = loadPref(PREFS.fps);
-  if (fps) fpsValue = fps;
-
-  const quality = loadPref(PREFS.quality);
-  if (quality) qualityValue = quality;
-
-  const format = loadPref(PREFS.format);
-  if (format) formatValue = format;
-
-  const sysAudio = loadPref(PREFS.sysAudio);
-  if (sysAudio !== null) sysAudioChecked = sysAudio === 'true';
-
   const storedPipX = loadPref(PREFS.pipX);
   const storedPipY = loadPref(PREFS.pipY);
   if (storedPipX !== null && storedPipY !== null) {
