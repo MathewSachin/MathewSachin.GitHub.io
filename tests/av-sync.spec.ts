@@ -419,8 +419,13 @@ function extractVideoTimestamps(filePath: string, label = ''): number[] {
     '-v', 'error',
     '-i', filePath,
     '-an',
-    '-vf', 'select=gt(scene,0.3),showinfo',
-    '-f', 'null', '-',
+    // In ffmpeg's filter-graph syntax, ',' separates filters and must be
+    // escaped as '\,' inside a filter option value.  We send the string
+    // "select=gt(scene\,0.3),showinfo" so ffmpeg sees two filters in a chain:
+    //   1) select  with expression gt(scene,0.3)
+    //   2) showinfo (prints pts_time to stderr for each passing frame)
+    '-vf', 'select=gt(scene\\,0.3),showinfo',
+    '-f', 'null', '/dev/null',
   ]);
 
   if (label) {
