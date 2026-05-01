@@ -399,7 +399,7 @@ function runFfprobe(args: string[]): string {
 }
 
 function runFfmpeg(args: string[]): { stdout: string; stderr: string } {
-  const result = spawnSync('ffmpeg', args, { encoding: 'utf8' });
+  const result = spawnSync('ffmpeg', args, { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 });
   if (result.status !== 0) {
     throw new Error(`ffmpeg exited ${result.status}:\n${result.stderr ?? ''}`);
   }
@@ -414,9 +414,11 @@ function runFfmpeg(args: string[]): { stdout: string; stderr: string } {
  */
 function extractVideoTimestamps(filePath: string, label = ''): number[] {
   // ffmpeg writes per-frame info to stderr via the showinfo filter.
-  // select=gt(scene,0.3) passes only frames with >30% luminance change.
+  // select=gt(scene\,0.3) passes only frames with >30% luminance change.
+  // NOTE: showinfo logs at AV_LOG_INFO level, so we must use '-v info' (not
+  // '-v error') to ensure its output appears in stderr.
   const { stderr } = runFfmpeg([
-    '-v', 'error',
+    '-v', 'info',
     '-i', filePath,
     '-an',
     // In ffmpeg's filter-graph syntax, ',' separates filters and must be
