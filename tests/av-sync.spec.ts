@@ -7,28 +7,32 @@
  *
  * How the synthetic signal reaches the recording pipeline
  * ───────────────────────────────────────────────────────
- * Rather than relying on canvas.captureStream() → <video> → Compositor.drawImage()
- * (which is unreliable in headless Chrome because the video element may never
- * reach readyState ≥ 2 for an off-screen canvas stream), the init script hooks
- * directly into the Compositor's drawing cycle:
+ * getDisplayMedia is replaced with a mock that returns a MediaStream with
+ * a minimal static-black video track and a 1 kHz OscillatorNode audio track.
+ * This lets the recorder start normally.
  *
- *   1. getDisplayMedia is replaced with a mock that returns a MediaStream with
- *      a minimal static-black video track and a 1 kHz OscillatorNode audio
- *      track.  This lets the recorder start normally.
+ * White video pulses are injected via TWO complementary mechanisms so at least
+ * one is guaranteed to work regardless of internal Compositor details:
  *
- *   2. After #recorder-canvas appears in the DOM, the script shadows
- *      ctx.fillText() on the same CanvasRenderingContext2D instance that the
- *      Compositor stores in this.#ctx.  The timestamp overlay text (drawn with
- *      fillStyle = '#fff') is the LAST drawing operation in drawFrame() while
- *      recording.  If the isInPulse flag is set at that moment, the hook
- *      overwrites the whole canvas with pure white before returning—so when
- *      RecorderCore.addFrame() captures the canvas immediately afterwards, it
- *      sees a bright white frame.
+ *   A. VideoFrame Proxy (primary, most direct)
+ *      window.VideoFrame is wrapped with a Proxy whose construct trap fires for
+ *      every new VideoFrame(canvas, ...) call.  When isInPulse is set and the
+ *      source is #recorder-canvas, the trap substitutes a white OffscreenCanvas.
+ *      This intercepts at the mediabunny encoding level before the frame reaches
+ *      VideoEncoder, so it is completely independent of how Compositor draws.
  *
- *   3. A MutationObserver on #status-badge fires when the recording badge first
- *      contains "Recording".  At that moment audio pulses are pre-scheduled via
- *      AudioContext.gainNode.setValueAtTime() and video pulses are driven by a
- *      Web Worker timer (immune to background-tab throttling, Scenario D).
+ *   B. CanvasRenderingContext2D.prototype.fillText override (belt-and-suspenders)
+ *      The Compositor's last drawing call in drawFrame() while recording is
+ *      ctx.fillText(ts, …) with fillStyle='#fff'.  A prototype-level override
+ *      checks this canvas id and fillStyle, then floods the canvas white.
+ *      Unlike an instance-level shadow, this override is in place from the
+ *      moment the init script runs and is not affected by canvas resizing.
+ *
+ * Audio pulses are pre-scheduled via AudioContext.gainNode.setValueAtTime(),
+ * which is not affected by page throttling.
+ *
+ * Video pulse timing uses a Web Worker timer (immune to background-tab
+ * throttling, Scenario D).
  *
  * Detection (ffprobe)
  * ───────────────────
@@ -120,13 +124,12 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   // ── 5. getDisplayMedia mock ─────────────────────────────────────────────────
   //
   // Returns a minimal MediaStream so the Captura recorder can start normally:
-  //   • video  — a static black canvas, repainted every frame so captureStream
-  //              sends live frames and screenVid reaches readyState ≥ 2.
+  //   • video  — a static black canvas, periodically repainted so captureStream
+  //              sends live frames (helps screenVid reach readyState ≥ 2).
   //   • audio  — a 1 kHz OscillatorNode; gain is pre-scheduled after recording
   //              starts (see schedulePulses).
   //
-  // The actual white-frame flashes are injected via the fillText hook (step 6),
-  // bypassing the captureStream → <video> → drawImage pipeline entirely.
+  // White-frame injection is handled by mechanisms A and B below.
   let gainNode: GainNode | null     = null;
   let audioCtx: AudioContext | null = null;
 
@@ -162,57 +165,75 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
     ]);
   };
 
-  // ── 6. Recording-canvas fillText hook ──────────────────────────────────────
+  // ── 6A. VideoFrame Proxy (primary video-pulse injection) ───────────────────
   //
-  // When the Compositor's drawFrame() runs while recording, the very last
-  // drawing call is:
+  // mediabunny's CanvasSource.add() calls new VideoFrame(canvas, { timestamp })
+  // to capture each recording frame.  By wrapping the global VideoFrame with a
+  // Proxy, we intercept every such call.  When isInPulse is set and the source
+  // is #recorder-canvas, we substitute a white OffscreenCanvas so the encoder
+  // receives a bright frame — triggering a scene-change in ffprobe.
   //
+  // This approach is independent of how Compositor draws and fires regardless
+  // of any canvas state-reset or fillStyle normalisation differences.
+
+  const _OrigVideoFrame = (window as any).VideoFrame as (typeof VideoFrame) | undefined;
+  if (typeof _OrigVideoFrame !== 'undefined') {
+    (window as any).VideoFrame = new Proxy(_OrigVideoFrame, {
+      construct(target, args, newTarget) {
+        const src  = args[0];
+        const init = args[1];
+        if (
+          isInPulse
+          && typeof HTMLCanvasElement !== 'undefined'
+          && src instanceof HTMLCanvasElement
+          && src.id === 'recorder-canvas'
+        ) {
+          // Replace with a same-sized white OffscreenCanvas
+          const oc   = new OffscreenCanvas(src.width || CANVAS_W, src.height || CANVAS_H);
+          const oc2d = oc.getContext('2d') as OffscreenCanvasRenderingContext2D;
+          oc2d.fillStyle = '#fff';
+          oc2d.fillRect(0, 0, oc.width, oc.height);
+          return Reflect.construct(target, [oc, init], newTarget);
+        }
+        return Reflect.construct(target, args, newTarget);
+      },
+    });
+  }
+
+  // ── 6B. CanvasRenderingContext2D.prototype.fillText override ───────────────
+  //       (belt-and-suspenders for the VideoFrame proxy above)
+  //
+  // The Compositor's drawFrame() ends with (when isRecording = true):
   //   ctx.fillStyle = '#fff';
-  //   ctx.fillText(ts, W - pad - 2, H - pad - 2);  ← HOOK FIRES HERE
-  //   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; // state only
+  //   ctx.fillText(ts, W-pad-2, H-pad-2);   ← last drawing op
   //
-  // Immediately after the timestamp text is drawn with fillStyle='#fff'
-  // (normalised to '#ffffff' by the canvas API), the hook overwrites the
-  // entire canvas with white if isInPulse is set.  Because drawFrame() has no
-  // further drawing after fillText(), the canvas is white when
-  // RecorderCore.addFrame() captures it on the very next line.
+  // A prototype-level override fires for EVERY fillText call.  When isInPulse
+  // is true and this is the recorder canvas being drawn with '#fff', the hook
+  // floods the canvas white so CanvasSource.add() sees a bright frame even if
+  // the VideoFrame proxy was not triggered.
   //
-  // The hook is set on the context INSTANCE (same object that Compositor stores
-  // as this.#ctx), so it transparently intercepts every drawFrame() call.
+  // Using the prototype (not an instance shadow) ensures the hook survives
+  // canvas resizes and is in place before the Compositor creates its context.
 
-  const setupFillTextHook = () => {
-    const recCanvas = document.getElementById('recorder-canvas') as HTMLCanvasElement | null;
-    if (!recCanvas) { setTimeout(setupFillTextHook, 50); return; }
+  const _origFillText = CanvasRenderingContext2D.prototype.fillText;
+  const _origFillRect = CanvasRenderingContext2D.prototype.fillRect;
 
-    const ctx = recCanvas.getContext('2d') as CanvasRenderingContext2D;
-
-    // Capture native methods before shadowing them on the instance
-    const nativeFillText = CanvasRenderingContext2D.prototype.fillText;
-    const nativeFillRect = CanvasRenderingContext2D.prototype.fillRect;
-
-    // Shadow fillText on this specific context instance
-    (ctx as any).fillText = function(
-      text: string, x: number, y: number, maxWidth?: number,
+  CanvasRenderingContext2D.prototype.fillText = function(
+    text: string, x: number, y: number, maxWidth?: number,
+  ): void {
+    if (maxWidth !== undefined) {
+      _origFillText.call(this, text, x, y, maxWidth);
+    } else {
+      _origFillText.call(this, text, x, y);
+    }
+    if (
+      isInPulse
+      && this.canvas.id === 'recorder-canvas'
+      && (this.fillStyle === '#ffffff' || this.fillStyle === '#fff')
     ) {
-      // Draw the original text first
-      if (maxWidth !== undefined) {
-        nativeFillText.call(this, text, x, y, maxWidth);
-      } else {
-        nativeFillText.call(this, text, x, y);
-      }
-
-      // The timestamp overlay uses fillStyle = '#fff' → normalised '#ffffff'.
-      // It is the last drawing call in drawFrame() when isRecording = true.
-      // Overwrite the canvas with white so CanvasSource.add() captures it.
-      const fs = (this as CanvasRenderingContext2D).fillStyle;
-      if ((fs === '#ffffff' || fs === '#fff') && isInPulse) {
-        nativeFillRect.call(this, 0, 0, recCanvas.width, recCanvas.height);
-      }
-    };
+      _origFillRect.call(this, 0, 0, this.canvas.width, this.canvas.height);
+    }
   };
-
-  // Run as soon as possible; the canvas may not exist until Svelte mounts
-  setTimeout(setupFillTextHook, 0);
 
   // ── 7. Pulse scheduler ──────────────────────────────────────────────────────
   //
@@ -227,8 +248,12 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   //        tab setTimeout throttling (Scenario D).
 
   const schedulePulses = (recordingStartPerf: number) => {
-    if (!audioCtx || !gainNode || pulsesStarted) return;
+    if (!audioCtx || !gainNode || pulsesStarted) {
+      console.log('[av-sync] schedulePulses skipped: audioCtx=' + !!audioCtx + ' gainNode=' + !!gainNode + ' pulsesStarted=' + pulsesStarted);
+      return;
+    }
     pulsesStarted = true;
+    console.log('[av-sync] schedulePulses starting, vfr=' + options.vfr);
 
     const audioNow = audioCtx.currentTime;
 
@@ -249,11 +274,13 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
         const pulseTargetPerf = recordingStartPerf + i * PULSE_INTERVAL_MS + vfrExtra;
         const waitMs          = Math.max(0, pulseTargetPerf - performance.now());
         await workerSleep(waitMs);
+        console.log('[av-sync] pulse ' + i + ' start');
         isInPulse = true;
         await workerSleep(PULSE_DURATION_MS);
         isInPulse = false;
+        console.log('[av-sync] pulse ' + i + ' end');
       }
-    })().catch(e => console.error('[av-sync] pulse video:', e));
+    })().catch(e => console.error('[av-sync] pulse video error:', e));
   };
 
   // ── 8. Recording-start detector ─────────────────────────────────────────────
@@ -474,6 +501,15 @@ async function runScenario(
   page: Page,
   opts: ScenarioOptions,
 ): Promise<void> {
+  // Capture browser console messages so they appear in CI test output
+  page.on('console', msg => {
+    const txt = msg.text();
+    if (txt.startsWith('[av-sync]')) {
+      console.log(`[browser] ${txt}`);
+    }
+  });
+  page.on('pageerror', err => console.error('[browser error]', err.message));
+
   // Inject the init script (OPFS mock + getDisplayMedia mock + prefs)
   await page.addInitScript(capturaAvSyncScript, { vfr: !!opts.vfr });
 
@@ -493,6 +529,7 @@ async function runScenario(
   await page.evaluate(() => {
     const schedule = (window as any).__avSyncSchedule;
     if (typeof schedule === 'function') schedule(performance.now());
+    else console.log('[av-sync] __avSyncSchedule not found on window');
   });
 
   if (opts.onRecording) await opts.onRecording(context, page);
