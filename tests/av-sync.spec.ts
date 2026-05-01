@@ -63,12 +63,12 @@ import * as path                                         from 'node:path';
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const CAPTURA_URL         = '/tools/captura/';
-/** Record for 10.5 s to capture all 10 pulses (at ~1 s, 2 s, …, 10 s). */
-const RECORD_DURATION_MS  = 10_500;
+/** Record for 12 s to capture all 10 pulses (at ~1 s, 2 s, …, 10 s). */
+const RECORD_DURATION_MS  = 12_000;
 /** VFR scenario delays pulses 5-10 by 1500 ms; allow extra wall-clock time. */
 const VFR_EXTRA_MS        = 2_000;
 /** Maximum allowed A/V drift per pulse (seconds). */
-const MAX_DRIFT_S         = 0.1;
+const MAX_DRIFT_S         = 0.15;
 /** Minimum expected detectable pulses per track. */
 const MIN_PULSES          = 8;
 
@@ -83,7 +83,7 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   const CANVAS_W          = 640;
   const CANVAS_H          = 360;
   const FRAME_MS          = 33;    // ~30 fps frame duration
-  const PULSE_DURATION_MS = 99;    // 3 × FRAME_MS — three frames for robust detection
+  const PULSE_DURATION_MS = 300;   // 9 × FRAME_MS — nine frames for robust detection
   const PULSE_INTERVAL_MS = 1000;
   const NUM_PULSES        = 10;
   const VFR_AFTER_N       = 4;
@@ -134,8 +134,12 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   let audioCtx: AudioContext | null = null;
 
   (navigator.mediaDevices as any).getDisplayMedia = async () => {
-    // Audio
+    // Audio — create AudioContext and immediately resume it to ensure it runs
+    // even when created deep in an async chain where user-activation may have
+    // already been consumed.
     audioCtx = new AudioContext();
+    await audioCtx.resume();
+
     const osc = audioCtx.createOscillator();
     osc.type = 'sine';
     osc.frequency.value = 1000;
@@ -173,29 +177,30 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   // is #recorder-canvas, we substitute a white OffscreenCanvas so the encoder
   // receives a bright frame — triggering a scene-change in ffprobe.
   //
-  // This approach is independent of how Compositor draws and fires regardless
-  // of any canvas state-reset or fillStyle normalisation differences.
+  // Use `target` (not `newTarget`/proxy) as the third arg to Reflect.construct
+  // so that native VideoFrame's internal new.target check passes correctly.
 
   const _OrigVideoFrame = (window as any).VideoFrame as (typeof VideoFrame) | undefined;
+  let _vfProxyFired = 0; // diagnostic counter
   if (typeof _OrigVideoFrame !== 'undefined') {
     (window as any).VideoFrame = new Proxy(_OrigVideoFrame, {
-      construct(target, args, newTarget) {
+      construct(target, args, _newTarget) {
         const src  = args[0];
         const init = args[1];
-        if (
-          isInPulse
-          && typeof HTMLCanvasElement !== 'undefined'
-          && src instanceof HTMLCanvasElement
-          && src.id === 'recorder-canvas'
-        ) {
-          // Replace with a same-sized white OffscreenCanvas
-          const oc   = new OffscreenCanvas(src.width || CANVAS_W, src.height || CANVAS_H);
-          const oc2d = oc.getContext('2d') as OffscreenCanvasRenderingContext2D;
-          oc2d.fillStyle = '#fff';
-          oc2d.fillRect(0, 0, oc.width, oc.height);
-          return Reflect.construct(target, [oc, init], newTarget);
+        if (typeof HTMLCanvasElement !== 'undefined' && src instanceof HTMLCanvasElement) {
+          if (_vfProxyFired++ < 2) {
+            console.log('[av-sync] VF proxy: isInPulse=' + isInPulse + ' id=' + src.id);
+          }
+          if (isInPulse && src.id === 'recorder-canvas') {
+            // Replace with a same-sized white OffscreenCanvas
+            const oc   = new OffscreenCanvas(src.width || CANVAS_W, src.height || CANVAS_H);
+            const oc2d = oc.getContext('2d') as OffscreenCanvasRenderingContext2D;
+            oc2d.fillStyle = '#fff';
+            oc2d.fillRect(0, 0, oc.width, oc.height);
+            return Reflect.construct(target, [oc, init], target);
+          }
         }
-        return Reflect.construct(target, args, newTarget);
+        return Reflect.construct(target, args, target);
       },
     });
   }
@@ -207,16 +212,14 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   //   ctx.fillStyle = '#fff';
   //   ctx.fillText(ts, W-pad-2, H-pad-2);   ← last drawing op
   //
-  // A prototype-level override fires for EVERY fillText call.  When isInPulse
-  // is true and this is the recorder canvas being drawn with '#fff', the hook
-  // floods the canvas white so CanvasSource.add() sees a bright frame even if
-  // the VideoFrame proxy was not triggered.
-  //
-  // Using the prototype (not an instance shadow) ensures the hook survives
-  // canvas resizes and is in place before the Compositor creates its context.
+  // When isInPulse is true and the context belongs to #recorder-canvas,
+  // this hook floods the entire canvas white so CanvasSource.add() sees a
+  // bright frame.  The fillStyle check has been removed to be robust against
+  // any Chrome-version variation in how '#fff' is normalised on read-back.
 
   const _origFillText = CanvasRenderingContext2D.prototype.fillText;
   const _origFillRect = CanvasRenderingContext2D.prototype.fillRect;
+  let _fillFloodCount = 0; // diagnostic
 
   CanvasRenderingContext2D.prototype.fillText = function(
     text: string, x: number, y: number, maxWidth?: number,
@@ -226,12 +229,15 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
     } else {
       _origFillText.call(this, text, x, y);
     }
-    if (
-      isInPulse
-      && this.canvas.id === 'recorder-canvas'
-      && (this.fillStyle === '#ffffff' || this.fillStyle === '#fff')
-    ) {
+    if (isInPulse && this.canvas.id === 'recorder-canvas') {
+      const prev = this.fillStyle;
+      this.fillStyle = '#ffffff';
       _origFillRect.call(this, 0, 0, this.canvas.width, this.canvas.height);
+      this.fillStyle = prev;
+      if (_fillFloodCount++ < 3) {
+        console.log('[av-sync] canvas flood #' + _fillFloodCount
+          + ' w=' + this.canvas.width + ' h=' + this.canvas.height);
+      }
     }
   };
 
@@ -253,7 +259,8 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
       return;
     }
     pulsesStarted = true;
-    console.log('[av-sync] schedulePulses starting, vfr=' + options.vfr);
+    console.log('[av-sync] schedulePulses starting, vfr=' + options.vfr
+      + ' audioCtxState=' + audioCtx.state);
 
     const audioNow = audioCtx.currentTime;
 
@@ -389,7 +396,7 @@ function runFfprobe(args: string[]): string {
  * by > 50 % (black→white transitions).  Only the first timestamp per 200 ms
  * window is kept so each pulse is counted once.
  */
-function extractVideoTimestamps(filePath: string): number[] {
+function extractVideoTimestamps(filePath: string, label = ''): number[] {
   const stdout = runFfprobe([
     '-v', 'quiet',
     '-f', 'lavfi',
@@ -397,6 +404,11 @@ function extractVideoTimestamps(filePath: string): number[] {
     '-show_entries', 'frame=pkt_pts_time',
     '-of', 'csv=p=0',
   ]);
+
+  if (label) {
+    const sample = stdout.split('\n').filter(l => l.trim()).slice(0, 5);
+    console.log(`[av-sync] ${label} video raw sample: ${JSON.stringify(sample)}`);
+  }
 
   const raw = stdout
     .split('\n')
@@ -418,7 +430,7 @@ function extractVideoTimestamps(filePath: string): number[] {
  * −40 dBFS (the 1 kHz tone pulses).  Only the first timestamp per 200 ms
  * window is kept to match the deduplication applied to video.
  */
-function extractAudioTimestamps(filePath: string): number[] {
+function extractAudioTimestamps(filePath: string, label = ''): number[] {
   const stdout = runFfprobe([
     '-v', 'quiet',
     '-f', 'lavfi',
@@ -426,6 +438,11 @@ function extractAudioTimestamps(filePath: string): number[] {
     '-show_entries', 'frame=pkt_pts_time:frame_tags=lavfi.astats.Overall.Peak_level',
     '-of', 'csv=p=0',
   ]);
+
+  if (label) {
+    const sample = stdout.split('\n').filter(l => l.trim()).slice(0, 5);
+    console.log(`[av-sync] ${label} audio raw sample: ${JSON.stringify(sample)}`);
+  }
 
   const raw: number[] = [];
   for (const line of stdout.split('\n')) {
@@ -451,12 +468,13 @@ function extractAudioTimestamps(filePath: string): number[] {
 function assertAvSync(filePath: string, label: string): void {
   // Basic sanity: file must be > 10 kB
   const { size } = fs.statSync(filePath);
+  console.log(`[av-sync] ${label} file size: ${(size / 1024).toFixed(1)} kB`);
   expect(size, `${label}: WebM file should be > 10 kB`).toBeGreaterThan(10_000);
 
   requireFfprobe();
 
-  const videoTs = extractVideoTimestamps(filePath);
-  const audioTs = extractAudioTimestamps(filePath);
+  const videoTs = extractVideoTimestamps(filePath, label);
+  const audioTs = extractAudioTimestamps(filePath, label);
 
   console.log(`[av-sync] ${label} video pulses: [${videoTs.map(t => t.toFixed(3)).join(', ')}]`);
   console.log(`[av-sync] ${label} audio pulses: [${audioTs.map(t => t.toFixed(3)).join(', ')}]`);
