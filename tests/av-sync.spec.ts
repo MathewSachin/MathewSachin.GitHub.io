@@ -136,9 +136,14 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   (navigator.mediaDevices as any).getDisplayMedia = async () => {
     // Audio — create AudioContext and immediately resume it to ensure it runs
     // even when created deep in an async chain where user-activation may have
-    // already been consumed.
+    // already been consumed.  A 1 s timeout guard avoids hanging if the browser
+    // denies auto-resume (the test will still run, just without audio).
     audioCtx = new AudioContext();
-    await audioCtx.resume();
+    await Promise.race([
+      audioCtx.resume(),
+      new Promise(r => setTimeout(r, 1000)),
+    ]);
+    console.log('[av-sync] audioCtx state after resume: ' + audioCtx.state);
 
     const osc = audioCtx.createOscillator();
     osc.type = 'sine';
