@@ -38,6 +38,7 @@ export class AudioMixer {
 
   buildMix(sysAudioTracks: MediaStreamTrack[] = [], micStream: MediaStream | null | undefined, micGainValue: number, sysGainValue: number) {
     this.#audioCtx      = new AudioContext();
+    this.#audioCtx.resume().catch(() => {});
     this.#audioDestNode = this.#audioCtx.createMediaStreamDestination();
 
     if (sysAudioTracks.length > 0) {

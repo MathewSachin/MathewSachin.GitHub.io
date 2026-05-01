@@ -372,19 +372,21 @@ function saveWebm(data: Buffer, label: string): string {
   return filePath;
 }
 
-// ── Helpers: ffprobe analysis ────────────────────────────────────────────────
+// ── Helpers: ffprobe/ffmpeg analysis ─────────────────────────────────────────
 
 /**
- * Requires ffprobe to be on PATH.  Throws a descriptive error when not found.
- * Install via `apt-get install ffmpeg` or `brew install ffmpeg`.
+ * Requires ffprobe and ffmpeg to be on PATH.  Throws a descriptive error when
+ * not found.  Install via `apt-get install ffmpeg` or `brew install ffmpeg`.
  */
 function requireFfprobe(): void {
-  const result = spawnSync('ffprobe', ['-version'], { encoding: 'utf8' });
-  if (result.status !== 0) {
-    throw new Error(
-      '[av-sync] ffprobe is required for A/V sync analysis.\n' +
-      'Install it with: apt-get install ffmpeg  OR  brew install ffmpeg',
-    );
+  for (const cmd of ['ffprobe', 'ffmpeg']) {
+    const result = spawnSync(cmd, ['-version'], { encoding: 'utf8' });
+    if (result.status !== 0) {
+      throw new Error(
+        `[av-sync] ${cmd} is required for A/V sync analysis.\n` +
+        'Install it with: apt-get install ffmpeg  OR  brew install ffmpeg',
+      );
+    }
   }
 }
 
@@ -396,34 +398,52 @@ function runFfprobe(args: string[]): string {
   return result.stdout ?? '';
 }
 
+function runFfmpeg(args: string[]): { stdout: string; stderr: string } {
+  const result = spawnSync('ffmpeg', args, { encoding: 'utf8' });
+  if (result.status !== 0) {
+    throw new Error(`ffmpeg exited ${result.status}:\n${result.stderr ?? ''}`);
+  }
+  return { stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
+}
+
 /**
  * Extracts timestamps (seconds) of video frames where scene luminance changes
- * by > 50 % (black→white transitions).  Only the first timestamp per 200 ms
- * window is kept so each pulse is counted once.
+ * by > 30 % (black→white transitions).  Uses `ffmpeg -vf select,showinfo` to
+ * avoid the lavfi `movie=` quoting issues with spawnSync.  Only the first
+ * timestamp per 500 ms window is kept so each pulse is counted once.
  */
 function extractVideoTimestamps(filePath: string, label = ''): number[] {
-  const stdout = runFfprobe([
-    '-v', 'quiet',
-    '-f', 'lavfi',
-    '-i', `movie=${filePath},select='gt(scene,0.5)'`,
-    '-show_entries', 'frame=pkt_pts_time',
-    '-of', 'csv=p=0',
+  // ffmpeg writes per-frame info to stderr via the showinfo filter.
+  // select=gt(scene,0.3) passes only frames with >30% luminance change.
+  const { stderr } = runFfmpeg([
+    '-v', 'error',
+    '-i', filePath,
+    '-an',
+    '-vf', 'select=gt(scene,0.3),showinfo',
+    '-f', 'null', '-',
   ]);
 
   if (label) {
-    const sample = stdout.split('\n').filter(l => l.trim()).slice(0, 5);
+    const sample = stderr.split('\n').filter(l => l.includes('showinfo')).slice(0, 3);
     console.log(`[av-sync] ${label} video raw sample: ${JSON.stringify(sample)}`);
   }
 
-  const raw = stdout
-    .split('\n')
-    .map(l => parseFloat(l.trim()))
-    .filter(t => !isNaN(t))
-    .sort((a, b) => a - b);
+  const raw: number[] = [];
+  for (const line of stderr.split('\n')) {
+    if (!line.includes('showinfo')) continue;
+    const m = line.match(/pts_time:([0-9.]+)/);
+    if (m) {
+      const t = parseFloat(m[1]);
+      if (!isNaN(t)) raw.push(t);
+    }
+  }
 
+  raw.sort((a, b) => a - b);
+
+  // 500 ms dedup window: keeps only the first timestamp of each pulse burst
   const deduped: number[] = [];
   for (const t of raw) {
-    if (deduped.length === 0 || t - deduped[deduped.length - 1] > 0.2) {
+    if (deduped.length === 0 || t - deduped[deduped.length - 1] > 0.5) {
       deduped.push(t);
     }
   }
@@ -432,7 +452,7 @@ function extractVideoTimestamps(filePath: string, label = ''): number[] {
 
 /**
  * Extracts timestamps (seconds) of audio frames where the peak level is above
- * −40 dBFS (the 1 kHz tone pulses).  Only the first timestamp per 200 ms
+ * −40 dBFS (the 1 kHz tone pulses).  Only the first timestamp per 500 ms
  * window is kept to match the deduplication applied to video.
  */
 function extractAudioTimestamps(filePath: string, label = ''): number[] {
@@ -460,9 +480,10 @@ function extractAudioTimestamps(filePath: string, label = ''): number[] {
 
   raw.sort((a, b) => a - b);
 
+  // 500 ms dedup window: keeps only the first timestamp of each pulse burst
   const deduped: number[] = [];
   for (const t of raw) {
-    if (deduped.length === 0 || t - deduped[deduped.length - 1] > 0.2) {
+    if (deduped.length === 0 || t - deduped[deduped.length - 1] > 0.5) {
       deduped.push(t);
     }
   }
