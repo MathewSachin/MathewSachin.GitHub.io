@@ -98,7 +98,8 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   localStorage.setItem('captura-sysAudio',  'true'); // use synthetic audio track
 
   // ── 3. Shared pulse state (read by the canvas hook, written by the scheduler)
-  let isInPulse = false;
+  let isInPulse      = false;
+  let pulsesStarted  = false; // guard: schedulePulses may be called from multiple paths
 
   // ── 4. Worker timer helper (not throttled when tab is in background) ────────
   const makeWorkerSleep = () => {
@@ -213,30 +214,7 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   // Run as soon as possible; the canvas may not exist until Svelte mounts
   setTimeout(setupFillTextHook, 0);
 
-  // ── 7. Recording-start detector ─────────────────────────────────────────────
-  //
-  // A MutationObserver watches #status-badge.  When it first contains
-  // "Recording" (but not "Session") we note the wall-clock start time and
-  // schedule the A/V pulse train.
-
-  const watchForRecordingStart = () => {
-    const badge = document.getElementById('status-badge');
-    if (!badge) { setTimeout(watchForRecordingStart, 50); return; }
-
-    const observer = new MutationObserver(() => {
-      const txt = badge.textContent ?? '';
-      if (txt.includes('Recording') && !txt.includes('Session')) {
-        const startPerf = performance.now();
-        observer.disconnect();
-        schedulePulses(startPerf);
-      }
-    });
-    observer.observe(badge, { childList: true, subtree: true, characterData: true });
-  };
-
-  setTimeout(watchForRecordingStart, 0);
-
-  // ── 8. Pulse scheduler ──────────────────────────────────────────────────────
+  // ── 7. Pulse scheduler ──────────────────────────────────────────────────────
   //
   // Called once when recording starts.  Schedules NUM_PULSES synchronized
   // audio+video pulses, each PULSE_DURATION_MS wide, spaced PULSE_INTERVAL_MS
@@ -249,7 +227,8 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   //        tab setTimeout throttling (Scenario D).
 
   const schedulePulses = (recordingStartPerf: number) => {
-    if (!audioCtx || !gainNode) return;
+    if (!audioCtx || !gainNode || pulsesStarted) return;
+    pulsesStarted = true;
 
     const audioNow = audioCtx.currentTime;
 
@@ -276,6 +255,38 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
       }
     })().catch(e => console.error('[av-sync] pulse video:', e));
   };
+
+  // ── 8. Recording-start detector ─────────────────────────────────────────────
+  //
+  // `window.__avSyncSchedule` is called from the Playwright test side after
+  // the badge confirms "Recording" — this avoids the race condition where
+  // networkidle resolves, the test immediately clicks Start, and the badge
+  // updates before this init script's setTimeout(fn,0) has installed the
+  // MutationObserver.
+  //
+  // The MutationObserver is kept as a belt-and-suspenders fallback with an
+  // immediate check so it also works when the init script runs first.
+
+  (window as any).__avSyncSchedule = schedulePulses;
+
+  const watchForRecordingStart = () => {
+    const badge = document.getElementById('status-badge');
+    if (!badge) { setTimeout(watchForRecordingStart, 50); return; }
+
+    const tryTrigger = () => {
+      const txt = badge.textContent ?? '';
+      if (txt.includes('Recording') && !txt.includes('Session')) {
+        observer.disconnect();
+        schedulePulses(performance.now());
+      }
+    };
+
+    const observer = new MutationObserver(tryTrigger);
+    observer.observe(badge, { childList: true, subtree: true, characterData: true });
+    tryTrigger(); // immediate check in case badge already shows "Recording"
+  };
+
+  setTimeout(watchForRecordingStart, 0);
 }
 
 // ── Helpers: OPFS file transfer ───────────────────────────────────────────────
@@ -474,6 +485,15 @@ async function runScenario(
   // Start recording (getDisplayMedia mock returns our synthetic stream)
   await page.click('#start-btn');
   await expect(page.locator('#status-badge')).toContainText('Recording', { timeout: 15_000 });
+
+  // Explicitly trigger pulse scheduling now that we know the badge shows
+  // "Recording".  This is the authoritative trigger — it avoids the race
+  // condition where the MutationObserver in the init script is set up after
+  // the badge has already changed (e.g., when networkidle resolved quickly).
+  await page.evaluate(() => {
+    const schedule = (window as any).__avSyncSchedule;
+    if (typeof schedule === 'function') schedule(performance.now());
+  });
 
   if (opts.onRecording) await opts.onRecording(context, page);
 
