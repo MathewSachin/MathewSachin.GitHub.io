@@ -6,7 +6,7 @@
  *
  *   A  Baseline     — ideal conditions, tab in focus, no throttling.
  *   B  CPU throttle — 4× CPU throttle applied via Chrome DevTools Protocol.
- *   C  VFR          — frame loop paused for 1 500 ms at the 4-second mark to
+ *   C  VFR          — frame loop paused for 1500 ms at the 4-second mark to
  *                     simulate a static-screen VFR drop-out.
  *   D  Background   — recording tab moved to background while a second tab is
  *                     in the foreground.
@@ -304,11 +304,11 @@ test.describe('Captura AV Sync', () => {
   });
 
   // ── Scenario C: Variable Frame Rate simulation ─────────────────────────────
-  test('Scenario C – VFR (1 500 ms rAF pause at 4 s)', async ({ context, page }) => {
+  test('Scenario C – VFR (1500 ms rAF pause at 4 s)', async ({ context, page }) => {
     await runScenario(context, page, {
       label:   'scenario-c-vfr',
       vfr:     true,
-      // Allow extra time for the 1 500 ms pause that is injected mid-recording
+      // Allow extra time for the 1500 ms pause that is injected mid-recording
       extraMs: VFR_EXTRA_MS,
     });
   });
