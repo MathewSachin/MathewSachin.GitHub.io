@@ -80,8 +80,8 @@ Part 2 of 9 &mdash;
 <p>The name <code>COPILOT_PAT</code> is what the workflow will reference.</p>
 <h2 id="the-workflow">The Workflow</h2>
 <p>Here’s the complete workflow that uses this token to trigger Copilot:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-491" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-491" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">AI Blog Post Generator</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-9937" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-9937" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">AI Blog Post Generator</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF">on</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  workflow_dispatch</span><span style="color:#E1E4E8">:</span></span>
@@ -119,8 +119,8 @@ Part 2 of 9 &mdash;
 </ul>
 <div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="making-it-fully-automatic">Making It Fully Automatic</h2>
 <p>The <code>workflow_dispatch</code> trigger requires you to manually click <strong>Run workflow</strong> in the Actions tab. If you want Copilot to generate a post on a schedule — say, every Monday morning — swap the trigger:</p>
-<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-530" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
-</button> </div> <pre id="code-block-530" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#79B8FF">on</span><span style="color:#E1E4E8">:</span></span>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">yaml</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5598" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-5598" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#79B8FF">on</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  schedule</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">cron</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&#39;0 8 * * 1&#39;</span><span style="color:#6A737D">  # Every Monday at 08:00 UTC</span></span>
 <span class="line"><span style="color:#85E89D">  workflow_dispatch</span><span style="color:#E1E4E8">:       </span><span style="color:#6A737D"># Keep this so you can also trigger manually</span></span></code></pre> </div>
