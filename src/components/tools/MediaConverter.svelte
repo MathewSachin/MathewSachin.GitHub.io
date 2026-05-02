@@ -197,10 +197,12 @@ async function cancelConversion() {
 
 function download() {
   if (!outputBlob) return;
+  const url = URL.createObjectURL(outputBlob);
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(outputBlob);
+  a.href = url;
   a.download = outputFilename;
   a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
 // ── Derived ──────────────────────────────────────────────────────────
@@ -224,7 +226,7 @@ $: videoDiscarded = !hasVideo || selectedFormat.isAudioOnly || discardVideo;
       role="button"
       tabindex="0"
       on:click={() => fileInputEl?.click()}
-      on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputEl?.click(); }}
+      on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputEl?.click(); } }}
       on:dragover|preventDefault={() => {}}
       on:drop|preventDefault={onDrop}
     >
