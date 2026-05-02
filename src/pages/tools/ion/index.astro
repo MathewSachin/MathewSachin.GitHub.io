@@ -1,0 +1,8 @@
+---
+import ToolLayout from '@layouts/ToolLayout.astro';
+import { Content } from '@content/tool-docs/ion.mdx';
+import IonTool from '@components/tools/IonTool.svelte';
+---
+<ToolLayout title="Amazon Ion Formatter" DescriptiveContent={Content}>
+  <IonTool client:load />
+</ToolLayout>

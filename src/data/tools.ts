@@ -60,6 +60,7 @@ export const TOOLS: Tool[] = [
   { id: 'timestamp', name: 'Timestamp Converter', description: 'Convert between Unix epoch and human-readable timestamps.', icon: 'fas fa-clock' },
   { id: 'base64', name: 'Base64 Encoder / Decoder', description: 'Encode plain text to Base64 or decode Base64 back to text.', icon: 'fas fa-code' },
   { id: 'json', name: 'JSON Formatter & Validator', description: 'Format, minify, and validate JSON documents.', icon: 'fas fa-file-code' },
+  { id: 'ion', name: 'Amazon Ion Formatter', description: 'Format, minify, and convert Amazon Ion documents to JSON — entirely in your browser.', icon: 'fas fa-atom' },
   { id: 'cron', name: 'CRON Expression Generator', description: 'Build CRON expressions from frequency dropdowns — minute, hour, day, week, or month.', icon: 'fas fa-calendar-days' },
   { id: 'hash', name: 'Hash Generator', description: 'Generate MD5, SHA-1, and SHA-256 hashes from any input text.', icon: 'fas fa-hashtag' },
   { id: 'scratchpad', name: 'Smart Scratchpad', description: 'Distraction-free notepad that auto-saves every keystroke. Instantly strips formatting from pasted text.', icon: 'fas fa-pencil' },
