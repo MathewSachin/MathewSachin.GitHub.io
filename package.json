@@ -40,7 +40,7 @@
     "@types/node": "^25.6.0",
     "astro": "^6.2.1",
     "astro-link-validator": "github:rodgtr1/astro-link-validator#025a27b2582234084b3676bc725418b5fc429dcd",
-    "esbuild": "^0.27.4",
+    "esbuild": "^0.28.0",
     "hast-util-to-html": "^9.0.5",
     "hastscript": "^9.0.1",
     "jsdom": "^29.1.1",
