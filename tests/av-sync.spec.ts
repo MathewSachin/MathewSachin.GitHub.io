@@ -269,6 +269,9 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
     console.log('[av-sync] schedulePulses starting, vfr=' + options.vfr
       + ' audioCtxState=' + audioCtx.state);
 
+    // Capture in local variable so the async closure has a stable, non-null ref.
+    const gn = gainNode;
+
     // Single sequential Worker-timer loop drives both audio and video so
     // only one workerSleep is pending at a time.
     (async () => {
@@ -278,11 +281,11 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
         const waitMs          = Math.max(0, pulseTargetPerf - performance.now());
         await workerSleep(waitMs);
         console.log('[av-sync] pulse ' + i + ' start');
-        gainNode!.gain.value = 1;  // tone on  — audio pulse starts
-        isInPulse = true;           // canvas white — video pulse starts
+        gn.gain.value = 1;  // tone on  — audio pulse starts
+        isInPulse = true;    // canvas white — video pulse starts
         await workerSleep(PULSE_DURATION_MS);
-        gainNode!.gain.value = 0;   // tone off — audio pulse ends
-        isInPulse = false;           // canvas dark — video pulse ends
+        gn.gain.value = 0;   // tone off — audio pulse ends
+        isInPulse = false;    // canvas dark — video pulse ends
         console.log('[av-sync] pulse ' + i + ' end');
       }
     })().catch(e => console.error('[av-sync] pulse error:', e));
