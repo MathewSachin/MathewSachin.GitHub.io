@@ -27,7 +27,7 @@
     "sharp": "^0.34.5",
     "spark-md5": "^3.0.2",
     "svelte": "^5.55.4",
-    "terser": "^5.46.1",
+    "terser": "^5.46.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
