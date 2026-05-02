@@ -49,6 +49,14 @@ export const TOOLS: Tool[] = [
     icon: 'fas fa-image',
     quick_tool: true,
   },
+  {
+    id: 'mediaconvert',
+    name: 'Video & Audio Converter',
+    description:
+      'Convert video and audio files between MP4, WebM, MKV, MOV, MP3, WAV, OGG, FLAC and more — runs entirely in your browser using the WebCodecs API. No uploads, no server.',
+    icon: 'fas fa-film',
+    quick_tool: true,
+  },
   { id: 'timestamp', name: 'Timestamp Converter', description: 'Convert between Unix epoch and human-readable timestamps.', icon: 'fas fa-clock' },
   { id: 'base64', name: 'Base64 Encoder / Decoder', description: 'Encode plain text to Base64 or decode Base64 back to text.', icon: 'fas fa-code' },
   { id: 'json', name: 'JSON Formatter & Validator', description: 'Format, minify, and validate JSON documents.', icon: 'fas fa-file-code' },

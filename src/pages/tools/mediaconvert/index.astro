@@ -1,0 +1,8 @@
+---
+import ToolLayout from '@layouts/ToolLayout.astro';
+import { Content } from '@content/tool-docs/mediaconvert.mdx';
+import MediaConverter from '@components/tools/MediaConverter.svelte';
+---
+<ToolLayout title="Video & Audio Converter" DescriptiveContent={Content}>
+    <MediaConverter client:load />
+</ToolLayout>

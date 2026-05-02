@@ -1,0 +1,61 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+This tool converts video and audio files entirely inside your browser using
+[Mediabunny](https://mediabunny.dev/), a zero-dependency TypeScript library that
+handles container multiplexing / demultiplexing and codec encoding / decoding via the
+browser's built-in [WebCodecs API](https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API).
+**Your files never leave your device.**
+
+##### Supported Input Formats
+
+MP4, MOV, WebM, MKV, MP3, WAV, OGG, FLAC, ADTS, MPEG-TS — and any other container
+Mediabunny can demux.
+
+##### Supported Output Formats
+
+| Format | Extension | Best for |
+|--------|-----------|----------|
+| **MP4** | `.mp4` | Universal video — widest device & browser support |
+| **WebM** | `.webm` | Web video — open format, great compression |
+| **MKV** | `.mkv` | High quality video with multiple tracks |
+| **MOV** | `.mov` | Apple QuickTime video |
+| **MP3** | `.mp3` | Compressed audio — small files, universal support |
+| **WAV** | `.wav` | Uncompressed audio — lossless, large files |
+| **OGG** | `.ogg` | Open-source compressed audio |
+| **FLAC** | `.flac` | Lossless compressed audio |
+
+##### Options
+
+| Option | Description |
+|--------|-------------|
+| **Output Format** | Choose the target container format. Audio-only formats (MP3, WAV, OGG, FLAC) automatically discard the video track. |
+| **Extract audio only** | When selected for a video-capable output format, the video track is discarded and only the audio stream is written. |
+| **Limit max width** | Scales the video down proportionally so that its width does not exceed the specified pixel value. The aspect ratio is preserved. |
+
+##### Implementation Details
+
+Mediabunny is a pure TypeScript library with zero dependencies. It transmuxes or
+transcodes using WebCodecs when the source codec is not directly supported by the
+output container. In many cases (e.g. MP4 → WebM with VP8/VP9 source), the
+conversion is a fast transmux with no re-encoding.
+
+Processing steps:
+
+1. The file is wrapped in a `BlobSource` (lazy streaming reads — never fully buffered).
+2. `Input` probes the container format and exposes track metadata.
+3. `Output` is configured with the chosen output format and a `BufferTarget`.
+4. `Conversion.init()` analyses the tracks, decides whether to transmux or transcode, and
+   optionally sets up a resize pipeline.
+5. `conversion.execute()` streams the conversion, calling `onProgress` at each step.
+6. On completion the in-memory buffer is wrapped in a `Blob` for download.
+
+##### Privacy
+
+All processing runs locally in your browser tab. No file data or metadata is ever
+sent to any server.
+
+</div>
+</div>
