@@ -460,13 +460,20 @@ function extractAudioTimestamps(filePath: string, label = ''): number[] {
     '-v', 'quiet',
     '-f', 'lavfi',
     '-i', `amovie=${filePath},astats=metadata=1:reset=1`,
-    '-show_entries', 'frame=pkt_pts_time:frame_tags=lavfi.astats.Overall.Peak_level',
+    '-show_entries', 'frame=pts_time:frame_tags=lavfi.astats.Overall.Peak_level',
     '-of', 'csv=p=0',
   ]);
 
   if (label) {
-    const sample = stdout.split('\n').filter(l => l.trim()).slice(0, 5);
-    console.log(`[av-sync] ${label} audio raw sample: ${JSON.stringify(sample)}`);
+    // Show a sample from around t=1s (first pulse) to verify audio content
+    const allLines = stdout.split('\n').filter(l => l.trim() && l.includes(','));
+    const sampleLines = allLines.slice(0, 5);
+    const aroundPulse1 = allLines.filter(l => {
+      const t = parseFloat(l.split(',')[0]);
+      return t >= 0.8 && t <= 1.5;
+    }).slice(0, 5);
+    console.log(`[av-sync] ${label} audio raw sample (t=0): ${JSON.stringify(sampleLines)}`);
+    console.log(`[av-sync] ${label} audio raw sample (t~1s): ${JSON.stringify(aroundPulse1)}`);
   }
 
   const raw: number[] = [];
