@@ -1,4 +1,5 @@
 ---
+import CopyButton from '@components/tools/CopyButton.svelte';
 const props = Astro.props;
 
 const lang = props['data-language'] || "";
@@ -10,15 +11,14 @@ const id = `code-block-${Math.floor(Math.random() * 10000)}`;
 <div class="highlight">
   <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1">
     <span class={lang ? "code-lang" : ""}>{lang}</span>
-    
-    <button 
-      class="btn btn-sm btn-code btn-clip" 
-      title="Copy to clipboard" 
-      data-clipboard-target={`#${id}`}
+
+    <CopyButton
+      client:load
+      className="btn btn-sm btn-code btn-clip"
+      title="Copy to clipboard"
       aria-label="Copy code to clipboard"
-    >
-      <i class="fa fa-copy" aria-hidden="true"></i> COPY
-    </button>
+      targetSelector={`#${id}`}
+    >COPY</CopyButton>
   </div>
   
   <pre id={id} {...props}><slot /></pre>

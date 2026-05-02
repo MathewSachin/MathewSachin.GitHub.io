@@ -3,6 +3,7 @@ import { createEventDispatcher } from "svelte";
 import { tick } from "svelte";
 
 export let value: string = "";
+export let targetSelector: string = "";
 export let title: string = "Copy";
 export let iconClass: string = "fas fa-copy";
 export let copiedIconClass: string = "fas fa-check";
@@ -14,7 +15,11 @@ const dispatch = createEventDispatcher();
 
 async function handleCopy() {
   try {
-    await navigator.clipboard.writeText(value);
+    const targetValue = targetSelector
+      ? (document.querySelector(targetSelector)?.textContent || "")
+      : value;
+
+    await navigator.clipboard.writeText(targetValue);
     copied = true;
     dispatch("copied");
     await tick();

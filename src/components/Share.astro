@@ -3,6 +3,7 @@
  * Share.astro
  * Replaces _includes/share.html
  */
+import CopyButton from '@components/tools/CopyButton.svelte';
 interface Props {
   title: string;
   url: string;
@@ -51,7 +52,14 @@ const encodedTitle = encodeURIComponent(title);
   >
     <i class="fab fa-linkedin" aria-hidden="true"></i>
   </a>
-  <button id="copy-post-link" class={`btn btn-sm ${btnClass}`} aria-label="Copy link">
-    <i class="fa fa-link" aria-hidden="true"></i>
-  </button>
+  <CopyButton
+    client:load
+    id="copy-post-link"
+    className={`btn btn-sm ${btnClass}`}
+    aria-label="Copy link"
+    title="Copy link"
+    value={url}
+    iconClass="fa fa-link"
+    copiedIconClass="fa fa-check"
+  />
 </div>
