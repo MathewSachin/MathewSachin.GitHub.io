@@ -1,0 +1,339 @@
+---
+title: "From Jekyll to Astro: Modernizing This Blog's Entire Stack"
+icon: "fas fa-rocket"
+tags: [astro, jekyll, migration, typescript, svelte, playwright, web-dev, tutorial]
+related:
+  - /blog/2026/03/12/ai-blog-generation-flow
+  - /blog/2026/04/01/pr-preview-setup
+  - /blog/2026/04/03/core-web-vitals-jekyll
+---
+
+*This blog ran on Jekyll for years. Then I rewrote the entire thing in Astro — same content, zero Ruby, full TypeScript, and a test suite that caught every regression before it shipped. Here's the honest account of what changed, what got easier, and what surprised me.*
+
+## Why Leave Jekyll at All?
+
+Jekyll is fine. It ships with GitHub Pages out of the box, it's been battle-tested for over a decade, and for a simple blog it genuinely requires almost no configuration. The [Blogging with Jekyll series](/blog/series/blogging-with-jekyll/) on this site covers a working Jekyll setup end-to-end: AI-assisted post generation, PR previews, Core Web Vitals, AdSense, analytics — the whole stack.
+
+So why rewrite it?
+
+A few friction points accumulated over time:
+
+| Pain point | Details |
+|---|---|
+| **Ruby** | Every machine that built the site needed a Ruby version manager, Bundler, and a Gemfile.lock that would drift out of sync. Local builds on a new machine: 20 minutes. |
+| **Liquid templates** | Liquid has no type checking, no IDE autocomplete, and no way to refactor a variable name across a layout without grep. |
+| **Plugin ecosystem** | Custom Jekyll plugins are Ruby scripts. Debugging them meant dropping into IRB. Good luck importing an npm package. |
+| **JavaScript felt bolted on** | Client-side interactivity lived in `_includes/` as raw `<script>` tags. No bundling, no types, no component model. |
+| **No islands** | Every page loaded every JavaScript file, even on pages where none of it ran. |
+
+None of these were blockers on their own. Together they made the codebase feel like two different languages awkwardly sharing a directory.
+
+## Why Astro?
+
+I looked at Next.js, Nuxt, Gatsby, Eleventy, and Hugo before settling on Astro. The deciding factors:
+
+- **Zero JS by default.** Astro ships static HTML unless you explicitly opt a component into the browser. That matches a blog's default case: most pages need no JavaScript at all.
+- **Component islands.** When you *do* need interactivity — a search widget, an interactive code demo — you mount it as a self-contained island that hydrates independently. The rest of the page stays static.
+- **Any UI framework.** Astro integrates with React, Vue, Svelte, Solid, and others. This blog already had some Svelte experiments, so `@astrojs/svelte` was a natural fit.
+- **First-class TypeScript.** `.astro` files support TypeScript in the front matter section with no configuration. `astro.config.ts`, `content.config.ts` — the entire build pipeline is typed.
+- **Content Collections.** A typed schema for blog posts with Zod validation. No more wondering whether a post has a `tags` field or a `tag` field.
+
+## The Migration in Broad Strokes
+
+The content itself — the Markdown files — needed almost no changes. The migration was entirely about infrastructure:
+
+```
+Jekyll                          Astro
+─────────────────────────────────────────────────
+_layouts/*.html           →     src/layouts/*.astro
+_includes/*.html          →     src/components/*.astro
+_plugins/*.rb             →     src/plugins/*.ts  (or eliminated)
+_config.yml               →     astro.config.ts
+Gemfile                   →     package.json
+bundle exec jekyll serve  →     npm run dev
+Liquid {{ variable }}     →     {variable}
+{% if %}...{% endif %}    →     {condition && <Tag />}
+{{ page.url | relative_url }} → import.meta.env.BASE_URL
+```
+
+The content files moved into `src/content/blog/`, and a glob loader in `content.config.ts` picks them up automatically.
+
+---
+
+## No More Ruby
+
+This is the change I felt most immediately.
+
+The Jekyll build depended on:
+
+- A Ruby version manager (rbenv or rvm)
+- `gem install bundler`
+- `bundle install` (which could fail if native extensions needed system libraries)
+- A Docker image pre-baked with the right Ruby version to keep CI fast
+
+The Astro build depends on:
+
+```bash
+npm install
+npm run build
+```
+
+That's it. Node.js is already on every developer machine, every CI runner, and every cloud environment. The custom Docker image that shaved minutes off Jekyll CI builds is now unnecessary. `npm ci` + `npm run build` just works.
+
+### TypeScript Over JavaScript
+
+The old blog's client-side JavaScript was a collection of `<script>` tags in `_includes/` files:
+
+```html
+<!-- _includes/toc.html -->
+<script>
+  // 120 lines of vanilla JS with no type information
+  var headings = document.querySelectorAll('h2, h3');
+  // ...
+</script>
+```
+
+The new codebase has typed utilities, typed component props, and typed content schemas:
+
+```typescript
+// src/content.config.ts
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    tags: z.array(z.string()).default([]),
+    series: z.string().optional(),
+    accent_color: z.string().optional(),
+    // ...
+  }),
+});
+```
+
+When a post has a typo in its front matter — say `tag:` instead of `tags:` — the build fails immediately with a clear Zod validation error instead of silently rendering a page with no tags.
+
+The `postUrlFromId` utility, the `estimateReadingTime` function, the tag colour lookup — all typed, all refactorable, all with IDE autocomplete:
+
+```typescript
+// src/utils/posts.ts
+export function postUrlFromId(id: string): string {
+  const match = id.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
+  if (!match) return `/blog/${id}.html`;
+  const [, year, month, day, title] = match;
+  return `/blog/${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}/${title}.html`;
+}
+```
+
+Try doing that with a Jekyll Liquid filter.
+
+---
+
+## Astro Islands: Interactive Components Without Shipping Everything
+
+The Jekyll site loaded JavaScript globally. The reading-progress bar script, the TOC scroll-spy, the lightbox initialisation — all of it landed on every page load, whether the page needed it or not.
+
+Astro's island architecture inverts this. An `.astro` component is static by default. To make something interactive, you mount a framework component and declare *when* it should hydrate:
+
+```astro
+<!-- Only hydrate once the page is idle — defers to browser idle callback -->
+<ChromeDinoSpeedWidget client:idle />
+
+<!-- Hydrate immediately — needed for search, which must respond to input -->
+<Search client:load base={BASE} />
+
+<!-- Hydrate only when the element enters the viewport -->
+<HeavyChart client:visible />
+```
+
+The directives (`client:load`, `client:idle`, `client:visible`) give you precise control over JavaScript loading without any manual lazy-loading code.
+
+### The Search Component
+
+The site's full-text search is a Svelte component that loads an Orama index, queries it on every keystroke, and renders results — all in the browser, with no backend:
+
+```svelte
+<!-- src/components/Search.svelte -->
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { create, load, search } from '@orama/orama';
+
+  let { base } = $props();
+  let hits = $state([] as any[]);
+  let db: any = null;
+
+  onMount(async () => {
+    const resp = await fetch(`${base}search-index.json`);
+    const rawIndex = await resp.json();
+    db = create({ schema: SCHEMA as any });
+    load(db, rawIndex);
+  });
+  // ...
+</script>
+```
+
+On the search page, it mounts as an island:
+
+```astro
+<Search client:load base={BASE} />
+```
+
+Before Astro, this would have been a global script tag that ran on every page. Now it only exists on `/search/` and only hydrates when that page loads.
+
+### Interactive Blog Post Widgets
+
+Several posts have embedded interactive demos — for example, the Chrome Dino hack posts let readers adjust the speed or score value and copy the generated JavaScript snippet. These are Svelte components mounted as islands inside MDX:
+
+```mdx
+<ChromeDinoSpeedWidget client:idle />
+```
+
+The widget holds state (the current speed value), renders a live preview of the JavaScript snippet, and provides a copy button — all scoped to that component, no global state pollution.
+
+In Jekyll this was either a fragile inline script that queried DOM elements by ID, or it wasn't interactive at all.
+
+---
+
+## How Playwright Tests Made the Migration Safe
+
+Migrating a multi-year blog is exactly the kind of change that should have tests. Not because the migration logic is complex, but because you need to *know* that 60+ posts still render correctly, that the search still works, that links still resolve.
+
+The Playwright test suite covers the interactive and navigational surfaces that are hardest to verify manually:
+
+```typescript
+// tests/e2e/search.spec.ts
+test('search input becomes enabled once the index is loaded', async ({ page }) => {
+  await page.goto('/search/');
+  await expect(page.locator('#search-input')).toBeEnabled({ timeout: 15000 });
+  await expect(page.locator('#search-status')).not.toBeAttached({ timeout: 15000 });
+});
+
+test('shows results when a query matches blog posts', async ({ page }) => {
+  await page.goto('/search/');
+  const searchInput = page.locator('#search-input');
+  await expect(searchInput).toBeEnabled({ timeout: 15000 });
+  await searchInput.fill('jekyll');
+  await expect(page.locator('#search-results')).not.toBeEmpty({ timeout: 5000 });
+});
+```
+
+The search test alone caught three separate issues during migration:
+
+1. The Orama index wasn't being generated because the build script hadn't been ported from the Jekyll pipeline
+2. The `client:load` directive was missing from the Search component, so the Svelte island never hydrated
+3. The base URL was being double-applied to the index fetch URL in PR preview builds
+
+Each of these would have been a silent failure in production — a search page that loads but never responds to input. The Playwright test turned them into immediate build failures with clear stack traces.
+
+### Beyond Search
+
+Other Playwright specs guard the tool pages and interactive demos:
+
+```typescript
+// tests/e2e/dino-hack.spec.ts — checks the speed/score/elevation widgets still work
+// tests/e2e/hash.spec.ts     — verifies the hash tool computes correct SHA-256 outputs
+// tests/e2e/timestamp.spec.ts — validates Unix timestamp conversion in both directions
+```
+
+The pattern is the same: run the built site against a real browser, interact with the interactive surfaces, assert on the output. When a migration refactor breaks something, the spec fails before the PR merges.
+
+Running the full suite against the built output takes about 30 seconds:
+
+```bash
+npm run build && npx playwright test
+```
+
+That's the entire confidence check for a deployment that touches 60+ blog posts and a dozen interactive tools.
+
+---
+
+## What Got Simpler
+
+The migration removed more code than it added.
+
+### Build-Time Diagrams
+
+Jekyll had a custom Ruby plugin that shelled out to a Node script to render Pintora diagrams at build time:
+
+```ruby
+class PintoraBlock < Liquid::Block
+  def render(context)
+    code = super.strip
+    svg = `node _scripts/pintora-render.js #{Shellwords.escape(code)}`
+    "<div class=\"pintora-diagram\">#{svg}</div>"
+  end
+end
+```
+
+In Astro, it's a native component:
+
+```astro
+---
+import { render } from '@pintora/cli';
+const { code } = Astro.props;
+const svg = await render({ code, mimeType: 'image/svg+xml', renderInSubprocess: true });
+---
+{svg ? <div class="pintora-wrapper" set:html={svg} /> : <pre class="pintora">{code}</pre>}
+```
+
+The `renderInSubprocess: true` flag is still there — Pintora's CLI spawns a worker process to safely sandbox the renderer. But this is managed entirely by Node.js: no Ruby, no shell backtick escaping, no `Shellwords.escape`, no separate script invocation through a brittle OS command string. The Astro component is a plain `async` function that awaits a Promise. Same output, zero Ruby.
+
+### Table of Contents
+
+Jekyll's TOC was either a JavaScript DOM traversal after page load (CLS risk) or a Ruby plugin that generated data for Liquid to render. Neither was great.
+
+Astro renders the TOC from the headings array that the MDX processor returns directly:
+
+```astro
+const { Content, headings } = await render(post);
+```
+
+`headings` is a `MarkdownHeading[]` typed array, available at build time, passed straight to the TOC component. No Ruby, no runtime DOM traversal, no Liquid template gymnastics.
+
+### Content Validation
+
+Jekyll would silently build a post with missing or malformed front matter. A post with `tags: null` instead of `tags: []` would cause a Liquid error at render time — sometimes only on specific template paths, sometimes only in production.
+
+Astro's Zod schema catches it at build time:
+
+```
+ZodError: Invalid input
+  → tags: Expected array, received null  (post: 2023-04-09-captura-unmaintained)
+```
+
+---
+
+## What Stayed the Same
+
+The migration was deliberately conservative about content. The Markdown files are essentially unchanged. Post URLs follow the same `/blog/YYYY/MM/DD/slug.html` pattern. Redirects from old URL patterns are handled by Astro's static `redirects` config.
+
+Readers navigating from search results, from shared links, from Google — they land on the same URLs they always did.
+
+---
+
+## The Honest Trade-offs
+
+Astro isn't free:
+
+- **Build times are longer.** A cold `npm run build` takes longer than `jekyll build` on the same machine, mostly due to image processing and MDX compilation.
+- **More moving parts.** `astro.config.ts`, `content.config.ts`, `svelte.config.js`, `tsconfig.json` — Jekyll's single `_config.yml` was genuinely simpler for the cases it covered.
+- **Debugging islands.** When a Svelte component doesn't behave as expected, the error might be in the Svelte code, in the Astro boundary, in the `client:*` directive, or in the props being passed. The abstraction layers add debugging surface area.
+
+For a simple blog with no interactive components, Jekyll is still the right answer. The complexity of Astro pays off when you want typed content, framework components, and fine-grained hydration control.
+
+---
+
+## Summary
+
+| | Jekyll | Astro |
+|---|---|---|
+| **Language** | Ruby + Liquid | TypeScript + JSX |
+| **Client JS** | Global script tags | Scoped islands per component |
+| **Interactive components** | Inline `<script>` + DOM IDs | Svelte/React/Vue components with typed props |
+| **Content schema** | None (runtime errors) | Zod validation at build time |
+| **TOC** | Ruby plugin or runtime JS | Build-time from `headings` array |
+| **Diagrams** | Ruby → shell → Node | Native async component |
+| **Tests** | Manual / none | Playwright e2e + Vitest unit |
+| **CI setup** | Ruby + Bundler + Docker | `npm ci` |
+
+The site's content didn't change. The developer experience did — substantially, and in the right direction.
+
+*If you're on Jekyll and hitting the same friction points, the migration path is more mechanical than it sounds. The hard work is porting the layout templates. The content comes along for free.*
