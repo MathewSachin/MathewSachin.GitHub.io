@@ -1,0 +1,1 @@
+import{r as c}from"./utils.-QKJMNni.js";(function(){document.querySelectorAll(".btn-clip").forEach(function(e){const o=e.getAttribute("data-clipboard-target"),r=o?document.querySelector(o):null;r&&c(e,()=>r.textContent,e.querySelector("i"))});const t=document.getElementById("copy-post-link");t&&c(t,()=>window.location.href,t.querySelector("i"))})();
