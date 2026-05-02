@@ -23,7 +23,7 @@
     "ion-js": "^5.2.1",
     "mediabunny": "1.40.1",
     "node-addon-api": "^8.7.0",
-    "node-gyp": "^12.2.0",
+    "node-gyp": "^12.3.0",
     "sharp": "^0.34.5",
     "spark-md5": "^3.0.2",
     "svelte": "^5.55.4",
