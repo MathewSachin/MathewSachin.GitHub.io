@@ -1,0 +1,1 @@
+import{a as n}from"./utils.-QKJMNni.js";const t=document.getElementById("img-lightbox"),o=t.querySelector("img");n(".page-content img","click",function(e){const c=e;o.src=c.src||"",o.alt=c.alt||"",t.showModal()});const i=t.querySelector(".lightbox-close");i.addEventListener("click",function(){t.close()});t.addEventListener("click",function(e){e.target===t&&t.close()});
