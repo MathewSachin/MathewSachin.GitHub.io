@@ -1,5 +1,5 @@
 ---
-title: "From Jekyll to Astro: Modernising This Blog's Entire Stack"
+title: "From Jekyll to Astro: Modernizing This Blog's Entire Stack"
 icon: "fas fa-rocket"
 tags: [astro, jekyll, migration, typescript, svelte, playwright, web-dev, tutorial]
 related:
@@ -263,7 +263,7 @@ class PintoraBlock < Liquid::Block
 end
 ```
 
-In Astro, it's a native component with no subprocess:
+In Astro, it's a native component:
 
 ```astro
 ---
@@ -274,7 +274,7 @@ const svg = await render({ code, mimeType: 'image/svg+xml', renderInSubprocess: 
 {svg ? <div class="pintora-wrapper" set:html={svg} /> : <pre class="pintora">{code}</pre>}
 ```
 
-Same output. Zero Ruby. Zero subprocess shell escaping.
+The `renderInSubprocess: true` flag is still there — Pintora's CLI spawns a worker process to safely sandbox the renderer. But this is managed entirely by Node.js: no Ruby, no shell backtick escaping, no `Shellwords.escape`, no separate script invocation through a brittle OS command string. The Astro component is a plain `async` function that awaits a Promise. Same output, zero Ruby.
 
 ### Table of Contents
 
