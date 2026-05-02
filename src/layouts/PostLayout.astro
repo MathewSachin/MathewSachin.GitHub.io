@@ -8,7 +8,7 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BackToTop from '@components/BackToTop.astro';
-import Lightbox from '@components/Lightbox.astro';
+import Lightbox from '@components/Lightbox.svelte';
 import SeriesNav from '@components/SeriesNav.astro';
 import TableOfContents from '@components/TableOfContents.astro';
 import RelatedPosts from '@components/RelatedPosts.astro';
@@ -136,5 +136,5 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
   </div>
 
   <BackToTop />
-  <Lightbox />
+  <Lightbox client:load client:only />
 </BaseLayout>
