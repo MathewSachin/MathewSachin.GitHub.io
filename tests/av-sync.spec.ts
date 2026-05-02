@@ -47,6 +47,7 @@
  *   B  CPU throttle — 4× CPU throttle via Chrome DevTools Protocol.
  *   C  VFR          — pulses 5-10 delayed by 1500 ms.
  *   D  Background   — recording tab pushed behind a second tab mid-recording.
+ *   E  Countdown    — 3-second countdown before recording starts.
  *
  * Prerequisites
  * ─────────────
@@ -79,7 +80,7 @@ const MIN_PULSES          = 8;
 // compiled the test file.  TypeScript annotations are stripped by esbuild, so
 // the browser receives valid JavaScript.
 
-function capturaAvSyncScript(options: { vfr: boolean }): void {
+function capturaAvSyncScript(options: { vfr: boolean; countdown?: number }): void {
   // ── Constants (inside browser) ──────────────────────────────────────────────
   const CANVAS_W          = 640;
   const CANVAS_H          = 360;
@@ -99,7 +100,7 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
   };
 
   // ── 2. Preferences ─────────────────────────────────────────────────────────
-  localStorage.setItem('captura-countdown', '0');    // no countdown delay
+  localStorage.setItem('captura-countdown', String(options.countdown ?? 0));
   localStorage.setItem('captura-sysAudio',  'true'); // use synthetic audio track
 
   // ── 3. Shared pulse state (read by the canvas hook, written by the scheduler)
@@ -542,6 +543,8 @@ interface ScenarioOptions {
   label: string;
   vfr?: boolean;
   extraMs?: number;
+  /** Countdown duration in seconds before recording starts (default: 0). */
+  countdown?: number;
   /** Called after page load, before clicking Start. */
   setup?: (ctx: BrowserContext, page: Page) => Promise<void>;
   /** Called immediately after recording reaches the 'Recording' state. */
@@ -565,7 +568,7 @@ async function runScenario(
   page.on('pageerror', err => console.error('[browser error]', err.message));
 
   // Inject the init script (OPFS mock + getDisplayMedia mock + prefs)
-  await page.addInitScript(capturaAvSyncScript, { vfr: !!opts.vfr });
+  await page.addInitScript(capturaAvSyncScript, { vfr: !!opts.vfr, countdown: opts.countdown });
 
   // Navigate to the actual Captura recorder page
   await page.goto(CAPTURA_URL, { waitUntil: 'networkidle' });
@@ -655,6 +658,18 @@ test.describe('Captura AV Sync', () => {
       teardown: async () => {
         if (secondPage) { await secondPage.close(); secondPage = null; }
       },
+    });
+  });
+
+  // ── Scenario E: Countdown ─────────────────────────────────────────────────────
+  test('Scenario E – Countdown (3 s before recording)', async ({ context, page }) => {
+    // Verifies that both audio and video honour the countdown delay and remain
+    // in sync after the countdown completes.  A previous bug caused audio to
+    // start immediately while video waited, producing a drift equal to the
+    // countdown duration.
+    await runScenario(context, page, {
+      label:     'scenario-e-countdown',
+      countdown: 3,
     });
   });
 });
