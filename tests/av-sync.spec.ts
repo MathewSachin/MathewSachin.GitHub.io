@@ -28,8 +28,9 @@
  *      Unlike an instance-level shadow, this override is in place from the
  *      moment the init script runs and is not affected by canvas resizing.
  *
- * Audio pulses are pre-scheduled via AudioContext.gainNode.setValueAtTime(),
- * which is not affected by page throttling.
+ * Audio pulses are driven from the same Web Worker timer as video by setting
+ * gainNode.gain.value = 1/0 in the same synchronous block as isInPulse = true/false.
+ * This guarantees near-zero A/V skew in the signal regardless of throttling.
  *
  * Video pulse timing uses a Web Worker timer (immune to background-tab
  * throttling, Scenario D).
@@ -248,15 +249,16 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
 
   // ── 7. Pulse scheduler ──────────────────────────────────────────────────────
   //
-  // Called once when recording starts.  Schedules NUM_PULSES synchronized
+  // Called once when recording starts.  Drives NUM_PULSES synchronized
   // audio+video pulses, each PULSE_DURATION_MS wide, spaced PULSE_INTERVAL_MS
   // apart.  In VFR mode, pulses VFR_AFTER_N+1 … NUM_PULSES are shifted right
   // by VFR_PAUSE_MS.
   //
-  // Audio: pre-scheduled via AudioContext.gainNode.setValueAtTime() — not
-  //        affected by page throttling or JS event-loop pauses.
-  // Video: isInPulse flag set/cleared by Worker timer — immune to background-
-  //        tab setTimeout throttling (Scenario D).
+  // Both audio and video are driven from the SAME Worker-timer loop:
+  //   • gainNode.gain.value = 1/0  controls the 1 kHz tone in the mock context
+  //   • isInPulse = true/false      triggers the canvas-flood and VF-proxy hooks
+  // Firing them from the same synchronous block guarantees near-zero A/V skew
+  // in the signal.
 
   const schedulePulses = (recordingStartPerf: number) => {
     if (!audioCtx || !gainNode || pulsesStarted) {
@@ -267,19 +269,8 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
     console.log('[av-sync] schedulePulses starting, vfr=' + options.vfr
       + ' audioCtxState=' + audioCtx.state);
 
-    const audioNow = audioCtx.currentTime;
-
-    // Audio: pre-schedule all pulses via AudioContext (not throttled by JS)
-    for (let i = 1; i <= NUM_PULSES; i++) {
-      const audioExtra   = ((options.vfr && i > VFR_AFTER_N) ? VFR_PAUSE_MS : 0) / 1000;
-      const audioPulseAt = audioNow + i * (PULSE_INTERVAL_MS / 1000) + audioExtra;
-      gainNode.gain.setValueAtTime(1, audioPulseAt);
-      gainNode.gain.setValueAtTime(0, audioPulseAt + PULSE_DURATION_MS / 1000);
-    }
-
-    // Video: run a single sequential Worker-timer loop so only one workerSleep
-    // is pending at a time (concurrent calls would overwrite the onmessage
-    // handler and cancel earlier timeouts).
+    // Single sequential Worker-timer loop drives both audio and video so
+    // only one workerSleep is pending at a time.
     (async () => {
       for (let i = 1; i <= NUM_PULSES; i++) {
         const vfrExtra        = (options.vfr && i > VFR_AFTER_N) ? VFR_PAUSE_MS : 0;
@@ -287,12 +278,14 @@ function capturaAvSyncScript(options: { vfr: boolean }): void {
         const waitMs          = Math.max(0, pulseTargetPerf - performance.now());
         await workerSleep(waitMs);
         console.log('[av-sync] pulse ' + i + ' start');
-        isInPulse = true;
+        gainNode!.gain.value = 1;  // tone on  — audio pulse starts
+        isInPulse = true;           // canvas white — video pulse starts
         await workerSleep(PULSE_DURATION_MS);
-        isInPulse = false;
+        gainNode!.gain.value = 0;   // tone off — audio pulse ends
+        isInPulse = false;           // canvas dark — video pulse ends
         console.log('[av-sync] pulse ' + i + ' end');
       }
-    })().catch(e => console.error('[av-sync] pulse video error:', e));
+    })().catch(e => console.error('[av-sync] pulse error:', e));
   };
 
   // ── 8. Recording-start detector ─────────────────────────────────────────────

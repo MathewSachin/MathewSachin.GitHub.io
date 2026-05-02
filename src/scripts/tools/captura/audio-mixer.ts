@@ -36,9 +36,13 @@ export class AudioMixer {
   get micAnalyser() { return this.#micAnalyser; }
   get sysAnalyser() { return this.#sysAnalyser; }
 
-  buildMix(sysAudioTracks: MediaStreamTrack[] = [], micStream: MediaStream | null | undefined, micGainValue: number, sysGainValue: number) {
+  async buildMix(sysAudioTracks: MediaStreamTrack[] = [], micStream: MediaStream | null | undefined, micGainValue: number, sysGainValue: number): Promise<MediaStream> {
     this.#audioCtx      = new AudioContext();
-    this.#audioCtx.resume().catch(() => {}); // best-effort; context self-resumes after user interaction
+    // Await resume() so that the context is definitely running before any
+    // audio data is produced.  With --autoplay-policy=no-user-gesture-required
+    // (CI) this resolves instantly; in production the page's sticky activation
+    // from the Start-Recording click is sufficient for Chrome to honour it.
+    await this.#audioCtx.resume().catch(() => {});
     this.#audioDestNode = this.#audioCtx.createMediaStreamDestination();
 
     if (sysAudioTracks.length > 0) {
