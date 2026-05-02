@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Vim, Sublime, or an IDE? The Never-Ending Developer Holy War</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-288/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-288/blog/2026/03/09/luddites-vs-developers.html"><meta property="og:title" content="Vim, Sublime, or an IDE? The Never-Ending Developer Holy War"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-288/blog/2026/03/09/luddites-vs-developers.html"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-288/feed.xml"><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><link rel="stylesheet" href="/pr-preview/pr-288/_astro/_slug_@_@astro.n_ZwOThi.css">
+<link rel="stylesheet" href="/pr-preview/pr-288/_astro/BaseLayout.DknWdHTT.css">
+<style>:where([data-astro-image]){height:auto}:where([data-astro-image=full-width]){width:100%}:where([data-astro-image=constrained]){max-width:100%}[data-astro-image-fit=fill]{object-fit:fill}[data-astro-image-fit=contain]{object-fit:contain}[data-astro-image-fit=cover]{object-fit:cover}[data-astro-image-fit=scale-down]{object-fit:scale-down}
+.in-content-ad[data-astro-cid-ykg2om2w]{overflow:hidden;max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w] .card[data-astro-cid-ykg2om2w]{box-shadow:none;border-color:#00000020;overflow:hidden}.in-content-ad[data-astro-cid-ykg2om2w] .card-body[data-astro-cid-ykg2om2w]{min-height:200px}.in-content-ad[data-astro-cid-ykg2om2w] ins[data-astro-cid-ykg2om2w].adsbygoogle{max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w]:has(ins[data-ad-status=unfilled]){display:none}@media(max-width:767.98px){.in-content-ad[data-astro-cid-ykg2om2w]{overflow:visible;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw)}}
+blockquote[data-astro-cid-trienahh]{padding:.5em 1em;margin:0 0 1rem;color:#6c757d;border-left:.25em solid var(--post-accent, var(--color-accent));background:transparent;font-style:normal;font-size:.9em}blockquote[data-astro-cid-trienahh]>[data-astro-cid-trienahh]:last-child{margin-bottom:0}
+</style>
+<link rel="stylesheet" href="/pr-preview/pr-288/_astro/blog.gYhV94X6.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-288/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-288/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-288/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-288/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="text-light nav-link" href="/pr-preview/pr-288/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-astro-cid-q2vpma6g></div> <script type="module">const r=document.getElementById("reading-progress-bar");function e(){const t=document.documentElement.scrollHeight-window.innerHeight,n=t>0?Math.min(window.scrollY/t*100,100):0;r.style.width=n+"%",r.setAttribute("aria-valuenow",String(Math.round(n)))}window.addEventListener("scroll",e);window.addEventListener("resize",e);e();</script> <div class="bg-dark" data-astro-cid-gjtny2mx> <div class="pt-4 pb-5 post-hero text-white" data-astro-cid-gjtny2mx> <div class="container" data-astro-cid-gjtny2mx> <h2 data-astro-cid-gjtny2mx> <i class="fas fa-terminal me-2" aria-hidden="true" data-astro-cid-gjtny2mx></i> Vim, Sublime, or an IDE? The Never-Ending Developer Holy War </h2> <em data-astro-cid-gjtny2mx>9 Mar 2026</em> &nbsp;-&nbsp; <em data-astro-cid-gjtny2mx>7 min read</em> <div class="post-tag my-1 d-flex flex-wrap align-items-center gap-2" data-astro-cid-gjtny2mx> <a class="badge rounded-pill text-dark" style="background-color: #E3F2FD;" href="/pr-preview/pr-288/blog/tags/vim/" data-astro-cid-gjtny2mx>vim</a><a class="badge rounded-pill text-dark" style="background-color: #FCE4EC;" href="/pr-preview/pr-288/blog/tags/editor/" data-astro-cid-gjtny2mx>editor</a><a class="badge rounded-pill text-dark" style="background-color: #FFE0B2;" href="/pr-preview/pr-288/blog/tags/ide/" data-astro-cid-gjtny2mx>ide</a><a class="badge rounded-pill text-dark" style="background-color: #FFEBEE;" href="/pr-preview/pr-288/blog/tags/productivity/" data-astro-cid-gjtny2mx>productivity</a><a class="badge rounded-pill text-dark" style="background-color: #D7CCC8;" href="/pr-preview/pr-288/blog/tags/coding/" data-astro-cid-gjtny2mx>coding</a> </div>    <hr class="border-light mt-3 mb-3" data-astro-cid-gjtny2mx> <div class="related-posts-section" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
+</h5><div class="d-flex flex-row overflow-auto gap-3 pb-2" data-astro-cid-dpgbfi7r><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-288/blog/2023/04/16/creating-if-statement-kotlin.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Creating your own if statement in Kotlin" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-code-branch me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Creating your own if statement in Kotlin</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-288/blog/2023/04/14/dependency-injection-extension-functions-kotlin.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Dependency Injection of extension functions in Kotlin" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-plug me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Dependency Injection of extension functions in Kotlin</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-288/blog/2023/04/02/pure-functions.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read WTH is a Pure function" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-infinity me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>WTH is a Pure function</small></div></div></a></div></div></div>  <div class="p-5" data-astro-cid-gjtny2mx></div> </div> </div> <div class="container post-content-container" data-astro-cid-gjtny2mx> <div class="row" data-astro-cid-gjtny2mx> <div class="col-md-10" data-astro-cid-gjtny2mx> <div id="post" class="card" data-astro-cid-gjtny2mx> <div class="card-body" data-astro-cid-gjtny2mx> <div class="page-content" data-astro-cid-gjtny2mx>  <p><em>Every programmer, at some point, gets asked the question. Maybe by a new teammate, maybe in a job interview, maybe by a stranger on the internet at 2 AM. “What editor do you use?” What follows is never just an answer — it’s a declaration of identity.</em></p>
+<picture> <source srcset="/pr-preview/pr-288/_astro/editor-wars-hero.Deb_30fa_88GgF.webp" type="image/webp">  <img src="/pr-preview/pr-288/_astro/editor-wars-hero.Deb_30fa_ZExFF6.svg" data-image-component="true" alt="Three editor panels side by side: Vim with green-on-black terminal, Sublime Text with colorful syntax highlighting, and VS Code with file explorer and AI autocomplete" loading="lazy" decoding="async" width="600" height="280"> </picture>
+<h2 id="the-luddite-label">The Luddite Label</h2>
+<p>The original Luddites were 19th-century textile workers who smashed machines they feared would replace them. Today, the word gets thrown at developers who prefer older, simpler tools — and nobody gets called a Luddite more gleefully than the Vim user.</p>
+<p>But here’s the thing: using a 40-year-old terminal editor in 2026 is not the same as fearing technology. Often, it’s a very deliberate, very <em>informed</em> choice.</p>
+<p>Let’s walk through the three tribes and see what’s really going on.</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="the-vim-purist">The Vim Purist</h2>
+<div class="alert alert-info"><p>📟 <b>Fun fact:</b> Vim was released in 1991. It was itself an improvement on <code>vi</code>, which dates back to 1976. That’s older than most of the developers who use it.</p></div>
+<p>The Vim user doesn’t just use a text editor. They have <em>internalized</em> one. After enough time, Vim stops feeling like a program and starts feeling like a direct interface to the text itself.</p>
+<h3 id="why-people-swear-by-it">Why people swear by it</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>Feature</th><th>What it actually means</th></tr></thead><tbody><tr><td>Modal editing</td><td><code>hjkl</code> to move, <code>dd</code> to delete a line, <code>ci&quot;</code> to change inside quotes — no mouse needed</td></tr><tr><td>Speed</td><td>Once it clicks, editing feels faster than thinking</td></tr><tr><td>Ubiquity</td><td>SSH into any Linux server in the world, Vim is there</td></tr><tr><td>Composability</td><td>Commands combine like sentences: <code>d3w</code> deletes the next 3 words</td></tr><tr><td>Extensibility</td><td>Plugins exist for everything — LSP, git, fuzzy finding, themes</td></tr><tr><td>Zero distraction</td><td>It’s just you and the text</td></tr></tbody> </table> </div>
+<h3 id="the-honest-downsides">The honest downsides</h3>
+<ul>
+<li>The learning curve is a <strong>wall</strong>, not a curve. The famous joke: <em>“How do you exit Vim? You don’t. You’ve been trapped since 2011.”</em></li>
+<li>Setting up Vim to match modern IDE features (autocomplete, debugging, refactoring) takes serious time and config knowledge.</li>
+<li>Pair programming with someone who doesn’t know Vim? Awkward.</li>
+</ul>
+<p><strong>Who thrives here:</strong> DevOps engineers, backend developers, anyone who lives in the terminal, people who enjoy deeply customising their tools.</p>
+<h2 id="the-sublime--vs-code-crowd">The Sublime / VS Code Crowd</h2>
+<p>Sublime Text launched in 2008 and felt like a revelation — fast, clean, and powerful without demanding you memorise an alien control scheme. VS Code picked up the torch in 2015 and now dominates the landscape.</p>
+<p>These editors hit a sweet spot: they feel like <em>editors</em> (not operating systems), but they don’t fight you when you want modern features.</p>
+<h3 id="the-appeal">The appeal</h3>
+<ul>
+<li><strong>Open a file instantly.</strong> No project wizard, no indexing spinner, no JVM warmup.</li>
+<li><strong>Command Palette</strong> (<code>Ctrl+Shift+P</code> / <code>Cmd+Shift+P</code>) — do almost anything without leaving the keyboard.</li>
+<li><strong>Multi-cursor editing</strong> — select 20 occurrences and edit them all simultaneously.</li>
+<li><strong>Extensions marketplace</strong> — add exactly what you need, nothing more.</li>
+<li><strong>Works well with any language</strong> — Python, JS, Go, Rust, Markdown, YAML, whatever.</li>
+</ul>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-5172" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-5172" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>Startup time comparison (rough, informal):</span></span>
+<span class="line"><span>  Vim:          ~0.1 seconds</span></span>
+<span class="line"><span>  VS Code:      ~1-2 seconds</span></span>
+<span class="line"><span>  IntelliJ:     ~10-20 seconds (depends on project)</span></span></code></pre> </div>
+<h3 id="the-honest-downsides-1">The honest downsides</h3>
+<ul>
+<li>VS Code can quietly balloon in memory if you install too many extensions.</li>
+<li>Refactoring support rarely matches a dedicated IDE for large codebases.</li>
+<li>“Just install an extension” can become a rabbit hole.</li>
+</ul>
+<p><strong>Who thrives here:</strong> Full-stack developers, polyglot programmers, people who want power without configuration overhead, developers who switch between projects and languages frequently.</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="the-ide-devotee">The IDE Devotee</h2>
+<p>At the other end of the spectrum: the full IDE. IntelliJ IDEA, Visual Studio, Eclipse, Android Studio, Xcode. These are <em>environments</em>, not editors. They ship with everything: debugger, profiler, refactoring engine, test runner, database client, and more.</p>
+<p>The IDE devotee is not lazy — they’re leveraging serious engineering that took thousands of person-years to build.</p>
+<h3 id="what-you-actually-get">What you actually get</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>Capability</th><th>Example</th></tr></thead><tbody><tr><td>Deep refactoring</td><td>Rename a method and every call site updates — across 500 files</td></tr><tr><td>Type-aware autocomplete</td><td>Not just text matching, but understands your class hierarchy</td></tr><tr><td>Integrated debugger</td><td>Set breakpoints, inspect variables, step through code visually</td></tr><tr><td>Inline errors</td><td>See compiler errors <em>as you type</em>, before you even run anything</td></tr><tr><td>Framework awareness</td><td>Spring Boot, Kotlin, Android — the IDE understands the framework, not just the language</td></tr><tr><td>Built-in database tools</td><td>Query your DB without leaving the editor</td></tr></tbody> </table> </div>
+<p>For large, typed codebases — Java, Kotlin, C#, TypeScript — these features pay for themselves in minutes per day saved.</p>
+<h3 id="the-honest-downsides-2">The honest downsides</h3>
+<ul>
+<li><strong>Slow.</strong> Project indexing alone can take minutes on a large codebase.</li>
+<li><strong>Heavy.</strong> IntelliJ can comfortably use 2–4 GB of RAM.</li>
+<li><strong>Over-engineering small tasks.</strong> Using IntelliJ to edit a shell script feels like driving a forklift to buy groceries.</li>
+<li><strong>You can become dependent.</strong> Some developers find they genuinely don’t know how to find a method’s definition without pressing <code>Ctrl+Click</code>.</li>
+</ul>
+<p><strong>Who thrives here:</strong> Java/Kotlin/C# developers, anyone working in large enterprise codebases, Android or iOS developers, developers who value “it just works” over tweakability.</p>
+<h2 id="the-actual-holy-war">The Actual Holy War</h2>
+<p>The debate gets heated because people aren’t just comparing tools — they’re defending workflows, identities, and years of investment.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>The Vim user says</th><th>The IDE user says</th></tr></thead><tbody><tr><td>”Your IDE is a crutch&quot;</td><td>&quot;Your dotfiles are a hobby project&quot;</td></tr><tr><td>&quot;I can edit anything from a terminal&quot;</td><td>&quot;I can refactor 10,000 lines in 30 seconds&quot;</td></tr><tr><td>&quot;Sublime Text is Vim for people who gave up&quot;</td><td>&quot;Vim is an IDE for people who gave up on UI&quot;</td></tr><tr><td>&quot;My config is version-controlled&quot;</td><td>&quot;Mine is managed by the vendor and just works”</td></tr></tbody> </table> </div>
+<p>The truth? <strong>They’re all right.</strong> The Vim user really is faster at certain tasks. The IDE user really does catch more bugs before they compile. The Sublime user really does spend less time fighting their setup.</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="so-which-should-you-use">So Which Should You Use?</h2>
+<p>Ask these questions instead:</p>
+<ol>
+<li>
+<p><strong>What language and ecosystem?</strong> Kotlin + Android = Android Studio. Python scripts = VS Code or Vim. C# + .NET = Visual Studio or Rider.</p>
+</li>
+<li>
+<p><strong>How large is the codebase?</strong> 500 lines? Vim is fine. 500,000 lines? You probably want deep indexing.</p>
+</li>
+<li>
+<p><strong>How much do you want to customise?</strong> Vim is a blank canvas. VS Code is a reasonable default you can customise. IDEs give you guardrails.</p>
+</li>
+<li>
+<p><strong>Do you work on remote servers?</strong> Vim is unbeatable for SSH workflows.</p>
+</li>
+<li>
+<p><strong>Are you learning?</strong> Start with VS Code. It’s forgiving, well-documented, and the extensions ecosystem means it grows with you.</p>
+</li>
+</ol>
+<div class="alert alert-info"><p>💡 <b>The pragmatic answer:</b> Most experienced developers use <b>more than one tool</b>. Vim for quick server edits, VS Code for exploratory coding, IntelliJ for the big Java service. The real skill is knowing <i>which</i> tool to reach for.</p></div>
+<h2 id="the-verdict">The Verdict</h2>
+<p>Calling Vim users “Luddites” misses the point. They’re not resisting technology — they’ve just made a different tradeoff, one that optimises for speed, portability, and minimal friction over discoverability and automation.</p>
+<p>The best developers tend to be <em>curious about tools</em>, not <em>dogmatic about them</em>. Try Vim for a month. Really learn one IDE. See what VS Code’s extensions can do. Then pick the one (or combination) that makes <em>you</em> faster.</p>
+<p>The editor is not the craft. The craft is the thinking, the design, the problem-solving. The editor is just how your thoughts become code.</p>
+<p><em>What’s your editor of choice — and why? Drop a comment below. (And yes, Emacs users, you’re always welcome at the table.) 👇</em></p> <div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div>  </div> <hr data-astro-cid-gjtny2mx> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small ">Share:</span> <a class="btn btn-sm btn-outline-secondary" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-288%2Fblog%2F2026%2F03%2F09%2Fluddites-vs-developers%2F&#38;text=Vim%2C%20Sublime%2C%20or%20an%20IDE%3F%20The%20Never-Ending%20Developer%20Holy%20War" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-288%2Fblog%2F2026%2F03%2F09%2Fluddites-vs-developers%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-288%2Fblog%2F2026%2F03%2F09%2Fluddites-vs-developers%2F&#38;title=Vim%2C%20Sublime%2C%20or%20an%20IDE%3F%20The%20Never-Ending%20Developer%20Holy%20War" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-288%2Fblog%2F2026%2F03%2F09%2Fluddites-vs-developers%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <button id="copy-post-link" class="btn btn-sm btn-outline-secondary" aria-label="Copy link"> <i class="fa fa-link" aria-hidden="true"></i> </button> </div> <br data-astro-cid-gjtny2mx>   <div class="related-posts-section" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
+</h5><div class="d-flex flex-row overflow-auto gap-3 pb-2" data-astro-cid-dpgbfi7r><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-288/blog/2023/04/16/creating-if-statement-kotlin.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Creating your own if statement in Kotlin" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-code-branch me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Creating your own if statement in Kotlin</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-288/blog/2023/04/14/dependency-injection-extension-functions-kotlin.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Dependency Injection of extension functions in Kotlin" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-plug me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Dependency Injection of extension functions in Kotlin</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-288/blog/2023/04/02/pure-functions.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read WTH is a Pure function" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-infinity me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>WTH is a Pure function</small></div></div></a></div></div></div> <br data-astro-cid-gjtny2mx>  <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</script> </div> </div> </div>  <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none" data-astro-cid-gjtny2mx> <div class="sticky-md-top" style="top: 10px" data-astro-cid-gjtny2mx> <div class="mb-3" data-astro-cid-gjtny2mx> <div class="card toc-card" data-astro-cid-xvrfupwn><button type="button" class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none" aria-expanded="false" aria-controls="toc-collapse" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small><i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true" data-astro-cid-xvrfupwn></i></button><div class="card-header toc-header d-none d-md-block" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small></div><div class="collapse d-md-block" id="toc-collapse" data-astro-cid-xvrfupwn><div class="card-body p-0" data-astro-cid-xvrfupwn><nav id="toc-nav" aria-label="Table of contents" data-astro-cid-xvrfupwn><ul class="toc-list" data-astro-cid-xvrfupwn><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-luddite-label" data-astro-cid-xvrfupwn>The Luddite Label</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-vim-purist" data-astro-cid-xvrfupwn>The Vim Purist</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#why-people-swear-by-it" data-astro-cid-xvrfupwn>Why people swear by it</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#the-honest-downsides" data-astro-cid-xvrfupwn>The honest downsides</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-sublime--vs-code-crowd" data-astro-cid-xvrfupwn>The Sublime / VS Code Crowd</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#the-appeal" data-astro-cid-xvrfupwn>The appeal</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#the-honest-downsides-1" data-astro-cid-xvrfupwn>The honest downsides</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-ide-devotee" data-astro-cid-xvrfupwn>The IDE Devotee</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#what-you-actually-get" data-astro-cid-xvrfupwn>What you actually get</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#the-honest-downsides-2" data-astro-cid-xvrfupwn>The honest downsides</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-actual-holy-war" data-astro-cid-xvrfupwn>The Actual Holy War</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#so-which-should-you-use" data-astro-cid-xvrfupwn>So Which Should You Use?</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-verdict" data-astro-cid-xvrfupwn>The Verdict</a></li></ul></nav></div></div></div><script type="module">const c=document.querySelector(".toc-mobile-toggle"),l=document.getElementById("toc-collapse");c.addEventListener("click",function(){const t=c.getAttribute("aria-expanded")==="true";c.setAttribute("aria-expanded",t?"false":"true"),l.classList.toggle("show")});const f=document.getElementById("toc-nav"),g=document.getElementById("toc-sidebar"),b=document.querySelector("#post .page-content"),u=Array.from(b.querySelectorAll("h2, h3")),L=90,m=f.querySelectorAll("a");let d=!1,a,r;function p(t){const e=f;m.forEach(s=>s.classList.remove("toc-active")),e.querySelectorAll(".toc-sublist").forEach(s=>s.classList.remove("expanded")),t&&e.querySelectorAll(`a[href="#${t}"]`).forEach(function(o){if(o.classList.add("toc-active"),!!o.parentElement&&o.parentElement.classList.contains("toc-h3")){const n=o.closest(".toc-sublist");n&&n.classList.add("expanded")}else{const n=o.nextElementSibling;n&&n.classList.contains("toc-sublist")&&n.classList.add("expanded")}})}if(u.length>=3){let t=function(){d||(typeof r=="number"&&clearTimeout(r),r=window.setTimeout(()=>{const e=window.scrollY+L;let i=null;u.forEach(function(s){s.getBoundingClientRect().top+window.scrollY<=e&&(i=s.id||i)}),p(i)},50))};g.style.display="",window.addEventListener("scroll",t,{passive:!0}),window.addEventListener("resize",t),t()}m.forEach(function(t){t.addEventListener("click",function(){const e=t.getAttribute("href")||"";d=!0,typeof a=="number"&&clearTimeout(a),a=window.setTimeout(function(){d=!1},800),e.startsWith("#")&&p(e.substring(1)),l&&l.classList.contains("show")&&(l.classList.remove("show"),c&&c.setAttribute("aria-expanded","false"))})});</script> </div> <div class="d-none d-md-block" data-astro-cid-gjtny2mx></div> </div> </div> </div> </div> <br data-astro-cid-gjtny2mx> </div> <button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top" data-astro-cid-wlspcwf4> <i class="fas fa-arrow-up" aria-hidden="true" data-astro-cid-wlspcwf4></i> </button>  <script type="module">const t=document.getElementById("back-to-top");if(t){let c=window.scrollY;window.addEventListener("scroll",function(){const o=window.scrollY,n=o<c;c=o,t.classList.toggle("visible",n&&o>300)}),t.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})})}</script> <dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore data-astro-cid-gixpweiw> <div class="lightbox-content" data-astro-cid-gixpweiw> <button type="button" class="lightbox-close" aria-label="Close" data-astro-cid-gixpweiw>&times;</button> <img src="" alt="Expanded image" data-astro-cid-gixpweiw> </div> </dialog> <script type="module" src="/pr-preview/pr-288/_astro/Lightbox.astro_astro_type_script_index_0_lang.BudYLtmj.js"></script>  <script type="module" src="/pr-preview/pr-288/_astro/BaseLayout.astro_astro_type_script_index_0_lang.C0Ecsfr9.js"></script> </body> </html>
