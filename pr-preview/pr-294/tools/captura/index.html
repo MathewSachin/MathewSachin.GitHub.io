@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Captura Web Recorder</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-294/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-294/tools/captura/"><meta property="og:title" content="Captura Web Recorder"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-294/tools/captura/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-294/feed.xml"><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><style>#recorder-canvas{width:100%;height:auto;display:block;background:#111;border-radius:6px}.canvas-wrap{position:relative}#countdown-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#00000073;border-radius:6px;pointer-events:none}#countdown-overlay[hidden]{display:none!important}#countdown-number{font-size:clamp(4rem,15vw,8rem);font-weight:700;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.8);line-height:1;user-select:none;animation:countdown-pop .15s ease-out}@keyframes countdown-pop{0%{transform:scale(1.25);opacity:.6}to{transform:scale(1);opacity:1}}.rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc3545;animation:blink 1s step-start infinite;margin-right:4px}@keyframes blink{50%{opacity:0}}.audio-meter{width:100%;height:10px;display:block;border-radius:3px;background:#1e1e1e}#captura-error-dialog{background:#212529;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:0;max-width:480px;width:90vw;color:#e9ecef}#captura-error-dialog::backdrop{background:#000000a6}.captura-dialog-content{position:relative;padding:1.5rem 1.75rem}.captura-dialog-title{margin:0 2rem .75rem 0;font-size:1.05rem}.captura-dialog-body{margin:0;font-size:.9rem;line-height:1.55;color:#adb5bd}.captura-dialog-close{position:absolute;top:.75rem;right:.9rem;background:transparent;border:none;color:#adb5bd;font-size:1.4rem;line-height:1;cursor:pointer;padding:0}.toast-link{color:#fff;font-weight:600;text-decoration:underline}#pwa-update-bar{position:fixed;top:0;left:0;right:0;z-index:1100;padding:.6rem 1rem;background-color:#0dcaf0;color:#000;font-size:.875rem;box-shadow:0 2px 8px #0000004d}#pwa-update-bar[hidden]{display:none!important}@media(display-mode:standalone){nav.navbar,#tool-header,#tool-sidebar,#tool-giscus-section,#captura-about,#captura-how-it-works{display:none!important}#tool-main-content{flex:0 0 100%;max-width:100%}}
+</style>
+<link rel="stylesheet" href="/pr-preview/pr-294/_astro/BaseLayout.CfLJo8Qo.css">
+<style>:where([data-astro-image]){height:auto}:where([data-astro-image=full-width]){width:100%}:where([data-astro-image=constrained]){max-width:100%}[data-astro-image-fit=fill]{object-fit:fill}[data-astro-image-fit=contain]{object-fit:contain}[data-astro-image-fit=cover]{object-fit:cover}[data-astro-image-fit=scale-down]{object-fit:scale-down}
+.in-content-ad[data-astro-cid-ykg2om2w]{overflow:hidden;max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w] .card[data-astro-cid-ykg2om2w]{box-shadow:none;border-color:#00000020;overflow:hidden}.in-content-ad[data-astro-cid-ykg2om2w] .card-body[data-astro-cid-ykg2om2w]{min-height:200px}.in-content-ad[data-astro-cid-ykg2om2w] ins[data-astro-cid-ykg2om2w].adsbygoogle{max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w]:has(ins[data-ad-status=unfilled]){display:none}@media(max-width:767.98px){.in-content-ad[data-astro-cid-ykg2om2w]{overflow:visible;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw)}}
+blockquote[data-astro-cid-trienahh]{padding:.5em 1em;margin:0 0 1rem;color:#6c757d;border-left:.25em solid var(--post-accent, var(--color-accent));background:transparent;font-style:normal;font-size:.9em}blockquote[data-astro-cid-trienahh]>[data-astro-cid-trienahh]:last-child{margin-bottom:0}
+</style></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-294/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-294/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-294/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-294/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="text-light nav-link" href="/pr-preview/pr-294/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div class="bg-dark"> <div id="tool-header" class="py-4 text-white google-anno-skip"> <div class="container"> <h2>Captura Web Recorder</h2> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small text-white">Share:</span> <a class="btn btn-sm btn-outline-light" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-294%2Ftools%2Fcaptura%2F&#38;text=Captura%20Web%20Recorder" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-294%2Ftools%2Fcaptura%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-294%2Ftools%2Fcaptura%2F&#38;title=Captura%20Web%20Recorder" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-light" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-294%2Ftools%2Fcaptura%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var C=(a,r,c)=>r in a?A(a,r,{enumerable:!0,configurable:!0,writable:!0,value:c}):a[r]=c;var l=(a,r,c)=>C(a,typeof r!="symbol"?r+"":r,c);var E=new Set(["__proto__","constructor","prototype"]);{let a={0:t=>y(t),1:t=>c(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(c(t)),5:t=>new Set(c(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},r=t=>{let[p,e]=t;return p in a?a[p](e):void 0},c=t=>t.map(r),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,r(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let d=this.querySelectorAll("astro-slot"),n={},u=this.querySelectorAll("template[data-astro-template]");for(let o of u){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of d){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("name")||"default"]=o.innerHTML)}let m;try{m=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let i=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(i+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${i}`,this.getAttribute("props"),o),o}let s,h=this.hydrator(this);s=performance.now(),await h(this.Component,m,n,{client:this.getAttribute("client")}),s&&this.setAttribute("client-render-time",(performance.now()-s).toString()),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),d.disconnect(),this.childrenConnectedCallback()},d=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});d.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),d=this.getAttribute("client");if(Astro[d]===void 0){window.addEventListener(`astro:${d}`,()=>this.start(),{once:!0});return}try{await Astro[d](async()=>{let n=this.getAttribute("renderer-url"),[u,{default:m}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),s=this.getAttribute("component-export")||"default";if(s.includes(".")){this.Component=u;for(let h of s.split(".")){if(E.has(h)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,h))throw new Error(`Invalid component export path: ${s}`);this.Component=this.Component[h]}}else{if(E.has(s))throw new Error(`Invalid component export path: ${s}`);this.Component=u[s]}return this.hydrator=m,this.hydrate},e,this)}catch(n){console.error("[astro-island] Error hydrating %s",this.getAttribute("component-url"),n)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="1kLO17" component-url="/pr-preview/pr-294/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-294/_astro/client.svelte.DtBO7rvO.js" props="{&quot;id&quot;:[0,&quot;copy-post-link&quot;],&quot;className&quot;:[0,&quot;btn btn-sm btn-outline-light&quot;],&quot;aria-label&quot;:[0,&quot;Copy link&quot;],&quot;title&quot;:[0,&quot;Copy link&quot;],&quot;value&quot;:[0,&quot;https://mathewsachin.github.io/pr-preview/pr-294/tools/captura/&quot;],&quot;iconClass&quot;:[0,&quot;fa fa-link&quot;],&quot;copiedIconClass&quot;:[0,&quot;fa fa-check&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.06301800000073854" await-children><!--[--><button id="copy-post-link" aria-label="Copy link" class="btn btn-sm btn-outline-light" title="Copy link"><i class="fa fa-link"></i> <!--[--><!--]--></button><!--]--><!--astro:end--></astro-island> </div> </div> </div> <br> <div class="container"> <div class="row"> <div id="tool-main-content" class="col-md-10"> <div class="page-content">  <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><astro-island uid="1I2HdP" component-url="/pr-preview/pr-294/_astro/CapturaWebRecorder.QwURtRXx.js" component-export="default" renderer-url="/pr-preview/pr-294/_astro/client.svelte.DtBO7rvO.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;CapturaWebRecorder&quot;,&quot;value&quot;:true}"></astro-island>  <div id="captura-about" class="card google-anno-skip"><div class="card-body"><h5 id="about-captura-web-recorder">About Captura Web Recorder</h5><p>A browser-based screen recorder inspired by the original
+<a href="/blog/2023/04/09/captura-unmaintained.html">Captura (no longer maintained)</a> desktop app.
+Record your screen, mix in webcam and microphone audio, and save the result — all entirely
+inside your browser. <strong>No data is ever sent to any server.</strong></p><h6 id="limitations-vs-native-desktop-apps">Limitations vs. native desktop apps</h6><ul>
+<li><strong>No global keystroke/key overlay</strong> — browsers deliberately sandbox each tab
+and cannot listen to keyboard events outside the browser window. OS-level keyboard hooks
+(used by the original Captura to show keystrokes on screen) are simply not available to
+web pages. This is a fundamental security boundary of the web platform, and one of the
+reasons native desktop apps still shine for certain capture workflows.</li>
+<li><strong>Desktop only</strong> — mobile browsers do not expose <code>getDisplayMedia</code> because the mobile OS
+sandbox prevents web pages from capturing other apps’ screens. Use Chrome, Edge, or Firefox
+on a desktop.</li>
+<li><strong>WebM or MP4 output</strong> — the recorder can produce either a <code>.webm</code> file (VP9 + Opus) or an
+<code>.mp4</code> file (H.264 + AAC) via the <a href="https://github.com/Vanilagy/mediabunny">Mediabunny</a>
+library (WebCodecs API). Select the desired format from the <em>Recording format</em> dropdown
+before starting. The choice is saved for future visits.</li>
+<li><strong>File System Access API (Chrome/Edge) or OPFS (Firefox)</strong> — Chrome and Edge stream the
+recording directly to a folder you choose on your hard drive via the File System Access API;
+the save folder is remembered across visits. Firefox does not support the File System Access
+API, so the recorder falls back to the browser’s <strong>Origin Private File System (OPFS)</strong>: the
+recording is staged in private browser storage and a download is triggered automatically
+when you stop recording.</li>
+</ul><h6 id="hardware-media-key--os-media-overlay-support">Hardware media key &amp; OS media overlay support</h6><p>Once a recording is started, the browser registers a
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API">Media Session</a>
+so you can control it from <strong>hardware media keys</strong> (play/pause/stop buttons on
+keyboards, headsets, and remotes) or from the <strong>OS media overlay</strong> (e.g. the
+Windows taskbar media controls or macOS Now Playing widget) — even when the browser tab is
+not focused. The OS overlay shows the session as <em>“Captura Web – Recording Session
+Active”</em> and stays in sync as you pause, resume, or stop the recording.</p><div class="alert alert-info mb-0 py-2"><i class="fas fa-shield-alt me-1"></i><p><strong>Privacy:</strong> This tool runs 100% in your browser. No video, audio, or metadata
+is ever uploaded or transmitted anywhere.</p></div></div></div>
+<div id="captura-how-it-works" class="card mt-4 google-anno-skip"><div class="card-body"><h5 id="how-it-works">How It Works</h5><p><em>A look under the hood for the technically curious.</em></p><h6 id="screen--window-capture">Screen &amp; Window Capture</h6><p>Screen capture uses the browser’s <code>navigator.mediaDevices.getDisplayMedia()</code> API.
+When you click <em>Start Recording</em>, the browser shows its own native picker where you
+choose what to share — an entire screen, a specific window, or a browser tab. The browser
+returns a <code>MediaStream</code> containing a video track (and optionally an audio track
+if “Share system audio” is checked in the picker). This is intentional: the browser is
+the gatekeeper, so no web page can silently capture your screen without your explicit
+permission each time.</p><p>The system-audio checkbox in the recorder UI just passes <code>audio: true</code> as a
+constraint to <code>getDisplayMedia</code>. Whether system audio is actually available
+depends on the OS — Windows supports it natively; macOS requires a virtual audio driver.</p><hr/><h6 id="canvas-compositor">Canvas Compositor</h6><p>Rather than recording the screen stream directly, the recorder draws every frame onto an
+offscreen <code>&lt;canvas&gt;</code> element. This intermediate step is what makes the
+webcam picture-in-picture (PiP) overlay possible: each frame, the compositor first draws
+the screen video, then draws the webcam video on top in the chosen corner, and finally
+stamps a live timestamp in the bottom-right.</p><p>During recording the compositor runs in an async self-scheduling loop at your chosen frame
+rate (e.g. every ~33 ms for 30 fps). After drawing each frame it calls
+<code>canvasSource.add(timestamp)</code> from the Mediabunny library, which reads the
+canvas pixels and submits them to the hardware video encoder. The call is <code>await</code>ed
+so that if the encoder or disk I/O falls behind, the loop naturally slows down rather than
+overflowing an unbounded queue (back-pressure). The loop is a plain async function rather
+than <code>requestAnimationFrame</code> so that compositing continues reliably even when
+the browser tab is hidden or you switch to another application.</p><hr/><h6 id="audio-mixing">Audio Mixing</h6><p>System audio (from the screen capture) and microphone audio are two separate
+<code>MediaStream</code>s. To combine them into a single audio track, the recorder uses the
+Web Audio API:</p><ol>
+<li>An <code>AudioContext</code> is created.</li>
+<li>Each source stream is wrapped in a <code>MediaStreamSourceNode</code>.</li>
+<li>Each source node is routed through a <code>GainNode</code>, whose gain value is bound
+to the corresponding slider in the <em>Audio Mix</em> panel. Moving a slider while
+recording instantly changes the mix without any interruption.</li>
+<li>Each gain node feeds into an <code>AnalyserNode</code> that is read every animation
+frame to drive the live level meters in the UI. The RMS amplitude of the time-domain
+samples is computed, scaled, and painted as a green/yellow/red bar — green up to 70%
+of full scale, yellow from 70–85%, and red above 85% — so you can confirm your mic
+is live before committing to a long recording.</li>
+<li>Both analyser nodes connect to a single <code>MediaStreamDestinationNode</code>.</li>
+<li>The destination node exposes a mixed <code>MediaStream</code> whose audio track is then
+passed to Mediabunny as a <code>MediaStreamAudioTrackSource</code>.</li>
+</ol><p>This approach lets the browser’s audio engine handle the mixing in real time with no
+additional libraries required. Gain and mixer settings are persisted to
+<code>localStorage</code> so your preferred levels are restored on the next visit.</p><hr/><h6 id="streaming-to-disk">Streaming to Disk</h6><p>A naive screen recorder would accumulate the entire recording in memory as a
+<code>Blob</code> and only offer a download at the end. For long recordings this easily
+consumes gigabytes of RAM and risks a browser crash. This recorder avoids that problem by
+streaming compressed video data directly to a file as it is produced.</p><p><strong>Chrome / Edge (File System Access API):</strong>
+Before recording starts, the recorder asks for access to a <strong>folder</strong> of your
+choice via <code>window.showDirectoryPicker()</code>. The chosen folder handle is stored in
+<strong>IndexedDB</strong> so it persists across page reloads — you only need to pick a
+folder once. A <em>Choose Folder</em> button in the settings panel lets you switch to a
+different folder at any time.</p><p>When recording starts, the recorder verifies it still has write permission for the stored
+folder using <code>FileSystemDirectoryHandle.queryPermission()</code>. If permission has
+lapsed (e.g. after a browser restart), <code>requestPermission()</code> is called to prompt
+you to re-grant it.</p><p><strong>Firefox (Origin Private File System fallback):</strong>
+Firefox does not support the File System Access API’s directory picker. Instead, the
+recorder uses the <strong>Origin Private File System (OPFS)</strong> — a private,
+origin-scoped storage area exposed via <code>navigator.storage.getDirectory()</code>.
+No permission prompt is needed. The recording is staged in OPFS during capture; when you
+stop recording, a file download is triggered automatically so the video lands in your
+downloads folder. The temporary OPFS file is removed immediately after the download is
+initiated.</p><p>In both cases, once a writable <code>FileSystemWritableFileStream</code> is open, it is passed
+directly to Mediabunny’s <code>StreamTarget</code>, which writes encoded frames to the file
+incrementally as they are produced by the hardware encoder.
+When recording stops, <code>output.finalize()</code> flushes the encoder, rewrites the
+correct video duration into the file header, and closes the stream. Memory usage therefore
+stays near-constant regardless of recording length, and the output file always has a valid
+duration — unlike the truncated headers produced by the native <code>MediaRecorder</code> API.</p><hr/><h6 id="codec--container-mediabunny">Codec &amp; Container (Mediabunny)</h6><p>The recorder supports two output formats, selectable from the <em>Recording format</em> dropdown:</p><ul>
+<li><strong>WebM — VP9 + Opus:</strong> video encoded with <strong>VP9</strong>, audio with <strong>Opus</strong> at 128 kbps,
+muxed into a <strong>WebM</strong> container.</li>
+<li><strong>MP4 — H.264 + AAC:</strong> video encoded with <strong>H.264 (AVC)</strong>, audio with <strong>AAC</strong> at
+128 kbps, muxed into an <strong>MP4</strong> container.
+MP4 files are broadly compatible with most media players, devices, and video editors.</li>
+</ul><p>Both formats are handled by the <a href="https://github.com/Vanilagy/mediabunny">Mediabunny</a>
+library, which drives the browser’s hardware <code>VideoEncoder</code> and <code>AudioEncoder</code>
+(WebCodecs API) directly and writes the muxed output incrementally to the
+<code>FileSystemWritableFileStream</code> via its <code>StreamTarget</code>. On finalization it rewrites the
+duration metadata at the start of the file — a step that the native <code>MediaRecorder</code> API
+skips, making its output unscrubbable in many players.</p></div></div> </div> </div> <div id="tool-sidebar" class="col-md-2"> <div class="sticky-top" style="top: 10px">  </div> </div> </div> </div> <br> <div id="tool-giscus-section" class="container"> <div class="row"> <div class="col-md-10"> <div class="card"> <div class="card-body"> <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</script> </div> </div> </div> </div> </div> <br> </div>  </body></html>
