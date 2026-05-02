@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Ditching Disqus for giscus — and I Should Have Done It Sooner</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-291/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-291/blog/2026/03/12/ditching-disqus-for-giscus.html"><meta property="og:title" content="Ditching Disqus for giscus — and I Should Have Done It Sooner"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-291/blog/2026/03/12/ditching-disqus-for-giscus.html"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-291/feed.xml"><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><link rel="stylesheet" href="/pr-preview/pr-291/_astro/_slug_@_@astro.n_ZwOThi.css">
+<link rel="stylesheet" href="/pr-preview/pr-291/_astro/BaseLayout.CmxBwi-R.css">
+<style>:where([data-astro-image]){height:auto}:where([data-astro-image=full-width]){width:100%}:where([data-astro-image=constrained]){max-width:100%}[data-astro-image-fit=fill]{object-fit:fill}[data-astro-image-fit=contain]{object-fit:contain}[data-astro-image-fit=cover]{object-fit:cover}[data-astro-image-fit=scale-down]{object-fit:scale-down}
+.in-content-ad[data-astro-cid-ykg2om2w]{overflow:hidden;max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w] .card[data-astro-cid-ykg2om2w]{box-shadow:none;border-color:#00000020;overflow:hidden}.in-content-ad[data-astro-cid-ykg2om2w] .card-body[data-astro-cid-ykg2om2w]{min-height:200px}.in-content-ad[data-astro-cid-ykg2om2w] ins[data-astro-cid-ykg2om2w].adsbygoogle{max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w]:has(ins[data-ad-status=unfilled]){display:none}@media(max-width:767.98px){.in-content-ad[data-astro-cid-ykg2om2w]{overflow:visible;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw)}}
+blockquote[data-astro-cid-trienahh]{padding:.5em 1em;margin:0 0 1rem;color:#6c757d;border-left:.25em solid var(--post-accent, var(--color-accent));background:transparent;font-style:normal;font-size:.9em}blockquote[data-astro-cid-trienahh]>[data-astro-cid-trienahh]:last-child{margin-bottom:0}
+</style>
+<link rel="stylesheet" href="/pr-preview/pr-291/_astro/blog.gYhV94X6.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-291/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-291/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-291/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-291/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="text-light nav-link" href="/pr-preview/pr-291/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-astro-cid-q2vpma6g></div> <script type="module">const r=document.getElementById("reading-progress-bar");function e(){const t=document.documentElement.scrollHeight-window.innerHeight,n=t>0?Math.min(window.scrollY/t*100,100):0;r.style.width=n+"%",r.setAttribute("aria-valuenow",String(Math.round(n)))}window.addEventListener("scroll",e);window.addEventListener("resize",e);e();</script> <div class="bg-dark" data-astro-cid-gjtny2mx> <div class="pt-4 pb-5 post-hero text-white" data-astro-cid-gjtny2mx> <div class="container" data-astro-cid-gjtny2mx> <h2 data-astro-cid-gjtny2mx> <i class="fas fa-comments me-2" aria-hidden="true" data-astro-cid-gjtny2mx></i> Ditching Disqus for giscus — and I Should Have Done It Sooner </h2> <em data-astro-cid-gjtny2mx>12 Mar 2026</em> &nbsp;-&nbsp; <em data-astro-cid-gjtny2mx>5 min read</em> <div class="post-tag my-1 d-flex flex-wrap align-items-center gap-2" data-astro-cid-gjtny2mx> <a class="badge rounded-pill text-dark" style="background-color: #E3F2FD;" href="/pr-preview/pr-291/blog/tags/giscus/" data-astro-cid-gjtny2mx>giscus</a><a class="badge rounded-pill text-dark" style="background-color: #F3E5F5;" href="/pr-preview/pr-291/blog/tags/disqus/" data-astro-cid-gjtny2mx>disqus</a><a class="badge rounded-pill text-dark" style="background-color: #D7CCC8;" href="/pr-preview/pr-291/blog/tags/comments/" data-astro-cid-gjtny2mx>comments</a><a class="badge rounded-pill text-dark" style="background-color: #F0F4C3;" href="/pr-preview/pr-291/blog/tags/jekyll/" data-astro-cid-gjtny2mx>jekyll</a><a class="badge rounded-pill text-dark" style="background-color: #D7CCC8;" href="/pr-preview/pr-291/blog/tags/github-pages/" data-astro-cid-gjtny2mx>github-pages</a><a class="badge rounded-pill text-dark" style="background-color: #B2EBF2;" href="/pr-preview/pr-291/blog/tags/github/" data-astro-cid-gjtny2mx>github</a> </div>   <hr class="border-light mt-3 mb-0" data-astro-cid-gjtny2mx> <div class="series-banner" data-astro-cid-w7ld43o3><i class="fas fa-layer-group me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>
+Part 3 of 9 &mdash;
+<a href="/pr-preview/pr-291/blog/series/blogging-with-jekyll/" data-astro-cid-w7ld43o3>Blogging with Jekyll</a> series
+<br data-astro-cid-w7ld43o3><a class="series-prev-link" href="/pr-preview/pr-291/blog/2026/04/04/trigger-copilot-from-github-actions.html" data-astro-cid-w7ld43o3><i class="fas fa-arrow-left me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>Previous: Triggering GitHub Copilot from a GitHub Action via Issue Assignment</a></div>   <hr class="border-light mt-3 mb-3" data-astro-cid-gjtny2mx> <div class="related-posts-section" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
+</h5><div class="d-flex flex-row overflow-auto gap-3 pb-2" data-astro-cid-dpgbfi7r><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-291/blog/2023/04/09/captura-unmaintained.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read What happened to Captura?" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-camera me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>What happened to Captura?</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-291/blog/2026/03/09/luddites-vs-developers.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Vim, Sublime, or an IDE? The Never-Ending Developer Holy War" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-terminal me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Vim, Sublime, or an IDE? The Never-Ending Developer Holy War</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-291/blog/2026/03/12/ai-blog-generation-flow.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-robot me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages</small></div></div></a></div></div></div>  <div class="p-5" data-astro-cid-gjtny2mx></div> </div> </div> <div class="container post-content-container" data-astro-cid-gjtny2mx> <div class="row" data-astro-cid-gjtny2mx> <div class="col-md-10" data-astro-cid-gjtny2mx> <div id="post" class="card" data-astro-cid-gjtny2mx> <div class="card-body" data-astro-cid-gjtny2mx> <div class="page-content" data-astro-cid-gjtny2mx>  <p><em>Comment sections are supposed to be the friendly bit at the bottom of a post. A place to ask questions, share thoughts, push back. So why did mine feel like a billboard?</em></p>
+<picture> <source srcset="/pr-preview/pr-291/_astro/giscus-hero.Br26EYdf_88GgF.webp" type="image/webp">  <img src="/pr-preview/pr-291/_astro/giscus-hero.Br26EYdf_ZExFF6.svg" data-image-component="true" alt="Before and after comparison: Disqus with ad banners, tracking scripts and slow loading on the left; clean giscus GitHub Discussions widget on the right" loading="lazy" decoding="async" width="600" height="280"> </picture>
+<h2 id="the-problem-with-disqus">The Problem with Disqus</h2>
+<p>I had Disqus on this blog for years. It worked — technically. But every time I thought about it too hard, something felt off.</p>
+<p>Here’s what was actually going on behind the scenes on every page load:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>Issue</th><th>What it means for you</th></tr></thead><tbody><tr><td><strong>Ads</strong></td><td>Disqus injects its own ads into the comment section <em>on top of</em> any ads you already run</td></tr><tr><td><strong>Tracking</strong></td><td>Third-party cookies, pixel trackers, cross-site fingerprinting</td></tr><tr><td><strong>Weight</strong></td><td>~1 MB of JavaScript on every page, even if nobody comments</td></tr><tr><td><strong>Slow load</strong></td><td>The whole comment widget deferred to a sluggish external server</td></tr><tr><td><strong>Privacy</strong></td><td>Every visitor’s data handed to Disqus, then used for ad targeting</td></tr></tbody> </table> </div>
+<p>The blog already runs Google AdSense — that’s deliberate and I’m comfortable with it. But Disqus was bolting its own ad network <em>on top of that</em>, injecting third-party ads directly inside the comment section. So every post ended up with two separate ad systems running simultaneously, both loading tracking scripts, both fighting for space and bandwidth.</p>
+<p>Not great.</p>
+<div class="alert alert-info"><p>🔍 <b>Try it yourself:</b> Open DevTools on any Disqus-powered site and check the Network tab. Filter by <b>Fetch/XHR</b>. Count the requests. It’s a lot.</p></div>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="enter-giscus">Enter giscus</h2>
+<p><a href="https://giscus.app">giscus</a> is an open-source comment system that stores comments as <strong>GitHub Discussions</strong> on your repository. That’s it. No third-party servers, no ads, no tracking, no cost.</p>
+<p>The idea is beautifully simple:</p>
+<ul>
+<li>Each blog post maps to a GitHub Discussion thread</li>
+<li>Readers sign in with their GitHub account to comment</li>
+<li>Comments are stored directly in your repo’s Discussions tab</li>
+<li>You own the data — it lives in GitHub, not on someone else’s ad platform</li>
+<li>The whole widget is a single lightweight <code>&lt;script&gt;</code> tag</li>
+</ul>
+<p>It’s built on the <a href="https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions">GitHub Discussions API</a>, which means reactions (👍 ❤️ 🎉) work too.</p>
+<h2 id="the-setup-it-really-is-this-simple">The Setup (It Really Is This Simple)</h2>
+<h3 id="step-1-enable-github-discussions-on-your-repo">Step 1: Enable GitHub Discussions on your repo</h3>
+<p>Go to your repository on GitHub → <strong>Settings</strong> → <strong>General</strong> → scroll down to the <strong>Features</strong> section → tick <strong>Discussions</strong>.</p>
+<p>That’s it for the repo side.</p>
+<h3 id="step-2-install-the-giscus-github-app">Step 2: Install the giscus GitHub App</h3>
+<p>Head to <a href="https://github.com/apps/giscus">github.com/apps/giscus</a> and install it on your repository. This gives giscus permission to create and read Discussion threads on your behalf.</p>
+<h3 id="step-3-generate-your-config-snippet">Step 3: Generate your config snippet</h3>
+<p>Go to <a href="https://giscus.app">giscus.app</a>, fill in:</p>
+<ul>
+<li>Your repository name (e.g. <code>MathewSachin/MathewSachin.GitHub.io</code>)</li>
+<li>How to map pages to Discussions (I use <strong>pathname</strong> — each URL gets its own thread)</li>
+<li>Which Discussion category to use (I created a dedicated <strong>Announcements</strong> category)</li>
+<li>Your preferred theme and language</li>
+</ul>
+<p>giscus generates a <code>&lt;script&gt;</code> tag for you. Mine looked like this:</p>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">html</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-2384" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-2384" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">script</span><span style="color:#B392F0"> src</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;https://giscus.app/client.js&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-repo</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;MathewSachin/MathewSachin.GitHub.io&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-repo-id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-category</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;Announcements&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-category-id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;DIC_kwDOAulkj84C4PRo&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-mapping</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;pathname&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-strict</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;1&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-reactions-enabled</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;1&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-emit-metadata</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;0&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-input-position</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;top&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-theme</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;light&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-lang</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;en&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        data-loading</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;lazy&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        crossorigin</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;anonymous&quot;</span></span>
+<span class="line"><span style="color:#B392F0">        async</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">script</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div>
+<h3 id="step-4-drop-it-into-your-layout">Step 4: Drop it into your layout</h3>
+<p>For this Jekyll site, I saved that script to <code>_includes/giscus.html</code> and added one line to <code>_layouts/post.html</code>:</p>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">liquid</span> <button class="btn btn-sm btn-code btn-clip" title="Copy to clipboard" data-clipboard-target="#code-block-4640" aria-label="Copy code to clipboard"> <i class="fa fa-copy" aria-hidden="true"></i> COPY
+</button> </div> <pre id="code-block-4640" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="liquid"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#FDAEB7;font-style:italic">Giscus</span><span style="color:#E1E4E8"> /&gt;</span></span></code></pre> </div>
+<p>Done. Every post now has a fully functional, privacy-respecting comment section. The entire change took about ten minutes.</p>
+<div class="alert alert-info"><p>✅ <b>Bonus:</b> Because comments live in GitHub Discussions, you get email notifications for new comments for free — no extra configuration needed.</p></div>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="disqus-vs-giscus-at-a-glance">Disqus vs giscus at a Glance</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th></th><th>Disqus</th><th>giscus</th></tr></thead><tbody><tr><td><strong>Cost</strong></td><td>Free (with ads) or paid</td><td>Free, always</td></tr><tr><td><strong>Ads</strong></td><td>Yes, unless you pay</td><td>None</td></tr><tr><td><strong>Tracking</strong></td><td>Extensive</td><td>None</td></tr><tr><td><strong>Data ownership</strong></td><td>Disqus owns it</td><td>You own it (GitHub)</td></tr><tr><td><strong>Login required</strong></td><td>Optional (but noisy)</td><td>GitHub account</td></tr><tr><td><strong>Page weight</strong></td><td>~1 MB+</td><td>~50 KB</td></tr><tr><td><strong>Open source</strong></td><td>No</td><td>Yes</td></tr><tr><td><strong>Self-hostable</strong></td><td>No</td><td>Yes</td></tr></tbody> </table> </div>
+<p>The only real trade-off with giscus is that readers need a GitHub account to comment. For a developer-focused blog, that’s basically everyone already. If your audience is primarily non-developers, this is worth thinking about — but for me it’s a non-issue.</p>
+<h2 id="removing-disqus">Removing Disqus</h2>
+<p>Once giscus was live, I removed the <code>disqus</code> settings from <code>_config.yml</code> and trimmed the Disqus script from the layout. Less code, fewer dependencies, cleaner page loads.</p>
+<p>The old Disqus comments? Disqus lets you <a href="https://help.disqus.com/en/articles/1717164-comments-export">export your comment data</a> as an XML file, and giscus has a migration path. Mine was sparse enough that I didn’t bother, but the option is there if you need it.</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="the-result">The Result</h2>
+<p>Every post on this blog now loads faster, respects your privacy, and has a comment section I’m actually happy to stand behind.</p>
+<p>No Disqus ads. No extra trackers. No regrets.</p>
+<p><em>If you’ve been putting off switching away from Disqus — don’t. It genuinely took less time than writing this post.</em></p>
+<p><em>And speaking of comments — the shiny new giscus widget is live right below this paragraph. Sign in with GitHub and say hello. 👇 It would mean a lot to see it in action, and I’d love to hear if you’ve made (or are considering) the same switch!</em></p>
+<p><em>If you want to streamline the rest of your Jekyll workflow too, check out <a href="/pr-preview/pr-291/blog/2026/03/12/ai-blog-generation-flow.html">my AI blog generation post</a> — it’s the other half of keeping this blog low-friction.</em></p> <div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div>  </div> <hr data-astro-cid-gjtny2mx> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small ">Share:</span> <a class="btn btn-sm btn-outline-secondary" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-291%2Fblog%2F2026%2F03%2F12%2Fditching-disqus-for-giscus%2F&#38;text=Ditching%20Disqus%20for%20giscus%20%E2%80%94%20and%20I%20Should%20Have%20Done%20It%20Sooner" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-291%2Fblog%2F2026%2F03%2F12%2Fditching-disqus-for-giscus%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-291%2Fblog%2F2026%2F03%2F12%2Fditching-disqus-for-giscus%2F&#38;title=Ditching%20Disqus%20for%20giscus%20%E2%80%94%20and%20I%20Should%20Have%20Done%20It%20Sooner" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-291%2Fblog%2F2026%2F03%2F12%2Fditching-disqus-for-giscus%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <button id="copy-post-link" class="btn btn-sm btn-outline-secondary" aria-label="Copy link"> <i class="fa fa-link" aria-hidden="true"></i> </button> </div> <br data-astro-cid-gjtny2mx> <div class="series-post-nav" role="navigation" aria-label="Series navigation" data-astro-cid-w7ld43o3><a href="/pr-preview/pr-291/blog/2026/04/04/trigger-copilot-from-github-actions.html" class="series-nav-btn prev-post" data-astro-cid-w7ld43o3><i class="fas fa-arrow-left nav-icon" aria-hidden="true" data-astro-cid-w7ld43o3></i><div data-astro-cid-w7ld43o3><span class="nav-label" data-astro-cid-w7ld43o3>Previous in series</span><span class="nav-title" data-astro-cid-w7ld43o3><i class="fas fa-bolt post-icon me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>Triggering GitHub Copilot from a GitHub Action via Issue Assignment</span></div></a><a href="/pr-preview/pr-291/blog/2026/03/25/how-site-search-works.html" class="series-nav-btn next-post" data-astro-cid-w7ld43o3><i class="fas fa-arrow-right nav-icon" aria-hidden="true" data-astro-cid-w7ld43o3></i><div data-astro-cid-w7ld43o3><span class="nav-label" data-astro-cid-w7ld43o3>Next in series</span><span class="nav-title" data-astro-cid-w7ld43o3><i class="fas fa-search post-icon me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>This Blog Has Fully Offline Search — Here&#39;s How It Works</span></div></a></div>  <div class="related-posts-section" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
+</h5><div class="d-flex flex-row overflow-auto gap-3 pb-2" data-astro-cid-dpgbfi7r><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-291/blog/2023/04/09/captura-unmaintained.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read What happened to Captura?" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-camera me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>What happened to Captura?</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-291/blog/2026/03/09/luddites-vs-developers.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Vim, Sublime, or an IDE? The Never-Ending Developer Holy War" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-terminal me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Vim, Sublime, or an IDE? The Never-Ending Developer Holy War</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-291/blog/2026/03/12/ai-blog-generation-flow.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-robot me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>How I Auto-Generate Blog Posts with GitHub Copilot, PRs, and GitHub Pages</small></div></div></a></div></div></div> <br data-astro-cid-gjtny2mx>  <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</script> </div> </div> </div>  <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none" data-astro-cid-gjtny2mx> <div class="sticky-md-top" style="top: 10px" data-astro-cid-gjtny2mx> <div class="mb-3" data-astro-cid-gjtny2mx> <div class="card toc-card" data-astro-cid-xvrfupwn><button type="button" class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none" aria-expanded="false" aria-controls="toc-collapse" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small><i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true" data-astro-cid-xvrfupwn></i></button><div class="card-header toc-header d-none d-md-block" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small></div><div class="collapse d-md-block" id="toc-collapse" data-astro-cid-xvrfupwn><div class="card-body p-0" data-astro-cid-xvrfupwn><nav id="toc-nav" aria-label="Table of contents" data-astro-cid-xvrfupwn><ul class="toc-list" data-astro-cid-xvrfupwn><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-problem-with-disqus" data-astro-cid-xvrfupwn>The Problem with Disqus</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#enter-giscus" data-astro-cid-xvrfupwn>Enter giscus</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-setup-it-really-is-this-simple" data-astro-cid-xvrfupwn>The Setup (It Really Is This Simple)</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#step-1-enable-github-discussions-on-your-repo" data-astro-cid-xvrfupwn>Step 1: Enable GitHub Discussions on your repo</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#step-2-install-the-giscus-github-app" data-astro-cid-xvrfupwn>Step 2: Install the giscus GitHub App</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#step-3-generate-your-config-snippet" data-astro-cid-xvrfupwn>Step 3: Generate your config snippet</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#step-4-drop-it-into-your-layout" data-astro-cid-xvrfupwn>Step 4: Drop it into your layout</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#disqus-vs-giscus-at-a-glance" data-astro-cid-xvrfupwn>Disqus vs giscus at a Glance</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#removing-disqus" data-astro-cid-xvrfupwn>Removing Disqus</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#the-result" data-astro-cid-xvrfupwn>The Result</a></li></ul></nav></div></div></div><script type="module">const c=document.querySelector(".toc-mobile-toggle"),l=document.getElementById("toc-collapse");c.addEventListener("click",function(){const t=c.getAttribute("aria-expanded")==="true";c.setAttribute("aria-expanded",t?"false":"true"),l.classList.toggle("show")});const f=document.getElementById("toc-nav"),g=document.getElementById("toc-sidebar"),b=document.querySelector("#post .page-content"),u=Array.from(b.querySelectorAll("h2, h3")),L=90,m=f.querySelectorAll("a");let d=!1,a,r;function p(t){const e=f;m.forEach(s=>s.classList.remove("toc-active")),e.querySelectorAll(".toc-sublist").forEach(s=>s.classList.remove("expanded")),t&&e.querySelectorAll(`a[href="#${t}"]`).forEach(function(o){if(o.classList.add("toc-active"),!!o.parentElement&&o.parentElement.classList.contains("toc-h3")){const n=o.closest(".toc-sublist");n&&n.classList.add("expanded")}else{const n=o.nextElementSibling;n&&n.classList.contains("toc-sublist")&&n.classList.add("expanded")}})}if(u.length>=3){let t=function(){d||(typeof r=="number"&&clearTimeout(r),r=window.setTimeout(()=>{const e=window.scrollY+L;let i=null;u.forEach(function(s){s.getBoundingClientRect().top+window.scrollY<=e&&(i=s.id||i)}),p(i)},50))};g.style.display="",window.addEventListener("scroll",t,{passive:!0}),window.addEventListener("resize",t),t()}m.forEach(function(t){t.addEventListener("click",function(){const e=t.getAttribute("href")||"";d=!0,typeof a=="number"&&clearTimeout(a),a=window.setTimeout(function(){d=!1},800),e.startsWith("#")&&p(e.substring(1)),l&&l.classList.contains("show")&&(l.classList.remove("show"),c&&c.setAttribute("aria-expanded","false"))})});</script> </div> <div class="d-none d-md-block" data-astro-cid-gjtny2mx></div> </div> </div> </div> </div> <br data-astro-cid-gjtny2mx> </div> <button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top" data-astro-cid-wlspcwf4> <i class="fas fa-arrow-up" aria-hidden="true" data-astro-cid-wlspcwf4></i> </button>  <script type="module">const t=document.getElementById("back-to-top");if(t){let c=window.scrollY;window.addEventListener("scroll",function(){const o=window.scrollY,n=o<c;c=o,t.classList.toggle("visible",n&&o>300)}),t.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})})}</script> <dialog id="img-lightbox" aria-label="Image lightbox" data-proofer-ignore data-astro-cid-gixpweiw> <div class="lightbox-content" data-astro-cid-gixpweiw> <button type="button" class="lightbox-close" aria-label="Close" data-astro-cid-gixpweiw>&times;</button> <img src="" alt="Expanded image" data-astro-cid-gixpweiw> </div> </dialog> <script type="module" src="/pr-preview/pr-291/_astro/Lightbox.astro_astro_type_script_index_0_lang.BudYLtmj.js"></script>  <script type="module" src="/pr-preview/pr-291/_astro/BaseLayout.astro_astro_type_script_index_0_lang.C0Ecsfr9.js"></script> </body> </html>
