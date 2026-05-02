@@ -1,0 +1,49 @@
+<div class="card mt-4">
+<div class="card-body">
+
+#### How It Works
+
+This tool parses, formats, minifies, and converts [Amazon Ion](https://amazon-ion.github.io/ion-docs/)
+text — entirely inside your browser.
+**No data is ever sent to a server.**
+
+##### What is Amazon Ion?
+
+Amazon Ion is a richly-typed, self-describing data serialisation format developed at Amazon.
+It is a **superset of JSON** — every valid JSON document is also valid Ion — and adds
+several data types that JSON lacks, including:
+
+- **Symbols** (`hello`, `'with spaces'`) — interned string identifiers
+- **Timestamps** (`2023-01-15T`) — native date/time values with nanosecond precision
+- **Blobs & Clobs** — binary data embedded in text
+- **S-expressions** — ordered sequences with prefix notation
+- **Annotations** — type-level metadata attached to any value
+
+Ion comes in two equivalent representations: a **text** format (used here) and a compact
+**binary** format.
+
+##### Features
+
+- **Format** — pretty-prints the Ion text with consistent indentation.
+- **Minify** — serialises the Ion document with no extra whitespace.
+- **Convert to JSON** — converts Ion to standard JSON, mapping Ion-specific types
+  to their closest JSON equivalents (e.g. timestamps become ISO-8601 strings).
+
+##### Implementation Details
+
+The tool uses the official **[ion-js](https://www.npmjs.com/package/ion-js)** library
+(the Amazon-maintained JavaScript SDK for Ion):
+
+- `ion.load(input)` parses the Ion text and returns a typed JavaScript value.
+- `ion.dumpPrettyText(value)` serialises back to pretty-printed Ion text.
+- `ion.dumpText(value)` serialises to compact Ion text (minification).
+- `JSON.stringify(value, null, 2)` converts the parsed value to JSON, since
+  `ion.load` returns standard JavaScript types that `JSON.stringify` understands.
+
+##### Privacy
+
+All processing happens locally in your browser tab. Ion payloads — which may contain
+sensitive business data — never leave your device.
+
+</div>
+</div>
