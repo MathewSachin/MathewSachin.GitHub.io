@@ -1,15 +1,11 @@
 <script>
-  import { onMount } from 'svelte';
+  import CopyButton from './CopyButton.svelte';
   import { encodeBase64, decodeBase64 } from '@scripts/tools/base64.js';
-  import { registerCopyToClipboard } from '@scripts/utils.js';
 
   let text = '';
   let b64 = '';
   let textError = '';
   let b64Error = '';
-
-  let copyBtn;
-  let iconEl;
 
   function doEncode() {
     textError = '';
@@ -37,12 +33,6 @@
     textError = '';
     b64Error = '';
   }
-
-  onMount(() => {
-    if (copyBtn && iconEl) {
-      registerCopyToClipboard(copyBtn, () => b64, iconEl);
-    }
-  });
 </script>
 
 <div class="card google-anno-skip">
@@ -67,9 +57,7 @@
         <textarea class="form-control font-monospace" id="b64-input" rows="8" placeholder="Enter Base64 to decode…" bind:value={b64}></textarea>
         <div class="mt-2 d-flex gap-2 flex-wrap">
           <button class="btn btn-info text-white" id="decode-btn" on:click={doDecode}>&larr; Decode</button>
-          <button class="btn btn-outline-secondary" bind:this={copyBtn}>
-            <i class="fas fa-copy me-1" bind:this={iconEl}></i>Copy
-          </button>
+          <CopyButton value={b64} className="btn btn-outline-secondary">Copy</CopyButton>
         </div>
         <div id="b64-error" class={`text-danger small mt-1 ${b64Error ? '' : 'd-none'}`}>{b64Error}</div>
       </div>

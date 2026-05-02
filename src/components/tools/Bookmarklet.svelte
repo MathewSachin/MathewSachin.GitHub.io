@@ -1,7 +1,6 @@
 <script lang="ts">
-import { onMount } from 'svelte';
+import CopyButton from './CopyButton.svelte';
 import { minify } from 'terser';
-import { registerCopyToClipboard } from '@scripts/utils';
 
 let raw = '';
 let compiled = '';
@@ -14,9 +13,6 @@ let showSavings = false;
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 let seq = 0;
-
-let copyBtnEl: HTMLButtonElement | null = null;
-let copyIconEl: HTMLElement | null = null;
 
 function uriEncode(code: string) {
   return code
@@ -87,12 +83,6 @@ function update() {
     });
   }, 250);
 }
-
-onMount(() => {
-  if (copyBtnEl && copyIconEl) {
-    registerCopyToClipboard(copyBtnEl, () => compiled, copyIconEl);
-  }
-});
 </script>
 
 <style>
@@ -161,9 +151,13 @@ onMount(() => {
       <div class="col-12 col-md-6">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <h5 class="mb-0">Compiled Bookmarklet</h5>
-          <button bind:this={copyBtnEl} class="btn btn-sm btn-outline-secondary" id="copy-btn">
-            <i class="fas fa-copy me-1" bind:this={copyIconEl}></i>Copy
-          </button>
+          <CopyButton
+            id="copy-btn"
+            value={compiled}
+            className="btn btn-sm btn-outline-secondary"
+            iconClass="fas fa-copy me-1"
+            copiedIconClass="fas fa-check me-1"
+          >Copy</CopyButton>
         </div>
         <textarea id="compiled-output" class="form-control" rows="14" readonly
           bind:value={compiled}

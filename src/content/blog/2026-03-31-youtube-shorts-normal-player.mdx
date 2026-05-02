@@ -11,7 +11,7 @@ related:
   - /blog/2026/03/21/youtube-shorts-sniper
 ---
 
-import ShortsUrlConverter from '@components/blog/ShortsUrlConverter.astro';
+import ShortsUrlConverter from '@components/blog/ShortsUrlConverter.svelte';
 
 *The YouTube Shorts player strips away the controls you rely on every day — no playback speed, no easy volume control, no theatre mode. Here's how to instantly escape it using nothing but your address bar.*
 
@@ -55,7 +55,7 @@ That's it. The exact same video now plays in the full YouTube player with every 
 
 Paste any Shorts URL into the box below and the converter will generate the normal-player URL for you:
 
-<ShortsUrlConverter />
+<ShortsUrlConverter client:load />
 
 ## Bookmarklet: One-Click Fix (Works on Any Computer)
 
