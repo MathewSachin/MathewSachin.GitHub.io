@@ -1,0 +1,266 @@
+---
+title: "Mobile DevTools: Building the Swiss Army Knife of Browser Bookmarklets"
+icon: "fas fa-terminal"
+tags: [javascript, mobile, devtools, bookmarklet, browser, hack, csp]
+series: browser-hacks
+related:
+  - /blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet
+  - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
+  - /blog/2026/03/07/edit-webpage-inspect-element
+  - /blog/2026/03/20/cookie-clicker-hacks
+---
+
+*You're sitting on a bus, a bug report comes in on your phone, and your laptop is nowhere in sight. The site looks wrong. You need a console. You have nothing. Until now.*
+
+---
+
+You're a developer. You know the drill. Something breaks on a client's site, your phone buzzes with a panicked message, and you're three hours from your desk. You open mobile Chrome, navigate to the page — and then you feel it: the sting of not having `F12`.
+
+Mobile browsers ship with zero developer tooling. No Elements panel. No Network tab. No console. Nothing.
+
+But here's the thing: mobile browsers *can* run JavaScript. Every one of them. And that's all we need to build something beautiful.
+
+This post is a three-level guide. By the end, you'll have a fully functional in-page JavaScript console you can inject into *any* website from your phone — and you'll understand exactly why it sometimes fails, and how to beat that too.
+
+## Level 1: The Injection — Building Your Mobile Console
+
+The plan: craft a self-contained JavaScript snippet that, when run on any page, injects a floating DevTools-style console directly into the DOM. It hijacks `console.log`, catches errors, and lets you run arbitrary JavaScript — all without leaving the browser.
+
+Here's the full script:
+
+```javascript
+(function() {
+    // Prevent multiple injections
+    if (document.getElementById('mobile-js-console')) return;
+
+    // 1. Create the Main Container
+    var container = document.createElement('div');
+    container.id = 'mobile-js-console';
+    container.style.cssText = 'position:fixed;bottom:0;left:0;width:100%;height:30%;background:#1e1e1e;color:#fff;z-index:2147483647;font-family:monospace;display:flex;flex-direction:column;box-shadow:0 -2px 10px rgba(0,0,0,0.5);transition:height 0.3s;';
+
+    // 2. Create the Header (Collapsible Toggle)
+    var header = document.createElement('div');
+    header.style.cssText = 'background:#333;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:14px;';
+    header.innerHTML = '<strong>JS Console</strong><span id="mjc-toggle">▼</span>';
+
+    // 3. Create the Log Area
+    var logArea = document.createElement('div');
+    logArea.style.cssText = 'flex-grow:1;overflow-y:auto;padding:10px;font-size:12px;word-break:break-all;';
+
+    // 4. Create the Input Area
+    var inputArea = document.createElement('div');
+    inputArea.style.cssText = 'display:flex;border-top:1px solid #444;';
+
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = '> Enter JS here...';
+    input.style.cssText = 'flex-grow:1;background:#000;color:#0f0;border:none;padding:12px;font-family:monospace;outline:none;font-size:14px;';
+
+    var btn = document.createElement('button');
+    btn.innerText = 'Run';
+    btn.style.cssText = 'background:#007acc;color:#fff;border:none;padding:0 20px;cursor:pointer;font-weight:bold;';
+
+    // Assemble DOM
+    inputArea.appendChild(input);
+    inputArea.appendChild(btn);
+    container.appendChild(header);
+    container.appendChild(logArea);
+    container.appendChild(inputArea);
+    document.body.appendChild(container);
+
+    // Toggle Logic
+    var isCollapsed = false;
+    header.onclick = function() {
+        isCollapsed = !isCollapsed;
+        container.style.height = isCollapsed ? '35px' : '30%';
+        document.getElementById('mjc-toggle').innerText = isCollapsed ? '▲' : '▼';
+    };
+
+    // Helper to print to UI
+    function printLog(msg, color) {
+        var div = document.createElement('div');
+        div.style.color = color;
+        div.style.borderBottom = '1px solid #333';
+        div.style.paddingBottom = '4px';
+        div.style.marginBottom = '4px';
+        div.innerText = msg;
+        logArea.appendChild(div);
+        logArea.scrollTop = logArea.scrollHeight;
+    }
+
+    // Hijack Console & Errors
+    var oldLog = console.log;
+    var oldErr = console.error;
+    console.log = function(...args) { oldLog(...args); printLog(args.join(' '), '#fff'); };
+    console.error = function(...args) { oldErr(...args); printLog(args.join(' '), '#ff4d4d'); };
+    window.onerror = function(msg, url, line) { printLog(msg + ' (Line: ' + line + ')', '#ff4d4d'); return false; };
+
+    // Execution Logic
+    function execute() {
+        var code = input.value;
+        if (!code) return;
+        printLog('> ' + code, '#aaa');
+        try {
+            var res = eval(code);
+            printLog('< ' + String(res), '#0f0');
+        } catch(e) {
+            console.error(e);
+        }
+        input.value = '';
+    }
+
+    btn.onclick = execute;
+    input.onkeypress = function(e) { if (e.key === 'Enter') execute(); };
+
+    printLog('Mobile JS Console initialized.', '#0f0');
+})();
+```
+
+### What's happening under the hood
+
+Let's break down the clever bits:
+
+**The IIFE guard** — The whole thing is wrapped in `(function() { ... })()`, an Immediately Invoked Function Expression. This means none of the internal variables (`container`, `input`, `logArea`) leak into the global scope and pollute the page. The `if (document.getElementById('mobile-js-console')) return;` line at the top ensures re-injecting the bookmarklet doesn't create a second console on top of the first.
+
+**z-index: 2147483647** — That's the maximum value for a 32-bit signed integer. It's the highest possible CSS stacking order, meaning the console floats above *everything* on the page, no matter how aggressively the site uses z-index.
+
+**Console hijacking** — Before injecting the panel, the script saves references to the original `console.log` and `console.error` functions. It then replaces both with new functions that call the original (so the browser's own dev tools still work if connected) *and* print to the custom UI. Any `console.log` call anywhere on the page — including calls inside the site's own JavaScript — now appears in your injected panel.
+
+**`window.onerror`** — This global handler catches any uncaught JavaScript exceptions on the page and routes them to the red error output in the panel. You see the bug without having to trigger it yourself.
+
+**The collapsible header** — A simple toggle that collapses the panel to `35px` (just the header bar) when you tap the header, and expands it back to 30% of the viewport height. Useful when you need to see the page underneath.
+
+### Turning it into a bookmarklet
+
+The script above is readable, multi-line JavaScript. Bookmarklets need to be a single URI-encoded line starting with `javascript:`. You can use the [Bookmarklet Compiler](/tools/bookmarklet/) to handle the minification and encoding automatically.
+
+The process is:
+
+1. Paste the script into the compiler
+2. Copy the resulting `javascript:...` string
+3. Create a new bookmark on your phone
+4. Edit the bookmark's URL and replace it with the compiled string
+5. Name it something like **"JS Console"**
+
+To inject: tap the address bar, type **JS Console**, and tap it when it appears in suggestions.
+
+---
+
+## Level 2: The CSP Wall — Why This Fails on GitHub (and How to Know When You're Beaten)
+
+Deploy your new console bookmarklet. Open GitHub on your phone. Tap the address bar, select "JS Console", and... nothing. Or worse — you see a blank error. Welcome to the **Content Security Policy**.
+
+### What is CSP?
+
+CSP is an HTTP response header that sites can set to restrict what JavaScript is allowed to do. It looks something like this:
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self' https://github.githubassets.com
+```
+
+This header tells the browser: *"Only execute scripts from this domain. Reject everything else."*
+
+When you run a bookmarklet, the browser treats it as an inline script execution — essentially the same as `<script>eval(...)</script>` injected at runtime. If the CSP doesn't include `'unsafe-eval'` or `'unsafe-inline'`, the browser refuses to run it.
+
+### The EvalError
+
+The specific error you'll see in a browser console (on desktop — you won't even see it on mobile without your injected console) is something like:
+
+```
+EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed
+source of script in the following Content Security Policy directive: "script-src 'self'..."
+```
+
+The `eval()` call inside the console's execution logic is the trigger. Even if the bookmarklet itself injected the DOM successfully, the moment you type something into the input and press **Run**, `eval(code)` trips the CSP wire.
+
+### Sites that block bookmarklets
+
+**GitHub** is a well-known example — it sets a strict CSP that blocks inline evaluation. **Twitter / X**, **Facebook**, and many financial or government sites do the same. In these cases, your bookmarklet will either silently fail, partially execute (the DOM injection might work but the eval won't), or throw an error you can't see without desktop DevTools.
+
+**Sites where it works perfectly:** Most content sites, blogs, wikis, news sites, game sites, and any site without a restrictive CSP header. You can check a site's CSP before trying by looking at the response headers — but on mobile that's not exactly convenient. The easiest test: just try it. If the console appears and says "Mobile JS Console initialized.", you're in.
+
+### The lesson
+
+CSP is not a bug — it's the system working as designed. GitHub's engineers added those restrictions deliberately to prevent cross-site scripting attacks. Your bookmarklet is collateral damage. Understanding *why* it fails is the difference between a developer who shrugs and a developer who levels up.
+
+---
+
+## Level 3: The Address Bar Heist — The Omnibox Injection
+
+CSP blocks `eval`. But there's one injection vector that CSP cannot touch at all: the **address bar itself**.
+
+### Why the omnibox is special
+
+When you type `javascript:alert(1)` directly into the browser's address bar and press Go, the browser executes it as a first-party action — not as an injected script. The browser treats it as *you*, the user, deliberately running code. CSP is a document-level restriction; it applies to scripts loaded *by the document*. The omnibox operates above the document.
+
+This is not a vulnerability. It's intentional. Browsers allow users to run JavaScript from the address bar because users have full trust over their own browsing session.
+
+### The workflow
+
+Here's how to use the address bar as your injection vector on any site, even behind a strict CSP:
+
+**Step 1 — Store the payload in a bookmarklet that copies to clipboard**
+
+Create a bookmarklet whose *only job* is to copy your console script to the clipboard:
+
+```
+javascript:navigator.clipboard.writeText('YOUR_MINIFIED_CONSOLE_SCRIPT_HERE');void(0);
+```
+
+Replace `YOUR_MINIFIED_CONSOLE_SCRIPT_HERE` with the full minified version of the console script (without the outer `javascript:` prefix — just the raw JS).
+
+**Step 2 — Trigger the copy bookmarklet**
+
+Navigate to any page (even one with CSP). Run the "copy" bookmarklet via the address bar dropdown. The console script is now in your clipboard.
+
+**Step 3 — Paste into the address bar**
+
+Tap the address bar and paste. You'll see the full `javascript:...` script appear. Hit **Go** / **Enter**.
+
+The browser executes it as a direct address bar navigation — CSP does not apply. Your console injects. You're in.
+
+### Why this works around CSP
+
+To be precise: the address bar bypass works because browsers intentionally exempt user-initiated `javascript:` navigations from CSP `script-src` restrictions. The W3C specification for CSP explicitly notes that the `javascript:` scheme in the navigation context is controlled by the browser's own navigation security model, not the document's CSP.
+
+This is also why you can always run `javascript:alert(1)` in the address bar on any page, no matter how locked down it is.
+
+<div class="alert alert-info">
+  ⚠️ <b>Note on clipboard API:</b> <code>navigator.clipboard.writeText()</code> requires either HTTPS or localhost. If a site is on HTTP, the clipboard write will fail silently. In that case, you can skip Step 1 and 2 — if the site is HTTP-only, CSP is rarely a concern anyway, and the bookmarklet will inject directly.
+</div>
+
+### Putting it all together
+
+The full three-step arsenal:
+
+| Situation | Method |
+|---|---|
+| Regular site (no strict CSP) | Inject directly via bookmarklet from address bar dropdown |
+| Site with strict CSP (GitHub, Twitter) | Copy-to-clipboard bookmarklet → paste full script into address bar → press Go |
+| HTTP site | Direct bookmarklet always works; CSP is rarely enforced on plain HTTP |
+
+---
+
+## Carrying Your Console Everywhere
+
+The mobile JS console you've just built is genuinely useful. Here's what you can actually do with it:
+
+- **Inspect global state:** Type `window.location`, `document.title`, or any global variable exposed by the page's scripts
+- **Query the DOM on the fly:** `document.querySelectorAll('a').length` tells you how many links are on the page
+- **Test API calls:** `fetch('https://api.example.com/data').then(r=>r.json()).then(d=>console.log(d))` — full async/await support, results appear in the panel
+- **Debug framework state:** On a Vue app, `window.__vue_app__` might expose the full app instance; on React, browser extensions aside, global handles are often reachable
+- **Catch live errors:** With the `window.onerror` hook active, any JavaScript crash anywhere on the page appears in red in your console — useful when you can reproduce a bug on mobile but not on desktop
+
+---
+
+## The Bigger Picture
+
+What you've just built in a few hundred bytes of JavaScript is a fully portable, framework-free debugging environment that runs in any browser without installation, without permissions, and without any server.
+
+That's the real power of the `javascript:` URL scheme and the bookmarklet pattern. The browser has always been a sandboxed JavaScript runtime. Bookmarklets are just the API for sending code into that runtime from outside the page.
+
+The CSP wall taught you something important: security restrictions exist for good reasons, and understanding them makes you a better engineer — not just a better hacker. The omnibox bypass isn't a cheat code; it's understanding the security model at a deeper level than most developers bother to.
+
+Next time you're on your phone and something breaks, you know what to reach for.
+
+*Want to go deeper? Check out the <PostLink url="/blog/2026/03/07/edit-webpage-inspect-element" text="Edit Any Webpage guide" /> for more DOM manipulation tricks, or the <PostLink url="/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet" text="Chrome Dino mobile bookmarklet" /> for a simpler first bookmarklet to practice with.*
