@@ -1,0 +1,202 @@
+---
+title: "Running a Native Astro Dev Server on Android with Termux"
+icon: "fab fa-android"
+tags: [android, termux, astro, nodejs, tutorial, mobile-dev]
+---
+
+*Your Android phone has a multi-core ARM64 CPU, gigabytes of RAM, and an always-on internet connection. Here's how to turn it into a genuine Node.js development machine — compiling native C++ dependencies on-device and serving a fully optimised Astro site to `localhost:4321`.*
+
+## Why Bother?
+
+Modern flagships are more powerful than the laptops developers used to ship production code on a decade ago. There's a legitimate use case for running a local `localhost` environment directly on the device you're testing on: you get pixel-perfect, native browser rendering for Progressive Web Apps and mobile UIs without any network hops, DevTools remote debugging, and a dev server you can carry in your pocket offline.
+
+Astro is a natural target because it outputs highly optimised static sites, has first-class image processing, and its dev server hot-reloads instantly. The challenge is that Astro's image pipeline depends on **`sharp`** and optionally **`canvas`** — packages that ship pre-compiled binaries for mainstream platforms but have *no* pre-built Android/arm64 binaries. We have to compile them from C++ source directly on the phone.
+
+This post walks through every step, including the non-obvious errors that justify each dependency install.
+
+---
+
+## Prerequisites: The Right Termux
+
+> **Do not install Termux from the Google Play Store.** The Play Store version is outdated and uses broken package repositories that will cause `pkg install` to fail with certificate or 404 errors.
+
+Install Termux from one of the maintained sources:
+
+- **F-Droid**: [f-droid.org/packages/com.termux](https://f-droid.org/packages/com.termux/)
+- **GitHub Releases**: [github.com/termux/termux-app/releases](https://github.com/termux/termux-app/releases)
+
+Either option gives you a current build with working repos.
+
+---
+
+## Step 1: The Base Environment
+
+Open Termux and bring the package index up to date, then grant storage access and install the core tools:
+
+```bash
+pkg update && pkg upgrade
+```
+
+```bash
+termux-setup-storage
+```
+
+```bash
+pkg install git nodejs
+```
+
+`termux-setup-storage` creates a symlink at `~/storage` that maps to Android's shared storage directories. You'll need it in a moment — but not for storing your repo.
+
+---
+
+## Step 2: The Storage Location Trap (Crucial)
+
+This is the single most common reason people give up.
+
+If you clone or copy your project into Android's shared storage — anywhere under `/storage/emulated/0/` (Documents, Downloads, etc.) — and then run `npm ci`, it will fail immediately with:
+
+```
+EACCES: permission denied, symlink '...' -> '...'
+```
+
+Android's emulated FAT32/exFAT filesystem **does not support symlinks**. npm's `node_modules` tree relies heavily on symlinks for hoisting and workspace links, so the install dies instantly.
+
+**The fix:** keep your project inside Termux's native home directory (`~`), which lives on the device's internal `ext4` partition and supports symlinks, hardlinks, and all standard POSIX file operations.
+
+```bash
+# Clone directly into ~
+cd ~
+git clone https://github.com/your-username/your-astro-project.git
+cd your-astro-project
+```
+
+If you already have files in shared storage, copy them with `cp -r`:
+
+```bash
+cp -r ~/storage/shared/my-project ~/my-project
+cd ~/my-project
+```
+
+---
+
+## Step 3: Preparing the C++ Compiler and Graphics Libraries
+
+Try running `npm ci` now and you'll hit a second wall. Packages like `canvas` invoke `node-gyp` to compile C++ extensions, and `node-gyp` will immediately complain that it can't find graphics protocol headers:
+
+```
+gyp: No such file or directory: '/data/data/com.termux/files/usr/include/X11/Xlib.h'
+```
+
+Termux ships a minimal base. You need to pull in the X11 repository and a set of graphics libraries that the C++ build scripts expect to find:
+
+```bash
+pkg install x11-repo -y
+pkg install build-essential python pkg-config libpixman libcairo pango libjpeg-turbo giflib xorgproto -y
+```
+
+What each piece does:
+
+| Package | Why it's needed |
+|---|---|
+| `build-essential` | GCC, G++, `make` — the compiler toolchain |
+| `python` | `node-gyp` is a Python script |
+| `pkg-config` | Lets the build system locate installed libraries |
+| `libpixman` | Low-level pixel math used by Cairo |
+| `libcairo` | 2D graphics library required by `canvas` |
+| `pango` | Text rendering, also required by `canvas` |
+| `libjpeg-turbo` | JPEG codec used by both `canvas` and `sharp` |
+| `giflib` | GIF support |
+| `xorgproto` | X11 protocol headers (`Xlib.h` etc.) |
+
+---
+
+## Step 4: Bypassing the Android NDK Bug
+
+With the graphics libraries in place, re-run `npm ci` and you'll hit a third error — this time from `node-gyp` itself:
+
+```
+gyp: Undefined variable android_ndk_path in binding.gyp
+```
+
+`node-gyp` has a code path that looks for an Android NDK installation. On a real Android build machine this would be set. On Termux it isn't, and the lookup crashes the whole configure step.
+
+Patch it by creating an override file that sets the variable to an empty string:
+
+```bash
+mkdir -p ~/.gyp
+echo "{'variables':{'android_ndk_path':''}}" > ~/.gyp/include.gypi
+```
+
+`node-gyp` reads `~/.gyp/include.gypi` early in its configure phase and merges these variables into the build, suppressing the crash.
+
+---
+
+## Step 5: Compiling Canvas and Sharp from Source
+
+Astro uses `sharp` for image optimisation — resizing, converting to WebP/AVIF, generating responsive `srcset` attributes. `sharp` wraps **libvips**, a high-performance C++ image processing library. Again, no pre-built arm64 binary exists, so we compile from source.
+
+Install libvips first:
+
+```bash
+pkg install libvips -y
+```
+
+Then tell pkg-config where to find it:
+
+```bash
+export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
+```
+
+Now force npm to build `sharp` locally instead of trying (and failing) to download a pre-built binary:
+
+```bash
+npm_config_build_from_source=true npm install sharp
+```
+
+> **This step takes time.** Compiling libvips bindings on a phone CPU will peg all cores for several minutes. The screen may dim. Let it run — it will finish.
+
+You'll see output like:
+
+```
+gyp info spawn make
+gyp info spawn args   'build'
+...
+make: Entering directory '.../sharp/build'
+  CXX(target) Release/obj.target/sharp/src/common.o
+  CXX(target) Release/obj.target/sharp/src/pipeline.o
+...
+```
+
+When `npm install sharp` exits cleanly, the hardest part is done.
+
+---
+
+## Step 6: Booting the Server
+
+Now install the rest of your project's dependencies and start the dev server:
+
+```bash
+npm ci
+npm run dev
+```
+
+After a few seconds you'll see:
+
+```
+ astro  v4.x.x ready in 1.2s
+
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+```
+
+Open Chrome on the same Android device, navigate to `http://localhost:4321`, and you're looking at your Astro site — fully rendered, hot-reload enabled, running natively on the phone's own CPU. Open DevTools with the address bar menu or connect remotely via `chrome://inspect`. Every save you make in a Termux editor (or a synced editor like Code Server) triggers an instant HMR update.
+
+---
+
+## Conclusion
+
+It takes six steps and a handful of C++ dependency installs, but the end result is a genuine Node.js + Astro development environment running on bare metal — no emulation, no cloud VM, no USB tethering required. The workflow is especially useful for testing PWA behaviour, offline caching strategies, and mobile-specific CSS without the guesswork of desktop DevTools device emulation.
+
+The same approach extends beyond Astro: any Node project that avoids Windows-specific native modules should compile and run correctly in Termux once the graphics and build toolchain are in place.
+
+*The phone in your pocket is a computer. Treat it like one.*
