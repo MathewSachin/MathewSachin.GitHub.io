@@ -1,0 +1,315 @@
+---
+title: "How I Test This Static Site with Playwright"
+icon: "fas fa-flask"
+tags: [playwright, testing, javascript, typescript, astro, tutorial, github-pages]
+series: blogging-with-jekyll
+related:
+  - /blog/2026/04/01/pr-preview-setup
+  - /blog/2026/03/25/how-site-search-works
+  - /blog/2026/04/02/docker-faster-github-actions
+---
+
+*A static site has no server to unit-test, but it is full of JavaScript that runs in the browser. Here's the complete testing setup I use — two layers of tests, one config file, and zero test flakiness from the tools that needed the most care.*
+
+## Why Test a Static Site at All?
+
+A static site looks boring from a testing perspective: pre-built HTML, no database, no API. But this site ships a surprising amount of client-side JavaScript:
+
+| Feature | What can break |
+|---|---|
+| Orama-powered search | Index fails to load; query returns no results |
+| Base64 / Hash / JSON tools | Encode/decode round-trip produces wrong output |
+| Timestamp converter | Seconds vs. milliseconds heuristic gets confused |
+| YouTube Thumbnail Grabber | URL parsing misses a format; resolution switcher breaks |
+| Scratchpad | localStorage persistence fails after a reload |
+| Chrome Dino Hack | Clipboard snippet contains the wrong JavaScript |
+| Captura Web Recorder | Recording pipeline produces no file; controls lock incorrectly |
+
+None of these are things a static-site linter would catch. They require a real browser.
+
+## Two Layers of Tests
+
+The test suite is split into two completely separate layers that serve different purposes and run via different commands.
+
+### Layer 1: Node.js Unit Tests
+
+Pure functions with no browser dependency are tested with the **Node.js built-in test runner** (`node:test`):
+
+```bash
+npm test
+# runs: node --test tests/*.test.ts
+```
+
+These tests import TypeScript source files directly (Node.js 22+ handles `.ts` files natively with the `--experimental-strip-types` flag implied by the runner). They cover things like:
+
+- `epochToMs()` — the function that decides whether a number is Unix seconds or milliseconds
+- `buildSearchIndex()` — the function that serialises blog posts into an Orama database
+- Individual tool logic exported from script files
+
+Because these tests never touch a browser, they run in under a second. There is no `playwright.config.ts` involved; it's just Node.
+
+### Layer 2: Playwright E2E Tests
+
+Everything that requires a real browser goes through **Playwright**:
+
+```bash
+npm run test:e2e
+# runs: playwright test
+```
+
+Tests live in `tests/e2e/` and `tests/*.spec.ts`, and every one of them is a full end-to-end test: Playwright spins up Chromium, navigates to a real URL served by a local HTTP server, and interacts with the page exactly as a user would.
+
+## The Configuration
+
+The entire Playwright configuration fits in one file:
+
+```typescript
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  testMatch: ['**/*.spec.ts'],
+  use: {
+    baseURL: 'http://localhost:4000',
+    permissions: ['camera', 'microphone', 'clipboard-read', 'clipboard-write'],
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: [
+            '--use-fake-ui-for-media-stream',
+            '--use-fake-device-for-media-stream',
+            '--auto-select-desktop-capture-source=Entire screen',
+          ],
+        },
+      },
+    },
+  ],
+  webServer: {
+    command: 'python3 -m http.server 4000 --directory dist',
+    url: 'http://localhost:4000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 15000,
+  },
+});
+```
+
+Three decisions worth explaining:
+
+**`webServer`** — Rather than integrating with Astro's dev server, the tests run against the fully-built output in `dist/`. This means every test sees exactly what a real visitor sees: minified assets, generated image paths, the pre-built Orama index. You have to run `npm run build` before the first test run, but after that `reuseExistingServer: !process.env.CI` keeps the Python server alive between runs so tests start instantly.
+
+**`permissions`** — The `clipboard-read` and `clipboard-write` permissions are pre-granted so clipboard tests don't hit a browser permission prompt. Camera and microphone are pre-granted for the Captura recorder tests.
+
+**`launchOptions.args`** — The three `--use-fake-*` flags tell Chromium to simulate a camera, microphone, and screen-share source without requiring real hardware. Without these flags, the Captura recorder tests would fail immediately when requesting `getDisplayMedia()`.
+
+## Basic Test Pattern
+
+Every spec file follows the same structure:
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.describe('Base64 tool', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/tools/base64/');
+  });
+
+  test('encodes plain text to Base64', async ({ page }) => {
+    await page.locator('#text-input').fill('hello');
+    await page.locator('#encode-btn').click();
+    await expect(page.locator('#b64-input')).toHaveValue('aGVsbG8=');
+  });
+
+  test('decodes Base64 to plain text', async ({ page }) => {
+    await page.locator('#b64-input').fill('aGVsbG8=');
+    await page.locator('#decode-btn').click();
+    await expect(page.locator('#text-input')).toHaveValue('hello');
+  });
+});
+```
+
+`test.describe` groups related tests and shares the `beforeEach` navigation. `page.locator()` selects elements by CSS selector — always by `id` where possible, since that's the most stable selector. Playwright's `expect()` assertions are auto-retrying: they poll until the condition is true or a timeout fires, which handles any DOM updates triggered asynchronously.
+
+## Testing Async Behavior: The Search Page
+
+The search index loads asynchronously via `fetch()`. The tests have to wait for it:
+
+```typescript
+test('search input becomes enabled once the index is loaded', async ({ page }) => {
+  await page.goto('/search/');
+  await expect(page.locator('#search-input')).toBeEnabled({ timeout: 15000 });
+  await expect(page.locator('#search-status')).not.toBeAttached({ timeout: 15000 });
+});
+
+test('shows results when a query matches blog posts', async ({ page }) => {
+  await page.goto('/search/');
+  const searchInput = page.locator('#search-input');
+  await expect(searchInput).toBeEnabled({ timeout: 15000 });
+  await searchInput.fill('jekyll');
+  await expect(page.locator('#search-results')).not.toBeEmpty({ timeout: 5000 });
+});
+```
+
+The extended `timeout: 15000` on the first assertion covers the case where the test machine is slow and the ~700 KB index takes a few seconds to download and hydrate. Once the input is enabled, the index is ready and subsequent queries are instant.
+
+## Testing Clipboard Operations
+
+Several of the hack tools — Chrome Dino, Wordle, Minesweeper — display copy buttons that put JavaScript snippets on the clipboard. Testing clipboard content requires explicit permission grants (already pre-granted in the config) and a `page.evaluate()` call to read back what was written:
+
+```typescript
+test('speed copy button copies correctly', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
+  await page.locator('#speed-input').fill('50');
+  await page.locator('#btn-speed-clip').click();
+
+  const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+  expect(clipboardText).toBe('(Runner.instance_ || Runner.getInstance()).setSpeed(50)');
+});
+```
+
+The `context.grantPermissions()` call is belt-and-suspenders — the permissions are already in the config-level `use.permissions`, but an explicit grant in the test makes the intent clear and avoids surprises if the test is ever run in isolation.
+
+## Testing with Fake Media Devices
+
+The Captura recorder uses `getDisplayMedia()` to capture the screen. In a real browser, this would prompt the user to select a window or screen. In the test environment, the three `--use-fake-*` Chrome flags make Chromium simulate a media stream without any hardware or user interaction.
+
+There is still one problem: the recorder uses the **Origin Private File System API** (`showDirectoryPicker()`) to write recordings to disk. OPFS is available in Chromium, but in the test environment there's no user gesture to trigger the picker. The fix is an `addInitScript` that replaces `showDirectoryPicker` before any page script runs:
+
+```typescript
+export const opfsMockScript = () => {
+  (window as any).showDirectoryPicker = async () => {
+    const root: any = await navigator.storage.getDirectory();
+    root.queryPermission    = async () => 'granted';
+    root.requestPermission  = async () => 'granted';
+    return root;
+  };
+};
+
+// In the test:
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(opfsMockScript);
+  await page.goto('/tools/captura/');
+});
+```
+
+`addInitScript` runs before any script on the page executes, so the mock is in place before the recorder tries to use the real picker. The OPFS root (`navigator.storage.getDirectory()`) is real storage — files written to it persist within the test and can be verified afterwards:
+
+```typescript
+test('Full recording pipeline writes a WebM file to disk', async ({ page }) => {
+  await page.addInitScript(opfsMockScript);
+  await page.goto('/tools/captura/');
+  await page.click('#pick-dir-btn');
+
+  // Start → wait 3 s → stop
+  await runRecordingPipeline(page);
+
+  // Read OPFS and assert a .webm file > 1 kB exists
+  await verifyWebmFile(page);
+});
+```
+
+## Testing localStorage Persistence
+
+The Scratchpad and the Captura recorder both persist preferences to `localStorage`. Testing persistence means testing across a page reload, which Playwright handles naturally:
+
+```typescript
+test('persists content in localStorage', async ({ page }) => {
+  await page.locator('#scratchpad').fill('remember me');
+  await expect(page.locator('#save-status')).toContainText('Saved');
+  await page.reload();
+  await expect(page.locator('#scratchpad')).toHaveValue('remember me');
+});
+```
+
+The scratchpad autosaves on `input` events with a short debounce. The `expect(...).toContainText('Saved')` assertion waits until the save completes before the test proceeds to reload — no `waitForTimeout()` needed.
+
+For the Captura recorder, which has several independent preference keys, tests write directly to `localStorage` via `page.evaluate()` to avoid race conditions with the two-step `selectOption` dance:
+
+```typescript
+test('preferences are restored after page reload', async ({ page }) => {
+  await page.evaluate(() => {
+    localStorage.setItem('captura-fps', '60');
+    localStorage.setItem('captura-quality', '480');
+    localStorage.setItem('captura-format', 'mp4-h264-aac');
+  });
+
+  await page.reload();
+
+  await expect(page.locator('#fps-select')).toHaveValue('60');
+  await expect(page.locator('#quality-select')).toHaveValue('480');
+  await expect(page.locator('#format-select')).toHaveValue('mp4-h264-aac');
+});
+```
+
+## Testing Embedded Iframes
+
+The Chrome Dino Hack post embeds the dino game in an `<iframe>`. Testing inside an iframe uses `contentFrame()` to get a handle to the frame's document:
+
+```typescript
+test('embedded dino game iframe loads the game', async ({ page }) => {
+  const frameElement = page.locator('#dino-game-frame');
+  await expect(frameElement).toBeVisible();
+  const frameHandle = frameElement.contentFrame();
+  // Assert non-null before using — Playwright's expect() narrows the type
+  expect(frameHandle).not.toBeNull();
+  if (!frameHandle) return;
+  // The dino page contains a canvas element
+  await expect(frameHandle.locator('canvas').first()).toBeVisible({ timeout: 10000 });
+});
+```
+
+## Testing Dialogs
+
+The Scratchpad's clear button shows a `confirm()` dialog before wiping the content. Playwright handles browser dialogs with `page.once('dialog', ...)`:
+
+```typescript
+test('clear button empties the textarea after confirmation', async ({ page }) => {
+  await page.locator('#scratchpad').fill('hello');
+  page.once('dialog', dialog => dialog.accept());
+  await page.locator('#clear-btn').click();
+  await expect(page.locator('#scratchpad')).toHaveValue('');
+});
+```
+
+`page.once()` registers a one-shot handler that fires the next time any dialog appears on the page. `dialog.accept()` clicks OK. The handler has to be registered *before* the click that triggers the dialog.
+
+## Running Tests in CI
+
+The tests run on every PR via GitHub Actions. The workflow:
+
+1. `npm ci` — install dependencies
+2. `npm run build` — build the Astro site into `dist/`
+3. `npx playwright install --with-deps chromium` — install the browser binary
+4. `npm run test:e2e` — run the Playwright suite
+
+With `reuseExistingServer: !process.env.CI`, the `webServer` block always spins up a fresh Python HTTP server in CI (the `!CI` condition is `false` in CI, so reuse is disabled). This ensures the tests always run against a freshly built site, not a cached server from a previous run.
+
+## What the Tests Have Actually Caught
+
+A few real regressions that the test suite caught before they hit production:
+
+- **Base64 Unicode regression** — an update to the encoding function broke the round-trip for multi-byte characters. The test that encodes `Hello 😀` and decodes it back caught this immediately.
+- **Search index timing** — a refactor moved the index fetch earlier, which occasionally caused the input to be enabled before the `#search-status` element was removed. The `not.toBeAttached` assertion (rather than `not.toBeVisible`) caught the DOM state correctly.
+- **Captura button visibility** — a state machine change left the Pause button visible after the recording stopped. The test that checks button states after `#stop-btn` is clicked caught this within seconds of the change being made.
+
+The tests are not exhaustive — they don't try to cover every edge case of every tool. They cover the happy path, one or two error paths, and any specific regression that was caught and would have been missed otherwise.
+
+## Summary
+
+| Layer | Runner | What it covers |
+|---|---|---|
+| Unit tests | `node:test` | Pure functions — epoch conversion, search index building, tool logic |
+| E2E tests | Playwright | Interactive browser features — tools, search, recorder, persistence |
+
+The Playwright config does three things: points at the pre-built `dist/` directory served via Python's HTTP server, pre-grants browser permissions, and enables fake media devices. Everything else is standard `page.locator()` → `page.click()` → `expect()` — no exotic fixtures, no page object models, no shared state between tests.
+
+<div class="alert alert-info">
+  💡 <b>Want to run the tests yourself?</b> After <code>npm run build</code>, run <code>npm run test:e2e</code>. The Python HTTP server starts automatically. All tests should pass on the first run with no extra setup — that's the invariant the CI workflow enforces.
+</div>
+
+*The most valuable thing about end-to-end tests on a static site isn't finding bugs — it's making refactors fearless. When you move a JavaScript tool to a new URL, or rewrite the search index loader, or change the Captura state machine, you find out immediately whether anything broke rather than discovering it from a confused reader.*
