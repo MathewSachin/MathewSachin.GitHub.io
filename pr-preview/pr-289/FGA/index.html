@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Fate-Grand-Automata (FGA)</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-289/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-289/FGA/"><meta property="og:title" content="Fate-Grand-Automata (FGA)"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-289/FGA/"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-289/feed.xml"><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><link rel="stylesheet" href="/pr-preview/pr-289/_astro/blog.gYhV94X6.css">
+<style>:where([data-astro-image]){height:auto}:where([data-astro-image=full-width]){width:100%}:where([data-astro-image=constrained]){max-width:100%}[data-astro-image-fit=fill]{object-fit:fill}[data-astro-image-fit=contain]{object-fit:contain}[data-astro-image-fit=cover]{object-fit:cover}[data-astro-image-fit=scale-down]{object-fit:scale-down}
+</style>
+<link rel="stylesheet" href="/pr-preview/pr-289/_astro/BaseLayout.DRMSjB-W.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-289/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-289/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-289/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-289/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="text-light nav-link" href="/pr-preview/pr-289/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div class="bg-dark"> <div class="py-4 text-white"> <div class="container"> <h2>Fate-Grand-Automata (FGA)</h2> </div> </div> <br> <div class="container"> <div class="card"> <div class="card-body"> <div class="page-content">  <img src="/pr-preview/pr-289/_astro/fga.DlEbEZBC_1FoD5P.webp" data-image-component="true" alt="Logo" loading="lazy" decoding="async" width="200" height="200"> <p>Auto-battle app for F/GO (Android 7 or later, no need for root on phones).</p> <p>Rewrite of <a href="https://github.com/29988122/Fate-Grand-Order_Lua">FGO-Lua</a> as an Android app in Kotlin with UI for configuration and without a time-limit on use.<br>
+It doesn't tamper with the game in anyway and works by looking at the screen and tapping things just like a normal user would do.<br>
+It's not made to do the story for you, but to automate the mundane farming.</p> <p>GitHub link: <a href="https://github.com/Fate-Grand-Automata/FGA">https://github.com/Fate-Grand-Automata/FGA</a></p> <p>Download from: <a href="https://fate-grand-automata.github.io">https://fate-grand-automata.github.io</a></p>  </div> </div> </div> </div> <br> </div>  <script type="module" src="/pr-preview/pr-289/_astro/BaseLayout.astro_astro_type_script_index_0_lang.C0Ecsfr9.js"></script> </body> </html>
