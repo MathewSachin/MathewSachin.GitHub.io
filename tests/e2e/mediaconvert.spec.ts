@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-// Minimal fake audio buffer (audio/mpeg MIME, invalid content – triggers a "Could not read file" error
-// but still causes the component to display the file-info and options sections).
+// Minimal fake audio buffer: audio/mpeg MIME with invalid content.
+// mediabunny will fail to parse it, triggering a "Could not read file" error,
+// but the component still renders the file-info and options sections.
 const FAKE_AUDIO_BYTES = Buffer.from('not a real mp3 file');
 
 // Minimal fake video buffer (video/mp4 MIME, invalid content).
