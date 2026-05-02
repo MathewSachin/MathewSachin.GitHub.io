@@ -1,9 +1,12 @@
-<script>
+<script lang="ts">
   import CopyButton from './CopyButton.svelte';
+  import JsonTreeNode from './JsonTreeNode.svelte';
   import { formatJson } from '@scripts/tools/json-formatter.js';
 
   let input = '';
   let output = '';
+  let parsedOutput: unknown = null;
+  let showTree = false;
   let error = '';
   let ok = false;
 
@@ -12,22 +15,30 @@
     ok = false;
   }
 
-  function applyFormat(indent) {
+  function applyFormat(indent: number) {
     clearFeedback();
     const result = formatJson(input, indent);
     if (result.error) {
       output = '';
+      parsedOutput = null;
+      showTree = false;
       error = result.error;
       ok = false;
-    } else {
+    } else if (result.output) {
       output = result.output;
-      if (result.output) ok = true;
+      parsedOutput = JSON.parse(result.output);
+      showTree = true;
+      ok = true;
+    } else {
+      output = '';
+      parsedOutput = null;
+      showTree = false;
     }
   }
 
   function format() { applyFormat(2); }
   function minify() { applyFormat(0); }
-  function clearAll() { input = ''; output = ''; clearFeedback(); }
+  function clearAll() { input = ''; output = ''; parsedOutput = null; showTree = false; clearFeedback(); }
 </script>
 
 <div class="card google-anno-skip">
@@ -55,8 +66,16 @@
 
       <div class="col-12 col-md-6">
         <label class="form-label fw-semibold" for="json-output">Output</label>
-        <textarea id="json-output" class="form-control font-monospace" rows="14" readonly bind:value={output}
-          placeholder="Formatted output…"></textarea>
+        <textarea id="json-output" class="visually-hidden" readonly bind:value={output} aria-hidden="true" tabindex="-1"></textarea>
+        {#if showTree}
+          <div class="json-tree-container font-monospace border rounded p-3">
+            <JsonTreeNode value={parsedOutput} />
+          </div>
+        {:else}
+          <div class="font-monospace border rounded p-3 text-muted json-tree-container">
+            Formatted output…
+          </div>
+        {/if}
         <div class="mt-2">
           <CopyButton value={output} title="Copy output" iconClass="fas fa-copy me-1" copiedIconClass="fas fa-check me-1">Copy</CopyButton>
         </div>
@@ -65,3 +84,13 @@
 
   </div>
 </div>
+
+<style>
+  .json-tree-container {
+    min-height: 340px;
+    max-height: 500px;
+    overflow: auto;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+</style>
