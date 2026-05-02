@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="en-us"> <head><meta charset="UTF-8"><title>Edit Any Webpage in Seconds (Great for Pranks!)</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/pr-preview/pr-292/images/favicon.ico"><link rel="canonical" href="https://mathewsachin.github.io/pr-preview/pr-292/blog/2026/03/07/edit-webpage-inspect-element.html"><meta property="og:title" content="Edit Any Webpage in Seconds (Great for Pranks!)"><meta property="og:type" content="website"><meta property="og:url" content="https://mathewsachin.github.io/pr-preview/pr-292/blog/2026/03/07/edit-webpage-inspect-element.html"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@MathewSachin7"><link rel="alternate" type="application/rss+xml" title="Mathew Sachin Blog" href="/pr-preview/pr-292/feed.xml"><!-- Keeping as inline and adding in <head> so all pages get the view transition */ --><script>
+window.addEventListener("pagereveal", (event) => {
+    // 1. Check if a view transition is actively happening
+    if (!event.viewTransition) return;
+
+    // 2. Ensure the modern Navigation API is supported
+    if ('navigation' in window && window['navigation']?.activation) {
+    const previousIndex = window['navigation'].activation.from?.index;
+    const currentIndex = window['navigation'].currentEntry?.index;
+
+    // 3. If the current index is smaller, the user navigated backward
+    if (currentIndex !== undefined && previousIndex !== undefined && currentIndex < previousIndex) {
+        
+        // Add the class to trigger the reverse CSS animations
+        document.documentElement.classList.add('back-transition');
+
+        // Clean up the class after the animation finishes so it doesn't break future forward navigation
+        event.viewTransition.finished.finally(() => {
+        document.documentElement.classList.remove('back-transition');
+        });
+    }
+    }
+});
+</script><link rel="stylesheet" href="/pr-preview/pr-292/_astro/_slug_@_@astro.CNfnTOgm.css">
+<link rel="stylesheet" href="/pr-preview/pr-292/_astro/BaseLayout.Dp5jGDss.css">
+<style>:where([data-astro-image]){height:auto}:where([data-astro-image=full-width]){width:100%}:where([data-astro-image=constrained]){max-width:100%}[data-astro-image-fit=fill]{object-fit:fill}[data-astro-image-fit=contain]{object-fit:contain}[data-astro-image-fit=cover]{object-fit:cover}[data-astro-image-fit=scale-down]{object-fit:scale-down}
+.in-content-ad[data-astro-cid-ykg2om2w]{overflow:hidden;max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w] .card[data-astro-cid-ykg2om2w]{box-shadow:none;border-color:#00000020;overflow:hidden}.in-content-ad[data-astro-cid-ykg2om2w] .card-body[data-astro-cid-ykg2om2w]{min-height:200px}.in-content-ad[data-astro-cid-ykg2om2w] ins[data-astro-cid-ykg2om2w].adsbygoogle{max-width:100%}.in-content-ad[data-astro-cid-ykg2om2w]:has(ins[data-ad-status=unfilled]){display:none}@media(max-width:767.98px){.in-content-ad[data-astro-cid-ykg2om2w]{overflow:visible;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw)}}
+blockquote[data-astro-cid-trienahh]{padding:.5em 1em;margin:0 0 1rem;color:#6c757d;border-left:.25em solid var(--post-accent, var(--color-accent));background:transparent;font-style:normal;font-size:.9em}blockquote[data-astro-cid-trienahh]>[data-astro-cid-trienahh]:last-child{margin-bottom:0}
+</style>
+<link rel="stylesheet" href="/pr-preview/pr-292/_astro/blog.gYhV94X6.css"></head> <body class="bg-dark"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;" data-astro-cid-5blmo7yk> <div class="container" data-astro-cid-5blmo7yk> <a class="navbar-brand" href="/pr-preview/pr-292/" data-astro-cid-5blmo7yk>Mathew Sachin</a> <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent" data-astro-cid-5blmo7yk> <span class="icon-bar bar-t" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-m" data-astro-cid-5blmo7yk></span> <span class="icon-bar bar-b" data-astro-cid-5blmo7yk></span> </button> <div class="collapse navbar-collapse" id="navbarContent" data-astro-cid-5blmo7yk> <ul class="navbar-nav me-auto" data-astro-cid-5blmo7yk> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-292/blog/" data-astro-cid-5blmo7yk>Blog</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-292/tools/" data-astro-cid-5blmo7yk>Tools</a> </li> <li class="nav-item" data-astro-cid-5blmo7yk> <a class="nav-link" href="/pr-preview/pr-292/privacy_policy/" data-astro-cid-5blmo7yk>Privacy Policy</a> </li> </ul> <a class="text-light nav-link" href="/pr-preview/pr-292/search/" data-astro-cid-5blmo7yk><i class="fas fa-search me-1" data-astro-cid-5blmo7yk></i>Search</a> </div> </div> </nav> <script type="module">const t=document.querySelector(".navbar-toggler"),e=document.getElementById("navbarContent");t.addEventListener("click",function(){e.classList.toggle("show"),t.classList.toggle("collapsed"),t.setAttribute("aria-expanded",e.classList.contains("show").toString())});</script>  <div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-astro-cid-q2vpma6g></div> <script type="module">const r=document.getElementById("reading-progress-bar");function e(){const t=document.documentElement.scrollHeight-window.innerHeight,n=t>0?Math.min(window.scrollY/t*100,100):0;r.style.width=n+"%",r.setAttribute("aria-valuenow",String(Math.round(n)))}window.addEventListener("scroll",e);window.addEventListener("resize",e);e();</script> <div class="bg-dark" data-astro-cid-gjtny2mx> <div class="pt-4 pb-5 post-hero text-white" data-astro-cid-gjtny2mx> <div class="container" data-astro-cid-gjtny2mx> <h2 data-astro-cid-gjtny2mx> <i class="fas fa-pencil-alt me-2" aria-hidden="true" data-astro-cid-gjtny2mx></i> Edit Any Webpage in Seconds (Great for Pranks!) </h2> <em data-astro-cid-gjtny2mx>7 Mar 2026</em> &nbsp;-&nbsp; <em data-astro-cid-gjtny2mx>8 min read</em> <div class="post-tag my-1 d-flex flex-wrap align-items-center gap-2" data-astro-cid-gjtny2mx> <a class="badge rounded-pill text-dark" style="background-color: #D7CCC8;" href="/pr-preview/pr-292/blog/tags/chrome/" data-astro-cid-gjtny2mx>chrome</a><a class="badge rounded-pill text-dark" style="background-color: #FFCCBC;" href="/pr-preview/pr-292/blog/tags/hack/" data-astro-cid-gjtny2mx>hack</a><a class="badge rounded-pill text-dark" style="background-color: #FFE0B2;" href="/pr-preview/pr-292/blog/tags/browser/" data-astro-cid-gjtny2mx>browser</a><a class="badge rounded-pill text-dark" style="background-color: #D7CCC8;" href="/pr-preview/pr-292/blog/tags/devtools/" data-astro-cid-gjtny2mx>devtools</a> </div>   <hr class="border-light mt-3 mb-0" data-astro-cid-gjtny2mx> <div class="series-banner" data-astro-cid-w7ld43o3><i class="fas fa-layer-group me-1" aria-hidden="true" data-astro-cid-w7ld43o3></i>
+Part 1 of 27 &mdash;
+<a href="/pr-preview/pr-292/blog/series/browser-hacks/" data-astro-cid-w7ld43o3>Browser Hacks</a> series
+</div>   <hr class="border-light mt-3 mb-3" data-astro-cid-gjtny2mx> <div class="related-posts-section" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
+</h5><div class="d-flex flex-row overflow-auto gap-3 pb-2" data-astro-cid-dpgbfi7r><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-292/blog/2016/11/05/chrome-dino-hack.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Hacking the Chrome Dino Game" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-gamepad me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking the Chrome Dino Game</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-292/blog/2019/12/07/unhide-password-box.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Reveal a Saved Password Hidden Behind Dots" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-eye me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Reveal a Saved Password Hidden Behind Dots</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-292/blog/2026/03/07/hacking-wordle.html" class="d-block text-decoration-none text-reset h-100" style="--card-accent: #538D4E" aria-label="Read Hacking Wordle: Solve It in One Try Using Browser DevTools" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-puzzle-piece me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking Wordle: Solve It in One Try Using Browser DevTools</small></div></div></a></div></div></div>  <div class="p-5" data-astro-cid-gjtny2mx></div> </div> </div> <div class="container post-content-container" data-astro-cid-gjtny2mx> <div class="row" data-astro-cid-gjtny2mx> <div class="col-md-10" data-astro-cid-gjtny2mx> <div id="post" class="card" data-astro-cid-gjtny2mx> <div class="card-body" data-astro-cid-gjtny2mx> <div class="page-content" data-astro-cid-gjtny2mx>  <p><em>What if you could make any website say whatever you want — in about 10 seconds, with zero coding skills? You totally can. Here’s how.</em></p>
+<h2 id="wait-isnt-that-illegal">Wait, isn’t that… illegal?</h2>
+<p>Nope! When you “edit” a webpage this way, you’re only changing what <strong>you see on your own screen</strong>. The actual website on the internet stays completely untouched. No servers are hacked. No databases are changed. Nobody else sees it.</p>
+<p>Think of it like this: your browser downloads a copy of the webpage and displays it to you. What we’re doing is scribbling on that local copy — like drawing a moustache on a magazine photo. The magazine in the store is still fine.</p>
+<p>This means:</p>
+<ul>
+<li>✅ It’s perfectly safe and harmless</li>
+<li>✅ A simple page refresh restores everything to normal</li>
+<li>❌ The changes are NOT permanent</li>
+<li>❌ Nobody else can see the changes</li>
+</ul>
+<p>The classic use case? <strong>Take a screenshot before refreshing</strong> and share it as a “totally real” screenshot. That’s the prank.</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="step-1--open-developer-tools">Step 1 — Open Developer Tools</h2>
+<p>Every major browser ships with built-in Developer Tools (DevTools). This is a panel used by web developers to inspect and debug websites — but it’s available to everyone, no installation needed.</p>
+<h3 id="google-chrome--microsoft-edge">Google Chrome / Microsoft Edge</h3>
+<p>Both use identical shortcuts:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>Action</th><th>Shortcut</th></tr></thead><tbody><tr><td>Open DevTools</td><td><code>F12</code></td></tr><tr><td>Also works</td><td><code>Ctrl + Shift + I</code> (Windows/Linux) or <code>Cmd + Option + I</code> (Mac)</td></tr><tr><td>Open via menu</td><td>Right-click anywhere on the page → <strong>Inspect</strong></td></tr></tbody> </table> </div>
+<h3 id="mozilla-firefox">Mozilla Firefox</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>Action</th><th>Shortcut</th></tr></thead><tbody><tr><td>Open DevTools</td><td><code>F12</code></td></tr><tr><td>Also works</td><td><code>Ctrl + Shift + I</code> (Windows/Linux) or <code>Cmd + Option + I</code> (Mac)</td></tr><tr><td>Open via menu</td><td>Right-click anywhere on the page → <strong>Inspect Element</strong></td></tr></tbody> </table> </div>
+<h3 id="safari-mac">Safari (Mac)</h3>
+<p>Safari hides DevTools by default. Enable it once:</p>
+<ol>
+<li>Go to <strong>Safari → Settings</strong> (or Preferences on older macOS)</li>
+<li>Click the <strong>Advanced</strong> tab</li>
+<li>Check <strong>“Show features for web developers”</strong> (or “Show Develop menu in menu bar” on older versions)</li>
+</ol>
+<p>Now you can right-click → <strong>Inspect Element</strong> or use <code>Cmd + Option + I</code>.</p>
+<div class="alert alert-info"><p>💡 <b>Tip:</b> The fastest way to jump straight to any element is to <b>right-click directly on the text or image you want to change</b>, then select <b>Inspect</b> (or <b>Inspect Element</b>). The DevTools panel will open with that element already highlighted — no hunting required.</p></div>
+<h2 id="what-am-i-looking-at">What am I looking at?</h2>
+<p>When DevTools opens, it can look intimidating. Don’t worry — you only need one tab: the <strong>Elements</strong> tab (called <strong>Inspector</strong> in Firefox).</p>
+<p>This tab shows you the <strong>HTML</strong> of the page — the raw building blocks that make up everything you see. Every piece of text, every image, every button has an HTML element behind it.</p>
+<p>Here’s what a typical line looks like:</p>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">html</span> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var C=(a,r,c)=>r in a?A(a,r,{enumerable:!0,configurable:!0,writable:!0,value:c}):a[r]=c;var l=(a,r,c)=>C(a,typeof r!="symbol"?r+"":r,c);var E=new Set(["__proto__","constructor","prototype"]);{let a={0:t=>y(t),1:t=>c(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(c(t)),5:t=>new Set(c(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},r=t=>{let[p,e]=t;return p in a?a[p](e):void 0},c=t=>t.map(r),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,r(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let d=this.querySelectorAll("astro-slot"),n={},u=this.querySelectorAll("template[data-astro-template]");for(let o of u){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of d){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("name")||"default"]=o.innerHTML)}let m;try{m=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let i=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(i+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${i}`,this.getAttribute("props"),o),o}let s,h=this.hydrator(this);s=performance.now(),await h(this.Component,m,n,{client:this.getAttribute("client")}),s&&this.setAttribute("client-render-time",(performance.now()-s).toString()),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),d.disconnect(),this.childrenConnectedCallback()},d=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});d.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),d=this.getAttribute("client");if(Astro[d]===void 0){window.addEventListener(`astro:${d}`,()=>this.start(),{once:!0});return}try{await Astro[d](async()=>{let n=this.getAttribute("renderer-url"),[u,{default:m}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),s=this.getAttribute("component-export")||"default";if(s.includes(".")){this.Component=u;for(let h of s.split(".")){if(E.has(h)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,h))throw new Error(`Invalid component export path: ${s}`);this.Component=this.Component[h]}}else{if(E.has(s))throw new Error(`Invalid component export path: ${s}`);this.Component=u[s]}return this.hydrator=m,this.hydrate},e,this)}catch(n){console.error("[astro-island] Error hydrating %s",this.getAttribute("component-url"),n)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="1RmkHu" component-url="/pr-preview/pr-292/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;className&quot;:[0,&quot;btn btn-sm btn-code btn-clip&quot;],&quot;title&quot;:[0,&quot;Copy to clipboard&quot;],&quot;aria-label&quot;:[0,&quot;Copy code to clipboard&quot;],&quot;targetSelector&quot;:[0,&quot;#code-block-3747&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.15416100000220467" await-children><!--[--><button aria-label="Copy code to clipboard" class="btn btn-sm btn-code btn-clip" title="Copy to clipboard"><i class="fas fa-copy"></i> <!--[--><astro-slot>COPY</astro-slot><!--]--></button><!--]--><!--astro:end--></astro-island> </div> <pre id="code-block-3747" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;Breaking News: Local Cat Refuses to Move&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div>
+<ul>
+<li>The <code>&lt;h1&gt;</code> is the <strong>tag</strong> — it tells the browser this is a big heading</li>
+<li>The text between the tags is what actually appears on screen</li>
+<li>We’re going to change that text 😈</li>
+</ul>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="step-2--edit-text-on-the-page">Step 2 — Edit Text on the Page</h2>
+<h3 id="the-double-click-method-easiest">The Double-Click Method (Easiest)</h3>
+<ol>
+<li>Right-click on the specific text you want to change on the page</li>
+<li>Click <strong>Inspect</strong> / <strong>Inspect Element</strong></li>
+<li>The Elements panel highlights the corresponding HTML</li>
+<li><strong>Double-click</strong> on the text (not the tag, the actual words) inside the Elements panel</li>
+<li>It becomes an editable field — type your replacement text</li>
+<li>Press <strong>Enter</strong> to confirm</li>
+</ol>
+<p>The page updates instantly. 🎉</p>
+<h3 id="the-edit-as-html-method-more-control">The “Edit as HTML” Method (More Control)</h3>
+<ol>
+<li>In the Elements panel, <strong>right-click</strong> on the element you want to change</li>
+<li>Select <strong>“Edit as HTML”</strong> (Chrome/Edge) or <strong>“Edit As HTML”</strong> (Firefox)</li>
+<li>A text box appears showing the full HTML of that element</li>
+<li>Change whatever you like — the text, or even add formatting</li>
+<li>Click outside the box to apply</li>
+</ol>
+<p>This is handy when you want to change multiple words at once, or the double-click didn’t work.</p>
+<h2 id="step-3--change-images">Step 3 — Change Images</h2>
+<p>Want to swap an image for something else?</p>
+<ol>
+<li>Right-click the image on the page → <strong>Inspect</strong></li>
+<li>You’ll see something like:
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">html</span> <astro-island uid="Z1hxYUc" component-url="/pr-preview/pr-292/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;className&quot;:[0,&quot;btn btn-sm btn-code btn-clip&quot;],&quot;title&quot;:[0,&quot;Copy to clipboard&quot;],&quot;aria-label&quot;:[0,&quot;Copy code to clipboard&quot;],&quot;targetSelector&quot;:[0,&quot;#code-block-708&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.1966099999990547" await-children><!--[--><button aria-label="Copy code to clipboard" class="btn btn-sm btn-code btn-clip" title="Copy to clipboard"><i class="fas fa-copy"></i> <!--[--><astro-slot>COPY</astro-slot><!--]--></button><!--]--><!--astro:end--></astro-island> </div> <pre id="code-block-708" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">img</span><span style="color:#B392F0"> src</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;https://example.com/photo.jpg&quot;</span><span style="color:#B392F0"> alt</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;A photo&quot;</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div>
+</li>
+<li>Double-click the URL inside the <code>src=&quot;...&quot;</code> part</li>
+<li>Replace it with the URL of any other image on the internet</li>
+<li>Press <strong>Enter</strong> — the image swaps out live</li>
+</ol>
+<div class="alert alert-info"><p>💡 <b>Finding an image URL:</b> Open any image in a new tab (right-click it → “Open image in new tab”), then copy the URL from the address bar. That’s the direct image URL you can paste in.</p></div>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="bonus-the-one-command-method">Bonus: The One-Command Method</h2>
+<p>The DevTools steps above are great for precise, surgical edits. But there’s a secret shortcut that turns the <strong>entire page</strong> into a giant text editor — no hunting through the HTML panel required.</p>
+<p>Open the <strong>Console</strong> tab in DevTools (it sits right next to the Elements tab) and type:</p>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <astro-island uid="Z1l5T5r" component-url="/pr-preview/pr-292/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;className&quot;:[0,&quot;btn btn-sm btn-code btn-clip&quot;],&quot;title&quot;:[0,&quot;Copy to clipboard&quot;],&quot;aria-label&quot;:[0,&quot;Copy code to clipboard&quot;],&quot;targetSelector&quot;:[0,&quot;#code-block-596&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.21247999999832246" await-children><!--[--><button aria-label="Copy code to clipboard" class="btn btn-sm btn-code btn-clip" title="Copy to clipboard"><i class="fas fa-copy"></i> <!--[--><astro-slot>COPY</astro-slot><!--]--></button><!--]--><!--astro:end--></astro-island> </div> <pre id="code-block-596" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#E1E4E8">document.designMode </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &quot;on&quot;</span></span></code></pre> </div>
+<p>Hit Enter. Now <strong>click anywhere on the page and start typing</strong>. Every piece of text — headings, paragraphs, captions — becomes editable instantly. It’s like turning a webpage into a Word document.</p>
+<p>To turn it back off:</p>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">js</span> <astro-island uid="Z1rj4VJ" component-url="/pr-preview/pr-292/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;className&quot;:[0,&quot;btn btn-sm btn-code btn-clip&quot;],&quot;title&quot;:[0,&quot;Copy to clipboard&quot;],&quot;aria-label&quot;:[0,&quot;Copy code to clipboard&quot;],&quot;targetSelector&quot;:[0,&quot;#code-block-290&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.2186020000008284" await-children><!--[--><button aria-label="Copy code to clipboard" class="btn btn-sm btn-code btn-clip" title="Copy to clipboard"><i class="fas fa-copy"></i> <!--[--><astro-slot>COPY</astro-slot><!--]--></button><!--]--><!--astro:end--></astro-island> </div> <pre id="code-block-290" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="js"><code><span class="line"><span style="color:#E1E4E8">document.designMode </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &quot;off&quot;</span></span></code></pre> </div>
+<h3 id="try-it-on-this-page-right-now">Try it on this page right now</h3>
+<div class="text-center my-3"><button id="btn-design-mode" class="btn btn-info" onclick="toggleDesignMode(this)">✏️ Enable Edit Mode</button></div>
+<p class="text-center text-muted" style="font-size:0.9em;">Click the button above, then click any text on this page and start typing!</p>
+<script>
+function toggleDesignMode(btn) {
+var enabling = document.designMode !== 'on';
+document.designMode = enabling ? 'on' : 'off';
+btn.textContent = enabling ? '✋ Disable Edit Mode' : '✏️ Enable Edit Mode';
+btn.className = enabling ? 'btn btn-warning' : 'btn btn-info';
+}
+</script>
+<h3 id="on-desktop-via-the-chrome-or-edge-console">On desktop: via the Chrome (or Edge) Console</h3>
+<ol>
+<li>Press <strong><code>F12</code></strong> to open DevTools</li>
+<li>Click the <strong>Console</strong> tab</li>
+<li>Type <code>document.designMode = &quot;on&quot;</code> and press <strong>Enter</strong></li>
+<li>Click any text on the page and edit away</li>
+</ol>
+<h3 id="on-mobile-use-a-bookmarklet">On mobile: use a Bookmarklet</h3>
+<p>Mobile browsers don’t have a DevTools console, but you can run JavaScript via a <strong>bookmarklet</strong> — a bookmark whose URL is JavaScript code instead of a web address.</p>
+<p><strong>Setting it up (one-time):</strong></p>
+<ol>
+<li>Bookmark any page on your phone (tap ⋮ → <strong>Bookmark</strong>, or the share icon → <strong>Add to Bookmarks</strong>)</li>
+<li>Open your bookmarks, find the one you just made, and <strong>edit</strong> it</li>
+<li>Replace the URL with:</li>
+</ol>
+<div class="highlight"> <div class="code-block-header d-flex align-items-center justify-content-between px-3 py-1"> <span class="code-lang">plaintext</span> <astro-island uid="Z29xlpX" component-url="/pr-preview/pr-292/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;className&quot;:[0,&quot;btn btn-sm btn-code btn-clip&quot;],&quot;title&quot;:[0,&quot;Copy to clipboard&quot;],&quot;aria-label&quot;:[0,&quot;Copy code to clipboard&quot;],&quot;targetSelector&quot;:[0,&quot;#code-block-4771&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.22244899999714107" await-children><!--[--><button aria-label="Copy code to clipboard" class="btn btn-sm btn-code btn-clip" title="Copy to clipboard"><i class="fas fa-copy"></i> <!--[--><astro-slot>COPY</astro-slot><!--]--></button><!--]--><!--astro:end--></astro-island> </div> <pre id="code-block-4771" class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>javascript:document.designMode=(document.designMode===&#39;on&#39;)?&#39;off&#39;:&#39;on&#39;;void(0);</span></span></code></pre> </div>
+<ol start="4">
+<li>Rename it something memorable, like <strong>“Edit Mode”</strong>, and save</li>
+</ol>
+<p><strong>Using it:</strong></p>
+<p>Whenever you want to edit a page on your phone, open your bookmarks and tap <strong>“Edit Mode”</strong>. The whole page becomes editable. Tap the bookmarklet again to turn editing off.</p>
+<div class="alert alert-info"><p>💡 <b>Pro tip:</b> This bookmarklet works on desktop too — sometimes it’s faster than opening the console every time. Just add it to your bookmarks bar for one-click access.</p></div>
+<h2 id="prank-ideas-to-try">Prank Ideas to Try</h2>
+<p>Here are some classics that work on almost any site:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Table component: wraps native <table> in a responsive container
+     and applies Bootstrap table classes so MDX authors can use raw Markdown
+     table syntax while getting Bootstrap styling when rendered. --><div class="table-responsive"> <table class="table table-bordered table-striped table-sm"> <thead><tr><th>Target</th><th>What to change</th><th>Effect</th></tr></thead><tbody><tr><td>News headline</td><td>The <code>&lt;h1&gt;</code> or <code>&lt;h2&gt;</code> text</td><td>”Local Man Discovers He is a Golden Retriever”</td></tr><tr><td>Article byline</td><td>Author name text</td><td>Put your friend’s name as the “author”</td></tr><tr><td>Price on a product page</td><td>The price text</td><td>Change ₹50,000 laptop to ₹1</td></tr><tr><td>Sports score</td><td>Score text in a live ticker</td><td>Your team wins, always</td></tr><tr><td>Weather forecast</td><td>Temperature or description</td><td>🌨️ Snowstorm predicted in July</td></tr><tr><td>Social media post</td><td>A friend’s (public) post on your screen</td><td>Make them say something absurd</td></tr></tbody> </table> </div>
+<p><strong>Golden rule of pranking:</strong> Always take a screenshot before refreshing the page. The edit vanishes the moment you reload!</p>
+<div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div><h2 id="how-does-this-actually-work">How Does This Actually Work?</h2>
+<p>When you type a web address and hit Enter, here’s what happens behind the scenes:</p>
+<ol>
+<li>Your browser sends a request to a <strong>web server</strong> somewhere in the world</li>
+<li>That server sends back a bunch of files — HTML (structure), CSS (styles), JavaScript (behaviour)</li>
+<li>Your browser <strong>renders</strong> those files, turning the raw code into the pretty page you see</li>
+</ol>
+<p>The key insight: <strong>your browser holds a local copy of all that code in memory</strong>. DevTools gives you a live editor for that in-memory copy. Any change you make is reflected instantly on screen — but it only exists in your browser’s memory, not on the server. Refresh the page, and your browser fetches a fresh copy from the server, wiping your edits.</p>
+<p>This is exactly why web developers love DevTools — they can try out changes live without touching the actual website files.</p>
+<h2 id="things-to-know">Things to Know</h2>
+<ul>
+<li><strong>A page refresh undoes everything.</strong> No undo button needed — just reload.</li>
+<li><strong>Some pages are harder to edit.</strong> If text is loaded dynamically (like live sports scores that update every few seconds), your changes might get overwritten automatically.</li>
+<li><strong>Screenshots can be cropped/edited too</strong> — so treat any “screenshots” you receive with healthy scepticism!</li>
+<li><strong>Don’t use this to deceive maliciously.</strong> Harmless pranks on friends = fun. Using a doctored screenshot to spread misinformation or defame someone = not cool (and potentially illegal).</li>
+</ul>
+<p>Go ahead, change a headline, take a screenshot, and send it to a friend. When they panic, you can tell them it took you 10 seconds and a right-click.</p>
+<p>Want to take your DevTools skills further? Check out <a href="/pr-preview/pr-292/blog/2026/03/07/hacking-wordle.html">this Wordle hack</a> for another fun trick you can pull off with the same panel.</p>
+<p>Drop a comment below with the funniest prank you pulled off! 👇</p> <div class="in-content-ad my-4" data-astro-cid-ykg2om2w> <p class="text-muted text-center mb-2" data-astro-cid-ykg2om2w><small data-astro-cid-ykg2om2w>Advertisement</small></p> <div class="card border" data-astro-cid-ykg2om2w> <div class="card-body p-2" data-astro-cid-ykg2om2w>  </div> </div> </div>  </div> <hr data-astro-cid-gjtny2mx> <div class="share-section d-flex align-items-center flex-wrap gap-2"> <span class="share-label small ">Share:</span> <a class="btn btn-sm btn-outline-secondary" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-292%2Fblog%2F2026%2F03%2F07%2Fedit-webpage-inspect-element%2F&#38;text=Edit%20Any%20Webpage%20in%20Seconds%20(Great%20for%20Pranks!)" target="_blank" rel="noopener noreferrer" data-share-method="twitter" aria-label="Share on Twitter/X"> <i class="fab fa-twitter" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-292%2Fblog%2F2026%2F03%2F07%2Fedit-webpage-inspect-element%2F" target="_blank" rel="noopener noreferrer" data-share-method="facebook" aria-label="Share on Facebook"> <i class="fab fa-facebook" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-292%2Fblog%2F2026%2F03%2F07%2Fedit-webpage-inspect-element%2F&#38;title=Edit%20Any%20Webpage%20in%20Seconds%20(Great%20for%20Pranks!)" target="_blank" rel="noopener noreferrer" data-share-method="reddit" aria-label="Share on Reddit"> <i class="fab fa-reddit" aria-hidden="true"></i> </a> <a class="btn btn-sm btn-outline-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmathewsachin.github.io%2Fpr-preview%2Fpr-292%2Fblog%2F2026%2F03%2F07%2Fedit-webpage-inspect-element%2F" target="_blank" rel="noopener noreferrer" data-share-method="linkedin" aria-label="Share on LinkedIn"> <i class="fab fa-linkedin" aria-hidden="true"></i> </a> <astro-island uid="So0QI" component-url="/pr-preview/pr-292/_astro/CopyButton.BD240OuR.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;id&quot;:[0,&quot;copy-post-link&quot;],&quot;className&quot;:[0,&quot;btn btn-sm btn-outline-secondary&quot;],&quot;aria-label&quot;:[0,&quot;Copy link&quot;],&quot;title&quot;:[0,&quot;Copy link&quot;],&quot;value&quot;:[0,&quot;https://mathewsachin.github.io/pr-preview/pr-292/blog/2026/03/07/edit-webpage-inspect-element/&quot;],&quot;iconClass&quot;:[0,&quot;fa fa-link&quot;],&quot;copiedIconClass&quot;:[0,&quot;fa fa-check&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CopyButton&quot;,&quot;value&quot;:true}" server-render-time="0.11299300000246149" await-children><!--[--><button id="copy-post-link" aria-label="Copy link" class="btn btn-sm btn-outline-secondary" title="Copy link"><i class="fa fa-link"></i> <!--[--><!--]--></button><!--]--><!--astro:end--></astro-island> </div> <br data-astro-cid-gjtny2mx>   <div class="related-posts-section" data-astro-cid-dpgbfi7r><h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;" data-astro-cid-dpgbfi7r><i class="fas fa-bookmark me-2" data-astro-cid-dpgbfi7r></i>You might also like
+</h5><div class="d-flex flex-row overflow-auto gap-3 pb-2" data-astro-cid-dpgbfi7r><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-292/blog/2016/11/05/chrome-dino-hack.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Hacking the Chrome Dino Game" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-gamepad me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking the Chrome Dino Game</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-292/blog/2019/12/07/unhide-password-box.html" class="d-block text-decoration-none text-reset h-100" aria-label="Read Reveal a Saved Password Hidden Behind Dots" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-eye me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Reveal a Saved Password Hidden Behind Dots</small></div></div></a></div><div class="flex-shrink-0" style="width:260px; max-width:90vw;" data-astro-cid-dpgbfi7r><a href="/pr-preview/pr-292/blog/2026/03/07/hacking-wordle.html" class="d-block text-decoration-none text-reset h-100" style="--card-accent: #538D4E" aria-label="Read Hacking Wordle: Solve It in One Try Using Browser DevTools" data-astro-cid-dpgbfi7r><div class="card h-100 d-flex flex-column" data-astro-cid-dpgbfi7r><div class="card-body flex-grow-1" data-astro-cid-dpgbfi7r><small data-astro-cid-dpgbfi7r><i class="fas fa-puzzle-piece me-1 text-white" aria-hidden="true" data-astro-cid-dpgbfi7r></i>Hacking Wordle: Solve It in One Try Using Browser DevTools</small></div></div></a></div></div></div> <br data-astro-cid-gjtny2mx>  <script src="https://giscus.app/client.js" data-repo="MathewSachin/MathewSachin.GitHub.io" data-repo-id="MDEwOlJlcG9zaXRvcnk0ODg1MDA2Mw==" data-category="Announcements" data-category-id="DIC_kwDOAulkj84C4PRo" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+</script> </div> </div> </div>  <div class="col-12 col-md-2 order-first order-md-last" id="toc-sidebar" style="display:none" data-astro-cid-gjtny2mx> <div class="sticky-md-top" style="top: 10px" data-astro-cid-gjtny2mx> <div class="mb-3" data-astro-cid-gjtny2mx> <div class="card toc-card" data-astro-cid-xvrfupwn><button type="button" class="card-header toc-header toc-mobile-toggle w-100 text-start d-md-none" aria-expanded="false" aria-controls="toc-collapse" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small><i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true" data-astro-cid-xvrfupwn></i></button><div class="card-header toc-header d-none d-md-block" data-astro-cid-xvrfupwn><small data-astro-cid-xvrfupwn><i class="fas fa-list me-1" aria-hidden="true" data-astro-cid-xvrfupwn></i>Contents</small></div><div class="collapse d-md-block" id="toc-collapse" data-astro-cid-xvrfupwn><div class="card-body p-0" data-astro-cid-xvrfupwn><nav id="toc-nav" aria-label="Table of contents" data-astro-cid-xvrfupwn><ul class="toc-list" data-astro-cid-xvrfupwn><li class="toc-link" data-astro-cid-xvrfupwn><a href="#wait-isnt-that-illegal" data-astro-cid-xvrfupwn>Wait, isn’t that… illegal?</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#step-1--open-developer-tools" data-astro-cid-xvrfupwn>Step 1 — Open Developer Tools</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#google-chrome--microsoft-edge" data-astro-cid-xvrfupwn>Google Chrome / Microsoft Edge</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#mozilla-firefox" data-astro-cid-xvrfupwn>Mozilla Firefox</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#safari-mac" data-astro-cid-xvrfupwn>Safari (Mac)</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#what-am-i-looking-at" data-astro-cid-xvrfupwn>What am I looking at?</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#step-2--edit-text-on-the-page" data-astro-cid-xvrfupwn>Step 2 — Edit Text on the Page</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#the-double-click-method-easiest" data-astro-cid-xvrfupwn>The Double-Click Method (Easiest)</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#the-edit-as-html-method-more-control" data-astro-cid-xvrfupwn>The “Edit as HTML” Method (More Control)</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#step-3--change-images" data-astro-cid-xvrfupwn>Step 3 — Change Images</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#bonus-the-one-command-method" data-astro-cid-xvrfupwn>Bonus: The One-Command Method</a><ul class="toc-sublist" data-astro-cid-xvrfupwn><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#try-it-on-this-page-right-now" data-astro-cid-xvrfupwn>Try it on this page right now</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#on-desktop-via-the-chrome-or-edge-console" data-astro-cid-xvrfupwn>On desktop: via the Chrome (or Edge) Console</a></li><li class="toc-link toc-h3" data-astro-cid-xvrfupwn><a href="#on-mobile-use-a-bookmarklet" data-astro-cid-xvrfupwn>On mobile: use a Bookmarklet</a></li></ul></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#prank-ideas-to-try" data-astro-cid-xvrfupwn>Prank Ideas to Try</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#how-does-this-actually-work" data-astro-cid-xvrfupwn>How Does This Actually Work?</a></li><li class="toc-link" data-astro-cid-xvrfupwn><a href="#things-to-know" data-astro-cid-xvrfupwn>Things to Know</a></li></ul></nav></div></div></div><script type="module">const c=document.querySelector(".toc-mobile-toggle"),l=document.getElementById("toc-collapse");c.addEventListener("click",function(){const t=c.getAttribute("aria-expanded")==="true";c.setAttribute("aria-expanded",t?"false":"true"),l.classList.toggle("show")});const f=document.getElementById("toc-nav"),g=document.getElementById("toc-sidebar"),b=document.querySelector("#post .page-content"),u=Array.from(b.querySelectorAll("h2, h3")),L=90,m=f.querySelectorAll("a");let d=!1,a,r;function p(t){const e=f;m.forEach(s=>s.classList.remove("toc-active")),e.querySelectorAll(".toc-sublist").forEach(s=>s.classList.remove("expanded")),t&&e.querySelectorAll(`a[href="#${t}"]`).forEach(function(o){if(o.classList.add("toc-active"),!!o.parentElement&&o.parentElement.classList.contains("toc-h3")){const n=o.closest(".toc-sublist");n&&n.classList.add("expanded")}else{const n=o.nextElementSibling;n&&n.classList.contains("toc-sublist")&&n.classList.add("expanded")}})}if(u.length>=3){let t=function(){d||(typeof r=="number"&&clearTimeout(r),r=window.setTimeout(()=>{const e=window.scrollY+L;let i=null;u.forEach(function(s){s.getBoundingClientRect().top+window.scrollY<=e&&(i=s.id||i)}),p(i)},50))};g.style.display="",window.addEventListener("scroll",t,{passive:!0}),window.addEventListener("resize",t),t()}m.forEach(function(t){t.addEventListener("click",function(){const e=t.getAttribute("href")||"";d=!0,typeof a=="number"&&clearTimeout(a),a=window.setTimeout(function(){d=!1},800),e.startsWith("#")&&p(e.substring(1)),l&&l.classList.contains("show")&&(l.classList.remove("show"),c&&c.setAttribute("aria-expanded","false"))})});</script> </div> <div class="d-none d-md-block" data-astro-cid-gjtny2mx></div> </div> </div> </div> </div> <br data-astro-cid-gjtny2mx> </div> <button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top" data-astro-cid-wlspcwf4> <i class="fas fa-arrow-up" aria-hidden="true" data-astro-cid-wlspcwf4></i> </button>  <script type="module">const t=document.getElementById("back-to-top");if(t){let c=window.scrollY;window.addEventListener("scroll",function(){const o=window.scrollY,n=o<c;c=o,t.classList.toggle("visible",n&&o>300)}),t.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})})}</script> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><astro-island uid="Z1t392o" component-url="/pr-preview/pr-292/_astro/Lightbox.Bc8Fx9JY.js" component-export="default" renderer-url="/pr-preview/pr-292/_astro/client.svelte.DtBO7rvO.js" props="{&quot;data-astro-cid-gjtny2mx&quot;:[0,true]}" ssr client="only" opts="{&quot;name&quot;:&quot;Lightbox&quot;,&quot;value&quot;:true}"></astro-island>  </body></html>
