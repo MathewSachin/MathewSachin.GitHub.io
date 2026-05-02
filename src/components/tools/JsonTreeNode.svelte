@@ -88,7 +88,7 @@
   }
   .json-ellipsis {
     cursor: pointer;
-    color: #888;
+    color: var(--bs-secondary-color, #adb5bd);
     font-style: italic;
     margin: 0 0.25em;
     font-size: 0.85em;
