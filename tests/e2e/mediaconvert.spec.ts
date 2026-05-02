@@ -48,8 +48,9 @@ test.describe('Media Converter tool', () => {
       buffer: FAKE_AUDIO_BYTES,
     });
 
-    await expect(page.locator('table')).toBeVisible();
-    await expect(page.locator('table')).toContainText('sample.mp3');
+    const fileInfoTable = page.locator('.table-borderless');
+    await expect(fileInfoTable).toBeVisible();
+    await expect(fileInfoTable).toContainText('sample.mp3');
   });
 
   test('uploading a media file shows the convert button', async ({ page }) => {
@@ -120,7 +121,7 @@ test.describe('Media Converter tool', () => {
   test('"How It Works" section is present', async ({ page }) => {
     await expect(page.locator('text=How It Works')).toBeVisible();
     await expect(page.locator('text=Supported Output Formats')).toBeVisible();
-    await expect(page.locator('text=Privacy')).toBeVisible();
+    await expect(page.locator('h5', { hasText: 'Privacy' })).toBeVisible();
   });
 
   test('file size is shown in the file info table', async ({ page }) => {
@@ -134,7 +135,8 @@ test.describe('Media Converter tool', () => {
       buffer: FAKE_AUDIO_BYTES,
     });
 
-    await expect(page.locator('table')).toContainText('Size');
-    await expect(page.locator('table')).toContainText('B');
+    const fileInfoTable = page.locator('.table-borderless');
+    await expect(fileInfoTable).toContainText('Size');
+    await expect(fileInfoTable).toContainText('B');
   });
 });
