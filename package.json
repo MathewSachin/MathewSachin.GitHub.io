@@ -21,7 +21,7 @@
     "diff2html": "^3.4.56",
     "gray-matter": "^4.0.3",
     "ion-js": "^5.2.1",
-    "mediabunny": "1.40.1",
+    "mediabunny": "1.43.1",
     "node-addon-api": "^8.7.0",
     "node-gyp": "^12.3.0",
     "sharp": "^0.34.5",
