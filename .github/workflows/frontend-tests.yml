@@ -32,5 +32,8 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
+      - name: Install ffmpeg (provides ffprobe for AV sync analysis)
+        run: sudo apt-get install -y ffmpeg
+
       - name: Run frontend tests
         run: npm run test:e2e
