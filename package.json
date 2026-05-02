@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build:astro": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "astro check && svelte-check",
     "build": "astro build",
     "test": "node --test tests/*.test.ts",
     "test:e2e": "playwright test"
@@ -47,6 +47,7 @@
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "svelte-check": "^4.4.7",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0"
   }
