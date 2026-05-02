@@ -50,7 +50,7 @@
         {/if}
         {#if ok}
           <div id="ion-ok" class="alert alert-success mt-2 py-2" role="alert">
-            <i class="fas fa-check-circle me-1"></i>Valid ION
+            <i class="fas fa-check-circle me-1"></i>Valid Ion
           </div>
         {/if}
       </div>
