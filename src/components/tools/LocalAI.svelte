@@ -173,9 +173,8 @@
             disabled={isLoading || isGenerating}>
             <i class="fas fa-times me-1"></i>Clear
           </button>
-        {:else}
-          <button class="btn btn-outline-secondary" on:click={pickDirectory} id="pick-dir-btn"
-            disabled={isLoading || isGenerating || phase === 'ready'}>
+        {:else if !isLoading && !isGenerating && phase !== 'ready'}
+          <button class="btn btn-outline-secondary" on:click={pickDirectory} id="pick-dir-btn">
             <i class="fas fa-folder-open me-1"></i>Pick Folder
           </button>
         {/if}
