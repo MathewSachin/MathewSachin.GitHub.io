@@ -1,4 +1,6 @@
 ---
+import Fa from 'svelte-fa';
+import { faPause, faPlay, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 ---
 
 <div class="dino-embed-wrapper">
@@ -11,7 +13,10 @@
     <strong>Live Debugger</strong>
   </div>
   <div class="card-body">
-    <button id="debug-toggle" class="btn btn-sm text-info"><i class="fas fa-pause"></i></button>
+    <button id="debug-toggle" class="btn btn-sm text-info">
+      <span id="icon-pause"><Fa icon={faPause} /></span>
+      <span id="icon-play" style="display:none"><Fa icon={faPlay} /></span>
+    </button>
 
     <span class="badge rounded-pill bg-primary">
       currentSpeed: <span id="dbg-speed">—</span>
@@ -28,7 +33,7 @@
       <div class="input-group">  
         <textarea id="fake-console" class="form-control" rows="5"
           placeholder="Type in the commands here and click SEND"></textarea>
-        <button class="btn btn-primary" type="button" id="button-dino-send"><i class="fas fa-paper-plane"></i> SEND</button>
+        <button class="btn btn-primary" type="button" id="button-dino-send"><Fa icon={faPaperPlane} /> SEND</button>
       </div>
     </div>
 
@@ -76,7 +81,8 @@ const elDistance = document.getElementById('dbg-distance') as HTMLElement;
 const elSpeed = document.getElementById('dbg-speed') as HTMLElement;
 const elY = document.getElementById('dbg-ypos') as HTMLElement;
 const toggleBtn = document.getElementById('debug-toggle') as HTMLElement;
-const toggleIcon = toggleBtn.querySelector('i') as HTMLElement;
+const iconPause = document.getElementById('icon-pause') as HTMLElement;
+const iconPlay = document.getElementById('icon-play') as HTMLElement;
 
 let running = true;
 let intervalId: number | null = null;
@@ -126,14 +132,16 @@ function start() {
   if (intervalId !== null) return;
   intervalId = window.setInterval(update, 200);
   running = true;
-  toggleIcon.className = "fa fa-pause";
+  iconPause.style.display = '';
+  iconPlay.style.display = 'none';
 }
 
 function stop() {
   if (intervalId !== null) window.clearInterval(intervalId);
   intervalId = null;
   running = false;
-  toggleIcon.className = "fa fa-play";
+  iconPause.style.display = 'none';
+  iconPlay.style.display = '';
 }
 
 toggleBtn.addEventListener('click', function(){

@@ -2,6 +2,8 @@
   import { onMount, onDestroy } from 'svelte';
   import { countWords } from '@scripts/tools/scratchpad.js';
   import CopyButton from './CopyButton.svelte';
+  import Fa from 'svelte-fa';
+  import { faCopy, faCheck, faTrash, faCompress, faExpand } from '@fortawesome/free-solid-svg-icons';
 
   const STORAGE_KEY = 'scratchpad-v1';
 
@@ -101,12 +103,12 @@
   <div class="card-body">
 
     <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
-      <CopyButton value={pad} title="Copy All" iconClass="fas fa-copy me-1" copiedIconClass="fas fa-check me-1">Copy All</CopyButton>
+      <CopyButton value={pad} title="Copy All" icon={faCopy} copiedIcon={faCheck} iconClass="me-1">Copy All</CopyButton>
       <button class="btn btn-outline-secondary btn-sm" id="clear-btn" on:click={clearAll}>
-        <i class="fas fa-trash me-1"></i>Clear
+        <Fa icon={faTrash} class="me-1" />Clear
       </button>
       <button class="btn btn-outline-secondary btn-sm" id="fullscreen-btn" on:click={toggleFullscreen} title="Toggle full screen">
-        <i class={isFullscreen ? 'fas fa-compress me-1' : 'fas fa-expand me-1'}></i><span id="fullscreen-label">{fsLabel}</span>
+        <Fa icon={isFullscreen ? faCompress : faExpand} class="me-1" /><span id="fullscreen-label">{fsLabel}</span>
       </button>
       <span class="ms-auto text-muted small" id="save-status">{saveStatus}</span>
       <span class="text-muted small" id="word-count">{words} word{words !== 1 ? 's' : ''}  {chars} char{chars !== 1 ? 's' : ''}</span>

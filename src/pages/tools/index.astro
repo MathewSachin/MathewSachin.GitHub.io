@@ -6,6 +6,8 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { TOOLS } from '@data/tools.ts';
 import '@styles/blog.css';
+import Fa from 'svelte-fa';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const BASE = import.meta.env.BASE_URL;
 ---
@@ -23,14 +25,14 @@ const BASE = import.meta.env.BASE_URL;
                   <div class="card-body">
                     <p class="card-title mb-1">
                       <span style={tool.accent_color ? `color: ${tool.accent_color};` : undefined} class={tool.accent_color ? undefined : 'text-info'}>
-                        <i class={`${tool.icon} me-2`} aria-hidden="true"></i>
+                        <Fa icon={tool.icon} class="me-2" />
                         <span>{tool.name}</span>
                       </span>
                     </p>
                     <p class="card-text">{tool.description}</p>
                   </div>
                   <div class="card-footer">
-                    <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+                    <small><Fa icon={faArrowRight} class="me-1" />Open tool</small>
                   </div>
                 </div>
               </a>

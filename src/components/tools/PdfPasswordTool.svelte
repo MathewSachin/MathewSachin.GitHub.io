@@ -1,4 +1,7 @@
 <script lang="ts">
+import Fa from 'svelte-fa';
+import { faExclamationCircle, faLock, faLockOpen, faSpinner, faTimesCircle, faCheckCircle, faShieldAlt, faFilePdf, faInfoCircle, faCog, faDownload } from '@fortawesome/free-solid-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 export let workerUrl: string;
 
 let selectedFile: File | null = null;
@@ -11,16 +14,18 @@ let ownerPass = '';
 let decryptPass = '';
 let statusText = '';
 let statusType: 'info' | 'danger' | 'success' | 'warning' = 'info';
-let statusIcon = '';
+let statusIcon: IconDefinition | null = null;
+let statusSpin = false;
 let statusVisible = false;
 let processDisabled = true;
 let resultUrl = '';
 let resultName = '';
 
-function showStatus(text: string, type: typeof statusType, icon: string = '') {
+function showStatus(text: string, type: typeof statusType, icon: IconDefinition | null = null, spin = false) {
   statusText = text;
   statusType = type;
   statusIcon = icon;
+  statusSpin = spin;
   statusVisible = true;
 }
 function hideStatus() { statusVisible = false; }
@@ -57,7 +62,7 @@ function handleDrop(e: DragEvent) {
 }
 function handleFile(file: File) {
   if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
-    showStatus('Please select a PDF file.', 'danger', 'fa-exclamation-circle');
+    showStatus('Please select a PDF file.', 'danger', faExclamationCircle);
     return;
   }
   selectedFile = file;
@@ -73,7 +78,7 @@ function handleFile(file: File) {
     const bytes = new Uint8Array(buf);
     fileValid = isValidPdf(bytes);
     if (!fileValid) {
-      showStatus('The selected file does not appear to be a valid PDF.', 'danger', 'fa-exclamation-circle');
+      showStatus('The selected file does not appear to be a valid PDF.', 'danger', faExclamationCircle);
       selectedFile = null;
       fileName = '';
       processDisabled = true;
@@ -82,10 +87,10 @@ function handleFile(file: File) {
     isEncrypted = isPdfEncrypted(bytes);
     if (isEncrypted) {
       setMode('remove');
-      showStatus('Encrypted PDF detected — enter the current password to remove it.', 'info', 'fa-lock');
+      showStatus('Encrypted PDF detected — enter the current password to remove it.', 'info', faLock);
     } else {
       setMode('add');
-      showStatus('No encryption detected — you can add a password below.', 'info', 'fa-lock-open');
+      showStatus('No encryption detected — you can add a password below.', 'info', faLockOpen);
     }
     processDisabled = false;
   };
@@ -95,11 +100,11 @@ function handleFile(file: File) {
 async function processPdf() {
   if (!selectedFile) return;
   if (mode === 'add' && !userPass && !ownerPass) {
-    showStatus('Please enter at least a User Password or Owner Password.', 'danger', 'fa-exclamation-circle');
+    showStatus('Please enter at least a User Password or Owner Password.', 'danger', faExclamationCircle);
     return;
   }
   processDisabled = true;
-  showStatus('Loading qpdf — this may take a moment on first use…', 'info', 'fa-spinner fa-spin');
+  showStatus('Loading qpdf — this may take a moment on first use…', 'info', faSpinner, true);
   const reader = new FileReader();
   reader.onload = function (e) {
     const buf = (e.target && e.target.result) as ArrayBuffer | null;
@@ -111,7 +116,7 @@ async function processPdf() {
       processDisabled = false;
       if (!ev.data.success) {
         const msg = ev.data.error || 'An unknown error occurred.';
-        showStatus(msg, 'danger', 'fa-times-circle');
+        showStatus(msg, 'danger', faTimesCircle);
         return;
       }
       revokePreviousUrl();
@@ -119,12 +124,12 @@ async function processPdf() {
       resultUrl = URL.createObjectURL(blob);
       const baseName = selectedFile!.name.replace(/\.pdf$/i, '');
       resultName = baseName + (mode === 'remove' ? '-decrypted.pdf' : '-protected.pdf');
-      showStatus('Done! Your file is ready to download.', 'success', 'fa-check-circle');
+      showStatus('Done! Your file is ready to download.', 'success', faCheckCircle);
     };
     worker.onerror = function (err) {
       worker.terminate();
       processDisabled = false;
-      showStatus('Worker error: ' + (err.message || 'unknown'), 'danger', 'fa-times-circle');
+      showStatus('Worker error: ' + (err.message || 'unknown'), 'danger', faTimesCircle);
     };
     const msg: any = { file: fileData, type: mode === 'remove' ? 'decrypt' : 'encrypt' };
     if (mode === 'remove') {
@@ -133,7 +138,7 @@ async function processPdf() {
       msg.userPass = userPass;
       msg.ownerPass = ownerPass || userPass;
     }
-    showStatus('Processing…', 'info', 'fa-spinner fa-spin');
+    showStatus('Processing…', 'info', faSpinner, true);
     worker.postMessage(msg);
   };
   reader.readAsArrayBuffer(selectedFile);
@@ -146,7 +151,7 @@ async function processPdf() {
 <!-- Privacy badge -->
 <div class="d-flex align-items-center gap-2 mb-4 p-2 rounded"
   style="background:rgba(25,135,84,.08); border:1px solid rgba(25,135,84,.2)">
-  <i class="fas fa-shield-alt text-success"></i>
+  <Fa icon={faShieldAlt} class="text-success" />
   <span class="small">
     <strong class="text-success">Privacy Check:</strong>
     <span id="privacy-bytes">0 KB</span> uploaded to server — all processing happens in your browser.
@@ -158,7 +163,7 @@ async function processPdf() {
   style="cursor:pointer; border-style:dashed !important"
   on:click={() => document.getElementById('file-input')?.click()}
   on:dragover|preventDefault={() => {}} on:drop={handleDrop}>
-  <i class="fas fa-file-pdf fa-2x text-muted mb-2 d-block"></i>
+  <Fa icon={faFilePdf} size="2x" class="text-muted mb-2 d-block" />
   <p class="mb-1">Drop a PDF here, or <span class="text-primary">click to browse</span></p>
   <small class="text-muted">PDF files only</small>
   <input type="file" id="file-input" accept=".pdf,application/pdf" class="d-none" on:change={handleFileInput}>
@@ -167,7 +172,7 @@ async function processPdf() {
 <!-- Selected file name -->
 {#if fileName}
 <p id="file-name" class="text-muted small mb-3">
-  <i class="fas fa-file-pdf me-1"></i>{fileName}
+  <Fa icon={faFilePdf} class="me-1" />{fileName}
 </p>
 {/if}
 
@@ -178,13 +183,13 @@ async function processPdf() {
     <div class="form-check">
       <input class="form-check-input" type="radio" name="pdf-mode" id="mode-remove" value="remove" bind:group={mode}>
       <label class="form-check-label" for="mode-remove">
-        <i class="fas fa-lock-open me-1 text-success"></i>Remove Password
+        <Fa icon={faLockOpen} class="me-1 text-success" />Remove Password
       </label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="radio" name="pdf-mode" id="mode-add" value="add" bind:group={mode}>
       <label class="form-check-label" for="mode-add">
-        <i class="fas fa-lock me-1 text-primary"></i>Add Password
+        <Fa icon={faLock} class="me-1 text-primary" />Add Password
       </label>
     </div>
   </div>
@@ -206,7 +211,7 @@ async function processPdf() {
     <div class="col-12 col-sm-6">
       <label class="form-label fw-semibold" for="user-pass">
         User Password
-        <i class="fas fa-info-circle text-muted ms-1" title="Password required to open the PDF"></i>
+        <Fa icon={faInfoCircle} class="text-muted ms-1" title="Password required to open the PDF" />
       </label>
       <input type="password" id="user-pass" class="form-control"
         placeholder="Required to open the PDF" autocomplete="new-password" bind:value={userPass}>
@@ -214,7 +219,7 @@ async function processPdf() {
     <div class="col-12 col-sm-6">
       <label class="form-label fw-semibold" for="owner-pass">
         Owner Password
-        <i class="fas fa-info-circle text-muted ms-1" title="Password for full permissions (printing, editing). Defaults to User Password if left blank."></i>
+        <Fa icon={faInfoCircle} class="text-muted ms-1" title="Password for full permissions (printing, editing). Defaults to User Password if left blank." />
       </label>
       <input type="password" id="owner-pass" class="form-control"
         placeholder="Defaults to User Password" autocomplete="new-password" bind:value={ownerPass}>
@@ -231,7 +236,7 @@ async function processPdf() {
 <div id="status-msg" class="mb-3">
   <div class={`alert alert-${statusType} py-2 mb-0`}>
     {#if statusIcon}
-      <i class={`fas ${statusIcon} me-2`}></i>
+      <Fa icon={statusIcon} spin={statusSpin} class="me-2" />
     {/if}
     {statusText}
   </div>
@@ -240,18 +245,18 @@ async function processPdf() {
 
 <!-- Process button -->
 <button id="process-btn" class="btn btn-primary" on:click={processPdf} disabled={processDisabled}>
-  <i class="fas fa-cog me-1"></i>Process PDF
+  <Fa icon={faCog} class="me-1" />Process PDF
 </button>
 
 <!-- Result / download -->
 {#if resultUrl}
 <div class="mt-4">
   <div class="d-flex align-items-center gap-3 flex-wrap p-3 border rounded">
-    <i class="fas fa-file-pdf fa-2x text-danger"></i>
+    <Fa icon={faFilePdf} size="2x" class="text-danger" />
     <div>
       <div class="small text-muted mb-1">Your processed PDF is ready:</div>
       <a href={resultUrl} download={resultName} class="btn btn-success btn-sm">
-        <i class="fas fa-download me-1"></i><span>Download</span>
+        <Fa icon={faDownload} class="me-1" /><span>Download</span>
       </a>
     </div>
   </div>

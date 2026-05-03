@@ -1,6 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { postIdFromSlug, postUrlFromSlug } from '@utils/posts';
+import Fa from 'svelte-fa';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faIconFromClass } from '@utils/fa-icon';
 
 interface Props {
   relatedIds: string[];
@@ -17,7 +20,7 @@ const relatedPosts = relatedIds
 {relatedPosts.length > 0 && (
   <div class="related-posts-section">
     <h5 class="related-posts-heading mb-3 text-uppercase fw-semibold" style="letter-spacing:0.05em; font-size:1rem;">
-      <i class="fas fa-bookmark me-2"></i>You might also like
+      <Fa icon={faBookmark} class="me-2" />You might also like
     </h5>
     <div class="d-flex flex-row overflow-auto gap-3 pb-2">
       {relatedPosts.map(post => (
@@ -31,7 +34,7 @@ const relatedPosts = relatedIds
             <div class="card h-100 d-flex flex-column">
               <div class="card-body flex-grow-1">
                 <small>
-                  {post.data.icon && <i class={`${post.data.icon} me-1 text-white`} aria-hidden="true"></i>}
+                  {post.data.icon && faIconFromClass(post.data.icon) && <Fa icon={faIconFromClass(post.data.icon)!} class="me-1 text-white" />}
                   {post.data.title}
                 </small>
               </div>

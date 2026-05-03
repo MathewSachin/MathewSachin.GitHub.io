@@ -8,6 +8,8 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import PostItem from '@components/PostItem.astro';
 import '@styles/blog.css';
 import { sortPostsByDate } from '@utils/posts';
+import Fa from 'svelte-fa';
+import { faTags, faArchive, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -39,8 +41,8 @@ const hasNext = currentPage < totalPages;
       <h2 class="text-white mb-3">Blog Posts</h2>
 
       <div class="d-flex gap-2 mb-3">
-        <a href={`${BASE}blog/tags/`} class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>Tags</a>
-        <a href={`${BASE}blog/archive/`} class="btn btn-outline-secondary btn-sm"><i class="fas fa-archive me-1"></i>Archive</a>
+        <a href={`${BASE}blog/tags/`} class="btn btn-outline-info btn-sm"><Fa icon={faTags} class="me-1" />Tags</a>
+        <a href={`${BASE}blog/archive/`} class="btn btn-outline-secondary btn-sm"><Fa icon={faArchive} class="me-1" />Archive</a>
       </div>
 
       <div class="card">
@@ -54,11 +56,11 @@ const hasNext = currentPage < totalPages;
               {hasPrev ? (
                 <li class="page-item">
                   <a href={currentPage === 2 ? `${BASE}blog/` : `${BASE}blog/page/${currentPage - 1}/`} class="page-link" aria-label="Previous page">
-                    <i class="fas fa-chevron-left"></i>
+                    <Fa icon={faChevronLeft} />
                   </a>
                 </li>
               ) : (
-                <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-left"></i></span></li>
+                <li class="page-item disabled"><span class="page-link"><Fa icon={faChevronLeft} /></span></li>
               )}
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
@@ -70,11 +72,11 @@ const hasNext = currentPage < totalPages;
               {hasNext ? (
                 <li class="page-item">
                   <a href={`${BASE}blog/page/${currentPage + 1}/`} class="page-link" aria-label="Next page">
-                    <i class="fas fa-chevron-right"></i>
+                    <Fa icon={faChevronRight} />
                   </a>
                 </li>
               ) : (
-                <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-right"></i></span></li>
+                <li class="page-item disabled"><span class="page-link"><Fa icon={faChevronRight} /></span></li>
               )}
             </ul>
           </nav>

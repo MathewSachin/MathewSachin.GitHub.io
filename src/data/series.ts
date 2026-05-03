@@ -1,3 +1,9 @@
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import {
+  faPencilAlt, faUsers, faCogs, faTachometerAlt, faChartLine, faSeedling,
+  faTerminal, faChessKnight, faMobileAlt, faSatelliteDish, faRandom,
+} from '@fortawesome/free-solid-svg-icons';
+
 export interface SeriesPost {
   id: string
   blurb: string
@@ -5,7 +11,7 @@ export interface SeriesPost {
 
 export interface SeriesLevel {
   title: string
-  icon: string
+  icon: IconDefinition
   intro: string
   posts: SeriesPost[]
 }
@@ -26,7 +32,7 @@ export const SERIES: Record<string, Series> = {
     levels: [
       {
         title: 'Level 1 — Writing & Automation',
-        icon: 'fas fa-pencil-alt',
+        icon: faPencilAlt,
         intro:
           "Before you optimise anything, you need a fast, frictionless way to write and publish. This post shows how to go from a prompt on your phone to a live blog post in minutes — no laptop, no manual deployments.",
         posts: [
@@ -36,7 +42,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 2 — Reader Features',
-        icon: 'fas fa-users',
+        icon: faUsers,
         intro: "A static site doesn't have to feel static to readers. These two posts add a fully-featured comment section and instant full-text search — both running entirely in the browser with zero backend or cloud subscription required.",
         posts: [
           { id: '/blog/2026/03/12/ditching-disqus-for-giscus', blurb: 'Replace a slow, ad-heavy comment system with GitHub Discussions — zero backend, zero cost. Teaches: giscus setup, GitHub Apps, data ownership.' },
@@ -45,7 +51,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 3 — Dev Workflow & Operations',
-        icon: 'fas fa-cogs',
+        icon: faCogs,
         intro: 'The finishing touches that turn a hobby blog into a well-oiled publishing platform. Live PR previews so you can review every post before it goes live, controlled ad placement instead of Google putting ads wherever it likes, and a custom Docker image that cuts CI build times dramatically.',
         posts: [
           { id: '/blog/2026/04/01/pr-preview-setup', blurb: 'Get a live preview URL for every pull request so you can review posts exactly as readers will see them. Teaches: GitHub Actions, GitHub Pages environments, PR automation.' },
@@ -55,7 +61,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 4 — Performance',
-        icon: 'fas fa-tachometer-alt',
+        icon: faTachometerAlt,
         intro: "A fast site is a better site — for readers, for search ranking, and for Core Web Vitals. This post covers every change that moved this blog from 'Needs improvement' to Good on LCP, CLS, and INP: responsive images, build-time diagrams, minification, and removing runtime JavaScript.",
         posts: [
           { id: '/blog/2026/04/03/core-web-vitals-jekyll', blurb: "Go from 'Needs improvement' to Good on all three Core Web Vitals. Teaches: jekyll-picture-tag, Rouge vs highlight.js, Pintora at build time, build-time TOC, HTML minification, and custom AdSense placement." },
@@ -63,7 +69,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 5 — Analytics & Engagement',
-        icon: 'fas fa-chart-line',
+        icon: faChartLine,
         intro: "Pageviews tell you someone opened a tab — they don't tell you whether anyone read a word. This post instruments every 'invisible' reader behaviour: scroll depth, code interaction, viewport entry, social shares, and search, using only GA4 custom events and vanilla JavaScript.",
         posts: [
           { id: '/blog/2026/04/04/beyond-pageviews-tracking-engagement', blurb: 'Track scroll depth, code copies, TOC clicks, social shares, and more — without any paid analytics tool. Teaches: GA4 custom events, IntersectionObserver, passive scroll listeners, debounced selectionchange.' },
@@ -78,7 +84,7 @@ export const SERIES: Record<string, Series> = {
     levels: [
       {
         title: 'Level 1 — Zero Coding Required',
-        icon: 'fas fa-seedling',
+        icon: faSeedling,
         intro: "You don't need to know a single line of code to start here. These tricks use the browser's built-in inspector — the same tool professional web developers use every day. Your only job is to press F12 and click.",
         posts: [
           { id: '/blog/2026/03/07/edit-webpage-inspect-element', blurb: "Make any website say whatever you want in about ten seconds — great for pranks. Teaches: the DOM, <code>document.designMode</code>." },
@@ -88,7 +94,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 2 — Your First Console Scripts',
-        icon: 'fas fa-terminal',
+        icon: faTerminal,
         intro: "Time to open the JavaScript Console and type commands that actually change how a game works. These three posts introduce variables, objects, automation loops, and event simulation — core concepts you will use in every subsequent post.",
         posts: [
           { id: '/blog/2016/11/05/chrome-dino-hack', blurb: 'Set an immortal dino, freeze the score counter, and get a free high score in one console command. Teaches: JS objects, property assignment, the Console tab.' },
@@ -98,7 +104,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 3 — Advanced Game Manipulation',
-        icon: 'fas fa-chess-knight',
+        icon: faChessKnight,
         intro: "You have the basics. Now go deeper. These three posts show you how to override the browser's own built-in functions, build bots that mimic human behaviour convincingly, and exploit intentional backdoors that developers accidentally (or not so accidentally) left inside their own code.",
         posts: [
           { id: '/blog/2026/03/20/hacking-minesweeper-online', blurb: 'Guarantee a safe first click — every time — by controlling which numbers the browser considers "random". Teaches: monkey-patching Math.random, prototype overrides.' },
@@ -108,7 +114,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 4 — CSS Injection & Bookmarklets',
-        icon: 'fas fa-mobile-alt',
+        icon: faMobileAlt,
         intro: "Typing into the Console every time gets old fast. Bookmarklets let you save a hack as a browser bookmark and run it with a single tap — even on mobile where DevTools doesn't exist at all. This section also covers CSS injection to change how websites look and feel.",
         posts: [
           { id: '/blog/2026/03/19/brute-force-dark-mode', blurb: 'Force any website into dark mode in two seconds on both desktop and mobile. Teaches: CSS filter injection, invert(), hue-rotate(), the <style> injection pattern.' },
@@ -119,7 +125,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 5 — Network Sniffing & Media Downloading',
-        icon: 'fas fa-satellite-dish',
+        icon: faSatelliteDish,
         intro: "Now the serious power moves. These posts show you how to intercept network traffic, inspect the browser's internal data structures, use platform JSON APIs, and ultimately write a fully persistent userscript — a mini browser extension you author yourself. Each platform teaches a different angle of the same underlying skill.",
         posts: [
           { id: '/blog/2026/03/21/save-instagram-photos', blurb: 'Instagram disables right-click on photos. This script strips the CSS lock — and keeps stripping it as you scroll and new posts load. Teaches: MutationObserver, CSS pointer-events.' },
@@ -139,7 +145,7 @@ export const SERIES: Record<string, Series> = {
       },
       {
         title: 'Level 6 — API Interception & Response Spoofing',
-        icon: 'fas fa-random',
+        icon: faRandom,
         intro: 'The final leap: instead of reading what a server sends, you replace it. By monkey-patching window.fetch before the game loads, you intercept outgoing requests mid-flight and hand the game a response you fabricated yourself — the ultimate technique for bending any API-driven browser game to your will.',
         posts: [
           { id: '/blog/2026/04/08/hacking-infinite-craft', blurb: "Infinite Craft asks a server for every combination result. This script replaces window.fetch with its own version, intercepts the pair API call, and returns a fake response — letting you inject any item with any emoji as a brand-new discovery. Teaches: monkey-patching window.fetch, constructing new Response(), URL-targeted interception, queued injection pattern." },

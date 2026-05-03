@@ -8,6 +8,9 @@ import type { CollectionEntry } from 'astro:content';
 import { getSeriesPosition } from '@data/index';
 import { SERIES } from '@data/series';
 import { postIdFromSlug, postUrlFromSlug } from '@utils/posts';
+import Fa from 'svelte-fa';
+import { faLayerGroup, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faIconFromClass } from '@utils/fa-icon';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -31,14 +34,14 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
 ---
 {variant === 'header' && (
   <div class="series-banner">
-    <i class="fas fa-layer-group me-1" aria-hidden="true"></i>
+    <Fa icon={faLayerGroup} class="me-1" />
     Part {part} of {total} &mdash;
     <a href={`${BASE}blog/series/${post.data.series}/`}>{series.name}</a> series
     {prevPost && (
       <>
         <br />
         <a class="series-prev-link" href={`${BASE}${postUrlFromSlug(prevPost.id).slice(1)}`}>
-          <i class="fas fa-arrow-left me-1" aria-hidden="true"></i>Previous: {prevPost.data.title}
+          <Fa icon={faArrowLeft} class="me-1" />Previous: {prevPost.data.title}
         </a>
       </>
     )}
@@ -49,11 +52,11 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
   <div class="series-post-nav" role="navigation" aria-label="Series navigation">
     {prevPost ? (
       <a href={`${BASE}${postUrlFromSlug(prevPost.id).slice(1)}`} class="series-nav-btn prev-post">
-        <i class="fas fa-arrow-left nav-icon" aria-hidden="true"></i>
+        <Fa icon={faArrowLeft} class="nav-icon" />
         <div>
           <span class="nav-label">Previous in series</span>
           <span class="nav-title">
-            {prevPost.data.icon && <i class={`${prevPost.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+            {prevPost.data.icon && faIconFromClass(prevPost.data.icon) && <Fa icon={faIconFromClass(prevPost.data.icon)!} class="post-icon me-1" />}
             {prevPost.data.title}
           </span>
         </div>
@@ -61,11 +64,11 @@ const nextPost = nextId ? allPosts.find(p => postIdFromSlug(p.id) === nextId) : 
     ) : <div></div>}
     {nextPost && (
       <a href={`${BASE}${postUrlFromSlug(nextPost.id).slice(1)}`} class="series-nav-btn next-post">
-        <i class="fas fa-arrow-right nav-icon" aria-hidden="true"></i>
+        <Fa icon={faArrowRight} class="nav-icon" />
         <div>
           <span class="nav-label">Next in series</span>
           <span class="nav-title">
-            {nextPost.data.icon && <i class={`${nextPost.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+            {nextPost.data.icon && faIconFromClass(nextPost.data.icon) && <Fa icon={faIconFromClass(nextPost.data.icon)!} class="post-icon me-1" />}
             {nextPost.data.title}
           </span>
         </div>

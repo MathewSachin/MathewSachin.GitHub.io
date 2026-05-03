@@ -1,12 +1,16 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
 import { tick } from "svelte";
+import Fa from 'svelte-fa';
+import { faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 export let value: string = "";
 export let targetSelector: string = "";
 export let title: string = "Copy";
-export let iconClass: string = "fas fa-copy";
-export let copiedIconClass: string = "fas fa-check";
+export let icon: IconDefinition = faCopy;
+export let copiedIcon: IconDefinition = faCheck;
+export let iconClass: string = "";
 export let resetDelay: number = 2000;
 export let className: string = "btn btn-sm btn-outline-secondary";
 
@@ -33,6 +37,6 @@ async function handleCopy() {
 </script>
 
 <button {...$$restProps} class={className} {title} on:click={handleCopy}>
-  <i class={copied ? copiedIconClass : iconClass}></i>
+  <Fa icon={copied ? copiedIcon : icon} class={iconClass} />
   <slot />
 </button>

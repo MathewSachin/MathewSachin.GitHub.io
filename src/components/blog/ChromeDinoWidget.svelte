@@ -1,5 +1,7 @@
 <script lang="ts">
 import CopyButton from '@components/tools/CopyButton.svelte';
+import Fa from 'svelte-fa';
+import { faUndo } from '@fortawesome/free-solid-svg-icons';
 
 const { resetFunction, contentToCopy, children, resetId = '', copyId = '' } = $props();
 </script>
@@ -8,7 +10,7 @@ const { resetFunction, contentToCopy, children, resetId = '', copyId = '' } = $p
   <div class="dino-hack-controls d-flex justify-content-between gap-2 flex-wrap px-3 py-2">
     <span class="code-lang">JS</span>
     <span>
-      <button class="btn btn-sm btn-code" id={resetId} onclick={resetFunction} title="Reset to default" aria-label="Reset speed to default"><i class="fa fa-undo" aria-hidden="true"></i> RESET</button>
+      <button class="btn btn-sm btn-code" id={resetId} onclick={resetFunction} title="Reset to default" aria-label="Reset speed to default"><Fa icon={faUndo} /> RESET</button>
       <CopyButton value={contentToCopy} className="btn btn-sm btn-code" {...(copyId ? { id: copyId } : {})}>COPY</CopyButton>
     </span>
   </div>

@@ -1,16 +1,18 @@
 ---
 const BASE = import.meta.env.BASE_URL;
+import Fa from 'svelte-fa';
+import { faVideo, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 ---
 
 <div><a href={`${BASE}tools/captura/`} class="inline-tool-card-link">
   <div class="card inline-tool-card">
     <div class="card-body d-flex align-items-center gap-3">
-      <i class="fas fa-video fa-2x flex-shrink-0"></i>
+      <Fa icon={faVideo} size="2x" class="flex-shrink-0" />
       <div>
         <div class="fw-bold">Captura Web Recorder</div>
         <div class="small mt-1">Record your screen in the browser — no installation needed.</div>
       </div>
-      <i class="fas fa-arrow-right ms-auto flex-shrink-0"></i>
+      <Fa icon={faArrowRight} class="ms-auto flex-shrink-0" />
     </div>
   </div>
 </a></div>

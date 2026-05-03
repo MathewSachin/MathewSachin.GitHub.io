@@ -1,5 +1,7 @@
 ---
 import type { MarkdownHeading } from 'astro';
+import Fa from 'svelte-fa';
+import { faList, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   headings: MarkdownHeading[];
@@ -36,11 +38,11 @@ const groupedEntries = tocEntries.reduce((acc, heading) => {
     aria-expanded="false"
     aria-controls="toc-collapse"
     >
-    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
-    <i class="fas fa-chevron-down toc-chevron ms-auto" aria-hidden="true"></i>
+    <small><Fa icon={faList} class="me-1" />Contents</small>
+    <Fa icon={faChevronDown} class="toc-chevron ms-auto" />
   </button>
   <div class="card-header toc-header d-none d-md-block">
-    <small><i class="fas fa-list me-1" aria-hidden="true"></i>Contents</small>
+    <small><Fa icon={faList} class="me-1" />Contents</small>
   </div>
   <div class="collapse d-md-block" id="toc-collapse">
     <div class="card-body p-0">

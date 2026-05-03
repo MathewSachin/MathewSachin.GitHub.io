@@ -1,5 +1,7 @@
 ---
 const BASE = import.meta.env.BASE_URL;
+import Fa from 'svelte-fa';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 ---
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="view-transition-name: navbar;">
@@ -22,7 +24,7 @@ const BASE = import.meta.env.BASE_URL;
             <a class="nav-link" href={`${BASE}privacy_policy/`}>Privacy Policy</a>
           </li>
       </ul>
-      <a class="text-light nav-link" href={`${BASE}search/`}><i class="fas fa-search me-1"></i>Search</a>
+      <a class="text-light nav-link" href={`${BASE}search/`}><Fa icon={faSearch} class="me-1" />Search</a>
     </div>
   </div>
 </nav>

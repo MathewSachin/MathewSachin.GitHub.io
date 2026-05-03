@@ -1,6 +1,8 @@
 <script lang="ts">
 import CopyButton from './CopyButton.svelte';
 import { minify } from 'terser';
+import Fa from 'svelte-fa';
+import { faCopy, faCheck, faBookmark, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 let raw = '';
 let compiled = '';
@@ -155,8 +157,9 @@ function update() {
             id="copy-btn"
             value={compiled}
             className="btn btn-sm btn-outline-secondary"
-            iconClass="fas fa-copy me-1"
-            copiedIconClass="fas fa-check me-1"
+            iconClass="me-1"
+            icon={faCopy}
+            copiedIcon={faCheck}
           >Copy</CopyButton>
         </div>
         <textarea id="compiled-output" class="form-control" rows="14" readonly
@@ -167,12 +170,12 @@ function update() {
           <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
             <a id="drag-btn" href={dragHref} class:bm-disabled={bmDisabled} draggable="true"
               title="Drag this button onto your bookmarks bar">
-              <i class="fas fa-bookmark me-2"></i>Drag me to Bookmarks
+              <Fa icon={faBookmark} class="me-2" />Drag me to Bookmarks
             </a>
             <small class="text-muted">or right-click → Bookmark this link</small>
           </div>
           <p class="d-md-none mb-0 text-muted" style="font-size:0.85rem;">
-            <i class="fas fa-info-circle me-1"></i>Dragging to the bookmarks bar is a desktop-only feature.
+            <Fa icon={faInfoCircle} class="me-1" />Dragging to the bookmarks bar is a desktop-only feature.
             On mobile, tap <strong>Copy</strong> above, then manually create a new bookmark in your browser and paste the compiled code as the URL.
           </p>
         </div>

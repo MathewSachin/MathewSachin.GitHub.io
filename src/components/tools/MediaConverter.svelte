@@ -15,6 +15,8 @@ import {
   OggOutputFormat,
   FlacOutputFormat,
 } from 'mediabunny';
+import Fa from 'svelte-fa';
+import { faFileVideo, faRotate, faStop, faCircleCheck, faDownload } from '@fortawesome/free-solid-svg-icons';
 
 // ── Format catalogue ────────────────────────────────────────────────
 
@@ -230,7 +232,7 @@ $: videoDiscarded = !hasVideo || selectedFormat.isAudioOnly || discardVideo;
       on:dragover|preventDefault={() => {}}
       on:drop|preventDefault={onDrop}
     >
-      <i class="fas fa-file-video fa-2x text-muted mb-2 d-block"></i>
+      <Fa icon={faFileVideo} size="2x" class="text-muted mb-2 d-block" />
       <p class="mb-1">Drop a video or audio file here, or <span class="text-info">click to browse</span></p>
       <small class="text-muted">MP4 · WebM · MKV · MOV · MP3 · WAV · OGG · FLAC · and more</small>
       <input bind:this={fileInputEl} type="file" accept="video/*,audio/*" class="d-none" on:change={onFileChange}>
@@ -295,11 +297,11 @@ $: videoDiscarded = !hasVideo || selectedFormat.isAudioOnly || discardVideo;
     <!-- Convert button -->
     <div class="d-flex gap-2 align-items-center flex-wrap">
       <button class="btn btn-info text-white" on:click={startConversion} disabled={converting}>
-        <i class="fas fa-rotate me-1"></i>Convert
+        <Fa icon={faRotate} class="me-1" />Convert
       </button>
       {#if converting}
       <button class="btn btn-outline-secondary" on:click={cancelConversion}>
-        <i class="fas fa-stop me-1"></i>Cancel
+        <Fa icon={faStop} class="me-1" />Cancel
       </button>
       {/if}
     </div>
@@ -334,11 +336,11 @@ $: videoDiscarded = !hasVideo || selectedFormat.isAudioOnly || discardVideo;
     <div class="mt-4 p-3 border rounded">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
         <div>
-          <p class="mb-1 fw-semibold text-success"><i class="fas fa-circle-check me-1"></i>Conversion complete</p>
+          <p class="mb-1 fw-semibold text-success"><Fa icon={faCircleCheck} class="me-1" />Conversion complete</p>
           <small class="text-muted">{outputFilename} — {formatBytes(outputBlob.size)}</small>
         </div>
         <button class="btn btn-success" on:click={download}>
-          <i class="fas fa-download me-1"></i>Download
+          <Fa icon={faDownload} class="me-1" />Download
         </button>
       </div>
     </div>

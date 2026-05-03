@@ -4,6 +4,9 @@
  * Replaces _includes/share.html
  */
 import CopyButton from '@components/tools/CopyButton.svelte';
+import Fa from 'svelte-fa';
+import { faLink, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faTwitter, faFacebook, faReddit, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 interface Props {
   title: string;
   url: string;
@@ -23,7 +26,7 @@ const encodedTitle = encodeURIComponent(title);
     data-share-method="twitter"
     aria-label="Share on Twitter/X"
   >
-    <i class="fab fa-twitter" aria-hidden="true"></i>
+    <Fa icon={faTwitter} />
   </a>
   <a
     class={`btn btn-sm ${btnClass}`}
@@ -32,7 +35,7 @@ const encodedTitle = encodeURIComponent(title);
     data-share-method="facebook"
     aria-label="Share on Facebook"
   >
-    <i class="fab fa-facebook" aria-hidden="true"></i>
+    <Fa icon={faFacebook} />
   </a>
   <a
     class={`btn btn-sm ${btnClass}`}
@@ -41,7 +44,7 @@ const encodedTitle = encodeURIComponent(title);
     data-share-method="reddit"
     aria-label="Share on Reddit"
   >
-    <i class="fab fa-reddit" aria-hidden="true"></i>
+    <Fa icon={faReddit} />
   </a>
   <a
     class={`btn btn-sm ${btnClass}`}
@@ -50,7 +53,7 @@ const encodedTitle = encodeURIComponent(title);
     data-share-method="linkedin"
     aria-label="Share on LinkedIn"
   >
-    <i class="fab fa-linkedin" aria-hidden="true"></i>
+    <Fa icon={faLinkedin} />
   </a>
   <CopyButton
     client:load
@@ -59,7 +62,7 @@ const encodedTitle = encodeURIComponent(title);
     aria-label="Copy link"
     title="Copy link"
     value={url}
-    iconClass="fa fa-link"
-    copiedIconClass="fa fa-check"
+    icon={faLink}
+    copiedIcon={faCheck}
   />
 </div>

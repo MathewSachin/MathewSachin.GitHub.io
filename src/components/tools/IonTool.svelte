@@ -1,6 +1,8 @@
 <script>
   import CopyButton from './CopyButton.svelte';
   import { processIon } from '@scripts/tools/ion-formatter.js';
+  import Fa from 'svelte-fa';
+  import { faCopy, faCheck, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
   let input = '';
   let output = '';
@@ -50,7 +52,7 @@
         {/if}
         {#if ok}
           <div id="ion-ok" class="alert alert-success mt-2 py-2" role="alert">
-            <i class="fas fa-check-circle me-1"></i>Valid Ion
+            <Fa icon={faCheckCircle} class="me-1" />Valid Ion
           </div>
         {/if}
       </div>
@@ -60,7 +62,7 @@
         <textarea id="ion-output" class="form-control font-monospace" rows="14" readonly bind:value={output}
           placeholder="Formatted output…"></textarea>
         <div class="mt-2">
-          <CopyButton value={output} title="Copy output" iconClass="fas fa-copy me-1" copiedIconClass="fas fa-check me-1">Copy</CopyButton>
+          <CopyButton value={output} title="Copy output" icon={faCopy} copiedIcon={faCheck} iconClass="me-1">Copy</CopyButton>
         </div>
       </div>
     </div>

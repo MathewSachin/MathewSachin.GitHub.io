@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { create, load, search } from '@orama/orama';
+  import Fa from 'svelte-fa';
+  import { faExclamationTriangle, faSearch } from '@fortawesome/free-solid-svg-icons';
 
   const SCHEMA = {
     title: 'string',
@@ -15,6 +17,7 @@
   const basePath = $derived(base.replace(/\/$/, ''));
 
   let status = $state('Loading search index…');
+  let statusError = $state(false);
   let term = $state('');
   let hits = $state([] as any[]);
   let inputDisabled = $state(true);
@@ -42,7 +45,8 @@
       inputDisabled = false;
       if (inputEl) inputEl.focus();
     } catch (err) {
-      status = '<i class="fas fa-exclamation-triangle text-warning me-1"></i>Search index unavailable.';
+      status = 'Search index unavailable.';
+      statusError = true;
       console.error('Search index load failed:', err);
     }
   });
@@ -74,13 +78,15 @@
   <div id="search-status" class="text-muted small mb-3">
     {#if status === 'Loading search index…'}
       <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+    {:else if statusError}
+      <Fa icon={faExclamationTriangle} class="text-warning me-1" />
     {/if}
-    {@html status}
+    {status}
   </div>
 {/if}
 
 <div class="input-group mb-4">
-  <span class="input-group-text bg-info text-white border-info"><i class="fas fa-search"></i></span>
+  <span class="input-group-text bg-info text-white border-info"><Fa icon={faSearch} /></span>
   <input
     id="search-input"
     bind:this={inputEl}

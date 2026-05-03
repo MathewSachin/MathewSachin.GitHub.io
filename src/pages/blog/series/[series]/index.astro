@@ -5,6 +5,8 @@ import { getCollection } from 'astro:content';
 import SeriesLayout from '@layouts/SeriesLayout.astro';
 import { SERIES } from '@data/series';
 import { postIdFromSlug, postUrlFromSlug, sortPostsByDate } from '@utils/posts';
+import Fa from 'svelte-fa';
+import { faIconFromClass } from '@utils/fa-icon';
 
 export async function getStaticPaths() {
   return Object.keys(SERIES).map(key => ({
@@ -32,7 +34,7 @@ function findPost(id: string) {
       <>
         <hr />
         <h2 class="series-level-heading" id={`level-${lvlIdx + 1}`}>
-          <i class={`${level.icon} me-1`} aria-hidden="true"></i>{level.title}
+          <Fa icon={level.icon} class="me-1" />{level.title}
         </h2>
         <p>{level.intro}</p>
 
@@ -49,7 +51,7 @@ function findPost(id: string) {
                   class="series-post-title"
                   style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
                 >
-                  {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                  {post.data.icon && faIconFromClass(post.data.icon) && <Fa icon={faIconFromClass(post.data.icon)!} class="post-icon me-1" />}
                   {post.data.title}
                 </a>
                 <br />

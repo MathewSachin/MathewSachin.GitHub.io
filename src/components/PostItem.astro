@@ -7,6 +7,8 @@
 import type { CollectionEntry } from 'astro:content';
 import { postUrlFromSlug, formatDate, getPostDate, estimateReadingTime } from '@utils/posts';
 import { getTagColor } from '@utils/posts';
+import Fa from 'svelte-fa';
+import { faIconFromClass } from '@utils/fa-icon';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -26,7 +28,7 @@ const readTime = estimateReadingTime(post.body ?? '');
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
       <span class="blog-post-title fw-semibold">
         <h5>
-          {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+          {post.data.icon && faIconFromClass(post.data.icon) && <Fa icon={faIconFromClass(post.data.icon)!} class="post-icon me-1" />}
           {post.data.title}
         </h5>
       </span>

@@ -9,6 +9,8 @@ import { showAlert, showToast, showErrorDialog, initDialogs } from '../../script
 import { RecorderAPI }                         from '../../scripts/tools/captura/recorder-api';
 import { RecorderStateMachine, STATE, EVENT, type State, type Event }  from '../../scripts/tools/captura/recorder-state-machine';
 import { onMount, untrack } from 'svelte';
+import Fa from 'svelte-fa';
+import { faCircle, faPause, faPlay, faStop, faTimes, faTimesCircle, faFolderOpen, faMicrophone, faDesktop, faRefresh, faVideo } from '@fortawesome/free-solid-svg-icons';
 
 let elapsedSecs = $state(0);
 let recorderState: State = $state(STATE.IDLE);
@@ -128,7 +130,7 @@ const startBtnDisabled = $derived(isReq);
 
 const showPauseBtn = $derived(active);
 const pauseBtnDisabled = $derived(false);
-const pauseBtnIcon = $derived(isPaused ? 'fa-play' : 'fa-pause');
+const pauseBtnIcon = $derived(isPaused ? faPlay : faPause);
 const pauseBtnText = $derived(isPaused ? 'Resume' : 'Pause');
 const pauseBtnClass = $derived(isPaused ? 'btn btn-success' : 'btn btn-warning text-dark');
 const showStopBtn = $derived(active);
@@ -498,27 +500,27 @@ $effect(() => {
         <div class="mt-3 d-flex gap-2 flex-wrap">
           {#if showStartBtn}
             <button id="start-btn" class="btn btn-info text-white" disabled={startBtnDisabled} onclick={startRecording}>
-              <i class="fas fa-circle me-1"></i>Start Recording
+              <Fa icon={faCircle} class="me-1" />Start Recording
             </button>
           {/if}
           {#if showPauseBtn}
             <button id="pause-btn" class={pauseBtnClass} disabled={pauseBtnDisabled} onclick={handlePauseResume}>
-              <i class="fas {pauseBtnIcon} me-1"></i>{pauseBtnText}
+              <Fa icon={pauseBtnIcon} class="me-1" />{pauseBtnText}
             </button>
           {/if}
           {#if showStopBtn}
             <button id="stop-btn" class="btn btn-danger" disabled={stopBtnDisabled} onclick={() => machine.transition(EVENT.USER_STOP)}>
-              <i class="fas fa-stop me-1"></i>Stop
+              <Fa icon={faStop} class="me-1" />Stop
             </button>
           {/if}
           {#if showCancelCountdownBtn}
             <button id="cancel-countdown-btn" class="btn btn-secondary" onclick={() => machine.transition(EVENT.COUNTDOWN_CANCEL)}>
-              <i class="fas fa-times me-1"></i>Cancel
+              <Fa icon={faTimes} class="me-1" />Cancel
             </button>
           {/if}
           {#if showEndSessionBtn}
             <button id="end-session-btn" class="btn btn-outline-warning" disabled={endSessionBtnDisabled} onclick={() => machine.transition(EVENT.END_SESSION)}>
-              <i class="fas fa-times-circle me-1"></i>End Session
+              <Fa icon={faTimesCircle} class="me-1" />End Session
             </button>
           {/if}
         </div>
@@ -527,7 +529,7 @@ $effect(() => {
         <div class="mt-3 d-flex align-items-center gap-2">
           <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">{dirName}</span>
           <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" onclick={() => { storage.pickDirectory(); }} hidden={storage?.isOPFS} disabled={lockControls}>
-            <i class="fas fa-folder-open me-1"></i>Choose Folder
+            <Fa icon={faFolderOpen} class="me-1" />Choose Folder
           </button>
         </div>
 
@@ -538,7 +540,7 @@ $effect(() => {
           <div class="mb-2">
             <div class="d-flex align-items-center justify-content-between mb-1">
               <label class="form-label text-muted small mb-0" for="mic-gain-slider">
-                <i class="fas fa-microphone me-1"></i>Mic level
+                <Fa icon={faMicrophone} class="me-1" />Mic level
               </label>
               <span id="mic-gain-label" class="text-muted small font-monospace">{micGainLabelValue}</span>
             </div>
@@ -549,7 +551,7 @@ $effect(() => {
           <div class="mb-2">
             <div class="d-flex align-items-center justify-content-between mb-1">
               <label class="form-label text-muted small mb-0" for="sys-gain-slider">
-                <i class="fas fa-desktop me-1"></i>System level
+                <Fa icon={faDesktop} class="me-1" />System level
               </label>
               <span id="sys-gain-label" class="text-muted small font-monospace">{sysGainLabelValue}</span>
             </div>
@@ -567,13 +569,13 @@ $effect(() => {
         <h6 class="mb-3">
           Sources
           {#if !micDisabled}
-            <button title="Refresh" class="btn" onclick={enumerateDevices}><i class="fas fa-refresh"></i></button>
+            <button title="Refresh" class="btn" onclick={enumerateDevices}><Fa icon={faRefresh} /></button>
           {/if}
         </h6>
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="webcam-select">
-            <i class="fas fa-video me-1"></i>Webcam overlay
+            <Fa icon={faVideo} class="me-1" />Webcam overlay
           </label>
           <select id="webcam-select" class="form-select form-select-sm" bind:value={webcamValue} disabled={webcamDisabled}>
             {#each webcamOptions as opt}
@@ -584,7 +586,7 @@ $effect(() => {
 
         <div class="mb-3">
           <label class="form-label text-muted small mb-1" for="mic-select">
-            <i class="fas fa-microphone me-1"></i>Microphone
+            <Fa icon={faMicrophone} class="me-1" />Microphone
           </label>
           <select id="mic-select" class="form-select form-select-sm" bind:value={micValue} disabled={micDisabled}>
             {#each micOptions as opt}

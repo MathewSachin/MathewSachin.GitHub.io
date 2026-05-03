@@ -4,6 +4,8 @@
  * Replaces _includes/series_showcase.html
  */
 import { SERIES, type Series } from '@data/series';
+import Fa from 'svelte-fa';
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 const BASE = import.meta.env.BASE_URL;
 const seriesList = Object.entries(SERIES);
@@ -31,7 +33,7 @@ function truncateWords(text: string, maxWords: number): string {
           <div class="card-body py-2 px-3">
             <div class="d-flex justify-content-between align-items-center gap-2">
               <span class="fw-semibold">
-                <i class="fas fa-layer-group me-1 text-info" aria-hidden="true"></i>{s.name}
+                <Fa icon={faLayerGroup} class="me-1 text-info" />{s.name}
               </span>
               <span class="badge bg-info text-nowrap">{countPosts(s)} parts</span>
             </div>

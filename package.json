@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@fortawesome/fontawesome-common-types": "^7.2.0",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@huggingface/transformers": "^4.2.0",
     "@imagemagick/magick-wasm": "^0.0.40",
     "@orama/orama": "^3.1.18",
@@ -28,6 +30,7 @@
     "sharp": "^0.34.5",
     "spark-md5": "^3.0.2",
     "svelte": "^5.55.4",
+    "svelte-fa": "^4.0.4",
     "terser": "^5.46.2",
     "typescript": "^5.9.3"
   },

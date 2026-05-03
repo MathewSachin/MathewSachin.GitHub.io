@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import Fa from 'svelte-fa';
+  import { faMicrochip, faFolderOpen, faTimes, faDownload, faTriangleExclamation, faPaperPlane, faStop } from '@fortawesome/free-solid-svg-icons';
 
   // ── State ────────────────────────────────────────────────────────────
   let phase: 'idle' | 'loading' | 'ready' | 'generating' | 'error' = 'idle';
@@ -151,7 +153,7 @@
 
     <!-- ── Header note ──────────────────────────────────────────────── -->
     <div class="alert alert-info mb-4" role="alert">
-      <i class="fas fa-microchip me-2"></i>
+      <Fa icon={faMicrochip} class="me-2" />
       <strong>Runs 100% in your browser.</strong>
       The model weights (~2 GB) are downloaded once and cached locally.
       WebGPU is required for acceleration.
@@ -167,15 +169,15 @@
       <div class="d-flex align-items-center gap-2 flex-wrap">
         {#if dirName}
           <span class="badge bg-success fs-6 py-2 px-3" id="dir-name">
-            <i class="fas fa-folder-open me-1"></i>{dirName}
+            <Fa icon={faFolderOpen} class="me-1" />{dirName}
           </span>
           <button class="btn btn-outline-secondary btn-sm" on:click={clearDirectory} id="clear-dir-btn"
             disabled={isLoading || isGenerating}>
-            <i class="fas fa-times me-1"></i>Clear
+            <Fa icon={faTimes} class="me-1" />Clear
           </button>
         {:else if phase === 'idle'}
           <button class="btn btn-outline-secondary" on:click={pickDirectory} id="pick-dir-btn">
-            <i class="fas fa-folder-open me-1"></i>Pick Folder
+            <Fa icon={faFolderOpen} class="me-1" />Pick Folder
           </button>
         {/if}
       </div>
@@ -185,7 +187,7 @@
     {#if phase === 'idle' || phase === 'error'}
       <div class="mb-4">
         <button class="btn btn-info text-white" id="load-btn" on:click={loadModel}>
-          <i class="fas fa-download me-2"></i>Load Model
+          <Fa icon={faDownload} class="me-2" />Load Model
         </button>
       </div>
     {/if}
@@ -207,7 +209,7 @@
     <!-- ── Error ─────────────────────────────────────────────────────── -->
     {#if phase === 'error'}
       <div class="alert alert-danger mb-4" id="error-msg" role="alert">
-        <i class="fas fa-triangle-exclamation me-2"></i>{errorMessage}
+        <Fa icon={faTriangleExclamation} class="me-2" />{errorMessage}
         <button class="btn btn-sm btn-outline-danger ms-3" on:click={reset}>Retry</button>
       </div>
     {/if}
@@ -229,12 +231,12 @@
       <div class="d-flex gap-2 mb-4 align-items-center flex-wrap">
         <button class="btn btn-info text-white" id="generate-btn"
           on:click={generate} disabled={!canGenerate || isGenerating}>
-          <i class="fas fa-paper-plane me-1"></i>
+          <Fa icon={faPaperPlane} class="me-1" />
           {isGenerating ? 'Generating…' : 'Generate'}
         </button>
         {#if isGenerating}
           <button class="btn btn-outline-secondary" id="abort-btn" on:click={abort}>
-            <i class="fas fa-stop me-1"></i>Stop
+            <Fa icon={faStop} class="me-1" />Stop
           </button>
         {/if}
       </div>

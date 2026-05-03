@@ -1,6 +1,8 @@
 <script lang="ts">
 import wasmUrl from '@imagemagick/magick-wasm/magick.wasm?url';
 import * as IM from '@imagemagick/magick-wasm';
+import Fa from 'svelte-fa';
+import { faImage, faCompressAlt, faDownload } from '@fortawesome/free-solid-svg-icons';
 
 let initialized = false;
 let initializing = false;
@@ -151,7 +153,7 @@ function onFileChange() {
       on:click={() => fileInputEl?.click()}
       on:dragover|preventDefault={() => { }}
       on:drop|preventDefault={onDrop}>
-      <i class="fas fa-image fa-2x text-muted mb-2 d-block"></i>
+      <Fa icon={faImage} size="2x" class="text-muted mb-2 d-block" />
       <p class="mb-1">Drop an image here, or <span class="text-info">click to browse</span></p>
       <small class="text-muted">JPEG · PNG · WebP · GIF · BMP</small>
       <input bind:this={fileInputEl} type="file" accept="image/*" class="d-none" on:change={onFileChange}>
@@ -185,7 +187,7 @@ function onFileChange() {
       </div>
 
       <button class="btn btn-info text-white" on:click={compress}>
-        <i class="fas fa-compress-alt me-1"></i>Compress Image
+        <Fa icon={faCompressAlt} class="me-1" />Compress Image
       </button>
     </div>
     {/if}
@@ -212,7 +214,7 @@ function onFileChange() {
         </div>
 
         <div class="mt-3 d-flex align-items-center gap-3 flex-wrap">
-          <button class="btn btn-success" on:click={download}><i class="fas fa-download me-1"></i>Download</button>
+          <button class="btn btn-success" on:click={download}><Fa icon={faDownload} class="me-1" />Download</button>
           {#if savingsPercentage > 0}
             <span id="savings-label" class="fw-semibold text-success">{savingsPercentage.toFixed(1)}% smaller ({formatBytes(sizeDiff)} saved)</span>
           {:else}
