@@ -15,7 +15,6 @@ import '@styles/blog.css';
 import Fa from 'svelte-fa';
 import { faArrowRight, faTags, faLayerGroup, faBookOpen, faPenToSquare, faScrewdriverWrench, faGamepad, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 const BASE = import.meta.env.BASE_URL;
 const allPosts = sortPostsByDate(await getCollection('blog'));
@@ -63,12 +62,12 @@ const recentPosts = allPosts.slice(0, 8);
         {/* Project cards */}
         <div class="home-cards-section pb-4">
           <div class="row">
-            {([
-              { href: `${BASE}tools/captura/`, icon: faVideo as IconDefinition, label: 'Captura', text: 'Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.' },
-              { href: `${BASE}FGA/`, icon: faGamepad as IconDefinition, label: 'FGA', text: 'Auto-Battle app for F/GO Android.' },
-              { href: `${BASE}blog/`, icon: faPenToSquare as IconDefinition, label: 'Blog', text: 'Thoughts, tutorials, and writeups.' },
-              { href: `${BASE}tools/`, icon: faScrewdriverWrench as IconDefinition, label: 'Tools', text: 'Handy utilities and converters.' },
-            ] as { href: string; icon: IconDefinition; label: string; text: string }[]).map(card => (
+            {[
+              { href: `${BASE}tools/captura/`, icon: faVideo, label: 'Captura', text: 'Capture Screen, Audio, Cursor, Mouse Clicks and Keystrokes.' },
+              { href: `${BASE}FGA/`, icon: faGamepad, label: 'FGA', text: 'Auto-Battle app for F/GO Android.' },
+              { href: `${BASE}blog/`, icon: faPenToSquare, label: 'Blog', text: 'Thoughts, tutorials, and writeups.' },
+              { href: `${BASE}tools/`, icon: faScrewdriverWrench, label: 'Tools', text: 'Handy utilities and converters.' },
+            ].map(card => (
               <div class="col-md mb-3">
                 <a href={card.href} class="home-card-link" aria-label={card.label}>
                   <div class="card h-100">

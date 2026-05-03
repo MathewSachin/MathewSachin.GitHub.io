@@ -15,7 +15,7 @@ import { faPause, faPlay, faPaperPlane } from '@fortawesome/free-solid-svg-icons
   <div class="card-body">
     <button id="debug-toggle" class="btn btn-sm text-info">
       <span id="icon-pause"><Fa icon={faPause} /></span>
-      <span id="icon-play" style="display:none"><Fa icon={faPlay} /></span>
+      <span id="icon-play" class="d-none"><Fa icon={faPlay} /></span>
     </button>
 
     <span class="badge rounded-pill bg-primary">
@@ -132,16 +132,16 @@ function start() {
   if (intervalId !== null) return;
   intervalId = window.setInterval(update, 200);
   running = true;
-  iconPause.style.display = '';
-  iconPlay.style.display = 'none';
+  iconPause.classList.remove('d-none');
+  iconPlay.classList.add('d-none');
 }
 
 function stop() {
   if (intervalId !== null) window.clearInterval(intervalId);
   intervalId = null;
   running = false;
-  iconPause.style.display = 'none';
-  iconPlay.style.display = '';
+  iconPause.classList.add('d-none');
+  iconPlay.classList.remove('d-none');
 }
 
 toggleBtn.addEventListener('click', function(){
