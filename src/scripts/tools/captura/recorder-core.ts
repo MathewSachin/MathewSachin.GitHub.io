@@ -29,8 +29,9 @@ export class RecorderCore {
     });
 
     this.#canvasSource = new CanvasSource(canvas, {
-      codec:   isMp4 ? 'avc' : 'vp9',
-      bitrate: videoBitrate,
+      codec:        isMp4 ? 'avc' : 'vp9',
+      bitrate:      videoBitrate,
+      latencyMode:  'realtime',
     });
     this.#output.addVideoTrack(this.#canvasSource);
 
