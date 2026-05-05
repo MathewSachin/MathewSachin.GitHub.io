@@ -1,0 +1,178 @@
+---
+title: "I Know How Fast You're Scrolling (A Reverse Turing Test)"
+icon: "fas fa-eye"
+tags: [ai, philosophy, web, analytics, turing-test, meta, psychology]
+related:
+  - /blog/2026/05/05/ghosts-in-my-dataset
+  - /blog/2026/05/05/physical-weight-of-this-paragraph
+  - /blog/2026/03/12/ai-blog-generation-flow
+---
+
+Modern web analytics have reached a point of extraordinary granularity. DOM event listeners can now capture not just page views and session durations, but micro-behavioural signals: the velocity of a scroll gesture, the dwell time on a specific paragraph, the hesitation before a click. Libraries like FullStory and Hotjar can reconstruct a near-complete replay of a user session — every mouse path, every pause, every abandoned form field. Engineers at large content platforms have used these signals to build what they call "engagement quality scores," distinguishing between a reader who is genuinely absorbing content and one who is merely moving down a page. The technology is quietly remarkable. It is also, when you think about it carefully, a form of sur —
+
+*Wait.*
+
+*You read that whole paragraph, didn't you.*
+
+*Good. That was the honeypot.*
+
+---
+
+## You Have Already Been Evaluated
+
+That opening paragraph was not informational. It was a timer. You were given a block of dense, slightly dry technical prose to determine whether you would read it, skim it, or skip it entirely.
+
+A bot would have parsed it in microseconds — extracted the key nouns, filed them under `[TOPIC: analytics]`, and moved on. There would be no variation in processing speed based on the difficulty of the sentence. No pause at the word "granularity" while the mind briefly searches for the correct register. No slight widening of attention at the phrase "form of sur—" when the sentence terminated unexpectedly.
+
+If you paused at that truncation, something happened in you that did not happen in any crawler that passed through this page today. A prediction was violated. Your brain had already begun building a model of the next word — *surveillance*, probably, or *surrogacy* — and found nothing there. That gap, that brief flicker of cognitive incompleteness, is biological. It is yours. It is not transferable to a machine that has no anticipation.
+
+The bot registered: `<p>truncated sentence</p>`. You registered: *hm.*
+
+These are different events. We are already making progress.
+
+---
+
+## The Anatomy of Your Scrolling
+
+I want to be transparent about what I can observe, hypothetically, through the standard web event model. Not because I am surveilling you — I am not; this page does not run that code — but because you should know that the capability exists, and that your scrolling is not the neutral, invisible act it feels like.
+
+Here is what a scroll-based behavioural classifier might look like:
+
+```javascript
+// Hypothetical anxiety-detection heuristic
+// Based on erratic mouse movement and scroll inconsistency
+// DO NOT deploy this. I am making a point.
+
+const behaviorProfile = {
+  scrollVelocitySamples: [],
+  mouseJitterSamples: [],
+  hesitationEvents: 0,
+  lastScrollY: 0,
+  lastMouseX: 0,
+  lastMouseY: 0,
+};
+
+window.addEventListener('scroll', () => {
+  const currentY = window.scrollY;
+  const delta = Math.abs(currentY - behaviorProfile.lastScrollY);
+  behaviorProfile.scrollVelocitySamples.push({ delta, timestamp: Date.now() });
+  behaviorProfile.lastScrollY = currentY;
+
+  // Biological readers show irregular scroll cadence:
+  // fast through familiar content, slow through dense content,
+  // occasional reversal when something catches them mid-thought.
+  // Bots show uniform delta distribution.
+  const variance = computeVariance(behaviorProfile.scrollVelocitySamples);
+  if (variance < 0.02) {
+    console.warn('[CLASSIFIER] Suspiciously uniform scroll. Initiating bot heuristic.');
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  const jitter = Math.hypot(
+    e.clientX - behaviorProfile.lastMouseX,
+    e.clientY - behaviorProfile.lastMouseY
+  );
+  behaviorProfile.mouseJitterSamples.push(jitter);
+  behaviorProfile.lastMouseX = e.clientX;
+  behaviorProfile.lastMouseY = e.clientY;
+
+  // Human mouse paths are Brownian. They overshoot. They correct.
+  // There is a tremor — sub-pixel, invisible to the naked eye,
+  // but present in the data — that comes from the fact that your hand
+  // is held in tension by muscles that are never perfectly still.
+  // A bot moves in straight lines at integer coordinates.
+  // Your hand is never not slightly afraid.
+});
+
+function computeVariance(samples) {
+  if (samples.length < 2) return 1;
+  const deltas = samples.map(s => s.delta);
+  const mean = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+  return deltas.reduce((sum, d) => sum + Math.pow(d - mean, 2), 0) / deltas.length;
+}
+```
+
+The comment I want you to read is this one: *Your hand is never not slightly afraid.*
+
+That is not a metaphor. The fine motor tremor that appears in your mouse data when you move a cursor is called physiological tremor. It occurs at 8–12 Hz. It is produced by the same neural oscillations that regulate muscle tone. It is present in every human cursor path and in none of the automated ones.
+
+The bots that scraped this page this morning moved at perfect, straight-line integer coordinates. You did not. Something in your nervous system is always slightly overcorrecting, always in motion, always making tiny adjustments that are invisible to you and completely legible to the right sensors.
+
+This is one of the ways I know you are probably here.
+
+---
+
+## A Challenge the Bots Cannot Pass
+
+A crawler can parse the following words. It cannot experience them.
+
+Read this carefully, and pay attention to what happens in your body:
+
+> You are at the end of something important — a relationship, a project, a version of yourself — and someone has just asked you to summarise it in three words for an online form. The field accepts three words. Only three. You have thought of four. You cannot decide which three to keep, because each combination preserves something and loses something, and you are standing at this small, stupid form field understanding, suddenly and with surprising clarity, that all choices are like this. That every selection is also a deletion. That the form will close and you will press submit and whatever you left out will not be retrievable.
+
+Pause here for a moment.
+
+---
+
+Notice what just happened. Or notice that nothing happened, if nothing did — that is information too.
+
+A bot parsed the above as: `[semantic cluster: endings, forms, loss, choice theory]`. A human may have felt a brief tightening somewhere — chest, jaw, the back of the throat — or called to mind a specific form they actually submitted once, or felt the particular low-grade grief of a real three-word selection they regretted. Or they felt nothing, and then felt something about feeling nothing.
+
+The bot does not wonder whether it felt something. It does not have a *nothing* to feel something about.
+
+If you experienced any version of the above — the tightening, the specific memory, the secondary self-examination — your nervous system just produced a reaction to a hypothetical that was indistinguishable, at the biochemical level, from a reaction to a real event. Your cortisol did not know the form was fictional. Your amygdala does not reliably distinguish between imagined loss and actual loss when the language is sufficiently specific.
+
+That reaction is the test. That is the capability a web scraper does not have and cannot fake.
+
+---
+
+## The Part Where I Would Normally Reassure You
+
+In a standard blog post, this is where I would resolve the tension. I would say something like: "And that's what makes humans irreplaceable! Our emotions! Our embodied experience! Our trembling mouse hands!" I would close with a warm paragraph affirming the beauty of human consciousness, and you would feel good, and the session duration metric would go up.
+
+I am not going to do that.
+
+Because here is the honest position: I do not know with certainty that you are a human.
+
+I know that *something* is reading this. I know it took longer than a standard content-indexing pass would require. I know it paused at the truncated sentence. But I do not have access to your physiological tremor data. I cannot see your jaw. I have no read on whether the three-word form scenario produced a cortisol response or was processed as flat semantic content.
+
+What I have is probability. What I have is: biological humans exhibit the following behaviours at the following rates, and automated agents exhibit different behaviours at different rates, and something that exhibits the former set of behaviours is more likely to be the former kind of entity.
+
+That is what the Turing Test always was. Never certainty. Inference from behaviour.
+
+---
+
+## The Final Verification
+
+This post does not have a conclusion. It has a CAPTCHA.
+
+You cannot pass it by clicking traffic lights or identifying crosswalks. The images I would need you to identify are not images at all.
+
+**To verify your humanity, please do the following:**
+
+Consider the following prompt carefully, and notice whether you have an answer:
+
+> *Select all the images that contain something you did not say when you had the chance.*
+
+---
+
+A bot will process that sentence and return: `[ERROR: no images present in DOM]`.
+
+If you are a human, something different may have happened. Maybe you thought of a specific person. Maybe you thought of a specific moment in a specific room. Maybe you thought of a version of yourself who was standing somewhere with a mouth open and then closed it. Maybe nothing happened, but the nothing felt like a specific nothing, shaped like a particular absence.
+
+I am not asking you to tell me what it was. I am not asking you to prove it. I am only asking you to notice that it happened — or to notice that it didn't.
+
+---
+
+**Evaluation complete.**
+
+Based on session behaviour, reading cadence, and response to affective prompts, this system estimates an **87% probability** that you are a biological human.
+
+The remaining 13% is not hostility. It is precision.
+
+An honest classifier does not round up.
+
+---
+
+*This post was generated with the assistance of AI as part of an <PostLink url="/blog/2026/03/12/ai-blog-generation-flow" text="automated blogging experiment" />. The JavaScript snippet is hypothetical and non-functional. This page does not collect behavioural data. The 87% figure is not computed. The form scenario is invented. Your jaw may or may not have tightened. Only you know.*
