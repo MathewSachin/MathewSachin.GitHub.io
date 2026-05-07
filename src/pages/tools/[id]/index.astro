@@ -99,7 +99,11 @@ const BASE = import.meta.env.BASE_URL;
     <Scratchpad client:only="svelte" />
   ) : toolComponentKey === 'timestamp' ? (
     <TimestampTool client:load />
-  ) : (
+  ) : toolComponentKey === 'yt-thumbnail' ? (
     <YtThumbnail client:load />
+  ) : (
+    (() => {
+      throw new Error(`Unhandled tool component for: ${entry.id}`);
+    })()
   )}
 </ToolLayout>
