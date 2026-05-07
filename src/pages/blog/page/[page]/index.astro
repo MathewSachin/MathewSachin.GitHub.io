@@ -10,26 +10,17 @@ import '@styles/blog.css';
 import { sortPostsByDate } from '@utils/posts';
 
 const BASE = import.meta.env.BASE_URL;
+const POSTS_PER_PAGE = 10;
 
-export async function getStaticPaths() {
-  const POSTS_PER_PAGE = 10;
+export async function getStaticPaths({ paginate }) {
   const allPosts = sortPostsByDate(await getCollection('blog'));
-  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-
-  // Generate paths for page 2 onwards (page 1 = /blog/)
-  return Array.from({ length: totalPages - 1 }, (_, i) => {
-    const page = i + 2;
-    const start = (page - 1) * POSTS_PER_PAGE;
-    const posts = allPosts.slice(start, start + POSTS_PER_PAGE);
-    return {
-      params: { page: String(page) },
-      props: { posts, page, totalPages },
-    };
-  });
+  return paginate(allPosts, { pageSize: POSTS_PER_PAGE }).filter(path => Number(path.params.page) > 1);
 }
 
-const { posts, page, totalPages } = Astro.props;
-const currentPage = Number(page);
+const { page } = Astro.props;
+const posts = page.data;
+const currentPage = page.currentPage;
+const totalPages = page.lastPage;
 const hasPrev = currentPage > 1;
 const hasNext = currentPage < totalPages;
 ---
