@@ -2,19 +2,32 @@
   import { md5, sha } from '@scripts/tools/hash.js';
   import CopyButton from './CopyButton.svelte';
 
-  let text = '';
-  let outMd5 = '';
-  let outSha1 = '';
-  let outSha256 = '';
+  let text = $state('');
+  const outMd5 = $derived(md5(text || ''));
+  let outSha1 = $state('');
+  let outSha256 = $state('');
+  let hashRequest = 0;
 
-  $: outMd5 = md5(text || '');
+  $effect(() => {
+    const currentText = text || '';
+    const currentRequest = ++hashRequest;
 
-  $: if (text !== undefined) {
-    // compute async hashes; allow rapid updates
-    const t = text || '';
-    sha('SHA-1', t).then(h => outSha1 = h).catch(() => outSha1 = '');
-    sha('SHA-256', t).then(h => outSha256 = h).catch(() => outSha256 = '');
-  }
+    sha('SHA-1', currentText)
+      .then((hash) => {
+        if (currentRequest === hashRequest) outSha1 = hash;
+      })
+      .catch(() => {
+        if (currentRequest === hashRequest) outSha1 = '';
+      });
+
+    sha('SHA-256', currentText)
+      .then((hash) => {
+        if (currentRequest === hashRequest) outSha256 = hash;
+      })
+      .catch(() => {
+        if (currentRequest === hashRequest) outSha256 = '';
+      });
+  });
 </script>
 
 <div class="card google-anno-skip">
