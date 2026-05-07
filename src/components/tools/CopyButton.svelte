@@ -1,38 +1,54 @@
-<script lang="ts">
-import { createEventDispatcher } from "svelte";
-import { tick } from "svelte";
+<script>
+import { onDestroy, tick } from 'svelte';
 
-export let value: string = "";
-export let targetSelector: string = "";
-export let title: string = "Copy";
-export let iconClass: string = "fas fa-copy";
-export let copiedIconClass: string = "fas fa-check";
-export let resetDelay: number = 2000;
-export let className: string = "btn btn-sm btn-outline-secondary";
+let {
+  value = '',
+  targetSelector = '',
+  title = 'Copy',
+  iconClass = 'fas fa-copy',
+  copiedIconClass = 'fas fa-check',
+  resetDelay = 2000,
+  className = 'btn btn-sm btn-outline-secondary',
+  onclick = undefined,
+  oncopied = undefined,
+  children = undefined,
+  ...restProps
+} = $props();
 
-let copied = false;
-const dispatch = createEventDispatcher();
+let copied = $state(false);
+let resetTimer = null;
 
-async function handleCopy() {
+onDestroy(() => {
+  if (resetTimer) clearTimeout(resetTimer);
+});
+
+async function handleCopy(event) {
+  onclick?.(event);
+
   try {
     const targetValue = targetSelector
-      ? (document.querySelector(targetSelector)?.textContent || "")
+      ? (document.querySelector(targetSelector)?.textContent || '')
       : value;
 
     await navigator.clipboard.writeText(targetValue);
     copied = true;
-    dispatch("copied");
+    oncopied?.();
     await tick();
-    setTimeout(() => {
+
+    if (resetTimer) clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => {
       copied = false;
+      resetTimer = null;
     }, resetDelay);
-  } catch (e) {
+  } catch {
     // fallback: do nothing
   }
 }
 </script>
 
-<button {...$$restProps} class={className} {title} on:click={handleCopy}>
+<button {...restProps} class={className} {title} onclick={handleCopy}>
   <i class={copied ? copiedIconClass : iconClass}></i>
-  <slot />
+  {#if children}
+    {@render children()}
+  {/if}
 </button>
