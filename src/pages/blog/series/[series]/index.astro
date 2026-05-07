@@ -53,7 +53,7 @@ function findPost(id: string) {
                   {post.data.title}
                 </a>
                 <br />
-                <small class="text-muted">{entry.blurb}</small>
+                {post.data.description && <small class="text-muted">{post.data.description}</small>}
               </div>
             </div>
           );
