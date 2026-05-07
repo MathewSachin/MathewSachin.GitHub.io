@@ -53,9 +53,10 @@ if (!ToolRenderer) {
 }
 
 const { Content } = await render(entry);
+const toolTitle = entry.data.title ?? entry.id;
 ---
 <ToolLayout
-  title={entry.data.title!}
+  title={toolTitle}
   accentColor={entry.data.accent_color}
   ads={entry.data.ads}
   manifest={entry.data.manifest}

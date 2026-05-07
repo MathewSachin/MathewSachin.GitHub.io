@@ -17,12 +17,20 @@ export async function getTools(): Promise<Tool[]> {
 
   return entries
     .sort((a, b) => a.data.order - b.data.order)
-    .map((entry) => ({
-      id: entry.id,
-      name: entry.data.title!,
-      description: entry.data.description!,
-      icon: entry.data.icon!,
-      accent_color: entry.data.accent_color,
-      quick_tool: entry.data.quick_tool,
-    }));
+    .map((entry) => {
+      const { title, description, icon } = entry.data;
+
+      if (!title || !description || !icon) {
+        throw new Error(`Missing required tool metadata for: ${entry.id}`);
+      }
+
+      return {
+        id: entry.id,
+        name: title,
+        description,
+        icon,
+        accent_color: entry.data.accent_color,
+        quick_tool: entry.data.quick_tool,
+      };
+    });
 }
