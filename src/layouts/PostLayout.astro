@@ -16,10 +16,11 @@ import Share from '@components/Share.astro';
 import Giscus from '@components/Giscus.astro';
 import AdUnit from '@components/AdUnit.astro';
 import ReadingProgressBar from '@components/ReadingProgressBar.astro';
-import { formatDate, getPostDate, estimateReadingTime, tagSlug } from '@utils/posts';
+import { formatDate, getPostDate, estimateReadingTime, postIdFromSlug, tagSlug } from '@utils/posts';
 import '@styles/blog.css';
 import type { MarkdownHeading } from 'astro';
 import { getTagColor } from '@utils/posts';
+import { getSeriesKeyForPostId } from '@data/series';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -33,9 +34,10 @@ const { post, allPosts, headings, canonicalPath } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
 
-const { title, icon, tags = [], series, related = [], accent_color, ads = true, toc: showToc = true } = post.data;
+const { title, icon, tags = [], related = [], accent_color, ads = true, toc: showToc = true } = post.data;
 const date = getPostDate(post);
 const readTime = estimateReadingTime(post.body ?? '');
+const seriesKey = getSeriesKeyForPostId(postIdFromSlug(post.id));
 const pageUrl = Astro.url.href;
 // Canonical URL: use explicit .html path if provided, else fall back to current URL
 const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;
@@ -73,7 +75,7 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
           }
         </style>
 
-        {series && (
+        {seriesKey && (
           <>
             <hr class="border-light mt-3 mb-0" />
             <SeriesNav post={post} variant="header" allPosts={allPosts} />
@@ -104,7 +106,7 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
 
               <br />
 
-              {series && <SeriesNav post={post} variant="footer" allPosts={allPosts} />}
+              {seriesKey && <SeriesNav post={post} variant="footer" allPosts={allPosts} />}
 
               {related.length > 0 && (
                 <>

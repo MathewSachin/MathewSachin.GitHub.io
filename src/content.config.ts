@@ -13,7 +13,6 @@ const blog = defineCollection({
     title: z.string(),
     icon: z.string().optional(),
     tags: z.array(z.string()).default([]),
-    series: z.string().optional(),
     related: z.array(z.string()).default([]),
     accent_color: z.string().optional(),
     date: z.coerce.date().optional(),
@@ -27,4 +26,3 @@ const blog = defineCollection({
 });
 
 export const collections = { blog };
-
