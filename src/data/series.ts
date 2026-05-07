@@ -74,7 +74,7 @@ export const SERIES: Record<string, Series> = {
   'browser-hacks': {
     name: 'Browser Hacks',
     url: '/blog/series/browser-hacks/',
-    description: 'A 27-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. Most chapters need nothing but a browser and a curious mind — the final chapter adds Tampermonkey to make your scripts persistent.',
+    description: 'A 28-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. Most chapters need nothing but a browser and a curious mind — the final chapter adds Tampermonkey to make your scripts persistent.',
     levels: [
       {
         title: 'Level 1 — Zero Coding Required',
@@ -114,6 +114,7 @@ export const SERIES: Record<string, Series> = {
           { id: '/blog/2026/03/19/brute-force-dark-mode', blurb: 'Force any website into dark mode in two seconds on both desktop and mobile. Teaches: CSS filter injection, invert(), hue-rotate(), the <style> injection pattern.' },
           { id: '/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet', blurb: 'Apply the Dino hacks from Part 3 on your phone — no computer, no DevTools. Teaches: bookmarklets, URL encoding.' },
           { id: '/blog/2026/03/19/hacking-wordle-mobile-bookmarklet', blurb: 'Apply the Wordle hack from Part 4 on your phone with a single bookmark tap. Teaches: packaging complex scripts as a bookmarklet, URL encoding.' },
+          { id: '/blog/2026/05/07/remove-popups-bookmarklet', blurb: "One tap to kill popup overlays and restore locked scrolling on most sites. Teaches: scroll-lock reversal, fixed/sticky element removal, generic bookmarklet cleanup patterns." },
           { id: '/blog/2026/04/07/fake-liberal-secret-hitler', blurb: 'Swap your Fascist role images and scrub teammate names on secret-hitler.com so your screen always reads \'Liberal\' — with a MutationObserver keeping the mask in place across mobile dialog resets. Teaches: <code>getAttribute</code> vs <code>img.src</code>, sibling DOM removal, persistent <code>MutationObserver</code> patterns.'}
         ],
       },

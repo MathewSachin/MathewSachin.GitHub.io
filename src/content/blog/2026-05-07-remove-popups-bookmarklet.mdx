@@ -1,0 +1,89 @@
+---
+title: "Remove Any Popup in One Tap: The Kill-Sticky Bookmarklet"
+description: "A single bookmarklet that restores scrolling and removes fixed or sticky overlays so you can keep reading without login popups blocking the page."
+icon: "fas fa-ban"
+tags: [bookmarklet, javascript, css, devtools, popup, overlay, browser, hack]
+series: browser-hacks
+related:
+  - /blog/2026/04/10/quora-devtools-bypass
+  - /blog/2026/04/10/pinterest-devtools-hacks
+  - /blog/2026/03/19/brute-force-dark-mode
+  - /blog/2026/05/02/mobile-devtools-console-bookmarklet
+  - /blog/2026/03/07/edit-webpage-inspect-element
+---
+
+*You're halfway through an article, a giant login popup drops in, scrolling gets locked, and the page is basically dead. This bookmarklet brings it back in one tap.*
+
+<div class="alert alert-info">
+  ⚠️ <b>Important context:</b> This is a front-end trick. It only changes how the page renders in your browser. It can bypass <b>soft walls</b> (content already loaded but hidden by overlays), but not <b>hard walls</b> where the server refuses to send content until you log in.
+</div>
+
+---
+
+## The Bookmarklet
+
+Copy this exactly (including `javascript:`):
+
+```javascript
+javascript:(function(){document.documentElement.style.setProperty('overflow','auto','important');document.body.style.setProperty('overflow','auto','important');document.body.style.setProperty('position','static','important');document.querySelectorAll('*').forEach(e=>{let s=window.getComputedStyle(e);if(s.position==='fixed'||s.position==='sticky'){e.remove();}})})();
+```
+
+---
+
+## Install It in 60 Seconds
+
+1. Create any bookmark (`Ctrl + D` on Windows/Linux, `Cmd + D` on Mac).
+2. Edit that bookmark.
+3. Name it something obvious like **Remove Popups**.
+4. Replace the bookmark URL with the bookmarklet code above.
+5. Save it to your bookmarks bar.
+
+When a page gets blocked by overlays, click that bookmark.
+
+---
+
+## What It Actually Does
+
+Readable version:
+
+```javascript
+(function () {
+  // 1) Restore page scrolling
+  document.documentElement.style.setProperty('overflow', 'auto', 'important');
+  document.body.style.setProperty('overflow', 'auto', 'important');
+  document.body.style.setProperty('position', 'static', 'important');
+
+  // 2) Remove fixed and sticky elements (common popup/overlay pattern)
+  document.querySelectorAll('*').forEach((el) => {
+    const style = window.getComputedStyle(el);
+    if (style.position === 'fixed' || style.position === 'sticky') {
+      el.remove();
+    }
+  });
+})();
+```
+
+Most login walls and newsletter popups are just fixed-position DOM layers plus scroll lock. This script removes those layers and gives you scrolling back.
+
+---
+
+## Side Effects You Should Expect
+
+This is intentionally a broad hammer. It removes **all** fixed/sticky elements, not only bad ones.
+
+That means it may also remove:
+
+- sticky navigation bars
+- floating chat widgets
+- share sidebars
+- cookie banners
+
+If it over-cleans the page, just refresh. Everything resets.
+
+---
+
+## Why This Belongs in Your Browser Toolkit
+
+You can delete overlays manually in DevTools, but that gets old fast, especially on mobile. A bookmarklet gives you the same power in one click, on demand, anywhere.
+
+If you're new to this style of hacking, start with <PostLink url="/blog/2026/03/07/edit-webpage-inspect-element" text="Edit Any Webpage in Seconds" /> and then try <PostLink url="/blog/2026/04/10/quora-devtools-bypass" text="Quora DevTools Bypass" /> for a full real-world layered wall teardown.
