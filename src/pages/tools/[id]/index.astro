@@ -17,24 +17,6 @@ import Scratchpad from '@components/tools/Scratchpad.svelte';
 import TimestampTool from '@components/tools/TimestampTool.svelte';
 import YtThumbnail from '@components/tools/YtThumbnail.svelte';
 
-const SUPPORTED_COMPONENTS = new Set([
-  'base64',
-  'bookmarklet',
-  'captura',
-  'cron',
-  'diff',
-  'hash',
-  'imgcompress',
-  'ion',
-  'json',
-  'localai',
-  'mediaconvert',
-  'pdf',
-  'scratchpad',
-  'timestamp',
-  'yt-thumbnail',
-]);
-
 export async function getStaticPaths() {
   const entries = await getCollection('toolDocs', ({ data }) => data.published);
 
@@ -51,10 +33,6 @@ if (!entry.data.component) {
 }
 
 const toolComponentKey = entry.data.component;
-
-if (!SUPPORTED_COMPONENTS.has(toolComponentKey)) {
-  throw new Error(`Missing tool component mapping for: ${entry.id}`);
-}
 
 if (toolComponentKey === 'captura') {
   await import('@styles/recorder.css');
