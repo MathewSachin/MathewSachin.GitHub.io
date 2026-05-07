@@ -1,21 +1,40 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import ToolLayout from '@layouts/ToolLayout.astro';
-import Base64Tool from '@components/tools/Base64Tool.svelte';
-import Bookmarklet from '@components/tools/Bookmarklet.svelte';
-import CapturaWebRecorder from '@components/tools/CapturaWebRecorder.svelte';
-import CronTool from '@components/tools/CronTool.svelte';
-import DiffTool from '@components/tools/DiffTool.svelte';
-import HashTool from '@components/tools/HashTool.svelte';
-import ImageCompressor from '@components/tools/ImageCompressor.svelte';
-import IonTool from '@components/tools/IonTool.svelte';
-import JsonTool from '@components/tools/JsonTool.svelte';
-import LocalAI from '@components/tools/LocalAI.svelte';
-import MediaConverter from '@components/tools/MediaConverter.svelte';
-import PdfPasswordTool from '@components/tools/PdfPasswordTool.svelte';
-import Scratchpad from '@components/tools/Scratchpad.svelte';
-import TimestampTool from '@components/tools/TimestampTool.svelte';
-import YtThumbnail from '@components/tools/YtThumbnail.svelte';
+import Base64Renderer from '@components/tools/renderers/Base64Renderer.astro';
+import BookmarkletRenderer from '@components/tools/renderers/BookmarkletRenderer.astro';
+import CapturaRenderer from '@components/tools/renderers/CapturaRenderer.astro';
+import CronRenderer from '@components/tools/renderers/CronRenderer.astro';
+import DiffRenderer from '@components/tools/renderers/DiffRenderer.astro';
+import HashRenderer from '@components/tools/renderers/HashRenderer.astro';
+import ImageCompressorRenderer from '@components/tools/renderers/ImageCompressorRenderer.astro';
+import IonRenderer from '@components/tools/renderers/IonRenderer.astro';
+import JsonRenderer from '@components/tools/renderers/JsonRenderer.astro';
+import LocalAIRenderer from '@components/tools/renderers/LocalAIRenderer.astro';
+import MediaConverterRenderer from '@components/tools/renderers/MediaConverterRenderer.astro';
+import PdfRenderer from '@components/tools/renderers/PdfRenderer.astro';
+import ScratchpadRenderer from '@components/tools/renderers/ScratchpadRenderer.astro';
+import TimestampRenderer from '@components/tools/renderers/TimestampRenderer.astro';
+import YtThumbnailRenderer from '@components/tools/renderers/YtThumbnailRenderer.astro';
+
+const TOOL_RENDERERS: Record<string, AstroComponentFactory> = {
+  base64: Base64Renderer,
+  bookmarklet: BookmarkletRenderer,
+  captura: CapturaRenderer,
+  cron: CronRenderer,
+  diff: DiffRenderer,
+  hash: HashRenderer,
+  imgcompress: ImageCompressorRenderer,
+  ion: IonRenderer,
+  json: JsonRenderer,
+  localai: LocalAIRenderer,
+  mediaconvert: MediaConverterRenderer,
+  pdf: PdfRenderer,
+  scratchpad: ScratchpadRenderer,
+  timestamp: TimestampRenderer,
+  'yt-thumbnail': YtThumbnailRenderer,
+};
 
 export async function getStaticPaths() {
   const entries = await getCollection('toolDocs', ({ data }) => data.published && !!data.component && !!data.title);
@@ -27,13 +46,13 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props as { entry: CollectionEntry<'toolDocs'> };
+const ToolRenderer = entry.data.component ? TOOL_RENDERERS[entry.data.component] : undefined;
 
-if (entry.data.component === 'captura') {
-  await import('@styles/recorder.css');
+if (!ToolRenderer) {
+  throw new Error(`Missing tool renderer for: ${entry.id}`);
 }
 
 const { Content } = await render(entry);
-const BASE = import.meta.env.BASE_URL;
 ---
 <ToolLayout
   title={entry.data.title!}
@@ -42,19 +61,5 @@ const BASE = import.meta.env.BASE_URL;
   manifest={entry.data.manifest}
   DescriptiveContent={Content}
 >
-  {entry.data.component === 'base64' && <Base64Tool client:load />}
-  {entry.data.component === 'bookmarklet' && <Bookmarklet client:load />}
-  {entry.data.component === 'captura' && <CapturaWebRecorder client:load client:only />}
-  {entry.data.component === 'cron' && <CronTool client:load />}
-  {entry.data.component === 'diff' && <DiffTool client:load />}
-  {entry.data.component === 'hash' && <HashTool client:load />}
-  {entry.data.component === 'imgcompress' && <ImageCompressor client:load />}
-  {entry.data.component === 'ion' && <IonTool client:load />}
-  {entry.data.component === 'json' && <JsonTool client:load />}
-  {entry.data.component === 'localai' && <LocalAI client:only="svelte" />}
-  {entry.data.component === 'mediaconvert' && <MediaConverter client:load />}
-  {entry.data.component === 'pdf' && <PdfPasswordTool client:load workerUrl={`${BASE}tools/pdf/pdf.worker.js`} />}
-  {entry.data.component === 'scratchpad' && <Scratchpad client:load client:only />}
-  {entry.data.component === 'timestamp' && <TimestampTool client:load />}
-  {entry.data.component === 'yt-thumbnail' && <YtThumbnail client:load />}
+  <ToolRenderer />
 </ToolLayout>
