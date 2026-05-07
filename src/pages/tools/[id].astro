@@ -39,12 +39,6 @@ const TOOL_RENDERERS: Record<string, AstroComponentFactory> = {
 export async function getStaticPaths() {
   const entries = await getCollection('toolDocs', ({ data }) => data.published);
 
-  for (const entry of entries) {
-    if (!entry.data.component) {
-      throw new Error(`Published tool is missing a renderer component: ${entry.id}`);
-    }
-  }
-
   return entries.map((entry) => ({
     params: { id: entry.id },
     props: { entry },
