@@ -34,7 +34,7 @@ const { post, allPosts, headings, canonicalPath } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
 const SITE = import.meta.env.SITE || 'https://mathewsachin.github.io';
 
-const { title, icon, tags = [], related = [], accent_color, ads = true, toc: showToc = true } = post.data;
+const { title, icon, tags = [], related = [], accent_color, ads = true, toc: showToc = true, description, image } = post.data;
 const date = getPostDate(post);
 const readTime = estimateReadingTime(post.body ?? '');
 const seriesKey = getSeriesKeyForPostId(postIdFromSlug(post.id));
@@ -42,7 +42,7 @@ const pageUrl = Astro.url.href;
 // Canonical URL: use explicit .html path if provided, else fall back to current URL
 const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;
 ---
-<BaseLayout title={title} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
+<BaseLayout title={title} description={description} ogImage={image} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
 
   <ReadingProgressBar />
 
