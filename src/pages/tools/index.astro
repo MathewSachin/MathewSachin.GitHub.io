@@ -4,10 +4,11 @@
 // Replaces tools/index.html
 
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { TOOLS } from '@data/tools.ts';
+import { getTools } from '@data/tools.ts';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
+const tools = await getTools();
 ---
 <BaseLayout title="Tools">
   <div class="bg-dark py-3">
@@ -16,7 +17,7 @@ const BASE = import.meta.env.BASE_URL;
 
       <div class="home-cards-section">
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-          {TOOLS.map(tool => (
+          {tools.map(tool => (
             <div class="col">
               <a href={`${BASE}tools/${tool.id}/`} class="home-card-link" aria-label={tool.name}>
                 <div class="card h-100">

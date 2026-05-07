@@ -1,9 +1,0 @@
----
-import ToolLayout from '@layouts/ToolLayout.astro';
-import { Content } from '@content/tool-docs/captura.mdx';
-import CapturaWebRecorder from '@components/tools/CapturaWebRecorder.svelte';
-import '@styles/recorder.css';
----
-<ToolLayout title="Captura Web Recorder" DescriptiveContent={Content}>
-  <CapturaWebRecorder client:load client:only />
-</ToolLayout>

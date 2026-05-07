@@ -1,0 +1,87 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ToolLayout from '@layouts/ToolLayout.astro';
+import Base64Tool from '@components/tools/Base64Tool.svelte';
+import Bookmarklet from '@components/tools/Bookmarklet.svelte';
+import CapturaWebRecorder from '@components/tools/CapturaWebRecorder.svelte';
+import CronTool from '@components/tools/CronTool.svelte';
+import DiffTool from '@components/tools/DiffTool.svelte';
+import HashTool from '@components/tools/HashTool.svelte';
+import ImageCompressor from '@components/tools/ImageCompressor.svelte';
+import IonTool from '@components/tools/IonTool.svelte';
+import JsonTool from '@components/tools/JsonTool.svelte';
+import LocalAI from '@components/tools/LocalAI.svelte';
+import MediaConverter from '@components/tools/MediaConverter.svelte';
+import PdfPasswordTool from '@components/tools/PdfPasswordTool.svelte';
+import Scratchpad from '@components/tools/Scratchpad.svelte';
+import TimestampTool from '@components/tools/TimestampTool.svelte';
+import YtThumbnail from '@components/tools/YtThumbnail.svelte';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('toolDocs', ({ data }) => data.published);
+
+  return entries.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<'toolDocs'> };
+
+if (!entry.data.component) {
+  throw new Error(`Published tool is missing component metadata: ${entry.id}`);
+}
+
+const toolComponentKey = entry.data.component;
+
+if (toolComponentKey === 'captura') {
+  await import('@styles/recorder.css');
+}
+
+const { Content } = await render(entry);
+const toolTitle = entry.data.title ?? entry.id;
+const BASE = import.meta.env.BASE_URL;
+---
+<ToolLayout
+  title={toolTitle}
+  accentColor={entry.data.accent_color}
+  ads={entry.data.ads}
+  manifest={entry.data.manifest}
+  DescriptiveContent={Content}
+>
+  {toolComponentKey === 'base64' ? (
+    <Base64Tool client:load />
+  ) : toolComponentKey === 'bookmarklet' ? (
+    <Bookmarklet client:load />
+  ) : toolComponentKey === 'captura' ? (
+    <CapturaWebRecorder client:only="svelte" />
+  ) : toolComponentKey === 'cron' ? (
+    <CronTool client:load />
+  ) : toolComponentKey === 'diff' ? (
+    <DiffTool client:load />
+  ) : toolComponentKey === 'hash' ? (
+    <HashTool client:load />
+  ) : toolComponentKey === 'imgcompress' ? (
+    <ImageCompressor client:load />
+  ) : toolComponentKey === 'ion' ? (
+    <IonTool client:load />
+  ) : toolComponentKey === 'json' ? (
+    <JsonTool client:load />
+  ) : toolComponentKey === 'localai' ? (
+    <LocalAI client:only="svelte" />
+  ) : toolComponentKey === 'mediaconvert' ? (
+    <MediaConverter client:load />
+  ) : toolComponentKey === 'pdf' ? (
+    <PdfPasswordTool client:load workerUrl={`${BASE}tools/pdf/pdf.worker.js`} />
+  ) : toolComponentKey === 'scratchpad' ? (
+    <Scratchpad client:only="svelte" />
+  ) : toolComponentKey === 'timestamp' ? (
+    <TimestampTool client:load />
+  ) : toolComponentKey === 'yt-thumbnail' ? (
+    <YtThumbnail client:load />
+  ) : (
+    (() => {
+      throw new Error(`Unhandled tool component for: ${entry.id}`);
+    })()
+  )}
+</ToolLayout>

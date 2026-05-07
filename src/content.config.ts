@@ -25,4 +25,21 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const toolDocs = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: 'src/content/tool-docs' }),
+  schema: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    icon: z.string().optional(),
+    accent_color: z.string().optional(),
+    quick_tool: z.boolean().default(false),
+    listed: z.boolean().default(true),
+    published: z.boolean().default(false),
+    order: z.number().default(999),
+    component: z.string().optional(),
+    ads: z.boolean().default(true),
+    manifest: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, toolDocs };
