@@ -4,20 +4,22 @@
 // Page 1 is handled by /blog/index.astro; this handles page 2+.
 
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostItem from '@components/PostItem.astro';
 import '@styles/blog.css';
 import { sortPostsByDate } from '@utils/posts';
 
 const BASE = import.meta.env.BASE_URL;
-const POSTS_PER_PAGE = 10;
 
-export async function getStaticPaths({ paginate }) {
+export const getStaticPaths = (async ({ paginate }) => {
   const allPosts = sortPostsByDate(await getCollection('blog'));
-  return paginate(allPosts, { pageSize: POSTS_PER_PAGE }).filter(path => Number(path.params.page) > 1);
-}
+  const paginatedPaths = paginate(allPosts, { pageSize: 10 });
+  return paginatedPaths.filter(({ params }) => Number(params.page) > 1);
+}) satisfies GetStaticPaths;
 
-const { page } = Astro.props;
+const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> };
 const posts = page.data;
 const currentPage = page.currentPage;
 const totalPages = page.lastPage;
