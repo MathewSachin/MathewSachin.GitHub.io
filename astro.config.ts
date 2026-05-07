@@ -4,7 +4,6 @@ import mdx from '@astrojs/mdx';
 import svelte from '@astrojs/svelte';
 import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'node:url';
-import rehypeRaw from 'rehype-raw';
 import linkValidator from 'astro-link-validator';
 
 import { rehypeInjectAds } from './src/plugins/rehype-plugins';
@@ -52,10 +51,6 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
     shikiConfig: { theme: 'github-dark' },
     rehypePlugins: [
-      // rehype-raw must run first so that raw HTML blocks in .md files
-      // are parsed into element nodes
-      // before our custom plugins traverse the tree.
-      rehypeRaw,
       [rehypeInjectAds, { density: 2 }],
     ],
   },

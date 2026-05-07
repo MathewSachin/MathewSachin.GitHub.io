@@ -9,6 +9,7 @@ related:
   - /blog/2026/03/19/hacking-wordle-mobile-bookmarklet
   - /blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet
 ---
+import BruteDarkModeWidget from '@components/blog/BruteDarkModeWidget.svelte';
 
 *Some websites still don't have a dark mode. Your eyes suffer at midnight. Here's a two-second fix that works on any page — desktop or mobile.*
 
@@ -77,10 +78,7 @@ Or just refresh the page — the injected style only lives in memory and disappe
 
 See it in action on this page before you copy the code anywhere:
 
-<div class="my-3">
-  <button class="btn btn-dark me-2" onclick="bruteDarkOn()">🌙 Dark Mode ON</button>
-  <button class="btn btn-secondary" onclick="bruteDarkOff()">☀️ Dark Mode OFF</button>
-</div>
+<BruteDarkModeWidget client:load />
 
 ## On Mobile — Using a Bookmarklet
 
@@ -143,18 +141,3 @@ Because the style is tagged with a unique `id`, the revert script can find and r
 ---
 
 Want more browser hacks you can pull off without installing anything? Check out <PostLink url="/blog/2026/03/07/edit-webpage-inspect-element" text="Edit Any Webpage in Seconds" /> and <PostLink url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle with DevTools" />.
-
-<script>{`
-function bruteDarkOn() {
-  if (!document.getElementById('__brute-dark')) {
-    var s = document.createElement('style');
-    s.id = '__brute-dark';
-    s.innerHTML = 'html { filter: invert(100%) hue-rotate(180deg) !important; } img, video, picture, canvas { filter: invert(100%) hue-rotate(180deg) !important; }';
-    document.head.appendChild(s);
-  }
-}
-function bruteDarkOff() {
-  var el = document.getElementById('__brute-dark');
-  if (el) el.remove();
-}
-`}</script>
