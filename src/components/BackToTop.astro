@@ -1,11 +1,17 @@
 ---
 ---
 
-<button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top">
-<i class="fas fa-arrow-up" aria-hidden="true"></i>
-</button>
+<back-to-top>
+  <button id="back-to-top" class="btn btn-info" aria-label="Back to top" title="Back to top">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+  </button>
+</back-to-top>
 
 <style>
+back-to-top {
+    display: contents;
+}
+
 /* Back to top button */
 #back-to-top {
     position: fixed;
@@ -35,20 +41,33 @@
 </style>
 
 <script>
-const BACK_TO_TOP_THRESHOLD = 300;          // px of scroll before button appears
+const BACK_TO_TOP_THRESHOLD = 300; // px of scroll before button appears
 
-// Back to top button — only visible when scrolling up past the threshold
-const backToTop = document.getElementById("back-to-top");
-if (backToTop) {
-    let backToTopLastY = window.scrollY;
-    window.addEventListener("scroll", function () {
-        const currentScrollY = window.scrollY;
-        const scrollingUp = currentScrollY < backToTopLastY;
-        backToTopLastY = currentScrollY;
-        backToTop.classList.toggle("visible", scrollingUp && currentScrollY > BACK_TO_TOP_THRESHOLD);
-    });
-    backToTop.addEventListener("click", function () {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+class BackToTopElement extends HTMLElement {
+  private _btn!: HTMLButtonElement;
+  private _lastY = 0;
+
+  private _onScroll = () => {
+    const y = window.scrollY;
+    const up = y < this._lastY;
+    this._lastY = y;
+    this._btn.classList.toggle("visible", up && y > BACK_TO_TOP_THRESHOLD);
+  };
+
+  private _onClick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  connectedCallback() {
+    this._btn = this.querySelector("button")!;
+    this._lastY = window.scrollY;
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+    this._btn.addEventListener("click", this._onClick);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener("scroll", this._onScroll);
+    this._btn?.removeEventListener("click", this._onClick);
+  }
 }
+
+customElements.define("back-to-top", BackToTopElement);
 </script>

@@ -1,23 +1,35 @@
 ---
 ---
 
-<div id="reading-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+<reading-progress-bar role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></reading-progress-bar>
 
 <script>
-const progressBar = document.getElementById("reading-progress-bar") as HTMLElement;
-function updateProgress() {
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
-  progressBar.style.width = progress + "%";
-  progressBar.setAttribute("aria-valuenow", String(Math.round(progress)));
+class ReadingProgressBarElement extends HTMLElement {
+  private _onUpdate = () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min((window.scrollY / docHeight) * 100, 100) : 0;
+    this.style.width = progress + "%";
+    this.setAttribute("aria-valuenow", String(Math.round(progress)));
+  };
+
+  connectedCallback() {
+    window.addEventListener("scroll", this._onUpdate, { passive: true });
+    window.addEventListener("resize", this._onUpdate);
+    this._onUpdate();
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener("scroll", this._onUpdate);
+    window.removeEventListener("resize", this._onUpdate);
+  }
 }
-window.addEventListener("scroll", updateProgress);
-window.addEventListener("resize", updateProgress);
-updateProgress();
+
+customElements.define("reading-progress-bar", ReadingProgressBarElement);
 </script>
 
 <style>
-#reading-progress-bar {
+reading-progress-bar {
+  display: block;
   position: fixed;
   top: 0;
   left: 0;
