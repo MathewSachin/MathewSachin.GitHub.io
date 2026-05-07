@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import ToolLayout from '@layouts/ToolLayout.astro';
 import Base64Tool from '@components/tools/Base64Tool.svelte';
 import Bookmarklet from '@components/tools/Bookmarklet.svelte';
@@ -17,6 +18,26 @@ import Scratchpad from '@components/tools/Scratchpad.svelte';
 import TimestampTool from '@components/tools/TimestampTool.svelte';
 import YtThumbnail from '@components/tools/YtThumbnail.svelte';
 
+const TOOL_COMPONENTS: Record<string, AstroComponentFactory> = {
+  base64: Base64Tool,
+  bookmarklet: Bookmarklet,
+  captura: CapturaWebRecorder,
+  cron: CronTool,
+  diff: DiffTool,
+  hash: HashTool,
+  imgcompress: ImageCompressor,
+  ion: IonTool,
+  json: JsonTool,
+  localai: LocalAI,
+  mediaconvert: MediaConverter,
+  pdf: PdfPasswordTool,
+  scratchpad: Scratchpad,
+  timestamp: TimestampTool,
+  'yt-thumbnail': YtThumbnail,
+};
+
+const CLIENT_ONLY_COMPONENTS = new Set(['localai', 'scratchpad']);
+
 export async function getStaticPaths() {
   const entries = await getCollection('toolDocs', ({ data }) => data.published);
 
@@ -32,13 +53,22 @@ if (!entry.data.component) {
   throw new Error(`Published tool is missing component metadata: ${entry.id}`);
 }
 
-if (entry.data.component === 'captura') {
+const toolComponentKey = entry.data.component;
+const ToolComponent = TOOL_COMPONENTS[toolComponentKey];
+
+if (!ToolComponent) {
+  throw new Error(`Missing tool component mapping for: ${entry.id}`);
+}
+
+if (toolComponentKey === 'captura') {
   await import('@styles/recorder.css');
 }
 
 const { Content } = await render(entry);
 const toolTitle = entry.data.title ?? entry.id;
 const BASE = import.meta.env.BASE_URL;
+const toolProps = toolComponentKey === 'pdf' ? { workerUrl: `${BASE}tools/pdf/pdf.worker.js` } : undefined;
+const isClientOnly = CLIENT_ONLY_COMPONENTS.has(toolComponentKey);
 ---
 <ToolLayout
   title={toolTitle}
@@ -47,19 +77,9 @@ const BASE = import.meta.env.BASE_URL;
   manifest={entry.data.manifest}
   DescriptiveContent={Content}
 >
-  {entry.data.component === 'base64' && <Base64Tool client:load />}
-  {entry.data.component === 'bookmarklet' && <Bookmarklet client:load />}
-  {entry.data.component === 'captura' && <CapturaWebRecorder client:load client:only />}
-  {entry.data.component === 'cron' && <CronTool client:load />}
-  {entry.data.component === 'diff' && <DiffTool client:load />}
-  {entry.data.component === 'hash' && <HashTool client:load />}
-  {entry.data.component === 'imgcompress' && <ImageCompressor client:load />}
-  {entry.data.component === 'ion' && <IonTool client:load />}
-  {entry.data.component === 'json' && <JsonTool client:load />}
-  {entry.data.component === 'localai' && <LocalAI client:only="svelte" />}
-  {entry.data.component === 'mediaconvert' && <MediaConverter client:load />}
-  {entry.data.component === 'pdf' && <PdfPasswordTool client:load workerUrl={`${BASE}tools/pdf/pdf.worker.js`} />}
-  {entry.data.component === 'scratchpad' && <Scratchpad client:load client:only />}
-  {entry.data.component === 'timestamp' && <TimestampTool client:load />}
-  {entry.data.component === 'yt-thumbnail' && <YtThumbnail client:load />}
+  {isClientOnly ? (
+    <ToolComponent {...toolProps} client:only="svelte" />
+  ) : (
+    <ToolComponent {...toolProps} client:load />
+  )}
 </ToolLayout>
