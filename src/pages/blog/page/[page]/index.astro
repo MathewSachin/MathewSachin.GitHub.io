@@ -7,11 +7,9 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import PostItem from '@components/PostItem.astro';
+import BlogListPage from '@components/blog/BlogListPage.astro';
 import '@styles/blog.css';
 import { sortPostsByDate } from '@utils/posts';
-
-const BASE = import.meta.env.BASE_URL;
 
 export const getStaticPaths = (async ({ paginate }) => {
   const allPosts = sortPostsByDate(await getCollection('blog'));
@@ -23,60 +21,11 @@ interface Props {
   page: Page<CollectionEntry<'blog'>>;
 }
 
-const { page } = Astro.props;
+const { page }: Props = Astro.props;
 const posts = page.data;
 const currentPage = page.currentPage;
 const totalPages = page.lastPage;
-const hasPrev = currentPage > 1;
-const hasNext = currentPage < totalPages;
 ---
 <BaseLayout title={`Blog Posts — Page ${currentPage}`}>
-  <div class="bg-dark py-3">
-    <div class="container">
-      <h2 class="text-white mb-3">Blog Posts</h2>
-
-      <div class="d-flex gap-2 mb-3">
-        <a href={`${BASE}blog/tags/`} class="btn btn-outline-info btn-sm"><i class="fas fa-tags me-1"></i>Tags</a>
-        <a href={`${BASE}blog/archive/`} class="btn btn-outline-secondary btn-sm"><i class="fas fa-archive me-1"></i>Archive</a>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          <div class="posts">
-            {posts.map(post => <PostItem post={post} />)}
-          </div>
-
-          <nav class="mt-3">
-            <ul class="pagination justify-content-center flex-wrap">
-              {hasPrev ? (
-                <li class="page-item">
-                  <a href={currentPage === 2 ? `${BASE}blog/` : `${BASE}blog/page/${currentPage - 1}/`} class="page-link" aria-label="Previous page">
-                    <i class="fas fa-chevron-left"></i>
-                  </a>
-                </li>
-              ) : (
-                <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-left"></i></span></li>
-              )}
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                <li class={`page-item ${p === currentPage ? 'active' : ''}`}>
-                  <a href={p === 1 ? `${BASE}blog/` : `${BASE}blog/page/${p}/`} class="page-link">{p}</a>
-                </li>
-              ))}
-
-              {hasNext ? (
-                <li class="page-item">
-                  <a href={`${BASE}blog/page/${currentPage + 1}/`} class="page-link" aria-label="Next page">
-                    <i class="fas fa-chevron-right"></i>
-                  </a>
-                </li>
-              ) : (
-                <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-right"></i></span></li>
-              )}
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </div>
+  <BlogListPage posts={posts} currentPage={currentPage} totalPages={totalPages} />
 </BaseLayout>
