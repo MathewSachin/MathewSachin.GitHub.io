@@ -1,19 +1,23 @@
 // ── metronome.ts ─────────────────────────────────────────────────────────────
 // The Timing Engine: Web Worker proxy timer + compositing loop driver.
 
-const _blob = new Blob(
-  ['let t;self.onmessage=function(e){clearTimeout(t);t=setTimeout(function(){self.postMessage(null);},e.data);}'],
-  { type: 'application/javascript' }
-);
-const _url = URL.createObjectURL(_blob);
-const _worker = new Worker(_url);
-URL.revokeObjectURL(_url);
+function createWorker() {
+  const blob = new Blob(
+    ['let t;self.onmessage=function(e){clearTimeout(t);t=setTimeout(function(){self.postMessage(null);},e.data);}'],
+    { type: 'application/javascript' }
+  );
+  const url = URL.createObjectURL(blob);
+  const worker = new Worker(url);
+  URL.revokeObjectURL(url);
+  return worker;
+}
 
 export class Metronome {
   #active: boolean = false;
   #done: Promise<void> = Promise.resolve();
   #animFrameId: number | null = null;
   #sleepResolve: (() => void) | null = null;
+  #worker: Worker | null = null;
 
   get done() { return this.#done; }
 
@@ -31,8 +35,18 @@ export class Metronome {
           const elapsed = performance.now() - frameStart;
           await new Promise<void>(resolve => {
             this.#sleepResolve = resolve;
-            _worker.onmessage = () => { this.#sleepResolve = null; resolve(); };
-            _worker.postMessage(Math.max(0, interval - elapsed));
+            this.#worker ??= typeof Worker === 'undefined' ? null : createWorker();
+
+            if (this.#worker) {
+              this.#worker.onmessage = () => { this.#sleepResolve = null; resolve(); };
+              this.#worker.postMessage(Math.max(0, interval - elapsed));
+              return;
+            }
+
+            setTimeout(() => {
+              this.#sleepResolve = null;
+              resolve();
+            }, Math.max(0, interval - elapsed));
           });
         }
       })();
@@ -48,7 +62,7 @@ export class Metronome {
   stop() {
     this.#active = false;
     if (this.#animFrameId) { cancelAnimationFrame(this.#animFrameId); this.#animFrameId = null; }
-    _worker.onmessage = null;
+    if (this.#worker) this.#worker.onmessage = null;
     if (this.#sleepResolve) { this.#sleepResolve(); this.#sleepResolve = null; }
   }
 }

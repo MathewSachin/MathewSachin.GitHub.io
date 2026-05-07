@@ -1,6 +1,5 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import ToolLayout from '@layouts/ToolLayout.astro';
 import Base64Tool from '@components/tools/Base64Tool.svelte';
 import Bookmarklet from '@components/tools/Bookmarklet.svelte';
@@ -18,25 +17,23 @@ import Scratchpad from '@components/tools/Scratchpad.svelte';
 import TimestampTool from '@components/tools/TimestampTool.svelte';
 import YtThumbnail from '@components/tools/YtThumbnail.svelte';
 
-const TOOL_COMPONENTS: Record<string, AstroComponentFactory> = {
-  base64: Base64Tool,
-  bookmarklet: Bookmarklet,
-  captura: CapturaWebRecorder,
-  cron: CronTool,
-  diff: DiffTool,
-  hash: HashTool,
-  imgcompress: ImageCompressor,
-  ion: IonTool,
-  json: JsonTool,
-  localai: LocalAI,
-  mediaconvert: MediaConverter,
-  pdf: PdfPasswordTool,
-  scratchpad: Scratchpad,
-  timestamp: TimestampTool,
-  'yt-thumbnail': YtThumbnail,
-};
-
-const CLIENT_ONLY_COMPONENTS = new Set(['localai', 'scratchpad']);
+const SUPPORTED_COMPONENTS = new Set([
+  'base64',
+  'bookmarklet',
+  'captura',
+  'cron',
+  'diff',
+  'hash',
+  'imgcompress',
+  'ion',
+  'json',
+  'localai',
+  'mediaconvert',
+  'pdf',
+  'scratchpad',
+  'timestamp',
+  'yt-thumbnail',
+]);
 
 export async function getStaticPaths() {
   const entries = await getCollection('toolDocs', ({ data }) => data.published);
@@ -54,9 +51,8 @@ if (!entry.data.component) {
 }
 
 const toolComponentKey = entry.data.component;
-const ToolComponent = TOOL_COMPONENTS[toolComponentKey];
 
-if (!ToolComponent) {
+if (!SUPPORTED_COMPONENTS.has(toolComponentKey)) {
   throw new Error(`Missing tool component mapping for: ${entry.id}`);
 }
 
@@ -67,8 +63,6 @@ if (toolComponentKey === 'captura') {
 const { Content } = await render(entry);
 const toolTitle = entry.data.title ?? entry.id;
 const BASE = import.meta.env.BASE_URL;
-const toolProps = toolComponentKey === 'pdf' ? { workerUrl: `${BASE}tools/pdf/pdf.worker.js` } : undefined;
-const isClientOnly = CLIENT_ONLY_COMPONENTS.has(toolComponentKey);
 ---
 <ToolLayout
   title={toolTitle}
@@ -77,9 +71,35 @@ const isClientOnly = CLIENT_ONLY_COMPONENTS.has(toolComponentKey);
   manifest={entry.data.manifest}
   DescriptiveContent={Content}
 >
-  {isClientOnly ? (
-    <ToolComponent {...toolProps} client:only="svelte" />
+  {toolComponentKey === 'base64' ? (
+    <Base64Tool client:load />
+  ) : toolComponentKey === 'bookmarklet' ? (
+    <Bookmarklet client:load />
+  ) : toolComponentKey === 'captura' ? (
+    <CapturaWebRecorder client:only="svelte" />
+  ) : toolComponentKey === 'cron' ? (
+    <CronTool client:load />
+  ) : toolComponentKey === 'diff' ? (
+    <DiffTool client:load />
+  ) : toolComponentKey === 'hash' ? (
+    <HashTool client:load />
+  ) : toolComponentKey === 'imgcompress' ? (
+    <ImageCompressor client:load />
+  ) : toolComponentKey === 'ion' ? (
+    <IonTool client:load />
+  ) : toolComponentKey === 'json' ? (
+    <JsonTool client:load />
+  ) : toolComponentKey === 'localai' ? (
+    <LocalAI client:only="svelte" />
+  ) : toolComponentKey === 'mediaconvert' ? (
+    <MediaConverter client:load />
+  ) : toolComponentKey === 'pdf' ? (
+    <PdfPasswordTool client:load workerUrl={`${BASE}tools/pdf/pdf.worker.js`} />
+  ) : toolComponentKey === 'scratchpad' ? (
+    <Scratchpad client:only="svelte" />
+  ) : toolComponentKey === 'timestamp' ? (
+    <TimestampTool client:load />
   ) : (
-    <ToolComponent {...toolProps} client:load />
+    <YtThumbnail client:load />
   )}
 </ToolLayout>
