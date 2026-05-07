@@ -9,8 +9,8 @@ let {
   copiedIconClass = 'fas fa-check',
   resetDelay = 2000,
   className = 'btn btn-sm btn-outline-secondary',
-  onclick = undefined,
-  oncopied = undefined,
+  onclick: buttonOnClick = undefined,
+  oncopied: onCopied = undefined,
   children = undefined,
   ...restProps
 } = $props();
@@ -23,8 +23,6 @@ onDestroy(() => {
 });
 
 async function handleCopy(event) {
-  onclick?.(event);
-
   try {
     const targetValue = targetSelector
       ? (document.querySelector(targetSelector)?.textContent || '')
@@ -32,7 +30,7 @@ async function handleCopy(event) {
 
     await navigator.clipboard.writeText(targetValue);
     copied = true;
-    oncopied?.();
+    onCopied?.();
     await tick();
 
     if (resetTimer) clearTimeout(resetTimer);
@@ -42,6 +40,8 @@ async function handleCopy(event) {
     }, resetDelay);
   } catch {
     // fallback: do nothing
+  } finally {
+    buttonOnClick?.(event);
   }
 }
 </script>
