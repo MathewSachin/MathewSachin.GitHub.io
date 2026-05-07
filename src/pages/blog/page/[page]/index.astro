@@ -19,7 +19,11 @@ export const getStaticPaths = (async ({ paginate }) => {
   return paginatedPaths.filter(({ params }) => Number(params.page) > 1);
 }) satisfies GetStaticPaths;
 
-const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> };
+interface Props {
+  page: Page<CollectionEntry<'blog'>>;
+}
+
+const { page } = Astro.props;
 const posts = page.data;
 const currentPage = page.currentPage;
 const totalPages = page.lastPage;
