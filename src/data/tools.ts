@@ -25,7 +25,7 @@ export async function getTools(): Promise<Tool[]> {
   const entries = (await getCollection('toolDocs', ({ data }) => data.published && data.listed)).filter(hasListMetadata);
 
   return entries
-    .sort((a, b) => a.data.order - b.data.order)
+    .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
     .map((entry) => ({
       id: entry.id,
       name: entry.data.title,

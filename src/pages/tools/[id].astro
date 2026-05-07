@@ -37,7 +37,7 @@ const TOOL_RENDERERS: Record<string, AstroComponentFactory> = {
 };
 
 export async function getStaticPaths() {
-  const entries = await getCollection('toolDocs', ({ data }) => data.published && !!data.component && !!data.title);
+  const entries = await getCollection('toolDocs', ({ data }) => data.published && !!data.component);
 
   return entries.map((entry) => ({
     params: { id: entry.id },
