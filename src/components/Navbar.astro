@@ -46,7 +46,7 @@ const BASE = import.meta.env.BASE_URL;
     }
 
     disconnectedCallback() {
-      this._toggler?.removeEventListener("click", this._onToggle);
+      this._toggler.removeEventListener("click", this._onToggle);
     }
   }
 

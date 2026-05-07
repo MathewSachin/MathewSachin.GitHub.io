@@ -64,8 +64,8 @@ class BackToTopElement extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this._btn.removeEventListener("click", this._onClick);
     window.removeEventListener("scroll", this._onScroll);
-    this._btn?.removeEventListener("click", this._onClick);
   }
 }
 

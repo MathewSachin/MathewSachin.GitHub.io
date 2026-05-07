@@ -192,91 +192,74 @@ toc-widget {
 const SCROLL_OFFSET = 90;
 
 class TocWidgetElement extends HTMLElement {
-  private _tocToggle!: HTMLElement;
-  private _tocCollapse!: HTMLElement;
-  private _tocNav!: HTMLElement;
+  private _abortController: AbortController | undefined;
   private _isClickScrolling = false;
   private _clickScrollTimeout: number | undefined;
   private _manualScrollDebounce: number | undefined;
-  private _onScroll: (() => void) | undefined;
-  private _onResize: (() => void) | undefined;
-
-  private _onToggle = () => {
-    const expanded = this._tocToggle.getAttribute("aria-expanded") === "true";
-    this._tocToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
-    this._tocCollapse.classList.toggle("show");
-  };
-
-  private _updateActiveState(activeId: string | null) {
-    const tocLinks = this._tocNav.querySelectorAll("a") as NodeListOf<HTMLAnchorElement>;
-    tocLinks.forEach((a) => a.classList.remove("toc-active"));
-
-    const allSublists = this._tocNav.querySelectorAll(".toc-sublist");
-    allSublists.forEach((list) => list.classList.remove("expanded"));
-
-    if (activeId) {
-      const activeLinks = this._tocNav.querySelectorAll(`a[href="#${activeId}"]`) as NodeListOf<HTMLAnchorElement>;
-      activeLinks.forEach((a) => {
-        a.classList.add("toc-active");
-
-        const isH3 = !!a.parentElement && a.parentElement.classList.contains("toc-h3");
-        if (isH3) {
-          const parentSublist = a.closest(".toc-sublist") as HTMLElement | null;
-          if (parentSublist) parentSublist.classList.add("expanded");
-        } else {
-          const siblingSublist = a.nextElementSibling as HTMLElement | null;
-          if (siblingSublist && siblingSublist.classList.contains("toc-sublist")) {
-            siblingSublist.classList.add("expanded");
-          }
-        }
-      });
-    }
-  }
 
   connectedCallback() {
-    this._tocToggle = this.querySelector(".toc-mobile-toggle")!;
-    this._tocCollapse = this.querySelector("#toc-collapse")!;
-    this._tocNav = this.querySelector("#toc-nav")!;
+    this._abortController = new AbortController();
+    const { signal } = this._abortController;
+
+    const tocToggle = this.querySelector(".toc-mobile-toggle") as HTMLElement;
+    const tocCollapse = this.querySelector("#toc-collapse") as HTMLElement;
+    const tocNav = this.querySelector("#toc-nav") as HTMLElement;
+    const tocLinks = tocNav.querySelectorAll("a") as NodeListOf<HTMLAnchorElement>;
+
+    // Helper: update active/expanded state in the TOC nav
+    const updateActiveState = (activeId: string | null) => {
+      tocLinks.forEach((a) => a.classList.remove("toc-active"));
+      tocNav.querySelectorAll(".toc-sublist").forEach((list) => list.classList.remove("expanded"));
+
+      if (activeId) {
+        (tocNav.querySelectorAll(`a[href="#${activeId}"]`) as NodeListOf<HTMLAnchorElement>).forEach((a) => {
+          a.classList.add("toc-active");
+          const isH3 = !!a.parentElement && a.parentElement.classList.contains("toc-h3");
+          if (isH3) {
+            (a.closest(".toc-sublist") as HTMLElement | null)?.classList.add("expanded");
+          } else {
+            const sib = a.nextElementSibling as HTMLElement | null;
+            if (sib?.classList.contains("toc-sublist")) sib.classList.add("expanded");
+          }
+        });
+      }
+    };
 
     // Mobile TOC collapse toggle
-    this._tocToggle.addEventListener("click", this._onToggle);
+    tocToggle.addEventListener("click", () => {
+      const expanded = tocToggle.getAttribute("aria-expanded") === "true";
+      tocToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+      tocCollapse.classList.toggle("show");
+    }, { signal });
 
     // Scroll-spy setup
-    const tocSidebar = this.closest("#toc-sidebar") as HTMLElement | null;
+    const tocSidebar = document.getElementById("toc-sidebar") as HTMLElement | null;
     const postContent = document.querySelector("#post .page-content") as HTMLElement | null;
-
     if (!postContent) return;
 
     const headings = Array.from(postContent.querySelectorAll("h2, h3")) as HTMLElement[];
-    const tocLinks = this._tocNav.querySelectorAll("a") as NodeListOf<HTMLAnchorElement>;
 
     if (headings.length >= 3) {
       if (tocSidebar) tocSidebar.style.display = "";
 
-      this._onScroll = () => {
+      const updateToc = () => {
         if (this._isClickScrolling) return;
-
-        if (typeof this._manualScrollDebounce === "number") {
-          clearTimeout(this._manualScrollDebounce);
-        }
+        if (typeof this._manualScrollDebounce === "number") clearTimeout(this._manualScrollDebounce);
         this._manualScrollDebounce = window.setTimeout(() => {
           const scrollPos = window.scrollY + SCROLL_OFFSET;
           let activeId: string | null = null;
           headings.forEach((h) => {
-            const top = h.getBoundingClientRect().top + window.scrollY;
-            if (top <= scrollPos) activeId = h.id || activeId;
+            if (h.getBoundingClientRect().top + window.scrollY <= scrollPos) activeId = h.id || activeId;
           });
-          this._updateActiveState(activeId);
+          updateActiveState(activeId);
         }, 50); // Small debounce prevents DOM thrashing if the user rapidly drags the scrollbar
       };
 
-      this._onResize = this._onScroll;
-
-      window.addEventListener("scroll", this._onScroll, { passive: true });
-      window.addEventListener("resize", this._onResize);
+      window.addEventListener("scroll", updateToc, { passive: true, signal });
+      window.addEventListener("resize", updateToc, { signal });
 
       // Initial setup
-      this._onScroll();
+      updateToc();
     }
 
     // Track TOC link clicks and manage scroll-pause state
@@ -292,23 +275,19 @@ class TocWidgetElement extends HTMLElement {
         }, 800); // 800ms typically covers standard smooth scrolling durations
 
         // Set the target as active immediately
-        if (targetHref.startsWith("#")) {
-          this._updateActiveState(targetHref.substring(1));
-        }
+        if (targetHref.startsWith("#")) updateActiveState(targetHref.substring(1));
 
         // Collapse the TOC on mobile after the user taps a link
-        if (this._tocCollapse.classList.contains("show")) {
-          this._tocCollapse.classList.remove("show");
-          this._tocToggle.setAttribute("aria-expanded", "false");
+        if (tocCollapse.classList.contains("show")) {
+          tocCollapse.classList.remove("show");
+          tocToggle.setAttribute("aria-expanded", "false");
         }
-      });
+      }, { signal });
     });
   }
 
   disconnectedCallback() {
-    this._tocToggle?.removeEventListener("click", this._onToggle);
-    if (this._onScroll) window.removeEventListener("scroll", this._onScroll);
-    if (this._onResize) window.removeEventListener("resize", this._onResize);
+    this._abortController?.abort();
     if (typeof this._manualScrollDebounce === "number") clearTimeout(this._manualScrollDebounce);
     if (typeof this._clickScrollTimeout === "number") clearTimeout(this._clickScrollTimeout);
   }
