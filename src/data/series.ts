@@ -17,12 +17,16 @@ export interface Series {
   levels: SeriesLevel[]
 }
 
-export const SERIES: Record<string, Series> = {
+function countSeriesPosts(series: Series): number {
+  return series.levels.reduce((acc, level) => acc + level.posts.length, 0)
+}
+
+const SERIES_CONFIG: Record<string, Series> = {
   'blogging-with-jekyll': {
     name: 'Blogging with Jekyll',
     url: '/blog/series/blogging-with-jekyll/',
     description:
-      'A 9-part series on building and running a Jekyll blog hosted on GitHub Pages — from automating posts with AI to adding offline search, comments, live PR previews, ads, faster CI builds, Good Core Web Vitals, and deep reader engagement analytics. Each part is a standalone deep-dive you can apply to your own site.',
+      'A {count}-part series on building and running a Jekyll blog hosted on GitHub Pages — from automating posts with AI to adding offline search, comments, live PR previews, ads, faster CI builds, Good Core Web Vitals, and deep reader engagement analytics. Each part is a standalone deep-dive you can apply to your own site.',
     levels: [
       {
         title: 'Level 1 — Writing & Automation',
@@ -74,7 +78,7 @@ export const SERIES: Record<string, Series> = {
   'browser-hacks': {
     name: 'Browser Hacks',
     url: '/blog/series/browser-hacks/',
-    description: 'A 28-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. Most chapters need nothing but a browser and a curious mind — the final chapter adds Tampermonkey to make your scripts persistent.',
+    description: 'A {count}-part series that takes you from your very first <kbd>F12</kbd> press all the way to writing persistent browser scripts. Every technique builds on the last. Most chapters need nothing but a browser and a curious mind — the final chapter adds Tampermonkey to make your scripts persistent.',
     levels: [
       {
         title: 'Level 1 — Zero Coding Required',
@@ -149,3 +153,10 @@ export const SERIES: Record<string, Series> = {
     ],
   },
 }
+
+export const SERIES: Record<string, Series> = Object.fromEntries(
+  Object.entries(SERIES_CONFIG).map(([seriesKey, series]) => {
+    const postCount = countSeriesPosts(series)
+    return [seriesKey, { ...series, description: series.description.replace(/\{count\}/g, String(postCount)) }]
+  }),
+) as Record<string, Series>
