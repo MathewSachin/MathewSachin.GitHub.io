@@ -8,6 +8,7 @@ related:
   - /blog/2019/12/07/unhide-password-box
   - /blog/2026/03/07/hacking-wordle
 ---
+import DesignModeWidget from '@components/blog/DesignModeWidget.svelte';
 
 *What if you could make any website say whatever you want — in about 10 seconds, with zero coding skills? You totally can. Here's how.*
 
@@ -137,19 +138,7 @@ document.designMode = "off"
 
 ### Try it on this page right now
 
-<div class="text-center my-3">
-  <button id="btn-design-mode" class="btn btn-info" onclick="toggleDesignMode(this)">✏️ Enable Edit Mode</button>
-</div>
-<p class="text-center text-muted" style="font-size:0.9em;">Click the button above, then click any text on this page and start typing!</p>
-
-<script>{`
-function toggleDesignMode(btn) {
-  var enabling = document.designMode !== 'on';
-  document.designMode = enabling ? 'on' : 'off';
-  btn.textContent = enabling ? '✋ Disable Edit Mode' : '✏️ Enable Edit Mode';
-  btn.className = enabling ? 'btn btn-warning' : 'btn btn-info';
-}
-`}</script>
+<DesignModeWidget client:load />
 
 ### On desktop: via the Chrome (or Edge) Console
 
