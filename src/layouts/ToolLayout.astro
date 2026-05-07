@@ -42,7 +42,13 @@ const pageUrl = Astro.url.href;
           <div class="page-content">
             <slot />
 
-            {DescriptiveContent && <RenderMDX Content={DescriptiveContent} />}
+            {DescriptiveContent && (
+              <div class="card mt-4">
+                <div class="card-body">
+                  <RenderMDX Content={DescriptiveContent} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div id="tool-sidebar" class="col-md-2">

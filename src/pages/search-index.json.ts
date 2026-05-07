@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 import { create, insert, save } from '@orama/orama';
 // Notice the updated relative path since we are now inside src/pages/
-import { TOOLS } from '@data/tools';
+import { getTools } from '@data/tools';
 import { stripMarkdown, postUrlFromFilename } from '@scripts/search-index'
 
 // IMPORTANT: Tells Astro to build this as a static .json file during `astro build`
@@ -64,8 +64,8 @@ export async function GET() {
     inserted++;
   }
 
-  // 3. Index tools from src/data/tools.ts
-  for (const tool of TOOLS) {
+  // 3. Index tools from the tools content collection
+  for (const tool of await getTools()) {
     const url = `/tools/${tool.id}/`;
     await insert(db, {
       title: tool.name,
