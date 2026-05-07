@@ -46,7 +46,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props as { entry: CollectionEntry<'toolDocs'> };
-const ToolRenderer = entry.data.component ? TOOL_RENDERERS[entry.data.component] : undefined;
+const ToolRenderer = TOOL_RENDERERS[entry.data.component];
 
 if (!ToolRenderer) {
   throw new Error(`Missing tool renderer for: ${entry.id}`);
