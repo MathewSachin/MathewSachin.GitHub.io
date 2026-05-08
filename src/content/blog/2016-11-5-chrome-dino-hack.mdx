@@ -16,6 +16,7 @@ import ChromeDinoScoreWidget from '@components/blog/ChromeDinoScoreWidget.svelte
 import ChromeDinoJumpWidget from '@components/blog/ChromeDinoJumpWidget.svelte';
 import ChromeDinoElevationWidget from '@components/blog/ChromeDinoElevationWidget.svelte';
 import Tabs from '@components/Tabs.astro';
+import TriviaChallenge from '@components/TriviaChallenge.svelte';
 import chromeDino from '@images/chromeDino.gif';
 
 *All hacks updated as of 19<sup>th</sup> April 2026 based on game changes.*
@@ -332,6 +333,44 @@ Pressing Right moves you forward normally, but the real fun starts when you pres
 Keep having fun and may your dino run forever!
 
 Share this page around and comment down if you have tricks of your own!
+
+---
+
+## 🦕 Chrome Dino Trivia Challenge
+
+Think you know your Dino game lore? Put your knowledge to the test!
+
+<TriviaChallenge
+  client:load
+  storageKey="chrome-dino-trivia-highscore"
+  questions={[
+    {
+      question: "What is the default starting speed of the Chrome Dino game?",
+      options: ["3", "6", "10", "15"],
+      answer: 1
+    },
+    {
+      question: "Which keyboard key starts the Chrome Dino game?",
+      options: ["Enter", "Shift", "Space", "Tab"],
+      answer: 2
+    },
+    {
+      question: "At approximately how many points do pterodactyls first appear?",
+      options: ["100", "250", "450", "800"],
+      answer: 2
+    },
+    {
+      question: "What JavaScript method is called to replace the game-over behavior in the God Mode hack?",
+      options: ["Runner.prototype.start", "Runner.prototype.gameOver", "Runner.prototype.stop", "Runner.prototype.reset"],
+      answer: 1
+    },
+    {
+      question: "What is the default hard-coded ground Y position (in pixels) used by the Chrome Dino game?",
+      options: ["50", "75", "93", "120"],
+      answer: 2
+    }
+  ]}
+/>
 
 ---
 
