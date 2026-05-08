@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 const DINO_HACK_URL = '/blog/2016/11/05/chrome-dino-hack.html';
 
@@ -113,14 +113,14 @@ const Q_CORRECT = ['6', 'Space', '450', 'Runner.prototype.gameOver', '93'];
 const Q_WRONG   = ['3', 'Enter', '100', 'Runner.prototype.start',    '50'];
 
 /** Select an option and click "Submit Answer" inside the trivia component. */
-async function submitAnswer(page: import('@playwright/test').Page, optionText: string) {
+async function submitAnswer(page: Page, optionText: string) {
   const trivia = page.locator('.trivia-challenge');
   await trivia.getByRole('button', { name: optionText, exact: true }).click();
   await trivia.getByRole('button', { name: 'Submit Answer' }).click();
 }
 
 /** Answer one question then advance (Next Question / See Results). */
-async function answerAndAdvance(page: import('@playwright/test').Page, optionText: string) {
+async function answerAndAdvance(page: Page, optionText: string) {
   await submitAnswer(page, optionText);
   const trivia = page.locator('.trivia-challenge');
   const next = trivia.getByRole('button', { name: /Next Question|See Results/ });
@@ -128,7 +128,7 @@ async function answerAndAdvance(page: import('@playwright/test').Page, optionTex
 }
 
 /** Answer all 5 questions, choosing correct or wrong answers based on `allCorrect`. */
-async function completeQuiz(page: import('@playwright/test').Page, allCorrect = true) {
+async function completeQuiz(page: Page, allCorrect = true) {
   for (let i = 0; i < Q_CORRECT.length; i++) {
     const option = allCorrect ? Q_CORRECT[i] : Q_WRONG[i];
     if (i < Q_CORRECT.length - 1) {
