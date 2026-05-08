@@ -262,8 +262,10 @@ test.describe('Trivia Challenge', () => {
   });
 
   test('existing high score is displayed in the quiz header', async ({ page }) => {
-    // Pre-seed a high score of 60.
-    await page.evaluate((key) => localStorage.setItem(key, '60'), STORAGE_KEY);
+    // Pre-seed a high score of 60. Use addInitScript so the value survives the
+    // reload (a plain evaluate would be wiped by the beforeEach initScript on
+    // the next navigation).
+    await page.addInitScript(([key, val]) => localStorage.setItem(key, val), [STORAGE_KEY, '60'] as [string, string]);
     await page.reload();
     const trivia = page.locator('.trivia-challenge');
     await expect(trivia).toContainText('Best:');
@@ -272,7 +274,7 @@ test.describe('Trivia Challenge', () => {
 
   test('high score is not updated when a lower score is achieved', async ({ page }) => {
     // Pre-seed a perfect high score.
-    await page.evaluate((key) => localStorage.setItem(key, '100'), STORAGE_KEY);
+    await page.addInitScript(([key, val]) => localStorage.setItem(key, val), [STORAGE_KEY, '100'] as [string, string]);
     await page.reload();
     await completeQuiz(page, false); // score will be 0
     const stored = await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY);
@@ -280,7 +282,7 @@ test.describe('Trivia Challenge', () => {
   });
 
   test('existing high score shown on results screen when not beaten', async ({ page }) => {
-    await page.evaluate((key) => localStorage.setItem(key, '100'), STORAGE_KEY);
+    await page.addInitScript(([key, val]) => localStorage.setItem(key, val), [STORAGE_KEY, '100'] as [string, string]);
     await page.reload();
     await completeQuiz(page, false); // score 0, does not beat 100
     const trivia = page.locator('.trivia-challenge');
