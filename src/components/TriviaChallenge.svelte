@@ -55,11 +55,10 @@
     } else {
       finished = true;
       if (storageKey) {
-        const finalScore = Math.round((correctCount / questions.length) * 100);
-        if (highScore === null || finalScore > highScore) {
-          highScore = finalScore;
+        if (highScore === null || score > highScore) {
+          highScore = score;
           newHighScore = true;
-          localStorage.setItem(storageKey, String(finalScore));
+          localStorage.setItem(storageKey, String(score));
         }
       }
     }
