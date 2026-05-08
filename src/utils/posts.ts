@@ -2,7 +2,7 @@
  * Utilities for deriving URLs and metadata from blog post collection entries.
  * NOTE: In Astro 6 content layer (glob loader), entries use .id (not .slug).
  */
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 /**
  * Derive the URL path from a content collection entry id.
@@ -82,6 +82,14 @@ export function formatDateUS(date: Date): string {
     year: 'numeric',
     timeZone: 'UTC',
   });
+}
+
+/**
+ * Fetch all blog posts sorted by date descending (newest first).
+ * Centralises the common pattern: sortPostsByDate(await getCollection('blog')).
+ */
+export async function getAllPosts(): Promise<CollectionEntry<'blog'>[]> {
+  return sortPostsByDate(await getCollection('blog'));
 }
 
 /**

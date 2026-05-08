@@ -3,15 +3,14 @@
 // Blog listing index: /blog/
 // Page 1 lives at /blog/, subsequent pages at /blog/page/2/ etc.
 
-import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BlogListPage from '@components/blog/BlogListPage.astro';
 import '@styles/blog.css';
-import { sortPostsByDate } from '@utils/posts';
+import { getAllPosts } from '@utils/posts';
 
 const POSTS_PER_PAGE = 10;
 
-const allPosts = sortPostsByDate(await getCollection('blog'));
+const allPosts = await getAllPosts();
 const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 const posts = allPosts.slice(0, POSTS_PER_PAGE);
 ---

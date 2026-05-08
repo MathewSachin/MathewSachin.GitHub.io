@@ -1,22 +1,21 @@
 ---
 // Per-tag page: /blog/tags/[tag]/
 
-import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { sortPostsByDate, getPostDate, formatDateUS, postUrlFromSlug, tagSlug } from '@utils/posts';
+import { getAllPosts, getPostDate, formatDateUS, postUrlFromSlug, tagSlug } from '@utils/posts';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog');
+  const allPosts = await getAllPosts();
   const tags = new Set(allPosts.flatMap(p => p.data.tags ?? []));
   return Array.from(tags).map(t => ({ params: { tag: tagSlug(t) } }));
 }
 
 const { tag } = Astro.params;
 
-const allPosts = sortPostsByDate(await getCollection('blog'));
+const allPosts = await getAllPosts();
 const normalizedTag = String(tag);
 
 // Find the human-friendly tag name (preserve original casing if possible)

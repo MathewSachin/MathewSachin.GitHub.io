@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
@@ -9,11 +9,11 @@ import { glob } from 'astro/loaders';
  */
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/blog' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     icon: z.string().optional(),
     tags: z.array(z.string()).default([]),
-    related: z.array(z.string()).default([]),
+    related: z.array(reference('blog')).default([]),
     accent_color: z.string().optional(),
     date: z.coerce.date().optional(),
     ads: z.boolean().default(true),
@@ -21,7 +21,7 @@ const blog = defineCollection({
     manifest: z.string().optional(),
     redirect_from: z.array(z.string()).optional(),
     description: z.string().optional(),
-    image: z.string().optional(),
+    image: image().optional(),
   }),
 });
 

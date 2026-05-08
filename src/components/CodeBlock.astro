@@ -13,7 +13,7 @@ const id = `code-block-${Math.floor(Math.random() * 10000)}`;
     <span class={lang ? "code-lang" : ""}>{lang}</span>
 
     <CopyButton
-      client:load
+      client:visible
       className="btn btn-sm btn-code btn-clip"
       title="Copy to clipboard"
       aria-label="Copy code to clipboard"
