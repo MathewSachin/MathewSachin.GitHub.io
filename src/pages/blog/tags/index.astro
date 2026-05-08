@@ -1,11 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { sortPostsByDate, buildTagsMap, tagSlug, getTagColor } from '@utils/posts';
+import { getAllPosts, buildTagsMap, tagSlug, getTagColor } from '@utils/posts';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
-const allPosts = sortPostsByDate(await getCollection('blog'));
+const allPosts = await getAllPosts();
 const tagsMap = buildTagsMap(allPosts);
 ---
 <BaseLayout title="Tags" ads={true}>

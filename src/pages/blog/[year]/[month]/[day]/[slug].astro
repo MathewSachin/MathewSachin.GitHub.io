@@ -3,13 +3,12 @@
 
 import { getCollection, render } from 'astro:content';
 import PostLayout from '@layouts/PostLayout.astro';
-import { sortPostsByDate, postUrlFromId } from '@utils/posts';
+import { getAllPosts, postUrlFromId } from '@utils/posts';
 import RenderMDX from '@components/mdx/RenderMDX.astro';
 import InContentAd from '@components/InContentAd.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  const allPosts = sortPostsByDate(posts);
+  const allPosts = await getAllPosts();
 
   return allPosts.map(post => {
     // In Astro 6 content layer (glob loader), the entry ID is the filename without extension

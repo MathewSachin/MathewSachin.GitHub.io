@@ -1,18 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { postIdFromSlug, postUrlFromSlug } from '@utils/posts';
+import { postUrlFromSlug } from '@utils/posts';
 
 interface Props {
-  relatedIds: string[];
-  allPosts: CollectionEntry<'blog'>[];
+  posts: CollectionEntry<'blog'>[];
 }
 
-const { relatedIds, allPosts } = Astro.props;
+const { posts: relatedPosts } = Astro.props;
 const BASE = import.meta.env.BASE_URL;
-
-const relatedPosts = relatedIds
-  .map(id => allPosts.find(p => postIdFromSlug(p.id) === id))
-  .filter(Boolean) as CollectionEntry<'blog'>[];
 ---
 {relatedPosts.length > 0 && (
   <div class="related-posts-section">

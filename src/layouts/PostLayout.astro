@@ -6,6 +6,7 @@
  * + _includes/back_to_top.html
  */
 import type { CollectionEntry } from 'astro:content';
+import { getEntries } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BackToTop from '@components/BackToTop.astro';
 import Lightbox from '@components/Lightbox.svelte';
@@ -41,6 +42,7 @@ const seriesKey = getSeriesKeyForPostId(postIdFromSlug(post.id));
 const pageUrl = Astro.url.href;
 // Canonical URL: use explicit .html path if provided, else fall back to current URL
 const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonicalPath}` : pageUrl;
+const relatedPosts = related.length > 0 ? await getEntries(related) : [];
 ---
 <BaseLayout title={title} description={description} ogImage={image} accentColor={accent_color} ads={ads} canonicalUrl={canonicalUrl}>
 
@@ -81,10 +83,10 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
             <SeriesNav post={post} variant="header" allPosts={allPosts} />
           </>
         )}
-        {related.length > 0 && (
+        {relatedPosts.length > 0 && (
           <>
             <hr class="border-light mt-3 mb-3" />
-            <RelatedPosts relatedIds={related} allPosts={allPosts} />
+            <RelatedPosts posts={relatedPosts} />
           </>
         )}
         <div class="p-5"></div>
@@ -108,9 +110,9 @@ const canonicalUrl = canonicalPath ? `${SITE}${BASE.replace(/\/$/, '')}${canonic
 
               {seriesKey && <SeriesNav post={post} variant="footer" allPosts={allPosts} />}
 
-              {related.length > 0 && (
+              {relatedPosts.length > 0 && (
                 <>
-                  <RelatedPosts relatedIds={related} allPosts={allPosts} />
+                  <RelatedPosts posts={relatedPosts} />
                   <br />
                 </>
               )}
