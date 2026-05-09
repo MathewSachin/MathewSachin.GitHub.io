@@ -80,9 +80,8 @@ test.describe('PDF Password Tool', () => {
       buffer: Buffer.from('hello'),
     }, async () => {
       await expect(page.locator('#status-msg')).toBeVisible();
+      await expect(page.locator('#status-msg')).toContainText('PDF');
     });
-
-    await expect(page.locator('#status-msg')).toContainText('PDF');
   });
 
   test('shows error for invalid (non-PDF) file content', async ({ page }) => {
@@ -92,9 +91,8 @@ test.describe('PDF Password Tool', () => {
       buffer: Buffer.from('this is not a pdf'),
     }, async () => {
       await expect(page.locator('#status-msg')).toBeVisible();
+      await expect(page.locator('#status-msg')).toContainText('valid PDF');
     });
-
-    await expect(page.locator('#status-msg')).toContainText('valid PDF');
   });
 
   test('both user and owner password fields are visible in Add mode', async ({ page }) => {
