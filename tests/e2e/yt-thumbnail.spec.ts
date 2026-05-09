@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('YouTube Thumbnail Grabber tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/yt-thumbnail/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/tools/yt-thumbnail/');
   });
 
   test('shows error for empty input', async ({ page }) => {

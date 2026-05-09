@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('JSON Formatter tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/json/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/tools/json/');
   });
 
   test('formats valid JSON with indentation', async ({ page }) => {

@@ -12,7 +12,7 @@ const PLAIN_PDF_BYTES = Buffer.from(
 
 test.describe('PDF Password Tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/pdf/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/tools/pdf/');
   });
 
   test('page loads with correct title and drop zone', async ({ page }) => {
