@@ -71,7 +71,7 @@ const RECORD_DURATION_MS  = 12_000;
 const VFR_EXTRA_MS        = 2_000;
 /** Maximum allowed A/V drift per pulse (seconds). */
 const MAX_DRIFT_S         = 0.15;
-/** First pulse can include startup jitter in CI runners. */
+/** First pulse can include startup jitter in CI (encoder/muxer warm-up before steady-state timing). */
 const FIRST_PULSE_MAX_DRIFT_S = 0.22;
 /** Minimum expected detectable pulses per track. */
 const MIN_PULSES          = 8;
