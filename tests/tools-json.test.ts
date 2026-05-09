@@ -76,3 +76,18 @@ test('formatJson: preserves boolean and null values', () => {
   assert.equal(parsed.nothing, null)
   assert.equal(parsed.num, 0)
 })
+
+test('formatJson: falls back to String(error) for non-Error throws', () => {
+  const originalParse = JSON.parse
+  JSON.parse = (() => {
+    throw undefined
+  }) as typeof JSON.parse
+
+  try {
+    const { output, error } = formatJson('{"a":1}', 2)
+    assert.equal(output, '')
+    assert.equal(error, 'undefined')
+  } finally {
+    JSON.parse = originalParse
+  }
+})
