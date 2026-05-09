@@ -79,7 +79,7 @@ test('formatJson: preserves boolean and null values', () => {
 
 test('formatJson: falls back to String(error) for non-Error throws', () => {
   const originalParse = JSON.parse
-  JSON.parse = (() => {
+  JSON.parse = ((_text: string) => {
     throw { code: 'bad-json' }
   }) as typeof JSON.parse
 

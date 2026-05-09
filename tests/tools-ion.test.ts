@@ -95,7 +95,7 @@ test('processIon: toJson handles boolean and null', () => {
 
 test('processIon: falls back to String(error) for non-Error throws', () => {
   const originalStringify = JSON.stringify
-  JSON.stringify = (() => {
+  JSON.stringify = ((_value: unknown) => {
     throw { code: 'stringify-failure' }
   }) as typeof JSON.stringify
 
