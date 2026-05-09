@@ -70,16 +70,14 @@ test.describe('YouTube Thumbnail Grabber tool', () => {
   });
 
   test('Enter key triggers grab', async ({ page }) => {
-    await page.locator('#yt-input').fill('dQw4w9WgXcQ');
-    await page.locator('#yt-input').focus();
+    const input = page.locator('#yt-input');
+    await input.fill('dQw4w9WgXcQ');
+    await input.focus();
     const result = page.locator('#yt-result');
-    for (let attempt = 0; attempt < 8; attempt++) {
-      await page.locator('#yt-input').press('Enter');
-      if (!(await result.evaluate(el => el.classList.contains('d-none')))) {
-        break;
-      }
-      await page.waitForTimeout(100);
-    }
+    await expect.poll(async () => {
+      await input.press('Enter');
+      return await result.evaluate(el => el.classList.contains('d-none'));
+    }).toBe(false);
     await expect(result).not.toHaveClass(/d-none/);
   });
 

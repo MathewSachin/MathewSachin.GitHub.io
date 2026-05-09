@@ -119,10 +119,10 @@ async function submitAnswer(page: Page, optionText: string) {
   const option = trivia.getByRole('button', { name: optionText, exact: true });
   const submit = trivia.getByRole('button', { name: 'Submit Answer' });
 
-  await option.click();
-  if ((await option.getAttribute('class'))?.includes('btn-primary') !== true) {
+  await expect.poll(async () => {
     await option.click();
-  }
+    return (await option.getAttribute('class'))?.includes('btn-primary') ?? false;
+  }).toBe(true);
   await expect(option).toHaveClass(/btn btn-primary/);
   await expect(submit).toBeEnabled();
   await submit.click();
