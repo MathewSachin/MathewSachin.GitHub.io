@@ -80,13 +80,13 @@ test('formatJson: preserves boolean and null values', () => {
 test('formatJson: falls back to String(error) for non-Error throws', () => {
   const originalParse = JSON.parse
   JSON.parse = (() => {
-    throw undefined
+    throw { code: 'bad-json' }
   }) as typeof JSON.parse
 
   try {
     const { output, error } = formatJson('{"a":1}', 2)
     assert.equal(output, '')
-    assert.equal(error, 'undefined')
+    assert.equal(error, '[object Object]')
   } finally {
     JSON.parse = originalParse
   }

@@ -96,13 +96,13 @@ test('processIon: toJson handles boolean and null', () => {
 test('processIon: falls back to String(error) for non-Error throws', () => {
   const originalStringify = JSON.stringify
   JSON.stringify = (() => {
-    throw undefined
+    throw { code: 'stringify-failure' }
   }) as typeof JSON.stringify
 
   try {
     const { output, error } = processIon('{name:"Alice"}', 'toJson')
     assert.equal(output, '')
-    assert.equal(error, 'undefined')
+    assert.equal(error, '[object Object]')
   } finally {
     JSON.stringify = originalStringify
   }
