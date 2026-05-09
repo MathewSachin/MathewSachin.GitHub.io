@@ -17,19 +17,19 @@ const UPLOAD_RETRY_TIMEOUT_MS = 5000;
 async function uploadFile(
   page: Page,
   file: { name: string; mimeType: string; buffer: Buffer },
-  readyCheck: () => Promise<void>
+  assertReady: () => Promise<void>
 ) {
   const dropZone = page.locator('#drop-zone');
-  let filesSet = false;
+  let uploadAttempted = false;
   await expect(async () => {
-    if (!filesSet) {
+    if (!uploadAttempted) {
       const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_TIMEOUT_MS });
       await dropZone.click();
       const fileChooser = await fileChooserPromise;
       await fileChooser.setFiles(file);
-      filesSet = true;
+      uploadAttempted = true;
     }
-    await readyCheck();
+    await assertReady();
   }).toPass({ timeout: UPLOAD_RETRY_TIMEOUT_MS });
 }
 
