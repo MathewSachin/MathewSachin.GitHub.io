@@ -59,6 +59,9 @@ export default defineConfig({
   },
   image: {
     service: { entrypoint: 'astro/assets/services/sharp' },
-    responsiveStyles: true
+    responsiveStyles: true,
+    // Required after Astro 6.3.x for processing repository-managed SVG assets.
+    // Do not use untrusted/user-provided SVG inputs.
+    dangerouslyProcessSVG: true,
   },
 });
