@@ -6,8 +6,7 @@ test.describe('Scratchpad tool', () => {
     await gotoAndWaitForReady(page, '/tools/scratchpad/', page.locator('#scratchpad'));
     // Clear any saved state from previous tests
     await page.evaluate(() => localStorage.removeItem('scratchpad-v1'));
-    await page.reload();
-    await expect(page.locator('#scratchpad')).toBeVisible();
+    await gotoAndWaitForReady(page, '/tools/scratchpad/', page.locator('#scratchpad'));
   });
 
   test('updates word and character count on input', async ({ page }) => {
