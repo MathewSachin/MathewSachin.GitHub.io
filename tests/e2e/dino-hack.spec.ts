@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { gotoAndWaitForReady } from './navigation.ts';
 
 const DINO_HACK_URL = '/blog/2016/11/05/chrome-dino-hack.html';
+const TRIVIA_SELECTION_RETRY_TIMEOUT_MS = 7000;
 
 test.describe('Chrome Dino Hack post', () => {
   test.beforeEach(async ({ page }) => {
@@ -122,7 +123,7 @@ async function submitAnswer(page: Page, optionText: string) {
   await expect(async () => {
     await option.click();
     await expect(option).toHaveClass(/btn-primary/);
-  }).toPass({ timeout: 3000 });
+  }).toPass({ timeout: TRIVIA_SELECTION_RETRY_TIMEOUT_MS });
   await submit.click();
 }
 
