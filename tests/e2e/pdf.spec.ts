@@ -11,6 +11,9 @@ const PLAIN_PDF_BYTES = Buffer.from(
   'trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF\n'
 );
 
+const FILE_CHOOSER_WAIT_MS = 1000;
+const UPLOAD_RETRY_TIMEOUT_MS = 5000;
+
 async function uploadFile(
   page: Page,
   file: { name: string; mimeType: string; buffer: Buffer },
@@ -18,12 +21,12 @@ async function uploadFile(
 ) {
   const dropZone = page.locator('#drop-zone');
   await expect(async () => {
-    const fileChooserPromise = page.waitForEvent('filechooser', { timeout: 1000 });
+    const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_WAIT_MS });
     await dropZone.click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(file);
     await readyCheck();
-  }).toPass({ timeout: 5000 });
+  }).toPass({ timeout: UPLOAD_RETRY_TIMEOUT_MS });
 }
 
 test.describe('PDF Password Tool', () => {
