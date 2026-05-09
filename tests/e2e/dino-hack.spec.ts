@@ -116,8 +116,16 @@ const Q_WRONG   = ['3', 'Enter', '100', 'Runner.prototype.start',    '50'];
 /** Select an option and click "Submit Answer" inside the trivia component. */
 async function submitAnswer(page: Page, optionText: string) {
   const trivia = page.locator('.trivia-challenge');
-  await trivia.getByRole('button', { name: optionText, exact: true }).click();
-  await trivia.getByRole('button', { name: 'Submit Answer' }).click();
+  const option = trivia.getByRole('button', { name: optionText, exact: true });
+  const submit = trivia.getByRole('button', { name: 'Submit Answer' });
+
+  await option.click();
+  if ((await option.getAttribute('class'))?.includes('btn-primary') !== true) {
+    await option.click();
+  }
+  await expect(option).toHaveClass(/btn btn-primary/);
+  await expect(submit).toBeEnabled();
+  await submit.click();
 }
 
 /** Answer one question then advance (Next Question / See Results). */
