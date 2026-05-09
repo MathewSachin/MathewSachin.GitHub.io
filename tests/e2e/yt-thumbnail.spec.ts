@@ -4,14 +4,22 @@ import { gotoAndWaitForReady } from './navigation.ts';
 async function clickGrabUntilHandled(page: Page) {
   const error = page.locator('#yt-error');
   const result = page.locator('#yt-result');
-
-  await expect.poll(async () => {
-    await page.locator('#grab-btn').click();
+  const isHandled = async () => {
     const hasError = await error.isVisible();
     const className = await result.getAttribute('class');
     const hasResult = !(className?.includes('d-none'));
     return hasError || hasResult;
-  }).toBe(true);
+  };
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.locator('#grab-btn').click();
+    try {
+      await expect.poll(isHandled, { timeout: 1000 }).toBe(true);
+      break;
+    } catch {
+      if (attempt === 2) throw new Error('Grab action was not handled');
+    }
+  }
 }
 
 test.describe('YouTube Thumbnail Grabber tool', () => {
@@ -87,11 +95,18 @@ test.describe('YouTube Thumbnail Grabber tool', () => {
     await input.fill('dQw4w9WgXcQ');
     await input.focus();
     const result = page.locator('#yt-result');
-    await expect.poll(async () => {
+    for (let attempt = 0; attempt < 3; attempt++) {
       await input.press('Enter');
-      const className = await result.getAttribute('class');
-      return !(className?.includes('d-none'));
-    }).toBe(true);
+      try {
+        await expect.poll(async () => {
+          const className = await result.getAttribute('class');
+          return !(className?.includes('d-none'));
+        }, { timeout: 1000 }).toBe(true);
+        break;
+      } catch {
+        if (attempt === 2) throw new Error('Enter key did not trigger thumbnail generation');
+      }
+    }
   });
 
   test('download button has correct filename stored', async ({ page }) => {
