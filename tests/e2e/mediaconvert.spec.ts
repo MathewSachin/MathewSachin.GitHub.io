@@ -51,7 +51,6 @@ test.describe('Media Converter tool', () => {
       await expect(page.locator('.alert-danger')).toBeVisible();
     });
 
-    await expect(page.locator('.alert-danger')).toBeVisible();
     await expect(page.locator('.alert-danger')).toContainText('video or audio');
   });
 
@@ -65,7 +64,6 @@ test.describe('Media Converter tool', () => {
     });
 
     const fileInfoTable = page.locator('.table-borderless');
-    await expect(fileInfoTable).toBeVisible();
     await expect(fileInfoTable).toContainText('sample.mp3');
   });
 
@@ -78,7 +76,6 @@ test.describe('Media Converter tool', () => {
       await expect(page.getByRole('button', { name: /Convert/i })).toBeVisible();
     });
 
-    await expect(page.getByRole('button', { name: /Convert/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Convert/i })).toBeEnabled();
   });
 
