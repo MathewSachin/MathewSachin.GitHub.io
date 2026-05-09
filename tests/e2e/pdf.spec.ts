@@ -16,6 +16,7 @@ const FILE_CHOOSER_TIMEOUT_MS = 3000;
 // Keeps retries bounded for click + chooser + upload verification.
 const UPLOAD_RETRY_TIMEOUT_MS = 5000;
 
+/** Retries drop-zone upload until post-upload assertions pass or timeout elapses. */
 async function uploadFile(
   page: Page,
   file: { name: string; mimeType: string; buffer: Buffer },
