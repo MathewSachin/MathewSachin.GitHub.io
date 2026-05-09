@@ -1,14 +1,15 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { gotoAndWaitForReady } from './navigation.ts';
 
-async function clickGrabUntilHandled(page: import('@playwright/test').Page) {
+async function clickGrabUntilHandled(page: Page) {
   const error = page.locator('#yt-error');
   const result = page.locator('#yt-result');
 
   await expect.poll(async () => {
     await page.locator('#grab-btn').click();
     const hasError = await error.isVisible();
-    const hasResult = await result.evaluate(el => !el.classList.contains('d-none'));
+    const className = await result.getAttribute('class');
+    const hasResult = !(className?.includes('d-none'));
     return hasError || hasResult;
   }).toBe(true);
 }
@@ -88,7 +89,8 @@ test.describe('YouTube Thumbnail Grabber tool', () => {
     const result = page.locator('#yt-result');
     await expect.poll(async () => {
       await input.press('Enter');
-      return await result.evaluate(el => !el.classList.contains('d-none'));
+      const className = await result.getAttribute('class');
+      return !(className?.includes('d-none'));
     }).toBe(true);
   });
 
