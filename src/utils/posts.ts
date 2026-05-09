@@ -89,39 +89,6 @@ export function formatDateUS(date: Date): string {
  * Centralises the common pattern: sortPostsByDate(await getCollection('blog')).
  */
 
-function normalizeBlogUrlPath(url: string): string {
-  return url
-    .replace(/^https?:\/\/[^/]+/i, '')
-    .replace(/\.html$/i, '')
-    .replace(/\/$/, '')
-    .toLowerCase();
-}
-
-let blogPostByUrlMapPromise: Promise<Map<string, CollectionEntry<'blog'>>> | undefined;
-
-async function getBlogPostByUrlMap(): Promise<Map<string, CollectionEntry<'blog'>>> {
-  if (!blogPostByUrlMapPromise) {
-    blogPostByUrlMapPromise = getCollection('blog').then(posts => {
-      const map = new Map<string, CollectionEntry<'blog'>>();
-      for (const post of posts) {
-        const basePath = normalizeBlogUrlPath(postUrlFromId(post.id));
-        map.set(basePath, post);
-      }
-      return map;
-    });
-  }
-  return blogPostByUrlMapPromise;
-}
-
-export async function getPostByUrl(url: string): Promise<CollectionEntry<'blog'>> {
-  const map = await getBlogPostByUrlMap();
-  const key = normalizeBlogUrlPath(url);
-  const post = map.get(key);
-  if (!post) {
-    throw new Error(`No blog post found for URL: ${url}`);
-  }
-  return post;
-}
 
 export async function getAllPosts(): Promise<CollectionEntry<'blog'>[]> {
   return sortPostsByDate(await getCollection('blog'));

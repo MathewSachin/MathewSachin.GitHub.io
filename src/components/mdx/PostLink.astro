@@ -1,13 +1,27 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import { postUrlFromSlug } from '@utils/posts';
 
 interface Props {
-  post: CollectionEntry<'blog'> | Promise<CollectionEntry<'blog'>>;
+  slug: string;
 }
 
-const { post: postProp } = Astro.props;
-const post = await postProp;
+const { slug } = Astro.props;
+const postsPromise = getCollection('blog');
+const normaliseSlugId = (value: string) => {
+  const match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
+  if (!match) return value;
+  const [, year, month, day, rest] = match;
+  return `${year}-${Number(month)}-${Number(day)}-${rest}`;
+};
+
+const posts = await postsPromise;
+const normalizedSlug = normaliseSlugId(slug);
+const post = posts.find(entry => normaliseSlugId(entry.id) === normalizedSlug);
+if (!post) {
+  throw new Error(`No blog post found for slug: ${slug}`);
+}
+
 const BASE = import.meta.env.BASE_URL;
 const href = `${BASE}${postUrlFromSlug(post.id).slice(1)}`;
 ---

@@ -8,7 +8,6 @@ related:
   - 2026-03-12-ai-blog-generation-flow
   - 2026-03-25-how-site-search-works
 ---
-import { getPostByUrl } from '@utils/posts';
 
 *Every push to this blog triggers a GitHub Actions build — Jekyll, Ruby gems, Node packages, libvips image processing, html-proofer. Without a custom Docker image, that build reinstalls the entire toolchain from scratch every single time. Here's how a pre-baked container image makes it fast.*
 
@@ -250,4 +249,4 @@ For this blog — Jekyll with `jekyll_picture_tag` requiring libvips — the 6-7
 
 The build is fast because the slow parts ran a long time ago, and the result is still sitting in a registry waiting to be pulled.
 
-*If you're also running a Jekyll site on GitHub Actions with custom plugins, the <PostLink post={getPostByUrl('/blog/2026/04/01/pr-preview-setup')} /> is worth reading alongside this one — together they cover the full CI pipeline this site uses.*
+*If you're also running a Jekyll site on GitHub Actions with custom plugins, the <PostLink slug="2026-4-1-pr-preview-setup" /> is worth reading alongside this one — together they cover the full CI pipeline this site uses.*

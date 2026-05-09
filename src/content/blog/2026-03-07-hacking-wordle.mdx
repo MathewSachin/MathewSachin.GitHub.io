@@ -11,7 +11,6 @@ related:
   - 2019-12-7-unhide-password-box
   - 2026-03-07-edit-webpage-inspect-element
 ---
-import { getPostByUrl } from '@utils/posts';
 import wordleHero from '@images/wordle-hero.svg';
 import wordleDevtoolsOpen from '@images/wordle-devtools-open.svg';
 import wordleNetworkTab from '@images/wordle-network-tab.svg';
@@ -38,7 +37,7 @@ This is the magic panel that web developers use to peek under the hood of any we
 
 <div class="alert alert-info">
   📱 <b>On a phone or tablet?</b> Mobile browsers don't have DevTools — but you can still hack Wordle using a bookmarklet. No computer needed!<br />
-  👉 <PostLink post={getPostByUrl('/blog/2026/03/19/hacking-wordle-mobile-bookmarklet')} />
+  👉 <PostLink slug="2026-3-19-hacking-wordle-mobile-bookmarklet" />
 </div>
 
 <Picture src={wordleDevtoolsOpen} alt="Browser window with DevTools panel open showing the Elements tab" />
@@ -112,4 +111,4 @@ You just used **browser developer tools** to intercept live data from a website 
 
 No coding required. No special software. Just you, your browser, and a little curiosity.
 
-*Want more browser tricks like this? Check out <PostLink post={getPostByUrl('/blog/2016/11/05/chrome-dino-hack')} /> for more fun ways to bend the web to your will, or try <PostLink post={getPostByUrl('/blog/2026/03/07/edit-webpage-inspect-element')} /> to see another clever DevTools trick!*
+*Want more browser tricks like this? Check out <PostLink slug="2016-11-5-chrome-dino-hack" /> for more fun ways to bend the web to your will, or try <PostLink slug="2026-3-7-edit-webpage-inspect-element" /> to see another clever DevTools trick!*
