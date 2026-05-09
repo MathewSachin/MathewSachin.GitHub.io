@@ -9,6 +9,7 @@ related:
   - 2026-04-01-pr-preview-setup
   - 2026-04-02-docker-faster-github-actions
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *GitHub Copilot can act as a coding agent: assign it to an issue and it opens a pull request with working code. This post shows how to trigger that automatically from a GitHub Actions workflow — including the one token setup step that isn't obvious.*
 
@@ -160,7 +161,7 @@ activityDiagram
   }
 `} />
 
-The <PostLink url="/blog/2026/03/12/ai-blog-generation-flow" text="AI blog generation flow overview" /> covers the broader picture of how posts go from Copilot's PR to a live Jekyll page on GitHub Pages.
+The <PostLink post={getPostByUrl('/blog/2026/03/12/ai-blog-generation-flow')} /> covers the broader picture of how posts go from Copilot's PR to a live Jekyll page on GitHub Pages.
 
 ## Troubleshooting
 

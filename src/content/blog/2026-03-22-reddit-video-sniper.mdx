@@ -11,6 +11,7 @@ related:
   - 2026-03-22-instagram-story-sniper
   - 2026-03-07-edit-webpage-inspect-element
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *Reddit has no download button for native videos. This script exploits Reddit's own public JSON API to pull the direct MP4 link — no re-encoding, no waiting, no third-party services required.*
 
@@ -106,7 +107,7 @@ Your browser will open a new tab or trigger a download prompt for the `.mp4` fil
 
 ## How the Code Works
 
-This script takes a fundamentally different approach from the <PostLink url="/blog/2026/03/21/instagram-reel-sniper" text="Instagram Reel Sniper" /> or <PostLink url="/blog/2026/03/21/youtube-shorts-sniper" text="YouTube Shorts Sniper" />, which use `captureStream` and `MediaRecorder` to re-record the video as it plays. The Reddit approach is a **direct URL extraction** — no re-encoding, just retrieving the link that Reddit already knows about.
+This script takes a fundamentally different approach from the <PostLink post={getPostByUrl('/blog/2026/03/21/instagram-reel-sniper')} /> or <PostLink post={getPostByUrl('/blog/2026/03/21/youtube-shorts-sniper')} />, which use `captureStream` and `MediaRecorder` to re-record the video as it plays. The Reddit approach is a **direct URL extraction** — no re-encoding, just retrieving the link that Reddit already knows about.
 
 ### Step 1: Sanitizing the URL
 
@@ -196,7 +197,7 @@ This script's approach is architecturally distinct from the recorder-based scrip
 | **Audio** | Video-only (DASH separation) | Audio included (stream is already merged) |
 | **Why different** | Reddit publicly exposes metadata via `.json` API | Other platforms do not expose direct CDN links |
 
-The <PostLink url="/blog/2026/03/21/twitter-x-video-sniper" text="Twitter/X Video Sniper" /> has a Method 2 (High-Res Scraper) that also extracts a direct URL via React internals — that's the closest conceptual equivalent. The Reddit approach is simpler because the metadata is available through an official public endpoint rather than internal component state.
+The <PostLink post={getPostByUrl('/blog/2026/03/21/twitter-x-video-sniper')} /> has a Method 2 (High-Res Scraper) that also extracts a direct URL via React internals — that's the closest conceptual equivalent. The Reddit approach is simpler because the metadata is available through an official public endpoint rather than internal component state.
 
 ---
 
@@ -211,7 +212,7 @@ The <PostLink url="/blog/2026/03/21/twitter-x-video-sniper" text="Twitter/X Vide
 | File saves as `Reddit_Post_abc123.mp4` but won't play | Incomplete download or corrupt file | Re-run the script; if the issue persists, the CDN URL may have changed |
 | Download doesn't start | Browser blocked the `<a>.click()` | Allow pop-ups / automatic downloads for reddit.com in browser settings |
 
-*Using the same browser-only approach, you can also <PostLink url="/blog/2026/03/21/instagram-reel-sniper" text="download Instagram Reels" />, <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="download Instagram Stories" />, <PostLink url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" />, <PostLink url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" />, and <PostLink url="/blog/2026/03/21/save-instagram-photos" text="save Instagram photos" />.*
+*Using the same browser-only approach, you can also <PostLink post={getPostByUrl('/blog/2026/03/21/instagram-reel-sniper')} />, <PostLink post={getPostByUrl('/blog/2026/03/22/instagram-story-sniper')} />, <PostLink post={getPostByUrl('/blog/2026/03/21/youtube-shorts-sniper')} />, <PostLink post={getPostByUrl('/blog/2026/03/21/twitter-x-video-sniper')} />, and <PostLink post={getPostByUrl('/blog/2026/03/21/save-instagram-photos')} />.*
 
 ---
 

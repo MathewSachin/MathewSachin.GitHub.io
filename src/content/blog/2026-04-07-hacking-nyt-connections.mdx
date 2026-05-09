@@ -11,6 +11,7 @@ related:
   - 2016-11-5-chrome-dino-hack
   - 2026-03-20-cookie-clicker-hacks
 ---
+import { getPostByUrl } from '@utils/posts';
 import nytConnectionsNetworkTab from '@images/nyt-connections-network-tab.png';
 
 
@@ -141,4 +142,4 @@ The entire script is wrapped in an **Immediately Invoked Function Expression** â
 
 ---
 
-*Want to go further with NYT browser tricks? See <PostLink url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle: Solve It in One Try" /> for the same network-sniffing technique applied to Wordle, or <PostLink url="/blog/2026/03/22/reddit-video-sniper" text="Reddit Video Sniper" /> for another public JSON API exploit.*
+*Want to go further with NYT browser tricks? See <PostLink post={getPostByUrl('/blog/2026/03/07/hacking-wordle')} /> for the same network-sniffing technique applied to Wordle, or <PostLink post={getPostByUrl('/blog/2026/03/22/reddit-video-sniper')} /> for another public JSON API exploit.*

@@ -6,6 +6,7 @@ related:
   - 2017-7-28-mixing-audio
   - 2023-04-09-captura-unmaintained
 ---
+import { getPostByUrl } from '@utils/posts';
 
 <div class="alert alert-warning">
   ⚠️ <b>Disclaimer:</b> Piping to ffmpeg is <b>not the most reliable method</b> for recording. Because pipes do not support variable frame rate, ffmpeg must receive frames at a perfectly steady rate — any hiccup in your application will cause <b>frame drops</b>, <b>audio/video desync</b>, or a corrupted output file. For production-quality recording, consider using ffmpeg's <code>gdigrab</code>/<code>x11grab</code> capture sources or writing to an intermediate container instead of a live pipe.
@@ -13,7 +14,7 @@ related:
 
 FFmpeg is a great tool for working with media of all kinds.
 In this post, I will demonstrate how images and audio can be piped to **ffmpeg.exe** from C#.
-If you need to mix audio from multiple sources before piping, check out <PostLink url="/blog/2017/07/28/mixing-audio" text="my audio mixing post" />.
+If you need to mix audio from multiple sources before piping, check out <PostLink post={getPostByUrl('/blog/2017/07/28/mixing-audio')} />.
 
 We launch **ffmpeg.exe** as a child process using the `System.Diagnostics.Process` class, with `UseShellExecute = false` and `CreateNoWindow = true` so that no console window appears.
 

@@ -14,6 +14,7 @@ related:
   - 2019-12-7-unhide-password-box
   - 2016-11-5-chrome-dino-hack
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *Instagram prevents right-clicking on photos and dragging them to your desktop. This script strips those CSS restrictions — and keeps stripping them as you scroll and new posts load — no extensions or third-party sites required.*
 
@@ -243,7 +244,7 @@ Platforms restrict right-clicking and image saving for a few reasons:
 
 None of these measures prevent the browser from downloading the image — they only restrict what you can do with it once it's rendered on screen. The image data is already on your machine the moment it appears in your browser.
 
-*Using the same browser-only approach, you can also <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="download Instagram Stories" />, <PostLink url="/blog/2026/03/21/instagram-reel-sniper" text="download Instagram Reels" />, <PostLink url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" />, and <PostLink url="/blog/2026/03/21/twitter-x-video-sniper" text="download Twitter/X videos" />.*
+*Using the same browser-only approach, you can also <PostLink post={getPostByUrl('/blog/2026/03/22/instagram-story-sniper')} />, <PostLink post={getPostByUrl('/blog/2026/03/21/instagram-reel-sniper')} />, <PostLink post={getPostByUrl('/blog/2026/03/21/youtube-shorts-sniper')} />, and <PostLink post={getPostByUrl('/blog/2026/03/21/twitter-x-video-sniper')} />.*
 
 ---
 

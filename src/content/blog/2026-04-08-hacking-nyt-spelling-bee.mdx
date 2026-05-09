@@ -11,6 +11,7 @@ related:
   - 2026-03-20-cookie-clicker-hacks
   - 2026-03-19-brute-force-dark-mode
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *NYT Spelling Bee loads the full answer list — every valid word and every pangram — into a JavaScript variable on the page before you type a single letter. One console command reads it all back out, and a bookmarklet turns that into a floating panel you can tap on mobile.*
 
@@ -138,7 +139,7 @@ if (!d) return alert("Game data not found!");
 
 When the Spelling Bee page loads, the game's own JavaScript writes the full puzzle payload into `window.gameData` — a property on the global `window` object. This is a common pattern in server-side-rendered apps: the server bakes the data into the page as a JavaScript assignment so the client-side game can read it without an extra network round-trip.
 
-Unlike the <PostLink url="/blog/2026/04/07/hacking-nyt-connections" text="NYT Connections hack" /> — which fetches the answers from a separate JSON endpoint — there's no network request to sniff here. The data is already in memory by the time the page finishes loading. `window.gameData.today.answers` is an alphabetically sorted array of every valid word; `window.gameData.today.pangrams` is the subset that use all seven letters.
+Unlike the <PostLink post={getPostByUrl('/blog/2026/04/07/hacking-nyt-connections')} /> — which fetches the answers from a separate JSON endpoint — there's no network request to sniff here. The data is already in memory by the time the page finishes loading. `window.gameData.today.answers` is an alphabetically sorted array of every valid word; `window.gameData.today.pangrams` is the subset that use all seven letters.
 
 The guard `if (!d)` handles the edge case where the script runs before the game has initialised (for example, on a reload that's still in progress) — it aborts with a clear message rather than throwing a cryptic `TypeError`.
 
@@ -196,4 +197,4 @@ The entire script is an **Immediately Invoked Function Expression**. All variabl
 
 ---
 
-*For more NYT game tricks, see <PostLink url="/blog/2026/04/07/hacking-nyt-connections" text="Hacking NYT Connections" /> for a network-sniffing approach, or <PostLink url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle" /> for reading game state out of localStorage.*
+*For more NYT game tricks, see <PostLink post={getPostByUrl('/blog/2026/04/07/hacking-nyt-connections')} /> for a network-sniffing approach, or <PostLink post={getPostByUrl('/blog/2026/03/07/hacking-wordle')} /> for reading game state out of localStorage.*

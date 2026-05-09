@@ -10,6 +10,7 @@ related:
   - 2026-03-20-cookie-clicker-hacks
   - 2019-12-7-unhide-password-box
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *What if you could guarantee a safe first click in Minesweeper — every single time? No guessing, no luck. Just a tiny script that takes over the browser's random number generator and stacks the deck in your favour.*
 
@@ -169,4 +170,4 @@ Without the `if (fakeRandom >= 1) fakeRandom = 0` line, the counter would eventu
 
 Now go enjoy your (totally legitimate) winning streak! 🏆
 
-*Enjoyed this? Check out <PostLink url="/blog/2016/11/05/chrome-dino-hack" text="Hacking the Chrome Dino Game" />, <PostLink url="/blog/2026/03/20/hacking-typeracer" text="Hacking TypeRacer" />, or <PostLink url="/blog/2026/03/07/hacking-wordle" text="Hacking Wordle" /> for more fun browser tricks.*
+*Enjoyed this? Check out <PostLink post={getPostByUrl('/blog/2016/11/05/chrome-dino-hack')} />, <PostLink post={getPostByUrl('/blog/2026/03/20/hacking-typeracer')} />, or <PostLink post={getPostByUrl('/blog/2026/03/07/hacking-wordle')} /> for more fun browser tricks.*

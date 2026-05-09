@@ -6,6 +6,7 @@ related:
   - 2017-7-28-ffmpeg-pipe-csharp
   - 2023-04-09-captura-unmaintained
 ---
+import { getPostByUrl } from '@utils/posts';
 
 This post shows how to mix audio from Microphone input and Speaker output (obtained using WASAPI Loopback) on Windows using ManagedBass.
 We'll be using the BassMix addon along with built-in support for recording and WASAPI Loopback.
@@ -202,4 +203,4 @@ Bass.CurrentRecordingDevice = LoopbackDeviceIndex;
 Bass.RecordFree();
 ```
 
-Once you have the raw mixed audio data, you can pipe it to FFmpeg for encoding — see <PostLink url="/blog/2017/07/28/ffmpeg-pipe-csharp" text="my C# FFmpeg piping post" /> for how to do that.
+Once you have the raw mixed audio data, you can pipe it to FFmpeg for encoding — see <PostLink post={getPostByUrl('/blog/2017/07/28/ffmpeg-pipe-csharp')} /> for how to do that.

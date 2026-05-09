@@ -13,6 +13,7 @@ related:
   - 2026-03-07-edit-webpage-inspect-element
   - 2019-12-7-unhide-password-box
 ---
+import { getPostByUrl } from '@utils/posts';
 import whatsappDevtoolsHero from '@images/whatsapp-devtools-hero.svg';
 
 
@@ -217,9 +218,9 @@ These same principles generalise to almost every website you visit. The Network 
 
 If you want to go further:
 
-- <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="Instagram Story Sniper" /> — downloads disappearing Stories by reading React's internal fiber tree
-- <PostLink url="/blog/2026/03/21/save-instagram-photos" text="Save Instagram Photos" /> — removes Instagram's right-click block with a MutationObserver
-- <PostLink url="/blog/2026/03/21/twitter-x-video-sniper" text="Twitter/X Video Sniper" /> — captures HLS streams that never appear as a single file in the Network tab
+- <PostLink post={getPostByUrl('/blog/2026/03/22/instagram-story-sniper')} /> — downloads disappearing Stories by reading React's internal fiber tree
+- <PostLink post={getPostByUrl('/blog/2026/03/21/save-instagram-photos')} /> — removes Instagram's right-click block with a MutationObserver
+- <PostLink post={getPostByUrl('/blog/2026/03/21/twitter-x-video-sniper')} /> — captures HLS streams that never appear as a single file in the Network tab
 
 **So — what website do you want to inspect next?** Drop the URL in the comments and let's take a look under the hood together.
 

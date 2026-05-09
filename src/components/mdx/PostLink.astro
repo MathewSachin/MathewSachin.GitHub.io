@@ -1,37 +1,17 @@
 ---
-/**
- * PostLink.astro
- * MDX replacement for {% include post_link.html url="..." text="..." %}
- *
- * Props:
- *   url  - post URL, e.g. /blog/2026/03/07/hacking-wordle
- *          Automatically converted to .html form for navigation.
- *   text - Optional link text. When omitted the post title is used
- *          (look-up not implemented; falls back to the slug).
- */
+import type { CollectionEntry } from 'astro:content';
+import { postUrlFromSlug } from '@utils/posts';
 
 interface Props {
-  url: string;
-  text?: string;
+  post: CollectionEntry<'blog'> | Promise<CollectionEntry<'blog'>>;
 }
 
-const { url, text } = Astro.props;
+const { post: postProp } = Astro.props;
+const post = await postProp;
 const BASE = import.meta.env.BASE_URL;
-
-// Normalise url: strip trailing slash, ensure .html suffix
-const normalised = url.replace(/\/$/, '').replace(/\.html$/, '') + '.html';
-const href = `${BASE}${normalised.replace(/^\//, '')}`;
-
-// Derive display text from the slug if not supplied
-function slugToTitle(u: string): string {
-  const parts = u.split('/');
-  const slug = parts[parts.length - 1].replace(/\.html$/, '');
-  return slug
-    .split('-')
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
-const linkText = text ?? slugToTitle(url);
+const href = `${BASE}${postUrlFromSlug(post.id).slice(1)}`;
 ---
-<a href={href}>{linkText}</a>
+<a href={href} style={post.data.accent_color ? `color: ${post.data.accent_color};` : undefined}>
+  {post.data.icon && <i class={`${post.data.icon} me-1`} aria-hidden="true"></i>}
+  {post.data.title}
+</a>

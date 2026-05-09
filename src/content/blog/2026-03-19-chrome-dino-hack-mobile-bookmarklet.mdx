@@ -9,12 +9,13 @@ related:
   - 2026-03-07-hacking-wordle
   - 2026-03-07-edit-webpage-inspect-element
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *You've found the Chrome Dino hack — but your phone doesn't have DevTools. No problem. There's a trick that works entirely from your mobile browser.*
 
 ---
 
-The <PostLink url="/blog/2016/11/05/chrome-dino-hack" text="classic Dino hacks" /> rely on the Chrome Developer Console to run JavaScript. On a desktop that's one keyboard shortcut away, but on a phone or tablet the console simply isn't available. That's where **bookmarklets** come in.
+The <PostLink post={getPostByUrl('/blog/2016/11/05/chrome-dino-hack')} /> rely on the Chrome Developer Console to run JavaScript. On a desktop that's one keyboard shortcut away, but on a phone or tablet the console simply isn't available. That's where **bookmarklets** come in.
 
 ## What Is a Bookmarklet?
 
@@ -88,4 +89,4 @@ Or simply refresh the page to start fresh.
 
 ---
 
-Want to go further? Check out the full <PostLink url="/blog/2016/11/05/chrome-dino-hack" text="Chrome Dino Hack guide" /> for speed control, score manipulation, auto-play, and more tricks you can use on desktop!
+Want to go further? Check out the full <PostLink post={getPostByUrl('/blog/2016/11/05/chrome-dino-hack')} /> for speed control, score manipulation, auto-play, and more tricks you can use on desktop!

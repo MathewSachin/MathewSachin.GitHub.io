@@ -10,6 +10,7 @@ related:
   - 2026-03-07-hacking-wordle
   - 2026-03-07-edit-webpage-inspect-element
 ---
+import { getPostByUrl } from '@utils/posts';
 
 *Sometimes the most elegant software architecture is just finding the backdoor the developer forgot to close — or in this case, the one they intentionally left wide open.*
 
@@ -144,4 +145,4 @@ Want to write your own bookmarklets? The [Bookmarklet Compiler](/tools/bookmarkl
 
 Enjoy your mountains of cookies — however you choose to earn them!
 
-*Enjoyed this? Check out <PostLink url="/blog/2016/11/05/chrome-dino-hack" text="Hacking the Chrome Dino Game" />, <PostLink url="/blog/2026/03/20/hacking-minesweeper-online" text="Hacking Minesweeper Online" />, or <PostLink url="/blog/2026/03/20/hacking-typeracer" text="Hacking TypeRacer" /> for more browser tricks.*
+*Enjoyed this? Check out <PostLink post={getPostByUrl('/blog/2016/11/05/chrome-dino-hack')} />, <PostLink post={getPostByUrl('/blog/2026/03/20/hacking-minesweeper-online')} />, or <PostLink post={getPostByUrl('/blog/2026/03/20/hacking-typeracer')} /> for more browser tricks.*
