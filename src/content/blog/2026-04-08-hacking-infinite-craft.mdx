@@ -260,10 +260,10 @@ header.onclick = function() {
 };
 ```
 
-The same collapsible-panel pattern used in the <PostLink url="/blog/2026/04/08/hacking-nyt-strands" text="Strands" /> and <PostLink url="/blog/2026/04/08/hacking-nyt-spelling-bee" text="Spelling Bee" /> helpers. `isOpen` is a boolean that flips on every header click. `display: none` / `"block"` is the cheapest possible show/hide — no animation overhead, no layout reflow of other elements. The chevron syncs with the state for a clear visual affordance.
+The same collapsible-panel pattern used in the <PostLink slug="2026-04-08-hacking-nyt-strands" /> and <PostLink slug="2026-04-08-hacking-nyt-spelling-bee" /> helpers. `isOpen` is a boolean that flips on every header click. `display: none` / `"block"` is the cheapest possible show/hide — no animation overhead, no layout reflow of other elements. The chevron syncs with the state for a clear visual affordance.
 
 ---
 
 *The fetch monkey-patch is the most powerful technique in this series so far — rather than reading what a server says, you replace what it says entirely. The same pattern works on any site that relies on `window.fetch` for its core loop: queue a fake response, trigger a call, and the game doesn't know the difference.*
 
-*For a gentler form of API exploitation — reading answers without injecting anything — see <PostLink url="/blog/2026/04/07/hacking-nyt-connections" text="Hacking NYT Connections" /> or <PostLink url="/blog/2026/04/08/hacking-nyt-strands" text="Hacking NYT Strands" />.*
+*For a gentler form of API exploitation — reading answers without injecting anything — see <PostLink slug="2026-04-07-hacking-nyt-connections" /> or <PostLink slug="2026-04-08-hacking-nyt-strands" />.*

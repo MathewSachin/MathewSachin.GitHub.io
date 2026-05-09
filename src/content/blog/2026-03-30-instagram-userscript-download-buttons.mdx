@@ -13,7 +13,7 @@ related:
   - 2026-03-21-twitter-x-video-sniper
 ---
 
-*The three earlier Instagram posts — <PostLink url="/blog/2026/03/21/save-instagram-photos" text="photo saving" />, <PostLink url="/blog/2026/03/21/instagram-reel-sniper" text="reel downloading" />, and <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="story downloading" /> — each require you to open the browser console, paste a snippet, and press Enter every single time you want to save something. This post bundles all three techniques into one persistent userscript that injects a **⬇ button** directly into the Instagram UI — no console, no paste, no repeat setup.*
+*The three earlier Instagram posts — <PostLink slug="2026-03-21-save-instagram-photos" />, <PostLink slug="2026-03-21-instagram-reel-sniper" />, and <PostLink slug="2026-03-22-instagram-story-sniper" /> — each require you to open the browser console, paste a snippet, and press Enter every single time you want to save something. This post bundles all three techniques into one persistent userscript that injects a **⬇ button** directly into the Instagram UI — no console, no paste, no repeat setup.*
 
 ---
 
@@ -489,7 +489,7 @@ async function scrapeReactFiber(startEl) {
 }
 ```
 
-Every DOM element rendered by React has a hidden property whose name starts with `__reactFiber$` or `__reactProps$` (followed by a random suffix that changes with each React build). This property holds the component's internal state — including the CDN URLs Instagram retrieved from its servers. The scraper walks up the DOM from the target element, finds these hidden properties, and crawls their object trees looking for `.mp4`, `.jpg`, or `.webp` URLs. This approach is shared by both the photo handler and the story handler; it comes directly from the <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="Story Sniper" />.
+Every DOM element rendered by React has a hidden property whose name starts with `__reactFiber$` or `__reactProps$` (followed by a random suffix that changes with each React build). This property holds the component's internal state — including the CDN URLs Instagram retrieved from its servers. The scraper walks up the DOM from the target element, finds these hidden properties, and crawls their object trees looking for `.mp4`, `.jpg`, or `.webp` URLs. This approach is shared by both the photo handler and the story handler; it comes directly from the <PostLink slug="2026-03-22-instagram-story-sniper" />.
 
 When multiple resolutions are present (Instagram often includes several), the scraper ranks them by `width × height` and returns the largest.
 
@@ -514,7 +514,7 @@ Every click handler disables its button at the start of the operation and re-ena
 const blobUrl = await recordReel(videoEl);
 ```
 
-The Fiber scraper does not always find a CDN URL for Reels — Instagram sometimes serves the video in encrypted segments or keeps the URL deeper in the fiber tree than the scraper can reach. In that case the Reel handler falls back to the approach from the <PostLink url="/blog/2026/03/21/instagram-reel-sniper" text="Reel Sniper" />: it calls `videoEl.captureStream()` and records the decoded frames with `MediaRecorder` (VP9 + Opus, 5 Mbps) as the video plays from the beginning. The result is a `.webm` file rather than the original `.mp4`, but it captures whatever the browser is actually displaying.
+The Fiber scraper does not always find a CDN URL for Reels — Instagram sometimes serves the video in encrypted segments or keeps the URL deeper in the fiber tree than the scraper can reach. In that case the Reel handler falls back to the approach from the <PostLink slug="2026-03-21-instagram-reel-sniper" />: it calls `videoEl.captureStream()` and records the decoded frames with `MediaRecorder` (VP9 + Opus, 5 Mbps) as the video plays from the beginning. The result is a `.webm` file rather than the original `.mp4`, but it captures whatever the browser is actually displaying.
 
 ### The Story Axis Fix
 
@@ -523,7 +523,7 @@ const dist = Math.abs(cx - (r.left + r.width / 2));
 if (r.left >= 0 && r.right <= window.innerWidth)
 ```
 
-Stories pre-load the previous and next stories **horizontally** — they sit off-screen to the left and right, outside the horizontal viewport bounds. The story handler measures horizontal distance to the viewport centre and only considers elements fully within the horizontal bounds, exactly as the <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="Story Sniper" /> does. This prevents the button from being attached to a pre-loaded off-screen story instead of the one you are actually viewing.
+Stories pre-load the previous and next stories **horizontally** — they sit off-screen to the left and right, outside the horizontal viewport bounds. The story handler measures horizontal distance to the viewport centre and only considers elements fully within the horizontal bounds, exactly as the <PostLink slug="2026-03-22-instagram-story-sniper" /> does. This prevents the button from being attached to a pre-loaded off-screen story instead of the one you are actually viewing.
 
 ### The SPA Navigation Watcher
 
@@ -585,7 +585,7 @@ A dedicated download button would need to reliably identify the correct post ima
 
 ---
 
-*For the individual console-based versions of each technique, see <PostLink url="/blog/2026/03/21/save-instagram-photos" text="Save Instagram Photos" />, <PostLink url="/blog/2026/03/21/instagram-reel-sniper" text="Instagram Reel Sniper" />, and <PostLink url="/blog/2026/03/22/instagram-story-sniper" text="Instagram Story Sniper" />. You can also <PostLink url="/blog/2026/03/22/reddit-video-sniper" text="download Reddit videos" /> and <PostLink url="/blog/2026/03/21/youtube-shorts-sniper" text="download YouTube Shorts" /> with the same browser-only approach.*
+*For the individual console-based versions of each technique, see <PostLink slug="2026-03-21-save-instagram-photos" />, <PostLink slug="2026-03-21-instagram-reel-sniper" />, and <PostLink slug="2026-03-22-instagram-story-sniper" />. You can also <PostLink slug="2026-03-22-reddit-video-sniper" /> and <PostLink slug="2026-03-21-youtube-shorts-sniper" /> with the same browser-only approach.*
 
 ---
 

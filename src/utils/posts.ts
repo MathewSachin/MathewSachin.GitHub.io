@@ -88,6 +88,8 @@ export function formatDateUS(date: Date): string {
  * Fetch all blog posts sorted by date descending (newest first).
  * Centralises the common pattern: sortPostsByDate(await getCollection('blog')).
  */
+
+
 export async function getAllPosts(): Promise<CollectionEntry<'blog'>[]> {
   return sortPostsByDate(await getCollection('blog'));
 }
