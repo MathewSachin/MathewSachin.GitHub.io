@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Scratchpad tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/scratchpad/');
+    await page.goto('/tools/scratchpad/', { waitUntil: 'domcontentloaded' });
     // Clear any saved state from previous tests
     await page.evaluate(() => localStorage.removeItem('scratchpad-v1'));
     await page.reload();

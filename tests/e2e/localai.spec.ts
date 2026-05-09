@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Local AI tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/localai/');
+    await page.goto('/tools/localai/', { waitUntil: 'domcontentloaded' });
   });
 
   test('page loads with correct title', async ({ page }) => {

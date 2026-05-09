@@ -10,7 +10,7 @@ const FAKE_VIDEO_BYTES = Buffer.from('not a real mp4 file');
 
 test.describe('Media Converter tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/mediaconvert/');
+    await page.goto('/tools/mediaconvert/', { waitUntil: 'domcontentloaded' });
   });
 
   test('page loads with correct title and drop zone', async ({ page }) => {

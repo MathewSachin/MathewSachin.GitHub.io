@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Hash Generator tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/hash/');
+    await page.goto('/tools/hash/', { waitUntil: 'domcontentloaded' });
   });
 
   test('auto-generates hashes on load using empty string', async ({ page }) => {

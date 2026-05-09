@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Timestamp tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/timestamp/');
+    await page.goto('/tools/timestamp/', { waitUntil: 'domcontentloaded' });
   });
 
   test('converts epoch seconds to date/time strings', async ({ page }) => {

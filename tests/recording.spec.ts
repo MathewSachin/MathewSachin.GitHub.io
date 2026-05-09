@@ -3,7 +3,7 @@ import { opfsMockScript, runRecordingPipeline, verifyWebmFile } from './captura-
 
 test('Full recording pipeline writes a WebM file to disk', async ({ page }) => {
   await page.addInitScript(opfsMockScript);
-  await page.goto('/tools/captura/');
+  await page.goto('/tools/captura/', { waitUntil: 'domcontentloaded' });
 
   await page.click('#pick-dir-btn');
 

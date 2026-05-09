@@ -4,7 +4,7 @@ const DINO_HACK_URL = '/blog/2016/11/05/chrome-dino-hack.html';
 
 test.describe('Chrome Dino Hack post', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(DINO_HACK_URL);
+    await page.goto(DINO_HACK_URL, { waitUntil: 'domcontentloaded' });
   });
 
   // ── Embedded game ──────────────────────────────────────────────────────────
@@ -146,7 +146,7 @@ test.describe('Trivia Challenge', () => {
   test.beforeEach(async ({ page }) => {
     // Clear any stored high score before each test.
     await page.addInitScript((key) => localStorage.removeItem(key), STORAGE_KEY);
-    await page.goto(DINO_HACK_URL);
+    await page.goto(DINO_HACK_URL, { waitUntil: 'domcontentloaded' });
   });
 
   // ── Initial render ──────────────────────────────────────────────────────────

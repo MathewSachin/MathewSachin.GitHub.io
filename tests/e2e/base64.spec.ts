@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Base64 tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/base64/');
+    await page.goto('/tools/base64/', { waitUntil: 'domcontentloaded' });
   });
 
   test('encodes plain text to Base64', async ({ page }) => {
