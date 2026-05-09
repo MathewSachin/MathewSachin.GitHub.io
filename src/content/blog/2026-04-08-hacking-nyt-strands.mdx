@@ -171,7 +171,7 @@ const todayStr = `${yyyy}-${mm}-${dd}`;
 
 `new Date()` gives the current local date and time. `getMonth()` returns a zero-based month index (0 = January), so `+ 1` corrects that. Both month and day are zero-padded to two digits with `padStart(2, '0')` — so April 8 becomes `"04"` and `"08"` rather than `"4"` and `"8"`. The result is a zero-padded `YYYY-MM-DD` string that matches the filename pattern the NYT API uses.
 
-This is a slightly different approach from the <PostLink slug="2026-4-7-hacking-nyt-connections" />, which used `new Date().toISOString().split('T')[0]`. That one-liner is terser but produces UTC date — it can return yesterday's date if you're in a timezone behind UTC and it's before midnight UTC. The explicit `getFullYear` / `getMonth` / `getDate` approach always uses your local clock, matching the puzzle NYT serves to your region.
+This is a slightly different approach from the <PostLink slug="2026-04-07-hacking-nyt-connections" />, which used `new Date().toISOString().split('T')[0]`. That one-liner is terser but produces UTC date — it can return yesterday's date if you're in a timezone behind UTC and it's before midnight UTC. The explicit `getFullYear` / `getMonth` / `getDate` approach always uses your local clock, matching the puzzle NYT serves to your region.
 
 ### Fetching the JSON Directly
 
@@ -182,7 +182,7 @@ if (!response.ok) throw new Error("Network response was not ok");
 const puzzleData = await response.json();
 ```
 
-Unlike <PostLink slug="2026-4-8-hacking-nyt-spelling-bee" /> — which bakes its answers into a `window.gameData` global — Strands does not expose its data in any JavaScript variable. The only way to read today's answers programmatically is to call the same JSON endpoint the game fetches in the Network tab. Because this script runs *in the context of the NYT page*, the browser automatically attaches any NYT session cookies to the request, satisfying the same-origin check. Running the same `fetch` from a different site would be blocked by CORS.
+Unlike <PostLink slug="2026-04-08-hacking-nyt-spelling-bee" /> — which bakes its answers into a `window.gameData` global — Strands does not expose its data in any JavaScript variable. The only way to read today's answers programmatically is to call the same JSON endpoint the game fetches in the Network tab. Because this script runs *in the context of the NYT page*, the browser automatically attaches any NYT session cookies to the request, satisfying the same-origin check. Running the same `fetch` from a different site would be blocked by CORS.
 
 `response.ok` is `true` for any HTTP 2xx status. If NYT changes the URL scheme or adds authentication, the thrown error surfaces immediately rather than producing a silent `undefined` downstream.
 
@@ -232,4 +232,4 @@ If you run the bookmarklet twice without reloading the page, this line detects t
 
 ---
 
-*For more NYT game tricks, see <PostLink slug="2026-4-8-hacking-nyt-spelling-bee" /> for reading answers from a global JavaScript variable, or <PostLink slug="2026-4-7-hacking-nyt-connections" /> for the same network-sniffing technique on the Connections puzzle.*
+*For more NYT game tricks, see <PostLink slug="2026-04-08-hacking-nyt-spelling-bee" /> for reading answers from a global JavaScript variable, or <PostLink slug="2026-04-07-hacking-nyt-connections" /> for the same network-sniffing technique on the Connections puzzle.*

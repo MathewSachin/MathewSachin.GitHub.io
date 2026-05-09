@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getEntry } from 'astro:content';
 import { postUrlFromSlug } from '@utils/posts';
 
 interface Props {
@@ -7,17 +7,7 @@ interface Props {
 }
 
 const { slug } = Astro.props;
-const postsPromise = getCollection('blog');
-const normaliseSlugId = (value: string) => {
-  const match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})-(.+)$/);
-  if (!match) return value;
-  const [, year, month, day, rest] = match;
-  return `${year}-${Number(month)}-${Number(day)}-${rest}`;
-};
-
-const posts = await postsPromise;
-const normalizedSlug = normaliseSlugId(slug);
-const post = posts.find(entry => normaliseSlugId(entry.id) === normalizedSlug);
+const post = await getEntry('blog', slug);
 if (!post) {
   throw new Error(`No blog post found for slug: ${slug}`);
 }

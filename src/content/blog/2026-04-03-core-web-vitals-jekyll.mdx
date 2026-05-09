@@ -88,7 +88,7 @@ Minifying HTML shaves kilobytes off every page. Minifying inlined CSS and JS (vi
 
 Ad injection is one of the most common causes of CLS. When Google's Auto Ads script runs and decides to insert a 250 px banner between two paragraphs, the entire page jumps. That registers as a layout shift.
 
-The fix is to reserve the space statically. The custom ad placement system on this site (covered in detail in <PostLink slug="2026-4-2-adsense-auto-vs-custom-placement" />) injects ad slots at build time, not runtime. The browser knows the slot exists and how tall it will be before the AdSense script runs. No jump, no CLS contribution.
+The fix is to reserve the space statically. The custom ad placement system on this site (covered in detail in <PostLink slug="2026-04-02-adsense-auto-vs-custom-placement" />) injects ad slots at build time, not runtime. The browser knows the slot exists and how tall it will be before the AdSense script runs. No jump, no CLS contribution.
 
 ```css
 .in-content-ad ins.adsbygoogle {
@@ -212,8 +212,8 @@ Every performance technique has a context where it helps and a context where it 
 
 ---
 
-*If you found this useful and want to dig into any of these implementations, the full build pipeline is covered in the <PostLink slug="2026-4-2-docker-faster-github-actions" />. Questions welcome in the comments.*
+*If you found this useful and want to dig into any of these implementations, the full build pipeline is covered in the <PostLink slug="2026-04-02-docker-faster-github-actions" />. Questions welcome in the comments.*
 
 ---
 
-*This post was generated with the assistance of AI as part of an <PostLink slug="2026-3-12-ai-blog-generation-flow" />. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
+*This post was generated with the assistance of AI as part of an <PostLink slug="2026-03-12-ai-blog-generation-flow" />. The research, curation, and editorial choices were made by an AI agent; any errors are its own.*
