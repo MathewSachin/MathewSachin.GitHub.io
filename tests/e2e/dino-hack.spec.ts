@@ -119,17 +119,10 @@ async function submitAnswer(page: Page, optionText: string) {
   const option = trivia.getByRole('button', { name: optionText, exact: true });
   const submit = trivia.getByRole('button', { name: 'Submit Answer' });
 
-  for (let attempt = 0; attempt < 3; attempt++) {
+  await expect(async () => {
     await option.click();
-    try {
-      await expect
-        .poll(async () => (await option.getAttribute('class'))?.includes('btn-primary') ?? false, { timeout: 1000 })
-        .toBe(true);
-      break;
-    } catch {
-      if (attempt === 2) throw new Error(`Failed to select trivia option "${optionText}"`);
-    }
-  }
+    await expect(option).toHaveClass(/btn-primary/);
+  }).toPass({ timeout: 3000 });
   await submit.click();
 }
 

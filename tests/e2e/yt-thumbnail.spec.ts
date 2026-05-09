@@ -11,15 +11,10 @@ async function clickGrabUntilHandled(page: Page) {
     return hasError || hasResult;
   };
 
-  for (let attempt = 0; attempt < 3; attempt++) {
+  await expect(async () => {
     await page.locator('#grab-btn').click();
-    try {
-      await expect.poll(isHandled, { timeout: 1000 }).toBe(true);
-      break;
-    } catch {
-      if (attempt === 2) throw new Error('Grab action was not handled');
-    }
-  }
+    await expect.poll(isHandled).toBe(true);
+  }).toPass({ timeout: 3000 });
 }
 
 test.describe('YouTube Thumbnail Grabber tool', () => {
@@ -95,18 +90,10 @@ test.describe('YouTube Thumbnail Grabber tool', () => {
     await input.fill('dQw4w9WgXcQ');
     await input.focus();
     const result = page.locator('#yt-result');
-    for (let attempt = 0; attempt < 3; attempt++) {
+    await expect(async () => {
       await input.press('Enter');
-      try {
-        await expect.poll(async () => {
-          const className = await result.getAttribute('class');
-          return !(className?.includes('d-none'));
-        }, { timeout: 1000 }).toBe(true);
-        break;
-      } catch {
-        if (attempt === 2) throw new Error('Enter key did not trigger thumbnail generation');
-      }
-    }
+      await expect(result).not.toHaveClass(/d-none/);
+    }).toPass({ timeout: 3000 });
   });
 
   test('download button has correct filename stored', async ({ page }) => {
