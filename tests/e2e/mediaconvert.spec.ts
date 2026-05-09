@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { gotoAndWaitForReady } from './navigation.ts';
 
 // Minimal fake audio buffer: audio/mpeg MIME with invalid content.
@@ -8,6 +8,21 @@ const FAKE_AUDIO_BYTES = Buffer.from('not a real mp3 file');
 
 // Minimal fake video buffer (video/mp4 MIME, invalid content).
 const FAKE_VIDEO_BYTES = Buffer.from('not a real mp4 file');
+
+async function uploadFile(
+  page: Page,
+  file: { name: string; mimeType: string; buffer: Buffer },
+  readyCheck: () => Promise<void>
+) {
+  const browseButton = page.getByRole('button', { name: /click to browse/i });
+  await expect(async () => {
+    const fileChooserPromise = page.waitForEvent('filechooser', { timeout: 1000 });
+    await browseButton.click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(file);
+    await readyCheck();
+  }).toPass({ timeout: 5000 });
+}
 
 test.describe('Media Converter tool', () => {
   test.beforeEach(async ({ page }) => {
@@ -28,14 +43,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('shows error when a non-media file is uploaded', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'test.txt',
       mimeType: 'text/plain',
       buffer: Buffer.from('hello world'),
+    }, async () => {
+      await expect(page.locator('.alert-danger')).toBeVisible();
     });
 
     await expect(page.locator('.alert-danger')).toBeVisible();
@@ -43,14 +56,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('uploading a media file shows the file info section', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'sample.mp3',
       mimeType: 'audio/mpeg',
       buffer: FAKE_AUDIO_BYTES,
+    }, async () => {
+      await expect(page.locator('.table-borderless')).toBeVisible();
     });
 
     const fileInfoTable = page.locator('.table-borderless');
@@ -59,14 +70,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('uploading a media file shows the convert button', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'sample.mp3',
       mimeType: 'audio/mpeg',
       buffer: FAKE_AUDIO_BYTES,
+    }, async () => {
+      await expect(page.getByRole('button', { name: /Convert/i })).toBeVisible();
     });
 
     await expect(page.getByRole('button', { name: /Convert/i })).toBeVisible();
@@ -74,14 +83,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('uploading an invalid media file shows a status error', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'sample.mp3',
       mimeType: 'audio/mpeg',
       buffer: FAKE_AUDIO_BYTES,
+    }, async () => {
+      await expect(page.locator('.alert-danger')).toBeVisible();
     });
 
     // mediabunny will fail to parse the fake file and show an error
@@ -89,14 +96,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('output format dropdown contains expected format options', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'sample.mp4',
       mimeType: 'video/mp4',
       buffer: FAKE_VIDEO_BYTES,
+    }, async () => {
+      await expect(page.locator('#output-format')).toBeVisible();
     });
 
     const select = page.locator('#output-format');
@@ -108,14 +113,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('video-only options are not shown for audio MIME files', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'sample.mp3',
       mimeType: 'audio/mpeg',
       buffer: FAKE_AUDIO_BYTES,
+    }, async () => {
+      await expect(page.locator('.table-borderless')).toBeVisible();
     });
 
     // hasVideo is false for this fake file, so video-specific checkboxes should be absent
@@ -130,14 +133,12 @@ test.describe('Media Converter tool', () => {
   });
 
   test('file size is shown in the file info table', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.getByRole('button', { name: /click to browse/i }).click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'sample.wav',
       mimeType: 'audio/wav',
       buffer: FAKE_AUDIO_BYTES,
+    }, async () => {
+      await expect(page.locator('.table-borderless')).toBeVisible();
     });
 
     const fileInfoTable = page.locator('.table-borderless');
