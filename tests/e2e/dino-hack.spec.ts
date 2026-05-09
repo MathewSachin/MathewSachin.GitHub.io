@@ -1,10 +1,12 @@
 import { test, expect, type Page } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 const DINO_HACK_URL = '/blog/2016/11/05/chrome-dino-hack.html';
+const TRIVIA_SELECTION_RETRY_TIMEOUT_MS = 7000;
 
 test.describe('Chrome Dino Hack post', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(DINO_HACK_URL);
+    await gotoAndWaitForReady(page, DINO_HACK_URL, page.locator('#speed-input'));
   });
 
   // ── Embedded game ──────────────────────────────────────────────────────────
@@ -115,8 +117,14 @@ const Q_WRONG   = ['3', 'Enter', '100', 'Runner.prototype.start',    '50'];
 /** Select an option and click "Submit Answer" inside the trivia component. */
 async function submitAnswer(page: Page, optionText: string) {
   const trivia = page.locator('.trivia-challenge');
-  await trivia.getByRole('button', { name: optionText, exact: true }).click();
-  await trivia.getByRole('button', { name: 'Submit Answer' }).click();
+  const option = trivia.getByRole('button', { name: optionText, exact: true });
+  const submit = trivia.getByRole('button', { name: 'Submit Answer' });
+
+  await expect(async () => {
+    await option.click();
+    await expect(option).toHaveClass(/btn-primary/);
+  }).toPass({ timeout: TRIVIA_SELECTION_RETRY_TIMEOUT_MS });
+  await submit.click();
 }
 
 /** Answer one question then advance (Next Question / See Results). */
@@ -146,7 +154,7 @@ test.describe('Trivia Challenge', () => {
   test.beforeEach(async ({ page }) => {
     // Clear any stored high score before each test.
     await page.addInitScript((key) => localStorage.removeItem(key), STORAGE_KEY);
-    await page.goto(DINO_HACK_URL);
+    await gotoAndWaitForReady(page, DINO_HACK_URL, page.locator('.trivia-challenge'));
   });
 
   // ── Initial render ──────────────────────────────────────────────────────────

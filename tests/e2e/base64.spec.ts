@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('Base64 tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/base64/');
+    await gotoAndWaitForReady(page, '/tools/base64/', page.locator('#text-input'));
   });
 
   test('encodes plain text to Base64', async ({ page }) => {

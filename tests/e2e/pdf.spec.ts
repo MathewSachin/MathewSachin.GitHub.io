@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 // Minimal valid unencrypted PDF (PDF 1.4, single empty page)
 const PLAIN_PDF_BYTES = Buffer.from(
@@ -10,9 +11,30 @@ const PLAIN_PDF_BYTES = Buffer.from(
   'trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF\n'
 );
 
+// CI can be slow to wire filechooser listeners after click.
+const FILE_CHOOSER_TIMEOUT_MS = 3000;
+// Keeps retries bounded for click + chooser + upload verification.
+const UPLOAD_RETRY_TIMEOUT_MS = 5000;
+
+/** Retries drop-zone upload until post-upload assertions pass or timeout elapses. */
+async function uploadFile(
+  page: Page,
+  file: { name: string; mimeType: string; buffer: Buffer },
+  verifyUploadComplete: () => Promise<void>
+) {
+  const dropZone = page.locator('#drop-zone');
+  await expect(async () => {
+    const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_TIMEOUT_MS });
+    await dropZone.click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(file);
+    await verifyUploadComplete();
+  }).toPass({ timeout: UPLOAD_RETRY_TIMEOUT_MS });
+}
+
 test.describe('PDF Password Tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/pdf/');
+    await gotoAndWaitForReady(page, '/tools/pdf/', page.locator('#drop-zone'));
   });
 
   test('page loads with correct title and drop zone', async ({ page }) => {
@@ -41,49 +63,37 @@ test.describe('PDF Password Tool', () => {
   });
 
   test('uploading a plain PDF enables the process button and selects Add Password mode', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.locator('#drop-zone').click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'test.pdf',
       mimeType: 'application/pdf',
       buffer: PLAIN_PDF_BYTES,
+    }, async () => {
+      await expect(page.locator('#process-btn')).toBeEnabled();
+      await expect(page.locator('#mode-add')).toBeChecked();
+      await expect(page.locator('#file-name')).toBeVisible();
     });
-
-    await expect(page.locator('#process-btn')).toBeEnabled({ timeout: 5000 });
-    await expect(page.locator('#mode-add')).toBeChecked();
-    await expect(page.locator('#file-name')).toBeVisible();
   });
 
   test('shows error when a non-PDF file is uploaded', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.locator('#drop-zone').click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'test.txt',
       mimeType: 'text/plain',
       buffer: Buffer.from('hello'),
+    }, async () => {
+      await expect(page.locator('#status-msg')).toBeVisible();
+      await expect(page.locator('#status-msg')).toContainText('PDF');
     });
-
-    await expect(page.locator('#status-msg')).toBeVisible();
-    await expect(page.locator('#status-msg')).toContainText('PDF');
   });
 
   test('shows error for invalid (non-PDF) file content', async ({ page }) => {
-    const [fileChooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      page.locator('#drop-zone').click(),
-    ]);
-    await fileChooser.setFiles({
+    await uploadFile(page, {
       name: 'fake.pdf',
       mimeType: 'application/pdf',
       buffer: Buffer.from('this is not a pdf'),
+    }, async () => {
+      await expect(page.locator('#status-msg')).toBeVisible();
+      await expect(page.locator('#status-msg')).toContainText('valid PDF');
     });
-
-    await expect(page.locator('#status-msg')).toBeVisible();
-    await expect(page.locator('#status-msg')).toContainText('valid PDF');
   });
 
   test('both user and owner password fields are visible in Add mode', async ({ page }) => {

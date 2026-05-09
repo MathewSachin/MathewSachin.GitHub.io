@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('Hash Generator tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/hash/');
+    await gotoAndWaitForReady(page, '/tools/hash/', page.locator('#hash-input'));
   });
 
   test('auto-generates hashes on load using empty string', async ({ page }) => {

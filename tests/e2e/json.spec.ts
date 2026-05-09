@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('JSON Formatter tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/json/');
+    await gotoAndWaitForReady(page, '/tools/json/', page.locator('#json-input'));
   });
 
   test('formats valid JSON with indentation', async ({ page }) => {
