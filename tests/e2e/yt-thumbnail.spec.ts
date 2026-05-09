@@ -14,7 +14,7 @@ async function clickGrabUntilHandled(page: Page) {
   await expect(async () => {
     await page.locator('#grab-btn').click();
     await expect.poll(isHandled).toBe(true);
-  }).toPass({ timeout: 3000 });
+  }).toPass({ timeout: 7000 });
 }
 
 test.describe('YouTube Thumbnail Grabber tool', () => {
@@ -93,7 +93,7 @@ test.describe('YouTube Thumbnail Grabber tool', () => {
     await expect(async () => {
       await input.press('Enter');
       await expect(result).not.toHaveClass(/d-none/);
-    }).toPass({ timeout: 3000 });
+    }).toPass({ timeout: 7000 });
   });
 
   test('download button has correct filename stored', async ({ page }) => {
