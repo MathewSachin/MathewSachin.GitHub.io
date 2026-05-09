@@ -11,7 +11,7 @@ const PLAIN_PDF_BYTES = Buffer.from(
   'trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF\n'
 );
 
-const FILE_CHOOSER_WAIT_MS = 1000;
+const FILE_CHOOSER_TIMEOUT_MS = 1000;
 const UPLOAD_RETRY_TIMEOUT_MS = 5000;
 
 async function uploadFile(
@@ -23,7 +23,7 @@ async function uploadFile(
   let filesSet = false;
   await expect(async () => {
     if (!filesSet) {
-      const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_WAIT_MS });
+      const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_TIMEOUT_MS });
       await dropZone.click();
       const fileChooser = await fileChooserPromise;
       await fileChooser.setFiles(file);
@@ -70,10 +70,9 @@ test.describe('PDF Password Tool', () => {
       buffer: PLAIN_PDF_BYTES,
     }, async () => {
       await expect(page.locator('#process-btn')).toBeEnabled();
+      await expect(page.locator('#mode-add')).toBeChecked();
+      await expect(page.locator('#file-name')).toBeVisible();
     });
-
-    await expect(page.locator('#mode-add')).toBeChecked();
-    await expect(page.locator('#file-name')).toBeVisible();
   });
 
   test('shows error when a non-PDF file is uploaded', async ({ page }) => {
