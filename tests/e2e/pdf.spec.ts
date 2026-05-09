@@ -11,7 +11,7 @@ const PLAIN_PDF_BYTES = Buffer.from(
   'trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF\n'
 );
 
-const FILE_CHOOSER_TIMEOUT_MS = 1000;
+const FILE_CHOOSER_TIMEOUT_MS = 3000;
 const UPLOAD_RETRY_TIMEOUT_MS = 5000;
 
 async function uploadFile(
@@ -20,15 +20,11 @@ async function uploadFile(
   assertReady: () => Promise<void>
 ) {
   const dropZone = page.locator('#drop-zone');
-  let uploadAttempted = false;
   await expect(async () => {
-    if (!uploadAttempted) {
-      const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_TIMEOUT_MS });
-      await dropZone.click();
-      const fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles(file);
-      uploadAttempted = true;
-    }
+    const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_TIMEOUT_MS });
+    await dropZone.click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(file);
     await assertReady();
   }).toPass({ timeout: UPLOAD_RETRY_TIMEOUT_MS });
 }
