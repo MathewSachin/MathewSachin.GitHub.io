@@ -11,13 +11,15 @@ const PLAIN_PDF_BYTES = Buffer.from(
   'trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF\n'
 );
 
+// CI can be slow to wire filechooser listeners after click.
 const FILE_CHOOSER_TIMEOUT_MS = 3000;
+// Keeps retries bounded for click + chooser + upload verification.
 const UPLOAD_RETRY_TIMEOUT_MS = 5000;
 
 async function uploadFile(
   page: Page,
   file: { name: string; mimeType: string; buffer: Buffer },
-  assertReady: () => Promise<void>
+  verifyUploadComplete: () => Promise<void>
 ) {
   const dropZone = page.locator('#drop-zone');
   await expect(async () => {
@@ -25,7 +27,7 @@ async function uploadFile(
     await dropZone.click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(file);
-    await assertReady();
+    await verifyUploadComplete();
   }).toPass({ timeout: UPLOAD_RETRY_TIMEOUT_MS });
 }
 
