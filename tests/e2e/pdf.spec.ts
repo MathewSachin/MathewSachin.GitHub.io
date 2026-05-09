@@ -20,11 +20,15 @@ async function uploadFile(
   readyCheck: () => Promise<void>
 ) {
   const dropZone = page.locator('#drop-zone');
+  let filesSet = false;
   await expect(async () => {
-    const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_WAIT_MS });
-    await dropZone.click();
-    const fileChooser = await fileChooserPromise;
-    await fileChooser.setFiles(file);
+    if (!filesSet) {
+      const fileChooserPromise = page.waitForEvent('filechooser', { timeout: FILE_CHOOSER_WAIT_MS });
+      await dropZone.click();
+      const fileChooser = await fileChooserPromise;
+      await fileChooser.setFiles(file);
+      filesSet = true;
+    }
     await readyCheck();
   }).toPass({ timeout: UPLOAD_RETRY_TIMEOUT_MS });
 }
