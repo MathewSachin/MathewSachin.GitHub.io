@@ -123,8 +123,6 @@ async function submitAnswer(page: Page, optionText: string) {
     await option.click();
     return (await option.getAttribute('class'))?.includes('btn-primary') ?? false;
   }).toBe(true);
-  await expect(option).toHaveClass(/btn btn-primary/);
-  await expect(submit).toBeEnabled();
   await submit.click();
 }
 
