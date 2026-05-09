@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('Local AI tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/localai/');
+    await gotoAndWaitForReady(page, '/tools/localai/', page.locator('#load-btn'));
   });
 
   test('page loads with correct title', async ({ page }) => {

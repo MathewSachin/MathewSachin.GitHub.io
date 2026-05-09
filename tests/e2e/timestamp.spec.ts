@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('Timestamp tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/timestamp/', { waitUntil: 'domcontentloaded' });
+    await gotoAndWaitForReady(page, '/tools/timestamp/', page.locator('#now-seconds'));
     const nowSeconds = page.locator('#now-seconds');
-    await expect(nowSeconds).toBeVisible();
     const initialNowSeconds = await nowSeconds.textContent();
     await expect
       .poll(async () => await nowSeconds.textContent(), { timeout: 7000 })

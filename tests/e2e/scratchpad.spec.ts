@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('Scratchpad tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/scratchpad/');
+    await gotoAndWaitForReady(page, '/tools/scratchpad/', page.locator('#scratchpad'));
     // Clear any saved state from previous tests
     await page.evaluate(() => localStorage.removeItem('scratchpad-v1'));
     await page.reload();
+    await expect(page.locator('#scratchpad')).toBeVisible();
   });
 
   test('updates word and character count on input', async ({ page }) => {

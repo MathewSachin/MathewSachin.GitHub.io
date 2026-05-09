@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 // Minimal fake audio buffer: audio/mpeg MIME with invalid content.
 // mediabunny will fail to parse it, triggering a "Could not read file" error,
@@ -10,7 +11,11 @@ const FAKE_VIDEO_BYTES = Buffer.from('not a real mp4 file');
 
 test.describe('Media Converter tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/mediaconvert/');
+    await gotoAndWaitForReady(
+      page,
+      '/tools/mediaconvert/',
+      page.getByRole('button', { name: /click to browse/i })
+    );
   });
 
   test('page loads with correct title and drop zone', async ({ page }) => {

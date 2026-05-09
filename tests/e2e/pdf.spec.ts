@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 // Minimal valid unencrypted PDF (PDF 1.4, single empty page)
 const PLAIN_PDF_BYTES = Buffer.from(
@@ -12,7 +13,7 @@ const PLAIN_PDF_BYTES = Buffer.from(
 
 test.describe('PDF Password Tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/pdf/');
+    await gotoAndWaitForReady(page, '/tools/pdf/', page.locator('#drop-zone'));
   });
 
   test('page loads with correct title and drop zone', async ({ page }) => {

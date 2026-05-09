@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { gotoAndWaitForReady } from './navigation.ts';
 
 test.describe('YouTube Thumbnail Grabber tool', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tools/yt-thumbnail/');
+    await gotoAndWaitForReady(page, '/tools/yt-thumbnail/', page.locator('#yt-input'));
   });
 
   test('shows error for empty input', async ({ page }) => {
