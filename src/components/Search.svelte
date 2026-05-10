@@ -20,6 +20,12 @@
   let inputDisabled = $state(true);
   let db: any = null;
   let inputEl: HTMLInputElement | null = null;
+  const TYPE_LABELS: Record<string, string> = {
+    tool: 'Tool',
+    series: 'Series',
+    tag: 'Tag',
+    tags: 'Tags',
+  };
 
   function formatDate(iso?: string) {
     if (!iso) return '';
@@ -86,8 +92,8 @@
     bind:this={inputEl}
     type="search"
     class="form-control form-control-lg"
-    placeholder="Search posts and tools…"
-    aria-label="Search posts and tools"
+    placeholder="Search posts, series, tags, and tools…"
+    aria-label="Search posts, series, tags, and tools"
     oninput={handleInput}
     disabled={inputDisabled}
     autocomplete="off"
@@ -105,10 +111,10 @@
             <div class="blog-post-item py-3 mb-1">
             <div class="d-flex justify-content-between align-items-start gap-2">
                 <span class="blog-post-title fw-semibold">{doc.title}</span>
-                {#if doc.type === 'tool'}
-                <span class="badge rounded-pill bg-info text-white">Tool</span>
-                {:else}
+                {#if doc.type === 'post'}
                 <span class="small text-muted text-nowrap">{formatDate(doc.date)}</span>
+                {:else}
+                <span class={`badge rounded-pill ${doc.type === 'tool' ? 'bg-info text-white' : 'bg-secondary text-white'}`}>{TYPE_LABELS[doc.type] ?? 'Page'}</span>
                 {/if}
             </div>
             {#if doc.tags && doc.tags.length && doc.type !== 'tool'}

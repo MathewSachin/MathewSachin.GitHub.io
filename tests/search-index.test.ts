@@ -194,6 +194,42 @@ test('search-index.json: tools are searchable', async () => {
   assert.ok(toolHit, 'expected base64 tool in results')
 })
 
+test('search-index.json: series pages are searchable', async () => {
+  const schema = {
+    title: 'string',
+    url: 'string',
+    content: 'string',
+    tags: 'string[]',
+    date: 'string',
+    type: 'string',
+  }
+  const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
+  const db = create({ schema: schema as any })
+  load(db as any, raw)
+
+  const results = await search(db as any, { term: 'Blogging with Jekyll', properties: ['title', 'content'] })
+  const seriesHit = results.hits.find(h => h.document.type === 'series' && h.document.url === '/blog/series/blogging-with-jekyll/')
+  assert.ok(seriesHit, 'expected Blogging with Jekyll series page in results')
+})
+
+test('search-index.json: tag pages are searchable', async () => {
+  const schema = {
+    title: 'string',
+    url: 'string',
+    content: 'string',
+    tags: 'string[]',
+    date: 'string',
+    type: 'string',
+  }
+  const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
+  const db = create({ schema: schema as any })
+  load(db as any, raw)
+
+  const results = await search(db as any, { term: 'GitHub Pages', properties: ['title', 'content', 'tags'] })
+  const tagHit = results.hits.find(h => h.document.type === 'tag' && h.document.url === '/blog/tags/github-pages/')
+  assert.ok(tagHit, 'expected github-pages tag page in results')
+})
+
 test('search-index.json: every entry has required fields', async () => {
   const schema = {
     title: 'string',
@@ -208,7 +244,7 @@ test('search-index.json: every entry has required fields', async () => {
   load(db as any, raw)
 
   // Retrieve all documents via a broad search
-  const results = await search(db as any, { term: '', limit: 200 })
+  const results = await search(db as any, { term: '', limit: 400 })
   assert.ok(results.hits.length > 0, 'index should contain at least one entry')
 
   for (const hit of results.hits) {
@@ -219,12 +255,22 @@ test('search-index.json: every entry has required fields', async () => {
     assert.ok(Array.isArray(doc.tags), `tags should be an array (got ${typeof doc.tags})`)
     assert.ok(typeof doc.date === 'string', `date should be a string (got ${typeof doc.date})`)
     assert.ok(typeof doc.type === 'string', `type should be a string (got ${typeof doc.type})`)
-    assert.ok(doc.type === 'post' || doc.type === 'tool', `type should be 'post' or 'tool' (got '${doc.type}')`)
+    assert.ok(['post', 'tool', 'series', 'tag', 'tags'].includes(doc.type), `unexpected type '${doc.type}'`)
     if (doc.type === 'post') {
       assert.match(doc.url, /^\/blog\/\d{4}\/\d{2}\/\d{2}\//, 'post url should match /blog/YYYY/MM/DD/ format')
       assert.match(doc.date, /^\d{4}-\d{2}-\d{2}$/, 'post date should be in YYYY-MM-DD format')
-    } else {
+    } else if (doc.type === 'tool') {
       assert.match(doc.url, /^\/tools\//, 'tool url should start with /tools/')
+      assert.equal(doc.date, '', 'tool date should be empty')
+    } else if (doc.type === 'series') {
+      assert.match(doc.url, /^\/blog\/series\//, 'series url should start with /blog/series/')
+      assert.equal(doc.date, '', 'series date should be empty')
+    } else if (doc.type === 'tag') {
+      assert.match(doc.url, /^\/blog\/tags\/[^/]+\/$/, 'tag url should be a tag archive page')
+      assert.equal(doc.date, '', 'tag date should be empty')
+    } else {
+      assert.equal(doc.url, '/blog/tags/', 'tags entry should point to the tags index')
+      assert.equal(doc.date, '', 'tags index date should be empty')
     }
   }
 })
