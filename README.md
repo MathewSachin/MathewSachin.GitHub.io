@@ -3,6 +3,16 @@
 
 Personal website and blog built with [Astro](https://astro.build/).
 
+## Contributor Notes
+
+- Prefer `.mdx` for all new blog posts. Use filenames like `YYYY-MM-DD-slug.mdx`.
+- For local validation and Copilot work, build with `NODE_ENV=development npm run build` so the build matches the repo's testing configuration.
+- Run validation in this order from the repo root:
+  1. `NODE_ENV=development npm run build`
+  2. `npm test`
+  3. `npm run check`
+  4. `npm run test:e2e` when browser-facing changes are involved
+
 
 ## Local Development
 
@@ -38,10 +48,10 @@ The site will be available at <http://localhost:4321> by default.
 
 ## Build
 
-Create a production build:
+Create a local/testing build (matches Copilot and CI test builds):
 
 ```bash
-npm run build
+NODE_ENV=development npm run build
 ```
 
 Preview the production build locally:
