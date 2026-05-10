@@ -5,6 +5,7 @@ import '@styles/styles.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ViewTransitions from '@components/ViewTransitions.astro';
+import { ClientRouter } from 'astro:transitions';
 
 /**
  * BaseLayout.astro
@@ -72,11 +73,12 @@ const resolvedCanonical = canonicalUrl || Astro.url.href;
 
   {/* AdSense */}
   {IS_PROD && ads && (
-    <script is:inline data-ad-client={ADSENSE_ID} async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script is:inline data-astro-rerun data-ad-client={ADSENSE_ID} async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   )}
 
   {accentColor && <style define:vars={{ accentColor }}>{`:root { --post-accent: ${accentColor}; }`}</style>}
 
+  <ClientRouter />
   <ViewTransitions />
   
   <slot name="head" />

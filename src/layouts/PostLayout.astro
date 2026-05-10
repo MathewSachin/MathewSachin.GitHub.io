@@ -140,5 +140,5 @@ const relatedPosts = related.length > 0 ? await getEntries(related) : [];
   </div>
 
   <BackToTop />
-  <Lightbox client:load client:only />
+  <Lightbox client:load client:only transition:persist />
 </BaseLayout>
