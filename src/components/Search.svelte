@@ -25,6 +25,11 @@
     series: 'Series',
     tag: 'Tag',
   };
+  const TYPE_BADGE_CLASSES: Record<string, string> = {
+    tool: 'bg-info text-white',
+    series: 'bg-primary text-white',
+    tag: 'bg-secondary text-white',
+  };
 
   function formatDate(iso?: string) {
     if (!iso) return '';
@@ -113,7 +118,7 @@
                 {#if doc.type === 'post'}
                 <span class="small text-muted text-nowrap">{formatDate(doc.date)}</span>
                 {:else}
-                <span class={`badge rounded-pill ${doc.type === 'tool' ? 'bg-info text-white' : 'bg-secondary text-white'}`}>{TYPE_LABELS[doc.type] ?? 'Page'}</span>
+                <span class={`badge rounded-pill ${TYPE_BADGE_CLASSES[doc.type] ?? 'bg-secondary text-white'}`}>{TYPE_LABELS[doc.type] ?? 'Page'}</span>
                 {/if}
             </div>
             {#if doc.tags && doc.tags.length && doc.type !== 'tool'}

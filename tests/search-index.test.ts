@@ -18,6 +18,14 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
+const SEARCH_SCHEMA = {
+  title: 'string',
+  url: 'string',
+  content: 'string',
+  tags: 'string[]',
+  date: 'string',
+  type: 'string',
+}
 
 // ---------------------------------------------------------------------------
 // Unit tests: stripMarkdown
@@ -153,16 +161,8 @@ test('search-index.json: file exists and contains valid JSON', async () => {
 })
 
 test('search-index.json: can be loaded and searched with Orama', async () => {
-  const schema = {
-    title: 'string',
-    url: 'string',
-    content: 'string',
-    tags: 'string[]',
-    date: 'string',
-    type: 'string',
-  }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = create({ schema: schema as any })
+  const db = create({ schema: SEARCH_SCHEMA as any })
   load(db as any, raw)
 
   // Known post: Chrome Dino Hack
@@ -176,16 +176,8 @@ test('search-index.json: can be loaded and searched with Orama', async () => {
 })
 
 test('search-index.json: tools are searchable', async () => {
-  const schema = {
-    title: 'string',
-    url: 'string',
-    content: 'string',
-    tags: 'string[]',
-    date: 'string',
-    type: 'string',
-  }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = create({ schema: schema as any })
+  const db = create({ schema: SEARCH_SCHEMA as any })
   load(db as any, raw)
 
   const results = await search(db as any, { term: 'Base64', properties: ['title'] })
@@ -195,16 +187,8 @@ test('search-index.json: tools are searchable', async () => {
 })
 
 test('search-index.json: series pages are searchable', async () => {
-  const schema = {
-    title: 'string',
-    url: 'string',
-    content: 'string',
-    tags: 'string[]',
-    date: 'string',
-    type: 'string',
-  }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = create({ schema: schema as any })
+  const db = create({ schema: SEARCH_SCHEMA as any })
   load(db as any, raw)
 
   const results = await search(db as any, { term: 'Blogging with Jekyll', properties: ['title', 'content'] })
@@ -213,16 +197,8 @@ test('search-index.json: series pages are searchable', async () => {
 })
 
 test('search-index.json: tag pages are searchable', async () => {
-  const schema = {
-    title: 'string',
-    url: 'string',
-    content: 'string',
-    tags: 'string[]',
-    date: 'string',
-    type: 'string',
-  }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = create({ schema: schema as any })
+  const db = create({ schema: SEARCH_SCHEMA as any })
   load(db as any, raw)
 
   const results = await search(db as any, { term: 'GitHub Pages', properties: ['title', 'content', 'tags'] })
@@ -231,16 +207,8 @@ test('search-index.json: tag pages are searchable', async () => {
 })
 
 test('search-index.json: every entry has required fields', async () => {
-  const schema = {
-    title: 'string',
-    url: 'string',
-    content: 'string',
-    tags: 'string[]',
-    date: 'string',
-    type: 'string',
-  }
   const raw = JSON.parse(await readFile(SEARCH_INDEX_PATH, 'utf8'))
-  const db = create({ schema: schema as any })
+  const db = create({ schema: SEARCH_SCHEMA as any })
   load(db as any, raw)
 
   // Retrieve all documents via a broad search
