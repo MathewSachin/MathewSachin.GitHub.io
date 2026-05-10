@@ -255,7 +255,7 @@ test('search-index.json: every entry has required fields', async () => {
     assert.ok(Array.isArray(doc.tags), `tags should be an array (got ${typeof doc.tags})`)
     assert.ok(typeof doc.date === 'string', `date should be a string (got ${typeof doc.date})`)
     assert.ok(typeof doc.type === 'string', `type should be a string (got ${typeof doc.type})`)
-    assert.ok(['post', 'tool', 'series', 'tag', 'tags'].includes(doc.type), `unexpected type '${doc.type}'`)
+    assert.ok(['post', 'tool', 'series', 'tag'].includes(doc.type), `unexpected type '${doc.type}'`)
     if (doc.type === 'post') {
       assert.match(doc.url, /^\/blog\/\d{4}\/\d{2}\/\d{2}\//, 'post url should match /blog/YYYY/MM/DD/ format')
       assert.match(doc.date, /^\d{4}-\d{2}-\d{2}$/, 'post date should be in YYYY-MM-DD format')
@@ -266,11 +266,8 @@ test('search-index.json: every entry has required fields', async () => {
       assert.match(doc.url, /^\/blog\/series\//, 'series url should start with /blog/series/')
       assert.equal(doc.date, '', 'series date should be empty')
     } else if (doc.type === 'tag') {
-      assert.match(doc.url, /^\/blog\/tags\/[^/]+\/$/, 'tag url should be a tag archive page')
+      assert.match(doc.url, /^\/blog\/tags\/([^/]+\/)?$/, 'tag url should be a tag archive page')
       assert.equal(doc.date, '', 'tag date should be empty')
-    } else {
-      assert.equal(doc.url, '/blog/tags/', 'tags entry should point to the tags index')
-      assert.equal(doc.date, '', 'tags index date should be empty')
     }
   }
 })

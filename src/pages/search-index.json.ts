@@ -75,7 +75,7 @@ export async function GET() {
     content: Array.from(tagsMap.keys()).join(' '),
     tags: Array.from(tagsMap.keys()),
     date: '',
-    type: 'tags',
+    type: 'tag',
   });
   inserted++;
 

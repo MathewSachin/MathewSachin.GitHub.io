@@ -24,7 +24,6 @@
     tool: 'Tool',
     series: 'Series',
     tag: 'Tag',
-    tags: 'Tags',
   };
 
   function formatDate(iso?: string) {
