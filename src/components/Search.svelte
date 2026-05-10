@@ -121,7 +121,7 @@
                 <span class={`badge rounded-pill ${TYPE_BADGE_CLASSES[doc.type] ?? 'bg-secondary text-white'}`}>{TYPE_LABELS[doc.type] ?? 'Page'}</span>
                 {/if}
             </div>
-            {#if doc.tags && doc.tags.length && doc.type !== 'tool'}
+            {#if doc.tags && doc.tags.length && doc.type === 'post'}
                 <div class="mt-1">
                 {#each doc.tags as t}
                     <span class="badge rounded-pill bg-secondary me-1">{t}</span>

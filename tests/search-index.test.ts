@@ -18,6 +18,7 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
+const MAX_SEARCH_RESULTS_FOR_VALIDATION = 400
 const SEARCH_SCHEMA = {
   title: 'string',
   url: 'string',
@@ -212,7 +213,7 @@ test('search-index.json: every entry has required fields', async () => {
   load(db as any, raw)
 
   // Retrieve all documents via a broad search
-  const results = await search(db as any, { term: '', limit: 400 })
+  const results = await search(db as any, { term: '', limit: MAX_SEARCH_RESULTS_FOR_VALIDATION })
   assert.ok(results.hits.length > 0, 'index should contain at least one entry')
 
   for (const hit of results.hits) {
