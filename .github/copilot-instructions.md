@@ -23,7 +23,7 @@ This repository is a personal site/blog built with Astro 6 + Svelte 5 and deploy
 
 ## Important project conventions
 
-- Blog post filenames must follow `YYYY-MM-DD-slug.md` or `.mdx` (single-digit month/day is accepted by the loader, but URLs are zero-padded).
+- New blog posts should always be created as `.mdx` files, with filenames following `YYYY-MM-DD-slug.mdx` (single-digit month/day is accepted by the loader, but URLs are zero-padded).
 - Blog URLs are generated as `/blog/YYYY/MM/DD/slug.html`; preserve that shape when changing routing helpers.
 - Tool pages are content-driven:
   - metadata lives in `src/content/tool-docs/<id>.mdx`
@@ -38,13 +38,14 @@ This repository is a personal site/blog built with Astro 6 + Svelte 5 and deploy
 
 Run validations from the repo root:
 
-1. `npm run build`
+1. `NODE_ENV=development npm run build`
 2. `npm test`
 3. `npm run check`
 4. `npm run test:e2e` when browser-facing behavior changes
 
 Why this order matters:
 
+- Copilot should always set `NODE_ENV=development` before building in this repository. Testing builds disable production-only integrations and match the existing CI testing path.
 - `npm test` reads `dist/search-index.json`, so unit tests can fail if you skip `npm run build` first.
 - Playwright serves the built `dist/` folder on port 4000 via `playwright.config.ts`, so e2e tests also expect a fresh build.
 
@@ -58,9 +59,9 @@ Why this order matters:
 ## CI notes
 
 - CI uses Node 22 and `npm ci`.
-- `build-site.yml` runs `npm run build` and `npm test`.
+- `build-site.yml` runs testing builds with `NODE_ENV=development npm run build` when `testing: true`, and production builds otherwise.
 - `frontend-tests.yml` downloads the built `dist/` artifact, installs Playwright Chromium, installs FFmpeg, and then runs `npm run test:e2e`.
-- `copilot-setup-steps.yml` only installs dependencies, so assume repo-specific guidance must come from this file.
+- `copilot-setup-steps.yml` should preinstall the tools Copilot needs here (`npm ci`, Playwright Chromium, and FFmpeg) and set `NODE_ENV=development` in `GITHUB_ENV`.
 
 ## Astro-specific caution
 
