@@ -1,8 +1,10 @@
 import { getCollection } from 'astro:content';
 import { create, insert, save } from '@orama/orama';
 // Notice the updated relative path since we are now inside src/pages/
+import { SERIES } from '@data/series';
 import { getTools } from '@data/tools';
 import { stripMarkdown, postUrlFromFilename } from '@scripts/search-index'
+import { buildTagsMap, postIdFromSlug, tagUrl } from '@utils/posts';
 
 // IMPORTANT: Tells Astro to build this as a static .json file during `astro build`
 export const prerender = true;
@@ -29,6 +31,8 @@ function parsePostDate(dateInFrontmatter: Date | undefined, filename: string): s
 export async function GET() {
   // 1. Fetch all posts via Astro's content collections
   const posts = await getCollection('blog');
+  const postsById = new Map(posts.map(post => [postIdFromSlug(post.id), post]));
+  const tagsMap = buildTagsMap(posts);
 
   const db = create({
     schema: {
@@ -64,7 +68,66 @@ export async function GET() {
     inserted++;
   }
 
-  // 3. Index tools from the tools content collection
+  // 3. Index the tag listing pages
+  await insert(db, {
+    title: 'Tags',
+    url: '/blog/tags/',
+    content: Array.from(tagsMap.keys()).join(' '),
+    tags: Array.from(tagsMap.keys()),
+    date: '',
+    type: 'tag',
+  });
+  inserted++;
+
+  for (const [tag, taggedPosts] of tagsMap) {
+    const content = stripMarkdown([
+      tag,
+      ...taggedPosts.flatMap(post => [post.data.title, post.data.description ?? '', ...(post.data.tags ?? [])]),
+    ].join(' ')).slice(0, MAX_CONTENT_LENGTH);
+
+    await insert(db, {
+      title: `Tag: ${tag}`,
+      url: tagUrl(tag),
+      content,
+      tags: [tag],
+      date: '',
+      type: 'tag',
+    });
+    inserted++;
+  }
+
+  // 4. Index series pages
+  for (const series of Object.values(SERIES)) {
+    const seriesTags = new Set<string>();
+    const content = stripMarkdown([
+      series.name,
+      series.description,
+      ...series.levels.flatMap(level => [
+        level.title,
+        level.intro,
+        ...level.posts.flatMap(({ id }) => {
+          const post = postsById.get(id);
+          if (!post) return [];
+          for (const tag of post.data.tags ?? []) {
+            seriesTags.add(tag);
+          }
+          return [post.data.title, post.data.description ?? '', ...(post.data.tags ?? [])];
+        }),
+      ]),
+    ].join(' ')).slice(0, MAX_CONTENT_LENGTH);
+
+    await insert(db, {
+      title: series.name,
+      url: series.url,
+      content,
+      tags: Array.from(seriesTags),
+      date: '',
+      type: 'series',
+    });
+    inserted++;
+  }
+
+  // 5. Index tools from the tools content collection
   for (const tool of await getTools()) {
     const url = `/tools/${tool.id}/`;
     await insert(db, {
