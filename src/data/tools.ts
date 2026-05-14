@@ -7,6 +7,7 @@ export interface Tool {
   icon: string;
   accent_color?: string;
   quick_tool?: boolean;
+  tags: string[];
 }
 
 export async function getTools(): Promise<Tool[]> {
@@ -28,6 +29,7 @@ export async function getTools(): Promise<Tool[]> {
         icon,
         accent_color: entry.data.accent_color,
         quick_tool: entry.data.quick_tool,
+        tags: entry.data.tags,
       };
     });
 }

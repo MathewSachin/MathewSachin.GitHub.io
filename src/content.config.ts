@@ -39,6 +39,7 @@ const toolDocs = defineCollection({
     component: z.string().optional(),
     ads: z.boolean().default(true),
     manifest: z.string().optional(),
+    tags: z.array(z.string()).default([]),
   }),
 });
 

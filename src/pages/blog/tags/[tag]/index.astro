@@ -3,26 +3,37 @@
 
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { getAllPosts, getPostDate, formatDateUS, postUrlFromSlug, tagSlug } from '@utils/posts';
+import { getTools } from '@data/tools';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   const allPosts = await getAllPosts();
-  const tags = new Set(allPosts.flatMap(p => p.data.tags ?? []));
+  const allTools = await getTools();
+
+  const postTags = new Set(allPosts.flatMap(p => p.data.tags ?? []));
+  const toolTags = new Set(allTools.flatMap(t => t.tags));
+  const tags = new Set([...postTags, ...toolTags]);
+
   return Array.from(tags).map(t => ({ params: { tag: tagSlug(t) } }));
 }
 
 const { tag } = Astro.params;
 
 const allPosts = await getAllPosts();
+const allTools = await getTools();
 const normalizedTag = String(tag);
 
 // Find the human-friendly tag name (preserve original casing if possible)
-const allTags = Array.from(new Set(allPosts.flatMap(p => p.data.tags)));
+const allTags = Array.from(new Set([
+  ...allPosts.flatMap(p => p.data.tags),
+  ...allTools.flatMap(t => t.tags),
+]));
 const displayTag = allTags.find(t => tagSlug(t) === normalizedTag) ?? decodeURIComponent(normalizedTag);
 
 const posts = allPosts.filter(p => p.data.tags.some(t => tagSlug(t) === normalizedTag));
+const tools = allTools.filter(t => t.tags.some(tag => tagSlug(tag) === normalizedTag));
 ---
 
 <BaseLayout title={`Tag: ${displayTag}`} ads={true}>
@@ -30,29 +41,66 @@ const posts = allPosts.filter(p => p.data.tags.some(t => tagSlug(t) === normaliz
     <div class="container">
       <h2 class="text-white mb-3">Tag: {displayTag}</h2>
 
-      <div class="card">
-        <div class="card-body">
-          {posts.length === 0 ? (
-            <p class="text-muted">No posts found for this tag.</p>
-          ) : (
-            posts.map(post => (
-              <a
-                href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
-                class="tag-post-link text-decoration-none text-reset"
-                style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
-              >
-                <div class="tag-post-item d-flex justify-content-between align-items-center py-2">
-                  <span class="tag-post-title">
-                    {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
-                    {post.data.title}
-                  </span>
-                  <span class="small text-muted text-nowrap ms-3">{formatDateUS(getPostDate(post))}</span>
-                </div>
-              </a>
-            ))
-          )}
+      {tools.length > 0 && (
+        <div class="mb-4">
+          <h5 class="text-white-50 mb-2">Tools</h5>
+          <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+            {tools.map(tool => (
+              <div class="col">
+                <a href={`${BASE}tools/${tool.id}/`} class="home-card-link" aria-label={tool.name}>
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <p class="card-title mb-1">
+                        <span style={tool.accent_color ? `color: ${tool.accent_color};` : undefined} class={tool.accent_color ? undefined : 'text-info'}>
+                          <i class={`${tool.icon} me-2`} aria-hidden="true"></i>
+                          <span>{tool.name}</span>
+                        </span>
+                      </p>
+                      <p class="card-text">{tool.description}</p>
+                    </div>
+                    <div class="card-footer">
+                      <small><i class="fas fa-arrow-right me-1"></i>Open tool</small>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {posts.length > 0 && (
+        <div>
+          {tools.length > 0 && <h5 class="text-white-50 mb-2">Posts</h5>}
+          <div class="card">
+            <div class="card-body">
+              {posts.map(post => (
+                <a
+                  href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                  class="tag-post-link text-decoration-none text-reset"
+                  style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
+                >
+                  <div class="tag-post-item d-flex justify-content-between align-items-center py-2">
+                    <span class="tag-post-title">
+                      {post.data.icon && <i class={`${post.data.icon} post-icon me-1`} aria-hidden="true"></i>}
+                      {post.data.title}
+                    </span>
+                    <span class="small text-muted text-nowrap ms-3">{formatDateUS(getPostDate(post))}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tools.length === 0 && posts.length === 0 && (
+        <div class="card">
+          <div class="card-body">
+            <p class="text-muted">No content found for this tag.</p>
+          </div>
+        </div>
+      )}
     </div>
   </div>
 </BaseLayout>

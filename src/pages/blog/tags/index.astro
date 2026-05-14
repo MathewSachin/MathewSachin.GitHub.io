@@ -1,11 +1,30 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { getAllPosts, buildTagsMap, tagSlug, getTagColor } from '@utils/posts';
+import { getTools } from '@data/tools';
 import '@styles/blog.css';
 
 const BASE = import.meta.env.BASE_URL;
 const allPosts = await getAllPosts();
+const allTools = await getTools();
 const tagsMap = buildTagsMap(allPosts);
+
+// Build a combined count map: tag → { posts, tools }
+const combinedCounts = new Map<string, { posts: number; tools: number }>();
+for (const [tag, posts] of tagsMap) {
+  combinedCounts.set(tag, { posts: posts.length, tools: 0 });
+}
+for (const tool of allTools) {
+  for (const tag of tool.tags) {
+    const existing = combinedCounts.get(tag) ?? { posts: 0, tools: 0 };
+    combinedCounts.set(tag, { ...existing, tools: existing.tools + 1 });
+  }
+}
+
+// Sort by total count descending
+const sortedTags = [...combinedCounts.entries()].sort(
+  (a, b) => (b[1].posts + b[1].tools) - (a[1].posts + a[1].tools)
+);
 ---
 <BaseLayout title="Tags" ads={true}>
   <div class="bg-dark py-3">
@@ -14,14 +33,15 @@ const tagsMap = buildTagsMap(allPosts);
 
       <div class="card">
         <div class="card-body">
-          {[...tagsMap.entries()].map(([tag, posts]) => {
+          {sortedTags.map(([tag, counts]) => {
             const tagColor = getTagColor(tag)
+            const total = counts.posts + counts.tools;
             return (
               <div>
               <a href={`${BASE}blog/tags/${tagSlug(tag)}/`} class="tag-post-link text-decoration-none text-reset">
                 <div class="tag-post-item d-flex justify-content-between align-items-center">
                   <div class="p-2 flex-grow-1" style={`text-decoration: underline 3px ${tagColor};`}>{tag}</div>
-                  <div class="p-2"><span class="badge text-dark" style={`background-color: ${tagColor};`} class="ms-1">{posts.length}</span></div>
+                  <div class="p-2"><span class="badge text-dark" style={`background-color: ${tagColor};`} class="ms-1">{total}</span></div>
                 </div>
               </a>
               </div>

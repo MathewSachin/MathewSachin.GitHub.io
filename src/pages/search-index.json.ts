@@ -134,7 +134,7 @@ export async function GET() {
       title: tool.name,
       url,
       content: tool.description,
-      tags: [],
+      tags: tool.tags,
       date: '',
       type: 'tool',
     });
