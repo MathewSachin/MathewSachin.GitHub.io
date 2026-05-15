@@ -1,6 +1,6 @@
 <script>
   import CopyButton from './CopyButton.svelte';
-  import { formatJson } from '@scripts/tools/json-formatter.js';
+  import { formatJson, minifyJson } from '@scripts/tools/json-formatter.js';
 
   let input = '';
   let output = '';
@@ -26,7 +26,18 @@
   }
 
   function format() { applyFormat(2); }
-  function minify() { applyFormat(0); }
+  function minify() {
+    clearFeedback();
+    const result = minifyJson(input);
+    if (result.error) {
+      output = '';
+      error = result.error;
+      ok = false;
+    } else {
+      output = result.output;
+      if (result.output) ok = true;
+    }
+  }
   function clearAll() { input = ''; output = ''; clearFeedback(); }
 </script>
 

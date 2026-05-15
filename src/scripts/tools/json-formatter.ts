@@ -8,3 +8,13 @@ export function formatJson(raw: string, indent: number): { output: string; error
     return { output: '', error: err?.message ?? String(e) };
   }
 }
+
+export function minifyJson(raw: string): { output: string; error: string | null } {
+  if (!raw.trim()) return { output: '', error: null };
+  try {
+    return { output: JSON.stringify(JSON.parse(raw)), error: null };
+  } catch (e: unknown) {
+    const err = e as Error | undefined;
+    return { output: '', error: err?.message ?? String(e) };
+  }
+}

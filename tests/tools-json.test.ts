@@ -7,7 +7,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { formatJson } from '../src/scripts/tools/json-formatter.ts'
+import { formatJson, minifyJson } from '../src/scripts/tools/json-formatter.ts'
 
 // ---------------------------------------------------------------------------
 // formatJson — formatting (indent = 2)
@@ -85,6 +85,56 @@ test('formatJson: falls back to String(error) for non-Error throws', () => {
 
   try {
     const { output, error } = formatJson('{"a":1}', 2)
+    assert.equal(output, '')
+    assert.equal(error, '[object Object]')
+  } finally {
+    JSON.parse = originalParse
+  }
+})
+
+// ---------------------------------------------------------------------------
+// minifyJson
+// ---------------------------------------------------------------------------
+
+test('minifyJson: removes whitespace from a JSON object', () => {
+  const { output, error } = minifyJson('{ "a" : 1 , "b" : 2 }')
+  assert.equal(error, null)
+  assert.equal(output, '{"a":1,"b":2}')
+})
+
+test('minifyJson: compacts already pretty-printed JSON', () => {
+  const input = JSON.stringify({ key: 'value', arr: [1, 2] }, null, 2)
+  const { output, error } = minifyJson(input)
+  assert.equal(error, null)
+  assert.equal(output, '{"key":"value","arr":[1,2]}')
+})
+
+test('minifyJson: returns empty output for blank input', () => {
+  const { output, error } = minifyJson('   ')
+  assert.equal(error, null)
+  assert.equal(output, '')
+})
+
+test('minifyJson: returns error for invalid JSON', () => {
+  const { output, error } = minifyJson('{bad json}')
+  assert.equal(output, '')
+  assert.ok(typeof error === 'string' && error.length > 0, 'error should be a non-empty string')
+})
+
+test('minifyJson: handles JSON arrays', () => {
+  const { output, error } = minifyJson('[ 1 , 2 , 3 ]')
+  assert.equal(error, null)
+  assert.equal(output, '[1,2,3]')
+})
+
+test('minifyJson: falls back to String(error) for non-Error throws', () => {
+  const originalParse = JSON.parse
+  JSON.parse = ((_text: string) => {
+    throw { code: 'bad-json' }
+  }) as typeof JSON.parse
+
+  try {
+    const { output, error } = minifyJson('{"a":1}')
     assert.equal(output, '')
     assert.equal(error, '[object Object]')
   } finally {
