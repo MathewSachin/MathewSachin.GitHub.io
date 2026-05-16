@@ -37,7 +37,7 @@
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/svelte": "^8.0.5",
     "@pintora/cli": "^0.8.1",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^25.6.2",
     "astro": "^6.3.1",
     "astro-link-validator": "github:rodgtr1/astro-link-validator#025a27b2582234084b3676bc725418b5fc429dcd",
