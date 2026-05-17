@@ -35,7 +35,7 @@
     "@astrojs/mdx": "^5.0.4",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/svelte": "^8.0.5",
+    "@astrojs/svelte": "^8.1.1",
     "@pintora/cli": "^0.8.1",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.6.2",
