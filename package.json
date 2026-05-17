@@ -32,7 +32,7 @@
     "typescript": "^6.0.3"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/mdx": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/svelte": "^8.1.1",
