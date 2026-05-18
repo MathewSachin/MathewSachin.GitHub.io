@@ -13,6 +13,7 @@ import JsonTool from '@components/tools/JsonTool.svelte';
 import LocalAI from '@components/tools/LocalAI.svelte';
 import MediaConverter from '@components/tools/MediaConverter.svelte';
 import PdfPasswordTool from '@components/tools/PdfPasswordTool.svelte';
+import QrTool from '@components/tools/QrTool.svelte';
 import Scratchpad from '@components/tools/Scratchpad.svelte';
 import TimestampTool from '@components/tools/TimestampTool.svelte';
 import YtThumbnail from '@components/tools/YtThumbnail.svelte';
@@ -73,6 +74,8 @@ const BASE = import.meta.env.BASE_URL;
     <MediaConverter client:load />
   ) : toolComponentKey === 'pdf' ? (
     <PdfPasswordTool client:load workerUrl={`${BASE}tools/pdf/pdf.worker.js`} />
+  ) : toolComponentKey === 'qr' ? (
+    <QrTool client:load />
   ) : toolComponentKey === 'scratchpad' ? (
     <Scratchpad client:only="svelte" />
   ) : toolComponentKey === 'timestamp' ? (
