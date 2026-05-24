@@ -1,41 +1,90 @@
 ---
 title: "Astro Performance Audit: What Actually Improved After Migration"
-description: "A metrics-first audit of post-migration performance: image/SVG handling, hydration budget, and measurable wins."
+icon: "fas fa-tachometer-alt"
 tags: [astro, performance, web-dev, github-pages, tutorial]
+related:
+  - 2026-05-02-jekyll-to-astro-migration
+  - 2026-04-03-core-web-vitals-jekyll
+  - 2026-04-04-beyond-pageviews-tracking-engagement
+  - 2026-05-02-testing-with-playwright
 ---
 
-Migration stories are cheap. Measured improvements are the part that matters.
+*“We migrated and it feels faster” is not an audit. Performance claims only matter when they are measured, compared fairly, and tied to specific implementation choices.*
 
 ## Target query
-What concrete performance gains came from moving this site from Jekyll to Astro?
+
+What changed measurably after moving this site from Jekyll to Astro?
 
 ## Promise
-You will see a reproducible audit framework and the metrics that changed for real users.
 
-## Baseline vs post-migration metrics
-Capture comparable runs before interpreting any “improvement”.
+You’ll get a repeatable audit framework focused on real outcomes: payload, rendering, and Core Web Vitals behavior.
 
-## Image and SVG handling decisions
-How asset pipeline choices influenced LCP and layout stability.
+## Step 1: Build a fair baseline
 
-## Hydration budget analysis
-Where JavaScript was reduced and where interactivity still justifies hydration.
+A fair before/after audit compares equivalent pages:
 
-## Measurable outcomes
-Translate technical changes into user-facing improvements.
+- one content-heavy post
+- one homepage/listing page
+- one interactive page
+
+Measure each in similar network/device profiles and aggregate over multiple runs.
+
+## Step 2: Attribute improvements to concrete changes
+
+Typical migration wins came from specific decisions:
+
+1. **Islands architecture** reduced unnecessary page-wide JavaScript.
+2. **Typed content pipeline** reduced rendering mistakes and metadata drift.
+3. **Asset handling improvements** made image/SVG delivery more predictable.
+4. **Simpler build path** reduced accidental regressions in deployment output.
+
+Without attribution, metrics are trivia.
+
+## Image and SVG handling impact
+
+Image strategy affects LCP more than most teams expect.
+
+Important checks:
+
+- LCP element format and dimensions
+- responsive image behavior
+- SVG processing policy consistency
+
+Migrating stack is a chance to enforce better defaults instead of carrying historical debt.
+
+## Hydration budget: the hidden lever
+
+For blog-like sites, hydration budget is often the biggest practical win.
+
+Audit each template:
+
+- What must hydrate immediately?
+- What can hydrate on idle/visibility?
+- What should remain static forever?
+
+JavaScript not shipped is the fastest JavaScript.
+
+## Measurable outcomes to track monthly
+
+Use a compact scorecard:
+
+- LCP median and p75
+- CLS p75
+- Total JS transferred per template
+- Largest route HTML size
+- Third-party script cost
+
+A migration is not a one-time optimization event; it should establish a recurring performance discipline.
 
 ## Examples/screenshots to include
-- Baseline vs current Lighthouse snapshot
-- Web Vitals trend chart
-- JS payload reduction view
-- LCP element comparison
 
-## Related reading
-- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
-- <PostLink slug="2026-04-03-core-web-vitals-jekyll" />
-- <PostLink slug="2026-04-04-beyond-pageviews-tracking-engagement" />
+- Baseline vs post-migration Lighthouse summary
+- JS payload breakdown before/after
+- Hydration map by page template
+- Web Vitals trend chart over time
 
 ## Actionable takeaway
-Audit by budget: set max JS, max LCP element weight, and max third-party cost per page template.
 
-Use this audit format as a recurring monthly performance review.
+Set explicit page-template budgets (JS bytes, LCP target, third-party cost), and block changes that exceed them unless they ship deliberate user value.
+
+For migration context, read <PostLink slug="2026-05-02-jekyll-to-astro-migration" /> first.

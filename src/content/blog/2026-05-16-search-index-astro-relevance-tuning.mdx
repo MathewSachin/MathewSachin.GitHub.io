@@ -1,41 +1,101 @@
 ---
 title: "How the Search Index Works in Astro (and How to Tune Relevance)"
-description: "From content extraction to ranking quality: a practical guide to Astro search-index generation, tag indexing, and result tuning."
+icon: "fas fa-search"
 tags: [astro, search, javascript, tutorial, orama]
+related:
+  - 2026-03-25-how-site-search-works
+  - 2026-05-02-testing-with-playwright
+  - 2026-05-02-jekyll-to-astro-migration
+  - 2026-04-04-beyond-pageviews-tracking-engagement
 ---
 
-Search quality is a product decision disguised as a data structure.
+*Search relevance does not emerge automatically from “index everything.” It is a sequence of deliberate choices: what to include, what to strip, what to boost, and how to evaluate outcomes against real user queries.*
 
 ## Target query
-How do I build and tune a good static-site search index in Astro?
+
+How should I build and tune static-site search in Astro so results are actually useful?
 
 ## Promise
-You will get a clear model for index generation, ranking improvement, and debugging bad matches.
+
+You’ll leave with a practical model for index generation, relevance tuning, and debugging search misses.
 
 ## Index generation flow
-How posts, tags, tools, and series are collected and normalized.
 
-## Content stripping and truncation
-What to keep, what to remove, and how this impacts relevance.
+A robust static search pipeline typically does this:
 
-## Tag indexing and boosts
-Using tags and metadata intentionally instead of treating them as decoration.
+1. collect content sources (posts, tags, tools, series pages)
+2. normalize metadata (title, URL, tags, category)
+3. strip markdown syntax/noise from body text
+4. serialize to a search-engine-friendly JSON index
+5. ship index with static build
 
-## Relevance tuning and debugging
-How to inspect misses, over-matches, and stale-index problems quickly.
+This keeps runtime search fast and infrastructure-free.
+
+## What to index (and what not to)
+
+Good search quality often improves when you **exclude** noisy content.
+
+Include:
+
+- title
+- concise description
+- tags
+- meaningful body text
+
+Exclude or downweight:
+
+- code fences (unless code search is a feature)
+- boilerplate nav/footer text
+- repeated CTA copy
+
+The goal is query intent alignment, not maximum token count.
+
+## Relevance tuning strategy
+
+Start with a simple weighting model:
+
+- title: highest boost
+- tags: medium-high
+- description: medium
+- body: baseline
+
+Then tune against actual query logs.
+
+### Practical tuning loop
+
+1. Pull top queries from analytics/search logs
+2. Label expected top results for each query
+3. Run offline relevance checks after each adjustment
+4. Compare precision of top 3 results
+5. Ship only improvements that help real queries
+
+## Debugging bad matches quickly
+
+When a result looks wrong, inspect:
+
+- was the page indexed?
+- was content stripped too aggressively?
+- did tags overpower semantic relevance?
+- is stale index being served from old build?
+
+Most “search is broken” incidents are stale-index or weighting mistakes, not engine bugs.
+
+## Common pitfalls in static search
+
+- rebuilding pages but forgetting to regenerate index
+- over-indexing long body text so niche keywords dominate
+- relying on synthetic queries instead of user behavior
+- not testing search after URL/routing changes
 
 ## Examples/screenshots to include
-- Index schema snapshot
-- Before/after relevance tuning example
-- False-positive query diagnosis
-- Search result quality checklist
 
-## Related reading
-- <PostLink slug="2026-03-25-how-site-search-works" />
-- <PostLink slug="2026-05-02-testing-with-playwright" />
-- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
+- Search index schema snapshot
+- Before/after ranking on the same query set
+- Stale-index debugging flow
+- Query-to-expected-results rubric
 
 ## Actionable takeaway
-Track your top 20 real queries and tune ranking against that set, not against synthetic demo terms.
 
-After tuning, rebuild and run `npm test` so search-index tests verify the generated output.
+Maintain a living benchmark set of your top 20–50 real queries, and tune search against that benchmark every time you change extraction or weighting.
+
+Background implementation context: <PostLink slug="2026-03-25-how-site-search-works" />.

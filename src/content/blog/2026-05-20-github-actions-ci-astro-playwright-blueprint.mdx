@@ -1,41 +1,83 @@
 ---
 title: "GitHub Actions CI for Astro + Playwright: A Practical Blueprint"
-description: "A production-ready CI layout for Astro static builds and Playwright e2e tests: artifacts, workflow split, debugging, and cost control."
+icon: "fab fa-github"
 tags: [github-actions, ci-cd, playwright, devops, astro, tutorial]
+related:
+  - 2026-04-01-pr-preview-setup
+  - 2026-04-02-docker-faster-github-actions
+  - 2026-05-02-testing-with-playwright
+  - 2026-05-02-jekyll-to-astro-migration
 ---
 
-Fast CI is nice. Fast CI that still catches regressions is better.
+*Fast CI is easy if you skip useful checks. Reliable CI is easy if you accept slow feedback. The real challenge is designing a pipeline that is both fast and trustworthy.*
 
 ## Target query
-What is the right GitHub Actions design for Astro build + Playwright validation?
+
+How should I structure GitHub Actions for an Astro static site with Playwright e2e tests?
 
 ## Promise
-You will get a practical pipeline structure that is fast, debuggable, and maintainable.
 
-## Build artifact strategy
-Build once, test many; avoid recomputing the same site in every job.
+You’ll get a practical workflow blueprint that balances speed, observability, and confidence.
 
-## Pipeline split for e2e reliability
-Separate deterministic build checks from browser-runtime checks.
+## Core principle: build once, reuse everywhere
 
-## Debugging failed jobs quickly
-Use artifacts, traces, and focused logs to cut triage time.
+The highest-leverage CI optimization is artifact reuse.
 
-## Cost and runtime optimization
-Cache wisely and remove redundant work without sacrificing confidence.
+Pipeline shape:
+
+1. install + build site once
+2. publish `dist/` artifact
+3. downstream jobs (tests/previews) consume same artifact
+
+This avoids duplicate builds and removes “it passed in build job but failed in test job due to different output” drift.
+
+## Split checks by failure domain
+
+Separate jobs by what can break:
+
+- **build/unit checks**: compile/content/schema/runtime-independent logic
+- **browser checks**: Playwright against built artifact
+- **deploy checks**: only after quality gates pass
+
+When jobs are scoped well, failures are faster to diagnose.
+
+## Debugging failed jobs without guesswork
+
+Always preserve:
+
+- test traces/screenshots/videos
+- build logs
+- generated artifact metadata
+
+If an e2e test fails, the review path should be obvious: open trace, inspect state, identify failing assumption.
+
+## Runtime and cost optimization levers
+
+- dependency caching with lockfile keying
+- artifact reuse across jobs
+- conditional workflow triggers for docs/content-only changes (where appropriate)
+- matrix pruning to only meaningful browser/runtime combinations
+
+Optimization rule: remove duplicated work first, micro-tune second.
+
+## CI hygiene practices
+
+- keep steps explicit and deterministic
+- pin major action versions
+- fail fast on missing artifacts
+- surface concise summary annotations for quick PR review
+
+A clean pipeline is easier to evolve than a “works somehow” YAML maze.
 
 ## Examples/screenshots to include
-- Workflow graph
-- Artifact handoff between jobs
-- Failed Playwright trace triage
-- Runtime/cost comparison before vs after
 
-## Related reading
-- <PostLink slug="2026-04-01-pr-preview-setup" />
-- <PostLink slug="2026-04-02-docker-faster-github-actions" />
-- <PostLink slug="2026-05-02-testing-with-playwright" />
+- workflow graph showing artifact handoff
+- successful vs failed run comparison
+- Playwright trace triage screenshot
+- runtime trend before/after optimization
 
 ## Actionable takeaway
-Design CI around artifact reuse first; this single decision usually drives both speed and consistency gains.
 
-Then validate browser behavior with Playwright on the exact same built artifact.
+Design your pipeline around artifact continuity. It usually gives the largest speed + reliability gain in one decision.
+
+For testing details, pair this with <PostLink slug="2026-05-02-testing-with-playwright" />.

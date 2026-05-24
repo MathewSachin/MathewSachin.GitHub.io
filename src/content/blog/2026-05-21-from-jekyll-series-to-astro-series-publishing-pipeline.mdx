@@ -1,41 +1,93 @@
 ---
 title: "From Jekyll Series to Astro Series: Building the New Publishing Pipeline"
-description: "How to evolve a mature Jekyll content workflow into an Astro-native publishing pipeline with typed metadata and safer routing."
+icon: "fas fa-pen-nib"
 tags: [astro, blogging, github-actions, tutorial, migration]
+related:
+  - 2026-05-02-jekyll-to-astro-migration
+  - 2026-03-12-ai-blog-generation-flow
+  - 2026-04-04-trigger-copilot-from-github-actions
+  - 2026-04-01-pr-preview-setup
 ---
 
-A migration is done only when your publishing workflow becomes simpler than before.
+*The migration is only half done when pages render in a new framework. It is fully done when your publishing workflow becomes easier, safer, and faster than before.*
 
 ## Target query
-How do I transition from Jekyll-era content operations to an Astro-native publishing system?
+
+How do I evolve a mature Jekyll publishing workflow into an Astro-native content pipeline?
 
 ## Promise
-You will get a concrete blueprint for content collections, routing, metadata quality, and deploy flow.
 
-## Content collections and typed metadata
-Use schema-validated frontmatter to eliminate silent content drift.
+This post gives a practical blueprint for day-to-day publishing in Astro: content schema, routes, previews, and deployment discipline.
 
-## Route shape and link consistency
-Keep URL conventions stable while modernizing internals.
+## Content collections as the new foundation
 
-## Base URL pitfalls in preview environments
-Avoid broken internal links when running previews under subpaths.
+In Jekyll, frontmatter drift can hide for weeks.
 
-## Deployment flow and series organization
-Define repeatable steps from draft to published post.
+In Astro, typed collections let you validate metadata at build time.
+
+Benefits:
+
+- required fields enforced early
+- optional fields documented in one place
+- fewer silent formatting mistakes
+
+Treating metadata as schema is a huge reliability upgrade for long-running blogs.
+
+## Route shape consistency during migration
+
+Users and search engines expect URL stability.
+
+If legacy posts used date-based routes, preserve route shape while modernizing internals.
+
+Good migration behavior:
+
+- keep canonical URL patterns stable
+- maintain redirects where route changes are unavoidable
+- validate internal links after content moves
+
+## BASE_URL and preview pitfalls
+
+Preview environments often run under subpaths. Hardcoded root-relative links break quietly.
+
+Adopt a strict policy:
+
+- internal links/components should be BASE-aware
+- test previews using the same base-path behavior as CI
+
+This one detail prevents a large class of “works locally, broken in preview” defects.
+
+## New publishing flow (draft to live)
+
+A reliable Astro-era flow can be:
+
+1. create dated `.mdx` post
+2. write with schema-valid frontmatter
+3. build locally and run tests
+4. open PR with preview link
+5. review content + UX + links
+6. merge and deploy
+
+Automating parts of this flow is useful, but consistency matters more than automation quantity.
+
+## Organizing future series content
+
+Moving from a Jekyll-era series to Astro-first series is a chance to define clearer editorial structure:
+
+- standalone deep dives for high-intent search queries
+- linked series hubs for topic continuity
+- consistent tag clusters to improve discovery
+
+This makes content strategy and technical architecture reinforce each other.
 
 ## Examples/screenshots to include
-- Collection schema snippet overview
-- Route mapping old vs new
-- Preview URL behavior with base path
-- Publishing checklist board
 
-## Related reading
-- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
-- <PostLink slug="2026-03-12-ai-blog-generation-flow" />
-- <PostLink slug="2026-04-04-trigger-copilot-from-github-actions" />
+- Content schema and validation error example
+- Route mapping old vs new
+- Broken root-relative link in preview vs fixed BASE-aware link
+- Draft-to-publish checklist board snapshot
 
 ## Actionable takeaway
-Treat content metadata as code: validate it at build time and block deploys on schema failures.
 
-This is the foundation for a future “Blogging with Astro” series.
+Treat publishing as a pipeline, not a one-off writing event: schema checks, route checks, preview checks, then deploy.
+
+Start with migration context: <PostLink slug="2026-05-02-jekyll-to-astro-migration" />.

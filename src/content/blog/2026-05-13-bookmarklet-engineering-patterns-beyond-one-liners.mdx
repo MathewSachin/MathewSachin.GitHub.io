@@ -1,42 +1,134 @@
 ---
 title: "Bookmarklet Engineering Patterns Beyond One-Liners"
-description: "Turn fragile one-liner hacks into robust bookmarklets with selector strategy, fallbacks, mobile-safe behavior, and maintainability checks."
+icon: "fas fa-bookmark"
 tags: [bookmarklet, javascript, devtools, browser, tutorial]
+related:
+  - 2026-05-02-mobile-devtools-console-bookmarklet
+  - 2026-05-07-remove-popups-bookmarklet
+  - 2026-03-07-edit-webpage-inspect-element
+  - 2019-12-7-unhide-password-box
 ---
 
-If your bookmarklet breaks every two weeks, it is not an automation tool — it is a coin flip.
+*Most bookmarklets are written like throwaway snippets. That is exactly why they break the moment a site updates a class name. If you want bookmarklets that survive real-world UI drift, you need engineering patterns, not one-liners.*
 
 ## Target query
-How do I write bookmarklets that keep working across layout changes and mobile browsers?
+
+How do I write bookmarklets that continue working across redesigns, mobile browsers, and edge-case page states?
 
 ## Promise
-You will leave with a practical checklist to make bookmarklets resilient, readable, and reusable.
 
-## Pattern 1: Stable selectors over brittle CSS chains
-Use semantic anchors (`aria-*`, text labels, URL patterns) before deep CSS selectors.
+By the end of this guide, you’ll have a practical reliability checklist you can apply to any bookmarklet before sharing it.
 
-## Pattern 2: Failure fallback paths
-Add guard clauses and alternate strategies instead of crashing on first miss.
+## Why one-liners fail in production
 
-## Pattern 3: Mobile compatibility by default
-Test on mobile bookmark execution constraints and avoid desktop-only assumptions.
+Most “viral” bookmarklets fail for predictable reasons:
 
-## Pattern 4: CSP and sandbox caveats
-Know when bookmarklets can modify DOM only versus when network/script paths are blocked.
+1. **Selectors are too brittle** (`.app > div:nth-child(4) > span`).
+2. **Execution assumes ideal timing** (DOM already loaded, no lazy render, no hydration).
+3. **No guard rails** (errors crash silently and leave users confused).
+4. **No fallback path** (single strategy, single point of failure).
+5. **No mobile testing** (works only on desktop Chrome).
 
-## Examples/screenshots to include
-- Desktop + mobile before/after popup removal
-- Selector fallback tree
-- CSP failure mode example
-- Maintainability checklist snapshot
+A bookmarklet is still software. Software needs defensive design.
 
-## Related reading
-- <PostLink slug="2026-05-02-mobile-devtools-console-bookmarklet" />
-- <PostLink slug="2026-05-07-remove-popups-bookmarklet" />
-- <PostLink slug="2026-03-07-edit-webpage-inspect-element" />
-- <a href="/tools/bookmarklet/">Bookmarklet Compiler tool</a>
+## Pattern 1: Prefer semantic anchors over style hooks
+
+Class names are implementation detail. Product labels and accessibility attributes usually change less frequently.
+
+Use this priority order when choosing selectors:
+
+1. `id` (if stable and meaningful)
+2. explicit data attributes (`data-testid`, `data-role`, etc.)
+3. accessibility attributes (`aria-label`, role + text)
+4. visible text matching
+5. class-based fallback
+
+### Quick selector strategy checklist
+
+- Can you find at least **two independent ways** to locate the target node?
+- Does your selector rely on **position** (`nth-child`) rather than meaning?
+- If text is used, do you account for case and whitespace noise?
+
+## Pattern 2: Build a fallback tree, not a single selector
+
+Reliable bookmarklets behave like this:
+
+- Try strategy A
+- If A fails, try B
+- If B fails, try C
+- If all fail, present a helpful message
+
+That turns “nothing happened” into a recoverable flow.
+
+### What to log for debugging
+
+At minimum, log:
+
+- strategy attempted
+- number of nodes found
+- which fallback succeeded
+- final action result
+
+When someone says “it stopped working,” these logs tell you *where* it failed.
+
+## Pattern 3: Treat timing as a first-class concern
+
+Many modern pages render asynchronously. Running immediately on click is often too early.
+
+Use phased execution:
+
+1. run immediately
+2. if missing target, retry after a short delay
+3. if still missing, attach a bounded observer and stop after timeout
+
+Key point: **bounded** retries. Infinite observers are memory leaks disguised as resilience.
+
+## Pattern 4: Mobile compatibility is not optional
+
+A bookmarklet that only works in desktop Chromium is a private utility, not a public one.
+
+Before publishing, validate on:
+
+- Android Chrome
+- iOS Safari (bookmarklet invocation behavior differs)
+- at least one page in reader mode / simplified mode (where applicable)
+
+Also verify whether your flow depends on hover, right-click, or keyboard shortcuts that do not exist on touch devices.
+
+## Pattern 5: Understand CSP and execution boundaries
+
+Bookmarklets can do a lot, but they are not magic.
+
+Common constraints:
+
+- strict CSP can block injected scripts from remote origins
+- cross-origin iframe boundaries cannot be bypassed from page context
+- server-enforced authorization cannot be bypassed via DOM edits
+
+Design bookmarklets for **DOM transformations and user-side convenience**, not for privilege escalation fantasies.
+
+## Maintainability checklist before you publish
+
+Use this 8-point release gate:
+
+1. ✅ Selector strategy has at least one fallback
+2. ✅ Timing strategy handles delayed rendering
+3. ✅ Errors are surfaced clearly to users
+4. ✅ Mobile run validated on real devices
+5. ✅ CSP behavior documented
+6. ✅ Safe no-op when element is missing
+7. ✅ Tested on at least 3 URLs/states
+8. ✅ Versioned changelog note for updates
+
+## Concrete examples/screenshots to add before publishing
+
+- Popup-heavy page before/after run
+- Selector fallback flow diagram
+- Mobile Safari invocation screenshot
+- Error-state toast/alert screenshot
 
 ## Actionable takeaway
-Before publishing any bookmarklet, run a 5-point release gate: selector stability, fallback path, mobile run, CSP behavior, and rollback refresh path.
 
-If you want a faster starting point, use the <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> to package and minify your script safely.
+Treat every bookmarklet like a mini product: reliability budget, fallback policy, and compatibility checklist.
+
+If you want to ship one today, start with the <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> and apply this checklist before sharing.

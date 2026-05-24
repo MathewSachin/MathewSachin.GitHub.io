@@ -1,41 +1,119 @@
 ---
 title: "Building Reliable Playwright Tests for Static Sites"
-description: "A flake-resistant Playwright workflow for static Astro sites: hydration-aware navigation, retry patterns, and CI diagnostics."
+icon: "fas fa-vial"
 tags: [playwright, testing, ci-cd, astro, tutorial]
+related:
+  - 2026-05-02-testing-with-playwright
+  - 2026-05-02-jekyll-to-astro-migration
+  - 2026-04-01-pr-preview-setup
+  - 2026-04-02-docker-faster-github-actions
 ---
 
-A passing test suite once is luck. A passing test suite in CI every day is engineering.
+*Flaky tests are not a Playwright problem — they are usually an assumptions problem. Static sites still have async search indexes, hydrated islands, and browser APIs. If your tests ignore that reality, CI becomes roulette.*
 
 ## Target query
-How do I make Playwright tests stable for static sites with client-hydrated islands?
+
+How do I make Playwright tests stable for static Astro sites that include client-side islands?
 
 ## Promise
-You will get a repeatable pattern for reducing hydration race failures and CI-only flakes.
 
-## Hydration timing and navigation strategy
-Prefer deterministic ready signals over assumptions about load events.
+This post gives you a concrete anti-flake testing model you can adopt immediately.
 
-## Retry patterns that do not hide bugs
-Use bounded retries around fragile interactions, then assert hard outcomes.
+## Reliability starts with architecture, not retries
 
-## CI stability and observability
-Capture enough context (traces, screenshots, logs) to make failed runs debuggable in minutes.
+Use two layers:
 
-## Local debugging workflow
-Reproduce CI timing behavior locally before changing assertions.
+- **Node tests** for pure logic
+- **Playwright e2e** for browser interactions
+
+This split removes most unnecessary browser tests and keeps the e2e suite focused on real user flows.
+
+## Pattern 1: Define explicit readiness per page
+
+Never assume `page.goto()` implies “ready for interactions.”
+
+For each page, define one explicit readiness condition such as:
+
+- search input enabled
+- hydration marker visible
+- loading status removed
+
+Once that condition passes, everything else becomes dramatically more stable.
+
+## Pattern 2: Use bounded retries for unstable interaction points
+
+Retries are useful when they are **narrow and intentional**.
+
+Good retry targets:
+
+- click that races with hydration
+- file chooser event timing
+- clipboard reads after async copy action
+
+Bad retry targets:
+
+- final assertions about expected outcome
+- broad test-level retries that hide real regressions
+
+If the final state is wrong, fail fast.
+
+## Pattern 3: Build once, test the built artifact
+
+Static site behavior in dev mode can differ from built output.
+
+CI should validate what users receive:
+
+1. build site
+2. serve `dist/`
+3. run Playwright against that server
+
+This catches path issues, generated asset mistakes, and search-index delivery bugs that dev-server tests often miss.
+
+## Pattern 4: Make failure artifacts mandatory
+
+A failed run should answer these questions in under 5 minutes:
+
+- what step failed?
+- what did the page look like?
+- what network call failed or hung?
+- was hydration complete?
+
+Store at least:
+
+- Playwright trace
+- screenshot
+- test output logs
+
+## Pattern 5: Keep selectors stable and product-oriented
+
+Prefer selectors that reflect user intent:
+
+- form field IDs
+- role/name combinations
+- stable data attributes
+
+Avoid brittle style selectors and deeply nested CSS paths.
+
+## Local debugging workflow that mirrors CI
+
+When a test flakes in CI:
+
+1. Run the same test against built `dist/`
+2. Use headed mode + trace viewer
+3. Slow down just the problematic interaction
+4. Add explicit readiness or narrow retry where needed
+
+Never “fix” flakiness by adding arbitrary `waitForTimeout` sleeps globally.
 
 ## Examples/screenshots to include
-- Typical hydration race timeline
-- Retry helper pattern in action
-- CI failure artifact triage flow
-- Stable vs flaky assertion examples
 
-## Related reading
-- <PostLink slug="2026-05-02-testing-with-playwright" />
-- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
-- <PostLink slug="2026-04-01-pr-preview-setup" />
+- Hydration race timeline for a failing test
+- Before/after readiness-gate fix
+- Trace viewer step showing the failure transition
+- Selector anti-pattern vs stable selector comparison
 
 ## Actionable takeaway
-Write one explicit “ready” condition per page and make every interaction wait on that condition before acting.
 
-If your UI behavior changed, validate the flow with `npm run test:e2e` before shipping.
+For each tested page, add one deterministic readiness assertion before the first interaction. That single habit removes a huge percentage of CI flakes.
+
+For the current setup details, see <PostLink slug="2026-05-02-testing-with-playwright" />.
