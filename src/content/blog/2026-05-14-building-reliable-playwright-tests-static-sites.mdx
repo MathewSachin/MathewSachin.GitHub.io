@@ -1,0 +1,41 @@
+---
+title: "Building Reliable Playwright Tests for Static Sites"
+description: "A flake-resistant Playwright workflow for static Astro sites: hydration-aware navigation, retry patterns, and CI diagnostics."
+tags: [playwright, testing, ci-cd, astro, tutorial]
+---
+
+A passing test suite once is luck. A passing test suite in CI every day is engineering.
+
+## Target query
+How do I make Playwright tests stable for static sites with client-hydrated islands?
+
+## Promise
+You will get a repeatable pattern for reducing hydration race failures and CI-only flakes.
+
+## Hydration timing and navigation strategy
+Prefer deterministic ready signals over assumptions about load events.
+
+## Retry patterns that do not hide bugs
+Use bounded retries around fragile interactions, then assert hard outcomes.
+
+## CI stability and observability
+Capture enough context (traces, screenshots, logs) to make failed runs debuggable in minutes.
+
+## Local debugging workflow
+Reproduce CI timing behavior locally before changing assertions.
+
+## Examples/screenshots to include
+- Typical hydration race timeline
+- Retry helper pattern in action
+- CI failure artifact triage flow
+- Stable vs flaky assertion examples
+
+## Related reading
+- <PostLink slug="2026-05-02-testing-with-playwright" />
+- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
+- <PostLink slug="2026-04-01-pr-preview-setup" />
+
+## Actionable takeaway
+Write one explicit “ready” condition per page and make every interaction wait on that condition before acting.
+
+If your UI behavior changed, validate the flow with `npm run test:e2e` before shipping.

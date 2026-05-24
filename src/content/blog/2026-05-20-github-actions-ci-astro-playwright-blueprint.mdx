@@ -1,0 +1,41 @@
+---
+title: "GitHub Actions CI for Astro + Playwright: A Practical Blueprint"
+description: "A production-ready CI layout for Astro static builds and Playwright e2e tests: artifacts, workflow split, debugging, and cost control."
+tags: [github-actions, ci-cd, playwright, devops, astro, tutorial]
+---
+
+Fast CI is nice. Fast CI that still catches regressions is better.
+
+## Target query
+What is the right GitHub Actions design for Astro build + Playwright validation?
+
+## Promise
+You will get a practical pipeline structure that is fast, debuggable, and maintainable.
+
+## Build artifact strategy
+Build once, test many; avoid recomputing the same site in every job.
+
+## Pipeline split for e2e reliability
+Separate deterministic build checks from browser-runtime checks.
+
+## Debugging failed jobs quickly
+Use artifacts, traces, and focused logs to cut triage time.
+
+## Cost and runtime optimization
+Cache wisely and remove redundant work without sacrificing confidence.
+
+## Examples/screenshots to include
+- Workflow graph
+- Artifact handoff between jobs
+- Failed Playwright trace triage
+- Runtime/cost comparison before vs after
+
+## Related reading
+- <PostLink slug="2026-04-01-pr-preview-setup" />
+- <PostLink slug="2026-04-02-docker-faster-github-actions" />
+- <PostLink slug="2026-05-02-testing-with-playwright" />
+
+## Actionable takeaway
+Design CI around artifact reuse first; this single decision usually drives both speed and consistency gains.
+
+Then validate browser behavior with Playwright on the exact same built artifact.

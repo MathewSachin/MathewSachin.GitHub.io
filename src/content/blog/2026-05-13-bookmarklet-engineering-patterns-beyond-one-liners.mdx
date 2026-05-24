@@ -1,0 +1,42 @@
+---
+title: "Bookmarklet Engineering Patterns Beyond One-Liners"
+description: "Turn fragile one-liner hacks into robust bookmarklets with selector strategy, fallbacks, mobile-safe behavior, and maintainability checks."
+tags: [bookmarklet, javascript, devtools, browser, tutorial]
+---
+
+If your bookmarklet breaks every two weeks, it is not an automation tool — it is a coin flip.
+
+## Target query
+How do I write bookmarklets that keep working across layout changes and mobile browsers?
+
+## Promise
+You will leave with a practical checklist to make bookmarklets resilient, readable, and reusable.
+
+## Pattern 1: Stable selectors over brittle CSS chains
+Use semantic anchors (`aria-*`, text labels, URL patterns) before deep CSS selectors.
+
+## Pattern 2: Failure fallback paths
+Add guard clauses and alternate strategies instead of crashing on first miss.
+
+## Pattern 3: Mobile compatibility by default
+Test on mobile bookmark execution constraints and avoid desktop-only assumptions.
+
+## Pattern 4: CSP and sandbox caveats
+Know when bookmarklets can modify DOM only versus when network/script paths are blocked.
+
+## Examples/screenshots to include
+- Desktop + mobile before/after popup removal
+- Selector fallback tree
+- CSP failure mode example
+- Maintainability checklist snapshot
+
+## Related reading
+- <PostLink slug="2026-05-02-mobile-devtools-console-bookmarklet" />
+- <PostLink slug="2026-05-07-remove-popups-bookmarklet" />
+- <PostLink slug="2026-03-07-edit-webpage-inspect-element" />
+- <a href="/tools/bookmarklet/">Bookmarklet Compiler tool</a>
+
+## Actionable takeaway
+Before publishing any bookmarklet, run a 5-point release gate: selector stability, fallback path, mobile run, CSP behavior, and rollback refresh path.
+
+If you want a faster starting point, use the <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> to package and minify your script safely.

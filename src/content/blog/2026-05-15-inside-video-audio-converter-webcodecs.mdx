@@ -1,0 +1,41 @@
+---
+title: "Inside the Video & Audio Converter Tool (WebCodecs in Practice)"
+description: "A technical deep dive into the in-browser media converter: architecture, browser constraints, format tradeoffs, and privacy model."
+tags: [webcodecs, media, browser, tooling, tutorial]
+---
+
+The interesting part of media conversion is not the UI — it is the pipeline decisions behind it.
+
+## Target query
+How does an in-browser media converter actually work, and what are its limits?
+
+## Promise
+You will understand the architecture and practical tradeoffs of WebCodecs-based conversion.
+
+## Architecture walkthrough
+Input parsing, decode pipeline, transform stages, and output muxing.
+
+## Browser compatibility constraints
+Why codec support differs per browser and how to design graceful degradation.
+
+## Format matrix decisions
+How to choose between MP4, WebM, MKV, MP3, WAV, OGG, and FLAC for user goals.
+
+## Performance and privacy model
+Memory pressure, CPU limits, and why local-only processing matters.
+
+## Examples/screenshots to include
+- Conversion pipeline diagram
+- Browser support table
+- Format quality/size comparison
+- Runtime performance snapshot
+
+## Related reading
+- <a href="/tools/mediaconvert/">Video & Audio Converter</a>
+- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
+- <PostLink slug="2026-05-01-astro-server-on-android-termux" />
+
+## Actionable takeaway
+Expose supported codecs up front and fail fast with clear messages when a browser cannot encode a selected target format.
+
+Try the concepts directly in the <a href="/tools/mediaconvert/">converter tool</a> and compare outputs side by side.

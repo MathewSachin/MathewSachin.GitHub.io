@@ -1,0 +1,41 @@
+---
+title: "How the Search Index Works in Astro (and How to Tune Relevance)"
+description: "From content extraction to ranking quality: a practical guide to Astro search-index generation, tag indexing, and result tuning."
+tags: [astro, search, javascript, tutorial, orama]
+---
+
+Search quality is a product decision disguised as a data structure.
+
+## Target query
+How do I build and tune a good static-site search index in Astro?
+
+## Promise
+You will get a clear model for index generation, ranking improvement, and debugging bad matches.
+
+## Index generation flow
+How posts, tags, tools, and series are collected and normalized.
+
+## Content stripping and truncation
+What to keep, what to remove, and how this impacts relevance.
+
+## Tag indexing and boosts
+Using tags and metadata intentionally instead of treating them as decoration.
+
+## Relevance tuning and debugging
+How to inspect misses, over-matches, and stale-index problems quickly.
+
+## Examples/screenshots to include
+- Index schema snapshot
+- Before/after relevance tuning example
+- False-positive query diagnosis
+- Search result quality checklist
+
+## Related reading
+- <PostLink slug="2026-03-25-how-site-search-works" />
+- <PostLink slug="2026-05-02-testing-with-playwright" />
+- <PostLink slug="2026-05-02-jekyll-to-astro-migration" />
+
+## Actionable takeaway
+Track your top 20 real queries and tune ranking against that set, not against synthetic demo terms.
+
+After tuning, rebuild and run `npm test` so search-index tests verify the generated output.
