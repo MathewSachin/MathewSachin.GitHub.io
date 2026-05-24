@@ -9,82 +9,46 @@ related:
   - 2026-05-02-testing-with-playwright
 ---
 
-*“We migrated and it feels faster” is not an audit. Performance claims only matter when they are measured, compared fairly, and tied to specific implementation choices.*
+*“It feels faster” is a useful intuition, but it is not evidence. After migrating from Jekyll to Astro, I wanted to know which changes actually moved numbers and which ones merely felt modern.*
 
-## Target query
+A good audit answers two questions: what improved, and why.
 
-What changed measurably after moving this site from Jekyll to Astro?
+## Build a fair before/after comparison
 
-## Promise
+Meaningful comparisons need equivalent page types—content-heavy posts, listing pages, and interactive routes—under similar network/device profiles.
 
-You’ll get a repeatable audit framework focused on real outcomes: payload, rendering, and Core Web Vitals behavior.
+When the baseline is fair, you can attribute gains with confidence instead of cherry-picking a single route that flatters the new stack.
 
-## Step 1: Build a fair baseline
+## Where the largest gains usually came from
 
-A fair before/after audit compares equivalent pages:
+In this migration, the biggest practical improvements were tied to architecture choices, not “micro-optimizations”:
 
-- one content-heavy post
-- one homepage/listing page
-- one interactive page
+- less unnecessary JavaScript from islands-first rendering
+- cleaner content pipeline with typed metadata
+- predictable static output and asset paths
 
-Measure each in similar network/device profiles and aggregate over multiple runs.
+These changes reduced both payload and regression risk.
 
-## Step 2: Attribute improvements to concrete changes
+## Hydration discipline matters more than most tweaks
 
-Typical migration wins came from specific decisions:
+On content-heavy sites, hydration budget is often the hidden lever. Every component that doesn’t need to hydrate is one fewer script competing for main-thread time.
 
-1. **Islands architecture** reduced unnecessary page-wide JavaScript.
-2. **Typed content pipeline** reduced rendering mistakes and metadata drift.
-3. **Asset handling improvements** made image/SVG delivery more predictable.
-4. **Simpler build path** reduced accidental regressions in deployment output.
+Template-by-template hydration decisions usually outperform random bundle-level tuning done later.
 
-Without attribution, metrics are trivia.
+## Image and SVG policy still affects real metrics
 
-## Image and SVG handling impact
+Even with a strong static stack, media handling can dominate LCP behavior. Route-level audits should still check:
 
-Image strategy affects LCP more than most teams expect.
+- which element is LCP
+- whether media dimensions and format choices are appropriate
+- whether asset processing policy remains consistent
 
-Important checks:
+Performance regressions often re-enter through content and media changes, not framework code.
 
-- LCP element format and dimensions
-- responsive image behavior
-- SVG processing policy consistency
+## Treat performance as an operating practice
 
-Migrating stack is a chance to enforce better defaults instead of carrying historical debt.
+Migration is a reset point, not the finish line. I’ve found it more effective to keep a small recurring scorecard—LCP, CLS, JS transferred, largest HTML payload, third-party cost—than to run occasional one-off audits.
 
-## Hydration budget: the hidden lever
+That rhythm makes regressions visible early and keeps optimization tied to real user impact.
 
-For blog-like sites, hydration budget is often the biggest practical win.
-
-Audit each template:
-
-- What must hydrate immediately?
-- What can hydrate on idle/visibility?
-- What should remain static forever?
-
-JavaScript not shipped is the fastest JavaScript.
-
-## Measurable outcomes to track monthly
-
-Use a compact scorecard:
-
-- LCP median and p75
-- CLS p75
-- Total JS transferred per template
-- Largest route HTML size
-- Third-party script cost
-
-A migration is not a one-time optimization event; it should establish a recurring performance discipline.
-
-## Examples/screenshots to include
-
-- Baseline vs post-migration Lighthouse summary
-- JS payload breakdown before/after
-- Hydration map by page template
-- Web Vitals trend chart over time
-
-## Actionable takeaway
-
-Set explicit page-template budgets (JS bytes, LCP target, third-party cost), and block changes that exceed them unless they ship deliberate user value.
-
-For migration context, read <PostLink slug="2026-05-02-jekyll-to-astro-migration" /> first.
+If you want migration context first, read <PostLink slug="2026-05-02-jekyll-to-astro-migration" />.

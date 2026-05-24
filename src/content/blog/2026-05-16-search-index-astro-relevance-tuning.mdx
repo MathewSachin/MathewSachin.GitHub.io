@@ -9,93 +9,57 @@ related:
   - 2026-04-04-beyond-pageviews-tracking-engagement
 ---
 
-*Search relevance does not emerge automatically from “index everything.” It is a sequence of deliberate choices: what to include, what to strip, what to boost, and how to evaluate outcomes against real user queries.*
+*The easiest way to build search is to index everything and call it done. The easiest way to get bad results is also to index everything and call it done.*
 
-## Target query
+Search quality on static sites comes from choices: what to include, what to strip, what to boost, and how to validate ranking against real user intent.
 
-How should I build and tune static-site search in Astro so results are actually useful?
+## Index generation is where relevance begins
 
-## Promise
+For static search, most important decisions happen before runtime:
 
-You’ll leave with a practical model for index generation, relevance tuning, and debugging search misses.
+- choose source documents (posts, tags, tools, series pages)
+- normalize metadata consistently
+- strip markdown noise from content bodies
+- serialize a compact index and ship it with the build
 
-## Index generation flow
+Runtime querying is fast only because this preprocessing does the hard work up front.
 
-A robust static search pipeline typically does this:
+## Better search often means indexing less
 
-1. collect content sources (posts, tags, tools, series pages)
-2. normalize metadata (title, URL, tags, category)
-3. strip markdown syntax/noise from body text
-4. serialize to a search-engine-friendly JSON index
-5. ship index with static build
+Over-indexing is one of the most common self-inflicted problems.
 
-This keeps runtime search fast and infrastructure-free.
+Title, description, tags, and meaningful body text are usually enough. Boilerplate UI text, repetitive CTA copy, and irrelevant code fences can dilute results and push wrong pages higher than they should be.
 
-## What to index (and what not to)
+The goal is not maximum token volume; the goal is signal density.
 
-Good search quality often improves when you **exclude** noisy content.
+## Relevance tuning should follow real queries
 
-Include:
+I start with intuitive field weighting—titles highest, tags high, description medium, body baseline—then tune using observed user queries.
 
-- title
-- concise description
-- tags
-- meaningful body text
+A practical loop looks like this:
 
-Exclude or downweight:
+1. collect top real queries
+2. define expected top results
+3. run comparisons after each weighting change
+4. ship only if top results improve materially
 
-- code fences (unless code search is a feature)
-- boilerplate nav/footer text
-- repeated CTA copy
+Without this loop, relevance tuning becomes guesswork with fancy terminology.
 
-The goal is query intent alignment, not maximum token count.
+## Debugging “search is broken” quickly
 
-## Relevance tuning strategy
+When rankings look wrong, I check simple causes first:
 
-Start with a simple weighting model:
-
-- title: highest boost
-- tags: medium-high
-- description: medium
-- body: baseline
-
-Then tune against actual query logs.
-
-### Practical tuning loop
-
-1. Pull top queries from analytics/search logs
-2. Label expected top results for each query
-3. Run offline relevance checks after each adjustment
-4. Compare precision of top 3 results
-5. Ship only improvements that help real queries
-
-## Debugging bad matches quickly
-
-When a result looks wrong, inspect:
-
-- was the page indexed?
+- was the page included in the index?
 - was content stripped too aggressively?
-- did tags overpower semantic relevance?
-- is stale index being served from old build?
+- are tags overpowering body relevance?
+- is an old index being served from a stale build?
 
-Most “search is broken” incidents are stale-index or weighting mistakes, not engine bugs.
+In practice, stale index artifacts and extraction mistakes are far more common than engine-level bugs.
 
-## Common pitfalls in static search
+## Keep a relevance benchmark as part of maintenance
 
-- rebuilding pages but forgetting to regenerate index
-- over-indexing long body text so niche keywords dominate
-- relying on synthetic queries instead of user behavior
-- not testing search after URL/routing changes
+Search quality drifts when content changes, URLs evolve, and new taxonomies are introduced. A small benchmark set of high-intent queries catches drift early and makes tuning safer.
 
-## Examples/screenshots to include
+Treat that benchmark like a test suite for relevance.
 
-- Search index schema snapshot
-- Before/after ranking on the same query set
-- Stale-index debugging flow
-- Query-to-expected-results rubric
-
-## Actionable takeaway
-
-Maintain a living benchmark set of your top 20–50 real queries, and tune search against that benchmark every time you change extraction or weighting.
-
-Background implementation context: <PostLink slug="2026-03-25-how-site-search-works" />.
+If you want the implementation background first, read <PostLink slug="2026-03-25-how-site-search-works" />.

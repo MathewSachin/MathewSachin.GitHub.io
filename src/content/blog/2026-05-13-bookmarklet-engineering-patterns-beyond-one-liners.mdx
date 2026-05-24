@@ -9,126 +9,63 @@ related:
   - 2019-12-7-unhide-password-box
 ---
 
-*Most bookmarklets are written like throwaway snippets. That is exactly why they break the moment a site updates a class name. If you want bookmarklets that survive real-world UI drift, you need engineering patterns, not one-liners.*
+*The internet loves bookmarklet one-liners. I’ve written and used plenty of them too. The problem is that one-liners are usually optimized for “looks clever in a tweet,” not “keeps working next month.”*
 
-## Target query
+If you’ve ever shared a bookmarklet, then gotten a DM saying “it stopped working,” you already know the real challenge isn’t writing JavaScript. It’s dealing with pages that change every week.
 
-How do I write bookmarklets that continue working across redesigns, mobile browsers, and edge-case page states?
+## The failure pattern is boringly consistent
 
-## Promise
+Almost every broken bookmarklet I debug ends up failing for one of the same reasons:
 
-By the end of this guide, you’ll have a practical reliability checklist you can apply to any bookmarklet before sharing it.
+- the selector depended on fragile class names or DOM position
+- the script ran before the target UI finished rendering
+- there was no fallback when the first query returned nothing
+- errors failed silently, so users only saw “nothing happened”
 
-## Why one-liners fail in production
+That combination makes bookmarklets feel random, even when the original idea is good.
 
-Most “viral” bookmarklets fail for predictable reasons:
+## Think in strategies, not snippets
 
-1. **Selectors are too brittle** (`.app > div:nth-child(4) > span`).
-2. **Execution assumes ideal timing** (DOM already loaded, no lazy render, no hydration).
-3. **No guard rails** (errors crash silently and leave users confused).
-4. **No fallback path** (single strategy, single point of failure).
-5. **No mobile testing** (works only on desktop Chrome).
+The biggest shift is mental: a bookmarklet should be treated as a tiny product, not a throwaway snippet.
 
-A bookmarklet is still software. Software needs defensive design.
+For element targeting, I start with meaning-first selectors (`id`, `data-*`, ARIA labels, button text) and keep class-based selectors as fallback only. Then I design a lookup chain, not a single query. If method A fails, try B. If B fails, try C. If all fail, report clearly what was attempted.
 
-## Pattern 1: Prefer semantic anchors over style hooks
+That one change turns “mysterious breakage” into “diagnosable behavior.”
 
-Class names are implementation detail. Product labels and accessibility attributes usually change less frequently.
+## Timing is part of correctness
 
-Use this priority order when choosing selectors:
+Modern pages hydrate in phases. A bookmarklet that assumes “click means DOM is ready” will fail intermittently on real-world connections.
 
-1. `id` (if stable and meaningful)
-2. explicit data attributes (`data-testid`, `data-role`, etc.)
-3. accessibility attributes (`aria-label`, role + text)
-4. visible text matching
-5. class-based fallback
+A reliable flow is:
 
-### Quick selector strategy checklist
+1. attempt immediately
+2. retry after a short delay
+3. optionally use a bounded observer when content is rendered late
 
-- Can you find at least **two independent ways** to locate the target node?
-- Does your selector rely on **position** (`nth-child`) rather than meaning?
-- If text is used, do you account for case and whitespace noise?
+The key word is *bounded*. Infinite polling is just another failure mode.
 
-## Pattern 2: Build a fallback tree, not a single selector
+## Mobile is where many bookmarklets quietly die
 
-Reliable bookmarklets behave like this:
+Desktop Chrome success does not imply mobile success.
 
-- Try strategy A
-- If A fails, try B
-- If B fails, try C
-- If all fail, present a helpful message
+Invocation behavior differs across browsers, some interactions depend on hover/right-click, and not every mobile browser exposes the same UX for bookmarks. If a bookmarklet is meant to be shared, I test at least Android Chrome and iOS Safari before calling it “done.”
 
-That turns “nothing happened” into a recoverable flow.
+## Know the boundary of what bookmarklets can do
 
-### What to log for debugging
+Bookmarklets are great for client-side convenience: cleanup, copy helpers, visibility toggles, quick transformations.
 
-At minimum, log:
+They are not a tool for bypassing real server-side controls. CSP rules, iframe boundaries, and backend authorization still exist for a reason. Designing with those boundaries in mind leads to better tools and less confusion.
 
-- strategy attempted
-- number of nodes found
-- which fallback succeeded
-- final action result
+## A practical release bar
 
-When someone says “it stopped working,” these logs tell you *where* it failed.
+Before publishing, I ask a few boring but useful questions:
 
-## Pattern 3: Treat timing as a first-class concern
+- Do I have at least one fallback selector path?
+- Does it fail safely when the target is missing?
+- Is there a clear error message for users?
+- Did I validate on mobile as well as desktop?
+- Can I explain exactly where it is expected *not* to work?
 
-Many modern pages render asynchronously. Running immediately on click is often too early.
+If the answer to any of these is no, it’s still a draft.
 
-Use phased execution:
-
-1. run immediately
-2. if missing target, retry after a short delay
-3. if still missing, attach a bounded observer and stop after timeout
-
-Key point: **bounded** retries. Infinite observers are memory leaks disguised as resilience.
-
-## Pattern 4: Mobile compatibility is not optional
-
-A bookmarklet that only works in desktop Chromium is a private utility, not a public one.
-
-Before publishing, validate on:
-
-- Android Chrome
-- iOS Safari (bookmarklet invocation behavior differs)
-- at least one page in reader mode / simplified mode (where applicable)
-
-Also verify whether your flow depends on hover, right-click, or keyboard shortcuts that do not exist on touch devices.
-
-## Pattern 5: Understand CSP and execution boundaries
-
-Bookmarklets can do a lot, but they are not magic.
-
-Common constraints:
-
-- strict CSP can block injected scripts from remote origins
-- cross-origin iframe boundaries cannot be bypassed from page context
-- server-enforced authorization cannot be bypassed via DOM edits
-
-Design bookmarklets for **DOM transformations and user-side convenience**, not for privilege escalation fantasies.
-
-## Maintainability checklist before you publish
-
-Use this 8-point release gate:
-
-1. ✅ Selector strategy has at least one fallback
-2. ✅ Timing strategy handles delayed rendering
-3. ✅ Errors are surfaced clearly to users
-4. ✅ Mobile run validated on real devices
-5. ✅ CSP behavior documented
-6. ✅ Safe no-op when element is missing
-7. ✅ Tested on at least 3 URLs/states
-8. ✅ Versioned changelog note for updates
-
-## Concrete examples/screenshots to add before publishing
-
-- Popup-heavy page before/after run
-- Selector fallback flow diagram
-- Mobile Safari invocation screenshot
-- Error-state toast/alert screenshot
-
-## Actionable takeaway
-
-Treat every bookmarklet like a mini product: reliability budget, fallback policy, and compatibility checklist.
-
-If you want to ship one today, start with the <a href="/tools/bookmarklet/">Bookmarklet Compiler</a> and apply this checklist before sharing.
+If you want to ship one now, build it in the <a href="/tools/bookmarklet/">Bookmarklet Compiler</a>—then hold it to this reliability bar before sharing.

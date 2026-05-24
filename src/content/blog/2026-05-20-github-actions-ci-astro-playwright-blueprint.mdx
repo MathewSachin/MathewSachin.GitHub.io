@@ -9,75 +9,46 @@ related:
   - 2026-05-02-jekyll-to-astro-migration
 ---
 
-*Fast CI is easy if you skip useful checks. Reliable CI is easy if you accept slow feedback. The real challenge is designing a pipeline that is both fast and trustworthy.*
+*The easiest way to speed up CI is to delete checks. The easiest way to increase confidence is to run everything all the time. Useful pipelines sit in the middle: fast enough to keep momentum, strict enough to catch real issues.*
 
-## Target query
+For Astro + Playwright projects, a few structural decisions create most of the benefit.
 
-How should I structure GitHub Actions for an Astro static site with Playwright e2e tests?
+## Build once, consume everywhere
 
-## Promise
+The highest-leverage optimization is artifact continuity.
 
-You’ll get a practical workflow blueprint that balances speed, observability, and confidence.
+Build the site once, store the output, and make downstream jobs consume the same artifact. This removes duplicate work and eliminates a subtle class of “passed in one job, failed in another” inconsistencies caused by separate builds.
 
-## Core principle: build once, reuse everywhere
+## Separate jobs by failure domain
 
-The highest-leverage CI optimization is artifact reuse.
+I prefer clear job boundaries:
 
-Pipeline shape:
+- build/unit/content checks
+- browser e2e checks
+- deploy steps
 
-1. install + build site once
-2. publish `dist/` artifact
-3. downstream jobs (tests/previews) consume same artifact
+When jobs map to failure domains, triage is faster and reviewers can identify ownership quickly.
 
-This avoids duplicate builds and removes “it passed in build job but failed in test job due to different output” drift.
+## CI debugging should be first-class
 
-## Split checks by failure domain
+A failing workflow should come with enough evidence to diagnose without rerunning blindly. In practice that means preserving traces, screenshots where relevant, and concise logs connected to the failing step.
 
-Separate jobs by what can break:
+If a reviewer has to guess what happened, the workflow is under-instrumented.
 
-- **build/unit checks**: compile/content/schema/runtime-independent logic
-- **browser checks**: Playwright against built artifact
-- **deploy checks**: only after quality gates pass
+## Where performance wins usually come from
 
-When jobs are scoped well, failures are faster to diagnose.
+Most runtime improvements come from removing duplicated work:
 
-## Debugging failed jobs without guesswork
+- lockfile-based dependency caching
+- build artifact reuse
+- avoiding unnecessary matrix breadth
 
-Always preserve:
+Micro-optimizations help later, but deduplication is usually where the big minutes are hiding.
 
-- test traces/screenshots/videos
-- build logs
-- generated artifact metadata
+## Keep workflow YAML boring on purpose
 
-If an e2e test fails, the review path should be obvious: open trace, inspect state, identify failing assumption.
+Pipelines age better when they are explicit and unsurprising: pinned major action versions, deterministic steps, clear fail-fast behavior for missing artifacts, and concise job summaries.
 
-## Runtime and cost optimization levers
+“Boring CI” is easier to trust and easier to maintain.
 
-- dependency caching with lockfile keying
-- artifact reuse across jobs
-- conditional workflow triggers for docs/content-only changes (where appropriate)
-- matrix pruning to only meaningful browser/runtime combinations
-
-Optimization rule: remove duplicated work first, micro-tune second.
-
-## CI hygiene practices
-
-- keep steps explicit and deterministic
-- pin major action versions
-- fail fast on missing artifacts
-- surface concise summary annotations for quick PR review
-
-A clean pipeline is easier to evolve than a “works somehow” YAML maze.
-
-## Examples/screenshots to include
-
-- workflow graph showing artifact handoff
-- successful vs failed run comparison
-- Playwright trace triage screenshot
-- runtime trend before/after optimization
-
-## Actionable takeaway
-
-Design your pipeline around artifact continuity. It usually gives the largest speed + reliability gain in one decision.
-
-For testing details, pair this with <PostLink slug="2026-05-02-testing-with-playwright" />.
+If you want the testing layer details behind this blueprint, pair this with <PostLink slug="2026-05-02-testing-with-playwright" />.

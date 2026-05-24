@@ -9,85 +9,44 @@ related:
   - 2026-04-01-pr-preview-setup
 ---
 
-*The migration is only half done when pages render in a new framework. It is fully done when your publishing workflow becomes easier, safer, and faster than before.*
+*Framework migration is only half the story. The real win is when the publishing workflow becomes more reliable for future posts than the old one ever was.*
 
-## Target query
+Moving from Jekyll-era habits to an Astro-native pipeline changed how I write, review, and ship content day to day.
 
-How do I evolve a mature Jekyll publishing workflow into an Astro-native content pipeline?
+## Typed content changed editorial reliability
 
-## Promise
+In older workflows, frontmatter mistakes could stay invisible until a page looked wrong in production. With typed collections and schema validation, metadata issues fail early during build.
 
-This post gives a practical blueprint for day-to-day publishing in Astro: content schema, routes, previews, and deployment discipline.
+That shifts quality control from “spot later” to “block before merge,” which is exactly where content correctness should sit.
 
-## Content collections as the new foundation
+## URL continuity is a migration requirement
 
-In Jekyll, frontmatter drift can hide for weeks.
+Readers and search engines care about stable URLs more than internal framework choices.
 
-In Astro, typed collections let you validate metadata at build time.
+During migration, preserving route shape and handling redirects where needed prevents avoidable SEO and navigation regressions. It also keeps historical links from old posts and social shares useful.
 
-Benefits:
+## BASE-aware linking prevents preview surprises
 
-- required fields enforced early
-- optional fields documented in one place
-- fewer silent formatting mistakes
+One subtle but recurring source of issues is base path handling in previews. Root-relative links can look fine locally and fail in preview deployments.
 
-Treating metadata as schema is a huge reliability upgrade for long-running blogs.
+Adopting BASE-aware internal linking as a strict convention removed a class of “works here, broken there” bugs from the publishing flow.
 
-## Route shape consistency during migration
+## The new day-to-day flow is simpler
 
-Users and search engines expect URL stability.
+The current flow is intentionally boring:
 
-If legacy posts used date-based routes, preserve route shape while modernizing internals.
+1. create dated `.mdx` file
+2. write schema-valid frontmatter + content
+3. run build/tests/checks
+4. open PR and review via preview
+5. merge only when content and navigation pass
 
-Good migration behavior:
+This consistency matters more than adding more automation scripts.
 
-- keep canonical URL patterns stable
-- maintain redirects where route changes are unavoidable
-- validate internal links after content moves
+## Series strategy also got clearer
 
-## BASE_URL and preview pitfalls
+Migration was a good forcing function to tighten editorial structure: deeper standalone posts for search intent, better internal linkage between related posts, and cleaner tag clusters for discovery.
 
-Preview environments often run under subpaths. Hardcoded root-relative links break quietly.
+In practice, technical architecture and content strategy now reinforce each other instead of fighting each other.
 
-Adopt a strict policy:
-
-- internal links/components should be BASE-aware
-- test previews using the same base-path behavior as CI
-
-This one detail prevents a large class of “works locally, broken in preview” defects.
-
-## New publishing flow (draft to live)
-
-A reliable Astro-era flow can be:
-
-1. create dated `.mdx` post
-2. write with schema-valid frontmatter
-3. build locally and run tests
-4. open PR with preview link
-5. review content + UX + links
-6. merge and deploy
-
-Automating parts of this flow is useful, but consistency matters more than automation quantity.
-
-## Organizing future series content
-
-Moving from a Jekyll-era series to Astro-first series is a chance to define clearer editorial structure:
-
-- standalone deep dives for high-intent search queries
-- linked series hubs for topic continuity
-- consistent tag clusters to improve discovery
-
-This makes content strategy and technical architecture reinforce each other.
-
-## Examples/screenshots to include
-
-- Content schema and validation error example
-- Route mapping old vs new
-- Broken root-relative link in preview vs fixed BASE-aware link
-- Draft-to-publish checklist board snapshot
-
-## Actionable takeaway
-
-Treat publishing as a pipeline, not a one-off writing event: schema checks, route checks, preview checks, then deploy.
-
-Start with migration context: <PostLink slug="2026-05-02-jekyll-to-astro-migration" />.
+If you’re coming from the same direction, start with <PostLink slug="2026-05-02-jekyll-to-astro-migration" /> and then map your publishing checklist around schema + preview + route validation.

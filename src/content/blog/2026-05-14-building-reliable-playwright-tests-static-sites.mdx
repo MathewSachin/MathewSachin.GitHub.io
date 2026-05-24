@@ -9,111 +9,67 @@ related:
   - 2026-04-02-docker-faster-github-actions
 ---
 
-*Flaky tests are not a Playwright problem — they are usually an assumptions problem. Static sites still have async search indexes, hydrated islands, and browser APIs. If your tests ignore that reality, CI becomes roulette.*
+*When people say “Playwright is flaky,” I usually hear “our tests are making assumptions the browser does not guarantee.” Static sites have fewer moving parts than full apps, but they still have hydration, async index loads, and browser permission edges.*
 
-## Target query
+The good news is that reliability improves a lot once you model those realities explicitly.
 
-How do I make Playwright tests stable for static Astro sites that include client-side islands?
+## Most flakiness comes from readiness assumptions
 
-## Promise
+The most common anti-pattern is treating `page.goto()` as “the page is ready for all interactions.”
 
-This post gives you a concrete anti-flake testing model you can adopt immediately.
+For each page, define a concrete readiness signal before you click anything. On search pages, maybe that means the input is enabled and loading status is gone. On tool pages, maybe it means a primary action button is visible and enabled.
 
-## Reliability starts with architecture, not retries
+Once that first readiness assertion is explicit, a huge class of random failures disappears.
 
-Use two layers:
+## Keep retries narrow and intentional
 
-- **Node tests** for pure logic
-- **Playwright e2e** for browser interactions
+Retries are useful for interactions that race with hydration or browser events. They are harmful when used as a blanket at the test level.
 
-This split removes most unnecessary browser tests and keeps the e2e suite focused on real user flows.
+I use bounded retries for things like:
 
-## Pattern 1: Define explicit readiness per page
+- file chooser timing windows
+- clipboard reads after async copy actions
+- a click that occasionally races with late-rendered markup
 
-Never assume `page.goto()` implies “ready for interactions.”
+I avoid retries for final behavior assertions. If the end state is wrong, I want the test to fail loudly.
 
-For each page, define one explicit readiness condition such as:
+## Test the artifact users actually receive
 
-- search input enabled
-- hydration marker visible
-- loading status removed
+Static sites can behave differently between dev server and built output. That’s why the stable pattern is:
 
-Once that condition passes, everything else becomes dramatically more stable.
-
-## Pattern 2: Use bounded retries for unstable interaction points
-
-Retries are useful when they are **narrow and intentional**.
-
-Good retry targets:
-
-- click that races with hydration
-- file chooser event timing
-- clipboard reads after async copy action
-
-Bad retry targets:
-
-- final assertions about expected outcome
-- broad test-level retries that hide real regressions
-
-If the final state is wrong, fail fast.
-
-## Pattern 3: Build once, test the built artifact
-
-Static site behavior in dev mode can differ from built output.
-
-CI should validate what users receive:
-
-1. build site
+1. build the site
 2. serve `dist/`
-3. run Playwright against that server
+3. run e2e against that output
 
-This catches path issues, generated asset mistakes, and search-index delivery bugs that dev-server tests often miss.
+It catches broken paths, stale assets, and index delivery issues that local dev mode can hide.
 
-## Pattern 4: Make failure artifacts mandatory
+## Debugging should be fast, not forensic archaeology
 
-A failed run should answer these questions in under 5 minutes:
+A failing CI run should be diagnosable in minutes. For that, artifacts matter as much as assertions.
 
-- what step failed?
-- what did the page look like?
-- what network call failed or hung?
-- was hydration complete?
-
-Store at least:
+At minimum, keep:
 
 - Playwright trace
-- screenshot
-- test output logs
+- screenshot/video where relevant
+- concise logs tied to failing step
 
-## Pattern 5: Keep selectors stable and product-oriented
+When this is in place, triage becomes “open trace, inspect transition, patch assumption,” not “rerun and guess.”
 
-Prefer selectors that reflect user intent:
+## Selector quality is part of test reliability
 
-- form field IDs
-- role/name combinations
-- stable data attributes
+Tests should track user intent, not CSS implementation details. IDs, roles, and stable attributes age better than long nested selectors.
 
-Avoid brittle style selectors and deeply nested CSS paths.
+Whenever a test starts failing after a harmless refactor, it’s often a sign the selector targeted styling structure instead of user-facing semantics.
 
-## Local debugging workflow that mirrors CI
+## The practical checklist I use now
 
-When a test flakes in CI:
+Before merging a new e2e test, I ask:
 
-1. Run the same test against built `dist/`
-2. Use headed mode + trace viewer
-3. Slow down just the problematic interaction
-4. Add explicit readiness or narrow retry where needed
+- does the test define explicit page readiness?
+- does it avoid fixed sleeps?
+- are retries scoped to race-prone interactions only?
+- could someone debug a failure from stored artifacts alone?
 
-Never “fix” flakiness by adding arbitrary `waitForTimeout` sleeps globally.
+If yes, that test usually survives CI load and future refactors.
 
-## Examples/screenshots to include
-
-- Hydration race timeline for a failing test
-- Before/after readiness-gate fix
-- Trace viewer step showing the failure transition
-- Selector anti-pattern vs stable selector comparison
-
-## Actionable takeaway
-
-For each tested page, add one deterministic readiness assertion before the first interaction. That single habit removes a huge percentage of CI flakes.
-
-For the current setup details, see <PostLink slug="2026-05-02-testing-with-playwright" />.
+For concrete config details from this site, read <PostLink slug="2026-05-02-testing-with-playwright" />.

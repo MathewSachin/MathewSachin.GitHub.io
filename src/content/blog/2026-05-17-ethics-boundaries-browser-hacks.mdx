@@ -9,86 +9,55 @@ related:
   - 2026-03-07-edit-webpage-inspect-element
 ---
 
-*Technical capability is not ethical permission. The internet has enough “cool trick” posts with zero discussion of harm. This is the framework I use to decide what should be published, what should be abstracted, and what should not be shared at all.*
+*Just because something can be done in DevTools doesn’t mean it should be published as a tutorial. Capability is technical; responsibility is social.*
 
-## Target query
+Over time, I found I needed a clearer boundary for what belongs on this blog and what doesn’t.
 
-Where is the ethical boundary between harmless browser-side experimentation and irresponsible exploitation?
+## The soft-wall / hard-wall distinction
 
-## Promise
+The most useful framing is simple:
 
-You’ll get a concrete decision model for publishing browser-hack content responsibly.
+- **soft wall**: client-side presentation barriers (overlays, hidden elements, disabled controls)
+- **hard wall**: server-side authorization, authentication, entitlement, or access controls
 
-## Soft wall vs hard wall
+Explaining how client-side UI behaves can be educational. Publishing operational bypass guidance for hard controls is not something I consider responsible.
 
-This distinction matters:
+## A publication filter that scales
 
-- **Soft wall**: client-side presentation barrier (overlay, disabled button, hidden node)
-- **Hard wall**: server-side access control, authentication, authorization, or paid entitlement logic
+Before writing any browser-hack content, I evaluate two questions:
 
-Educational discussion of soft-wall UI behavior can be defensible.
+1. Is there genuine educational value?
+2. What is the realistic abuse potential?
 
-Operational guidance to bypass hard walls is not.
+If educational value is high and abuse potential is low, publication can make sense with clear context. If abuse potential is high, the right path is usually private disclosure or heavily abstracted discussion without executable misuse detail.
 
-## Safety-first publishing model
+## Why intent and framing matter
 
-Before publishing any technique, score it on two axes:
+Two posts can use similar primitives and have very different real-world outcomes depending on framing.
 
-1. **Educational value**
-2. **Abuse potential**
+A post focused on user-side customization, accessibility, and debugging can empower users safely. A post framed as a bypass playbook can encourage misuse even if the underlying API calls look “basic.”
 
-Only publish high-value / low-abuse material with mitigation context.
+That means editorial choices—scope, language, omitted details—are part of security posture.
 
-If abuse potential is high, either:
+## What I avoid publishing
 
-- keep it private
-- report responsibly
-- publish only conceptual analysis without operational details
+I avoid publishing step-by-step material that materially lowers effort for:
 
-## Legal and policy boundaries
+- unauthorized access to private data
+- account compromise workflows
+- meaningful security-control evasion
+- abuse-at-scale automation
 
-Even when a method is “just client-side,” legal risk may still exist depending on intent, jurisdiction, terms, and impact.
+You can still teach defensive thinking and browser internals without enabling misuse.
 
-Ground rules that reduce risk:
+## Responsible disclosure over “viral speed”
 
-- never encourage account compromise
-- avoid automation that targets personal/private data
-- avoid techniques that enable fraud at scale
-- include clear consent and ownership boundaries
+If something looks like a genuine vulnerability, responsible disclosure is slower but better: verify carefully, report privately, give maintainers time, then publish sanitized lessons if appropriate.
 
-## Responsible disclosure workflow
+It is less dramatic than shipping a “hack” thread immediately, but better for users and ecosystems.
 
-If you find a genuine vulnerability:
+## The standard I try to meet
 
-1. verify impact carefully
-2. collect minimal reproducible evidence
-3. contact vendor/platform security channel
-4. provide remediation context
-5. wait for response/remediation window
-6. publish sanitized educational learnings later
+If I can’t explain why a post helps users more than it helps attackers, it probably shouldn’t ship in its current form.
 
-This is slower than viral posting, but better for users.
-
-## What not to publish
-
-Avoid step-by-step material that directly enables:
-
-- unauthorized data access
-- account takeover pathways
-- evasion of meaningful security controls
-- scalable abuse scripts
-
-You can still teach defensive thinking without publishing misuse playbooks.
-
-## Examples/screenshots to include
-
-- Soft-wall overlay removal example (safe)
-- Hard-wall authorization failure example (conceptual only)
-- Publication decision matrix
-- Responsible disclosure timeline template
-
-## Actionable takeaway
-
-Use a publish gate: **high educational value, low abuse potential, explicit user-safety framing**. If any one of those is missing, do not ship.
-
-For practical, user-side customization patterns, see <PostLink slug="2026-05-07-remove-popups-bookmarklet" />.
+For safer, user-control-oriented examples, see <PostLink slug="2026-05-07-remove-popups-bookmarklet" />.
