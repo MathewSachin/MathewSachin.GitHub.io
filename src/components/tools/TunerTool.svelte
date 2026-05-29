@@ -107,19 +107,13 @@ const meterPercent = $derived(
   noteInfo ? Math.min(100, Math.max(0, ((noteInfo.cents + MAX_CENTS) / (MAX_CENTS * 2)) * 100)) : 50
 );
 
-const tuningLabel = $derived(() => {
-  if (!noteInfo) return '';
-  if (noteInfo.cents === 0) return 'In tune';
-  return noteInfo.cents > 0 ? `+${noteInfo.cents}¢ Sharp` : `${noteInfo.cents}¢ Flat`;
-});
+const tuningLabel = $derived(
+  !noteInfo ? '' : noteInfo.cents === 0 ? 'In tune' : noteInfo.cents > 0 ? `+${noteInfo.cents}¢ Sharp` : `${noteInfo.cents}¢ Flat`
+);
 
-const meterColor = $derived(() => {
-  if (!noteInfo) return 'secondary';
-  const absCents = Math.abs(noteInfo.cents);
-  if (absCents <= 5) return 'success';
-  if (absCents <= 15) return 'warning';
-  return 'danger';
-});
+const meterColor = $derived(
+  !noteInfo ? 'secondary' : Math.abs(noteInfo.cents) <= 5 ? 'success' : Math.abs(noteInfo.cents) <= 15 ? 'warning' : 'danger'
+);
 </script>
 
 <div class="card google-anno-skip">
@@ -198,12 +192,12 @@ const meterColor = $derived(() => {
           </div>
           <div class="progress" style="height: 24px;" role="progressbar" aria-label="Tuning meter">
             <div
-              class={`progress-bar bg-${meterColor()}`}
+              class={`progress-bar bg-${meterColor}`}
               style={`width: ${meterPercent}%`}
             ></div>
           </div>
           <div class="text-center mt-1">
-            <small class={`text-${meterColor()}`}>{tuningLabel()}</small>
+            <small class={`text-${meterColor}`}>{tuningLabel}</small>
           </div>
         </div>
 
