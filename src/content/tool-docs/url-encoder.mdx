@@ -1,0 +1,43 @@
+---
+title: "URL Encoder / Decoder"
+description: "Percent-encode plain text for safe use in URLs, or decode URL-encoded strings back to readable text."
+icon: "fas fa-link"
+quick_tool: false
+listed: true
+published: true
+order: 9
+component: "url-encoder"
+ads: true
+---
+
+#### How It Works
+
+This tool encodes and decodes text using
+[percent-encoding](https://en.wikipedia.org/wiki/Percent-encoding) (also known as URL encoding)
+— entirely inside your browser. **No data is ever sent to a server.**
+
+##### What is URL Encoding?
+
+Percent-encoding is a mechanism for representing characters that are not allowed or have special
+meaning in a URL. Each unsafe byte is replaced with a `%` sign followed by two hexadecimal digits
+representing its value (e.g., a space becomes `%20`, `&` becomes `%26`).
+
+This is used whenever you need to include arbitrary text as part of a URL query parameter or path
+segment without breaking the URL structure.
+
+##### Implementation Details
+
+The encoder uses JavaScript's built-in
+[`encodeURIComponent()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)
+function, which encodes all characters except `A–Z a–z 0–9 - _ . ! ~ * ' ( )`.
+
+The decoder uses
+[`decodeURIComponent()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent),
+which reverses the process. If the input contains an invalid percent-escape sequence (e.g. a
+lone `%` or a malformed sequence), the decoder will report an error rather than silently produce
+corrupted output.
+
+##### Privacy
+
+All encoding and decoding runs locally in your browser tab using standard JavaScript APIs.
+Your input text never leaves your device.
