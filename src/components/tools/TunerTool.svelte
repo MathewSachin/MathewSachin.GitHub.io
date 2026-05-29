@@ -127,7 +127,7 @@ const meterColor = $derived(
           <label class="form-label" for="tuner-mode">Mode</label>
           <select id="tuner-mode" class="form-select" bind:value={mode} disabled={isListening}>
             <option value="chromatic">Chromatic</option>
-            <option value="guitar">Acoustic Guitar</option>
+            <option value="guitar">Guitar (Standard Tuning)</option>
           </select>
         </div>
 

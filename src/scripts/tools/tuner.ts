@@ -2,6 +2,10 @@ export const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A',
 
 export const RMS_THRESHOLD = 0.01;
 
+/**
+ * Standard guitar tuning strings, ordered from lowest (string 6, E2) to highest (string 1, E4).
+ * Applies to acoustic, electric, and classical guitars in standard tuning.
+ */
 export const GUITAR_STRINGS = [
   { label: '6 (E2)', frequency: 82.41 },
   { label: '5 (A2)', frequency: 110.00 },
