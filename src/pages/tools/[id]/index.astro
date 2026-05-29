@@ -20,6 +20,7 @@ import SipTool from '@components/tools/SipTool.svelte';
 import Scratchpad from '@components/tools/Scratchpad.svelte';
 import TimestampTool from '@components/tools/TimestampTool.svelte';
 import UrlEncoderTool from '@components/tools/UrlEncoderTool.svelte';
+import TunerTool from '@components/tools/TunerTool.svelte';
 import YtThumbnail from '@components/tools/YtThumbnail.svelte';
 
 export async function getStaticPaths() {
@@ -92,6 +93,8 @@ const BASE = import.meta.env.BASE_URL;
     <TimestampTool client:load />
   ) : toolComponentKey === 'url-encoder' ? (
     <UrlEncoderTool client:load />
+  ) : toolComponentKey === 'tuner' ? (
+    <TunerTool client:load />
   ) : toolComponentKey === 'yt-thumbnail' ? (
     <YtThumbnail client:load />
   ) : (

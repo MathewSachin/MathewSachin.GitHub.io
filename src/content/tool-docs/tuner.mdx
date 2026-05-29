@@ -1,0 +1,33 @@
+---
+title: "Guitar & Chromatic Tuner"
+description: "Real-time in-browser tuner for acoustic guitar and any instrument using your microphone and the Web Audio API."
+icon: "fas fa-guitar"
+accent_color: "#a855f7"
+quick_tool: false
+listed: true
+published: true
+order: 19
+component: "tuner"
+ads: true
+---
+
+#### How It Works
+
+This tuner uses your browser's microphone and the
+[Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+to capture audio in real time and detect pitch through an autocorrelation algorithm.
+No audio is ever sent to a server — everything runs locally in your browser.
+
+##### Features
+
+- **Chromatic mode:** Detects any pitch and displays the nearest note name, octave, and
+  frequency in Hz with a ±50 cents deviation meter.
+- **Acoustic guitar mode:** Highlights the nearest standard-tuning string (E2, A2, D3, G3,
+  B3, E4) so you know which string you are tuning.
+- **Visual meter:** A color-coded bar shows how flat (red) or sharp (red) the detected note
+  is, turning green when you are within ±5 cents of the target.
+
+##### Privacy
+
+Your microphone audio is processed entirely in your browser. No audio data or pitch data
+is transmitted anywhere.
