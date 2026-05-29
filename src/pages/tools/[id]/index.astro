@@ -13,6 +13,7 @@ import IonTool from '@components/tools/IonTool.svelte';
 import JsonTool from '@components/tools/JsonTool.svelte';
 import LocalAI from '@components/tools/LocalAI.svelte';
 import MediaConverter from '@components/tools/MediaConverter.svelte';
+import MetronomeTool from '@components/tools/MetronomeTool.svelte';
 import PdfPasswordTool from '@components/tools/PdfPasswordTool.svelte';
 import QrTool from '@components/tools/QrTool.svelte';
 import SipTool from '@components/tools/SipTool.svelte';
@@ -76,6 +77,8 @@ const BASE = import.meta.env.BASE_URL;
     <LocalAI client:only="svelte" />
   ) : toolComponentKey === 'mediaconvert' ? (
     <MediaConverter client:load />
+  ) : toolComponentKey === 'metronome' ? (
+    <MetronomeTool client:load />
   ) : toolComponentKey === 'pdf' ? (
     <PdfPasswordTool client:load workerUrl={`${BASE}tools/pdf/pdf.worker.js`} />
   ) : toolComponentKey === 'qr' ? (
