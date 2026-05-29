@@ -4,6 +4,7 @@ import ToolLayout from '@layouts/ToolLayout.astro';
 import Base64Tool from '@components/tools/Base64Tool.svelte';
 import Bookmarklet from '@components/tools/Bookmarklet.svelte';
 import CapturaWebRecorder from '@components/tools/CapturaWebRecorder.svelte';
+import ColorPaletteTool from '@components/tools/ColorPaletteTool.svelte';
 import CronTool from '@components/tools/CronTool.svelte';
 import DiffTool from '@components/tools/DiffTool.svelte';
 import HashTool from '@components/tools/HashTool.svelte';
@@ -57,6 +58,8 @@ const BASE = import.meta.env.BASE_URL;
     <Bookmarklet client:load />
   ) : toolComponentKey === 'captura' ? (
     <CapturaWebRecorder client:only="svelte" />
+  ) : toolComponentKey === 'color-palette' ? (
+    <ColorPaletteTool client:load />
   ) : toolComponentKey === 'cron' ? (
     <CronTool client:load />
   ) : toolComponentKey === 'diff' ? (
