@@ -29,7 +29,8 @@ test('encodeUrl: encodes a slash', () => {
   assert.equal(encodeUrl('foo/bar'), 'foo%2Fbar')
 })
 
-test('encodeUrl: leaves unreserved characters unchanged', () => {
+test('encodeUrl: leaves characters unreserved by encodeURIComponent unchanged', () => {
+  // encodeURIComponent does not encode: A-Z a-z 0-9 - _ . ! ~ * ' ( )
   const safe = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~*\'()'
   assert.equal(encodeUrl(safe), safe)
 })
