@@ -137,7 +137,7 @@
       for="color-palette-file"
       id="color-palette-drop-zone"
       class="drop-zone border border-2 rounded p-5 text-center mb-4 d-block"
-      on:dragover|preventDefault={() => {}}
+      on:dragover|preventDefault
       on:drop|preventDefault={onDrop}
     >
       <i class="fas fa-image fa-2x text-muted mb-2 d-block"></i>

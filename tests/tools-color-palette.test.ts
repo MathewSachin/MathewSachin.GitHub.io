@@ -51,5 +51,5 @@ test('extractProminentHexColors: groups close shades with quantization', () => {
 });
 
 test('extractProminentHexColors: validates RGBA pixel shape', () => {
-  assert.throws(() => extractProminentHexColors([255, 0, 0]), /divisible by 4/);
+  assert.throws(() => extractProminentHexColors(Uint8ClampedArray.from([255, 0, 0])), /divisible by 4/);
 });
