@@ -31,6 +31,7 @@ const formatAmount = (value: number): string =>
       <div class="col-12 col-md-4">
         <label class="form-label" for="sip-years">Investment Duration (Years)</label>
         <input id="sip-years" type="number" min="0.1" step="0.1" class="form-control" bind:value={years}>
+        <div class="form-text">Fractional years are supported and rounded to the nearest month.</div>
       </div>
       <div class="col-12 col-md-4">
         <label class="form-label" for="sip-return">Expected Return (% p.a.)</label>

@@ -38,7 +38,7 @@ export function calculateSip(input: SipInput): SipResult {
   const annualStepUpRate = toNonNegativeNumber(input.annualStepUpRate ?? 0)
   const inflationRate = toNonNegativeNumber(input.inflationRate ?? 0)
   const initialInvestment = toNonNegativeNumber(input.initialInvestment ?? 0)
-  const totalMonths = Math.max(1, Math.floor(toNonNegativeNumber(input.years) * 12))
+  const totalMonths = Math.max(1, Math.round(toNonNegativeNumber(input.years) * 12))
 
   const monthlyRate = annualReturnRate / 12 / 100
   const stepUpFactor = 1 + annualStepUpRate / 100
@@ -57,7 +57,8 @@ export function calculateSip(input: SipInput): SipResult {
       yearlyInvestment = 0
     }
 
-    balance = (balance * (1 + monthlyRate)) + currentMonthlyInvestment
+    balance *= 1 + monthlyRate
+    balance += currentMonthlyInvestment
     totalInvested += currentMonthlyInvestment
     yearlyInvestment += currentMonthlyInvestment
 
@@ -73,7 +74,7 @@ export function calculateSip(input: SipInput): SipResult {
   }
 
   const estimatedReturns = balance - totalInvested
-  const inflationAdjustedValue = inflationFactor > 0 ? balance / inflationFactor : balance
+  const inflationAdjustedValue = balance / inflationFactor
 
   return {
     totalInvested,
