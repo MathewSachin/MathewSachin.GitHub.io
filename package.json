@@ -35,7 +35,7 @@
   "devDependencies": {
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.3",
     "@astrojs/svelte": "^8.1.1",
     "@pintora/cli": "^0.8.1",
     "@playwright/test": "^1.60.0",
