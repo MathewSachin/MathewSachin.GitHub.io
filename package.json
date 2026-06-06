@@ -22,7 +22,7 @@
     "diff2html": "^3.4.56",
     "gray-matter": "^4.0.3",
     "ion-js": "^5.2.1",
-    "mediabunny": "1.45.4",
+    "mediabunny": "1.46.0",
     "node-addon-api": "^8.8.0",
     "node-gyp": "^12.3.0",
     "qrcode": "^1.5.4",
