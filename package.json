@@ -41,7 +41,7 @@
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.2",
     "@types/qrcode": "^1.5.6",
-    "astro": "^6.4.4",
+    "astro": "^6.4.6",
     "astro-link-validator": "github:rodgtr1/astro-link-validator#025a27b2582234084b3676bc725418b5fc429dcd",
     "esbuild": "^0.28.1",
     "hast-util-to-html": "^9.0.5",
