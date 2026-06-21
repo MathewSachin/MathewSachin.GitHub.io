@@ -39,7 +39,7 @@
     "@astrojs/svelte": "^8.1.2",
     "@pintora/cli": "^0.8.1",
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.0.0",
     "@types/qrcode": "^1.5.6",
     "astro": "^6.4.8",
     "astro-link-validator": "github:rodgtr1/astro-link-validator#025a27b2582234084b3676bc725418b5fc429dcd",
