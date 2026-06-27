@@ -39,11 +39,13 @@ let canvas: HTMLCanvasElement;
 let dirName = $state('(no folder selected)');
 let micGainLabelValue = $derived(micMuted ? `Muted · ${gainPct(micGainValue)}` : gainPct(micGainValue));
 let sysGainLabelValue = $derived(sysMuted ? `Muted · ${gainPct(sysGainValue)}` : gainPct(sysGainValue));
+let annotationWidthLabelValue = $derived(`${annotationWidthValue}px`);
 let micLevelCanvas: HTMLCanvasElement;
 let sysLevelCanvas: HTMLCanvasElement;
 let errorDialog: HTMLDialogElement;
 let countdownOverlay: HTMLElement;
 let countdownNumberEl: HTMLElement;
+type AnnotationTool = 'none' | 'draw' | 'highlight' | 'zoom';
 const fpsOptions = [
   { value: '15', label: '15 fps' },
   { value: '30', label: '30 fps' },
@@ -55,6 +57,9 @@ const countdownOptions = [
   { value: '5', label: '5 sec' },
   { value: '10', label: '10 sec' },
 ];
+function setAnnotationTool(tool: AnnotationTool) {
+  annotationToolValue = tool;
+}
 
 let timerIntervalId: ReturnType<typeof setInterval> | null = null;
 let countdownIntervalId: ReturnType<typeof setInterval> | null = null;
@@ -484,6 +489,11 @@ onMount(() => {
   compositor = new Compositor(canvas, {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
   });
+  compositor.setAnnotationOptions({
+    tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
+    color: annotationColorValue,
+    width: parseFloat(annotationWidthValue),
+  });
   audioMixer   = new AudioMixer(micLevelCanvas, sysLevelCanvas);
   storage      = new StorageManager((name: string) => dirName = name, showErrorDialog);
   api = new RecorderAPI({
@@ -551,6 +561,16 @@ $effect(() => {
   savePref(PREFS.sysGain, sysGainValue);
   applyAudioMixSettings();
 });
+
+$effect(() => {
+  if (compositor) {
+    compositor.setAnnotationOptions({
+      tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
+      color: annotationColorValue,
+      width: parseFloat(annotationWidthValue),
+    });
+  }
+});
 </script>
 
 <div id="alert-box" class="alert mb-3" hidden></div>
@@ -580,18 +600,82 @@ $effect(() => {
             <span id="timer-text" class={timerClass}>{timerText}</span>
           </span>
         </div>
-          <div class="canvas-wrap">
-            <div class="preview-frame" class:preview-frame-dimmed={previewDimmed}>
-            <canvas id="recorder-canvas" width="1280" height="720" bind:this={canvas}></canvas>
-              {#if showPreviewHint}
-                <div class="preview-hint" aria-hidden="true">
-                  <span class="preview-hint-title">Preview will appear here</span>
-                  <span class="preview-hint-body">Select your sources, then start recording to share a screen or window.</span>
-                </div>
-              {/if}
+          <div class="preview-workspace">
+            <div class="annotation-toolbar" role="toolbar" aria-label="Annotation tools">
+              <button
+                id="annotation-tool-none-btn"
+                class="annotation-tool-btn"
+                class:is-active={annotationToolValue === 'none'}
+                type="button"
+                title="Pointer"
+                aria-label="Pointer tool"
+                aria-pressed={annotationToolValue === 'none'}
+                onclick={() => setAnnotationTool('none')}
+              >
+                <i class="fas fa-mouse-pointer"></i>
+              </button>
+              <button
+                id="annotation-tool-draw-btn"
+                class="annotation-tool-btn"
+                class:is-active={annotationToolValue === 'draw'}
+                type="button"
+                title="Draw"
+                aria-label="Draw tool"
+                aria-pressed={annotationToolValue === 'draw'}
+                onclick={() => setAnnotationTool('draw')}
+              >
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button
+                id="annotation-tool-highlight-btn"
+                class="annotation-tool-btn"
+                class:is-active={annotationToolValue === 'highlight'}
+                type="button"
+                title="Highlight"
+                aria-label="Highlight tool"
+                aria-pressed={annotationToolValue === 'highlight'}
+                onclick={() => setAnnotationTool('highlight')}
+              >
+                <i class="fas fa-highlighter"></i>
+              </button>
+              <button
+                id="annotation-tool-zoom-btn"
+                class="annotation-tool-btn"
+                class:is-active={annotationToolValue === 'zoom'}
+                type="button"
+                title="Zoom to region"
+                aria-label="Zoom to region tool"
+                aria-pressed={annotationToolValue === 'zoom'}
+                onclick={() => setAnnotationTool('zoom')}
+              >
+                <i class="fas fa-search-plus"></i>
+              </button>
+              <hr class="my-2 w-100" />
+              <label class="annotation-toolbar-label" for="annotation-color-input">Color</label>
+              <input id="annotation-color-input" class="form-control form-control-sm form-control-color" type="color" bind:value={annotationColorValue}>
+              <label class="annotation-toolbar-label mt-2" for="annotation-width-slider">Stroke</label>
+              <input id="annotation-width-slider" type="range" class="form-range" min="2" max="18" step="1" bind:value={annotationWidthValue}>
+              <span id="annotation-width-label" class="text-muted small font-monospace">{annotationWidthLabelValue}</span>
+              <button id="clear-annotations-btn" class="annotation-tool-btn mt-2" type="button" title="Clear drawings" aria-label="Clear drawings" onclick={() => compositor.clearAnnotations()}>
+                <i class="fas fa-eraser"></i>
+              </button>
+              <button id="reset-zoom-btn" class="annotation-tool-btn" type="button" title="Reset zoom" aria-label="Reset zoom" onclick={() => compositor.clearZoomRegion()}>
+                <i class="fas fa-search-minus"></i>
+              </button>
             </div>
-            <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true" bind:this={countdownOverlay}>
-              <span id="countdown-number" bind:this={countdownNumberEl}></span>
+            <div class="canvas-wrap">
+              <div class="preview-frame" class:preview-frame-dimmed={previewDimmed}>
+              <canvas id="recorder-canvas" width="1280" height="720" bind:this={canvas}></canvas>
+                {#if showPreviewHint}
+                  <div class="preview-hint" aria-hidden="true">
+                    <span class="preview-hint-title">Preview will appear here</span>
+                    <span class="preview-hint-body">Select your sources, then start recording to share a screen or window.</span>
+                  </div>
+                {/if}
+              </div>
+              <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true" bind:this={countdownOverlay}>
+                <span id="countdown-number" bind:this={countdownNumberEl}></span>
+              </div>
             </div>
           </div>
         <div class="mt-3 d-flex gap-2 flex-wrap">
