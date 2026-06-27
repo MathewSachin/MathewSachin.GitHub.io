@@ -23,6 +23,9 @@ let countdownValue = $state(loadPref(PREFS.countdown) ?? '3');
 let sysAudioChecked = $state(loadPref(PREFS.sysAudio) === 'true');
 let micGainValue = $state(loadPref(PREFS.micGain) ?? '1');
 let sysGainValue = $state(loadPref(PREFS.sysGain) ?? '1');
+let annotationToolValue = $state(loadPref(PREFS.annotationTool) ?? 'none');
+let annotationColorValue = $state(loadPref(PREFS.annotationColor) ?? '#ff3b30');
+let annotationWidthValue = $state(loadPref(PREFS.annotationWidth) ?? '4');
 
 // Device options for selects
 let webcamOptions = $state([{ label: 'None', value: '' }]);
@@ -37,6 +40,7 @@ let canvas: HTMLCanvasElement;
 let dirName = $state('(no folder selected)');
 let micGainLabelValue = $derived(gainPct(micGainValue));
 let sysGainLabelValue = $derived(gainPct(sysGainValue));
+let annotationWidthLabelValue = $derived(`${annotationWidthValue}px`);
 let micLevelCanvas: HTMLCanvasElement;
 let sysLevelCanvas: HTMLCanvasElement;
 let errorDialog: HTMLDialogElement;
@@ -167,6 +171,9 @@ $effect(() => savePref(PREFS.quality, qualityValue));
 $effect(() => savePref(PREFS.format, formatValue));
 $effect(() => savePref(PREFS.sysAudio, String(sysAudioChecked)));
 $effect(() => savePref(PREFS.countdown, countdownValue));
+$effect(() => savePref(PREFS.annotationTool, annotationToolValue));
+$effect(() => savePref(PREFS.annotationColor, annotationColorValue));
+$effect(() => savePref(PREFS.annotationWidth, annotationWidthValue));
 
 $effect(() => {
   const currentWebcam = webcamValue;
@@ -400,6 +407,11 @@ onMount(() => {
   compositor = new Compositor(canvas, {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
   });
+  compositor.setAnnotationOptions({
+    tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
+    color: annotationColorValue,
+    width: parseFloat(annotationWidthValue),
+  });
   audioMixer   = new AudioMixer(micLevelCanvas, sysLevelCanvas);
   storage      = new StorageManager((name: string) => dirName = name, showErrorDialog);
   api = new RecorderAPI({
@@ -458,6 +470,16 @@ $effect(() => {
   if (audioMixer) {
     audioMixer.setMicGain(micGain);
     audioMixer.setSysGain(sysGain);
+  }
+});
+
+$effect(() => {
+  if (compositor) {
+    compositor.setAnnotationOptions({
+      tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
+      color: annotationColorValue,
+      width: parseFloat(annotationWidthValue),
+    });
   }
 });
 </script>
@@ -555,6 +577,43 @@ $effect(() => {
             </div>
             <input type="range" class="form-range" id="sys-gain-slider" min="0" max="2" step="0.01" bind:value={sysGainValue}>
             <canvas id="sys-level-canvas" class="audio-meter mt-1" width="200" height="10" bind:this={sysLevelCanvas}></canvas>
+          </div>
+        </div>
+
+        <!-- On-screen annotations -->
+        <div class="mt-3">
+          <h6 class="mb-2">Annotations</h6>
+
+          <div class="mb-2">
+            <label class="form-label text-muted small mb-1" for="annotation-tool-select">Tool</label>
+            <select id="annotation-tool-select" class="form-select form-select-sm" bind:value={annotationToolValue}>
+              <option value="none">None</option>
+              <option value="draw">Draw</option>
+              <option value="highlight">Highlight</option>
+              <option value="zoom">Zoom to region</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label text-muted small mb-1" for="annotation-color-input">Color</label>
+            <input id="annotation-color-input" class="form-control form-control-sm form-control-color" type="color" bind:value={annotationColorValue}>
+          </div>
+
+          <div class="mb-2">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <label class="form-label text-muted small mb-0" for="annotation-width-slider">Stroke width</label>
+              <span id="annotation-width-label" class="text-muted small font-monospace">{annotationWidthLabelValue}</span>
+            </div>
+            <input id="annotation-width-slider" type="range" class="form-range" min="2" max="18" step="1" bind:value={annotationWidthValue}>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <button id="clear-annotations-btn" class="btn btn-sm btn-outline-secondary" type="button" onclick={() => compositor.clearAnnotations()}>
+              <i class="fas fa-eraser me-1"></i>Clear drawings
+            </button>
+            <button id="reset-zoom-btn" class="btn btn-sm btn-outline-secondary" type="button" onclick={() => compositor.clearZoomRegion()}>
+              <i class="fas fa-search-minus me-1"></i>Reset zoom
+            </button>
           </div>
         </div>
 

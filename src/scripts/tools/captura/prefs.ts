@@ -11,6 +11,9 @@ export const PREFS = {
   micGain:   'captura-micGain',
   sysGain:   'captura-sysGain',
   countdown: 'captura-countdown',
+  annotationTool:  'captura-annotationTool',
+  annotationColor: 'captura-annotationColor',
+  annotationWidth: 'captura-annotationWidth',
 } as const;
 
 export const savePref = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch (_) {} };

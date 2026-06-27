@@ -4,6 +4,7 @@
   display: block;
   background: #111;
   border-radius: 6px;
+  touch-action: none;
 }
 
 /* ── Canvas wrapper — needed so the countdown overlay can be positioned over it */
@@ -107,6 +108,11 @@
   color: #fff;
   font-weight: 600;
   text-decoration: underline;
+}
+
+#annotation-color-input {
+  width: 100%;
+  max-width: 5rem;
 }
 
 /* ── PWA update notification — fixed floating bar at top ─────────────────── */
