@@ -46,6 +46,8 @@ test.describe('Captura Web Recorder', () => {
     await page.click('#start-btn');
 
     await expect(page.locator('#status-badge')).toContainText('Recording');
+    await expect(page.locator('.preview-hint')).toBeHidden();
+    await expect(page.locator('#recorder-ui p').filter({ hasText: 'Shortcuts:' })).toBeVisible();
     // Pause and Stop visible; Start hidden; Release Screen Share visible
     await expect(page.locator('#pause-btn')).toBeVisible();
     await expect(page.locator('#stop-btn')).toBeVisible();
@@ -184,7 +186,7 @@ test.describe('Captura Web Recorder', () => {
 
   // ── Audio gain sliders ────────────────────────────────────────────────────────
 
-  test('audio cards explain why controls are inactive before sources are enabled', async ({ page }) => {
+  test('audio cards explain why controls are disabled before sources are enabled', async ({ page }) => {
     await expect(page.locator('#mic-gain-slider')).toBeDisabled();
     await expect(page.locator('#sys-gain-slider')).toBeDisabled();
     await expect(page.locator('text=Select a microphone to enable level control')).toBeVisible();

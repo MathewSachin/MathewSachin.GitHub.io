@@ -435,7 +435,7 @@ function isTypingTarget(target: EventTarget | null): boolean {
     el instanceof HTMLInputElement ||
     el instanceof HTMLTextAreaElement ||
     el instanceof HTMLSelectElement ||
-    el.isContentEditable
+    ('isContentEditable' in el && el.isContentEditable)
   );
 }
 
