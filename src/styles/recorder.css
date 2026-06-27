@@ -11,6 +11,31 @@
   position: relative;
 }
 
+.preview-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  pointer-events: none;
+}
+
+.preview-hint-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.preview-hint-body {
+  max-width: 28rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
 /* ── Countdown overlay ────────────────────────────────────────────────────── */
 #countdown-overlay {
   position: absolute;
@@ -56,6 +81,17 @@
   display: block;
   border-radius: 3px;
   background: #1e1e1e;
+}
+
+.source-audio-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.source-audio-card-disabled {
+  opacity: 0.65;
 }
 
 /* ── Centered error/warning dialog ───────────────────────────────────────── */

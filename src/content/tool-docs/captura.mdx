@@ -48,6 +48,9 @@ Windows taskbar media controls or macOS Now Playing widget) — even when the br
 not focused. The OS overlay shows the session as *"Captura Web – Recording Session
 Active"* and stays in sync as you pause, resume, or stop the recording.
 
+The recorder also supports page-level keyboard shortcuts: **Shift+R** starts or resumes,
+**Shift+P** pauses, **Shift+S** stops, and **Esc** cancels the start countdown.
+
 <div class="alert alert-info mb-0 py-2">
   <i class="fas fa-shield-alt me-1"></i>
   <strong>Privacy:</strong> This tool runs 100% in your browser. No video, audio, or metadata
@@ -174,4 +177,3 @@ library, which drives the browser's hardware `VideoEncoder` and `AudioEncoder`
 `FileSystemWritableFileStream` via its `StreamTarget`. On finalization it rewrites the
 duration metadata at the start of the file — a step that the native `MediaRecorder` API
 skips, making its output unscrubbable in many players.
-
