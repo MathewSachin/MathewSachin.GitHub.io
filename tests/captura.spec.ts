@@ -26,7 +26,7 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#timer-text')).toHaveText('00:00');
     await expect(page.locator('#dir-name')).toHaveText('(no folder selected)');
     await expect(page.locator('.preview-hint')).toContainText('Preview will appear here');
-    await expect(page.locator('text=Shortcuts:')).toBeVisible();
+    await expect(page.locator('#recorder-ui p').filter({ hasText: 'Shortcuts:' })).toBeVisible();
   });
 
   // ── Folder picker ────────────────────────────────────────────────────────────
