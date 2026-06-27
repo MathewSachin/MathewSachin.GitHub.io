@@ -492,7 +492,11 @@ onMount(() => {
 
   restoreSimplePrefs();
 
-  const handleDeviceChange = () => { void enumerateDevices(); };
+  const handleDeviceChange = () => {
+    enumerateDevices().catch((err) => {
+      console.error('[Captura] Device refresh failed:', err);
+    });
+  };
   if (hasGetDisplayMedia()) {
     navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
     enumerateDevices();
