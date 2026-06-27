@@ -492,7 +492,7 @@ onMount(() => {
 
   restoreSimplePrefs();
 
-  const handleDeviceChange = () => { enumerateDevices().catch(() => {}); };
+  const handleDeviceChange = () => { void enumerateDevices(); };
   if (hasGetDisplayMedia()) {
     navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
     enumerateDevices();
@@ -674,7 +674,7 @@ $effect(() => {
           </div>
           <canvas id="mic-level-canvas" class="audio-meter mt-2" width="200" height="10" bind:this={micLevelCanvas}></canvas>
           {#if micMixDisabled}
-            <div class="text-muted small mt-2">Select a microphone to enable level control and live metering.</div>
+            <div id="mic-mix-help" class="text-muted small mt-2">Select a microphone to enable level control and live metering.</div>
           {/if}
         </div>
 
@@ -697,7 +697,7 @@ $effect(() => {
           </div>
           <canvas id="sys-level-canvas" class="audio-meter mt-2" width="200" height="10" bind:this={sysLevelCanvas}></canvas>
           {#if sysMixDisabled}
-            <div class="text-muted small mt-2">Turn on system audio capture to enable level control and live metering.</div>
+            <div id="sys-mix-help" class="text-muted small mt-2">Turn on system audio capture to enable level control and live metering.</div>
           {/if}
         </div>
 

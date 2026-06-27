@@ -189,8 +189,8 @@ test.describe('Captura Web Recorder', () => {
   test('audio cards explain why controls are disabled before sources are enabled', async ({ page }) => {
     await expect(page.locator('#mic-gain-slider')).toBeDisabled();
     await expect(page.locator('#sys-gain-slider')).toBeDisabled();
-    await expect(page.locator('text=Select a microphone to enable level control')).toBeVisible();
-    await expect(page.locator('text=Turn on system audio capture to enable level control')).toBeVisible();
+    await expect(page.locator('#mic-mix-help')).toHaveText('Select a microphone to enable level control and live metering.');
+    await expect(page.locator('#sys-mix-help')).toHaveText('Turn on system audio capture to enable level control and live metering.');
   });
 
   test('mic gain slider updates its label', async ({ page }) => {
