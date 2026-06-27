@@ -403,15 +403,19 @@ function handlePauseResume() {
   }
 }
 
+function getAnnotationOptions() {
+  return {
+    tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
+    color: annotationColorValue,
+    width: parseFloat(annotationWidthValue),
+  };
+}
+
 onMount(() => {
   compositor = new Compositor(canvas, {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
   });
-  compositor.setAnnotationOptions({
-    tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
-    color: annotationColorValue,
-    width: parseFloat(annotationWidthValue),
-  });
+  compositor.setAnnotationOptions(getAnnotationOptions());
   audioMixer   = new AudioMixer(micLevelCanvas, sysLevelCanvas);
   storage      = new StorageManager((name: string) => dirName = name, showErrorDialog);
   api = new RecorderAPI({
@@ -475,11 +479,7 @@ $effect(() => {
 
 $effect(() => {
   if (compositor) {
-    compositor.setAnnotationOptions({
-      tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
-      color: annotationColorValue,
-      width: parseFloat(annotationWidthValue),
-    });
+    compositor.setAnnotationOptions(getAnnotationOptions());
   }
 });
 </script>
@@ -596,7 +596,7 @@ $effect(() => {
 
           <div class="mb-2">
             <label class="form-label text-muted small mb-1" for="annotation-color-input">Color</label>
-            <input id="annotation-color-input" class="form-control form-control-sm form-control-color" type="color" bind:value={annotationColorValue}>
+            <input id="annotation-color-input" class="form-control form-control-sm form-control-color" type="color" bind:value={annotationColorValue} aria-label="Annotation color">
           </div>
 
           <div class="mb-2">
@@ -609,10 +609,10 @@ $effect(() => {
 
           <div class="d-flex flex-wrap gap-2">
             <button id="clear-annotations-btn" class="btn btn-sm btn-outline-secondary" type="button" onclick={() => compositor.clearAnnotations()}>
-              <i class="fas fa-eraser me-1"></i>Clear drawings
+              <i class="fas fa-eraser me-1" aria-hidden="true"></i>Clear drawings
             </button>
             <button id="reset-zoom-btn" class="btn btn-sm btn-outline-secondary" type="button" onclick={() => compositor.clearZoomRegion()}>
-              <i class="fas fa-search-minus me-1"></i>Reset zoom
+              <i class="fas fa-search-minus me-1" aria-hidden="true"></i>Reset zoom
             </button>
           </div>
         </div>
