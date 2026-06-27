@@ -318,6 +318,59 @@ test.describe('Captura Web Recorder', () => {
     ).toBe('false');
   });
 
+  test('annotation tool preferences are persisted to localStorage', async ({ page }) => {
+    await page.selectOption('#annotation-tool-select', 'none');
+    await page.selectOption('#annotation-tool-select', 'draw');
+    await expectLocalStorage(page, 'captura-annotationTool', 'draw');
+
+    await page.evaluate(() => {
+      const colorInput = document.getElementById('annotation-color-input') as HTMLInputElement;
+      colorInput.value = '#00ff00';
+      colorInput.dispatchEvent(new Event('input', { bubbles: true }));
+      colorInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const widthSlider = document.getElementById('annotation-width-slider') as HTMLInputElement;
+      widthSlider.value = '10';
+      widthSlider.dispatchEvent(new Event('input', { bubbles: true }));
+      widthSlider.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    await expectLocalStorage(page, 'captura-annotationColor', '#00ff00');
+    await expectLocalStorage(page, 'captura-annotationWidth', '10');
+  });
+
+  test('draw and highlight tools add annotations and clear button removes them', async ({ page }) => {
+    await page.selectOption('#annotation-tool-select', 'draw');
+    await dragOnRecorderCanvas(page, { x: 80, y: 90 }, { x: 260, y: 140 });
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
+    ).toBe('1');
+
+    await page.selectOption('#annotation-tool-select', 'highlight');
+    await dragOnRecorderCanvas(page, { x: 300, y: 120 }, { x: 520, y: 260 });
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
+    ).toBe('2');
+
+    await page.click('#clear-annotations-btn');
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
+    ).toBe('0');
+  });
+
+  test('zoom-to-region applies and can be reset', async ({ page }) => {
+    await page.selectOption('#annotation-tool-select', 'zoom');
+    await dragOnRecorderCanvas(page, { x: 180, y: 110 }, { x: 430, y: 290 });
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.zoomActive)
+    ).toBe('true');
+
+    await page.click('#reset-zoom-btn');
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.zoomActive)
+    ).toBe('false');
+  });
+
   // ── Control lock ──────────────────────────────────────────────────────────────
 
   test('recording controls are disabled while recording is active', async ({ page }) => {
