@@ -1,0 +1,106 @@
+---
+title: "Select All Checkboxes on Any Website (One-Liner + Bookmarklet)"
+description: "When a site has no 'Select All' button, one line of JavaScript checks every checkbox on the page instantly. Works in DevTools or as a bookmarklet on mobile."
+icon: "fas fa-check-square"
+tags: [javascript, bookmarklet, devtools, browser, hack, productivity]
+related:
+  - 2026-05-07-remove-popups-bookmarklet
+  - 2019-12-7-unhide-password-box
+  - 2026-03-19-chrome-dino-hack-mobile-bookmarklet
+  - 2026-03-07-edit-webpage-inspect-element
+  - 2026-05-02-mobile-devtools-console-bookmarklet
+---
+
+import CheckboxDemoWidget from '@components/blog/CheckboxDemoWidget.svelte'
+
+*You open a bulk-action page — an email client, a file manager, a settings list — and there is no "Select All" button. So you sit there clicking every single checkbox, one by one. There's a better way.*
+
+---
+
+## The One-Liner
+
+Open DevTools (`F12` → **Console** tab), paste this, and press Enter:
+
+```javascript
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = true);
+```
+
+Every checkbox on the page is now checked. Takes about two seconds.
+
+---
+
+## How It Works
+
+- `document.querySelectorAll('input[type="checkbox"]')` — finds every `<input type="checkbox">` element on the page.
+- `.forEach(checkbox => checkbox.checked = true)` — loops over the results and sets the `checked` property to `true` on each one.
+
+That's it. Browsers store checkbox state as a plain JavaScript property, so you can flip it from the console just like the user clicking the box.
+
+<div class="alert alert-info">
+  ⚠️ <b>Note:</b> Some apps listen for click or change events before processing a checked state. If checking via the console doesn't trigger the expected action, try dispatching a <code>change</code> event too, or look for an API the page exposes.
+</div>
+
+---
+
+## The Bookmarklet (Works on Mobile Too)
+
+Desktop browsers have DevTools, but mobile browsers don't. A **bookmarklet** is a bookmark whose URL is a JavaScript snippet — tap it on any page and the script runs instantly.
+
+Copy this (including `javascript:`):
+
+```
+javascript:(function(){document.querySelectorAll('input[type="checkbox"]').forEach(function(cb){cb.checked=true;});})();
+```
+
+### Install it
+
+1. Bookmark any page (`Ctrl + D` on desktop, or tap the share icon → Add to Bookmarks on mobile).
+2. Edit that bookmark.
+3. Replace the URL with the bookmarklet code above.
+4. Give it a name like **Check All**.
+
+On desktop you can drag the link below straight to your bookmarks bar:
+
+<a href='javascript:(function(){document.querySelectorAll("input[type=&quot;checkbox&quot;]").forEach(function(cb){cb.checked=true;});})();' title="Check All Checkboxes">Check All Checkboxes</a>
+
+### Use it
+
+Navigate to any page with checkboxes, then click (or tap) the **Check All** bookmark. Done.
+
+---
+
+## Build Your Own Bookmarklet
+
+Want to customise the script — for example to only check boxes inside a specific form, or to toggle them instead of just checking? Paste your JavaScript into the [Bookmarklet Compiler](/tools/bookmarklet/). It wraps the code in an IIFE, minifies it with Terser, and URI-encodes it so you get a ready-to-install bookmarklet in one click.
+
+---
+
+## Try It Right Here
+
+The list below has no "Select All" button — exactly like those frustrating pages. Use the console snippet or the bookmarklet above, or just try the interactive buttons to see how it feels.
+
+<CheckboxDemoWidget client:load />
+
+---
+
+## Variations
+
+**Uncheck all:**
+
+```javascript
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+```
+
+**Toggle all (flip whatever state they're in):**
+
+```javascript
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = !checkbox.checked);
+```
+
+**Only within a specific container** (e.g. a table with `id="results-table"`):
+
+```javascript
+document.querySelectorAll('#results-table input[type="checkbox"]').forEach(checkbox => checkbox.checked = true);
+```
+
+These are all variations of the same idea — `querySelectorAll` accepts any CSS selector, so you can target exactly the checkboxes you want.
