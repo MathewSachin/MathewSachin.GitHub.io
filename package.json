@@ -15,7 +15,7 @@
     "@astrojs/check": "^0.9.9",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "@huggingface/transformers": "^4.2.0",
-    "@imagemagick/magick-wasm": "^0.0.40",
+    "@imagemagick/magick-wasm": "^0.0.41",
     "@orama/orama": "^3.1.18",
     "bootstrap": "^5.3.8",
     "diff": "^9.0.0",
