@@ -492,15 +492,19 @@ function handleGlobalShortcut(event: KeyboardEvent) {
   }
 }
 
+function getAnnotationOptions() {
+  return {
+    tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
+    color: annotationColorValue,
+    width: parseFloat(annotationWidthValue),
+  };
+}
+
 onMount(() => {
   compositor = new Compositor(canvas, {
     onPipMoved: (x: number, y: number) => { savePref(PREFS.pipX, String(x)); savePref(PREFS.pipY, String(y)); },
   });
-  compositor.setAnnotationOptions({
-    tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
-    color: annotationColorValue,
-    width: parseFloat(annotationWidthValue),
-  });
+  compositor.setAnnotationOptions(getAnnotationOptions());
   audioMixer   = new AudioMixer(micLevelCanvas, sysLevelCanvas);
   storage      = new StorageManager((name: string) => dirName = name, showErrorDialog);
   api = new RecorderAPI({
@@ -571,11 +575,7 @@ $effect(() => {
 
 $effect(() => {
   if (compositor) {
-    compositor.setAnnotationOptions({
-      tool: annotationToolValue as 'none' | 'draw' | 'highlight' | 'zoom',
-      color: annotationColorValue,
-      width: parseFloat(annotationWidthValue),
-    });
+    compositor.setAnnotationOptions(getAnnotationOptions());
   }
 });
 </script>
