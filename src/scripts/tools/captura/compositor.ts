@@ -21,6 +21,9 @@ type RectAnnotation = {
 
 type Annotation = DrawAnnotation | RectAnnotation;
 type DraftRect = RectAnnotation & { mode: 'highlight' | 'zoom' };
+
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const expandShorthandHex = (hex: string) => (hex.length === 3 ? hex.split('').map(part => part + part).join('') : hex);
 export class Compositor {
   webcamStream: MediaStream | null = null;
   previewWebcamStream: MediaStream | null = null;
@@ -139,18 +142,19 @@ export class Compositor {
 
   #normPoint(p: { x: number; y: number }): NormalizedPoint {
     return {
-      x: Math.max(0, Math.min(1, p.x / this.#canvas.width)),
-      y: Math.max(0, Math.min(1, p.y / this.#canvas.height)),
+      x: clamp(p.x / this.#canvas.width, 0, 1),
+      y: clamp(p.y / this.#canvas.height, 0, 1),
     };
   }
 
   #normalizeRect(a: NormalizedPoint, b: NormalizedPoint): { x: number; y: number; w: number; h: number } | null {
-    const x1 = Math.max(0, Math.min(a.x, b.x));
-    const y1 = Math.max(0, Math.min(a.y, b.y));
-    const x2 = Math.min(1, Math.max(a.x, b.x));
-    const y2 = Math.min(1, Math.max(a.y, b.y));
+    const x1 = clamp(Math.min(a.x, b.x), 0, 1);
+    const y1 = clamp(Math.min(a.y, b.y), 0, 1);
+    const x2 = clamp(Math.max(a.x, b.x), 0, 1);
+    const y2 = clamp(Math.max(a.y, b.y), 0, 1);
     const w = x2 - x1;
     const h = y2 - y1;
+    // Ignore accidental clicks/tiny drags that produce imperceptible regions.
     if (w <= 0.01 || h <= 0.01) return null;
     return { x: x1, y: y1, w, h };
   }
@@ -230,10 +234,11 @@ export class Compositor {
 
   #withAlpha(hexColor: string, alpha: number): string {
     const hex = hexColor.replace('#', '');
-    if (hex.length !== 6) return `rgba(255,255,0,${alpha})`;
-    const r = Number.parseInt(hex.slice(0, 2), 16);
-    const g = Number.parseInt(hex.slice(2, 4), 16);
-    const b = Number.parseInt(hex.slice(4, 6), 16);
+    const expanded = expandShorthandHex(hex);
+    if (expanded.length !== 6) return `rgba(255,255,255,${alpha})`;
+    const r = Number.parseInt(expanded.slice(0, 2), 16);
+    const g = Number.parseInt(expanded.slice(2, 4), 16);
+    const b = Number.parseInt(expanded.slice(4, 6), 16);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
