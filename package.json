@@ -23,7 +23,7 @@
     "gray-matter": "^4.0.3",
     "ion-js": "^5.2.1",
     "mediabunny": "1.49.0",
-    "node-addon-api": "^8.8.0",
+    "node-addon-api": "^8.9.0",
     "node-gyp": "^13.0.0",
     "qrcode": "^1.5.4",
     "sharp": "^0.35.2",
