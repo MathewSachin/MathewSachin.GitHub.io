@@ -44,14 +44,6 @@ export class Compositor {
 
     if (this.#screenVid.srcObject && this.#screenVid.readyState >= 2) {
       ctx.drawImage(this.#screenVid, 0, 0, W, H);
-    } else {
-      ctx.fillStyle    = 'rgba(255,255,255,0.15)';
-      ctx.font         = `${Math.round(W / 40)}px sans-serif`;
-      ctx.textAlign    = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('Click "Start Recording" to begin', W / 2, H / 2);
-      ctx.textAlign    = 'left';
-      ctx.textBaseline = 'alphabetic';
     }
 
     if ((this.webcamStream || this.previewWebcamStream) && this.#webcamVid.readyState >= 2) {
@@ -81,20 +73,6 @@ export class Compositor {
         ctx.textAlign    = 'left';
         ctx.textBaseline = 'alphabetic';
       }
-    }
-
-    if (this.isRecording) {
-      const ts  = new Date().toLocaleTimeString();
-      const pad = 6, fw = 120, fh = 20;
-      ctx.fillStyle    = 'rgba(0,0,0,0.45)';
-      ctx.fillRect(W - fw - pad, H - fh - pad, fw, fh);
-      ctx.fillStyle    = '#fff';
-      ctx.font         = '12px monospace';
-      ctx.textAlign    = 'right';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText(ts, W - pad - 2, H - pad - 2);
-      ctx.textAlign    = 'left';
-      ctx.textBaseline = 'alphabetic';
     }
   }
 

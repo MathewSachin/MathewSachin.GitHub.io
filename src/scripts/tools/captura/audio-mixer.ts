@@ -3,8 +3,8 @@
 // Responsibilities:
 //   • Mix system audio + microphone through GainNodes and AnalyserNodes.
 //   • Drive the green/yellow/red RMS level-meter canvases.
-//   • Start/stop the silent WAV loop that opens a macOS Core Audio session so
-//     the Media Session API and hardware media keys function correctly.
+//   • Start/stop the silent WAV loop used to keep a lightweight Core Audio
+//     output alive during recording on browsers that behave better with it.
 //   • Manage a lightweight preview AudioContext for mic/sys metering outside
 //     of an active recording.
 
@@ -23,6 +23,8 @@ export class AudioMixer {
   #previewMicAnalyser: AnalyserNode | null = null;
   #previewSysAnalyser: AnalyserNode | null = null;
   #previewMicStream: MediaStream | null = null;
+  #micMuted = false;
+  #sysMuted = false;
 
   #meterRafId: number | null = null;
   #micLevelCanvas: HTMLCanvasElement | null = null;
@@ -75,6 +77,8 @@ export class AudioMixer {
 
   setMicGain(value: number) { if (this.#micGainNode) this.#micGainNode.gain.value = value; }
   setSysGain(value: number) { if (this.#sysGainNode) this.#sysGainNode.gain.value = value; }
+  setMicMuted(value: boolean) { this.#micMuted = value; }
+  setSysMuted(value: boolean) { this.#sysMuted = value; }
 
   teardownMix() {
     if (this.#audioCtx) { this.#audioCtx.close(); this.#audioCtx = null; }
@@ -118,7 +122,7 @@ export class AudioMixer {
     if (this.#silentAudioUrl) { URL.revokeObjectURL(this.#silentAudioUrl); this.#silentAudioUrl = null; }
   }
 
-  #drawMeter(analyser: AnalyserNode | null | undefined, mCanvas: HTMLCanvasElement | null | undefined) {
+  #drawMeter(analyser: AnalyserNode | null | undefined, mCanvas: HTMLCanvasElement | null | undefined, isMuted: boolean) {
     if (!mCanvas) return;
     const mCtx = mCanvas.getContext('2d');
     if (!mCtx) return;
@@ -134,6 +138,13 @@ export class AudioMixer {
     for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; sum += v * v; }
     const level  = Math.min(1, Math.sqrt(sum / buf.length) * 8);
     const filled = level * W;
+    if (isMuted) {
+      if (filled > 0) {
+        mCtx.fillStyle = '#6c757d';
+        mCtx.fillRect(0, 0, filled, H);
+      }
+      return;
+    }
     const greenEnd = W * 0.70, yellowEnd = W * 0.85;
 
     if (filled > 0)         { mCtx.fillStyle = '#22c55e'; mCtx.fillRect(0,         0, Math.min(filled, greenEnd),                       H); }
@@ -156,8 +167,8 @@ export class AudioMixer {
             });
         return;
       }
-      this.#drawMeter(micAn, this.#micLevelCanvas);
-      this.#drawMeter(sysAn, this.#sysLevelCanvas);
+      this.#drawMeter(micAn, this.#micLevelCanvas, this.#micMuted);
+      this.#drawMeter(sysAn, this.#sysLevelCanvas, this.#sysMuted);
       this.#meterRafId = requestAnimationFrame(tick);
     };
     tick();

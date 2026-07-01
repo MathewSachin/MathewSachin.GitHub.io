@@ -26,6 +26,9 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#timer-text')).toHaveText('00:00');
     await expect(page.locator('#dir-name')).toHaveText('(no folder selected)');
     await expect(page.locator('.preview-hint')).toContainText('Preview will appear here');
+    await expect(page.locator('.preview-frame')).toHaveClass(/preview-frame-dimmed/);
+    await expect(page.locator('#fps-pill-group button')).toHaveCount(3);
+    await expect(page.locator('#countdown-pill-group button')).toHaveCount(4);
     await expect(page.locator('#recorder-ui p').filter({ hasText: 'Shortcuts:' })).toBeVisible();
   });
 
@@ -231,6 +234,8 @@ test.describe('Captura Web Recorder', () => {
 
     await expect(page.locator('#mic-gain-label')).toHaveText('Muted · 50%');
     await expect(page.locator('#sys-gain-label')).toHaveText('Muted · 150%');
+    await expect(page.locator('#mic-gain-label')).toHaveClass(/text-secondary/);
+    await expect(page.locator('#sys-gain-label')).toHaveClass(/text-secondary/);
   });
 
   // ── Preferences persistence ──────────────────────────────────────────────────
@@ -247,9 +252,8 @@ test.describe('Captura Web Recorder', () => {
   }
 
   test('FPS preference is persisted to localStorage on change', async ({ page }) => {
-    // Step to default first so the second step always triggers a change event.
-    await page.selectOption('#fps-select', '30');
-    await page.selectOption('#fps-select', '15');
+    await page.locator('#fps-pill-group button').filter({ hasText: '30 fps' }).click();
+    await page.locator('#fps-pill-group button').filter({ hasText: '15 fps' }).click();
     await expectLocalStorage(page, 'captura-fps', '15');
   });
 
@@ -284,13 +288,15 @@ test.describe('Captura Web Recorder', () => {
       localStorage.setItem('captura-fps', '60');
       localStorage.setItem('captura-quality', '480');
       localStorage.setItem('captura-format', 'mp4-h264-aac');
+      localStorage.setItem('captura-countdown', '10');
     });
 
     await page.reload();
 
-    await expect(page.locator('#fps-select')).toHaveValue('60');
+    await expect(page.locator('#fps-pill-group button').filter({ hasText: '60 fps' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('#quality-select')).toHaveValue('480');
     await expect(page.locator('#format-select')).toHaveValue('mp4-h264-aac');
+    await expect(page.locator('#countdown-pill-group button').filter({ hasText: '10 sec' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   // ── Control lock ──────────────────────────────────────────────────────────────
@@ -300,9 +306,10 @@ test.describe('Captura Web Recorder', () => {
     await page.click('#start-btn');
     await expect(page.locator('#status-badge')).toContainText('Recording');
 
-    await expect(page.locator('#fps-select')).toBeDisabled();
+    await expect(page.locator('#fps-pill-group button').first()).toBeDisabled();
     await expect(page.locator('#quality-select')).toBeDisabled();
     await expect(page.locator('#format-select')).toBeDisabled();
+    await expect(page.locator('#countdown-pill-group button').first()).toBeDisabled();
     await expect(page.locator('#sys-audio-chk')).toBeDisabled();
     await expect(page.locator('#pick-dir-btn')).toBeDisabled();
     await expect(page.locator('#webcam-select')).toBeEnabled();
@@ -312,9 +319,10 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 
     // Controls re-enabled after recording stops
-    await expect(page.locator('#fps-select')).toBeEnabled();
+    await expect(page.locator('#fps-pill-group button').first()).toBeEnabled();
     await expect(page.locator('#quality-select')).toBeEnabled();
     await expect(page.locator('#format-select')).toBeEnabled();
+    await expect(page.locator('#countdown-pill-group button').first()).toBeEnabled();
   });
 
   // ── MP4 format ───────────────────────────────────────────────────────────────

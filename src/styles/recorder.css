@@ -4,11 +4,21 @@
   display: block;
   background: #111;
   border-radius: 6px;
+  transition: opacity 0.2s ease;
 }
 
 /* ── Canvas wrapper — needed so the countdown overlay can be positioned over it */
 .canvas-wrap {
   position: relative;
+}
+
+.preview-frame {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.preview-frame-dimmed #recorder-canvas {
+  opacity: 0.55;
 }
 
 .preview-hint {
@@ -92,6 +102,46 @@
 
 .source-audio-card-disabled {
   opacity: 0.65;
+}
+
+.recorder-settings-panel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pill-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill-toggle-btn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--bs-body-color, #dee2e6);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  padding: 0.4rem 0.8rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pill-toggle-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pill-toggle-btn.active {
+  border-color: rgba(var(--bs-primary-rgb), 0.45);
+  background: rgba(var(--bs-primary-rgb), 0.18);
+  color: #fff;
+}
+
+.pill-toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ── Centered error/warning dialog ───────────────────────────────────────── */

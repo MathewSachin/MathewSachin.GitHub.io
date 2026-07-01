@@ -44,6 +44,17 @@ let sysLevelCanvas: HTMLCanvasElement;
 let errorDialog: HTMLDialogElement;
 let countdownOverlay: HTMLElement;
 let countdownNumberEl: HTMLElement;
+const fpsOptions = [
+  { value: '15', label: '15 fps' },
+  { value: '30', label: '30 fps' },
+  { value: '60', label: '60 fps' },
+];
+const countdownOptions = [
+  { value: '0', label: 'Off' },
+  { value: '3', label: '3 sec' },
+  { value: '5', label: '5 sec' },
+  { value: '10', label: '10 sec' },
+];
 
 let timerIntervalId: ReturnType<typeof setInterval> | null = null;
 let countdownIntervalId: ReturnType<typeof setInterval> | null = null;
@@ -128,6 +139,7 @@ const showPreviewHint = $derived(!hasSession && !isReq);
 const showSessionHint = $derived(isSession);
 const showMicMixControls = $derived(micValue !== '');
 const showSysMixControls = $derived(sysAudioChecked);
+const previewDimmed = $derived(!isRec);
 
 const showStartBtn = $derived(!(active || isStopping || isCountdown));
 const startBtnDisabled = $derived(isReq);
@@ -171,6 +183,8 @@ const countdownDisabled = $derived(lockControls);
 const micMixDisabled = $derived(!showMicMixControls);
 const sysMixDisabled = $derived(!showSysMixControls);
 const timerClass = $derived(active ? 'font-monospace small text-danger fw-semibold' : 'font-monospace text-muted small');
+const micGainLabelClass = $derived(micMuted ? 'text-secondary small font-monospace' : 'text-muted small font-monospace');
+const sysGainLabelClass = $derived(sysMuted ? 'text-secondary small font-monospace' : 'text-muted small font-monospace');
 
 $effect(() => savePref(PREFS.fps, fpsValue));
 $effect(() => savePref(PREFS.quality, qualityValue));
@@ -408,6 +422,8 @@ function getEffectiveSysGain(): number {
 
 function applyAudioMixSettings(): void {
   if (audioMixer) {
+    audioMixer.setMicMuted(micMuted);
+    audioMixer.setSysMuted(sysMuted);
     audioMixer.setMicGain(getEffectiveMicGain());
     audioMixer.setSysGain(getEffectiveSysGain());
   }
@@ -565,15 +581,17 @@ $effect(() => {
           </span>
         </div>
           <div class="canvas-wrap">
+            <div class="preview-frame" class:preview-frame-dimmed={previewDimmed}>
             <canvas id="recorder-canvas" width="1280" height="720" bind:this={canvas}></canvas>
-            {#if showPreviewHint}
-              <div class="preview-hint" aria-hidden="true">
-                <span class="preview-hint-title">Preview will appear here</span>
-                <span class="preview-hint-body">Select your sources, then start recording to share a screen or window.</span>
-              </div>
-            {/if}
-          <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true" bind:this={countdownOverlay}>
-            <span id="countdown-number" bind:this={countdownNumberEl}></span>
+              {#if showPreviewHint}
+                <div class="preview-hint" aria-hidden="true">
+                  <span class="preview-hint-title">Preview will appear here</span>
+                  <span class="preview-hint-body">Select your sources, then start recording to share a screen or window.</span>
+                </div>
+              {/if}
+            </div>
+            <div id="countdown-overlay" hidden aria-live="assertive" aria-atomic="true" bind:this={countdownOverlay}>
+              <span id="countdown-number" bind:this={countdownNumberEl}></span>
             </div>
           </div>
         <div class="mt-3 d-flex gap-2 flex-wrap">
@@ -614,24 +632,86 @@ $effect(() => {
           <kbd>Shift</kbd>+<kbd>S</kbd> stop, <kbd>Esc</kbd> cancel countdown.
         </p>
 
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <section class="recorder-settings-panel h-100">
+              <h6 class="mb-3">Output</h6>
+              <div class="mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">{dirName}</span>
+                  <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" onclick={() => { storage.pickDirectory(); }} hidden={storage?.isOPFS} disabled={lockControls}>
+                    <i class="fas fa-folder-open me-1"></i>Choose Folder
+                  </button>
+                </div>
+                <div class="text-muted small mt-2">Pick where recordings are saved before you start.</div>
+              </div>
+
+              <div>
+                <label class="form-label text-muted small mb-1" for="format-select">Recording format</label>
+                <select id="format-select" class="form-select form-select-sm" bind:value={formatValue} disabled={formatDisabled}>
+                  <option value="webm-vp9-opus">WebM — VP9 + Opus</option>
+                  <option value="mp4-h264-aac">MP4 — H.264 + AAC</option>
+                </select>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-md-6">
+            <section class="recorder-settings-panel h-100">
+              <h6 class="mb-3">Quality</h6>
+
+              <div class="mb-3">
+                <label class="form-label text-muted small mb-2">Frame rate</label>
+                <div id="fps-pill-group" class="pill-toggle-group" role="group" aria-label="Frame rate">
+                  {#each fpsOptions as opt}
+                    <button
+                      type="button"
+                      class:active={fpsValue === opt.value}
+                      class="pill-toggle-btn"
+                      aria-pressed={fpsValue === opt.value}
+                      onclick={() => { fpsValue = opt.value; }}
+                      disabled={fpsDisabled}
+                    >
+                      {opt.label}
+                    </button>
+                  {/each}
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label text-muted small mb-1" for="quality-select">Quality preset</label>
+                <select id="quality-select" class="form-select form-select-sm" bind:value={qualityValue} disabled={qualityDisabled}>
+                  <option value="480">480p — ~2 Mbps</option>
+                  <option value="720">720p — ~4 Mbps</option>
+                  <option value="1080">1080p — ~8 Mbps</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="form-label text-muted small mb-2">Countdown timer</label>
+                <div id="countdown-pill-group" class="pill-toggle-group" role="group" aria-label="Countdown timer">
+                  {#each countdownOptions as opt}
+                    <button
+                      type="button"
+                      class:active={countdownValue === opt.value}
+                      class="pill-toggle-btn"
+                      aria-pressed={countdownValue === opt.value}
+                      onclick={() => { countdownValue = opt.value; }}
+                      disabled={countdownDisabled}
+                    >
+                      {opt.label}
+                    </button>
+                  {/each}
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
       </div>
 
       <!-- Right: settings -->
       <div class="col-lg-4">
-
-        <h6 class="mb-2">Output</h6>
-        <div class="mb-3">
-          <div class="d-flex align-items-center gap-2">
-            <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">{dirName}</span>
-            <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" onclick={() => { storage.pickDirectory(); }} hidden={storage?.isOPFS} disabled={lockControls}>
-              <i class="fas fa-folder-open me-1"></i>Choose Folder
-            </button>
-          </div>
-          <div class="text-muted small mt-2">Pick where recordings are saved before you start.</div>
-        </div>
-
-        <hr>
-
         <!-- Audio / Video sources -->
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h6 class="mb-0">Sources</h6>
@@ -667,7 +747,7 @@ $effect(() => {
         <div class="source-audio-card mb-3" class:source-audio-card-disabled={micMixDisabled}>
           <div class="d-flex align-items-center justify-content-between mb-1">
             <label class="form-label text-muted small mb-0" for="mic-gain-slider">Mic level</label>
-            <span id="mic-gain-label" class="text-muted small font-monospace">{micGainLabelValue}</span>
+            <span id="mic-gain-label" class={micGainLabelClass}>{micGainLabelValue}</span>
           </div>
           <div class="d-flex align-items-center gap-2">
             <button id="mic-mute-btn" type="button" class="btn btn-sm btn-outline-secondary flex-shrink-0" aria-pressed={micMuted} onclick={toggleMicMute} disabled={micMixDisabled}>
@@ -690,7 +770,7 @@ $effect(() => {
         <div class="source-audio-card mb-3" class:source-audio-card-disabled={sysMixDisabled}>
           <div class="d-flex align-items-center justify-content-between mb-1">
             <label class="form-label text-muted small mb-0" for="sys-gain-slider">System level</label>
-            <span id="sys-gain-label" class="text-muted small font-monospace">{sysGainLabelValue}</span>
+            <span id="sys-gain-label" class={sysGainLabelClass}>{sysGainLabelValue}</span>
           </div>
           <div class="d-flex align-items-center gap-2">
             <button id="sys-mute-btn" type="button" class="btn btn-sm btn-outline-secondary flex-shrink-0" aria-pressed={sysMuted} onclick={toggleSysMute} disabled={sysMixDisabled}>
@@ -704,48 +784,6 @@ $effect(() => {
             <div id="sys-mix-help" class="text-muted small mt-2">Turn on system audio capture to enable level control and live metering.</div>
           {/if}
         </div>
-
-        <hr>
-
-        <!-- Quality -->
-        <h6 class="mb-3">Quality</h6>
-
-        <div class="mb-3">
-          <label class="form-label text-muted small mb-1" for="fps-select">Frame rate</label>
-          <select id="fps-select" class="form-select form-select-sm" bind:value={fpsValue} disabled={fpsDisabled}>
-            <option value="15">15 fps</option>
-            <option value="30">30 fps</option>
-            <option value="60">60 fps</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label text-muted small mb-1" for="quality-select">Quality preset</label>
-          <select id="quality-select" class="form-select form-select-sm" bind:value={qualityValue} disabled={qualityDisabled}>
-            <option value="480">480p — ~2 Mbps</option>
-            <option value="720">720p — ~4 Mbps</option>
-            <option value="1080">1080p — ~8 Mbps</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label text-muted small mb-1" for="format-select">Recording format</label>
-          <select id="format-select" class="form-select form-select-sm" bind:value={formatValue} disabled={formatDisabled}>
-            <option value="webm-vp9-opus">WebM — VP9 + Opus</option>
-            <option value="mp4-h264-aac">MP4 — H.264 + AAC</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label text-muted small mb-1" for="countdown-select">Countdown timer</label>
-          <select id="countdown-select" class="form-select form-select-sm" bind:value={countdownValue} disabled={countdownDisabled}>
-            <option value="0">Off</option>
-            <option value="3">3 seconds</option>
-            <option value="5">5 seconds</option>
-            <option value="10">10 seconds</option>
-          </select>
-        </div>
-
       </div>
     </div><!-- /.row -->
 
