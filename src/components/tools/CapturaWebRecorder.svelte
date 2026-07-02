@@ -25,6 +25,9 @@ let countdownValue = $state(loadPref(PREFS.countdown) ?? '3');
 let sysAudioChecked = $state(loadPref(PREFS.sysAudio) === 'true');
 let micGainValue = $state(loadPref(PREFS.micGain) ?? '1');
 let sysGainValue = $state(loadPref(PREFS.sysGain) ?? '1');
+let annotationToolValue = $state(loadPref(PREFS.annotationTool) ?? 'none');
+let annotationColorValue = $state(loadPref(PREFS.annotationColor) ?? '#ff3b30');
+let annotationWidthValue = $state(loadPref(PREFS.annotationWidth) ?? '4');
 
 // Device options for selects
 let webcamOptions = $state([{ label: 'None', value: '' }]);
@@ -196,6 +199,9 @@ $effect(() => savePref(PREFS.quality, qualityValue));
 $effect(() => savePref(PREFS.format, formatValue));
 $effect(() => savePref(PREFS.sysAudio, String(sysAudioChecked)));
 $effect(() => savePref(PREFS.countdown, countdownValue));
+$effect(() => savePref(PREFS.annotationTool, annotationToolValue));
+$effect(() => savePref(PREFS.annotationColor, annotationColorValue));
+$effect(() => savePref(PREFS.annotationWidth, annotationWidthValue));
 
 $effect(() => {
   const currentWebcam = webcamValue;

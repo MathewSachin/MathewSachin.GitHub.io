@@ -39,6 +39,15 @@ export class Compositor {
   #pipDragOffX = 0;
   #pipDragOffY = 0;
   #onPipMoved?: (x: number, y: number) => void;
+  #annotationTool: AnnotationTool = 'none';
+  #annotationColor = '#ff3b30';
+  #annotationWidth = 4;
+  #annotations: Annotation[] = [];
+  #draftStroke: DrawAnnotation | null = null;
+  #draftRect: DraftRect | null = null;
+  #zoomRegion: { x: number; y: number; w: number; h: number } | null = null;
+  #isAnnotating = false;
+  #dragStart: NormalizedPoint | null = null;
 
   constructor(canvas: HTMLCanvasElement, { onPipMoved }: { onPipMoved?: (x: number, y: number) => void } = {}) {
     this.#canvas     = canvas;
@@ -51,11 +60,13 @@ export class Compositor {
       { muted: true, autoplay: true, playsInline: true });
 
     this.#setupPipDrag();
+    this.#syncDataAttrs();
   }
 
   get canvas()    { return this.#canvas; }
   get screenVid() { return this.#screenVid; }
   get webcamVid() { return this.#webcamVid; }
+  get hasZoomRegion() { return !!this.#zoomRegion; }
 
   drawFrame() {
     const W   = this.#canvas.width;
@@ -66,7 +77,23 @@ export class Compositor {
     ctx.fillRect(0, 0, W, H);
 
     if (this.#screenVid.srcObject && this.#screenVid.readyState >= 2) {
-      ctx.drawImage(this.#screenVid, 0, 0, W, H);
+      if (this.#zoomRegion) {
+        const sx = this.#zoomRegion.x * W;
+        const sy = this.#zoomRegion.y * H;
+        const sw = this.#zoomRegion.w * W;
+        const sh = this.#zoomRegion.h * H;
+        ctx.drawImage(this.#screenVid, sx, sy, sw, sh, 0, 0, W, H);
+      } else {
+        ctx.drawImage(this.#screenVid, 0, 0, W, H);
+      }
+    } else {
+      ctx.fillStyle    = 'rgba(255,255,255,0.15)';
+      ctx.font         = `${Math.round(W / 40)}px sans-serif`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Click "Start Recording" to begin', W / 2, H / 2);
+      ctx.textAlign    = 'left';
+      ctx.textBaseline = 'alphabetic';
     }
 
     if ((this.webcamStream || this.previewWebcamStream) && this.#webcamVid.readyState >= 2) {
@@ -272,6 +299,35 @@ export class Compositor {
   }
   #setupPipDrag() {
     this.#canvas.addEventListener('mousedown', (e: MouseEvent) => {
+      if (this.#annotationTool !== 'none') {
+        const start = this.#normPoint(this.#canvasPos(e));
+        this.#isAnnotating = true;
+        this.#dragStart = start;
+
+        if (this.#annotationTool === 'draw') {
+          this.#draftStroke = {
+            type: 'draw',
+            points: [start],
+            color: this.#annotationColor,
+            width: this.#annotationWidth,
+          };
+          this.#draftRect = null;
+        } else {
+          this.#draftStroke = null;
+          this.#draftRect = {
+            type: 'highlight',
+            mode: this.#annotationTool,
+            rect: { x: start.x, y: start.y, w: 0, h: 0 },
+            color: this.#annotationColor,
+            width: this.#annotationWidth,
+          };
+        }
+
+        this.#canvas.style.cursor = 'crosshair';
+        e.preventDefault();
+        return;
+      }
+
       const r = this.getPipRect();
       if (!r) return;
       const { x, y } = this.#canvasPos(e);
@@ -285,6 +341,18 @@ export class Compositor {
     });
 
     this.#canvas.addEventListener('mousemove', (e: MouseEvent) => {
+      if (this.#isAnnotating) {
+        const curr = this.#normPoint(this.#canvasPos(e));
+        if (this.#annotationTool === 'draw' && this.#draftStroke) {
+          this.#draftStroke.points.push(curr);
+        } else if (this.#draftRect && this.#dragStart) {
+          const rect = this.#normalizeRect(this.#dragStart, curr);
+          this.#draftRect.rect = rect ?? { x: this.#dragStart.x, y: this.#dragStart.y, w: 0, h: 0 };
+        }
+        e.preventDefault();
+        return;
+      }
+
       const r = this.getPipRect();
       if (r) {
         const { x, y } = this.#canvasPos(e);
@@ -299,6 +367,34 @@ export class Compositor {
     });
 
     const stopDrag = () => {
+      if (this.#isAnnotating) {
+        if (this.#annotationTool === 'draw' && this.#draftStroke && this.#draftStroke.points.length > 1) {
+          this.#annotations.push(this.#draftStroke);
+        } else if (this.#draftRect && this.#dragStart) {
+          const rect = this.#draftRect.rect;
+          const normalized = rect.w > 0 && rect.h > 0 ? rect : null;
+          if (normalized) {
+            if (this.#draftRect.mode === 'zoom') {
+              this.#zoomRegion = normalized;
+            } else {
+              this.#annotations.push({
+                type: 'highlight',
+                rect: normalized,
+                color: this.#annotationColor,
+                width: this.#annotationWidth,
+              });
+            }
+          }
+        }
+        this.#isAnnotating = false;
+        this.#dragStart = null;
+        this.#draftStroke = null;
+        this.#draftRect = null;
+        this.#canvas.style.cursor = this.#annotationTool === 'none' ? '' : 'crosshair';
+        this.#syncDataAttrs();
+        return;
+      }
+
       if (!this.#pipDragging) return;
       this.#pipDragging = false;
       this.#canvas.style.cursor = '';
