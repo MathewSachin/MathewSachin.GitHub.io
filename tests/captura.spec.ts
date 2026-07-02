@@ -212,9 +212,14 @@ test.describe('Captura Web Recorder', () => {
     const box = await page.locator('#recorder-canvas').boundingBox();
     expect(box).not.toBeNull();
     const b = box!;
-    await page.mouse.move(b.x + start.x, b.y + start.y);
+    const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+    const startX = clamp(start.x, 2, Math.max(2, b.width - 2));
+    const startY = clamp(start.y, 2, Math.max(2, b.height - 2));
+    const endX = clamp(end.x, 2, Math.max(2, b.width - 2));
+    const endY = clamp(end.y, 2, Math.max(2, b.height - 2));
+    await page.mouse.move(b.x + startX, b.y + startY);
     await page.mouse.down();
-    await page.mouse.move(b.x + end.x, b.y + end.y);
+    await page.mouse.move(b.x + endX, b.y + endY);
     await page.mouse.up();
   }
 
@@ -319,8 +324,8 @@ test.describe('Captura Web Recorder', () => {
   });
 
   test('annotation tool preferences are persisted to localStorage', async ({ page }) => {
-    await page.selectOption('#annotation-tool-select', 'none');
-    await page.selectOption('#annotation-tool-select', 'draw');
+    await page.click('#annotation-tool-none-btn');
+    await page.click('#annotation-tool-draw-btn');
     await expectLocalStorage(page, 'captura-annotationTool', 'draw');
 
     await page.evaluate(() => {
@@ -340,13 +345,19 @@ test.describe('Captura Web Recorder', () => {
   });
 
   test('draw and highlight tools add annotations and clear button removes them', async ({ page }) => {
-    await page.selectOption('#annotation-tool-select', 'draw');
+    await page.click('#annotation-tool-draw-btn');
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationTool)
+    ).toBe('draw');
     await dragOnRecorderCanvas(page, { x: 80, y: 90 }, { x: 260, y: 140 });
     await expect.poll(async () =>
       page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
     ).toBe('1');
 
-    await page.selectOption('#annotation-tool-select', 'highlight');
+    await page.click('#annotation-tool-highlight-btn');
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationTool)
+    ).toBe('highlight');
     await dragOnRecorderCanvas(page, { x: 300, y: 120 }, { x: 520, y: 260 });
     await expect.poll(async () =>
       page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
@@ -359,7 +370,10 @@ test.describe('Captura Web Recorder', () => {
   });
 
   test('zoom-to-region applies and can be reset', async ({ page }) => {
-    await page.selectOption('#annotation-tool-select', 'zoom');
+    await page.click('#annotation-tool-zoom-btn');
+    await expect.poll(async () =>
+      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationTool)
+    ).toBe('zoom');
     await dragOnRecorderCanvas(page, { x: 180, y: 110 }, { x: 430, y: 290 });
     await expect.poll(async () =>
       page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.zoomActive)
