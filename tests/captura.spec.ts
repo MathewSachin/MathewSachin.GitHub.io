@@ -238,6 +238,78 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#sys-gain-label')).toHaveClass(/text-secondary/);
   });
 
+  test('starting while system audio is muted initializes the recording mix with zero system gain', async ({ page }) => {
+    await page.addInitScript(() => {
+      (navigator.mediaDevices as any).getDisplayMedia = async () => {
+        const audioCtx = new AudioContext();
+        await audioCtx.resume().catch(() => {});
+
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = 440;
+        const gain = audioCtx.createGain();
+        gain.gain.value = 0.2;
+        const audioDest = audioCtx.createMediaStreamDestination();
+        osc.connect(gain);
+        gain.connect(audioDest);
+        osc.start();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 360;
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const videoTrack = canvas.captureStream(30).getVideoTracks()[0];
+        const audioTrack = audioDest.stream.getAudioTracks()[0];
+        return new MediaStream([videoTrack, audioTrack]);
+      };
+    });
+
+    await page.goto('/tools/captura/', { waitUntil: 'networkidle' });
+    await page.waitForSelector('#sys-audio-chk', { state: 'attached' });
+    await page.waitForSelector('#sys-mute-btn', { state: 'attached' });
+
+    await page.evaluate(() => {
+      const originalCreateGain = AudioContext.prototype.createGain;
+      const createdGainNodes: GainNode[] = [];
+
+      (window as any).__capturaCreatedGainNodes = createdGainNodes;
+
+      AudioContext.prototype.createGain = function (...args: []) {
+        const gainNode = originalCreateGain.apply(this, args);
+        createdGainNodes.push(gainNode);
+        return gainNode;
+      };
+    });
+
+    await page.click('#pick-dir-btn');
+    await page.click('#sys-audio-chk');
+    await page.evaluate(() => {
+      const sysSlider = document.getElementById('sys-gain-slider') as HTMLInputElement;
+      sysSlider.value = '1.5';
+      sysSlider.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await expect(page.locator('#sys-mute-btn')).toBeEnabled();
+    await page.click('#sys-mute-btn');
+    await expect(page.locator('#sys-gain-label')).toHaveText('Muted · 150%');
+    await page.click('#start-btn');
+
+    await expect(page.locator('#status-badge')).toContainText('Recording');
+
+    await expect.poll(async () => {
+      return await page.evaluate(() => {
+        const gains = (window as any).__capturaCreatedGainNodes as GainNode[] | undefined;
+        const last = gains?.at(-1);
+        return last?.gain.value ?? null;
+      });
+    }).toBe(0);
+
+    await page.click('#stop-btn');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
+  });
+
   // ── Preferences persistence ──────────────────────────────────────────────────
   // Each pref test uses a two-step selectOption to guarantee the change event
   // always fires regardless of the element's prior value (which can persist

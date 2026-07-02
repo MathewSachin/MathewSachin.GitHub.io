@@ -315,8 +315,8 @@ function buildStartPayload(): {
     webcamDeviceId: webcamValue,
     micSelected:   micValue !== '',
     micDeviceId:   micValue,
-    micGain:       parseFloat(micGainValue),
-    sysGain:       parseFloat(sysGainValue),
+    micGain:       getEffectiveMicGain(),
+    sysGain:       getEffectiveSysGain(),
   };
 }
 
