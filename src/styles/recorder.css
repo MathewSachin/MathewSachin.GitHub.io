@@ -127,40 +127,6 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
-.preview-frame {
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.preview-frame-dimmed #recorder-canvas {
-  opacity: 0.55;
-}
-
-.preview-hint {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 1rem;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  pointer-events: none;
-}
-
-.preview-hint-title {
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.preview-hint-body {
-  max-width: 28rem;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.75);
-}
-
 /* ── Countdown overlay ────────────────────────────────────────────────────── */
 #countdown-overlay {
   position: absolute;
