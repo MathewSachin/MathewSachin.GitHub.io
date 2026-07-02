@@ -634,16 +634,16 @@ $effect(() => {
 
         <div class="row g-3 mt-1">
           <div class="col-md-6">
-            <section class="recorder-settings-panel h-100">
-              <h6 class="mb-3">Output</h6>
-              <div class="mb-3">
+            <section class="h-100 me-1">
+              <h6 class="mb-2">Output</h6>
+              <div class="mb-2">
                 <div class="d-flex align-items-center gap-2">
                   <span id="dir-name" class="text-muted small flex-grow-1 text-truncate">{dirName}</span>
                   <button id="pick-dir-btn" class="btn btn-sm btn-outline-secondary flex-shrink-0" onclick={() => { storage.pickDirectory(); }} hidden={storage?.isOPFS} disabled={lockControls}>
                     <i class="fas fa-folder-open me-1"></i>Choose Folder
                   </button>
                 </div>
-                <div class="text-muted small mt-2">Pick where recordings are saved before you start.</div>
+                <div class="text-muted small mt-1">Pick where recordings are saved before you start.</div>
               </div>
 
               <div>
@@ -657,11 +657,11 @@ $effect(() => {
           </div>
 
           <div class="col-md-6">
-            <section class="recorder-settings-panel h-100">
-              <h6 class="mb-3">Quality</h6>
+            <section class="h-100">
+              <h6 class="mb-2">Quality</h6>
 
-              <div class="mb-3">
-                <label class="form-label text-muted small mb-2">Frame rate</label>
+              <div class="mb-2">
+                <label class="form-label text-muted small mb-1">Frame rate</label>
                 <div id="fps-pill-group" class="pill-toggle-group" role="group" aria-label="Frame rate">
                   {#each fpsOptions as opt}
                     <button
@@ -678,7 +678,7 @@ $effect(() => {
                 </div>
               </div>
 
-              <div class="mb-3">
+              <div class="mb-2">
                 <label class="form-label text-muted small mb-1" for="quality-select">Quality preset</label>
                 <select id="quality-select" class="form-select form-select-sm" bind:value={qualityValue} disabled={qualityDisabled}>
                   <option value="480">480p — ~2 Mbps</option>
@@ -688,7 +688,7 @@ $effect(() => {
               </div>
 
               <div>
-                <label class="form-label text-muted small mb-2">Countdown timer</label>
+                <label class="form-label text-muted small mb-1">Countdown timer</label>
                 <div id="countdown-pill-group" class="pill-toggle-group" role="group" aria-label="Countdown timer">
                   {#each countdownOptions as opt}
                     <button
@@ -744,7 +744,7 @@ $effect(() => {
           </select>
         </div>
 
-        <div class="source-audio-card mb-3" class:source-audio-card-disabled={micMixDisabled}>
+        <div class="mb-3" class:source-audio-card-disabled={micMixDisabled}>
           <div class="d-flex align-items-center justify-content-between mb-1">
             <label class="form-label text-muted small mb-0" for="mic-gain-slider">Mic level</label>
             <span id="mic-gain-label" class={micGainLabelClass}>{micGainLabelValue}</span>
@@ -767,7 +767,7 @@ $effect(() => {
           <label class="form-check-label small" for="sys-audio-chk">Capture system audio</label>
         </div>
 
-        <div class="source-audio-card mb-3" class:source-audio-card-disabled={sysMixDisabled}>
+        <div class="mb-3" class:source-audio-card-disabled={sysMixDisabled}>
           <div class="d-flex align-items-center justify-content-between mb-1">
             <label class="form-label text-muted small mb-0" for="sys-gain-slider">System level</label>
             <span id="sys-gain-label" class={sysGainLabelClass}>{sysGainLabelValue}</span>
