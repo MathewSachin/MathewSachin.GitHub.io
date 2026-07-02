@@ -19,11 +19,17 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#status-badge')).toHaveText('Idle');
     await expect(page.locator('#start-btn')).toBeVisible();
     await expect(page.locator('#start-btn')).toBeEnabled();
+    await expect(page.locator('#start-btn')).toHaveClass(/btn-danger/);
     await expect(page.locator('#pause-btn')).toBeHidden();
     await expect(page.locator('#stop-btn')).toBeHidden();
     await expect(page.locator('#end-session-btn')).toBeHidden();
     await expect(page.locator('#timer-text')).toHaveText('00:00');
     await expect(page.locator('#dir-name')).toHaveText('(no folder selected)');
+    await expect(page.locator('.preview-hint')).toContainText('Preview will appear here');
+    await expect(page.locator('.preview-frame')).toHaveClass(/preview-frame-dimmed/);
+    await expect(page.locator('#fps-pill-group button')).toHaveCount(3);
+    await expect(page.locator('#countdown-pill-group button')).toHaveCount(4);
+    await expect(page.locator('#recorder-ui p').filter({ hasText: 'Shortcuts:' })).toBeVisible();
   });
 
   // ── Folder picker ────────────────────────────────────────────────────────────
@@ -43,19 +49,23 @@ test.describe('Captura Web Recorder', () => {
     await page.click('#start-btn');
 
     await expect(page.locator('#status-badge')).toContainText('Recording');
-    // Pause and Stop visible; Start hidden; End Session visible
+    await expect(page.locator('.preview-hint')).toBeHidden();
+    await expect(page.locator('#recorder-ui p').filter({ hasText: 'Shortcuts:' })).toBeVisible();
+    // Pause and Stop visible; Start hidden; Release Screen Share visible
     await expect(page.locator('#pause-btn')).toBeVisible();
     await expect(page.locator('#stop-btn')).toBeVisible();
     await expect(page.locator('#start-btn')).toBeHidden();
     await expect(page.locator('#end-session-btn')).toBeVisible();
+    await expect(page.locator('#format-select')).toBeDisabled();
 
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
-    // After stop: Start visible again; Pause/Stop hidden; End Session still visible
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
+    // After stop: Start visible again; Pause/Stop hidden; Release Screen Share still visible
     await expect(page.locator('#start-btn')).toBeVisible();
     await expect(page.locator('#pause-btn')).toBeHidden();
     await expect(page.locator('#stop-btn')).toBeHidden();
     await expect(page.locator('#end-session-btn')).toBeVisible();
+    await expect(page.locator('#end-session-btn')).toContainText('Release Screen Share');
   });
 
   // ── Timer ────────────────────────────────────────────────────────────────────
@@ -69,9 +79,10 @@ test.describe('Captura Web Recorder', () => {
     await page.waitForTimeout(2500);
     const timerText = await page.locator('#timer-text').textContent();
     expect(timerText).not.toBe('00:00');
+    await expect(page.locator('#timer-text')).toHaveClass(/text-danger/);
 
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
     await expect(page.locator('#timer-text')).toHaveText('00:00');
   });
 
@@ -121,7 +132,7 @@ test.describe('Captura Web Recorder', () => {
 
     await page.waitForTimeout(1000);
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
   });
 
   test('stop from paused state writes a WebM file to disk', async ({ page }) => {
@@ -134,19 +145,20 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#status-badge')).toHaveText('⏸ Paused');
 
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 
     await verifyWebmFile(page);
   });
 
   // ── End Session ───────────────────────────────────────────────────────────────
 
-  test('end session from session state returns to idle', async ({ page }) => {
+  test('release screen share from session state returns to idle', async ({ page }) => {
     await page.click('#pick-dir-btn');
     await runRecordingPipeline(page);
 
     // Currently in SESSION state
     await expect(page.locator('#end-session-btn')).toBeVisible();
+    await expect(page.locator('text=Use Release Screen Share')).toBeVisible();
     await page.click('#end-session-btn');
 
     await expect(page.locator('#status-badge')).toHaveText('Idle');
@@ -162,14 +174,14 @@ test.describe('Captura Web Recorder', () => {
 
     // First recording
     await runRecordingPipeline(page);
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 
     // Second recording — still in session, folder already set
     await page.click('#start-btn');
     await expect(page.locator('#status-badge')).toContainText('Recording');
     await page.waitForTimeout(3000);
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 
     const fileCount = await countFilesWithExtension(page, '.webm');
     expect(fileCount).toBe(2);
@@ -177,7 +189,15 @@ test.describe('Captura Web Recorder', () => {
 
   // ── Audio gain sliders ────────────────────────────────────────────────────────
 
+  test('audio cards explain why controls are disabled before sources are enabled', async ({ page }) => {
+    await expect(page.locator('#mic-gain-slider')).toBeDisabled();
+    await expect(page.locator('#sys-gain-slider')).toBeDisabled();
+    await expect(page.locator('#mic-mix-help')).toHaveText('Select a microphone to enable level control and live metering.');
+    await expect(page.locator('#sys-mix-help')).toHaveText('Turn on system audio capture to enable level control and live metering.');
+  });
+
   test('mic gain slider updates its label', async ({ page }) => {
+    await page.selectOption('#mic-select', { index: 1 });
     await page.evaluate(() => {
       const slider = document.getElementById('mic-gain-slider') as HTMLInputElement;
       slider.value = '0.5';
@@ -187,12 +207,107 @@ test.describe('Captura Web Recorder', () => {
   });
 
   test('system gain slider updates its label', async ({ page }) => {
+    await page.click('#sys-audio-chk');
     await page.evaluate(() => {
       const slider = document.getElementById('sys-gain-slider') as HTMLInputElement;
       slider.value = '1.5';
       slider.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await expect(page.locator('#sys-gain-label')).toHaveText('150%');
+  });
+
+  test('mute buttons toggle label state without losing the slider value', async ({ page }) => {
+    await page.selectOption('#mic-select', { index: 1 });
+    await page.click('#sys-audio-chk');
+
+    await page.evaluate(() => {
+      const micSlider = document.getElementById('mic-gain-slider') as HTMLInputElement;
+      micSlider.value = '0.5';
+      micSlider.dispatchEvent(new Event('input', { bubbles: true }));
+      const sysSlider = document.getElementById('sys-gain-slider') as HTMLInputElement;
+      sysSlider.value = '1.5';
+      sysSlider.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    await page.click('#mic-mute-btn');
+    await page.click('#sys-mute-btn');
+
+    await expect(page.locator('#mic-gain-label')).toHaveText('Muted · 50%');
+    await expect(page.locator('#sys-gain-label')).toHaveText('Muted · 150%');
+    await expect(page.locator('#mic-gain-label')).toHaveClass(/text-secondary/);
+    await expect(page.locator('#sys-gain-label')).toHaveClass(/text-secondary/);
+  });
+
+  test('starting while system audio is muted initializes the recording mix with zero system gain', async ({ page }) => {
+    await page.addInitScript(() => {
+      (navigator.mediaDevices as any).getDisplayMedia = async () => {
+        const audioCtx = new AudioContext();
+        await audioCtx.resume().catch(() => {});
+
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = 440;
+        const gain = audioCtx.createGain();
+        gain.gain.value = 0.2;
+        const audioDest = audioCtx.createMediaStreamDestination();
+        osc.connect(gain);
+        gain.connect(audioDest);
+        osc.start();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 360;
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const videoTrack = canvas.captureStream(30).getVideoTracks()[0];
+        const audioTrack = audioDest.stream.getAudioTracks()[0];
+        return new MediaStream([videoTrack, audioTrack]);
+      };
+    });
+
+    await page.goto('/tools/captura/', { waitUntil: 'networkidle' });
+    await page.waitForSelector('#sys-audio-chk', { state: 'attached' });
+    await page.waitForSelector('#sys-mute-btn', { state: 'attached' });
+
+    await page.evaluate(() => {
+      const originalCreateGain = AudioContext.prototype.createGain;
+      const createdGainNodes: GainNode[] = [];
+
+      (window as any).__capturaCreatedGainNodes = createdGainNodes;
+
+      AudioContext.prototype.createGain = function (...args: []) {
+        const gainNode = originalCreateGain.apply(this, args);
+        createdGainNodes.push(gainNode);
+        return gainNode;
+      };
+    });
+
+    await page.click('#pick-dir-btn');
+    await page.click('#sys-audio-chk');
+    await page.evaluate(() => {
+      const sysSlider = document.getElementById('sys-gain-slider') as HTMLInputElement;
+      sysSlider.value = '1.5';
+      sysSlider.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await expect(page.locator('#sys-mute-btn')).toBeEnabled();
+    await page.click('#sys-mute-btn');
+    await expect(page.locator('#sys-gain-label')).toHaveText('Muted · 150%');
+    await page.click('#start-btn');
+
+    await expect(page.locator('#status-badge')).toContainText('Recording');
+
+    await expect.poll(async () => {
+      return await page.evaluate(() => {
+        const gains = (window as any).__capturaCreatedGainNodes as GainNode[] | undefined;
+        const last = gains?.at(-1);
+        return last?.gain.value ?? null;
+      });
+    }).toBe(0);
+
+    await page.click('#stop-btn');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
   });
 
   // ── Preferences persistence ──────────────────────────────────────────────────
@@ -224,9 +339,8 @@ test.describe('Captura Web Recorder', () => {
   }
 
   test('FPS preference is persisted to localStorage on change', async ({ page }) => {
-    // Step to default first so the second step always triggers a change event.
-    await page.selectOption('#fps-select', '30');
-    await page.selectOption('#fps-select', '15');
+    await page.locator('#fps-pill-group button').filter({ hasText: '30 fps' }).click();
+    await page.locator('#fps-pill-group button').filter({ hasText: '15 fps' }).click();
     await expectLocalStorage(page, 'captura-fps', '15');
   });
 
@@ -261,66 +375,15 @@ test.describe('Captura Web Recorder', () => {
       localStorage.setItem('captura-fps', '60');
       localStorage.setItem('captura-quality', '480');
       localStorage.setItem('captura-format', 'mp4-h264-aac');
+      localStorage.setItem('captura-countdown', '10');
     });
 
     await page.reload();
 
-    await expect(page.locator('#fps-select')).toHaveValue('60');
+    await expect(page.locator('#fps-pill-group button').filter({ hasText: '60 fps' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('#quality-select')).toHaveValue('480');
     await expect(page.locator('#format-select')).toHaveValue('mp4-h264-aac');
-  });
-
-  test('annotation tool preferences are persisted to localStorage', async ({ page }) => {
-    await page.selectOption('#annotation-tool-select', 'none');
-    await page.selectOption('#annotation-tool-select', 'draw');
-    await expectLocalStorage(page, 'captura-annotationTool', 'draw');
-
-    await page.evaluate(() => {
-      const colorInput = document.getElementById('annotation-color-input') as HTMLInputElement;
-      colorInput.value = '#00ff00';
-      colorInput.dispatchEvent(new Event('input', { bubbles: true }));
-      colorInput.dispatchEvent(new Event('change', { bubbles: true }));
-
-      const widthSlider = document.getElementById('annotation-width-slider') as HTMLInputElement;
-      widthSlider.value = '10';
-      widthSlider.dispatchEvent(new Event('input', { bubbles: true }));
-      widthSlider.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-
-    await expectLocalStorage(page, 'captura-annotationColor', '#00ff00');
-    await expectLocalStorage(page, 'captura-annotationWidth', '10');
-  });
-
-  test('draw and highlight tools add annotations and clear button removes them', async ({ page }) => {
-    await page.selectOption('#annotation-tool-select', 'draw');
-    await dragOnRecorderCanvas(page, { x: 80, y: 90 }, { x: 260, y: 140 });
-    await expect.poll(async () =>
-      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
-    ).toBe('1');
-
-    await page.selectOption('#annotation-tool-select', 'highlight');
-    await dragOnRecorderCanvas(page, { x: 300, y: 120 }, { x: 520, y: 260 });
-    await expect.poll(async () =>
-      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
-    ).toBe('2');
-
-    await page.click('#clear-annotations-btn');
-    await expect.poll(async () =>
-      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.annotationCount)
-    ).toBe('0');
-  });
-
-  test('zoom-to-region applies and can be reset', async ({ page }) => {
-    await page.selectOption('#annotation-tool-select', 'zoom');
-    await dragOnRecorderCanvas(page, { x: 180, y: 110 }, { x: 430, y: 290 });
-    await expect.poll(async () =>
-      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.zoomActive)
-    ).toBe('true');
-
-    await page.click('#reset-zoom-btn');
-    await expect.poll(async () =>
-      page.locator('#recorder-canvas').evaluate((canvas) => canvas.dataset.zoomActive)
-    ).toBe('false');
+    await expect(page.locator('#countdown-pill-group button').filter({ hasText: '10 sec' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   test('annotation tool preferences are persisted to localStorage', async ({ page }) => {
@@ -392,19 +455,23 @@ test.describe('Captura Web Recorder', () => {
     await page.click('#start-btn');
     await expect(page.locator('#status-badge')).toContainText('Recording');
 
-    await expect(page.locator('#fps-select')).toBeDisabled();
+    await expect(page.locator('#fps-pill-group button').first()).toBeDisabled();
     await expect(page.locator('#quality-select')).toBeDisabled();
+    await expect(page.locator('#format-select')).toBeDisabled();
+    await expect(page.locator('#countdown-pill-group button').first()).toBeDisabled();
     await expect(page.locator('#sys-audio-chk')).toBeDisabled();
     await expect(page.locator('#pick-dir-btn')).toBeDisabled();
     await expect(page.locator('#webcam-select')).toBeEnabled();
     await expect(page.locator('#mic-select')).toBeDisabled();
 
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 
     // Controls re-enabled after recording stops
-    await expect(page.locator('#fps-select')).toBeEnabled();
+    await expect(page.locator('#fps-pill-group button').first()).toBeEnabled();
     await expect(page.locator('#quality-select')).toBeEnabled();
+    await expect(page.locator('#format-select')).toBeEnabled();
+    await expect(page.locator('#countdown-pill-group button').first()).toBeEnabled();
   });
 
   // ── MP4 format ───────────────────────────────────────────────────────────────
@@ -416,8 +483,23 @@ test.describe('Captura Web Recorder', () => {
     await expect(page.locator('#status-badge')).toContainText('Recording');
     await page.waitForTimeout(3000);
     await page.click('#stop-btn');
-    await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 
     await verifyFileByExtension(page, '.mp4');
+  });
+
+  test('keyboard shortcuts control recording flow', async ({ page }) => {
+    await page.click('#pick-dir-btn');
+    await page.keyboard.press('Shift+R');
+    await expect(page.locator('#status-badge')).toContainText('Recording');
+
+    await page.keyboard.press('Shift+P');
+    await expect(page.locator('#status-badge')).toHaveText('⏸ Paused');
+
+    await page.keyboard.press('Shift+R');
+    await expect(page.locator('#status-badge')).toContainText('Recording');
+
+    await page.keyboard.press('Shift+S');
+    await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
   });
 });
