@@ -13,13 +13,13 @@ export const opfsMockScript = () => {
 
 // Starts recording, waits 3 s, stops, and asserts badge state.
 // With fake media devices the screen-share track stays alive after stopping,
-// so the machine settles in SESSION ('◉ Session Active') rather than IDLE.
+// so the machine settles in SESSION ('◉ Screen share ready') rather than IDLE.
 export async function runRecordingPipeline(page: any) {
   await page.click('#start-btn');
   await expect(page.locator('#status-badge')).toContainText('Recording');
   await page.waitForTimeout(3000);
   await page.click('#stop-btn');
-  await expect(page.locator('#status-badge')).toHaveText('◉ Session Active');
+  await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready');
 }
 
 // Reads the OPFS root and asserts that a .webm file > 1 kB exists.

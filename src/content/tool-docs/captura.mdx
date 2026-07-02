@@ -38,15 +38,8 @@ inside your browser. **No data is ever sent to any server.**
   recording is staged in private browser storage and a download is triggered automatically
   when you stop recording.
 
-###### Hardware media key & OS media overlay support
-
-Once a recording is started, the browser registers a
-[Media Session](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)
-so you can control it from **hardware media keys** (play/pause/stop buttons on
-keyboards, headsets, and remotes) or from the **OS media overlay** (e.g. the
-Windows taskbar media controls or macOS Now Playing widget) — even when the browser tab is
-not focused. The OS overlay shows the session as *"Captura Web – Recording Session
-Active"* and stays in sync as you pause, resume, or stop the recording.
+The recorder also supports page-level keyboard shortcuts: **Shift+R** starts or resumes,
+**Shift+P** pauses, **Shift+S** stops, and **Esc** cancels the start countdown.
 
 <div class="alert alert-info mb-0 py-2">
   <i class="fas fa-shield-alt me-1"></i>
@@ -80,8 +73,7 @@ depends on the OS — Windows supports it natively; macOS requires a virtual aud
 Rather than recording the screen stream directly, the recorder draws every frame onto an
 offscreen `<canvas>` element. This intermediate step is what makes the
 webcam picture-in-picture (PiP) overlay possible: each frame, the compositor first draws
-the screen video, then draws the webcam video on top in the chosen corner, and finally
-stamps a live timestamp in the bottom-right.
+the screen video and then draws the webcam video on top in the chosen corner.
 
 During recording the compositor runs in an async self-scheduling loop at your chosen frame
 rate (e.g. every ~33 ms for 30 fps). After drawing each frame it calls
@@ -174,4 +166,3 @@ library, which drives the browser's hardware `VideoEncoder` and `AudioEncoder`
 `FileSystemWritableFileStream` via its `StreamTarget`. On finalization it rewrites the
 duration metadata at the start of the file — a step that the native `MediaRecorder` API
 skips, making its output unscrubbable in many players.
-

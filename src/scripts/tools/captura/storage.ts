@@ -131,7 +131,7 @@ export class StorageManager {
 
   #updateDirUI() {
     if (this.#isOPFS) {
-      this.#onDirNameChange('(saving to browser storage — Click the Download Recording toast after recording)');
+      this.#onDirNameChange('Browser storage fallback active — downloads start automatically after recording');
     } else {
       this.#onDirNameChange(this.#dirHandle?.name ?? '(no folder selected)');
     }

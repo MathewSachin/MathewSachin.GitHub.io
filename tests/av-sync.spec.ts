@@ -601,7 +601,7 @@ async function runScenario(
 
   // Stop recording and wait for the file to be fully written to OPFS
   await page.click('#stop-btn');
-  await expect(page.locator('#status-badge')).toHaveText('◉ Session Active', { timeout: 30_000 });
+  await expect(page.locator('#status-badge')).toHaveText('◉ Screen share ready', { timeout: 30_000 });
 
   // Transfer the WebM file to Node.js and run ffprobe analysis
   const buffer   = await getRecordingBuffer(page);

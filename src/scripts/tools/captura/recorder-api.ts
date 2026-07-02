@@ -129,7 +129,7 @@ export class RecorderAPI {
       const err = new Error(
         'System audio was not captured. In the browser share dialog, make sure to enable ' +
         '"Share system audio" (or "Share tab audio"). ' +
-        'Click "End Session" and try again, or uncheck "Capture system audio" to record without it.'
+        'Click "Release Screen Share" and try again, or uncheck "Capture system audio" to record without it.'
       );
       err.name  = 'SysAudioNotCaptured';
       const e = err as { title?: string } & Error;

@@ -4,11 +4,46 @@
   display: block;
   background: #111;
   border-radius: 6px;
+  transition: opacity 0.2s ease;
 }
 
 /* ── Canvas wrapper — needed so the countdown overlay can be positioned over it */
 .canvas-wrap {
   position: relative;
+}
+
+.preview-frame {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.preview-frame-dimmed #recorder-canvas {
+  opacity: 0.55;
+}
+
+.preview-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  pointer-events: none;
+}
+
+.preview-hint-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.preview-hint-body {
+  max-width: 28rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 /* ── Countdown overlay ────────────────────────────────────────────────────── */
@@ -41,21 +76,53 @@
   from { transform: scale(1.25); opacity: 0.6; }
   to   { transform: scale(1);    opacity: 1; }
 }
-.rec-dot {
-  display: inline-block;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: #dc3545;
-  animation: blink 1s step-start infinite;
-  margin-right: 4px;
-}
-@keyframes blink { 50% { opacity: 0; } }
 .audio-meter {
   width: 100%;
   height: 10px;
   display: block;
   border-radius: 3px;
   background: #1e1e1e;
+}
+
+.source-audio-card-disabled {
+  opacity: 0.65;
+}
+
+.pill-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill-toggle-btn {
+  border: 1px solid rgba(33, 37, 41, 0.12);
+  border-radius: 999px;
+  background: rgba(13, 110, 253, 0.02);
+  color: #1f2a37;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  padding: 0.4rem 0.8rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pill-toggle-btn:hover:not(:disabled) {
+  border-color: rgba(13, 110, 253, 0.45);
+  background: rgba(13, 110, 253, 0.14);
+  color: #0f172a;
+}
+
+.pill-toggle-btn.active {
+  border-color: rgba(var(--bs-primary-rgb), 0.85);
+  background: rgba(var(--bs-primary-rgb), 0.18);
+  color: #0a58ca;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.pill-toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ── Centered error/warning dialog ───────────────────────────────────────── */
