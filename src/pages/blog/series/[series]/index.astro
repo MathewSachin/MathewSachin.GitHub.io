@@ -93,7 +93,7 @@ function postHref(id: string) {
                 <h3 class="series-roadmap-title">{item.title}</h3>
                 <p class="series-roadmap-summary">{item.summary}</p>
 
-                <div class="series-roadmap-keywords" aria-label={`Keywords for ${item.title}`}>
+                <div class="series-roadmap-keywords">
                   {item.keywords.map(keyword => (
                     <span class="series-roadmap-keyword">{keyword}</span>
                   ))}

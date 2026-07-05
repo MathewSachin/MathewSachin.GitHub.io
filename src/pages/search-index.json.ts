@@ -99,12 +99,9 @@ export async function GET() {
   // 4. Index series pages
   for (const series of Object.values(SERIES)) {
     const seriesTags = new Set<string>();
-    const roadmapContent = (series.roadmap ?? []).flatMap(item => {
-      // Keep roadmap keywords in both the searchable content and tag list so the
-      // series page can be found by those future topic terms even before a post exists.
-      item.keywords.forEach(keyword => seriesTags.add(keyword));
-      return [item.title, item.summary, ...item.keywords];
-    });
+    const roadmap = series.roadmap ?? [];
+    roadmap.flatMap(item => item.keywords).forEach(keyword => seriesTags.add(keyword));
+    const roadmapContent = roadmap.flatMap(item => [item.title, item.summary, ...item.keywords]);
     const content = stripMarkdown([
       series.name,
       series.description,

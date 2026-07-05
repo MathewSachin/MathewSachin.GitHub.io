@@ -94,7 +94,7 @@ export const browserHacksSeries: Series = {
         related: [
           '/blog/2026/03/31/youtube-shorts-normal-player',
           '/blog/2026/04/10/whatsapp-web-devtools-statuses',
-          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+          '/blog/2026/05/02/mobile-devtools-console-bookmarklet',
         ],
       },
       {
@@ -112,9 +112,9 @@ export const browserHacksSeries: Series = {
         summary: 'A mobile-first sequel that shows how to package real console scripts into tap-to-run bookmarklets, including URL encoding, minification, and the common failure modes on mobile browsers.',
         keywords: ['bookmarklet', 'mobile', 'console', 'url encoding', 'javascript', 'devtools'],
         related: [
-          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
-          '/blog/2026/03/19-hacking-wordle-mobile-bookmarklet',
-          '/blog/2026/03/19-chrome-dino-hack-mobile-bookmarklet',
+          '/blog/2026/05/02/mobile-devtools-console-bookmarklet',
+          '/blog/2026/03/19/hacking-wordle-mobile-bookmarklet',
+          '/blog/2026/03/19/chrome-dino-hack-mobile-bookmarklet',
         ],
       },
       {
@@ -124,7 +124,7 @@ export const browserHacksSeries: Series = {
         related: [
           '/blog/2026/05/07/remove-popups-bookmarklet',
           '/blog/2026/06/27/select-all-checkboxes-bookmarklet',
-          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+          '/blog/2026/05/02/mobile-devtools-console-bookmarklet',
         ],
       },
       {
@@ -132,9 +132,9 @@ export const browserHacksSeries: Series = {
         summary: 'A teachable workflow post that abstracts the Reddit and NYT hacks into a repeatable method for discovering useful JSON endpoints, reading payloads, and replaying requests safely.',
         keywords: ['json', 'network tab', 'api', 'fetch', 'xhr', 'devtools'],
         related: [
-          '/blog/2026/03/22-reddit-video-sniper',
-          '/blog/2026/04/07-hacking-nyt-connections',
-          '/blog/2026/04/08-hacking-nyt-strands',
+          '/blog/2026/03/22/reddit-video-sniper',
+          '/blog/2026/04/07/hacking-nyt-connections',
+          '/blog/2026/04/08/hacking-nyt-strands',
         ],
       },
       {
@@ -152,9 +152,9 @@ export const browserHacksSeries: Series = {
         summary: 'A browser-state deep dive showing how to read, change, and reset front-end flags stored in Web Storage so you can uncover hidden state, preferences, and game variables.',
         keywords: ['localStorage', 'sessionStorage', 'browser state', 'javascript', 'debugging', 'web'],
         related: [
-          '/blog/2026/03/07-hacking-wordle',
-          '/blog/2026/03/20-cookie-clicker-hacks',
-          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+          '/blog/2026/03/07/hacking-wordle',
+          '/blog/2026/03/20/cookie-clicker-hacks',
+          '/blog/2026/05/02/mobile-devtools-console-bookmarklet',
         ],
       },
       {
@@ -163,8 +163,8 @@ export const browserHacksSeries: Series = {
         keywords: ['csv', 'table', 'scraping', 'dom', 'javascript', 'productivity'],
         related: [
           '/blog/2026/06/27/select-all-checkboxes-bookmarklet',
-          '/blog/2026/04/10-whatsapp-web-devtools-statuses',
-          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+          '/blog/2026/04/10/whatsapp-web-devtools-statuses',
+          '/blog/2026/05/02/mobile-devtools-console-bookmarklet',
         ],
       },
       {
@@ -172,9 +172,9 @@ export const browserHacksSeries: Series = {
         summary: 'A bridge post that explains when a one-liner should stay a console trick, when it should become a bookmarklet, and when it is worth promoting to a full userscript.',
         keywords: ['userscript', 'tampermonkey', 'bookmarklet', 'devtools', 'automation', 'workflow'],
         related: [
-          '/blog/2026/03/30-instagram-userscript-download-buttons',
-          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
-          '/blog/2026/05/07-remove-popups-bookmarklet',
+          '/blog/2026/03/30/instagram-userscript-download-buttons',
+          '/blog/2026/05/02/mobile-devtools-console-bookmarklet',
+          '/blog/2026/05/07/remove-popups-bookmarklet',
         ],
       },
     ],
