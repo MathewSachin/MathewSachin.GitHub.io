@@ -100,8 +100,9 @@ export async function GET() {
   for (const series of Object.values(SERIES)) {
     const seriesTags = new Set<string>();
     const roadmapContent = (series.roadmap ?? []).flatMap(item => {
-      item.keywords.forEach(keyword => seriesTags.add(keyword));
-      return [item.title, item.summary, ...item.keywords];
+      const roadmapKeywords = item.keywords;
+      roadmapKeywords.forEach(keyword => seriesTags.add(keyword));
+      return [item.title, item.summary, ...roadmapKeywords];
     });
     const content = stripMarkdown([
       series.name,
