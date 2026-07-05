@@ -99,6 +99,10 @@ export async function GET() {
   // 4. Index series pages
   for (const series of Object.values(SERIES)) {
     const seriesTags = new Set<string>();
+    const roadmapContent = (series.roadmap ?? []).flatMap(item => {
+      item.keywords.forEach(keyword => seriesTags.add(keyword));
+      return [item.title, item.summary, ...item.keywords];
+    });
     const content = stripMarkdown([
       series.name,
       series.description,
@@ -114,12 +118,7 @@ export async function GET() {
           return [post.data.title, post.data.description ?? '', ...(post.data.tags ?? [])];
         }),
       ]),
-      ...(series.roadmap ?? []).flatMap(item => {
-        for (const keyword of item.keywords) {
-          seriesTags.add(keyword);
-        }
-        return [item.title, item.summary, ...item.keywords];
-      }),
+      ...roadmapContent,
     ].join(' ')).slice(0, MAX_CONTENT_LENGTH);
 
     await insert(db, {
