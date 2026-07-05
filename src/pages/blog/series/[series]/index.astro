@@ -60,6 +60,55 @@ function findPost(id: string) {
       </>
     );
   })}
+
+  {series.roadmap && series.roadmap.length > 0 && (
+    <>
+      <hr />
+      <h2 class="series-level-heading" id="whats-next">
+        <i class="fas fa-list-check me-1" aria-hidden="true"></i>What's Next
+      </h2>
+      <p>
+        These are the next planned posts for this series — prioritised toward reusable hacks,
+        bookmarklets, DevTools workflows, and mobile-friendly tricks rather than news-driven topics.
+      </p>
+
+      <div class="series-roadmap">
+        {series.roadmap.map((item, index) => {
+          const relatedPosts = item.related
+            .map(id => findPost(id))
+            .filter((post): post is NonNullable<ReturnType<typeof findPost>> => post !== null);
+
+          return (
+            <section class="series-roadmap-item">
+              <span class="series-part-badge">{index + 1}</span>
+              <div class="series-roadmap-body">
+                <h3 class="series-roadmap-title">{item.title}</h3>
+                <p class="series-roadmap-summary">{item.summary}</p>
+
+                <div class="series-roadmap-keywords" aria-label={`Keywords for ${item.title}`}>
+                  {item.keywords.map(keyword => (
+                    <span class="series-roadmap-keyword">{keyword}</span>
+                  ))}
+                </div>
+
+                {relatedPosts.length > 0 && (
+                  <p class="series-roadmap-related mb-0">
+                    <span class="series-roadmap-related-label">Link back to:</span>{' '}
+                    {relatedPosts.map((post, relatedIndex) => (
+                      <>
+                        {relatedIndex > 0 && <span class="text-muted"> · </span>}
+                        <a href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}>{post.data.title}</a>
+                      </>
+                    ))}
+                  </p>
+                )}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </>
+  )}
 </SeriesLayout>
 
 <style>
@@ -139,5 +188,77 @@ a.series-post-title:hover {
   border-bottom: none;
   padding-bottom: 0;
   margin-top: 0;
+}
+
+.series-roadmap {
+  display: grid;
+  gap: 1rem;
+}
+
+.series-roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.series-roadmap-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.series-roadmap-title {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-accent);
+}
+
+.series-roadmap-summary {
+  margin-bottom: 0.65rem;
+}
+
+.series-roadmap-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+}
+
+.series-roadmap-keyword {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 12%, white);
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.series-roadmap-related {
+  font-size: 0.875rem;
+}
+
+.series-roadmap-related-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.series-roadmap-related a {
+  text-decoration: none;
+}
+
+.series-roadmap-related a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 575px) {
+  .series-roadmap-item {
+    padding: 0.9rem;
+  }
 }
 </style>

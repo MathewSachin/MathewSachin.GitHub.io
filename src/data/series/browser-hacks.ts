@@ -76,4 +76,106 @@ export const browserHacksSeries: Series = {
         ],
       },
     ],
+    roadmap: [
+      {
+        title: 'Copy Any Protected Text on Any Website',
+        summary: 'A practical soft-wall bypass for pages that disable selection, block copying, or hide text behind front-end overlays. Covers restoring user-select, removing event blockers, and bringing normal text selection back.',
+        keywords: ['copy', 'protected text', 'css', 'selection', 'overlay', 'devtools'],
+        related: [
+          '/blog/2026/04/10/quora-devtools-bypass',
+          '/blog/2026/05/07/remove-popups-bookmarklet',
+          '/blog/2026/03/21/save-instagram-photos',
+        ],
+      },
+      {
+        title: 'Force 2x/4x Playback on Any Video Site',
+        summary: 'A speed-control hack for players that hide playback controls or cap them at 2x. Focuses on video element inspection, JavaScript property control, and reusable bookmarklet patterns.',
+        keywords: ['video', 'playback speed', 'media', 'bookmarklet', 'javascript', 'mobile'],
+        related: [
+          '/blog/2026/03/31/youtube-shorts-normal-player',
+          '/blog/2026/04/10/whatsapp-web-devtools-statuses',
+          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+        ],
+      },
+      {
+        title: 'Download the Full-Resolution Image from Any Page',
+        summary: 'A general-purpose version of the Pinterest and Instagram tricks: inspect thumbnails, trace them back to original assets, and learn the image URL patterns sites often try to hide.',
+        keywords: ['images', 'network', 'cdn', 'devtools', 'download', 'social-media'],
+        related: [
+          '/blog/2026/04/10/pinterest-devtools-hacks',
+          '/blog/2026/03/21/save-instagram-photos',
+          '/blog/2026/03/22/instagram-story-sniper',
+        ],
+      },
+      {
+        title: 'Turn Any Console Snippet into a Mobile Bookmarklet',
+        summary: 'A mobile-first sequel that shows how to package real console scripts into tap-to-run bookmarklets, including URL encoding, minification, and the common failure modes on mobile browsers.',
+        keywords: ['bookmarklet', 'mobile', 'console', 'url encoding', 'javascript', 'devtools'],
+        related: [
+          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+          '/blog/2026/03/19-hacking-wordle-mobile-bookmarklet',
+          '/blog/2026/03/19-chrome-dino-hack-mobile-bookmarklet',
+        ],
+      },
+      {
+        title: 'Build a Personal Power Bookmarklets Toolbar',
+        summary: 'A systems post about turning one-off hacks into a repeatable toolkit: organize your best bookmarklets, standardize UI patterns, and keep a reusable browser-side utility belt.',
+        keywords: ['bookmarklet', 'toolkit', 'workflow', 'productivity', 'browser', 'javascript'],
+        related: [
+          '/blog/2026/05/07/remove-popups-bookmarklet',
+          '/blog/2026/06/27/select-all-checkboxes-bookmarklet',
+          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+        ],
+      },
+      {
+        title: 'Find Hidden JSON APIs in Any Website Using the Network Tab',
+        summary: 'A teachable workflow post that abstracts the Reddit and NYT hacks into a repeatable method for discovering useful JSON endpoints, reading payloads, and replaying requests safely.',
+        keywords: ['json', 'network tab', 'api', 'fetch', 'xhr', 'devtools'],
+        related: [
+          '/blog/2026/03/22-reddit-video-sniper',
+          '/blog/2026/04/07-hacking-nyt-connections',
+          '/blog/2026/04/08-hacking-nyt-strands',
+        ],
+      },
+      {
+        title: 'Bypass Open-in-App Nag Screens on Mobile Websites',
+        summary: 'A high-utility mobile workaround post focused on removing app-install prompts, restoring scroll, and surfacing the actual web content underneath soft app walls.',
+        keywords: ['mobile', 'open in app', 'popup', 'overlay', 'css', 'bookmarklet'],
+        related: [
+          '/blog/2026/05/07/remove-popups-bookmarklet',
+          '/blog/2026/04/10/pinterest-devtools-hacks',
+          '/blog/2026/04/10/quora-devtools-bypass',
+        ],
+      },
+      {
+        title: 'Inspect and Edit localStorage / sessionStorage to Unlock Features',
+        summary: 'A browser-state deep dive showing how to read, change, and reset front-end flags stored in Web Storage so you can uncover hidden state, preferences, and game variables.',
+        keywords: ['localStorage', 'sessionStorage', 'browser state', 'javascript', 'debugging', 'web'],
+        related: [
+          '/blog/2026/03/07-hacking-wordle',
+          '/blog/2026/03/20-cookie-clicker-hacks',
+          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+        ],
+      },
+      {
+        title: 'Save Data from Any HTML Table or List to CSV with One Script',
+        summary: 'A productivity-focused hack for turning messy pages into clean exports. Covers DOM querying, text cleanup, CSV generation, and quick browser-side downloads.',
+        keywords: ['csv', 'table', 'scraping', 'dom', 'javascript', 'productivity'],
+        related: [
+          '/blog/2026/06/27/select-all-checkboxes-bookmarklet',
+          '/blog/2026/04/10-whatsapp-web-devtools-statuses',
+          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+        ],
+      },
+      {
+        title: 'From DevTools Hack to Userscript: When to Upgrade',
+        summary: 'A bridge post that explains when a one-liner should stay a console trick, when it should become a bookmarklet, and when it is worth promoting to a full userscript.',
+        keywords: ['userscript', 'tampermonkey', 'bookmarklet', 'devtools', 'automation', 'workflow'],
+        related: [
+          '/blog/2026/03/30-instagram-userscript-download-buttons',
+          '/blog/2026/05/02-mobile-devtools-console-bookmarklet',
+          '/blog/2026/05/07-remove-popups-bookmarklet',
+        ],
+      },
+    ],
   }

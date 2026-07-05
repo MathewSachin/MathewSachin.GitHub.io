@@ -2,6 +2,13 @@ export interface SeriesPost {
   id: string
 }
 
+export interface SeriesRoadmapItem {
+  title: string
+  summary: string
+  keywords: string[]
+  related: string[]
+}
+
 export interface SeriesLevel {
   title: string
   icon: string
@@ -14,4 +21,5 @@ export interface Series {
   url: string
   description: string
   levels: SeriesLevel[]
+  roadmap?: SeriesRoadmapItem[]
 }

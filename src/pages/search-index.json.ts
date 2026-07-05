@@ -114,6 +114,12 @@ export async function GET() {
           return [post.data.title, post.data.description ?? '', ...(post.data.tags ?? [])];
         }),
       ]),
+      ...(series.roadmap ?? []).flatMap(item => {
+        for (const keyword of item.keywords) {
+          seriesTags.add(keyword);
+        }
+        return [item.title, item.summary, ...item.keywords];
+      }),
     ].join(' ')).slice(0, MAX_CONTENT_LENGTH);
 
     await insert(db, {
