@@ -21,6 +21,12 @@ const allPosts = await getAllPosts();
 function findPost(id: string) {
   return allPosts.find(p => postIdFromSlug(p.id) === id) || null;
 }
+
+function findPosts(ids: string[]) {
+  return ids
+    .map(id => findPost(id))
+    .filter(Boolean) as NonNullable<ReturnType<typeof findPost>>[];
+}
 ---
 <SeriesLayout title={series.name}>
   <p class="lead mt-2 mb-4" set:html={series.description} />
@@ -74,9 +80,7 @@ function findPost(id: string) {
 
       <div class="series-roadmap">
         {series.roadmap.map((item, index) => {
-          const relatedPosts = item.related
-            .map(id => findPost(id))
-            .filter((post): post is NonNullable<ReturnType<typeof findPost>> => post !== null);
+          const relatedPosts = findPosts(item.related);
 
           return (
             <section class="series-roadmap-item">
