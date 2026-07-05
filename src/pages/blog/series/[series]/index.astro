@@ -27,6 +27,10 @@ function findPosts(ids: string[]) {
     .map(id => findPost(id))
     .filter(Boolean) as NonNullable<ReturnType<typeof findPost>>[];
 }
+
+function postHref(id: string) {
+  return `${BASE}${postUrlFromSlug(id).slice(1)}`;
+}
 ---
 <SeriesLayout title={series.name}>
   <p class="lead mt-2 mb-4" set:html={series.description} />
@@ -50,7 +54,7 @@ function findPosts(ids: string[]) {
               <span class="series-part-badge">{part}</span>
               <div>
                 <a
-                  href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}
+                  href={postHref(post.id)}
                   class="series-post-title"
                   style={post.data.accent_color ? `--item-accent: ${post.data.accent_color}` : undefined}
                 >
@@ -101,7 +105,7 @@ function findPosts(ids: string[]) {
                     {relatedPosts.map((post, relatedIndex) => (
                       <>
                         {relatedIndex > 0 && <span class="text-muted"> · </span>}
-                        <a href={`${BASE}${postUrlFromSlug(post.id).slice(1)}`}>{post.data.title}</a>
+                        <a href={postHref(post.id)}>{post.data.title}</a>
                       </>
                     ))}
                   </p>

@@ -100,9 +100,10 @@ export async function GET() {
   for (const series of Object.values(SERIES)) {
     const seriesTags = new Set<string>();
     const roadmapContent = (series.roadmap ?? []).flatMap(item => {
-      const roadmapKeywords = item.keywords;
-      roadmapKeywords.forEach(keyword => seriesTags.add(keyword));
-      return [item.title, item.summary, ...roadmapKeywords];
+      // Keep roadmap keywords in both the searchable content and tag list so the
+      // series page can be found by those future topic terms even before a post exists.
+      item.keywords.forEach(keyword => seriesTags.add(keyword));
+      return [item.title, item.summary, ...item.keywords];
     });
     const content = stripMarkdown([
       series.name,
