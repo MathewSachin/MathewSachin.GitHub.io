@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@fortawesome/fontawesome-free": "^7.3.0",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "@huggingface/transformers": "^4.2.0",
     "@imagemagick/magick-wasm": "^0.0.41",
     "@orama/orama": "^3.1.18",
