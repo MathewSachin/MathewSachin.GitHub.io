@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Background -->
+  <rect width="720" height="320" fill="#f8f9fa" rx="12"/>
+
+  <!-- Header bar -->
+  <rect x="20" y="20" width="680" height="48" fill="#1a73e8" rx="8"/>
+  <text x="40" y="49" font-size="15" font-weight="700" fill="#fff">Google Search Console — Core Web Vitals</text>
+  <text x="590" y="49" font-size="11" fill="#bdd7ff">All URLs: Good</text>
+
+  <!-- Status badge -->
+  <rect x="620" y="30" width="64" height="22" fill="#34a853" rx="11"/>
+  <text x="652" y="45" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">✓ Good</text>
+
+  <!-- LCP card -->
+  <rect x="20" y="90" width="210" height="200" fill="#fff" rx="8" stroke="#dee2e6" stroke-width="1.5"/>
+  <!-- LCP green arc ring (simplified as concentric circles) -->
+  <circle cx="125" cy="175" r="52" fill="none" stroke="#e8f5e9" stroke-width="14"/>
+  <circle cx="125" cy="175" r="52" fill="none" stroke="#34a853" stroke-width="14"
+          stroke-dasharray="245 82" stroke-dashoffset="82" stroke-linecap="round"/>
+  <text x="125" y="169" text-anchor="middle" font-size="20" font-weight="700" fill="#202124">1.8s</text>
+  <text x="125" y="186" text-anchor="middle" font-size="10" fill="#5f6368">LCP</text>
+  <text x="125" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#202124">Largest Contentful Paint</text>
+  <rect x="75" y="247" width="100" height="22" fill="#e6f4ea" rx="11"/>
+  <text x="125" y="262" text-anchor="middle" font-size="11" font-weight="600" fill="#137333">Good  ≤ 2.5 s</text>
+
+  <!-- CLS card -->
+  <rect x="255" y="90" width="210" height="200" fill="#fff" rx="8" stroke="#dee2e6" stroke-width="1.5"/>
+  <circle cx="360" cy="175" r="52" fill="none" stroke="#e8f5e9" stroke-width="14"/>
+  <circle cx="360" cy="175" r="52" fill="none" stroke="#34a853" stroke-width="14"
+          stroke-dasharray="310 17" stroke-dashoffset="82" stroke-linecap="round"/>
+  <text x="360" y="169" text-anchor="middle" font-size="20" font-weight="700" fill="#202124">0.04</text>
+  <text x="360" y="186" text-anchor="middle" font-size="10" fill="#5f6368">CLS</text>
+  <text x="360" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#202124">Cumulative Layout Shift</text>
+  <rect x="310" y="247" width="100" height="22" fill="#e6f4ea" rx="11"/>
+  <text x="360" y="262" text-anchor="middle" font-size="11" font-weight="600" fill="#137333">Good  ≤ 0.1</text>
+
+  <!-- INP card -->
+  <rect x="490" y="90" width="210" height="200" fill="#fff" rx="8" stroke="#dee2e6" stroke-width="1.5"/>
+  <circle cx="595" cy="175" r="52" fill="none" stroke="#e8f5e9" stroke-width="14"/>
+  <circle cx="595" cy="175" r="52" fill="none" stroke="#34a853" stroke-width="14"
+          stroke-dasharray="294 33" stroke-dashoffset="82" stroke-linecap="round"/>
+  <text x="595" y="169" text-anchor="middle" font-size="20" font-weight="700" fill="#202124">148ms</text>
+  <text x="595" y="186" text-anchor="middle" font-size="10" fill="#5f6368">INP</text>
+  <text x="595" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#202124">Interaction to Next Paint</text>
+  <rect x="545" y="247" width="100" height="22" fill="#e6f4ea" rx="11"/>
+  <text x="595" y="262" text-anchor="middle" font-size="11" font-weight="600" fill="#137333">Good  ≤ 200 ms</text>
+</svg>
