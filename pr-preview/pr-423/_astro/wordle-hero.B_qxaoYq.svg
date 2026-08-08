@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+  <!-- Background -->
+  <rect width="400" height="480" fill="#ffffff"/>
+  <!-- Title bar -->
+  <text x="200" y="48" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#1a1a1b">Wordle</text>
+  <!-- Divider -->
+  <line x1="20" y1="60" x2="380" y2="60" stroke="#d3d6da" stroke-width="1"/>
+
+  <!-- Row 1 - CRANE all green (correct) -->
+  <rect x="40"  y="80" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <rect x="110" y="80" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <rect x="180" y="80" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <rect x="250" y="80" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <rect x="320" y="80" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <text x="70"  y="123" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">C</text>
+  <text x="140" y="123" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">R</text>
+  <text x="210" y="123" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">A</text>
+  <text x="280" y="123" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">N</text>
+  <text x="350" y="123" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">E</text>
+
+  <!-- Row 2 - STALE mixed -->
+  <rect x="40"  y="150" width="60" height="60" rx="4" fill="#787c7e"/>
+  <rect x="110" y="150" width="60" height="60" rx="4" fill="#787c7e"/>
+  <rect x="180" y="150" width="60" height="60" rx="4" fill="#c9b458"/>
+  <rect x="250" y="150" width="60" height="60" rx="4" fill="#787c7e"/>
+  <rect x="320" y="150" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <text x="70"  y="193" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">S</text>
+  <text x="140" y="193" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">T</text>
+  <text x="210" y="193" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">A</text>
+  <text x="280" y="193" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">L</text>
+  <text x="350" y="193" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">E</text>
+
+  <!-- Row 3 - GROAN mixed -->
+  <rect x="40"  y="220" width="60" height="60" rx="4" fill="#787c7e"/>
+  <rect x="110" y="220" width="60" height="60" rx="4" fill="#c9b458"/>
+  <rect x="180" y="220" width="60" height="60" rx="4" fill="#787c7e"/>
+  <rect x="250" y="220" width="60" height="60" rx="4" fill="#6aaa64"/>
+  <rect x="320" y="220" width="60" height="60" rx="4" fill="#787c7e"/>
+  <text x="70"  y="263" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">G</text>
+  <text x="140" y="263" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">R</text>
+  <text x="210" y="263" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">O</text>
+  <text x="280" y="263" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">A</text>  <!-- wrong, using N -->
+  <text x="350" y="263" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">N</text>
+
+  <!-- Rows 4-6 empty -->
+  <rect x="40"  y="290" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="110" y="290" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="180" y="290" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="250" y="290" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="320" y="290" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+
+  <rect x="40"  y="360" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="110" y="360" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="180" y="360" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="250" y="360" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="320" y="360" width="60" height="60" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+
+  <rect x="40"  y="430" width="60" height="44" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="110" y="430" width="60" height="44" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="180" y="430" width="60" height="44" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="250" y="430" width="60" height="44" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+  <rect x="320" y="430" width="60" height="44" rx="4" fill="none" stroke="#d3d6da" stroke-width="2"/>
+</svg>
