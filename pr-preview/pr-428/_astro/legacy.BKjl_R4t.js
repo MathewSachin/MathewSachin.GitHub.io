@@ -1,1 +1,0 @@
-import{vt as e}from"./client.B1ytoj9h.js";e();
