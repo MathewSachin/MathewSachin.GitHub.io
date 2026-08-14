@@ -38,7 +38,7 @@
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/svelte": "^9.0.1",
     "@pintora/cli": "^0.8.1",
-    "@playwright/test": "^1.62.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^26.1.2",
     "@types/qrcode": "^1.5.6",
     "astro": "^7.1.6",
