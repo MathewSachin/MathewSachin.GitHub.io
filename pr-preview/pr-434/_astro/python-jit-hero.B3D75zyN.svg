@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300">
+  <!-- White background -->
+  <rect width="480" height="300" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="240" y="24" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a1a1a">Python JIT Performance</text>
+  <text x="240" y="38" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#888">Relative speed vs. CPython 3.11 baseline</text>
+
+  <!-- Chart area -->
+  <!-- Y-axis -->
+  <line x1="80" y1="55" x2="80" y2="225" stroke="#ccc" stroke-width="1.5"/>
+  <!-- X-axis -->
+  <line x1="80" y1="225" x2="450" y2="225" stroke="#ccc" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="74" y="228" font-family="Arial, sans-serif" font-size="9" text-anchor="end" fill="#888">0</text>
+  <text x="74" y="183" font-family="Arial, sans-serif" font-size="9" text-anchor="end" fill="#888">1.0</text>
+  <text x="74" y="138" font-family="Arial, sans-serif" font-size="9" text-anchor="end" fill="#888">1.5</text>
+  <text x="74" y="93" font-family="Arial, sans-serif" font-size="9" text-anchor="end" fill="#888">2.0</text>
+  <text x="74" y="63" font-family="Arial, sans-serif" font-size="9" text-anchor="end" fill="#888">2.3</text>
+
+  <!-- Y-axis title -->
+  <text x="20" y="140" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#888" transform="rotate(-90,20,140)">Relative Speed</text>
+
+  <!-- Horizontal grid lines -->
+  <line x1="80" y1="183" x2="450" y2="183" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="80" y1="138" x2="450" y2="138" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="80" y1="93" x2="450" y2="93" stroke="#f0f0f0" stroke-width="1"/>
+
+  <!-- 3.11 baseline dotted line (height = 1.0 = y=183) -->
+  <line x1="80" y1="183" x2="450" y2="183" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="452" y="186" font-family="Arial, sans-serif" font-size="8" fill="#999">baseline</text>
+
+  <!-- Bar widths and positions -->
+  <!-- Bar spacing: 4 bars across ~340px, each bar ~60px wide, gap ~25px -->
+  <!-- x positions: 100, 185, 270, 355 -->
+  <!-- Heights (from y=225):
+       3.11: 1.0 baseline = 90px tall, top at y=135
+       3.12: 1.15x = 103px, top at y=122
+       3.13 JIT (slower): 0.9x = 81px, top at y=144
+       3.15 JIT (faster): 1.35x = ~121px, top at y=104 ... let's use visual heights
+       
+       Let's map: 0 = y=225, 2.3 = y=57 (168px range)
+       1px per 0.0137 units
+       
+       3.11: 1.0 → 73px tall → top=152
+       3.12: 1.15 → 84px tall → top=141
+       3.13: 0.88 → 64px tall → top=161
+       3.15: 1.35 → 98px tall → top=127
+       
+       Actually let me use nicer numbers. Range 0 to 1.5 mapped to 170px:
+       0 = 225, 1.5 = 55 (170px range, 1unit = 113px)
+       3.11: 1.0 = 225-113 = 112 → height 113
+       3.12: 1.15 = 225-130 = 95 → height 130
+       3.13: 0.88 = 225-99 = 126 → height 99
+       3.15: 1.45 = 225-164 = 61 → height 164
+  -->
+
+  <!-- Bar 3.11 - Grey -->
+  <rect x="100" y="112" width="60" height="113" rx="4" fill="#9ca3af"/>
+  <text x="130" y="107" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#6b7280">1.0×</text>
+
+  <!-- Bar 3.12 - Grey (slightly taller) -->
+  <rect x="195" y="95" width="60" height="130" rx="4" fill="#9ca3af"/>
+  <text x="225" y="90" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#6b7280">1.15×</text>
+
+  <!-- Bar 3.13 - Red/orange (JIT was slower) -->
+  <rect x="290" y="126" width="60" height="99" rx="4" fill="#ef4444"/>
+  <text x="320" y="121" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#ef4444">0.88×</text>
+  <!-- "slower" label -->
+  <rect x="284" y="162" width="72" height="14" rx="3" fill="#fef2f2"/>
+  <text x="320" y="173" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#ef4444">JIT slower ↓</text>
+
+  <!-- Bar 3.15 - Green (JIT faster!) - tallest, highlighted -->
+  <rect x="375" y="61" width="60" height="164" rx="4" fill="#22c55e"/>
+  <text x="405" y="56" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#16a34a" font-weight="bold">1.45×</text>
+  <!-- "faster!" annotation -->
+  <rect x="369" y="72" width="72" height="16" rx="4" fill="#f0fdf4"/>
+  <text x="405" y="84" font-family="Arial, sans-serif" font-size="8.5" text-anchor="middle" fill="#16a34a" font-weight="bold">+45% faster!</text>
+
+  <!-- X-axis labels -->
+  <text x="130" y="238" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">3.11</text>
+  <text x="225" y="238" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">3.12</text>
+  <text x="320" y="238" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#cc3333">3.13 (JIT)</text>
+  <text x="405" y="238" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#16a34a" font-weight="bold">3.15 (JIT)</text>
+
+  <!-- X-axis version label -->
+  <text x="265" y="254" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#888">Python Version</text>
+
+  <!-- Legend / caption -->
+  <rect x="80" y="265" width="320" height="26" rx="5" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <rect x="92" y="273" width="10" height="10" rx="2" fill="#ef4444"/>
+  <text x="106" y="282" font-family="Arial, sans-serif" font-size="8" fill="#666">3.13 JIT: debut (slower)</text>
+  <rect x="220" y="273" width="10" height="10" rx="2" fill="#22c55e"/>
+  <text x="234" y="282" font-family="Arial, sans-serif" font-size="8" fill="#666">3.15 JIT: redesigned (faster!)</text>
+</svg>

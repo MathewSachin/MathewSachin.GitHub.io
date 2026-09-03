@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 320" width="560" height="320">
+  <!-- DevTools panel -->
+  <rect width="560" height="320" rx="6" fill="#1e1e1e" stroke="#444" stroke-width="1"/>
+
+  <!-- Top tab bar -->
+  <rect width="560" height="34" rx="6" fill="#292929"/>
+  <rect x="0" y="28" width="560" height="6" fill="#292929"/>
+
+  <!-- Tab items -->
+  <text x="16" y="22" font-family="Arial, sans-serif" font-size="12" fill="#9e9e9e">Elements</text>
+  <text x="80" y="22" font-family="Arial, sans-serif" font-size="12" fill="#9e9e9e">Console</text>
+  <text x="140" y="22" font-family="Arial, sans-serif" font-size="12" fill="#9e9e9e">Sources</text>
+
+  <!-- Network tab - highlighted/active -->
+  <rect x="196" y="0" width="66" height="34" fill="#1e1e1e"/>
+  <text x="229" y="22" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">Network</text>
+  <rect x="196" y="31" width="66" height="3" fill="#4285f4"/>
+
+  <text x="268" y="22" font-family="Arial, sans-serif" font-size="12" fill="#9e9e9e">Performance</text>
+  <text x="348" y="22" font-family="Arial, sans-serif" font-size="12" fill="#9e9e9e">Memory</text>
+  <text x="406" y="22" font-family="Arial, sans-serif" font-size="12" fill="#9e9e9e">Application</text>
+
+  <!-- Network toolbar -->
+  <rect x="0" y="34" width="560" height="32" fill="#252525"/>
+  <!-- Record button -->
+  <circle cx="16" cy="50" r="8" fill="#e8453c"/>
+  <!-- Clear button -->
+  <text x="34" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">🚫</text>
+  <!-- Filter box -->
+  <rect x="52" y="40" width="180" height="20" rx="10" fill="#3c3c3c" stroke="#555" stroke-width="1"/>
+  <text x="65" y="54" font-family="Arial, sans-serif" font-size="11" fill="#666">Filter</text>
+
+  <!-- Filter type buttons -->
+  <text x="242" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">All</text>
+  <!-- Fetch/XHR highlighted -->
+  <rect x="268" y="40" width="60" height="20" rx="3" fill="#4285f4"/>
+  <text x="298" y="54" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#ffffff">Fetch/XHR</text>
+  <text x="338" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">JS</text>
+  <text x="358" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">CSS</text>
+  <text x="380" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Img</text>
+  <text x="402" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Media</text>
+  <text x="436" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Font</text>
+  <text x="462" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Doc</text>
+  <text x="490" y="55" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">WS</text>
+
+  <!-- Column headers -->
+  <rect x="0" y="66" width="560" height="22" fill="#2d2d2d"/>
+  <text x="10"  y="81" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Name</text>
+  <text x="230" y="81" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Status</text>
+  <text x="290" y="81" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Type</text>
+  <text x="350" y="81" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Initiator</text>
+  <text x="450" y="81" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Size</text>
+  <text x="510" y="81" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">Time</text>
+
+  <!-- Request rows -->
+  <!-- Row 1 -->
+  <rect x="0" y="88" width="560" height="24" fill="#1e1e1e"/>
+  <text x="10"  y="104" font-family="monospace" font-size="11" fill="#9cdcfe">svc/wordle/v2/</text>
+  <text x="230" y="104" font-family="Arial, sans-serif" font-size="11" fill="#6aaa64">200</text>
+  <text x="290" y="104" font-family="Arial, sans-serif" font-size="11" fill="#ce9178">fetch</text>
+  <text x="450" y="104" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">1.2 kB</text>
+  <text x="510" y="104" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">45 ms</text>
+
+  <!-- Row 2 - highlighted JSON row -->
+  <rect x="0" y="112" width="560" height="24" fill="#264f78"/>
+  <text x="10"  y="128" font-family="monospace" font-size="11" fill="#ffffff">2026-03-07.json</text>
+  <text x="230" y="128" font-family="Arial, sans-serif" font-size="11" fill="#6aaa64">200</text>
+  <text x="290" y="128" font-family="Arial, sans-serif" font-size="11" fill="#ce9178">fetch</text>
+  <text x="450" y="128" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">512 B</text>
+  <text x="510" y="128" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">38 ms</text>
+
+  <!-- Row 3 -->
+  <rect x="0" y="136" width="560" height="24" fill="#1e1e1e"/>
+  <text x="10"  y="152" font-family="monospace" font-size="11" fill="#9cdcfe">stats.json</text>
+  <text x="230" y="152" font-family="Arial, sans-serif" font-size="11" fill="#6aaa64">200</text>
+  <text x="290" y="152" font-family="Arial, sans-serif" font-size="11" fill="#ce9178">fetch</text>
+  <text x="450" y="152" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">856 B</text>
+  <text x="510" y="152" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">62 ms</text>
+
+  <!-- Row 4 -->
+  <rect x="0" y="160" width="560" height="24" fill="#252525"/>
+  <text x="10"  y="176" font-family="monospace" font-size="11" fill="#9cdcfe">user-data.json</text>
+  <text x="230" y="176" font-family="Arial, sans-serif" font-size="11" fill="#6aaa64">200</text>
+  <text x="290" y="176" font-family="Arial, sans-serif" font-size="11" fill="#ce9178">fetch</text>
+  <text x="450" y="176" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">2.4 kB</text>
+  <text x="510" y="176" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">78 ms</text>
+
+  <!-- Arrow pointing to highlighted row -->
+  <polygon points="560,124 548,118 548,130" fill="#fbbc04"/>
+  <text x="380" y="254" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#fbbc04">← Click "Fetch/XHR" then</text>
+  <text x="380" y="272" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#fbbc04">find the date-named .json file</text>
+
+  <!-- Bottom status bar -->
+  <rect x="0" y="295" width="560" height="25" fill="#252525"/>
+  <text x="10" y="312" font-family="Arial, sans-serif" font-size="11" fill="#9e9e9e">4 requests  |  4.9 kB transferred</text>
+</svg>
