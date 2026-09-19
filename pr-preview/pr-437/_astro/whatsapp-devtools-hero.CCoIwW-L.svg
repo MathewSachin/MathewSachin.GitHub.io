@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" width="720" height="360">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a2332;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="browserGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d333b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22272e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#00cc66;stop-opacity:0.05" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="360" fill="url(#bgGrad)" rx="8"/>
+
+  <!-- Subtle grid lines -->
+  <g stroke="#1e2d3d" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="60" x2="720" y2="60"/>
+    <line x1="0" y1="120" x2="720" y2="120"/>
+    <line x1="0" y1="180" x2="720" y2="180"/>
+    <line x1="0" y1="240" x2="720" y2="240"/>
+    <line x1="0" y1="300" x2="720" y2="300"/>
+    <line x1="120" y1="0" x2="120" y2="360"/>
+    <line x1="240" y1="0" x2="240" y2="360"/>
+    <line x1="360" y1="0" x2="360" y2="360"/>
+    <line x1="480" y1="0" x2="480" y2="360"/>
+    <line x1="600" y1="0" x2="600" y2="360"/>
+  </g>
+
+  <!-- ── Isometric browser window (left-centre, tilted) ── -->
+  <!-- Shadow -->
+  <rect x="88" y="88" width="290" height="200" rx="8" fill="#000" opacity="0.4"/>
+  <!-- Main window body -->
+  <rect x="80" y="80" width="290" height="200" rx="8" fill="url(#browserGrad)" stroke="#3d444d" stroke-width="1.5"/>
+  <!-- Title bar -->
+  <rect x="80" y="80" width="290" height="32" rx="8" fill="#2d333b"/>
+  <rect x="80" y="96" width="290" height="16" fill="#2d333b"/>
+  <!-- Traffic lights -->
+  <circle cx="100" cy="96" r="5" fill="#ff5f57"/>
+  <circle cx="116" cy="96" r="5" fill="#ffbd2e"/>
+  <circle cx="132" cy="96" r="5" fill="#28c840"/>
+  <!-- URL bar -->
+  <rect x="148" y="88" width="190" height="16" rx="4" fill="#1c2128" stroke="#444c56" stroke-width="0.5"/>
+  <text x="158" y="100" font-family="monospace" font-size="8" fill="#768390">web.whatsapp.com</text>
+
+  <!-- Browser content area — WhatsApp Web chat list (simplified) -->
+  <rect x="80" y="112" width="290" height="168" fill="#111b21"/>
+  <!-- WhatsApp green header strip -->
+  <rect x="80" y="112" width="290" height="36" fill="#202c33"/>
+  <circle cx="106" cy="130" r="10" fill="#00a884" opacity="0.8"/>
+  <text x="124" y="135" font-family="sans-serif" font-size="10" fill="#e9edef" font-weight="bold">WhatsApp Web</text>
+  <!-- Status ring indicators -->
+  <circle cx="105" cy="168" r="12" fill="none" stroke="#00a884" stroke-width="2.5"/>
+  <circle cx="105" cy="168" r="9" fill="#2a3942"/>
+  <circle cx="135" cy="168" r="12" fill="none" stroke="#00a884" stroke-width="2.5"/>
+  <circle cx="135" cy="168" r="9" fill="#2a3942"/>
+  <circle cx="165" cy="168" r="12" fill="none" stroke="#00a884" stroke-width="2.5"/>
+  <circle cx="165" cy="168" r="9" fill="#2a3942"/>
+  <!-- Green glow radiating from status ring -->
+  <circle cx="105" cy="168" r="18" fill="#00a884" opacity="0.08"/>
+  <!-- Chat rows -->
+  <rect x="86" y="190" width="278" height="24" rx="2" fill="#202c33" opacity="0.7"/>
+  <rect x="86" y="220" width="278" height="24" rx="2" fill="#202c33" opacity="0.5"/>
+  <rect x="86" y="250" width="278" height="24" rx="2" fill="#202c33" opacity="0.3"/>
+
+  <!-- DevTools panel (overlapping on the right-bottom) -->
+  <rect x="248" y="148" width="300" height="190" rx="6" fill="#1c2128" stroke="#444c56" stroke-width="1"/>
+  <!-- DevTools tab bar -->
+  <rect x="248" y="148" width="300" height="24" rx="6" fill="#22272e"/>
+  <rect x="248" y="160" width="300" height="12" fill="#22272e"/>
+  <!-- DevTools tabs -->
+  <rect x="252" y="152" width="44" height="16" rx="3" fill="#1c2128"/>
+  <text x="256" y="163" font-family="monospace" font-size="7" fill="#adbac7">Elements</text>
+  <rect x="300" y="152" width="40" height="16" rx="3" fill="#00a884" opacity="0.2"/>
+  <text x="304" y="163" font-family="monospace" font-size="7" fill="#00a884">Network</text>
+  <rect x="344" y="152" width="38" height="16" rx="3" fill="#22272e"/>
+  <text x="348" y="163" font-family="monospace" font-size="7" fill="#768390">Console</text>
+
+  <!-- DevTools content: Network tab with media entries -->
+  <rect x="248" y="172" width="300" height="20" fill="#2d333b"/>
+  <text x="254" y="186" font-family="monospace" font-size="7" fill="#adbac7">Filter:</text>
+  <rect x="276" y="175" width="60" height="14" rx="3" fill="#1c2128" stroke="#444c56" stroke-width="0.5"/>
+  <text x="280" y="185" font-family="monospace" font-size="7" fill="#768390">Media</text>
+  <!-- Column headers -->
+  <rect x="248" y="192" width="300" height="14" fill="#22272e"/>
+  <text x="254" y="202" font-family="monospace" font-size="6" fill="#636e7b">Name</text>
+  <text x="370" y="202" font-family="monospace" font-size="6" fill="#636e7b">Type</text>
+  <text x="420" y="202" font-family="monospace" font-size="6" fill="#636e7b">Size</text>
+  <!-- Network entry rows -->
+  <rect x="248" y="206" width="300" height="16" fill="#00a884" opacity="0.1"/>
+  <text x="254" y="217" font-family="monospace" font-size="7" fill="#00d4aa" filter="url(#glow)">enc_status_12345.mp4</text>
+  <text x="370" y="217" font-family="monospace" font-size="7" fill="#79c0ff">video</text>
+  <text x="420" y="217" font-family="monospace" font-size="7" fill="#adbac7">2.4 MB</text>
+  <rect x="248" y="222" width="300" height="16" fill="none"/>
+  <text x="254" y="233" font-family="monospace" font-size="7" fill="#adbac7">blob:https://web.whats...</text>
+  <text x="370" y="233" font-family="monospace" font-size="7" fill="#79c0ff">image</text>
+  <text x="420" y="233" font-family="monospace" font-size="7" fill="#adbac7">185 kB</text>
+  <!-- HTML source snippet in Elements panel style -->
+  <rect x="248" y="246" width="300" height="88" fill="#1c2128"/>
+  <text x="254" y="260" font-family="monospace" font-size="7" fill="#636e7b">1  </text>
+  <text x="270" y="260" font-family="monospace" font-size="7" fill="#ff7b72">&lt;img</text>
+  <text x="296" y="260" font-family="monospace" font-size="7" fill="#79c0ff"> src=</text>
+  <text x="322" y="260" font-family="monospace" font-size="7" fill="#a5d6ff">"blob:https://..."</text>
+  <text x="254" y="274" font-family="monospace" font-size="7" fill="#636e7b">2  </text>
+  <text x="270" y="274" font-family="monospace" font-size="7" fill="#79c0ff">     alt=</text>
+  <text x="308" y="274" font-family="monospace" font-size="7" fill="#a5d6ff">"status"</text>
+  <text x="348" y="274" font-family="monospace" font-size="7" fill="#ff7b72">/&gt;</text>
+  <text x="254" y="288" font-family="monospace" font-size="7" fill="#636e7b">3  </text>
+  <text x="270" y="288" font-family="monospace" font-size="7" fill="#ff7b72">&lt;div</text>
+  <text x="296" y="288" font-family="monospace" font-size="7" fill="#79c0ff"> style=</text>
+  <text x="331" y="288" font-family="monospace" font-size="7" fill="#a5d6ff">"user-select:</text>
+  <text x="254" y="302" font-family="monospace" font-size="7" fill="#a5d6ff">        none"</text>
+  <text x="296" y="302" font-family="monospace" font-size="7" fill="#ff7b72">&gt;</text>
+  <text x="254" y="316" font-family="monospace" font-size="7" fill="#636e7b">4  </text>
+  <text x="270" y="316" font-family="monospace" font-size="7" fill="#adbac7">  Status text here...</text>
+  <!-- Green highlighted selection line -->
+  <rect x="248" y="205" width="4" height="17" fill="#00a884"/>
+
+  <!-- ── Magnifying glass (isometric-ish, floating top-right) ── -->
+  <g transform="translate(590, 70)" filter="url(#softGlow)">
+    <!-- Glass circle -->
+    <circle cx="0" cy="0" r="44" fill="none" stroke="#00a884" stroke-width="4" opacity="0.9"/>
+    <circle cx="0" cy="0" r="40" fill="#0d1117" opacity="0.6"/>
+    <!-- Code lines inside the glass -->
+    <text x="-28" y="-16" font-family="monospace" font-size="8" fill="#00ff88" opacity="0.9">&lt;img src=</text>
+    <text x="-22" y="-4" font-family="monospace" font-size="8" fill="#00cc66" opacity="0.8">"blob:..."</text>
+    <text x="-18" y="8" font-family="monospace" font-size="8" fill="#00ff88" opacity="0.7">.mp4</text>
+    <text x="-26" y="20" font-family="monospace" font-size="8" fill="#00cc66" opacity="0.6">Network</text>
+    <!-- Glass shine -->
+    <circle cx="-12" cy="-16" r="8" fill="white" opacity="0.05"/>
+    <!-- Handle -->
+    <line x1="28" y1="28" x2="58" y2="60" stroke="#00a884" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+    <line x1="28" y1="28" x2="58" y2="60" stroke="#00ff88" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Glow pulse rings around magnifier -->
+  <circle cx="590" cy="70" r="52" fill="none" stroke="#00a884" stroke-width="1" opacity="0.2"/>
+  <circle cx="590" cy="70" r="62" fill="none" stroke="#00a884" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- Title text -->
+  <text x="40" y="348" font-family="sans-serif" font-size="11" fill="#636e7b" letter-spacing="2">WHATSAPP WEB — DEVTOOLS POWER USER GUIDE</text>
+  <!-- Accent badge -->
+  <rect x="40" y="32" width="8" height="28" rx="2" fill="#00a884"/>
+  <text x="58" y="44" font-family="sans-serif" font-size="13" fill="#adbac7" font-weight="bold">Browser Hacks</text>
+  <text x="58" y="60" font-family="sans-serif" font-size="20" fill="#e6edf3" font-weight="bold">Level 5 — Network Sniffing</text>
+</svg>

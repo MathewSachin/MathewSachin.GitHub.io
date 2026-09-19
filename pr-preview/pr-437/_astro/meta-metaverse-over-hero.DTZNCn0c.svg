@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" width="640" height="300">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1a"/>
+      <stop offset="100%" style="stop-color:#1a0a1a"/>
+    </linearGradient>
+    <linearGradient id="barGrad21" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="barGrad22" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="barGrad23" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626"/>
+      <stop offset="100%" style="stop-color:#991b1b"/>
+    </linearGradient>
+    <linearGradient id="barGrad24" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#b91c1c"/>
+      <stop offset="100%" style="stop-color:#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="barGrad25" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#991b1b"/>
+      <stop offset="100%" style="stop-color:#450a0a"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="300" fill="url(#bgGrad)" rx="12"/>
+
+  <!-- Title -->
+  <text x="320" y="32" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#f8fafc" text-anchor="middle">REALITY LABS: $45 BILLION LATER</text>
+  <text x="320" y="50" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Five years. Forty-five billion dollars. Zero metaverse.</text>
+
+  <!-- Chart area background -->
+  <rect x="50" y="65" width="340" height="175" rx="6" fill="#0d0d1a" opacity="0.7"/>
+
+  <!-- Y-axis label -->
+  <text x="38" y="155" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle" transform="rotate(-90 38 155)">Operating Loss ($B)</text>
+
+  <!-- Gridlines -->
+  <line x1="70" y1="230" x2="380" y2="230" stroke="#1e293b" stroke-width="1"/>
+  <line x1="70" y1="196" x2="380" y2="196" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="70" y1="162" x2="380" y2="162" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="70" y1="128" x2="380" y2="128" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="70" y1="94" x2="380" y2="94" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+  <!-- Y-axis labels -->
+  <text x="65" y="233" font-family="system-ui, sans-serif" font-size="8" fill="#475569" text-anchor="end">0</text>
+  <text x="65" y="199" font-family="system-ui, sans-serif" font-size="8" fill="#475569" text-anchor="end">5B</text>
+  <text x="65" y="165" font-family="system-ui, sans-serif" font-size="8" fill="#475569" text-anchor="end">10B</text>
+  <text x="65" y="131" font-family="system-ui, sans-serif" font-size="8" fill="#475569" text-anchor="end">15B</text>
+  <text x="65" y="97" font-family="system-ui, sans-serif" font-size="8" fill="#475569" text-anchor="end">20B</text>
+
+  <!-- Bars: scale is 34px per $5B, base y=230 -->
+  <!-- 2021: $10.2B → height = 10.2/5*34 = 69.36 → ~69, top y = 230-69 = 161 -->
+  <rect x="83" y="161" width="38" height="69" fill="url(#barGrad21)" rx="3" filter="url(#glow)" opacity="0.9"/>
+  <text x="102" y="156" font-family="system-ui, sans-serif" font-size="8" fill="#fca5a5" text-anchor="middle">$10.2B</text>
+  <text x="102" y="244" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">2021</text>
+
+  <!-- 2022: $13.7B → height = 13.7/5*34 = 93.16 → ~93, top y = 230-93 = 137 -->
+  <rect x="138" y="137" width="38" height="93" fill="url(#barGrad22)" rx="3" filter="url(#glow)" opacity="0.9"/>
+  <text x="157" y="132" font-family="system-ui, sans-serif" font-size="8" fill="#fca5a5" text-anchor="middle">$13.7B</text>
+  <text x="157" y="244" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">2022</text>
+
+  <!-- 2023: $16.1B → height = 16.1/5*34 = 109.5 → ~110, top y = 230-110 = 120 -->
+  <rect x="193" y="120" width="38" height="110" fill="url(#barGrad23)" rx="3" filter="url(#glow)" opacity="0.9"/>
+  <text x="212" y="115" font-family="system-ui, sans-serif" font-size="8" fill="#fca5a5" text-anchor="middle">$16.1B</text>
+  <text x="212" y="244" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">2023</text>
+
+  <!-- 2024: ~$17B → height = 17/5*34 = 115.6 → ~116, top y = 230-116 = 114 -->
+  <rect x="248" y="114" width="38" height="116" fill="url(#barGrad24)" rx="3" filter="url(#glow)" opacity="0.9"/>
+  <text x="267" y="109" font-family="system-ui, sans-serif" font-size="8" fill="#fca5a5" text-anchor="middle">~$17B</text>
+  <text x="267" y="244" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">2024</text>
+
+  <!-- 2025: ~$18B+ → height = 18/5*34 = 122.4 → ~122, top y = 230-122 = 108 -->
+  <rect x="303" y="108" width="38" height="122" fill="url(#barGrad25)" rx="3" filter="url(#glow)" opacity="0.9"/>
+  <text x="322" y="103" font-family="system-ui, sans-serif" font-size="8" fill="#fca5a5" text-anchor="middle">~$18B+</text>
+  <text x="322" y="244" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">2025</text>
+
+  <!-- Total label -->
+  <text x="215" y="265" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Reality Labs cumulative operating losses</text>
+
+  <!-- Right panel: Shutdown milestones -->
+  <rect x="408" y="65" width="210" height="175" rx="6" fill="#0d0d1a" opacity="0.7"/>
+  <text x="513" y="85" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#e2e8f0" text-anchor="middle">THE UNRAVELING</text>
+  <line x1="418" y1="91" x2="608" y2="91" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Timeline entries -->
+  <circle cx="426" cy="107" r="4" fill="#ef4444"/>
+  <text x="436" y="103" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#f87171">Jan 2026</text>
+  <text x="436" y="114" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">1,000+ Reality Labs layoffs</text>
+  <text x="436" y="124" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">3 VR studios closed</text>
+
+  <circle cx="426" cy="141" r="4" fill="#ef4444"/>
+  <text x="436" y="137" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#f87171">Feb 2026</text>
+  <text x="436" y="148" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">Horizon Workrooms shut down</text>
+  <text x="436" y="158" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">B2B headset sales ended</text>
+
+  <circle cx="426" cy="175" r="4" fill="#ef4444"/>
+  <text x="436" y="171" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#f87171">Mar 2026</text>
+  <text x="436" y="182" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">Horizon Worlds exits VR</text>
+  <text x="436" y="192" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">Mobile-only from Jun 15</text>
+
+  <!-- Timeline vertical line -->
+  <line x1="426" y1="103" x2="426" y2="230" stroke="#374151" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <!-- Bottom banner -->
+  <rect x="50" y="255" width="540" height="30" rx="6" fill="#1a0505" stroke="#7f1d1d" stroke-width="1"/>
+  <text x="320" y="272" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#fca5a5" text-anchor="middle">HORIZON WORLDS VR  ·  SHUTTING DOWN JUNE 15, 2026</text>
+</svg>
