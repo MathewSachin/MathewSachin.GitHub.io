@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280" width="600" height="280">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e8f5e9"/>
+      <stop offset="50%" style="stop-color:#e3f2fd"/>
+      <stop offset="100%" style="stop-color:#f3e5f5"/>
+    </linearGradient>
+    <linearGradient id="dnaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1565c0"/>
+      <stop offset="50%" style="stop-color:#2e7d32"/>
+      <stop offset="100%" style="stop-color:#6a1b9a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="280" fill="url(#bgGrad)"/>
+
+  <!-- === LEFT: The Prompt === -->
+  <!-- Speech bubble -->
+  <rect x="16" y="44" width="158" height="132" rx="12" fill="#ffffff" stroke="#81c784" stroke-width="2"/>
+  <!-- Speech bubble tail -->
+  <polygon points="80,176 60,200 100,176" fill="#ffffff"/>
+  <line x1="60" y1="200" x2="80" y2="176" stroke="#81c784" stroke-width="2"/>
+  <line x1="60" y1="200" x2="100" y2="176" stroke="#81c784" stroke-width="2"/>
+
+  <!-- Prompt label -->
+  <text x="95" y="66" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#2e7d32">The Prompt</text>
+  <line x1="30" y1="72" x2="162" y2="72" stroke="#c8e6c9" stroke-width="1"/>
+
+  <!-- Prompt text -->
+  <text x="95" y="92" font-family="Arial, sans-serif" font-size="9.5" text-anchor="middle" fill="#37474f">"Build something</text>
+  <text x="95" y="107" font-family="Arial, sans-serif" font-size="9.5" text-anchor="middle" fill="#37474f">that can survive,</text>
+  <text x="95" y="122" font-family="Arial, sans-serif" font-size="9.5" text-anchor="middle" fill="#37474f">replicate itself,</text>
+  <text x="95" y="137" font-family="Arial, sans-serif" font-size="9.5" text-anchor="middle" fill="#37474f">and adapt to a</text>
+  <text x="95" y="152" font-family="Arial, sans-serif" font-size="9.5" text-anchor="middle" fill="#37474f">changing env..."</text>
+
+  <!-- Nature label under prompt -->
+  <text x="95" y="220" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#2e7d32">Nature</text>
+  <text x="95" y="236" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#666">~3.8 billion years ago</text>
+
+  <!-- Arrow left to DNA -->
+  <line x1="178" y1="140" x2="208" y2="140" stroke="#81c784" stroke-width="2"/>
+  <polygon points="208,135 218,140 208,145" fill="#81c784"/>
+
+  <!-- === CENTER: DNA Helix === -->
+  <!-- DNA background pill -->
+  <rect x="206" y="30" width="188" height="220" rx="20" fill="rgba(255,255,255,0.5)"/>
+
+  <!-- DNA helix label -->
+  <text x="300" y="52" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#1565c0">DNA Helix</text>
+  <text x="300" y="66" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#666">Nature's source code</text>
+
+  <!-- DNA strand 1 (left curve - S-shape) -->
+  <path d="M268 82 C240 100, 260 120, 240 140 C220 160, 240 180, 220 200 C200 220, 220 236, 210 248"
+        fill="none" stroke="#1565c0" stroke-width="3" stroke-linecap="round"/>
+  <!-- DNA strand 2 (right curve - opposing S) -->
+  <path d="M332 82 C360 100, 340 120, 360 140 C380 160, 360 180, 380 200 C400 220, 380 236, 390 248"
+        fill="none" stroke="#6a1b9a" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Base pairs (connecting rungs) -->
+  <line x1="268" y1="82" x2="332" y2="82" stroke="#ef9a9a" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="268" cy="82" r="4" fill="#e53935"/>
+  <circle cx="332" cy="82" r="4" fill="#e53935"/>
+
+  <line x1="252" y1="98" x2="350" y2="98" stroke="#80cbc4" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="252" cy="98" r="4" fill="#00897b"/>
+  <circle cx="350" cy="98" r="4" fill="#00897b"/>
+
+  <line x1="244" y1="116" x2="357" y2="116" stroke="#ffe082" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="244" cy="116" r="4" fill="#f9a825"/>
+  <circle cx="357" cy="116" r="4" fill="#f9a825"/>
+
+  <line x1="244" y1="134" x2="357" y2="134" stroke="#ef9a9a" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="244" cy="134" r="4" fill="#e53935"/>
+  <circle cx="357" cy="134" r="4" fill="#e53935"/>
+
+  <line x1="248" y1="152" x2="354" y2="152" stroke="#80cbc4" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="248" cy="152" r="4" fill="#00897b"/>
+  <circle cx="354" cy="152" r="4" fill="#00897b"/>
+
+  <line x1="260" y1="170" x2="342" y2="170" stroke="#ffe082" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="260" cy="170" r="4" fill="#f9a825"/>
+  <circle cx="342" cy="170" r="4" fill="#f9a825"/>
+
+  <line x1="270" y1="188" x2="333" y2="188" stroke="#ef9a9a" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="270" cy="188" r="4" fill="#e53935"/>
+  <circle cx="333" cy="188" r="4" fill="#e53935"/>
+
+  <line x1="278" y1="206" x2="325" y2="206" stroke="#80cbc4" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="278" cy="206" r="4" fill="#00897b"/>
+  <circle cx="325" cy="206" r="4" fill="#00897b"/>
+
+  <line x1="296" y1="222" x2="316" y2="222" stroke="#ffe082" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="296" cy="222" r="4" fill="#f9a825"/>
+  <circle cx="316" cy="222" r="4" fill="#f9a825"/>
+
+  <!-- Base pair legend -->
+  <text x="300" y="258" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#666">A-T  G-C  (4 billion years of iteration)</text>
+
+  <!-- Arrow DNA to Output -->
+  <line x1="396" y1="140" x2="416" y2="140" stroke="#ba68c8" stroke-width="2"/>
+  <polygon points="416,135 426,140 416,145" fill="#ba68c8"/>
+
+  <!-- === RIGHT: The Output === -->
+  <!-- Output box -->
+  <rect x="424" y="44" width="158" height="192" rx="12" fill="#ffffff" stroke="#ba68c8" stroke-width="2"/>
+
+  <!-- Output label -->
+  <text x="503" y="66" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#6a1b9a">The Output</text>
+  <line x1="438" y1="72" x2="568" y2="72" stroke="#e1bee7" stroke-width="1"/>
+
+  <!-- Human silhouette (simple) -->
+  <!-- Head -->
+  <circle cx="503" cy="102" r="18" fill="#ffcc80" stroke="#ef9a00" stroke-width="1.5"/>
+  <!-- Eyes -->
+  <circle cx="497" cy="99" r="2.5" fill="#5d4037"/>
+  <circle cx="509" cy="99" r="2.5" fill="#5d4037"/>
+  <!-- Smile -->
+  <path d="M497 107 Q503 113 509 107" fill="none" stroke="#5d4037" stroke-width="1.5"/>
+  <!-- Body -->
+  <rect x="484" y="122" width="38" height="52" rx="6" fill="#90caf9" stroke="#1565c0" stroke-width="1.5"/>
+  <!-- Arms -->
+  <line x1="484" y1="132" x2="464" y2="158" stroke="#ffcc80" stroke-width="7" stroke-linecap="round"/>
+  <line x1="522" y1="132" x2="542" y2="158" stroke="#ffcc80" stroke-width="7" stroke-linecap="round"/>
+  <!-- Legs -->
+  <line x1="492" y1="174" x2="488" y2="210" stroke="#78909c" stroke-width="7" stroke-linecap="round"/>
+  <line x1="514" y1="174" x2="518" y2="210" stroke="#78909c" stroke-width="7" stroke-linecap="round"/>
+  <!-- Shoes -->
+  <ellipse cx="487" cy="213" rx="8" ry="5" fill="#455a64"/>
+  <ellipse cx="519" cy="213" rx="8" ry="5" fill="#455a64"/>
+
+  <!-- Output label -->
+  <text x="503" y="248" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#6a1b9a">Homo sapiens</text>
+
+  <!-- Fun tagline -->
+  <text x="300" y="272" font-family="Arial, sans-serif" font-size="10" font-style="italic" text-anchor="middle" fill="#546e7a">We are all just vibe-coded by evolution.</text>
+</svg>
