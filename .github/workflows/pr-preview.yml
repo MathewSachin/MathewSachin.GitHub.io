@@ -36,7 +36,7 @@ jobs:
 
       - name: Download site artifact
         if: github.event.action != 'closed'
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           name: site
           path: ./dist
